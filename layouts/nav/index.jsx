@@ -46,7 +46,14 @@ export default function Nav({ openNav, onCloseNav }) {
                 <Logo />
             </Box>
 
-            <NavSection data={navConfig} />
+            {navConfig.map((section) => (
+                <Box mb={2}>
+                    <Typography variant="caption" fontWeight="bold" mx={3}>
+                        {section.header.toUpperCase()}
+                    </Typography>
+                    <NavSection data={section.items} />
+                </Box>
+            ))}
 
             <Box sx={{ flexGrow: 1 }} />
         </Scrollbar>

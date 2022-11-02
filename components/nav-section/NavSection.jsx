@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 // @mui
 import { Box, List, ListItemText } from "@mui/material";
 import { StyledNavItem, StyledNavItemIcon } from "./styles";
+import { LaunchTwoTone as ExternalIcon } from "@mui/icons-material";
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,7 @@ NavSection.propTypes = {
 export default function NavSection({ data = [], ...other }) {
     return (
         <Box {...other}>
-            <List disablePadding sx={{ p: 1 }}>
+            <List disablePadding sx={{ p: 1, pt: 0 }}>
                 {data.map((item) => (
                     <NavItem key={item.title} item={item} />
                 ))}
@@ -43,6 +44,7 @@ function NavItem({ item }) {
     const { pathname, asPath } = useRouter();
 
     const active = getActive(item.path, pathname, asPath);
+    const external = isExternalLink(item.path);
 
     return (
         <StyledNavItem
@@ -58,7 +60,15 @@ function NavItem({ item }) {
         >
             <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
-            <ListItemText disableTypography primary={title} />
+            <ListItemText
+                disableTypography
+                primary={
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                        {title}
+                        {external && <ExternalIcon fontSize="small" sx={{ mx: 2 }} />}
+                    </Box>
+                }
+            />
 
             {info && info}
         </StyledNavItem>
