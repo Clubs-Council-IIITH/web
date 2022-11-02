@@ -1,0 +1,86 @@
+import { useRouter } from "next/router";
+import PropTypes from "prop-types";
+// @mui
+import { alpha, styled } from "@mui/material/styles";
+import { Link, Card, CardActionArea, Grid, Typography, CardContent } from "@mui/material";
+
+// ----------------------------------------------------------------------
+
+const StyledCardMedia = styled("div")({
+    position: "relative",
+    paddingTop: "calc(100% * 3 / 4)",
+});
+
+const StyledTitle = styled(Link)({
+    height: 44,
+    overflow: "hidden",
+    WebkitLineClamp: 2,
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+});
+
+const StyledCover = styled("img")({
+    top: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    position: "absolute",
+});
+
+// ----------------------------------------------------------------------
+
+ClubCard.propTypes = {
+    club: PropTypes.object.isRequired,
+    index: PropTypes.number,
+};
+
+export default function ClubCard({ club, index }) {
+    const { img, name, tagline } = club;
+    const router = useRouter();
+
+    return (
+        <Grid item xs={12} sm={6} md={4}>
+            <Card variant="outlined" sx={{ position: "relative" }} className="elevate">
+                <CardActionArea onClick={() => router.push(`${router.pathname}/${club.id}`)}>
+                    <StyledCardMedia
+                        sx={{
+                            pt: "100%",
+                            "&:after": {
+                                top: 0,
+                                content: "''",
+                                width: "100%",
+                                height: "100%",
+                                position: "absolute",
+                                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                            },
+                        }}
+                    >
+                        <StyledCover alt={name} src={img} />
+                    </StyledCardMedia>
+
+                    <CardContent sx={{ pt: 4, bottom: 0, width: "100%", position: "absolute" }}>
+                        <StyledTitle
+                            color="inherit"
+                            variant="subtitle2"
+                            underline="none"
+                            sx={{
+                                typography: "h5",
+                                color: "common.white",
+                            }}
+                        >
+                            {name}
+                        </StyledTitle>
+
+                        <Typography
+                            gutterBottom
+                            variant="caption"
+                            sx={{ color: "text.disabled", display: "block" }}
+                        >
+                            {tagline}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </Grid>
+    );
+}

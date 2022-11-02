@@ -5,7 +5,7 @@ import Page from "components/Page";
 
 export default function GeneralApp() {
     return (
-        <Page title="bruh">
+        <Page title="Home">
             <Container maxWidth="xl">hello</Container>
         </Page>
     );

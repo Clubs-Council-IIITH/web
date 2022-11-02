@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 
 const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
     const logo = (
-        <Box ref={ref} sx={{ width: 32, height: 32, cursor: "pointer", ...sx }}>
+        <Box ref={ref} sx={{ width: 32, height: 32, cursor: "pointer", py: 1, ...sx }}>
             <svg
                 width="32"
                 height="32"
