@@ -106,7 +106,14 @@ export default function ClubHero({ club }) {
             </FooterStyle>
 
             <OverlayStyle />
-            <Image alt="club cover image" src={img} ratio={isDesktop ? "21/9" : "4/3"} />
+            <Image
+                alt="club cover image"
+                src={img}
+                ratio={isDesktop ? "21/9" : "4/3"}
+                sx={{
+                    filter: "blur(0.3em)",
+                }}
+            />
         </Box>
     );
 }
