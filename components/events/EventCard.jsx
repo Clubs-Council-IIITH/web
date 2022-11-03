@@ -37,7 +37,7 @@ export default function EventCard({ event }) {
     }, [poster]);
 
     return (
-        <Card className="elevate">
+        <Card>
             <CardActionArea onClick={() => router.push(`/events/${event.id}`)}>
                 <Box sx={{ pt: "100%", position: "relative" }}>
                     {state && (

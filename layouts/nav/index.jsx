@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 // @mui
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from "@mui/material";
+import { Box, Drawer, Typography } from "@mui/material";
 // hooks
 import useResponsive from "hooks/useResponsive";
 // components
@@ -48,7 +48,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
             {navConfig.map((section, idx) => (
                 <Box key={idx} mb={2}>
-                    <Typography variant="caption" fontWeight="bold" mx={3}>
+                    <Typography variant="caption" fontWeight="bold" px={5}>
                         {section.header.toUpperCase()}
                     </Typography>
                     <NavSection data={section.items} />

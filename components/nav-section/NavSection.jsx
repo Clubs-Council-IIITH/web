@@ -24,7 +24,7 @@ NavSection.propTypes = {
 export default function NavSection({ data = [], ...other }) {
     return (
         <Box {...other}>
-            <List disablePadding sx={{ p: 1, pt: 0 }}>
+            <List disablePadding sx={{ p: 1, pt: 1 }}>
                 {data.map((item) => (
                     <NavItem key={item.title} item={item} />
                 ))}
@@ -47,17 +47,7 @@ function NavItem({ item }) {
     const external = isExternalLink(item.path);
 
     return (
-        <StyledNavItem
-            component={NextLink}
-            href={path}
-            sx={{
-                ...(active && {
-                    color: "text.primary",
-                    bgcolor: "action.selected",
-                    fontWeight: "fontWeightBold",
-                }),
-            }}
-        >
+        <StyledNavItem component={NextLink} href={path} active={active}>
             <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
             <ListItemText

@@ -11,7 +11,7 @@ import Image from "components/Image";
 // ----------------------------------------------------------------------
 
 const OverlayStyle = styled("div")(({ theme }) => ({
-    ...bgBlur({ blur: 2, color: theme.palette.primary.dark }),
+    ...bgBlur({ blur: 2, color: theme.palette.accent }),
     top: 0,
     zIndex: 8,
     content: "''",

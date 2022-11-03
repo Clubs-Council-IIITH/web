@@ -39,7 +39,7 @@ export default function ClubCard({ club, index }) {
 
     return (
         <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ position: "relative" }} className="elevate">
+            <Card sx={{ position: "relative" }}>
                 <CardActionArea onClick={() => router.push(`${router.pathname}/${club.id}`)}>
                     <StyledCardMedia
                         sx={{
@@ -50,12 +50,7 @@ export default function ClubCard({ club, index }) {
                                 width: "100%",
                                 height: "100%",
                                 position: "absolute",
-                                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.4),
-                            },
-                            "&:hover": {
-                                "&:after": {
-                                    bgcolor: (theme) => alpha(theme.palette.grey[900], 0.6),
-                                },
+                                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.3),
                             },
                         }}
                     >
