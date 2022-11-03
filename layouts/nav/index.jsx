@@ -46,8 +46,8 @@ export default function Nav({ openNav, onCloseNav }) {
                 <Logo />
             </Box>
 
-            {navConfig.map((section) => (
-                <Box mb={2}>
+            {navConfig.map((section, idx) => (
+                <Box key={idx} mb={2}>
                     <Typography variant="caption" fontWeight="bold" mx={3}>
                         {section.header.toUpperCase()}
                     </Typography>

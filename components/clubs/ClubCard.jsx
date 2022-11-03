@@ -12,7 +12,6 @@ const StyledCardMedia = styled("div")({
 });
 
 const StyledTitle = styled(Link)({
-    height: 44,
     overflow: "hidden",
     WebkitLineClamp: 2,
     display: "-webkit-box",
@@ -40,7 +39,7 @@ export default function ClubCard({ club, index }) {
 
     return (
         <Grid item xs={12} sm={6} md={4}>
-            <Card variant="outlined" sx={{ position: "relative" }} className="elevate">
+            <Card sx={{ position: "relative" }} className="elevate">
                 <CardActionArea onClick={() => router.push(`${router.pathname}/${club.id}`)}>
                     <StyledCardMedia
                         sx={{
@@ -51,7 +50,12 @@ export default function ClubCard({ club, index }) {
                                 width: "100%",
                                 height: "100%",
                                 position: "absolute",
-                                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.4),
+                            },
+                            "&:hover": {
+                                "&:after": {
+                                    bgcolor: (theme) => alpha(theme.palette.grey[900], 0.6),
+                                },
                             },
                         }}
                     >
@@ -74,7 +78,7 @@ export default function ClubCard({ club, index }) {
                         <Typography
                             gutterBottom
                             variant="caption"
-                            sx={{ color: "text.disabled", display: "block" }}
+                            sx={{ color: "text.disabled", display: "block", fontSize: 14 }}
                         >
                             {tagline}
                         </Typography>
