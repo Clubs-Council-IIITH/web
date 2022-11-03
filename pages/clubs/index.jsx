@@ -18,7 +18,7 @@ export default function Clubs() {
 
                 <Grid container spacing={3}>
                     {clubs
-                        .filter((club) => club.category !== "other")
+                        .filter((club) => club.category !== "OTHER")
                         .map((club, index) => (
                             <ClubCard key={index} club={club} index={index} />
                         ))}
