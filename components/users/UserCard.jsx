@@ -28,9 +28,8 @@ UserCard.propTypes = {
 export default function UserCard({ user }) {
     // const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
     const {
-        user: { firstName, lastName, img, mail, batch },
+        user: { firstName, lastName, img, mail },
         role,
-        year,
     } = user;
 
     return (
