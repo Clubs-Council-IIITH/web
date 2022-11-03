@@ -1,5 +1,6 @@
-//next
+// next
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 // @mui
 import { Typography, Button, Box, Grid, Card, Container } from "@mui/material";
@@ -10,13 +11,15 @@ import useResponsive from "hooks/useResponsive";
 import Page from "components/Page";
 import { ClubHero } from "components/clubs";
 import { EventCard } from "components/events";
+import { UserCard } from "components/users";
 import Iconify from "components/iconify";
 
 import clubs from "_mock/clubs";
 import events from "_mock/events";
+import members from "_mock/members";
 
 export default function Club() {
-    const { query } = useRouter();
+    const { asPath, query } = useRouter();
     const { id } = query;
 
     const isDesktop = useResponsive("up", "sm");
@@ -47,6 +50,34 @@ export default function Club() {
                             </Grid>
                             <Box sx={{ py: 2, textAlign: "right" }}>
                                 <Button
+                                    component={Link}
+                                    href={`${asPath}/events`}
+                                    size="small"
+                                    color="inherit"
+                                    sx={{ p: 2 }}
+                                    endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                                >
+                                    View more
+                                </Button>
+                            </Box>
+                        </Box>
+
+                        <Box sx={{ p: { xs: 2, md: 3 } }}>
+                            <Typography variant="h4">Members</Typography>
+                            <Grid container spacing={3} mt={1}>
+                                {/* display only current members */}
+                                {members
+                                    .filter((user) => user.year === new Date().getFullYear())
+                                    .map((user) => (
+                                        <Grid key={user.id} item xs={12} sm={6} md={3}>
+                                            <UserCard user={user} />
+                                        </Grid>
+                                    ))}
+                            </Grid>
+                            <Box sx={{ py: 2, textAlign: "right" }}>
+                                <Button
+                                    component={Link}
+                                    href={`${asPath}/members`}
                                     size="small"
                                     color="inherit"
                                     sx={{ p: 2 }}
@@ -55,10 +86,6 @@ export default function Club() {
                                     View all
                                 </Button>
                             </Box>
-                        </Box>
-
-                        <Box sx={{ p: { xs: 2, md: 3 } }}>
-                            <Typography variant="h4">Members</Typography>
                         </Box>
                     </>
                 )}

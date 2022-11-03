@@ -207,6 +207,22 @@ const members = [
         year: 2022,
         __typename: "MemberType",
     },
+    {
+        id: "1102",
+        user: {
+            id: "833",
+            img: "",
+            firstName: "Vishva",
+            lastName: "R",
+            mail: "vishva.saravanan@research.iiit.ac.in",
+            rollno: 2019113019,
+            batch: "UG2K19",
+            __typename: "UserType",
+        },
+        role: "Coordinator",
+        year: 2021,
+        __typename: "MemberType",
+    },
 ];
 
 export default members;
