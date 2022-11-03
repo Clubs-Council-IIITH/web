@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import { capitalCase } from "change-case";
+
 // @mui
 import { alpha, styled } from "@mui/material/styles";
 import { Box, Typography } from "@mui/material";
 import { SocialIcon } from "react-social-icons";
+
 // hooks
 import useResponsive from "hooks/useResponsive";
+
 // components
 import Image from "components/Image";
 
