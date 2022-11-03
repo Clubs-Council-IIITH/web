@@ -6,7 +6,6 @@ import { Box, Card, Avatar, Divider, Typography, Stack } from "@mui/material";
 import { bgBlur } from "utils/cssStyles";
 // components
 import Image from "components/Image";
-// import SvgIconStyle from "components/SvgIconStyle";
 
 // ----------------------------------------------------------------------
 

@@ -22,13 +22,16 @@
         "date-fns": "^2.29.3",
         "eslint": "8.26.0",
         "eslint-config-next": "13.0.1",
+        "framer-motion": "^7.6.4",
         "next": "13.0.1",
         "prop-types": "^15.8.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-hook-form": "^7.37.0",
         "react-lazy-load-image-component": "^1.5.5",
+        "react-slick": "^0.29.0",
         "react-social-icons": "^5.15.0",
-        "simplebar-react": "^2.4.3"
+        "simplebar-react": "^2.4.3",
+        "slick-carousel": "^1.8.1"
     }
 }
