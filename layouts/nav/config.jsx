@@ -6,6 +6,8 @@ import {
     CalendarTodayTwoTone as CalendarIcon,
     InfoTwoTone as AboutIcon,
     BugReportTwoTone as BugsIcon,
+    LocalActivityTwoTone as EventsIcon,
+    GroupsTwoTone as MembersIcon,
 } from "@mui/icons-material";
 
 const navConfig = [
@@ -31,6 +33,26 @@ const navConfig = [
                 title: "calendar",
                 path: "/calendar",
                 icon: <CalendarIcon fontSize="small" />,
+            },
+        ],
+    },
+    {
+        header: "manage",
+        items: [
+            {
+                title: "Clubs",
+                path: "/manage/clubs",
+                icon: <ClubsIcon fontSize="small" />,
+            },
+            {
+                title: "Events",
+                path: "/manage/events",
+                icon: <EventsIcon fontSize="small" />,
+            },
+            {
+                title: "Members",
+                path: "/manage/members",
+                icon: <MembersIcon fontSize="small" />,
             },
         ],
     },

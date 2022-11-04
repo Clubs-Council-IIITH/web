@@ -14,7 +14,7 @@ export function isExternalLink(path) {
 
 export function getActive(path, pathname, asPath) {
     if (path === "/") return pathname === path || asPath === path;
-    return pathname.includes(path) || asPath.includes(path);
+    return pathname.startsWith(path) || asPath.startsWith(path);
 }
 
 NavSection.propTypes = {

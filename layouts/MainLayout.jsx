@@ -1,11 +1,12 @@
 import { useState } from "react";
+
 // @mui
 import { styled } from "@mui/material/styles";
-//
+import { Scrollbars } from "react-custom-scrollbars-2";
+
+// components
 import Header from "./header";
 import Nav from "./nav";
-
-// ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
@@ -29,8 +30,6 @@ const Main = styled("div")(({ theme }) => ({
     },
 }));
 
-// ----------------------------------------------------------------------
-
 export default function MainLayout({ children }) {
     const [open, setOpen] = useState(false);
 
@@ -38,7 +37,9 @@ export default function MainLayout({ children }) {
         <StyledRoot>
             <Header onOpenNav={() => setOpen(true)} />
             <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-            <Main>{children}</Main>
+            <Scrollbars autoHide style={{ height: "100vh" }}>
+                <Main>{children}</Main>
+            </Scrollbars>
         </StyledRoot>
     );
 }
