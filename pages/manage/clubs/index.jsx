@@ -89,7 +89,7 @@ function ClubsTableRow(club) {
 
     return (
         <TableRow>
-            <TableCell align="left" sx={{ display: "flex", alignItems: "center" }}>
+            <TableCell align="left" sx={{ display: "flex", alignItems: "center", border: "none" }}>
                 <Image
                     disabledEffect
                     alt={name}
@@ -105,12 +105,16 @@ function ClubsTableRow(club) {
                     {name}
                 </Typography>
             </TableCell>
-            <TableCell align="left">{mail}</TableCell>
-            <TableCell align="left">{sentenceCase(category)}</TableCell>
-            <TableCell align="center">
+            <TableCell align="left" sx={{ border: "none" }}>
+                {mail}
+            </TableCell>
+            <TableCell align="left" sx={{ border: "none" }}>
+                {sentenceCase(category)}
+            </TableCell>
+            <TableCell align="center" sx={{ border: "none" }}>
                 <Label color={state == "ACTIVE" ? "success" : "error"}>{state}</Label>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{ border: "none" }}>
                 <Kebab items={menuItems} />
             </TableCell>
         </TableRow>

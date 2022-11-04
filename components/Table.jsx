@@ -22,7 +22,7 @@ export default function Table({ data, header: Header, row: Row, pagination = tru
 
     return (
         <>
-            <TableContainer sx={{ minWidth: 500, borderRadius: 1 }}>
+            <TableContainer sx={{ borderRadius: 1 }}>
                 <MUITable>
                     <TableHead>
                         <Header />
