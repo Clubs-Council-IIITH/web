@@ -1,6 +1,7 @@
 const clubs = [
     {
         id: "1",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/hacking.png",
         name: "0x1337: The Hacking Club",
         mail: "hacking.club@students.iiit.ac.in",
@@ -19,6 +20,7 @@ const clubs = [
     },
     {
         id: "30",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/alumni.png",
         name: "Alumni Cell",
         mail: "alumnicell@iiit.ac.in",
@@ -36,6 +38,7 @@ const clubs = [
     },
     {
         id: "9",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/asec_color.jpg",
         name: "Amateur Sports Enthusiasts Club",
         mail: "sportsclub@students.iiit.ac.in",
@@ -54,6 +57,7 @@ const clubs = [
     },
     {
         id: "25",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/apex.jpg",
         name: "Apex Council",
         mail: "apex@students.iiit.ac.in",
@@ -71,6 +75,7 @@ const clubs = [
     },
     {
         id: "2",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/astronom6y.png",
         name: "Astronomy Club",
         mail: "astronomyclub@students.iiit.ac.in",
@@ -89,6 +94,7 @@ const clubs = [
     },
     {
         id: "29",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/campuslife.jpg",
         name: "Campus Life Council",
         mail: "campuslife@students.iiit.ac.in",
@@ -106,6 +112,7 @@ const clubs = [
     },
     {
         id: "26",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/cult.JPG",
         name: "Cultural Council",
         mail: "cultural@students.iiit.ac.in",
@@ -123,6 +130,7 @@ const clubs = [
     },
     {
         id: "23",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/Cyclorama_The_Film_and_Dramatics_Society_edit_XoeVpUm.png",
         name: "Cyclorama",
         mail: "film.club@students.iiit.ac.in",
@@ -141,6 +149,7 @@ const clubs = [
     },
     {
         id: "10",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/Decore.png",
         name: "Decore – The Design Club",
         mail: "decore@students.iiit.ac.in",
@@ -159,6 +168,7 @@ const clubs = [
     },
     {
         id: "3",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/dsc.png",
         name: "Developer Student Club",
         mail: "dsc@students.iiit.ac.in",
@@ -177,6 +187,7 @@ const clubs = [
     },
     {
         id: "4",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/ERC.png",
         name: "Electronics and Robotics Club",
         mail: "roboticsclub@students.iiit.ac.in",
@@ -195,6 +206,7 @@ const clubs = [
     },
     {
         id: "31",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/ecell.jpg",
         name: "Entrepreneurship Cell",
         mail: "ecell@iiit.ac.in",
@@ -212,6 +224,7 @@ const clubs = [
     },
     {
         id: "32",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/felicity.png",
         name: "Felicity Taskforce",
         mail: "felicity@iiit.ac.in",
@@ -229,6 +242,7 @@ const clubs = [
     },
     {
         id: "28",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/fc.jpg",
         name: "Finance Council",
         mail: "finance_council@students.iiit.ac.in",
@@ -246,6 +260,7 @@ const clubs = [
     },
     {
         id: "11",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/fhc.jpg",
         name: "Frivolous Humour Club",
         mail: "fhc@students.iiit.ac.in",
@@ -264,6 +279,7 @@ const clubs = [
     },
     {
         id: "8",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/ISAQC.png",
         name: "ISAQC",
         mail: "isaqc@students.iiit.ac.in",
@@ -282,6 +298,7 @@ const clubs = [
     },
     {
         id: "12",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/LitClub_logo.jpg",
         name: "Literary Club",
         mail: "litclub@students.iiit.ac.in",
@@ -300,6 +317,7 @@ const clubs = [
     },
     {
         id: "24",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/nss.jpg",
         name: "National Service Scheme",
         mail: "nss@iiit.ac.in",
@@ -317,6 +335,7 @@ const clubs = [
     },
     {
         id: "5",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/osdg.png",
         name: "Open-Source Developers Group",
         mail: "osdg@students.iiit.ac.in",
@@ -335,6 +354,7 @@ const clubs = [
     },
     {
         id: "13",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/pentaprism.png",
         name: "Pentaprism",
         mail: "photography@students.iiit.ac.in",
@@ -353,6 +373,7 @@ const clubs = [
     },
     {
         id: "33",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/spc.jpg",
         name: "Placement Cell",
         mail: "naren.akash@research.iiit.ac.in",
@@ -370,6 +391,7 @@ const clubs = [
     },
     {
         id: "6",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/programming_club.jpg",
         name: "Programming Club",
         mail: "programming.club@students.iiit.ac.in",
@@ -388,6 +410,7 @@ const clubs = [
     },
     {
         id: "14",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/skate.jpg",
         name: "Skateboarding Club",
         mail: "skateboardingclub@students.iiit.ac.in",
@@ -406,6 +429,7 @@ const clubs = [
     },
     {
         id: "34",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/sports.png",
         name: "Sports Council",
         mail: "sports_secretary@students.iiit.ac.in",
@@ -423,6 +447,7 @@ const clubs = [
     },
     {
         id: "27",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/parliament.png",
         name: "Student Parliament",
         mail: "parliament@students.iiit.ac.in",
@@ -440,6 +465,7 @@ const clubs = [
     },
     {
         id: "15",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/artsoc.jpg",
         name: "The Art Society",
         mail: "artsociety@students.iiit.ac.in",
@@ -458,6 +484,7 @@ const clubs = [
     },
     {
         id: "16",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/chess.jpg",
         name: "The Chess Club",
         mail: "chessclub@students.iiit.ac.in",
@@ -476,6 +503,7 @@ const clubs = [
     },
     {
         id: "17",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/DanceCrew.png",
         name: "The Dance Crew",
         mail: "thedancecrew@students.iiit.ac.in",
@@ -494,6 +522,7 @@ const clubs = [
     },
     {
         id: "18",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/debsoc.png",
         name: "The Debate Society",
         mail: "debsoc@students.iiit.ac.in",
@@ -512,6 +541,7 @@ const clubs = [
     },
     {
         id: "19",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/IMG-20220812-WA0036.jpg",
         name: "The Gaming Club",
         mail: "thegamingclub@students.iiit.ac.in",
@@ -530,6 +560,7 @@ const clubs = [
     },
     {
         id: "20",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/languageClub.jpeg",
         name: "The Language Club",
         mail: "thelanguageclub@students.iiit.ac.in",
@@ -548,6 +579,7 @@ const clubs = [
     },
     {
         id: "21",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/music_club.png",
         name: "The Music Club",
         mail: "themusicclub@students.iiit.ac.in",
@@ -566,6 +598,7 @@ const clubs = [
     },
     {
         id: "7",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/trg.jpg",
         name: "Theory Group",
         mail: "theory.group@students.iiit.ac.in",
@@ -584,6 +617,7 @@ const clubs = [
     },
     {
         id: "22",
+        state: "ACTIVE",
         img: "http://clubs.iiit.ac.in/media/imgs/clubs/TVRQC_logo.png",
         name: "The TV Room Quiz Club",
         mail: "quizzing@students.iiit.ac.in",
