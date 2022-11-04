@@ -1,4 +1,15 @@
-import { Box, Card, TableRow, TableCell, Stack, Container, Typography } from "@mui/material";
+import Link from "next/link";
+
+import {
+    Box,
+    Button,
+    Card,
+    TableRow,
+    TableCell,
+    Stack,
+    Container,
+    Typography,
+} from "@mui/material";
 
 import Page from "components/Page";
 import Label from "components/label";
@@ -18,6 +29,15 @@ export default function Events() {
                     <Typography variant="h3" gutterBottom>
                         Manage Events
                     </Typography>
+
+                    <Button
+                        component={Link}
+                        href="#"
+                        variant="contained"
+                        startIcon={<Iconify icon="eva:plus-fill" />}
+                    >
+                        New Event
+                    </Button>
                 </Stack>
 
                 <Card>

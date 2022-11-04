@@ -1,6 +1,9 @@
+import Link from "next/link";
+
 import {
     Avatar,
     Box,
+    Button,
     Card,
     TableRow,
     TableCell,
@@ -25,6 +28,15 @@ export default function Members() {
                     <Typography variant="h3" gutterBottom>
                         Manage Members
                     </Typography>
+
+                    <Button
+                        component={Link}
+                        href="#"
+                        variant="contained"
+                        startIcon={<Iconify icon="eva:plus-fill" />}
+                    >
+                        New Member
+                    </Button>
                 </Stack>
 
                 <Card>
