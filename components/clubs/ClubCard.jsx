@@ -34,13 +34,13 @@ ClubCard.propTypes = {
 };
 
 export default function ClubCard({ club, index }) {
-    const { img, name, tagline } = club;
+    const { id, img, name, tagline } = club;
     const router = useRouter();
 
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ position: "relative" }}>
-                <CardActionArea onClick={() => router.push(`/clubs/${club.id}`)}>
+                <CardActionArea onClick={() => router.push(`/clubs/${id}`)}>
                     <StyledCardMedia
                         sx={{
                             pt: "100%",

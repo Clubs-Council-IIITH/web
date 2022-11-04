@@ -1,40 +1,21 @@
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
+
 // @mui
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
+
 // components
 import Label from "components/label";
+import EventPoster from "./EventPoster";
 import { fDateTime } from "utils/formatTime";
-
-// ----------------------------------------------------------------------
-
-const StyledEventImg = styled("img")({
-    top: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    position: "absolute",
-});
-
-// ----------------------------------------------------------------------
 
 EventCard.propTypes = {
     event: PropTypes.object,
 };
 
 export default function EventCard({ event }) {
-    const { club, name, poster, state, datetimeStart } = event;
+    const { name, state, datetimeStart } = event;
     const router = useRouter();
-
-    // blur club cover and set as poster if not uploaded
-    const [clubCoverAsPoster, setClubCoverAsPoster] = useState(false);
-    useEffect(() => {
-        if (poster === null || poster === "") {
-            setClubCoverAsPoster(true);
-        }
-    }, [poster]);
 
     return (
         <Card>
@@ -55,13 +36,7 @@ export default function EventCard({ event }) {
                             {state}
                         </Label>
                     )}
-                    <StyledEventImg
-                        alt={name}
-                        src={clubCoverAsPoster ? club.img : poster}
-                        sx={{
-                            ...(clubCoverAsPoster ? { filter: "blur(0.3em)" } : {}),
-                        }}
-                    />
+                    <EventPoster event={event} />
                 </Box>
 
                 <Stack spacing={1} sx={{ p: 3 }}>

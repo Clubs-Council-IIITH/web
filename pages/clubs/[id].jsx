@@ -27,7 +27,7 @@ export default function Club() {
     const club = clubs.find((c) => c.id === id);
 
     return (
-        <Page title={club.name}>
+        <Page title={club?.name}>
             <Container>
                 {club && (
                     <>
