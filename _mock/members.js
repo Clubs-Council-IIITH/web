@@ -13,6 +13,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -29,6 +30,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -45,6 +47,7 @@ const members = [
         },
         role: "Coordinator",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -61,6 +64,7 @@ const members = [
         },
         role: "Coordinator",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -77,6 +81,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -93,6 +98,7 @@ const members = [
         },
         role: "Coordinator",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -109,6 +115,7 @@ const members = [
         },
         role: "Coordinator",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -125,6 +132,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -141,6 +149,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -157,6 +166,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -173,6 +183,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -189,6 +200,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -205,6 +217,7 @@ const members = [
         },
         role: "Organizing Team",
         year: 2022,
+        approved: true,
         __typename: "MemberType",
     },
     {
@@ -221,6 +234,7 @@ const members = [
         },
         role: "Coordinator",
         year: 2021,
+        approved: true,
         __typename: "MemberType",
     },
 ];
