@@ -12,7 +12,7 @@ import {
 
 export default function Table({ data, header: Header, row: Row, pagination = true }) {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
 
     const handleChangeRowsPerPage = (event) => {
@@ -46,7 +46,7 @@ export default function Table({ data, header: Header, row: Row, pagination = tru
 
             {pagination ? (
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 20, 30]}
                     component="div"
                     count={data.length}
                     rowsPerPage={rowsPerPage}
