@@ -7,7 +7,7 @@ import { Box, Tab, Card, Grid, Divider, Container, Typography } from "@mui/mater
 // components
 import Page from "components/Page";
 import Image from "components/Image";
-import { EventDetails, EventPoster, EventStatus, EventActions } from "components/events";
+import { EventDetails, EventPoster, EventStatus, EventActions, EventBudget } from "components/events";
 
 import events from "_mock/events";
 
@@ -44,7 +44,9 @@ export default function Event() {
                 </Card>
 
                 {/* finance */}
-                <Card sx={{ mt: 2 }}>
+                <Card sx={{ mt: 2, p: 2 }}>
+                    <Typography variant="overline"> Budget </Typography>
+                    <EventBudget editable={true} />
                 </Card>
 
                 {/* venue */}
