@@ -1,4 +1,6 @@
+// next
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import {
     Box,
@@ -63,6 +65,7 @@ function EventsTableHeader() {
 }
 
 function EventsTableRow(event) {
+    const router = useRouter();
     const { club, name, datetimeStart, state } = event;
 
     const menuItems = [
@@ -96,8 +99,8 @@ function EventsTableRow(event) {
     ];
 
     return (
-        <TableRow>
-            <TableCell align="left" sx={{ display: "flex", alignItems: "center", border: "none" }}>
+        <TableRow hover onClick={() => router.push(`/manage/events/${event.id}`)} sx={{ cursor: "pointer" }} >
+            <TableCell align="left" sx={{ border: "none" }}>
                 <Typography variant="subtitle2" noWrap>
                     {name}
                 </Typography>
