@@ -16,13 +16,13 @@ export default function About() {
                 </Typography>
 
                 <Typography variant="body1">
-                    As a constituent body of the <i>Students' Life Committee</i> (SLC), the Clubs
+                    As a constituent body of the <i>Students&apos; Life Committee</i> (SLC), the Clubs
                     Council oversees all the student-driven activities and the functioning of the
                     clubs. It handles the annual budget of clubs, events, coordinates among
                     different clubs and helps in creating new clubs, societies and special interest
                     groups.
                     <Box mt={1} />
-                    The Clubs Council works closely with the institute's Students' Life Office,
+                    The Clubs Council works closely with the institute&apos;s Students&apos; Life Office,
                     Finance Council, Outreach, IT Offices, SLC and SAC faculty members, and all
                     other student administrative bodies.
                     <Box mt={1} />
@@ -56,7 +56,7 @@ export default function About() {
                     <Box mt={1} />
                     And then come the Club Members, who play an important role in design,
                     development and execution of any event organised by the clubs, and contribute to
-                    the betterment of Students' Life at IIIT, Hyderabad.
+                    the betterment of Students&apos; Life at IIIT, Hyderabad.
                 </Typography>
             </Container>
         </Page>

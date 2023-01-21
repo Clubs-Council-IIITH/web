@@ -36,7 +36,7 @@ export default function EventCard({ event }) {
                             {state}
                         </Label>
                     )}
-                    <EventPoster event={event} />
+                    <EventPoster {...event} />
                 </Box>
 
                 <Stack spacing={1} sx={{ p: 3 }}>

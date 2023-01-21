@@ -5,8 +5,7 @@ import Iconify from "components/iconify";
 import AudienceChips from "./AudienceChips";
 import { ClubBanner } from "components/clubs";
 
-export default function EventDetails({ event }) {
-    const { club, name, description, audience, datetimeStart, datetimeEnd } = event;
+export default function EventDetails({ club, name, description, audience, datetimeStart, datetimeEnd  }) {
 
     return (
         <Box p={3}>
@@ -21,7 +20,7 @@ export default function EventDetails({ event }) {
                 {name}
             </Typography>
 
-            <ClubBanner club={club} />
+            <ClubBanner {...club} />
 
             <Box display="flex" mt={4} alignItems="center">
                 <Iconify icon="ic:outline-location-on" sx={{ mr: 2 }} />

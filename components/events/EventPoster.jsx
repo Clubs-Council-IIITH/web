@@ -11,8 +11,7 @@ const StyledEventImg = styled("img")({
     position: "absolute",
 });
 
-export default function EventPoster({ event }) {
-    const { club, name, poster } = event;
+export default function EventPoster({ club, name, poster }) {
 
     // blur club cover and set as poster if not uploaded
     const [clubCoverAsPoster, setClubCoverAsPoster] = useState(false);

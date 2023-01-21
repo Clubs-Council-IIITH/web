@@ -31,8 +31,8 @@ export default function Table({ data, header: Header, row: Row, pagination = tru
                     <TableBody>
                         {data
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => (
-                                <Row {...row} />
+                            .map((row, key) => (
+                                <Row key={key} {...row} />
                             ))}
 
                         {emptyRows > 0 && (

@@ -2,8 +2,7 @@ import { useRouter } from "next/router";
 
 import { Avatar, Button, Box, Typography } from "@mui/material";
 
-export default function ClubBanner({ club, ...other }) {
-    const { id, img, name } = club;
+export default function ClubBanner({ id, img, name, ...other }) {
     const router = useRouter();
 
     return (

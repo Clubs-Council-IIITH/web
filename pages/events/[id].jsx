@@ -24,12 +24,12 @@ export default function Event() {
                     <Grid container>
                         <Grid item xs={12} md={6} lg={6}>
                             <Card sx={{ m: 1 }}>
-                                <Image src={event?.poster} ratio="1/1" />
-                                <EventPoster event={event} />
+                                <Image src={event?.poster} ratio="1/1" alt={event?.name} />
+                                <EventPoster {...event} />
                             </Card>
                         </Grid>
                         <Grid item xs={12} md={6} lg={6}>
-                            <EventDetails event={event} />
+                            <EventDetails {...event} />
                         </Grid>
                     </Grid>
                 </Card>

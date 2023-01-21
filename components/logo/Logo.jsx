@@ -55,6 +55,7 @@ const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
     return <NextLink href="/">{logo}</NextLink>;
 });
 
+Logo.displayName = "Logo";
 Logo.propTypes = {
     disabledLink: PropTypes.bool,
     sx: PropTypes.object,
