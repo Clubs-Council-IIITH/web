@@ -2,7 +2,17 @@
 import { useRouter } from "next/router";
 
 // @mui
-import { Box, Tab, Card, Grid, Divider, Container, Typography } from "@mui/material";
+import {
+    Box,
+    Tab,
+    Card,
+    Grid,
+    Divider,
+    Container,
+    Typography,
+    Avatar,
+    CardContent
+} from "@mui/material";
 
 // components
 import Page from "components/Page";
@@ -43,14 +53,25 @@ export default function Event() {
                     </Grid>
                 </Card>
 
-                {/* finance */}
+                {/* POC */}
+                <Card sx={{ mt: 2, p: 2 }}>
+                    <Typography variant="overline"> Point of Contact </Typography>
+                    <Card>
+                        <CardContent>
+
+                        </CardContent>
+                    </Card>
+                </Card>
+
+                {/* budget */}
                 <Card sx={{ mt: 2, p: 2 }}>
                     <Typography variant="overline"> Budget </Typography>
                     <EventBudget editable={true} />
                 </Card>
 
                 {/* venue */}
-                <Card sx={{ mt: 2 }}>
+                <Card sx={{ mt: 2, p: 2 }}>
+                    <Typography variant="overline"> Venue </Typography>
                 </Card>
             </Container>
         </Page >
