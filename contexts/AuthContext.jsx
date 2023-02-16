@@ -1,5 +1,8 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
+
+import { useLazyQuery } from "@apollo/client";
+import { GET_PROFILE } from "gql/queries/auth";
 
 const initialState = {
     isAuthenticated: false,
@@ -24,6 +27,21 @@ function AuthProvider({ children }) {
     const router = useRouter();
     const [authState, setAuthState] = useState(initialState);
 
+    // API call to fetch user details and isAuthenticated status
+    const [getUser] = useLazyQuery(GET_PROFILE, {
+        variables: { userInput: null },
+        onCompleted: ({ getProfile: user }) => {
+            setAuthState({
+                isAuthenticated: Boolean(user),
+                user: user,
+            });
+        },
+    });
+
+    // get currently logged in user on page load
+    useEffect(getUser, []);
+
+    // callback to log user in
     const login = () => {
         // save path to continue from
         localStorage.setItem("continue", router.pathname);
@@ -32,6 +50,7 @@ function AuthProvider({ children }) {
         router.push("/login");
     };
 
+    // callback to log user out
     const logout = () => {
         // save path to continue from
         localStorage.setItem("continue", router.pathname);
@@ -40,19 +59,13 @@ function AuthProvider({ children }) {
         router.push("/logout");
     };
 
+    // update currently logged in user while preserving browsing state
     const updateAuth = () => {
         // fetch path to continue from
         const continuePath = localStorage.getItem("continue");
 
         // update auth state
-        // TODO: API call to fetch user details and isAuthenticated status
-        setAuthState({
-            isAuthenticated: true,
-            user: {
-                displayName: "User Name",
-                email: "user.name@research.iiit.ac.in",
-            },
-        });
+        getUser();
 
         // redirect to continue browsing
         router.push(continuePath);
