@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.7.8",
+        "@emotion/css": "^11.10.6",
         "@emotion/react": "^11.10.4",
         "@emotion/server": "^11.10.0",
         "@emotion/styled": "^11.10.4",
@@ -37,6 +38,9 @@
         "react-slick": "^0.29.0",
         "react-social-icons": "^5.15.0",
         "simplebar-react": "^2.4.3",
+        "slate": "^0.91.4",
+        "slate-history": "^0.86.0",
+        "slate-react": "^0.91.10",
         "slick-carousel": "^1.8.1"
     }
 }

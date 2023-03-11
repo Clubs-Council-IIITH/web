@@ -12,6 +12,7 @@ import Page from "components/Page";
 import { ClubHero } from "components/clubs";
 import { EventCard } from "components/events";
 import { UserCard } from "components/users";
+import { RichTextEditor } from "components/RichTextEditor";
 import Iconify from "components/iconify";
 
 import clubs from "_mock/clubs";
@@ -34,7 +35,11 @@ export default function Club() {
                         <Card sx={{ mb: 4 }}>
                             <ClubHero club={club} />
                             <Box sx={{ p: { xs: 3, md: 5 } }}>
-                                <Typography variant="body">{club.description}</Typography>
+                                {/* <Typography variant="body">{club.description}</Typography> */}
+                                <RichTextEditor
+                                    editing={false}
+                                    editorState={[JSON.parse(club.description), null]}
+                                />
                             </Box>
                         </Card>
 
