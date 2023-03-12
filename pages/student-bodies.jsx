@@ -1,10 +1,11 @@
-// @mui
 import { Grid, Container, Stack, Typography } from "@mui/material";
 
 import Page from "components/Page";
+import ClientOnly from "components/ClientOnly";
 import { ClubCard } from "components/clubs";
 
-import clubs from "_mock/clubs";
+import { useQuery } from "@apollo/client";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 
 export default function StudentBodies() {
     return (
@@ -16,14 +17,25 @@ export default function StudentBodies() {
                     </Typography>
                 </Stack>
 
-                <Grid container spacing={3}>
-                    {clubs
-                        .filter((club) => club.category === "OTHER")
-                        .map((club, index) => (
-                            <ClubCard key={index} club={club} index={index} />
-                        ))}
-                </Grid>
+                <ClientOnly>
+                    <StudentBodiesList />
+                </ClientOnly>
             </Container>
         </Page>
+    );
+}
+
+function StudentBodiesList() {
+    const { loading, error, data: { activeClubs: clubs } = {} } = useQuery(GET_ACTIVE_CLUBS);
+
+    // TODO: add loading screen and empty list handling
+    return loading ? null : clubs.length == 0 ? null : (
+        <Grid container spacing={3}>
+            {clubs
+                ?.filter((club) => club.category === "other")
+                ?.map((club, index) => (
+                    <ClubCard key={index} club={club} index={index} />
+                ))}
+        </Grid>
     );
 }

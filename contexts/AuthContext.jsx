@@ -62,7 +62,7 @@ function AuthProvider({ children }) {
     // update currently logged in user while preserving browsing state
     const updateAuth = () => {
         // fetch path to continue from
-        const continuePath = localStorage.getItem("continue");
+        const continuePath = localStorage.getItem("continue") || "/";
 
         // update auth state
         getUser();
