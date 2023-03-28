@@ -140,9 +140,9 @@ function ClubMembers({ cid }) {
                     <Grid container spacing={3} mt={1}>
                         {/* display only current members */}
                         {members
-                            .filter((user) => user.year === new Date().getFullYear())
+                            .filter((user) => user.startYear === new Date().getFullYear())
                             .map((user) => (
-                                <Grid key={user.id} item xs={12} sm={6} md={3}>
+                                <Grid key={user.uid} item xs={12} sm={6} md={3}>
                                     <UserCard user={user} />
                                 </Grid>
                             ))}

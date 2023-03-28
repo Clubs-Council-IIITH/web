@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
+
+import { GET_USER_PROFILE } from "gql/queries/users";
+
 // @mui
 import { styled } from "@mui/material/styles";
 import { Box, Card, Avatar, Divider, Typography, Stack } from "@mui/material";
@@ -27,16 +32,36 @@ UserCard.propTypes = {
 
 export default function UserCard({ user }) {
     // const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
+
+    const { cid, uid, role, startYear, approved } = user;
+    const { name, setName } = useState("");
+    const { img, setImg } = useState(null);
+    // const {
+    //     user: { firstName, lastName, img, email },
+    //     role,
+    // } = user;
+
     const {
-        user: { firstName, lastName, img, mail },
-        role,
-    } = user;
+        loading,
+        error,
+        data: { member } = {},
+    } = useQuery(GET_USER_PROFILE, {
+        variables: {
+            userInput: {
+                uid: uid,
+            },
+        },
+        onCompleted: (userProfile) => {
+            setName(`${userProfile.firstName} ${userProfile.lastName}`);
+            setImg(userProfile.img);
+        }
+    });
 
     return (
         <Card sx={{ textAlign: "center" }}>
             <Box sx={{ position: "relative" }}>
                 <Avatar
-                    alt={`${firstName} ${lastName}`}
+                    alt={name}
                     src={img}
                     sx={{
                         width: 128,
@@ -54,7 +79,7 @@ export default function UserCard({ user }) {
             </Box>
             <Box pb={4}>
                 <Typography variant="subtitle1" sx={{ mt: 6 }}>
-                    {`${firstName} ${lastName}`}
+                    {name}
                 </Typography>
 
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
