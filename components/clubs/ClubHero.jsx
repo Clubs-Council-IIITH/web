@@ -93,9 +93,10 @@ export default function ClubHero({ club }) {
 
                 <Box display="flex" flexDirection={isDesktop ? "row" : "column"}>
                     {["instagram", "facebook", "youtube", "twitter", "linkedin", "discord"].map(
-                        (network) =>
+                        (network, key) =>
                             club?.[network] ? (
                                 <SocialMedia
+                                    key={key}
                                     network={network}
                                     url={club[network]}
                                     dims={isDesktop ? 35 : 30}
