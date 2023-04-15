@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useLazyQuery } from "@apollo/client";
-import { GET_USER_PROFILE } from "gql/queries/users";
+import { GET_USER } from "gql/queries/auth";
 
 const initialState = {
     isAuthenticated: false,
@@ -28,7 +28,7 @@ function AuthProvider({ children }) {
     const [authState, setAuthState] = useState(initialState);
 
     // API call to fetch user details and isAuthenticated status
-    const [getUser] = useLazyQuery(GET_USER_PROFILE, {
+    const [getUser] = useLazyQuery(GET_USER, {
         variables: { userInput: null },
         onCompleted: ({ userMeta, userProfile }) => {
             setAuthState({
