@@ -1,11 +1,10 @@
 import { Chip, Grid } from "@mui/material";
-
-import { fToList } from "utils/formatAudience";
+import { audienceLabels } from "utils/formatEvent";
 
 export default function AudienceChips({ audience }) {
     return (
         <Grid container spacing={1}>
-            {fToList(audience).map(({ name, color }) => (
+            {audienceLabels(audience)?.map(({ name, color }) => (
                 <Grid item key={name}>
                     <Chip
                         label={name}

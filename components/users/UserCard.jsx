@@ -54,7 +54,7 @@ export default function UserCard({ user }) {
         onCompleted: (userProfile) => {
             setName(`${userProfile.firstName} ${userProfile.lastName}`);
             setImg(userProfile.img);
-        }
+        },
     });
 
     return (

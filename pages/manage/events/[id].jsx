@@ -11,13 +11,19 @@ import {
     Container,
     Typography,
     Avatar,
-    CardContent
+    CardContent,
 } from "@mui/material";
 
 // components
 import Page from "components/Page";
 import Image from "components/Image";
-import { EventDetails, EventPoster, EventStatus, EventActions, EventBudget } from "components/events";
+import {
+    EventDetails,
+    EventPoster,
+    EventStatus,
+    EventActions,
+    EventBudget,
+} from "components/events";
 
 import events from "_mock/events";
 
@@ -44,7 +50,7 @@ export default function Event() {
                         <Grid item xs={12} md={6} lg={6}>
                             <Card sx={{ m: 1 }}>
                                 <Image src={event?.poster} ratio="1/1" alt={event?.name} />
-                                <EventPoster {...event} />
+                                <EventPoster event={event} club={{}} />
                             </Card>
                         </Grid>
                         <Grid item xs={12} md={6} lg={6}>
@@ -57,9 +63,7 @@ export default function Event() {
                 <Card sx={{ mt: 2, p: 2 }}>
                     <Typography variant="overline"> Point of Contact </Typography>
                     <Card>
-                        <CardContent>
-
-                        </CardContent>
+                        <CardContent></CardContent>
                     </Card>
                 </Card>
 
@@ -74,6 +78,6 @@ export default function Event() {
                     <Typography variant="overline"> Venue </Typography>
                 </Card>
             </Container>
-        </Page >
+        </Page>
     );
 }

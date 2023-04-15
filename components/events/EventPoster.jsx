@@ -11,20 +11,19 @@ const StyledEventImg = styled("img")({
     position: "absolute",
 });
 
-export default function EventPoster({ club, name, poster }) {
-
+export default function EventPoster({ event, club }) {
     // blur club cover and set as poster if not uploaded
     const [clubCoverAsPoster, setClubCoverAsPoster] = useState(false);
     useEffect(() => {
-        if (poster === null || poster === "") {
+        if (event?.poster === null || event?.poster === "") {
             setClubCoverAsPoster(true);
         }
-    }, [poster]);
+    }, [event?.poster]);
 
     return (
         <StyledEventImg
-            alt={name}
-            src={clubCoverAsPoster ? club.img : poster}
+            alt={event?.name}
+            src={clubCoverAsPoster ? club?.banner : event?.poster}
             sx={{
                 ...(clubCoverAsPoster ? { filter: "blur(0.3em)" } : {}),
             }}

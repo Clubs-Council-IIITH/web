@@ -16,15 +16,15 @@ export default function About() {
                 </Typography>
 
                 <Typography variant="body1">
-                    As a constituent body of the <i>Students&apos; Life Committee</i> (SLC), the Clubs
-                    Council oversees all the student-driven activities and the functioning of the
-                    clubs. It handles the annual budget of clubs, events, coordinates among
+                    As a constituent body of the <i>Students&apos; Life Committee</i> (SLC), the
+                    Clubs Council oversees all the student-driven activities and the functioning of
+                    the clubs. It handles the annual budget of clubs, events, coordinates among
                     different clubs and helps in creating new clubs, societies and special interest
                     groups.
                     <Box mt={1} />
-                    The Clubs Council works closely with the institute&apos;s Students&apos; Life Office,
-                    Finance Council, Outreach, IT Offices, SLC and SAC faculty members, and all
-                    other student administrative bodies.
+                    The Clubs Council works closely with the institute&apos;s Students&apos; Life
+                    Office, Finance Council, Outreach, IT Offices, SLC and SAC faculty members, and
+                    all other student administrative bodies.
                     <Box mt={1} />
                     The primary aim of the Clubs Council is to ensure that all student-driven
                     organizations on campus are successful in their aim to cultivate diverse campus

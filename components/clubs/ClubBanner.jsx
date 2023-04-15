@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 
 import { Avatar, Button, Box, Typography } from "@mui/material";
 
-export default function ClubBanner({ id, img, name, ...other }) {
+export default function ClubBanner({ cid, logo, name, ...other }) {
     const router = useRouter();
 
     return (
@@ -11,11 +11,13 @@ export default function ClubBanner({ id, img, name, ...other }) {
             color="black"
             display="flex"
             alignItems="center"
-            onClick={() => router.push(`/clubs/${id}`)}
+            border={1}
+            borderColor={"grey.300"}
+            onClick={() => router.push(`/clubs/${cid}`)}
             {...other}
         >
-            <Avatar src={img} alt={name} sx={{ height: 18, width: 18, mr: 1 }} />
-            <Typography variant="overline" fontSize={14}>
+            <Avatar src={logo} alt={name} sx={{ height: 18, width: 18, mr: 1 }} />
+            <Typography variant="body2" fontSize={14}>
                 {name}
             </Typography>
         </Box>

@@ -39,7 +39,9 @@ function AuthProvider({ children }) {
     });
 
     // get currently logged in user on page load
-    useEffect(getUser, []);
+    useEffect(() => {
+        getUser();
+    }, []);
 
     // callback to log user in
     const login = () => {

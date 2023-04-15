@@ -3,7 +3,9 @@ import { useAuth } from "contexts/AuthContext";
 
 export default function AuthRedirect() {
     const { updateAuth } = useAuth();
-    useEffect(updateAuth, []);
+    useEffect(() => {
+        updateAuth();
+    }, []);
 
     return null;
 }

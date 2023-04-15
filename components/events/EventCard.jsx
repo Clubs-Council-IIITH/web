@@ -13,15 +13,15 @@ EventCard.propTypes = {
     event: PropTypes.object,
 };
 
-export default function EventCard({ event }) {
-    const { name, state, datetimeStart } = event;
+export default function EventCard({ event, club }) {
+    const { _id, name, datetimeperiod } = event;
     const router = useRouter();
 
     return (
         <Card>
-            <CardActionArea onClick={() => router.push(`/events/${event.id}`)}>
+            <CardActionArea onClick={() => router.push(`/events/${_id}`)}>
                 <Box sx={{ pt: "100%", position: "relative" }}>
-                    {state && (
+                    {event?.status?.state && (
                         <Label
                             variant="filled"
                             color={(state === "A_6" && "error") || "info"}
@@ -33,10 +33,10 @@ export default function EventCard({ event }) {
                                 textTransform: "uppercase",
                             }}
                         >
-                            {state}
+                            {event?.status?.state}
                         </Label>
                     )}
-                    <EventPoster {...event} />
+                    <EventPoster event={event} club={club} />
                 </Box>
 
                 <Stack spacing={1} sx={{ p: 3 }}>
@@ -44,7 +44,14 @@ export default function EventCard({ event }) {
                         {name}
                     </Typography>
                     <Typography variant="caption" noWrap>
-                        {fDateTime(datetimeStart, "dd MMM, p")}
+                        {fDateTime(
+                            datetimeperiod?.[0],
+                            // show year if event didn't happen this year
+                            parseInt(fDateTime(datetimeperiod?.[0], "Y")) !==
+                                parseInt(new Date().getFullYear())
+                                ? "dd MMM Y, p"
+                                : "dd MMM, p"
+                        )}
                     </Typography>
                 </Stack>
             </CardActionArea>
