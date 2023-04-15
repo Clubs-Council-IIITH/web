@@ -76,7 +76,7 @@ function SocialMedia({ network, url, dims = 30, ...props }) {
 }
 
 export default function ClubHero({ club }) {
-    const { img, name, tagline } = club;
+    const { banner, name, tagline } = club;
 
     const isDesktop = useResponsive("up", "sm");
 
@@ -109,7 +109,7 @@ export default function ClubHero({ club }) {
             <OverlayStyle />
             <Image
                 alt="club cover image"
-                src={img}
+                src={banner}
                 ratio={isDesktop ? "21/9" : "4/3"}
                 sx={{
                     filter: "blur(0.3em)",
