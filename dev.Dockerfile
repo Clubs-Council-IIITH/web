@@ -8,5 +8,4 @@ RUN npm install --prefer-offline --no-audit --progress=false
 FROM node:18-slim as build
 WORKDIR /web
 COPY --from=node_cache /cache/ .
-COPY . .
 ENTRYPOINT [ "npm", "run", "dev" ]
