@@ -29,7 +29,7 @@ function StudentBodiesList() {
     const { loading, error, data: { activeClubs: clubs } = {} } = useQuery(GET_ACTIVE_CLUBS);
 
     // TODO: add loading screen and empty list handling
-    return loading ? null : clubs.length == 0 ? null : (
+    return loading ? null : !clubs?.length ? null : (
         <Grid container spacing={3}>
             {clubs
                 ?.filter((club) => club.category === "other")

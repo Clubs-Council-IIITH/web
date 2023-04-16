@@ -78,10 +78,9 @@ export default function UserCard({ user }) {
 
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {role}
-                </Typography>
-
-                <Typography variant="body2" mt={2} sx={{ color: "grey.400" }}>
-                    {startYear} - {endYear || "present"}
+                    <Box color="grey.400" display="inline-block" ml={0.5}>
+                        ({startYear} - {endYear || "present"})
+                    </Box>
                 </Typography>
             </Box>
         </Card>
