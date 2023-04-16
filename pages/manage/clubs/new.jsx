@@ -1,0 +1,376 @@
+import { useState, useCallback } from "react";
+
+import { useMutation } from "@apollo/client";
+import { CREATE_CLUB } from "gql/mutations/clubs";
+
+import {
+    Grid,
+    Card,
+    Container,
+    Stack,
+    Button,
+    Typography,
+    TextField,
+    Box,
+    InputLabel,
+    Select,
+    MenuItem,
+} from "@mui/material";
+
+import { useForm, Controller } from "react-hook-form";
+
+import Page from "components/Page";
+import Iconify from "components/iconify";
+import ImageUpload from "components/ImageUpload";
+import { RichTextEditor } from "components/RichTextEditor";
+
+export default function NewClub() {
+    // manage rich-text description
+    const [description, setDescription] = useState([
+        { type: "paragraph", children: [{ text: "" }] },
+    ]);
+
+    // manage logo upload
+    const [logo, setLogo] = useState(null);
+    const handleLogoDrop = useCallback(
+        (files) => {
+            const file = files[0];
+            if (file) {
+                setLogo(Object.assign(file, { preview: URL.createObjectURL(file) }));
+            }
+        },
+        [setLogo]
+    );
+
+    // manage banner upload
+    const [banner, setBanner] = useState(null);
+    const handleBannerDrop = useCallback(
+        (files) => {
+            const file = files[0];
+            if (file) {
+                setBanner(Object.assign(file, { preview: URL.createObjectURL(file) }));
+            }
+        },
+        [setBanner]
+    );
+
+    // mutation to create club
+    const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB);
+
+    // controlled form
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            category: "cultural",
+        },
+    });
+
+    // submission logic
+    const onSubmit = async (data) => {
+        const formData = {
+            ...data,
+            description: JSON.stringify(description),
+            logo,
+            banner,
+        };
+
+        console.log(formData);
+
+        // TODO: file uploads
+        formData.logo = null;
+        formData.banner = null;
+
+        // perform mutation
+        createClub({
+            variables: {
+                clubInput: formData,
+            },
+        });
+    };
+
+    return (
+        <Page title={"New Club"}>
+            <Container>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={8}>
+                            <Card sx={{ p: 3 }}>
+                                <Typography color="text.secondary" variant="subtitle2" pb={2}>
+                                    DETAILS
+                                </Typography>
+
+                                <Stack spacing={2}>
+                                    <Controller
+                                        name="cid"
+                                        control={control}
+                                        rules={{ required: "Club ID can not be empty!" }}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Club ID*"
+                                                autoComplete="off"
+                                                error={errors.cid}
+                                                helperText={errors.cid?.message}
+                                                {...field}
+                                            />
+                                        )}
+                                    />
+
+                                    <Controller
+                                        name="name"
+                                        control={control}
+                                        rules={{ required: "Name can not be empty!" }}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Name*"
+                                                autoComplete="off"
+                                                error={errors.name}
+                                                helperText={errors.name?.message}
+                                                {...field}
+                                            />
+                                        )}
+                                    />
+
+                                    <Controller
+                                        name="email"
+                                        control={control}
+                                        rules={{ required: "Club email is required!" }}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Email*"
+                                                autoComplete="off"
+                                                error={errors.email}
+                                                helperText={errors.email?.message}
+                                                {...field}
+                                            />
+                                        )}
+                                    />
+
+                                    <Box>
+                                        <InputLabel shrink>Category*</InputLabel>
+                                        <Controller
+                                            name="category"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select fullWidth {...field}>
+                                                    <MenuItem value="cultural">Cultural</MenuItem>
+                                                    <MenuItem value="technical">Technical</MenuItem>
+                                                    <MenuItem value="other">Other</MenuItem>
+                                                </Select>
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Controller
+                                        name="tagline"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Tagline"
+                                                autoComplete="off"
+                                                error={errors.tagline}
+                                                helperText={errors.tagline?.message}
+                                                {...field}
+                                            />
+                                        )}
+                                    />
+
+                                    <Box>
+                                        <InputLabel shrink>Description</InputLabel>
+                                        <Box
+                                            border={1}
+                                            borderColor={"grey.300"}
+                                            borderRadius={1}
+                                            py={1}
+                                            px={2}
+                                        >
+                                            <RichTextEditor
+                                                editing={true}
+                                                editorState={[description, setDescription]}
+                                            />
+                                        </Box>
+                                    </Box>
+                                </Stack>
+                            </Card>
+
+                            <Card sx={{ p: 3, mt: 3 }}>
+                                <Typography color="text.secondary" variant="subtitle2" pb={2}>
+                                    SOCIALS
+                                </Typography>
+
+                                <Stack spacing={2}>
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="mdi:web" mr={2} />
+                                        <Controller
+                                            name="socials.website"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="Website"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.website}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="mdi:instagram" mr={2} />
+                                        <Controller
+                                            name="socials.instagram"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="Instagram"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.instagram}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="ic:baseline-facebook" mr={2} />
+                                        <Controller
+                                            name="socials.facebook"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="Facebook"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.facebook}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="mdi:youtube" mr={2} />
+                                        <Controller
+                                            name="socials.youtube"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="YouTube"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.youtube}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="mdi:twitter" mr={2} />
+                                        <Controller
+                                            name="socials.twitter"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="Twitter"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.twitter}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="mdi:linkedin" mr={2} />
+                                        <Controller
+                                            name="socials.linkedin"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="LinkedIn"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.linkedin}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+
+                                    <Box display="flex" alignItems="center" w={100}>
+                                        <Iconify icon="ic:baseline-discord" mr={2} />
+                                        <Controller
+                                            name="socials.discord"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    fullWidth
+                                                    label="Discord"
+                                                    autoComplete="off"
+                                                    error={errors.socials?.discord}
+                                                    {...field}
+                                                />
+                                            )}
+                                        />
+                                    </Box>
+                                </Stack>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Card sx={{ p: 3 }}>
+                                <Typography color="text.secondary" variant="subtitle2" pb={2}>
+                                    MEDIA
+                                </Typography>
+
+                                <Stack spacing={2}>
+                                    <Box>
+                                        <InputLabel shrink>Logo</InputLabel>
+                                        <ImageUpload
+                                            name="logo"
+                                            accept="image/*"
+                                            maxSize={3145728} // TODO: set file size limits
+                                            onDrop={handleLogoDrop}
+                                            file={logo}
+                                            // shape="circle"
+                                        />
+                                    </Box>
+
+                                    <Box>
+                                        <InputLabel shrink>Banner</InputLabel>
+                                        <ImageUpload
+                                            name="banner"
+                                            accept="image/*"
+                                            maxSize={3145728} // TODO: set file size limits
+                                            onDrop={handleBannerDrop}
+                                            file={banner}
+                                        />
+                                    </Box>
+                                </Stack>
+                            </Card>
+                            <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                                <Button
+                                    fullWidth
+                                    color="inherit"
+                                    variant="outlined"
+                                    size="large"
+                                    onClick={() => console.log("cancel")}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button fullWidth type="submit" variant="contained" size="large">
+                                    Create
+                                </Button>
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Container>
+        </Page>
+    );
+}

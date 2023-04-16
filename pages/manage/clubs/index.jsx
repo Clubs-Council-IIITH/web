@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 import {
@@ -23,6 +24,8 @@ import Iconify from "components/iconify";
 import clubs from "_mock/clubs";
 
 export default function Clubs() {
+    const { asPath } = useRouter();
+
     return (
         <Page title="Manage Clubs">
             <Container>
@@ -33,7 +36,7 @@ export default function Clubs() {
 
                     <Button
                         component={Link}
-                        href="#"
+                        href={`${asPath}/new`}
                         variant="contained"
                         startIcon={<Iconify icon="eva:plus-fill" />}
                     >
