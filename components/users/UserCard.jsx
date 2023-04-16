@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
 
@@ -31,29 +31,23 @@ UserCard.propTypes = {
 };
 
 export default function UserCard({ user }) {
-    // const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
-
-    const { cid, uid, role, startYear, approved } = user;
-    const { name, setName } = useState("");
-    const { img, setImg } = useState(null);
-    // const {
-    //     user: { firstName, lastName, img, email },
-    //     role,
-    // } = user;
+    const { cid, uid, role, startYear, endYear, approved } = user;
+    const [name, setName] = useState("");
+    const [img, setImg] = useState(null);
 
     const {
         loading,
         error,
-        data: { member } = {},
+        data: { userProfile } = {},
     } = useQuery(GET_USER_PROFILE, {
         variables: {
             userInput: {
                 uid: uid,
             },
         },
-        onCompleted: (userProfile) => {
-            setName(`${userProfile.firstName} ${userProfile.lastName}`);
-            setImg(userProfile.img);
+        onCompleted: ({ userProfile }) => {
+            setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
+            // setImg(userProfile?.img);
         },
     });
 
@@ -78,12 +72,16 @@ export default function UserCard({ user }) {
                 <Image src={img} alt={img} ratio="16/9" />
             </Box>
             <Box pb={4}>
-                <Typography variant="subtitle1" sx={{ mt: 6 }}>
-                    {name}
+                <Typography variant="subtitle1" sx={{ mt: 6, textTransform: "capitalize" }}>
+                    {name.toLowerCase()}
                 </Typography>
 
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {role}
+                </Typography>
+
+                <Typography variant="body2" mt={2} sx={{ color: "grey.400" }}>
+                    {startYear} - {endYear || "present"}
                 </Typography>
             </Box>
         </Card>

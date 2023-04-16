@@ -6,6 +6,7 @@ export const GET_MEMBERS = gql`
             cid
             uid
             startYear
+            endYear
             role
             approved
         }
@@ -18,6 +19,7 @@ export const GET_PENDING_MEMBERS = gql`
             cid
             uid
             startYear
+            endYear
             role
             approved
         }

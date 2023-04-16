@@ -141,13 +141,15 @@ function ClubMembers({ cid }) {
         },
     });
 
-    return loading ? null : !members ? null : (
+    // TODO: handle loading screen and zero members
+    return loading ? null : !members.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
             <Typography variant="h4">Members</Typography>
             <Grid container spacing={3} mt={1}>
                 {/* display only current members */}
                 {members
-                    .filter((user) => user.startYear === new Date().getFullYear())
+                    // .filter((user) => user.startYear === new Date().getFullYear())
+                    .filter((user) => user.endYear === null)
                     .map((user) => (
                         <Grid key={user.uid} item xs={12} sm={6} md={3}>
                             <UserCard user={user} />
