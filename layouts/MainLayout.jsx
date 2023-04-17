@@ -37,7 +37,7 @@ export default function MainLayout({ children }) {
         <StyledRoot>
             <Header onOpenNav={() => setOpen(true)} />
             <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-            <Scrollbars autoHide style={{ height: "100vh" }}>
+            <Scrollbars autoHide universal={true} style={{ height: "100vh" }}>
                 <Main>{children}</Main>
             </Scrollbars>
         </StyledRoot>

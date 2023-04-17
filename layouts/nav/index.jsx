@@ -40,7 +40,7 @@ export default function Nav({ openNav, onCloseNav }) {
     }, [pathname]);
 
     const renderContent = (
-        <Scrollbars autoHide style={{ height: "100%" }}>
+        <Scrollbars autoHide universal={true} style={{ height: "100%" }}>
             <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
                 <Logo />
             </Box>
