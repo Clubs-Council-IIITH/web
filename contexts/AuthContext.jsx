@@ -46,7 +46,7 @@ function AuthProvider({ children }) {
     // callback to log user in
     const login = () => {
         // save path to continue from
-        localStorage.setItem("continue", router.pathname);
+        localStorage.setItem("continue", router.asPath);
 
         // redirect to CAS login
         router.push("/login");
@@ -55,7 +55,7 @@ function AuthProvider({ children }) {
     // callback to log user out
     const logout = () => {
         // save path to continue from
-        localStorage.setItem("continue", router.pathname);
+        localStorage.setItem("continue", router.asPath);
 
         // redirect to CAS logout
         router.push("/logout");

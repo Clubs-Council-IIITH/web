@@ -54,14 +54,12 @@ export default function Club() {
 
 function ClubDetails({ cid, setTitle }) {
     const {
+        data: { club } = {},
         loading,
         error,
-        data: { club } = {},
     } = useQuery(GET_CLUB, {
         variables: {
-            clubInput: {
-                cid: cid,
-            },
+            clubInput: { cid: cid },
         },
         onCompleted: ({ club }) => {
             setTitle(club?.name);
