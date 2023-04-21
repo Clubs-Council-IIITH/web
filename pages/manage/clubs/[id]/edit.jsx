@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useRouter } from "next/router";
 
@@ -69,7 +69,7 @@ export default function EditClub() {
     });
 
     // mutation to create club
-    const [editClub, { data, loading, error }] = useMutation(EDIT_CLUB);
+    const [editClub, editClubState] = useMutation(EDIT_CLUB);
 
     return clubLoading ? null : !club ? null : (
         <Page title={"Edit Club"}>
@@ -78,7 +78,7 @@ export default function EditClub() {
                     disableRequiredFields={true} // TODO: true if current user is the club, false if current user is cc
                     defaultValues={defaultValues}
                     submitMutation={editClub}
-                    submitState={{ data, loading, error }}
+                    submitState={editClubState}
                     submitButtonText="Save"
                 />
             </Container>

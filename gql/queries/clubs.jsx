@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const GET_ACTIVE_CLUBS = gql`
     query ActiveClubs {
         activeClubs {
+            _id
             cid
             state
             category
@@ -16,6 +17,7 @@ export const GET_ACTIVE_CLUBS = gql`
 export const GET_ALL_CLUBS = gql`
     query AllClubs {
         allClubs {
+            _id
             cid
             state
             category
@@ -30,9 +32,10 @@ export const GET_ALL_CLUBS = gql`
 export const GET_CLUB = gql`
     query Club($clubInput: SimpleClubInput!) {
         club(clubInput: $clubInput) {
+            _id
+            cid
             banner
             category
-            cid
             description
             email
             logo

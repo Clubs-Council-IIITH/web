@@ -19,6 +19,7 @@ import { uploadFile } from "utils/files";
 
 import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
+import LoadingButton from "components/LoadingButton";
 import { RichTextEditor } from "components/RichTextEditor";
 
 export default function ClubForm({
@@ -28,6 +29,10 @@ export default function ClubForm({
     disableRequiredFields = false,
     submitButtonText = "Done",
 }) {
+    // check if form is submitting from the client side
+    // needed to track multiple API calls (apart from the `submitState`, which is only for submitMutation)
+    const [submitting, setSubmitting] = useState(false);
+
     // manage rich-text description
     const [description, setDescription] = useState(
         defaultValues?.description || [{ type: "paragraph", children: [{ text: "" }] }]
@@ -75,21 +80,32 @@ export default function ClubForm({
 
     // submission logic
     const onSubmit = async (data) => {
-        // construct form data
-        // upload logo and banner if they are File objects (which they will be if they have been modified)
-        const formData = {
-            ...data,
-            description: JSON.stringify(description),
-            logo: typeof logo === "string" ? logo : await uploadFile(logo, "image"),
-            banner: typeof banner === "string" ? banner : await uploadFile(banner, "image"),
-        };
+        // start submitting form
+        setSubmitting(true);
 
-        // perform mutation
-        submitMutation({
-            variables: {
-                clubInput: formData,
-            },
-        });
+        try {
+            // construct form data
+            // upload logo and banner if they are File objects (which they will be if they have been modified)
+            const formData = {
+                ...data,
+                description: JSON.stringify(description),
+                logo: typeof logo === "string" ? logo : await uploadFile(logo, "image"),
+                banner: typeof banner === "string" ? banner : await uploadFile(banner, "image"),
+            };
+
+            // perform mutation
+            submitMutation({
+                variables: {
+                    clubInput: formData,
+                },
+            });
+        } catch {
+            // stop submitting form if error encountered
+            setSubmitting(false);
+        }
+
+        // finish submitting form
+        setSubmitting(false);
     };
 
     return (
@@ -380,9 +396,15 @@ export default function ClubForm({
                         >
                             Cancel
                         </Button>
-                        <Button fullWidth type="submit" variant="contained" size="large">
+                        <LoadingButton
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            loading={(submitting || submitState?.loading) && !submitState?.error}
+                        >
                             {submitButtonText}
-                        </Button>
+                        </LoadingButton>
                     </Stack>
                 </Grid>
             </Grid>

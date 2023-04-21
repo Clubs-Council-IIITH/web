@@ -62,7 +62,13 @@ export default function AccountPopover() {
                     }),
                 }}
             >
-                <Avatar src={null} alt="photoURL" />
+                <Avatar
+                    src={null}
+                    alt="photoURL"
+                    children={
+                        user?.firstName ? `${user?.firstName?.[0]}${user?.lastName?.[0]}` : null
+                    }
+                />
             </IconButton>
 
             <Popover
