@@ -10,6 +10,7 @@ import {
     Box,
     FormGroup,
     FormControlLabel,
+    Typography,
 } from "@mui/material";
 import {
     EditOutlined as EditIcon,
@@ -56,7 +57,7 @@ function BaseView({ actions, setView }) {
                     <Button
                         fullWidth
                         size="large"
-                        variant="contained"
+                        variant="outlined"
                         color="warning"
                         onClick={handleEdit}
                     >
@@ -71,7 +72,7 @@ function BaseView({ actions, setView }) {
                     <Button
                         fullWidth
                         size="large"
-                        variant="contained"
+                        variant="outlined"
                         color="error"
                         onClick={handleDelete}
                     >
@@ -86,7 +87,7 @@ function BaseView({ actions, setView }) {
                     <Button
                         fullWidth
                         size="large"
-                        variant="contained"
+                        variant="outlined"
                         color="info"
                         onClick={handleSubmit}
                     >
@@ -101,7 +102,7 @@ function BaseView({ actions, setView }) {
                     <Button
                         fullWidth
                         size="large"
-                        variant="contained"
+                        variant="outlined"
                         color="success"
                         onClick={handleApprove}
                     >

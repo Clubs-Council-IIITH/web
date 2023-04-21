@@ -21,7 +21,7 @@ import Iconify from "components/iconify";
 import { useQuery } from "@apollo/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_MEMBERS } from "gql/queries/members";
-import { GET_CLUB_EVENTS } from "gql/queries/events";
+import { GET_APPROVED_EVENTS } from "gql/queries/events";
 
 // import events from "_mock/events";
 
@@ -58,6 +58,7 @@ function ClubDetails({ cid, setTitle }) {
         loading,
         error,
     } = useQuery(GET_CLUB, {
+        skip: !cid,
         variables: {
             clubInput: { cid: cid },
         },
@@ -89,7 +90,7 @@ function ClubEvents({ cid }) {
         loading,
         error,
         data: { events, club } = {},
-    } = useQuery(GET_CLUB_EVENTS, {
+    } = useQuery(GET_APPROVED_EVENTS, {
         variables: {
             clubid: cid,
             clubInput: { cid: cid },

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // next
 import { useRouter } from "next/router";
 
@@ -13,14 +15,30 @@ import { EventDetails, EventPoster } from "components/events";
 import { useQuery } from "@apollo/client";
 import { GET_EVENT } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";
-import { useEffect } from "react";
+
+import ClientOnly from "components/ClientOnly";
 
 export default function Event() {
     const { query } = useRouter();
     const { id } = query;
 
-    useEffect(() => console.log("id", id), [id]);
+    // set title asynchronously
+    const [title, setTitle] = useState("...");
 
+    return (
+        <Page title={title}>
+            <Container>
+                <Card>
+                    <ClientOnly>
+                        <EventDisplay id={id} setTitle={setTitle} />
+                    </ClientOnly>
+                </Card>
+            </Container>
+        </Page>
+    );
+}
+
+function EventDisplay({ id, setTitle }) {
     // get event data
     const {
         loading: eventLoading,
@@ -30,6 +48,9 @@ export default function Event() {
         skip: !id,
         variables: {
             eventid: id,
+        },
+        onCompleted: ({ event }) => {
+            setTitle(event?.name);
         },
     });
 
@@ -47,22 +68,16 @@ export default function Event() {
 
     // TODO: handle event loading and error
     return eventLoading ? null : !event ? null : (
-        <Page title={event?.name}>
-            <Container>
-                <Card>
-                    <Grid container>
-                        <Grid item xs={12} md={6} lg={6}>
-                            <Card sx={{ m: 1 }}>
-                                <Image src={event?.poster} ratio="1/1" alt={event?.name} />
-                                <EventPoster event={event} club={club} />
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={6}>
-                            <EventDetails club={club} {...event} />
-                        </Grid>
-                    </Grid>
+        <Grid container>
+            <Grid item xs={12} md={6} lg={6}>
+                <Card sx={{ m: 1 }}>
+                    <Image src={event?.poster} ratio="1/1" alt={event?.name} />
+                    <EventPoster event={event} club={club} />
                 </Card>
-            </Container>
-        </Page>
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}>
+                <EventDetails club={club} {...event} />
+            </Grid>
+        </Grid>
     );
 }

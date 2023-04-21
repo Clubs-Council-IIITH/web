@@ -21,7 +21,12 @@ import Iconify from "components/iconify";
 
 import { fDateTime } from "utils/formatTime";
 
-import events from "_mock/events";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_CLUB } from "gql/queries/clubs";
+
+import ClientOnly from "components/ClientOnly";
+// import events from "_mock/events";
 
 export default function Events() {
     return (
@@ -44,11 +49,25 @@ export default function Events() {
 
                 <Card>
                     <Box m={1}>
-                        <Table data={events} header={EventsTableHeader} row={EventsTableRow} />
+                        <ClientOnly>
+                            <EventsTable />
+                        </ClientOnly>
                     </Box>
                 </Card>
             </Container>
         </Page>
+    );
+}
+
+function EventsTable() {
+    const {
+        loading,
+        error,
+        data: { events } = {},
+    } = useQuery(GET_ALL_EVENTS, { variables: { clubid: null } });
+
+    return loading ? null : error ? null : (
+        <Table data={events} header={EventsTableHeader} row={EventsTableRow} />
     );
 }
 
@@ -58,48 +77,68 @@ function EventsTableHeader() {
             <TableCell align="left">Name</TableCell>
             <TableCell align="left">Club</TableCell>
             <TableCell align="left">Scheduled</TableCell>
+            <TableCell align="center">Budget</TableCell>
+            <TableCell align="center">Venue</TableCell>
             <TableCell align="center">Status</TableCell>
-            <TableCell padding="checkbox" />
+            {/* <TableCell padding="checkbox" /> */}
         </TableRow>
     );
 }
 
 function EventsTableRow(event) {
     const router = useRouter();
-    const { club, name, datetimeStart, state } = event;
+    const { name, datetimeperiod, status } = event;
 
-    const menuItems = [
-        {
-            name: (
-                <Box display="flex" alignItems="center">
-                    <Iconify icon="eva:edit-outline" sx={{ mr: 1 }} />
-                    Edit
-                </Box>
-            ),
-            onClick: () => null,
+    console.log(event);
+
+    // get club
+    const {
+        loading: clubLoading,
+        error: clubError,
+        data: { club } = {},
+    } = useQuery(GET_CLUB, {
+        skip: !event?.clubid,
+        variables: {
+            clubInput: { cid: event?.clubid },
         },
-        {
-            name: (
-                <Box display="flex" alignItems="center" sx={{ color: "success.main" }}>
-                    <Iconify icon="eva:checkmark-outline" sx={{ mr: 1 }} />
-                    Approve
-                </Box>
-            ),
-            onClick: () => null,
-        },
-        {
-            name: (
-                <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>
-                    <Iconify icon="eva:trash-outline" sx={{ mr: 1 }} />
-                    Delete
-                </Box>
-            ),
-            onClick: () => null,
-        },
-    ];
+    });
+
+    // const menuItems = [
+    //     {
+    //         name: (
+    //             <Box display="flex" alignItems="center">
+    //                 <Iconify icon="eva:edit-outline" sx={{ mr: 1 }} />
+    //                 Edit
+    //             </Box>
+    //         ),
+    //         onClick: () => null,
+    //     },
+    //     {
+    //         name: (
+    //             <Box display="flex" alignItems="center" sx={{ color: "success.main" }}>
+    //                 <Iconify icon="eva:checkmark-outline" sx={{ mr: 1 }} />
+    //                 Approve
+    //             </Box>
+    //         ),
+    //         onClick: () => null,
+    //     },
+    //     {
+    //         name: (
+    //             <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>
+    //                 <Iconify icon="eva:trash-outline" sx={{ mr: 1 }} />
+    //                 Delete
+    //             </Box>
+    //         ),
+    //         onClick: () => null,
+    //     },
+    // ];
 
     return (
-        <TableRow hover onClick={() => router.push(`/manage/events/${event.id}`)} sx={{ cursor: "pointer" }} >
+        <TableRow
+            hover
+            onClick={() => router.push(`/manage/events/${event._id}`)}
+            sx={{ cursor: "pointer" }}
+        >
             <TableCell align="left" sx={{ border: "none" }}>
                 <Typography variant="subtitle2" noWrap>
                     {name}
@@ -109,14 +148,26 @@ function EventsTableRow(event) {
                 {club?.name}
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
-                {fDateTime(datetimeStart, "dd MMM, p")}
+                {fDateTime(datetimeperiod?.[0], "dd MMM, p")}
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
-                <Label>{state}</Label>
+                <Iconify
+                    sx={{ color: status?.budget ? "success.main" : "error.main" }}
+                    icon={status?.budget ? "eva:checkmark-outline" : "eva:close-outline"}
+                />
             </TableCell>
-            <TableCell align="right" sx={{ border: "none" }}>
+            <TableCell align="center" sx={{ border: "none" }}>
+                <Iconify
+                    sx={{ color: status?.venue ? "success.main" : "error.main" }}
+                    icon={status?.venue ? "eva:checkmark-outline" : "eva:close-outline"}
+                />
+            </TableCell>
+            <TableCell align="center" sx={{ border: "none" }}>
+                <Label>{status?.state}</Label>
+            </TableCell>
+            {/* <TableCell align="right" sx={{ border: "none" }} onClick={(e) => e.stopPropagation()}>
                 <Kebab items={menuItems} />
-            </TableCell>
+            </TableCell> */}
         </TableRow>
     );
 }

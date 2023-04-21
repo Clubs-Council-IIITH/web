@@ -24,14 +24,13 @@ import Kebab from "components/Kebab";
 import Table from "components/Table";
 import Iconify from "components/iconify";
 
-import clubs from "_mock/clubs";
 import { downloadFile } from "utils/files";
+import ClientOnly from "components/ClientOnly";
 
 export default function Clubs() {
     const { asPath } = useRouter();
 
-    const { loading, error, data: { allClubs: clubs } = {} } = useQuery(GET_ALL_CLUBS);
-
+    // handle loading and error
     return (
         <Page title="Manage Clubs">
             <Container>
@@ -52,11 +51,21 @@ export default function Clubs() {
 
                 <Card>
                     <Box m={1}>
-                        <Table data={clubs} header={ClubsTableHeader} row={ClubsTableRow} />
+                        <ClientOnly>
+                            <ClubsTable />
+                        </ClientOnly>
                     </Box>
                 </Card>
             </Container>
         </Page>
+    );
+}
+
+function ClubsTable() {
+    const { loading, error, data: { allClubs: clubs } = {} } = useQuery(GET_ALL_CLUBS);
+
+    return loading ? null : error ? null : (
+        <Table data={clubs} header={ClubsTableHeader} row={ClubsTableRow} />
     );
 }
 
@@ -122,7 +131,9 @@ function ClubsTableRow(club) {
                 {sentenceCase(category)}
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
-                <Label color={state === "active" ? "success" : "error"}>{state}</Label>
+                <Label color={state === "active" ? "success" : "error"}>
+                    {state?.toUpperCase()}
+                </Label>
             </TableCell>
             <TableCell align="right" sx={{ border: "none" }}>
                 <Kebab items={menuItems} />

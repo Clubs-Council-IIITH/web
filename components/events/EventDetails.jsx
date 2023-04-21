@@ -12,6 +12,8 @@ export default function EventDetails({
     audience,
     datetimeperiod,
     location,
+    mode,
+    link,
 }) {
     return (
         <Box p={3}>
@@ -34,14 +36,22 @@ export default function EventDetails({
 
             <Box display="flex" mt={4} alignItems="center">
                 <Iconify icon="ic:outline-location-on" sx={{ mr: 2 }} />
-                {/* TODO: only the first location item is shown, is this right? */}
-                <Typography variant="body1">{location?.[0]}</Typography>
+                <Typography variant="body1">
+                    {mode === "offline" ? location?.join(", ") : "Online"}
+                </Typography>
             </Box>
 
             <Box display="flex" mt={3} alignItems="center">
                 <Iconify icon="ic:outline-people-alt" sx={{ mr: 2 }} />
                 <AudienceChips audience={audience} />
             </Box>
+
+            {link ? (
+                <Box display="flex" mt={3} alignItems="center">
+                    <Iconify icon="material-symbols:link" sx={{ mr: 2 }} />
+                    {link}
+                </Box>
+            ) : null}
 
             <Divider sx={{ borderStyle: "dashed", my: 3 }} />
 
