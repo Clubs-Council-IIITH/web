@@ -87,7 +87,7 @@ export default function ClubHero({ club }) {
                 <Box display="flex" alignItems="center">
                     <Avatar
                         src={downloadFile(logo)}
-                        sx={{ mr: 4, border: 3, width: 64, height: 64 }}
+                        sx={{ mr: 3, border: 3, width: 64, height: 64 }}
                     />
                     {name}
                 </Box>

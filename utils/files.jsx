@@ -24,8 +24,7 @@ export async function uploadFile(file, filetype = "image") {
 }
 
 export function downloadFile(filepath) {
-    console.log(filepath);
-    if (filepath[0].toLowerCase().startsWith("http")) {
+    if (filepath.toLowerCase().startsWith("http")) {
         // return the full URL if global URL
         return filepath;
     } else {
