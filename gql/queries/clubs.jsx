@@ -6,7 +6,7 @@ export const GET_ACTIVE_CLUBS = gql`
             cid
             state
             category
-            logo
+            banner
             name
             tagline
         }
@@ -19,7 +19,7 @@ export const GET_ALL_CLUBS = gql`
             cid
             state
             category
-            logo
+            banner
             name
             tagline
         }

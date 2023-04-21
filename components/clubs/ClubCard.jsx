@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 // @mui
 import { alpha, styled } from "@mui/material/styles";
 import { Link, Card, CardActionArea, Grid, Typography, CardContent } from "@mui/material";
+import { downloadFile } from "utils/files";
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,7 @@ ClubCard.propTypes = {
 };
 
 export default function ClubCard({ club, index }) {
-    const { cid, logo, name, tagline } = club;
+    const { cid, banner, name, tagline } = club;
     const router = useRouter();
 
     return (
@@ -54,8 +55,8 @@ export default function ClubCard({ club, index }) {
                             },
                         }}
                     >
-                        {/* TODO: add fallback logo */}
-                        <StyledCover alt={name} src={logo} />
+                        {/* TODO: add fallback banner */}
+                        <StyledCover alt={name} src={downloadFile(banner)} />
                     </StyledCardMedia>
 
                     <CardContent sx={{ pt: 4, bottom: 0, width: "100%", position: "absolute" }}>

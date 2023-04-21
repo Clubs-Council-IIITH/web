@@ -3,7 +3,7 @@ import { capitalCase } from "change-case";
 
 // @mui
 import { alpha, styled } from "@mui/material/styles";
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { SocialIcon } from "react-social-icons";
 
 // hooks
@@ -11,6 +11,7 @@ import useResponsive from "hooks/useResponsive";
 
 // components
 import Image from "components/Image";
+import { downloadFile } from "utils/files";
 
 const OverlayStyle = styled("h1")(({ theme }) => ({
     top: 0,
@@ -76,13 +77,21 @@ function SocialMedia({ network, url, dims = 30, ...props }) {
 }
 
 export default function ClubHero({ club }) {
-    const { banner, name, tagline } = club;
+    const { banner, name, tagline, logo } = club;
 
     const isDesktop = useResponsive("up", "sm");
 
     return (
         <Box sx={{ position: "relative" }}>
-            <TitleStyle>{name}</TitleStyle>
+            <TitleStyle>
+                <Box display="flex" alignItems="center">
+                    <Avatar
+                        src={downloadFile(logo)}
+                        sx={{ mr: 4, border: 3, width: 64, height: 64 }}
+                    />
+                    {name}
+                </Box>
+            </TitleStyle>
 
             <FooterStyle>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -109,7 +118,7 @@ export default function ClubHero({ club }) {
             <OverlayStyle />
             <Image
                 alt="club cover image"
-                src={banner}
+                src={downloadFile(banner)}
                 ratio={isDesktop ? "21/9" : "4/3"}
                 sx={{
                     filter: "blur(0.3em)",

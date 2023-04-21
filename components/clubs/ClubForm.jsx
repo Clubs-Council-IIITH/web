@@ -15,6 +15,8 @@ import {
 
 import { useForm, Controller } from "react-hook-form";
 
+import { uploadFile } from "utils/files";
+
 import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import { RichTextEditor } from "components/RichTextEditor";
@@ -64,18 +66,15 @@ export default function ClubForm({
 
     // submission logic
     const onSubmit = async (data) => {
+        // construct form data
         const formData = {
             ...data,
             description: JSON.stringify(description),
-            logo,
-            banner,
+            logo: await uploadFile(logo, "image"),
+            banner: await uploadFile(banner, "image"),
         };
 
         console.log(formData);
-
-        // TODO: file uploads
-        formData.logo = null;
-        formData.banner = null;
 
         // perform mutation
         submitMutation({
