@@ -3,12 +3,16 @@ import { gql } from "@apollo/client";
 export const GET_MEMBERS = gql`
     query Members($clubInput: SimpleClubInput!) {
         members(clubInput: $clubInput) {
-            cid
             uid
-            startYear
-            endYear
-            role
-            approved
+            poc
+            roles {
+                rid
+                name
+                startYear
+                endYear
+                approved
+                deleted
+            }
         }
     }
 `;
@@ -18,10 +22,15 @@ export const GET_PENDING_MEMBERS = gql`
         pendingMembers {
             cid
             uid
-            startYear
-            endYear
-            role
-            approved
+            poc
+            roles {
+                rid
+                name
+                startYear
+                endYear
+                approved
+                deleted
+            }
         }
     }
 `;

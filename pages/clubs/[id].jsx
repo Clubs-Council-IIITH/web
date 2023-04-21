@@ -146,8 +146,11 @@ function ClubMembers({ cid }) {
             <Grid container spacing={3} mt={1}>
                 {/* display only current members */}
                 {members
-                    // .filter((user) => user.startYear === new Date().getFullYear())
-                    .filter((user) => user.endYear === null)
+                    .filter(
+                        // check if user has any current roles
+                        (user) =>
+                            user.roles?.map((role) => role.endYear).some((year) => year === null)
+                    )
                     .map((user) => (
                         <Grid key={user.uid} item xs={12} sm={6} md={3}>
                             <UserCard user={user} />
