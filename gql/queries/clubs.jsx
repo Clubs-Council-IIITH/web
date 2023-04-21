@@ -19,8 +19,9 @@ export const GET_ALL_CLUBS = gql`
             cid
             state
             category
-            banner
+            logo
             name
+            email
             tagline
         }
     }

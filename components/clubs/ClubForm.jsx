@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import {
     Grid,
@@ -61,20 +61,28 @@ export default function ClubForm({
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({ defaultValues });
+
+    // refresh form if default values change
+    useEffect(() => {
+        reset(defaultValues);
+        setDescription(defaultValues?.description);
+        setLogo(defaultValues?.logo);
+        setBanner(defaultValues?.banner);
+    }, [defaultValues]);
 
     // submission logic
     const onSubmit = async (data) => {
         // construct form data
+        // upload logo and banner if they are File objects (which they will be if they have been modified)
         const formData = {
             ...data,
             description: JSON.stringify(description),
-            logo: await uploadFile(logo, "image"),
-            banner: await uploadFile(banner, "image"),
+            logo: typeof logo === "string" ? logo : await uploadFile(logo, "image"),
+            banner: typeof banner === "string" ? banner : await uploadFile(banner, "image"),
         };
-
-        console.log(formData);
 
         // perform mutation
         submitMutation({
@@ -105,6 +113,7 @@ export default function ClubForm({
                                         error={errors.cid}
                                         helperText={errors.cid?.message}
                                         disabled={disableRequiredFields}
+                                        InputLabelProps={{ shrink: field.value }}
                                         {...field}
                                     />
                                 )}
@@ -121,6 +130,7 @@ export default function ClubForm({
                                         error={errors.name}
                                         helperText={errors.name?.message}
                                         disabled={disableRequiredFields}
+                                        InputLabelProps={{ shrink: field.value }}
                                         {...field}
                                     />
                                 )}
@@ -137,6 +147,7 @@ export default function ClubForm({
                                         error={errors.email}
                                         helperText={errors.email?.message}
                                         disabled={disableRequiredFields}
+                                        InputLabelProps={{ shrink: field.value }}
                                         {...field}
                                     />
                                 )}
@@ -170,6 +181,7 @@ export default function ClubForm({
                                         autoComplete="off"
                                         error={errors.tagline}
                                         helperText={errors.tagline?.message}
+                                        InputLabelProps={{ shrink: field.value }}
                                         {...field}
                                     />
                                 )}
@@ -210,6 +222,7 @@ export default function ClubForm({
                                             label="Website"
                                             autoComplete="off"
                                             error={errors.socials?.website}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}
@@ -227,6 +240,7 @@ export default function ClubForm({
                                             label="Instagram"
                                             autoComplete="off"
                                             error={errors.socials?.instagram}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}
@@ -244,6 +258,7 @@ export default function ClubForm({
                                             label="Facebook"
                                             autoComplete="off"
                                             error={errors.socials?.facebook}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}
@@ -261,6 +276,7 @@ export default function ClubForm({
                                             label="YouTube"
                                             autoComplete="off"
                                             error={errors.socials?.youtube}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}
@@ -278,6 +294,7 @@ export default function ClubForm({
                                             label="Twitter"
                                             autoComplete="off"
                                             error={errors.socials?.twitter}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}
@@ -295,6 +312,7 @@ export default function ClubForm({
                                             label="LinkedIn"
                                             autoComplete="off"
                                             error={errors.socials?.linkedin}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}
@@ -312,6 +330,7 @@ export default function ClubForm({
                                             label="Discord"
                                             autoComplete="off"
                                             error={errors.socials?.discord}
+                                            InputLabelProps={{ shrink: field.value }}
                                             {...field}
                                         />
                                     )}

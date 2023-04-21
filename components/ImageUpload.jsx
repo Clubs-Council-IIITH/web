@@ -5,6 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import { Box, Typography, Stack } from "@mui/material";
 
 import Image from "components/Image";
+import { downloadFile } from "utils/files";
 
 export default function ImageUpload({
     file,
@@ -73,7 +74,7 @@ export default function ImageUpload({
                 {file ? (
                     <Image
                         alt="Upload Preview"
-                        src={file?.preview || ""}
+                        src={typeof file === "string" ? downloadFile(file) : file?.preview}
                         sx={{
                             top: 4,
                             left: 4,

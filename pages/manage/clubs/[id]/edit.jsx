@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 
@@ -71,7 +71,7 @@ export default function EditClub() {
     // mutation to create club
     const [editClub, { data, loading, error }] = useMutation(EDIT_CLUB);
 
-    return clubLoading ? null : clubError ? null : (
+    return clubLoading ? null : !club ? null : (
         <Page title={"Edit Club"}>
             <Container>
                 <ClubForm

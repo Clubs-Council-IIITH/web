@@ -30,8 +30,8 @@ export default function Table({ data, header: Header, row: Row, pagination = tru
 
                     <TableBody>
                         {data
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, key) => (
+                            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            ?.map((row, key) => (
                                 <Row key={key} {...row} />
                             ))}
 
@@ -48,7 +48,7 @@ export default function Table({ data, header: Header, row: Row, pagination = tru
                 <TablePagination
                     rowsPerPageOptions={[10, 20, 30]}
                     component="div"
-                    count={data.length}
+                    count={data?.length || 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={(_, value) => setPage(value)}

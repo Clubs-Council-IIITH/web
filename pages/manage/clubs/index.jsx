@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CLUBS } from "gql/queries/clubs";
+
 import {
     Box,
     Button,
@@ -22,9 +25,12 @@ import Table from "components/Table";
 import Iconify from "components/iconify";
 
 import clubs from "_mock/clubs";
+import { downloadFile } from "utils/files";
 
 export default function Clubs() {
     const { asPath } = useRouter();
+
+    const { loading, error, data: { allClubs: clubs } = {} } = useQuery(GET_ALL_CLUBS);
 
     return (
         <Page title="Manage Clubs">
@@ -67,7 +73,8 @@ function ClubsTableHeader() {
 }
 
 function ClubsTableRow(club) {
-    const { name, img, mail, category, state } = club;
+    const router = useRouter();
+    const { cid, name, logo, email, category, state } = club;
 
     const menuItems = [
         {
@@ -77,7 +84,7 @@ function ClubsTableRow(club) {
                     Edit
                 </Box>
             ),
-            onClick: () => null,
+            onClick: () => router.push(`${router.asPath}/${cid}/edit`),
         },
         {
             name: (
@@ -96,7 +103,7 @@ function ClubsTableRow(club) {
                 <Image
                     disabledEffect
                     alt={name}
-                    src={img}
+                    src={downloadFile(logo)}
                     sx={{
                         borderRadius: 1.5,
                         width: 64,
@@ -109,13 +116,13 @@ function ClubsTableRow(club) {
                 </Typography>
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
-                {mail}
+                {email}
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
                 {sentenceCase(category)}
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
-                <Label color={state == "ACTIVE" ? "success" : "error"}>{state}</Label>
+                <Label color={state === "active" ? "success" : "error"}>{state}</Label>
             </TableCell>
             <TableCell align="right" sx={{ border: "none" }}>
                 <Kebab items={menuItems} />
