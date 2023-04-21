@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
+import { useRouter } from "next/router";
+
 import {
     Grid,
     Card,
@@ -29,6 +31,8 @@ export default function ClubForm({
     disableRequiredFields = false,
     submitButtonText = "Done",
 }) {
+    const router = useRouter();
+
     // check if form is submitting from the client side
     // needed to track multiple API calls (apart from the `submitState`, which is only for submitMutation)
     const [submitting, setSubmitting] = useState(false);
@@ -73,9 +77,9 @@ export default function ClubForm({
     // refresh form if default values change
     useEffect(() => {
         reset(defaultValues);
-        setDescription(defaultValues?.description);
-        setLogo(defaultValues?.logo);
-        setBanner(defaultValues?.banner);
+        if (defaultValues?.logo) setLogo(defaultValues?.logo);
+        if (defaultValues?.banner) setBanner(defaultValues?.banner);
+        if (defaultValues?.description) setDescription(defaultValues?.description);
     }, [defaultValues]);
 
     // submission logic
@@ -83,29 +87,38 @@ export default function ClubForm({
         // start submitting form
         setSubmitting(true);
 
-        try {
-            // construct form data
-            // upload logo and banner if they are File objects (which they will be if they have been modified)
-            const formData = {
-                ...data,
-                description: JSON.stringify(description),
-                logo: typeof logo === "string" ? logo : await uploadFile(logo, "image"),
-                banner: typeof banner === "string" ? banner : await uploadFile(banner, "image"),
-            };
+        // construct form data
+        // upload logo and banner if they are File objects (which they will be if they have been modified)
+        const formData = {
+            ...data,
+            description: description,
+            logo: logo,
+            banner: banner,
+        };
 
-            // perform mutation
-            submitMutation({
-                variables: {
-                    clubInput: formData,
-                },
-            });
-        } catch {
-            // stop submitting form if error encountered
-            setSubmitting(false);
+        // preprocess certain values
+        if (formData?.description) {
+            formData.description = JSON.stringify(formData.description);
         }
+        if (formData?.logo && typeof formData?.logo !== "string") {
+            formData.logo = await uploadFile(logo, "image");
+        }
+        if (formData?.banner && typeof formData?.banner !== "string") {
+            formData.banner = await uploadFile(banner, "image");
+        }
+
+        // perform mutation
+        submitMutation({
+            variables: {
+                clubInput: formData,
+            },
+        });
 
         // finish submitting form
         setSubmitting(false);
+
+        // redirect to manage page
+        router.push("/manage/clubs");
     };
 
     return (

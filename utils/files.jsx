@@ -18,7 +18,11 @@ export async function uploadFile(file, filetype = "image") {
     const filename = await fetch(`${url}?filetype=${filetype}`, {
         body: body,
         method: "POST",
-    }).then((res) => res.text());
+    })
+        .then((res) => res.text())
+        .catch((err) => {
+            throw err;
+        });
 
     return filename;
 }

@@ -64,10 +64,11 @@ export default function AccountPopover() {
             >
                 <Avatar
                     src={null}
-                    alt="photoURL"
-                    children={
-                        user?.firstName ? `${user?.firstName?.[0]}${user?.lastName?.[0]}` : null
-                    }
+                    alt="logged in"
+                    {...(user?.firstName && {
+                        children: `${user?.firstName?.[0]}${user?.lastName?.[0]}`,
+                        sx: { backgroundColor: "black" },
+                    })}
                 />
             </IconButton>
 

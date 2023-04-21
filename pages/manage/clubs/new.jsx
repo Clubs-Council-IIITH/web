@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { CREATE_CLUB } from "gql/mutations/clubs";
+import { GET_ACTIVE_CLUBS, GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import { Container } from "@mui/material";
 
@@ -29,7 +30,9 @@ export default function NewClub() {
     };
 
     // mutation to create club
-    const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB);
+    const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB, {
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }], // TODO: fix
+    });
 
     return (
         <Page title={"New Club"}>

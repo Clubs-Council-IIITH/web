@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { EDIT_CLUB } from "gql/mutations/clubs";
-import { GET_CLUB } from "gql/queries/clubs";
+import { GET_ACTIVE_CLUBS, GET_ALL_CLUBS, GET_CLUB } from "gql/queries/clubs";
 
 import { Container } from "@mui/material";
 
@@ -69,7 +69,9 @@ export default function EditClub() {
     });
 
     // mutation to create club
-    const [editClub, editClubState] = useMutation(EDIT_CLUB);
+    const [editClub, editClubState] = useMutation(EDIT_CLUB, {
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }], // TODO: fix
+    });
 
     return clubLoading ? null : !club ? null : (
         <Page title={"Edit Club"}>
