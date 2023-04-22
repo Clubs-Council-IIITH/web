@@ -1,102 +1,45 @@
 [
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Hariharan",
-            "lastName": "Kalimuthu",
-            "mail": "hariharan.k@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Hari.jpg"
-        },
-        "role": "Secretary"
+        "uid": "hariharan.k",
+        "roles": [{ "name": "Secretary", "startYear": 2021, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Radheshyam",
-            "lastName": "Thiyagarajan",
-            "mail": "radheshyam.t@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Radheshyam.png"
-        },
-        "role": "Secretary"
+        "uid": "radheshyam.t",
+        "roles": [{ "name": "Secretary", "startYear": 2021, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Advaith",
-            "lastName": "Malladi",
-            "mail": "advaith.malladi@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Advaith.jpeg"
-        },
-        "role": "Undersecretary"
+        "uid": "advaith.malladi",
+        "roles": [{ "name": "Undersecretary", "startYear": 2022, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Bhav",
-            "lastName": "Beri",
-            "mail": "bhav.beri@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Bhav.jpg"
-        },
-        "role": "Undersecretary + Tech Team"
+        "uid": "bhav.beri",
+        "roles": [
+            { "name": "Undersecretary", "startYear": 2022, "endYear": null },
+            { "name": "Tech Team", "startYear": 2022, "endYear": null }
+        ]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Gnaneswar",
-            "lastName": "Kulindala",
-            "mail": "gnaneswar.kulindala@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Gnan.jpg"
-        },
-        "role": "Undersecretary"
+        "uid": "gnaneswar.kulindala",
+        "roles": [{ "name": "Undersecretary", "startYear": 2022, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Ms",
-            "firstName": "Mihika",
-            "lastName": "Sanghi",
-            "mail": "mihika.sanghi@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Mihika.jpg"
-        },
-        "role": "Undersecretary"
+        "uid": "mihika.sanghi",
+        "roles": [{ "name": "Undersecretary", "startYear": 2022, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Ms",
-            "firstName": "Vrinda",
-            "lastName": "Agarwal",
-            "mail": "vrinda.agarwal@students.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Vrinda.jpg"
-        },
-        "role": "Undersecretary"
+        "uid": "vrinda.agarwal",
+        "roles": [{ "name": "Undersecretary", "startYear": 2022, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Vishva",
-            "lastName": "Saravanan",
-            "mail": "vishva.saravanan@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Vishva.jpg"
-        },
-        "role": "Tech Team Lead"
+        "uid": "mihir.r",
+        "roles": [{ "name": "Tech Team", "startYear": 2021, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Mihir",
-            "lastName": "Rawat",
-            "mail": "mihir.r@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Mihir.jpg"
-        },
-        "role": "Tech Team"
+        "uid": "vishva.saravanan",
+        "roles": [{ "name": "Tech Team Lead", "startYear": 2020, "endYear": null }]
     },
     {
-        "user": {
-            "title": "Mr",
-            "firstName": "Naren",
-            "lastName": "Akash R J",
-            "mail": "naren.akash@research.iiit.ac.in",
-            "img": "https://clubs.iiit.ac.in/media/imgs/members/Naren.jpg"
-        },
-        "role": "Advisor"
+        "uid": "naren.akash",
+        "roles": [{ "name": "Advisor", "startYear": 2019, "endYear": null }]
     }
 ]

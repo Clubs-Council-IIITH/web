@@ -4,15 +4,12 @@ import PropTypes from "prop-types";
 
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-// @mui
 import { styled } from "@mui/material/styles";
 import { Box, Card, Avatar, Divider, Typography, Stack } from "@mui/material";
-// utils
 import { bgBlur } from "utils/cssStyles";
-// components
-import Image from "components/Image";
 
-// ----------------------------------------------------------------------
+import Image from "components/Image";
+import { downloadFile } from "utils/files";
 
 const OverlayStyle = styled("div")(({ theme }) => ({
     ...bgBlur({ blur: 2, color: theme.palette.accent }),
@@ -23,8 +20,6 @@ const OverlayStyle = styled("div")(({ theme }) => ({
     height: "100%",
     position: "absolute",
 }));
-
-// ----------------------------------------------------------------------
 
 UserCard.propTypes = {
     user: PropTypes.object.isRequired,
@@ -47,7 +42,7 @@ export default function UserCard({ user }) {
         },
         onCompleted: ({ userProfile }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            // setImg(userProfile?.img);
+            // setImg(downloadFile(userProfile?.img));
         },
     });
 
@@ -77,12 +72,25 @@ export default function UserCard({ user }) {
                 </Typography>
 
                 {roles.map((role, key) => (
-                    <Typography variant="body2" mt={1} sx={{ color: "text.secondary" }}>
-                        {role?.name}
-                        <Box key={key} color="grey.400" display="inline-block" ml={0.5}>
+                    <Box
+                        key={key}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        mt={0.5}
+                    >
+                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                            {role?.name}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="grey.400"
+                            display="inline-block"
+                            ml={0.5}
+                        >
                             ({role?.startYear} - {role?.endYear || "present"})
-                        </Box>
-                    </Typography>
+                        </Typography>
+                    </Box>
                 ))}
             </Box>
         </Card>

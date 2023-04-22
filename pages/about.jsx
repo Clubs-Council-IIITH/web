@@ -21,11 +21,13 @@ export default function About() {
                     the clubs. It handles the annual budget of clubs, events, coordinates among
                     different clubs and helps in creating new clubs, societies and special interest
                     groups.
-                    <Box mt={1} />
+                </Typography>
+                <Typography variant="body1" mt={1}>
                     The Clubs Council works closely with the institute&apos;s Students&apos; Life
                     Office, Finance Council, Outreach, IT Offices, SLC and SAC faculty members, and
                     all other student administrative bodies.
-                    <Box mt={1} />
+                </Typography>
+                <Typography variant="body1" mt={1}>
                     The primary aim of the Clubs Council is to ensure that all student-driven
                     organizations on campus are successful in their aim to cultivate diverse campus
                     life experiences throughout the year, and enrich the thriving campus community
@@ -37,8 +39,8 @@ export default function About() {
                 </Typography>
 
                 <Grid container spacing={3}>
-                    {ccMembers.map((user) => (
-                        <Grid key={user.id} item xs={12} sm={6} md={3}>
+                    {ccMembers.map((user, key) => (
+                        <Grid key={key} item xs={12} sm={6} md={3}>
                             <UserCard user={user} />
                         </Grid>
                     ))}
@@ -53,7 +55,8 @@ export default function About() {
                     together to collaboratively organise and provide an extraordinary range of
                     opportunities through the form of various events, enabling students to pursue
                     their hobbies and develop their extra-curricular skills.
-                    <Box mt={1} />
+                </Typography>
+                <Typography variant="body1" mt={1}>
                     And then come the Club Members, who play an important role in design,
                     development and execution of any event organised by the clubs, and contribute to
                     the betterment of Students&apos; Life at IIIT, Hyderabad.
