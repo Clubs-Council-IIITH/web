@@ -4,18 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 // @mui
-import {
-    Box,
-    Tab,
-    Card,
-    Grid,
-    Divider,
-    Container,
-    Typography,
-    Avatar,
-    CardContent,
-    Chip,
-} from "@mui/material";
+import { Box, Card, Grid, Container, Typography, Chip } from "@mui/material";
 
 // components
 import Page from "components/Page";
@@ -28,7 +17,6 @@ import {
     EventBudget,
 } from "components/events";
 
-// import events from "_mock/events";
 import { useQuery } from "@apollo/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";

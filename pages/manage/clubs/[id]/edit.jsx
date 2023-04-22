@@ -70,7 +70,7 @@ export default function EditClub() {
 
     // mutation to create club
     const [editClub, editClubState] = useMutation(EDIT_CLUB, {
-        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }], // TODO: fix
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
     });
 
     return clubLoading ? null : !club ? null : (

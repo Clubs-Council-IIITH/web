@@ -31,7 +31,7 @@ export default function NewClub() {
 
     // mutation to create club
     const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB, {
-        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }], // TODO: fix
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
     });
 
     return (

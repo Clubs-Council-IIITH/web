@@ -141,7 +141,7 @@ function ClubMembers({ cid }) {
     });
 
     // TODO: handle loading screen and zero members
-    return loading ? null : !members.length ? null : (
+    return loading ? null : !members?.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
             <Typography variant="h4">Members</Typography>
             <Grid container spacing={3} mt={1}>
