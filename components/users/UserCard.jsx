@@ -31,7 +31,7 @@ UserCard.propTypes = {
 };
 
 export default function UserCard({ user }) {
-    const { cid, uid, roles, startYear, endYear, approved } = user;
+    const { uid, roles } = user;
     const [name, setName] = useState("");
     const [img, setImg] = useState(null);
 
@@ -73,7 +73,7 @@ export default function UserCard({ user }) {
             </Box>
             <Box pb={4}>
                 <Typography variant="subtitle1" sx={{ mt: 6, textTransform: "capitalize" }}>
-                    {name.toLowerCase()}
+                    {name?.toLowerCase()}
                 </Typography>
 
                 {roles.map((role, key) => (
