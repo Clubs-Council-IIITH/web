@@ -88,17 +88,20 @@ export function getNavConfig(user) {
             items: [
                 {
                     title: "Club",
-                    path: "/manage/clubs/@mine",
+                    path: "/manage/clubs",
+                    page: "@mine",
                     icon: <ClubsIcon fontSize="small" />,
                 },
                 {
                     title: "Events",
-                    path: "/manage/events/@mine",
+                    path: "/manage/events",
+                    page: "@mine",
                     icon: <EventsIcon fontSize="small" />,
                 },
                 {
                     title: "Members",
-                    path: "/manage/members/@mine",
+                    path: "/manage/members",
+                    page: "@mine",
                     icon: <MembersIcon fontSize="small" />,
                 },
             ],

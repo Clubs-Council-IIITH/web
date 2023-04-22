@@ -1,12 +1,10 @@
 import PropTypes from "prop-types";
 import NextLink from "next/link";
+
 import { useRouter } from "next/router";
-// @mui
 import { Box, List, ListItemText } from "@mui/material";
 import { StyledNavItem, StyledNavItemIcon } from "./styles";
 import { LaunchTwoTone as ExternalIcon } from "@mui/icons-material";
-
-// ----------------------------------------------------------------------
 
 export function isExternalLink(path) {
     return path.includes("http");
@@ -40,14 +38,14 @@ NavItem.propTypes = {
 };
 
 function NavItem({ item }) {
-    const { title, path, icon, info } = item;
+    const { title, path, page, icon, info } = item;
     const { pathname, asPath } = useRouter();
 
     const active = getActive(item.path, pathname, asPath);
     const external = isExternalLink(item.path);
 
     return (
-        <StyledNavItem component={NextLink} href={path} active={active}>
+        <StyledNavItem component={NextLink} href={`${path}/${page || ""}`} active={active}>
             <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
             <ListItemText
