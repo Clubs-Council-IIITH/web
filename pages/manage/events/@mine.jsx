@@ -7,6 +7,7 @@ import Table from "components/Table";
 import Iconify from "components/iconify";
 import ClientOnly from "components/ClientOnly";
 
+import { useAuth } from "contexts/AuthContext";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
 
@@ -44,13 +45,22 @@ export default function Events() {
 }
 
 function EventsTable() {
+    const { user } = useAuth();
+
+    // get events of current club
     const {
         loading,
         error,
         data: { events } = {},
-    } = useQuery(GET_ALL_EVENTS, { variables: { clubid: null } });
+    } = useQuery(GET_ALL_EVENTS, {
+        skip: !user?.uid,
+        variables: {
+            clubid: user?.uid,
+        },
+    });
 
-    return loading ? null : error ? null : (
+    // TODO: handle loading and empty indicators
+    return loading ? null : !events?.length ? null : (
         <Table data={events} header={EventsTableHeader} row={EventsTableRow} />
     );
 }

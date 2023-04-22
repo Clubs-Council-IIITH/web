@@ -2,25 +2,19 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-// @mui
 import { Box, Drawer, Typography } from "@mui/material";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
-// hooks
 import useResponsive from "hooks/useResponsive";
 
-// components
 import Logo from "components/logo";
 import NavSection from "components/nav-section";
 
-//
-import navConfig from "./config";
+import { getNavConfig } from "utils/navigation";
+import { useAuth } from "contexts/AuthContext";
 
-// ----------------------------------------------------------------------
-
+// define navigation sidebar width
 const NAV_WIDTH = 280;
-
-// ----------------------------------------------------------------------
 
 Nav.propTypes = {
     openNav: PropTypes.bool,
@@ -29,6 +23,7 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
     const { pathname } = useRouter();
+    const { user } = useAuth();
 
     const isDesktop = useResponsive("up", "lg");
 
@@ -45,7 +40,7 @@ export default function Nav({ openNav, onCloseNav }) {
                 <Logo />
             </Box>
 
-            {navConfig.map((section, idx) => (
+            {getNavConfig(user).map((section, idx) => (
                 <Box key={idx} mb={2}>
                     <Typography variant="caption" fontWeight="bold" px={5}>
                         {section.header.toUpperCase()}

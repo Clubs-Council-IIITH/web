@@ -1,12 +1,9 @@
 import { useState } from "react";
 
-// next
 import { useRouter } from "next/router";
 
-// @mui
 import { Box, Card, Grid, Container, Typography, Chip } from "@mui/material";
 
-// components
 import Page from "components/Page";
 import Image from "components/Image";
 import {

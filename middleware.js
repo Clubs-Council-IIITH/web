@@ -8,10 +8,6 @@ export function middleware(req) {
     // check if current route is protected
     const protectedRoute = Object.keys(routes).find((r) => match(r)(req.nextUrl.pathname)) || false;
 
-    console.log("pathname:", req.nextUrl.pathname);
-    console.log("protectedRoute:", protectedRoute);
-    console.log("matchers:", Object.keys(routes));
-
     // if not, proceed to the page
     if (!protectedRoute) {
         return NextResponse.next();
