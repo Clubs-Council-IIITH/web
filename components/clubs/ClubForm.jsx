@@ -131,75 +131,79 @@ export default function ClubForm({
                         </Typography>
 
                         <Stack spacing={2}>
-                            <Controller
-                                name="cid"
-                                control={control}
-                                rules={{ required: "Club ID can not be empty!" }}
-                                render={({ field }) => (
-                                    <TextField
-                                        label="Club ID*"
-                                        autoComplete="off"
-                                        error={errors.cid}
-                                        helperText={errors.cid?.message}
-                                        disabled={disableRequiredFields}
-                                        InputLabelProps={{ shrink: field.value }}
-                                        {...field}
+                            {!disableRequiredFields ? (
+                                <>
+                                    <Controller
+                                        name="code"
+                                        control={control}
+                                        rules={{ required: "Club Code can not be empty!" }}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Club Code*"
+                                                autoComplete="off"
+                                                error={errors.code}
+                                                helperText={errors.code?.message}
+                                                disabled={disableRequiredFields}
+                                                InputLabelProps={{ shrink: field.value }}
+                                                {...field}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
 
-                            <Controller
-                                name="name"
-                                control={control}
-                                rules={{ required: "Name can not be empty!" }}
-                                render={({ field }) => (
-                                    <TextField
-                                        label="Name*"
-                                        autoComplete="off"
-                                        error={errors.name}
-                                        helperText={errors.name?.message}
-                                        disabled={disableRequiredFields}
-                                        InputLabelProps={{ shrink: field.value }}
-                                        {...field}
+                                    <Controller
+                                        name="name"
+                                        control={control}
+                                        rules={{ required: "Name can not be empty!" }}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Name*"
+                                                autoComplete="off"
+                                                error={errors.name}
+                                                helperText={errors.name?.message}
+                                                disabled={disableRequiredFields}
+                                                InputLabelProps={{ shrink: field.value }}
+                                                {...field}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
 
-                            <Controller
-                                name="email"
-                                control={control}
-                                rules={{ required: "Club email is required!" }}
-                                render={({ field }) => (
-                                    <TextField
-                                        label="Email*"
-                                        autoComplete="off"
-                                        error={errors.email}
-                                        helperText={errors.email?.message}
-                                        disabled={disableRequiredFields}
-                                        InputLabelProps={{ shrink: field.value }}
-                                        {...field}
+                                    <Controller
+                                        name="email"
+                                        control={control}
+                                        rules={{ required: "Club email is required!" }}
+                                        render={({ field }) => (
+                                            <TextField
+                                                label="Email*"
+                                                autoComplete="off"
+                                                error={errors.email}
+                                                helperText={errors.email?.message}
+                                                disabled={disableRequiredFields}
+                                                InputLabelProps={{ shrink: field.value }}
+                                                {...field}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
 
-                            <Box>
-                                <InputLabel shrink>Category*</InputLabel>
-                                <Controller
-                                    name="category"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select
-                                            fullWidth
-                                            disabled={disableRequiredFields}
-                                            {...field}
-                                        >
-                                            <MenuItem value="cultural">Cultural</MenuItem>
-                                            <MenuItem value="technical">Technical</MenuItem>
-                                            <MenuItem value="other">Other</MenuItem>
-                                        </Select>
-                                    )}
-                                />
-                            </Box>
+                                    <Box>
+                                        <InputLabel shrink>Category*</InputLabel>
+                                        <Controller
+                                            name="category"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    fullWidth
+                                                    disabled={disableRequiredFields}
+                                                    {...field}
+                                                >
+                                                    <MenuItem value="cultural">Cultural</MenuItem>
+                                                    <MenuItem value="technical">Technical</MenuItem>
+                                                    <MenuItem value="other">Other</MenuItem>
+                                                </Select>
+                                            )}
+                                        />
+                                    </Box>
+                                </>
+                            ) : null}
 
                             <Controller
                                 name="tagline"

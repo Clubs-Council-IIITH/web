@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { useRouter } from "next/router";
-
 import { Box, Card, Container } from "@mui/material";
 
 import { useAuth } from "contexts/AuthContext";

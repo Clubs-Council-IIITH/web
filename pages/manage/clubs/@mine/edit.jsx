@@ -1,19 +1,18 @@
 import { useState } from "react";
 
-import { useRouter } from "next/router";
-
 import { useQuery, useMutation } from "@apollo/client";
 import { EDIT_CLUB } from "gql/mutations/clubs";
 import { GET_ACTIVE_CLUBS, GET_ALL_CLUBS, GET_CLUB } from "gql/queries/clubs";
 
 import { Container } from "@mui/material";
 
+import { useAuth } from "contexts/AuthContext";
+
 import Page from "components/Page";
 import { ClubForm } from "components/clubs";
 
 export default function EditClub() {
-    const { query } = useRouter();
-    const { id: cid } = query;
+    const { user } = useAuth();
 
     // default form values
     const [defaultValues, setDefaultValues] = useState({
@@ -42,8 +41,9 @@ export default function EditClub() {
         loading: clubLoading,
         error: clubError,
     } = useQuery(GET_CLUB, {
+        skip: !user?.uid,
         variables: {
-            clubInput: { cid: cid },
+            clubInput: { cid: user?.uid },
         },
         onCompleted: ({ club }) => {
             setDefaultValues({
@@ -77,6 +77,7 @@ export default function EditClub() {
         <Page title={"Edit Club"}>
             <Container>
                 <ClubForm
+                    disableRequiredFields={true} // true if current user is the club
                     defaultValues={defaultValues}
                     submitMutation={editClub}
                     submitState={editClubState}

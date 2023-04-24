@@ -34,6 +34,7 @@ export const GET_CLUB = gql`
         club(clubInput: $clubInput) {
             _id
             cid
+            code
             banner
             category
             description

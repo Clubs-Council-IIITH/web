@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
 
 import { Alert, AlertTitle, Button, Checkbox, Grid, Box, FormControlLabel } from "@mui/material";
 import {
@@ -16,8 +16,11 @@ export const editAction = {
 };
 
 function EditButton({ setView }) {
+    const router = useRouter();
+
     const handleEdit = () => {
         // TODO: redirect to edit page
+        router.push(`${router.asPath}/edit`);
     };
 
     return (
