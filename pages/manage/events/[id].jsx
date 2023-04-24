@@ -71,11 +71,10 @@ function EventDisplay({ id, setTitle }) {
     return (
         <Box>
             {/* action palette */}
-            {/* <EventActions actions={["edit", "delete", "submit", "approve"]} /> */}
             <ActionPalette actions={[editAction, deleteAction, submitAction, approveAction]} />
 
             {/* current status */}
-            <Box mt={4}>
+            <Box mt={3}>
                 <EventStatus status={event?.status} />
             </Box>
 

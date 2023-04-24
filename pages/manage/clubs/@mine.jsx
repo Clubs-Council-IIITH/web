@@ -11,22 +11,22 @@ import ClientOnly from "components/ClientOnly";
 import { ClubHero } from "components/clubs";
 import { RichTextEditor } from "components/RichTextEditor";
 
+import ActionPalette from "components/ActionPalette";
+import { editAction } from "components/clubs/ClubActions";
+
 import { useQuery } from "@apollo/client";
 import { GET_CLUB } from "gql/queries/clubs";
 
 export default function Club() {
-    const {
-        query: { id },
-    } = useRouter();
-
     // set title asynchronously
     const [title, setTitle] = useState("...");
 
     return (
         <Page title={title}>
             <Container>
+                {/* details */}
                 <ClientOnly>
-                    <ClubDetails cid={id} setTitle={setTitle} />
+                    <ClubDetails setTitle={setTitle} />
                 </ClientOnly>
             </Container>
         </Page>
@@ -52,14 +52,19 @@ function ClubDetails({ cid, setTitle }) {
 
     // TODO: handle loading screen and non-existent club
     return loading ? null : !club ? null : (
-        <Card sx={{ mb: 4 }}>
-            <ClubHero club={club} />
-            <Box sx={{ p: { xs: 3, md: 5 } }}>
-                <RichTextEditor
-                    editing={false}
-                    editorState={[JSON.parse(club.description), null]}
-                />
-            </Box>
-        </Card>
+        <Box>
+            {/* action palette */}
+            <ActionPalette actions={[editAction]} />
+
+            <Card sx={{ mb: 4, mt: 3 }}>
+                <ClubHero club={club} />
+                <Box sx={{ p: { xs: 3, md: 5 } }}>
+                    <RichTextEditor
+                        editing={false}
+                        editorState={[JSON.parse(club.description), null]}
+                    />
+                </Box>
+            </Card>
+        </Box>
     );
 }

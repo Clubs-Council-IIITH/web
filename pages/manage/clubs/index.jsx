@@ -76,7 +76,7 @@ function ClubsTableHeader() {
             <TableCell align="left">Email</TableCell>
             <TableCell align="left">Category</TableCell>
             <TableCell align="center">Status</TableCell>
-            <TableCell padding="checkbox" />
+            {/* <TableCell padding="checkbox" /> */}
         </TableRow>
     );
 }
@@ -85,29 +85,33 @@ function ClubsTableRow(club) {
     const router = useRouter();
     const { cid, name, logo, email, category, state } = club;
 
-    const menuItems = [
-        {
-            name: (
-                <Box display="flex" alignItems="center">
-                    <Iconify icon="eva:edit-outline" sx={{ mr: 1 }} />
-                    Edit
-                </Box>
-            ),
-            onClick: () => router.push(`${router.asPath}/${cid}/edit`),
-        },
-        {
-            name: (
-                <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>
-                    <Iconify icon="eva:trash-outline" sx={{ mr: 1 }} />
-                    Delete
-                </Box>
-            ),
-            onClick: () => null,
-        },
-    ];
+    // const menuItems = [
+    //     {
+    //         name: (
+    //             <Box display="flex" alignItems="center">
+    //                 <Iconify icon="eva:edit-outline" sx={{ mr: 1 }} />
+    //                 Edit
+    //             </Box>
+    //         ),
+    //         onClick: () => router.push(`${router.asPath}/${cid}/edit`),
+    //     },
+    //     {
+    //         name: (
+    //             <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>
+    //                 <Iconify icon="eva:trash-outline" sx={{ mr: 1 }} />
+    //                 Delete
+    //             </Box>
+    //         ),
+    //         onClick: () => null,
+    //     },
+    // ];
 
     return (
-        <TableRow>
+        <TableRow
+            hover
+            onClick={() => router.push(`/manage/clubs/${cid}`)}
+            sx={{ cursor: "pointer" }}
+        >
             <TableCell align="left" sx={{ display: "flex", alignItems: "center", border: "none" }}>
                 <Image
                     disabledEffect
@@ -135,9 +139,9 @@ function ClubsTableRow(club) {
                     {state?.toUpperCase()}
                 </Label>
             </TableCell>
-            <TableCell align="right" sx={{ border: "none" }}>
+            {/* <TableCell align="right" sx={{ border: "none" }}>
                 <Kebab items={menuItems} />
-            </TableCell>
+            </TableCell> */}
         </TableRow>
     );
 }

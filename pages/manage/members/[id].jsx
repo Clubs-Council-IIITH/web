@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 
 import { useQuery } from "@apollo/client";
 import { GET_MEMBER } from "gql/queries/members";
-import { GET_USER_PROFILE } from "gql/queries/users";
 
 import { Avatar, Box, Card, Grid, Container, Typography } from "@mui/material";
+
+import ActionPalette from "components/ActionPalette";
+import { editAction, deleteAction } from "components/members/MemberActions";
 
 import Label from "components/label";
 import Page from "components/Page";
@@ -47,7 +49,11 @@ export default function Member() {
     return loading ? null : !member ? null : (
         <Page title={"View Member"}>
             <Container>
-                <Grid container spacing={2}>
+                {/* action palette */}
+                <ActionPalette actions={[editAction, deleteAction]} />
+
+                {/* user profile */}
+                <Grid container spacing={2} mt={1}>
                     <Grid item xs={12} md={6} xl={4}>
                         <Card sx={{ p: 3 }}>
                             <Grid container spacing={2}>
@@ -103,6 +109,7 @@ export default function Member() {
                         </Card>
                     </Grid>
 
+                    {/* membership details */}
                     <Grid item xs md lg xl>
                         <Card sx={{ p: 3 }}>
                             <Typography variant="subtitle2" color="text.secondary">
