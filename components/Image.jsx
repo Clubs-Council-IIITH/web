@@ -1,9 +1,6 @@
 import PropTypes from "prop-types";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-// @mui
 import { Box } from "@mui/material";
-
-// ----------------------------------------------------------------------
 
 Image.propTypes = {
     disabledEffect: PropTypes.bool,
@@ -70,8 +67,6 @@ export default function Image({ ratio, disabledEffect = false, effect = "blur", 
         </Box>
     );
 }
-
-// ----------------------------------------------------------------------
 
 function getRatio(ratio = "1/1") {
     return {

@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-// @mui
+
 import { alpha, styled } from "@mui/material/styles";
 import { Link, Card, CardActionArea, Grid, Typography, CardContent } from "@mui/material";
 import { downloadFile } from "utils/files";
-
-// ----------------------------------------------------------------------
+import { mediaConstants } from "constants/media";
 
 const StyledCardMedia = styled("div")({
     position: "relative",
@@ -26,8 +25,6 @@ const StyledCover = styled("img")({
     objectFit: "cover",
     position: "absolute",
 });
-
-// ----------------------------------------------------------------------
 
 ClubCard.propTypes = {
     club: PropTypes.object.isRequired,
@@ -55,8 +52,10 @@ export default function ClubCard({ club, index }) {
                             },
                         }}
                     >
-                        {/* TODO: add fallback banner */}
-                        <StyledCover alt={name} src={downloadFile(banner)} />
+                        <StyledCover
+                            alt={name}
+                            src={banner ? downloadFile(banner) : mediaConstants.placeholderImg}
+                        />
                     </StyledCardMedia>
 
                     <CardContent sx={{ pt: 4, bottom: 0, width: "100%", position: "absolute" }}>

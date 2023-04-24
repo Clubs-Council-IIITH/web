@@ -1,17 +1,15 @@
 import PropTypes from "prop-types";
 import { capitalCase } from "change-case";
 
-// @mui
 import { alpha, styled } from "@mui/material/styles";
 import { Avatar, Box, Typography } from "@mui/material";
 import { SocialIcon } from "react-social-icons";
 
-// hooks
 import useResponsive from "hooks/useResponsive";
 
-// components
 import Image from "components/Image";
 import { downloadFile } from "utils/files";
+import { mediaConstants } from "constants/media";
 
 const OverlayStyle = styled("h1")(({ theme }) => ({
     top: 0,
@@ -56,8 +54,6 @@ const FooterStyle = styled("div")(({ theme }) => ({
         padding: theme.spacing(8),
     },
 }));
-
-// ----------------------------------------------------------------------
 
 ClubHero.propTypes = {
     club: PropTypes.object.isRequired,
@@ -118,7 +114,7 @@ export default function ClubHero({ club }) {
             <OverlayStyle />
             <Image
                 alt="club cover image"
-                src={downloadFile(banner)}
+                src={banner ? downloadFile(banner) : mediaConstants.placeholderImg}
                 ratio={isDesktop ? "21/9" : "4/3"}
                 sx={{
                     filter: "blur(0.3em)",
