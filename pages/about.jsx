@@ -1,7 +1,5 @@
-// @mui
-import { Typography, Button, Box, Grid, Card, Container } from "@mui/material";
+import { Typography, Grid, Container } from "@mui/material";
 
-// components
 import Page from "components/Page";
 import { UserCard } from "components/users";
 

@@ -4,6 +4,7 @@ export const GET_MEMBERS = gql`
     query Members($clubInput: SimpleClubInput!) {
         members(clubInput: $clubInput) {
             _id
+            cid
             uid
             poc
             roles {
@@ -32,6 +33,29 @@ export const GET_PENDING_MEMBERS = gql`
                 approved
                 deleted
             }
+        }
+    }
+`;
+
+export const GET_MEMBER = gql`
+    query Member($memberInput: SimpleMemberInput!, $userInput: UserInput!) {
+        member(memberInput: $memberInput) {
+            _id
+            uid
+            poc
+            roles {
+                startYear
+                rid
+                name
+                endYear
+                deleted
+                approved
+            }
+        }
+        userProfile(userInput: $userInput) {
+            firstName
+            lastName
+            email
         }
     }
 `;

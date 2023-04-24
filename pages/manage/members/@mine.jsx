@@ -61,7 +61,7 @@ export default function Members() {
 function MembersTable() {
     const { user } = useAuth();
 
-    // get events of current club
+    // get members of current club
     const {
         loading,
         error,
@@ -94,7 +94,7 @@ function MembersTableHeader() {
 function MembersTableRow(member) {
     const router = useRouter();
 
-    const { uid, poc, roles } = member;
+    const { cid, uid, poc, roles } = member;
     const [name, setName] = useState("");
     const [img, setImg] = useState(null);
 
@@ -117,7 +117,7 @@ function MembersTableRow(member) {
     return (
         <TableRow
             hover
-            onClick={() => router.push(`/manage/members/${member._id}`)}
+            onClick={() => router.push(`/manage/members/${cid}:${uid}`)}
             sx={{ cursor: "pointer" }}
         >
             <TableCell
@@ -154,8 +154,9 @@ function MembersTableRow(member) {
                 {userProfile?.email}
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
-                {roles.map((role, key) => (
+                {roles?.map((role, key) => (
                     <Typography
+                        key={key}
                         noWrap
                         variant="body2"
                         my={1}

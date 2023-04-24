@@ -1,13 +1,10 @@
 import { useState } from "react";
 
-// next
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-// @mui
 import { Typography, Button, Box, Grid, Card, Container } from "@mui/material";
 
-// hooks
 import useResponsive from "hooks/useResponsive";
 
 import Page from "components/Page";
@@ -21,9 +18,7 @@ import Iconify from "components/iconify";
 import { useQuery } from "@apollo/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_MEMBERS } from "gql/queries/members";
-import { GET_APPROVED_EVENTS } from "gql/queries/events";
-
-// import events from "_mock/events";
+import { GET_CLUB_EVENTS } from "gql/queries/events";
 
 export default function Club() {
     const {
@@ -90,7 +85,7 @@ function ClubEvents({ cid }) {
         loading,
         error,
         data: { events, club } = {},
-    } = useQuery(GET_APPROVED_EVENTS, {
+    } = useQuery(GET_CLUB_EVENTS, {
         variables: {
             clubid: cid,
             clubInput: { cid: cid },
