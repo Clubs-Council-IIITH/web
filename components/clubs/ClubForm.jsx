@@ -125,7 +125,7 @@ export default function ClubForm({
         <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    <Card sx={{ p: 3 }}>
+                    <Card sx={{ p: 2 }}>
                         <Typography color="text.secondary" variant="subtitle2" pb={2}>
                             DETAILS
                         </Typography>
@@ -238,7 +238,7 @@ export default function ClubForm({
                         </Stack>
                     </Card>
 
-                    <Card sx={{ p: 3, mt: 3 }}>
+                    <Card sx={{ p: 2, mt: 3 }}>
                         <Typography color="text.secondary" variant="subtitle2" pb={2}>
                             SOCIALS
                         </Typography>
@@ -373,7 +373,7 @@ export default function ClubForm({
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    <Card sx={{ p: 3 }}>
+                    <Card sx={{ p: 2 }}>
                         <Typography color="text.secondary" variant="subtitle2" pb={2}>
                             MEDIA
                         </Typography>

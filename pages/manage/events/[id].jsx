@@ -101,7 +101,7 @@ function EventDisplay({ id, setTitle }) {
 
             {/* budget */}
             <Card sx={{ mt: 2, p: 2 }}>
-                <Typography color="text.secondary" variant="subtitle2">
+                <Typography mb={2} color="text.secondary" variant="subtitle2">
                     BUDGET
                 </Typography>
                 <EventBudget rows={event?.budget} editable={false} />

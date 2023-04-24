@@ -1,27 +1,42 @@
-import { Box } from "@mui/material";
+import { useCallback } from "react";
+
+import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Iconify from "components/iconify/Iconify";
 
-export default function EventBudget({ rows, editable = false }) {
+export default function EventBudget({ rows, onUpdate = null, onDelete = null, editable = false }) {
+    const handleProcessRowUpdateError = useCallback((error) => {
+        console.error(error);
+    }, []);
+
     const columns = [
         {
             field: "name",
             headerName: "Name",
-            flex: 1,
+            width: 250,
+            flex: 2,
             editable: editable,
+            renderCell: (p) =>
+                p.value ? (
+                    p.value
+                ) : (
+                    <Typography color="text.secondary">
+                        <i>Double click to edit</i>
+                    </Typography>
+                ),
         },
         {
             // TODO: use currencyformatter on amounts
             field: "amount",
             type: "number",
             headerName: "Amount",
-            width: 180,
+            flex: 1,
             editable: editable,
         },
         {
             field: "reimbursable",
             headerName: "Reimbursable",
-            width: 160,
+            width: 130,
             editable: editable,
             headerAlign: "center",
             align: "center",
@@ -32,14 +47,37 @@ export default function EventBudget({ rows, editable = false }) {
                 />
             ),
         },
+        ...(editable
+            ? [
+                  {
+                      field: "action",
+                      align: "center",
+                      headerName: "",
+                      width: 50,
+                      renderCell: (p) => (
+                          <IconButton onClick={() => onDelete(p.id)} size="small">
+                              <Iconify
+                                  color="error.main"
+                                  icon="eva:trash-outline"
+                                  sx={{ height: 16, width: 16 }}
+                              />
+                          </IconButton>
+                      ),
+                  },
+              ]
+            : []),
     ];
 
     return (
-        <Box mt={2} sx={{ height: 500, width: "100%" }}>
+        <Box sx={{ height: 500, width: "100%" }}>
             <DataGrid
+                editMode="row"
                 columns={columns}
                 rows={rows || []}
+                disableRowSelectionOnClick
                 experimentalFeatures={{ newEditingApi: true }}
+                processRowUpdate={onUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
             />
         </Box>
     );
