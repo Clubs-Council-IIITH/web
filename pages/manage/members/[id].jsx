@@ -102,6 +102,7 @@ export default function Member() {
                             </Grid>
                         </Card>
                     </Grid>
+
                     <Grid item xs md lg xl>
                         <Card sx={{ p: 3 }}>
                             <Typography variant="subtitle2" color="text.secondary">

@@ -1,17 +1,6 @@
 import { useState } from "react";
 
-import {
-    Alert,
-    AlertTitle,
-    Button,
-    Checkbox,
-    Grid,
-    Stack,
-    Box,
-    FormGroup,
-    FormControlLabel,
-    Typography,
-} from "@mui/material";
+import { Alert, AlertTitle, Button, Checkbox, Grid, Box, FormControlLabel } from "@mui/material";
 import {
     EditOutlined as EditIcon,
     DeleteOutlined as DeleteIcon,
@@ -19,99 +8,109 @@ import {
     DoneOutlined as ApproveIcon,
 } from "@mui/icons-material";
 
-export default function EventActions({ actions = [] }) {
-    // set palette view
-    // base: base view (show all action buttons)
-    // approval: approval view (show approval flow actions)
-    // deletion: deletion view (show delete confirm box)
-    const [view, setView] = useState("base");
+// edit
+export const editAction = {
+    name: "edit",
+    button: EditButton,
+    view: null,
+};
 
-    return {
-        base: <BaseView actions={actions} setView={setView} />,
-        approval: <ApprovalView setView={setView} />,
-        deletion: <DeletionView setView={setView} />,
-    }[view];
-}
-
-function BaseView({ actions, setView }) {
+function EditButton({ setView }) {
     const handleEdit = () => {
         // TODO: redirect to edit page
     };
 
-    const handleDelete = () => {
-        setView("deletion");
-    };
+    return (
+        <Button fullWidth size="large" variant="outlined" color="warning" onClick={handleEdit}>
+            <EditIcon fontSize="small" sx={{ mr: 1 }} />
+            Edit
+        </Button>
+    );
+}
 
+// submit
+export const submitAction = {
+    name: "submit",
+    button: SubmitButton,
+    view: null,
+};
+
+function SubmitButton({ setView }) {
     const handleSubmit = () => {
         // TODO: API call
     };
 
-    const handleApprove = () => {
-        setView("approval");
+    return (
+        <Button fullWidth size="large" variant="outlined" color="info" onClick={handleSubmit}>
+            <SubmitIcon fontSize="small" sx={{ mr: 1 }} />
+            Submit
+        </Button>
+    );
+}
+
+// delete
+export const deleteAction = {
+    name: "delete",
+    button: DeleteButton,
+    view: DeletionView,
+};
+
+function DeleteButton({ setView }) {
+    const handleDelete = () => {
+        setView("delete");
     };
 
     return (
-        <Grid container spacing={2} p={2}>
-            {actions.includes("edit") ? (
-                <Grid item xs>
-                    <Button
-                        fullWidth
-                        size="large"
-                        variant="outlined"
-                        color="warning"
-                        onClick={handleEdit}
-                    >
-                        <EditIcon fontSize="small" sx={{ mr: 1 }} />
-                        Edit
-                    </Button>
-                </Grid>
-            ) : null}
+        <Button fullWidth size="large" variant="outlined" color="error" onClick={handleDelete}>
+            <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
+            Delete
+        </Button>
+    );
+}
 
-            {actions.includes("delete") ? (
-                <Grid item xs>
-                    <Button
-                        fullWidth
-                        size="large"
-                        variant="outlined"
-                        color="error"
-                        onClick={handleDelete}
-                    >
-                        <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
-                        Delete
-                    </Button>
-                </Grid>
-            ) : null}
+function DeletionView({ setView }) {
+    const handleCancel = () => {
+        setView("base");
+    };
 
-            {actions.includes("submit") ? (
-                <Grid item xs>
-                    <Button
-                        fullWidth
-                        size="large"
-                        variant="outlined"
-                        color="info"
-                        onClick={handleSubmit}
-                    >
-                        <SubmitIcon fontSize="small" sx={{ mr: 1 }} />
-                        Submit
-                    </Button>
-                </Grid>
-            ) : null}
+    const handleDelete = () => {
+        // TODO: API call
+        setView("base");
+    };
 
-            {actions.includes("approve") ? (
-                <Grid item xs>
-                    <Button
-                        fullWidth
-                        size="large"
-                        variant="outlined"
-                        color="success"
-                        onClick={handleApprove}
-                    >
-                        <ApproveIcon fontSize="small" sx={{ mr: 1 }} />
-                        Approve
-                    </Button>
-                </Grid>
-            ) : null}
-        </Grid>
+    return (
+        <Alert color="error" icon={false} sx={{ display: "block" }}>
+            <AlertTitle> Confirm Deletion </AlertTitle>
+            Are you sure you want to delete this event?
+            <Box mt={2} width="100%" display="flex" justifyContent="flex-end">
+                <Button variant="contained" color="inherit" onClick={handleCancel}>
+                    Cancel
+                </Button>
+                <Button variant="contained" color="error" sx={{ ml: 1 }} onClick={handleDelete}>
+                    Yes, delete it
+                </Button>
+            </Box>
+        </Alert>
+    );
+}
+
+// approve
+export const approveAction = {
+    name: "approve",
+    button: ApproveButton,
+    view: ApprovalView,
+};
+
+function ApproveButton({ setView }) {
+    const handleApprove = () => {
+        setView("approve");
+    };
+
+    return (
+        <Button fullWidth size="large" variant="outlined" color="success" onClick={handleApprove}>
+            <ApproveIcon fontSize="small" sx={{ mr: 1 }} />
+            Approve
+        </Button>
     );
 }
 
@@ -179,32 +178,6 @@ function ApprovalView({ setView }) {
                 </Button>
                 <Button variant="contained" color="success" sx={{ ml: 1 }} onClick={handleApprove}>
                     Confirm Approval
-                </Button>
-            </Box>
-        </Alert>
-    );
-}
-
-function DeletionView({ setView }) {
-    const handleCancel = () => {
-        setView("base");
-    };
-
-    const handleDelete = () => {
-        // TODO: API call
-        setView("base");
-    };
-
-    return (
-        <Alert color="error" icon={false} sx={{ display: "block" }}>
-            <AlertTitle> Confirm Deletion </AlertTitle>
-            Are you sure you want to delete this event?
-            <Box mt={2} width="100%" display="flex" justifyContent="flex-end">
-                <Button variant="contained" color="inherit" onClick={handleCancel}>
-                    Cancel
-                </Button>
-                <Button variant="contained" color="error" sx={{ ml: 1 }} onClick={handleDelete}>
-                    Yes, delete it
                 </Button>
             </Box>
         </Alert>

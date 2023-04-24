@@ -6,13 +6,15 @@ import { Box, Card, Grid, Container, Typography, Chip } from "@mui/material";
 
 import Page from "components/Page";
 import Image from "components/Image";
+import ActionPalette from "components/ActionPalette";
+
 import {
-    EventDetails,
-    EventPoster,
-    EventStatus,
-    EventActions,
-    EventBudget,
-} from "components/events";
+    editAction,
+    deleteAction,
+    submitAction,
+    approveAction,
+} from "components/events/EventActions";
+import { EventDetails, EventPoster, EventStatus, EventBudget } from "components/events";
 
 import { useQuery } from "@apollo/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
@@ -69,11 +71,8 @@ function EventDisplay({ id, setTitle }) {
     return (
         <Box>
             {/* action palette */}
-            <Box
-                sx={{ border: 1, borderRadius: 1, borderColor: "grey.300", borderStyle: "dashed" }}
-            >
-                <EventActions actions={["edit", "delete", "submit", "approve"]} />
-            </Box>
+            {/* <EventActions actions={["edit", "delete", "submit", "approve"]} /> */}
+            <ActionPalette actions={[editAction, deleteAction, submitAction, approveAction]} />
 
             {/* current status */}
             <Box mt={4}>
