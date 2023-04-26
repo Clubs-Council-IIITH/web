@@ -2,6 +2,8 @@ import { useCallback } from "react";
 
 import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+
+import { fCurrency } from "utils/formatCurrency";
 import Iconify from "components/iconify/Iconify";
 
 export default function EventBudget({ rows, onUpdate = null, onDelete = null, editable = false }) {
@@ -26,15 +28,16 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
                 ),
         },
         {
-            // TODO: use currencyformatter on amounts
             field: "amount",
             type: "number",
             headerName: "Amount",
             flex: 1,
             editable: editable,
+            valueFormatter: (p) => fCurrency(p?.value),
         },
         {
             field: "reimbursable",
+            type: "boolean",
             headerName: "Reimbursable",
             width: 130,
             editable: editable,
@@ -42,8 +45,8 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
             align: "center",
             renderCell: (p) => (
                 <Iconify
-                    color={p.value ? "success.main" : "error.main"}
-                    icon={p.value ? "eva:checkmark-outline" : "eva:close-outline"}
+                    color={!!p.value ? "success.main" : "error.main"}
+                    icon={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
                 />
             ),
         },
