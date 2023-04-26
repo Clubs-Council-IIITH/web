@@ -17,16 +17,19 @@ import {
     ToggleButtonGroup,
     Switch,
 } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import { useForm, Controller } from "react-hook-form";
 
 import { uploadFile } from "utils/files";
+import { datetimeConstants } from "constants/datetime";
 
 import { EventBudget } from "components/events";
 
 import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
+import { renderTimeViewClock } from "@mui/x-date-pickers";
 
 export default function EventForm({
     defaultValues,
@@ -170,33 +173,35 @@ export default function EventForm({
 
                             <Stack direction="row" spacing={2}>
                                 <Controller
-                                    name="datetime"
+                                    name="datetimeStarts"
                                     control={control}
                                     render={({ field }) => (
-                                        <TextField
-                                            fullWidth
-                                            type="date"
+                                        <DateTimePicker
                                             label="Starts*"
-                                            autoComplete="off"
-                                            error={errors.date}
-                                            helperText={errors.date?.message}
-                                            InputLabelProps={{ shrink: true }}
+                                            format={`${datetimeConstants.dateFormat} ${datetimeConstants.timeFormat}`}
+                                            sx={{ width: "100%" }}
+                                            viewRenderers={{
+                                                hours: renderTimeViewClock,
+                                                minutes: renderTimeViewClock,
+                                                seconds: renderTimeViewClock,
+                                            }}
                                             {...field}
                                         />
                                     )}
                                 />
                                 <Controller
-                                    name="datetime"
+                                    name="datetimeEnds"
                                     control={control}
                                     render={({ field }) => (
-                                        <TextField
-                                            fullWidth
-                                            type="date"
+                                        <DateTimePicker
                                             label="Ends*"
-                                            autoComplete="off"
-                                            error={errors.date}
-                                            helperText={errors.date?.message}
-                                            InputLabelProps={{ shrink: true }}
+                                            format={`${datetimeConstants.dateFormat} ${datetimeConstants.timeFormat}`}
+                                            sx={{ width: "100%" }}
+                                            viewRenderers={{
+                                                hours: renderTimeViewClock,
+                                                minutes: renderTimeViewClock,
+                                                seconds: renderTimeViewClock,
+                                            }}
                                             {...field}
                                         />
                                     )}
