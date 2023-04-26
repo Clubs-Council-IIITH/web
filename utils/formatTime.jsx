@@ -1,4 +1,4 @@
-import { format, getTime, formatDistanceToNow } from "date-fns";
+import { format, getTime, formatDistanceToNow, formatISO } from "date-fns";
 
 export function fDate(date, newFormat) {
     const fm = newFormat || "dd MMM yyyy";
@@ -22,4 +22,8 @@ export function fToNow(date) {
               addSuffix: true,
           })
         : "";
+}
+
+export function fToISO(datetime) {
+    return datetime ? formatISO(new Date(datetime)) : "";
 }

@@ -104,3 +104,11 @@ export const GET_FULL_EVENT = gql`
         }
     }
 `;
+
+export const GET_AVAILABLE_LOCATIONS = gql`
+    query AvailableRooms($timeslot: [DateTime!]!) {
+        availableRooms(timeslot: $timeslot) {
+            locations
+        }
+    }
+`;

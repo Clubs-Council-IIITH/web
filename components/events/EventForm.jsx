@@ -15,21 +15,27 @@ import {
     MenuItem,
     ToggleButton,
     ToggleButtonGroup,
-    Switch,
+    Chip,
+    FormControl,
+    OutlinedInput,
+    FormHelperText,
 } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { renderTimeViewClock } from "@mui/x-date-pickers";
 
 import { useForm, Controller } from "react-hook-form";
+
+import { useQuery } from "@apollo/client";
+import { GET_AVAILABLE_LOCATIONS } from "gql/queries/events";
 
 import { uploadFile } from "utils/files";
 import { datetimeConstants } from "constants/datetime";
 
-import { EventBudget } from "components/events";
-
 import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
-import { renderTimeViewClock } from "@mui/x-date-pickers";
+import { EventBudget } from "components/events";
+import { fToISO } from "utils/formatTime";
 
 export default function EventForm({
     defaultValues,
@@ -99,6 +105,8 @@ export default function EventForm({
         control,
         handleSubmit,
         reset,
+        watch,
+        setValue,
         formState: { errors },
     } = useForm({ defaultValues });
 
@@ -110,6 +118,30 @@ export default function EventForm({
         if (defaultValues?.mode) setMode(defaultValues?.mode);
         if (defaultValues?.budget) setBudget(defaultValues?.budget);
     }, [defaultValues]);
+
+    // watch start and end dates
+    const startDateInput = watch("datetimeperiod.0");
+    const endDateInput = watch("datetimeperiod.1");
+
+    // watch location
+    const locationInput = watch("location");
+
+    // reset location input if start/end dates are modified
+    useEffect(() => {
+        setValue("location", []);
+    }, [startDateInput, endDateInput]);
+
+    // get available locations
+    const { data: { availableRooms } = {}, loading: availableLocationsLoading } = useQuery(
+        GET_AVAILABLE_LOCATIONS,
+        {
+            skip: !(startDateInput && endDateInput),
+            variables: {
+                timeslot: [fToISO(startDateInput), fToISO(endDateInput)],
+            },
+            onCompleted: console.log,
+        }
+    );
 
     // submission logic
     const onSubmit = async (data) => {
@@ -173,7 +205,7 @@ export default function EventForm({
 
                             <Stack direction="row" spacing={2}>
                                 <Controller
-                                    name="datetimeStarts"
+                                    name="datetimeperiod.0"
                                     control={control}
                                     render={({ field }) => (
                                         <DateTimePicker
@@ -190,7 +222,7 @@ export default function EventForm({
                                     )}
                                 />
                                 <Controller
-                                    name="datetimeEnds"
+                                    name="datetimeperiod.1"
                                     control={control}
                                     render={({ field }) => (
                                         <DateTimePicker
@@ -322,72 +354,108 @@ export default function EventForm({
                                 </ToggleButtonGroup>
                             </Box>
 
+                            {/* enable room booking only if event is hybrid/offline */}
                             {mode !== 1 ? (
                                 <>
                                     <Controller
                                         name="location"
                                         control={control}
                                         render={({ field }) => (
-                                            <TextField
-                                                label="Location"
-                                                autoComplete="off"
-                                                error={errors.location}
-                                                helperText={errors.location?.message}
-                                                InputLabelProps={{ shrink: field.value }}
-                                                {...field}
-                                            />
+                                            <FormControl>
+                                                <InputLabel id="locationSelect">
+                                                    Location
+                                                </InputLabel>
+                                                <Select
+                                                    multiple
+                                                    id="location"
+                                                    labelId="locationSelect"
+                                                    disabled={!(startDateInput && endDateInput)}
+                                                    input={<OutlinedInput label="Location" />}
+                                                    renderValue={(selected) => (
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex",
+                                                                flexWrap: "wrap",
+                                                                gap: 0.5,
+                                                            }}
+                                                        >
+                                                            {selected.map((value) => (
+                                                                <Chip key={value} label={value} />
+                                                            ))}
+                                                        </Box>
+                                                    )}
+                                                    {...field}
+                                                >
+                                                    {availableRooms?.locations?.map((location) => (
+                                                        <MenuItem key={location} value={location}>
+                                                            {location}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                {!(startDateInput && endDateInput) ? (
+                                                    <FormHelperText>
+                                                        Enter start and end dates to get available
+                                                        rooms
+                                                    </FormHelperText>
+                                                ) : null}
+                                            </FormControl>
                                         )}
                                     />
 
-                                    <Controller
-                                        name="population"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                type="number"
-                                                label="Expected Population Count"
-                                                autoComplete="off"
-                                                error={errors.population}
-                                                helperText={errors.population?.message}
-                                                InputLabelProps={{ shrink: field.value }}
-                                                {...field}
+                                    {/* additional fields only if room is requested */}
+                                    {locationInput?.length ? (
+                                        <>
+                                            <Controller
+                                                name="population"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField
+                                                        type="number"
+                                                        label="Expected Population Count"
+                                                        autoComplete="off"
+                                                        error={errors.population}
+                                                        helperText={errors.population?.message}
+                                                        InputLabelProps={{ shrink: field.value }}
+                                                        {...field}
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
 
-                                    <Controller
-                                        name="equipment"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                multiline
-                                                label="Equipment Required"
-                                                autoComplete="off"
-                                                rows={3}
-                                                error={errors.equipment}
-                                                helperText={errors.equipment?.message}
-                                                InputLabelProps={{ shrink: field.value }}
-                                                {...field}
+                                            <Controller
+                                                name="equipment"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField
+                                                        multiline
+                                                        label="Equipment Required"
+                                                        autoComplete="off"
+                                                        rows={3}
+                                                        error={errors.equipment}
+                                                        helperText={errors.equipment?.message}
+                                                        InputLabelProps={{ shrink: field.value }}
+                                                        {...field}
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
 
-                                    <Controller
-                                        name="additional"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <TextField
-                                                multiline
-                                                label="Additional Requests"
-                                                autoComplete="off"
-                                                rows={3}
-                                                error={errors.additional}
-                                                helperText={errors.additional?.message}
-                                                InputLabelProps={{ shrink: field.value }}
-                                                {...field}
+                                            <Controller
+                                                name="additional"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField
+                                                        multiline
+                                                        label="Additional Requests"
+                                                        autoComplete="off"
+                                                        rows={3}
+                                                        error={errors.additional}
+                                                        helperText={errors.additional?.message}
+                                                        InputLabelProps={{ shrink: field.value }}
+                                                        {...field}
+                                                    />
+                                                )}
                                             />
-                                        )}
-                                    />
+                                        </>
+                                    ) : null}
                                 </>
                             ) : null}
                         </Stack>
