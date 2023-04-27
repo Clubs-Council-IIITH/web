@@ -105,7 +105,10 @@ function EventDisplay({ id, setTitle }) {
                 <Typography mb={2} color="text.secondary" variant="subtitle2">
                     BUDGET
                 </Typography>
-                <EventBudget rows={event?.budget} editable={false} />
+                <EventBudget
+                    rows={event?.budget?.map((b, key) => ({ ...b, id: b?.id || key }))} // add ID to each budget item if it doesn't exist (MUI requirement)
+                    editable={false}
+                />
             </Card>
 
             {/* venue */}
@@ -113,26 +116,38 @@ function EventDisplay({ id, setTitle }) {
                 <Typography color="text.secondary" variant="subtitle2">
                     VENUE
                 </Typography>
-                <Box mt={2}>
-                    {event?.location?.map((venue, key) => (
-                        <Chip key={key} label={locationLabel(venue)?.name} sx={{ mr: 1, p: 1 }} />
-                    ))}
-                </Box>
 
-                <Box mt={2}>
-                    <Typography variant="overline">Population</Typography>
-                    <Typography variant="body2">{event?.population || 0}</Typography>
-                </Box>
+                {/* show requested location details, if any */}
+                {event?.location?.length ? (
+                    <>
+                        <Box mt={2}>
+                            {event?.location?.map((venue, key) => (
+                                <Chip
+                                    key={key}
+                                    label={locationLabel(venue)?.name}
+                                    sx={{ mr: 1, p: 1 }}
+                                />
+                            ))}
+                        </Box>
 
-                <Box mt={2}>
-                    <Typography variant="overline">Equipment</Typography>
-                    <Typography variant="body2">{event?.equipment || "None"}</Typography>
-                </Box>
+                        <Box mt={2}>
+                            <Typography variant="overline">Population</Typography>
+                            <Typography variant="body2">{event?.population || 0}</Typography>
+                        </Box>
 
-                <Box mt={2}>
-                    <Typography variant="overline">Additional Information</Typography>
-                    <Typography variant="body2">{event?.additional || "None"}</Typography>
-                </Box>
+                        <Box mt={2}>
+                            <Typography variant="overline">Equipment</Typography>
+                            <Typography variant="body2">{event?.equipment || "None"}</Typography>
+                        </Box>
+
+                        <Box mt={2}>
+                            <Typography variant="overline">Additional Information</Typography>
+                            <Typography variant="body2">{event?.additional || "None"}</Typography>
+                        </Box>
+                    </>
+                ) : (
+                    <Box mt={2}>None requested</Box>
+                )}
             </Card>
         </Box>
     );

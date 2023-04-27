@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 // @mui
 import { styled } from "@mui/material/styles";
+import { downloadFile } from "utils/files";
 
 const StyledEventImg = styled("img")({
     top: 0,
@@ -23,7 +24,7 @@ export default function EventPoster({ event, club }) {
     return (
         <StyledEventImg
             alt={event?.name}
-            src={clubCoverAsPoster ? club?.banner : event?.poster}
+            src={downloadFile(clubCoverAsPoster ? club?.banner : event?.poster)}
             sx={{
                 ...(clubCoverAsPoster ? { filter: "blur(0.3em)" } : {}),
             }}

@@ -76,7 +76,6 @@ function ClubsTableHeader() {
             <TableCell align="left">Email</TableCell>
             <TableCell align="left">Category</TableCell>
             <TableCell align="center">Status</TableCell>
-            {/* <TableCell padding="checkbox" /> */}
         </TableRow>
     );
 }
@@ -84,27 +83,6 @@ function ClubsTableHeader() {
 function ClubsTableRow(club) {
     const router = useRouter();
     const { cid, name, logo, email, category, state } = club;
-
-    // const menuItems = [
-    //     {
-    //         name: (
-    //             <Box display="flex" alignItems="center">
-    //                 <Iconify icon="eva:edit-outline" sx={{ mr: 1 }} />
-    //                 Edit
-    //             </Box>
-    //         ),
-    //         onClick: () => router.push(`${router.asPath}/${cid}/edit`),
-    //     },
-    //     {
-    //         name: (
-    //             <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>
-    //                 <Iconify icon="eva:trash-outline" sx={{ mr: 1 }} />
-    //                 Delete
-    //             </Box>
-    //         ),
-    //         onClick: () => null,
-    //     },
-    // ];
 
     return (
         <TableRow
@@ -139,9 +117,6 @@ function ClubsTableRow(club) {
                     {state?.toUpperCase()}
                 </Label>
             </TableCell>
-            {/* <TableCell align="right" sx={{ border: "none" }}>
-                <Kebab items={menuItems} />
-            </TableCell> */}
         </TableRow>
     );
 }

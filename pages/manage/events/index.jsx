@@ -23,7 +23,7 @@ export default function Events() {
 
                     <Button
                         component={Link}
-                        href="#"
+                        href="/manage/events/new"
                         variant="contained"
                         startIcon={<Iconify icon="eva:plus-fill" />}
                     >

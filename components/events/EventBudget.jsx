@@ -13,8 +13,8 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
 
     const columns = [
         {
-            field: "name",
-            headerName: "Name",
+            field: "description",
+            headerName: "Description",
             width: 250,
             flex: 2,
             editable: editable,

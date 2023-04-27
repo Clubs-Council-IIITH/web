@@ -40,6 +40,8 @@ import LoadingButton from "components/LoadingButton";
 import { EventBudget } from "components/events";
 import { fToISO } from "utils/formatTime";
 import { useAuth } from "contexts/AuthContext";
+import { audienceMap } from "constants/events";
+import { locationLabel } from "utils/formatEvent";
 
 export default function EventForm({
     defaultValues,
@@ -144,7 +146,6 @@ export default function EventForm({
             variables: {
                 timeslot: [fToISO(startDateInput), fToISO(endDateInput)],
             },
-            onCompleted: console.log,
         }
     );
 
@@ -186,7 +187,7 @@ export default function EventForm({
         formData.budget = formData.budget
             .filter((i) => i?.name)
             .map((i) => ({
-                name: i.name,
+                description: i.description,
                 amount: i.amount,
                 reimbursable: i.reimbursable,
             }));
@@ -202,7 +203,7 @@ export default function EventForm({
         setSubmitting(false);
 
         // redirect to manage page
-        // router.push("/manage/events");
+        router.push("/manage/events");
     };
 
     return (
@@ -307,27 +308,11 @@ export default function EventForm({
                                     value={audience}
                                     onChange={handleAudienceChange}
                                 >
-                                    <ToggleButton disableRipple value="ug1">
-                                        UG1
-                                    </ToggleButton>
-                                    <ToggleButton disableRipple value="ug2">
-                                        UG2
-                                    </ToggleButton>
-                                    <ToggleButton disableRipple value="ug3">
-                                        UG3
-                                    </ToggleButton>
-                                    <ToggleButton disableRipple value="ug4">
-                                        UG4+
-                                    </ToggleButton>
-                                    <ToggleButton disableRipple value="pg">
-                                        PG
-                                    </ToggleButton>
-                                    <ToggleButton disableRipple value="stf">
-                                        Staff
-                                    </ToggleButton>
-                                    <ToggleButton disableRipple value="fac">
-                                        Faculty
-                                    </ToggleButton>
+                                    {Object.keys(audienceMap).map((key) => (
+                                        <ToggleButton disableRipple value={key}>
+                                            {audienceMap[key]}
+                                        </ToggleButton>
+                                    ))}
                                 </ToggleButtonGroup>
                             </Box>
 
@@ -402,20 +387,20 @@ export default function EventForm({
                                     value={mode}
                                     onChange={handleModeChange}
                                 >
-                                    <ToggleButton disableRipple value={0}>
+                                    <ToggleButton disableRipple value={"hybrid"}>
                                         Hybrid
                                     </ToggleButton>
-                                    <ToggleButton disableRipple value={1}>
+                                    <ToggleButton disableRipple value={"online"}>
                                         Online
                                     </ToggleButton>
-                                    <ToggleButton disableRipple value={2}>
+                                    <ToggleButton disableRipple value={"offline"}>
                                         Offline
                                     </ToggleButton>
                                 </ToggleButtonGroup>
                             </Box>
 
                             {/* enable room booking only if event is hybrid/offline */}
-                            {mode !== 1 ? (
+                            {mode !== "online" ? (
                                 <>
                                     <Controller
                                         name="location"
@@ -447,23 +432,27 @@ export default function EventForm({
                                                                 {selected.map((value) => (
                                                                     <Chip
                                                                         key={value}
-                                                                        label={value}
+                                                                        label={
+                                                                            locationLabel(value)
+                                                                                ?.name
+                                                                        }
                                                                     />
                                                                 ))}
                                                             </Box>
                                                         )}
                                                         {...field}
                                                     >
-                                                        {availableRooms?.locations?.map(
-                                                            (location) => (
+                                                        {availableRooms?.locations
+                                                            ?.slice()
+                                                            ?.sort()
+                                                            ?.map((location) => (
                                                                 <MenuItem
                                                                     key={location}
                                                                     value={location}
                                                                 >
-                                                                    {location}
+                                                                    {locationLabel(location)?.name}
                                                                 </MenuItem>
-                                                            )
-                                                        )}
+                                                            ))}
                                                     </Select>
                                                     {!(startDateInput && endDateInput) ? (
                                                         <FormHelperText>
