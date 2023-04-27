@@ -1,10 +1,23 @@
 import { gql } from "@apollo/client";
 
+export const GET_RECENT_EVENTS = gql`
+    query RecentEvents {
+        recentEvents {
+            _id
+            name
+            clubid
+            datetimeperiod
+            poster
+        }
+    }
+`;
+
 export const GET_CLUB_EVENTS = gql`
     query ClubEvents($clubid: String, $clubInput: SimpleClubInput!) {
         events(clubid: $clubid) {
             _id
             name
+            clubid
             datetimeperiod
             poster
         }
@@ -19,6 +32,7 @@ export const GET_APPROVED_EVENTS = gql`
         approvedEvents(clubid: $clubid) {
             _id
             name
+            clubid
             datetimeperiod
             poster
         }

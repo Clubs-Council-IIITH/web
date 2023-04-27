@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
-// @mui
+import { useLazyQuery } from "@apollo/client";
+import { GET_CLUB } from "gql/queries/clubs";
+
 import { styled } from "@mui/material/styles";
 import { downloadFile } from "utils/files";
 
@@ -12,16 +14,23 @@ const StyledEventImg = styled("img")({
     position: "absolute",
 });
 
-export default function EventPoster({ event, club }) {
+export default function EventPoster({ event }) {
+    const [getClub, { data: { club } = {}, loading, error }] = useLazyQuery(GET_CLUB, {
+        variables: {
+            clubInput: { cid: event?.clubid },
+        },
+    });
+
     // blur club cover and set as poster if not uploaded
     const [clubCoverAsPoster, setClubCoverAsPoster] = useState(false);
     useEffect(() => {
         if (event?.poster === null || event?.poster === "") {
+            getClub();
             setClubCoverAsPoster(true);
         }
     }, [event?.poster]);
 
-    return (
+    return loading ? null : !event ? null : (
         <StyledEventImg
             alt={event?.name}
             src={downloadFile(clubCoverAsPoster ? club?.banner : event?.poster)}

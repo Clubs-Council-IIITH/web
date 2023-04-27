@@ -1,21 +1,24 @@
-// next
 import Link from "next/link";
 
-// @mui
+import { useQuery } from "@apollo/client";
+import { GET_RECENT_EVENTS } from "gql/queries/events";
+
 import { Typography, Button, Box, Grid } from "@mui/material";
 
-// components
 import { EventCard } from "components/events";
 import Iconify from "components/iconify";
 
 import events from "_mock/events";
 
 export default function Upcoming() {
-    return (
+    // get recent events
+    const { loading, error, data: { recentEvents: events } = {} } = useQuery(GET_RECENT_EVENTS);
+
+    return loading ? null : !events.length ? null : (
         <Box mt={4}>
             <Typography variant="h4" sx={{ mb: 2 }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
-                    Upcoming Events
+                    Upcoming and recent events
                     <Button
                         component={Link}
                         href="/events"
@@ -30,8 +33,8 @@ export default function Upcoming() {
             </Typography>
             <Grid container spacing={3}>
                 {/* display only 4 events on the main page */}
-                {events.slice(0, 4).map((event) => (
-                    <Grid key={event.id} item xs={12} sm={6} md={3}>
+                {events?.slice(0, 4)?.map((event) => (
+                    <Grid key={event?.id} item xs={12} sm={6} md={3}>
                         <EventCard event={event} />
                     </Grid>
                 ))}

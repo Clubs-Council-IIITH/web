@@ -13,7 +13,7 @@ EventCard.propTypes = {
     event: PropTypes.object,
 };
 
-export default function EventCard({ event, club }) {
+export default function EventCard({ event }) {
     const { _id, name, datetimeperiod } = event;
     const router = useRouter();
 
@@ -36,7 +36,7 @@ export default function EventCard({ event, club }) {
                             {event?.status?.state}
                         </Label>
                     )}
-                    <EventPoster event={event} club={club} />
+                    <EventPoster event={event} />
                 </Box>
 
                 <Stack spacing={1} sx={{ p: 3 }}>

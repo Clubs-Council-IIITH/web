@@ -89,7 +89,7 @@ function ClubEvents({ cid }) {
     const {
         loading,
         error,
-        data: { events, club } = {},
+        data: { events } = {},
     } = useQuery(GET_CLUB_EVENTS, {
         variables: {
             clubid: cid,
@@ -105,7 +105,7 @@ function ClubEvents({ cid }) {
                 {/* display only 8 (or 4 on mobile) events on the main page */}
                 {events?.slice(0, isDesktop ? 8 : 4).map((event) => (
                     <Grid key={event.id} item xs={12} sm={6} md={3}>
-                        <EventCard event={event} club={club} />
+                        <EventCard event={event} />
                     </Grid>
                 ))}
             </Grid>
