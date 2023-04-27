@@ -72,20 +72,19 @@ export default function UserCard({ user }) {
                 </Typography>
 
                 {roles.map((role, key) => (
-                    <Box
-                        key={key}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        mt={0.5}
-                    >
-                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Box key={key} mt={0.5}>
+                        <Typography
+                            variant="body2"
+                            sx={{ display: "inline-block", color: "text.secondary" }}
+                        >
                             {role?.name}
                         </Typography>
                         <Typography
                             variant="body2"
                             color="grey.400"
-                            display="inline-block"
+                            sx={{
+                                display: "inline-block",
+                            }}
                             ml={0.5}
                         >
                             ({role?.startYear} - {role?.endYear || "present"})
