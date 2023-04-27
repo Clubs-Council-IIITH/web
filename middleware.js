@@ -42,7 +42,3 @@ export function middleware(req) {
     // continue to page
     return NextResponse.next();
 }
-
-export const config = {
-    matcher: [...Object.keys(routes), ...Object.keys(clubRedirects)],
-};
