@@ -21,6 +21,7 @@ import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";
 
 import ClientOnly from "components/ClientOnly";
+import { locationLabel } from "utils/formatEvent";
 
 export default function Event() {
     const { query } = useRouter();
@@ -114,7 +115,7 @@ function EventDisplay({ id, setTitle }) {
                 </Typography>
                 <Box mt={2}>
                     {event?.location?.map((venue, key) => (
-                        <Chip key={key} label={venue} sx={{ mr: 1, p: 1 }} />
+                        <Chip key={key} label={locationLabel(venue)?.name} sx={{ mr: 1, p: 1 }} />
                     ))}
                 </Box>
 

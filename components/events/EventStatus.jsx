@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 
 import { Alert, Grid } from "@mui/material";
+
 import Iconify from "components/iconify";
+import { stateLabel } from "utils/formatEvent";
 
 export default function EventStatus({ status }) {
     const [currentState, setCurrentState] = useState({});
 
     useEffect(() => {
-        // TODO: parse `state` and assign proper status
+        const newState = stateLabel(status?.state);
         setCurrentState({
-            icon: <Iconify icon="eva:refresh-fill" />,
-            severity: "warning",
-            text: "Pending Clubs Council approval",
+            icon: <Iconify icon={newState?.icon} />,
+            severity: newState?.color,
+            text: newState?.name,
         });
     }, [status?.state]);
 
     return (
         <Grid container spacing={2}>
+            {/* current event status */}
             <Grid item xs md={12} lg>
                 <Alert
                     sx={{ display: "flex", alignItems: "center" }}
@@ -26,6 +29,8 @@ export default function EventStatus({ status }) {
                     {currentState?.text}
                 </Alert>
             </Grid>
+
+            {/* budget status */}
             <Grid item xs={12} md={6} lg={4}>
                 <Alert
                     sx={{ display: "flex", alignItems: "center" }}
@@ -39,6 +44,8 @@ export default function EventStatus({ status }) {
                     {status?.budget ? "Budget approved" : "Budget not approved"}
                 </Alert>
             </Grid>
+
+            {/* venue status */}
             <Grid item xs={12} md={6} lg={4}>
                 <Alert
                     sx={{ display: "flex", alignItems: "center" }}

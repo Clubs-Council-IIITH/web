@@ -17,8 +17,8 @@ import { GET_CLUB } from "gql/queries/clubs";
 import { fDateTime } from "utils/formatTime";
 
 import Label from "components/label";
-import Kebab from "components/Kebab";
 import Iconify from "components/iconify";
+import { stateLabel } from "utils/formatEvent";
 
 export function EventsTableHeader() {
     return (
@@ -29,7 +29,6 @@ export function EventsTableHeader() {
             <TableCell align="center">Budget</TableCell>
             <TableCell align="center">Venue</TableCell>
             <TableCell align="center">Status</TableCell>
-            {/* <TableCell padding="checkbox" /> */}
         </TableRow>
     );
 }
@@ -49,36 +48,6 @@ export function EventsTableRow(event) {
             clubInput: { cid: event?.clubid },
         },
     });
-
-    // const menuItems = [
-    //     {
-    //         name: (
-    //             <Box display="flex" alignItems="center">
-    //                 <Iconify icon="eva:edit-outline" sx={{ mr: 1 }} />
-    //                 Edit
-    //             </Box>
-    //         ),
-    //         onClick: () => null,
-    //     },
-    //     {
-    //         name: (
-    //             <Box display="flex" alignItems="center" sx={{ color: "success.main" }}>
-    //                 <Iconify icon="eva:checkmark-outline" sx={{ mr: 1 }} />
-    //                 Approve
-    //             </Box>
-    //         ),
-    //         onClick: () => null,
-    //     },
-    //     {
-    //         name: (
-    //             <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>
-    //                 <Iconify icon="eva:trash-outline" sx={{ mr: 1 }} />
-    //                 Delete
-    //             </Box>
-    //         ),
-    //         onClick: () => null,
-    //     },
-    // ];
 
     return (
         <TableRow
@@ -110,11 +79,10 @@ export function EventsTableRow(event) {
                 />
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
-                <Label>{status?.state}</Label>
+                <Label color={stateLabel(status?.state)?.color}>
+                    {stateLabel(status?.state)?.shortName}
+                </Label>
             </TableCell>
-            {/* <TableCell align="right" sx={{ border: "none" }} onClick={(e) => e.stopPropagation()}>
-                <Kebab items={menuItems} />
-            </TableCell> */}
         </TableRow>
     );
 }

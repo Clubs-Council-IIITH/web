@@ -4,6 +4,7 @@ import { fDateTime } from "utils/formatTime";
 import Iconify from "components/iconify";
 import AudienceChips from "./AudienceChips";
 import { ClubBanner } from "components/clubs";
+import { locationLabel } from "utils/formatEvent";
 
 export default function EventDetails({
     club,
@@ -37,7 +38,9 @@ export default function EventDetails({
             <Box display="flex" mt={4} alignItems="center">
                 <Iconify icon="ic:outline-location-on" sx={{ mr: 2 }} />
                 <Typography variant="body1">
-                    {mode === "offline" ? location?.join(", ") : "Online"}
+                    {mode === "offline"
+                        ? location?.map((l) => locationLabel(l).name)?.join(", ")
+                        : "Online"}
                 </Typography>
             </Box>
 
