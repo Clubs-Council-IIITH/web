@@ -1,18 +1,22 @@
+import { useEffect } from "react";
 import Link from "next/link";
 
 import { useQuery } from "@apollo/client";
 import { GET_RECENT_EVENTS } from "gql/queries/events";
 
 import { Typography, Button, Box, Grid } from "@mui/material";
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 import { EventCard } from "components/events";
 import Iconify from "components/iconify";
 
-import events from "_mock/events";
-
 export default function Upcoming() {
     // get recent events
     const { loading, error, data: { recentEvents: events } = {} } = useQuery(GET_RECENT_EVENTS);
+
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
 
     return loading ? null : !events.length ? null : (
         <Box mt={4}>

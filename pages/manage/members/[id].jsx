@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 
@@ -14,6 +14,8 @@ import Label from "components/label";
 import Page from "components/Page";
 import Iconify from "components/iconify";
 import ClientOnly from "components/ClientOnly";
+
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 export default function Member() {
     const { query } = useRouter();
@@ -45,7 +47,10 @@ export default function Member() {
         },
     });
 
-    // TODO: handle loading and null state
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !member ? null : (
         <Page title={"View Member"}>
             <Container>

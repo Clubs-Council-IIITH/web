@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Box, Card, Container } from "@mui/material";
 
 import { useAuth } from "contexts/AuthContext";
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
@@ -48,7 +49,10 @@ function ClubDetails({ cid, setTitle }) {
         },
     });
 
-    // TODO: handle loading screen and non-existent club
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !club ? null : (
         <Box>
             {/* action palette */}

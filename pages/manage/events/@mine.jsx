@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import Link from "next/link";
 
 import { Box, Button, Card, Stack, Container, Typography } from "@mui/material";
+
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 import Page from "components/Page";
 import Table from "components/Table";
@@ -59,7 +62,10 @@ function EventsTable() {
         },
     });
 
-    // TODO: handle loading and empty indicators
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !events?.length ? null : (
         <Table data={events} header={EventsTableHeader} row={EventsTableRow} />
     );

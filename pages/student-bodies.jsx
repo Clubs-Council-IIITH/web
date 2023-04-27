@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Grid, Container, Stack, Typography } from "@mui/material";
 
 import Page from "components/Page";
@@ -6,6 +7,7 @@ import { ClubCard } from "components/clubs";
 
 import { useQuery } from "@apollo/client";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 export default function StudentBodies() {
     return (
@@ -28,7 +30,10 @@ export default function StudentBodies() {
 function StudentBodiesList() {
     const { loading, error, data: { activeClubs: clubs } = {} } = useQuery(GET_ACTIVE_CLUBS);
 
-    // TODO: add loading screen and empty list handling
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !clubs?.length ? null : (
         <Grid container spacing={3}>
             {clubs

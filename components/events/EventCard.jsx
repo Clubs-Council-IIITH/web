@@ -1,10 +1,8 @@
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
-// @mui
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
-// components
 import Label from "components/label";
 import EventPoster from "./EventPoster";
 import { fDateTime } from "utils/formatTime";

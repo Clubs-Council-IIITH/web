@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import ThemeProvider from "theme";
 import TransitionProvider from "components/TransitionProvider";
+import { ProgressbarProvider } from "contexts/ProgressbarContext";
 import { AuthProvider } from "contexts/AuthContext";
 import { ApolloProvider } from "@apollo/client";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -22,13 +23,15 @@ function MyApp({ Component, pageProps }) {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <AuthProvider>
                     <ThemeProvider>
-                        <AnimatePresence mode="wait" initial={false}>
-                            <Layout>
-                                <TransitionProvider route={router.route}>
-                                    <Component {...pageProps} />
-                                </TransitionProvider>
-                            </Layout>
-                        </AnimatePresence>
+                        <ProgressbarProvider>
+                            <AnimatePresence mode="wait" initial={false}>
+                                <Layout>
+                                    <TransitionProvider route={router.route}>
+                                        <Component {...pageProps} />
+                                    </TransitionProvider>
+                                </Layout>
+                            </AnimatePresence>
+                        </ProgressbarProvider>
                     </ThemeProvider>
                 </AuthProvider>
             </LocalizationProvider>

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 
 import { Card, Grid, Container } from "@mui/material";
+
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 import Page from "components/Page";
 import Image from "components/Image";
@@ -62,7 +64,10 @@ function EventDisplay({ id, setTitle }) {
         },
     });
 
-    // TODO: handle event loading and error
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(clubLoading && eventLoading), [clubLoading, eventLoading]);
+
     return eventLoading ? null : !event ? null : (
         <Grid container>
             <Grid item xs={12} md={6} lg={6}>

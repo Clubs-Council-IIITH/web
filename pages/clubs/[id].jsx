@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Typography, Button, Box, Grid, Card, Container } from "@mui/material";
 
 import useResponsive from "hooks/useResponsive";
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
@@ -62,7 +63,10 @@ function ClubDetails({ cid, setTitle }) {
         },
     });
 
-    // TODO: handle loading screen and non-existent club
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !club ? null : (
         <>
             <Card sx={{ mb: 2 }}>
@@ -97,7 +101,10 @@ function ClubEvents({ cid }) {
         },
     });
 
-    // TODO: handle loading screen and zero events
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !events?.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
             <Typography variant="h4">Events</Typography>
@@ -140,7 +147,10 @@ function ClubMembers({ cid }) {
         },
     });
 
-    // TODO: handle loading screen and zero members
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !members?.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
             <Typography variant="h4">Members</Typography>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// @mui
 import { alpha } from "@mui/material/styles";
 import {
     Box,
@@ -28,8 +27,6 @@ const COMMON_MENU_OPTIONS = [
         icon: "eva:settings-2-fill",
     },
 ];
-
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
     const { isAuthenticated, user, login, logout } = useAuth();

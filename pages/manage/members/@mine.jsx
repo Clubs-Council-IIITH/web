@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -25,6 +25,7 @@ import { useQuery } from "@apollo/client";
 import { GET_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
+import { useProgressbar } from "contexts/ProgressbarContext";
 import ClientOnly from "components/ClientOnly";
 
 export default function Members() {
@@ -75,7 +76,10 @@ function MembersTable() {
         },
     });
 
-    // TODO: handle loading and empty indicators
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
     return loading ? null : !members?.length ? null : (
         <Table data={members} header={MembersTableHeader} row={MembersTableRow} />
     );
@@ -113,6 +117,10 @@ function MembersTableRow(member) {
             // setImg(userProfile?.img);
         },
     });
+
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
 
     return (
         <TableRow
