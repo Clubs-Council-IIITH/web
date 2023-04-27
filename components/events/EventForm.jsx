@@ -319,7 +319,7 @@ export default function EventForm({
                                     onChange={handleAudienceChange}
                                 >
                                     {Object.keys(audienceMap).map((key) => (
-                                        <ToggleButton disableRipple value={key}>
+                                        <ToggleButton disableRipple key={key} value={key}>
                                             {audienceMap[key]}
                                         </ToggleButton>
                                     ))}

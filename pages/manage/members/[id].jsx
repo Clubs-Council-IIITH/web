@@ -123,7 +123,7 @@ export default function Member() {
 
                             <Grid container spacing={2}>
                                 {member?.roles?.map((role, key) => (
-                                    <Grid item container xs={12} mt={1}>
+                                    <Grid item container xs={12} mt={1} key={key}>
                                         <Grid item xs={3}>
                                             <Typography fontWeight={400} color="text.secondary">
                                                 {role?.startYear} - {role?.endYear || "present"}

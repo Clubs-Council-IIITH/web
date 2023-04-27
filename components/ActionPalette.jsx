@@ -20,8 +20,8 @@ function BaseView({ actions, setView }) {
     return (
         <Box sx={{ border: 1, borderRadius: 1, borderColor: "grey.300", borderStyle: "dashed" }}>
             <Grid container spacing={2} p={2}>
-                {actions?.map((Action) => (
-                    <Grid item xs>
+                {actions?.map((Action, key) => (
+                    <Grid item xs key={key}>
                         <Action.button setView={setView} />
                     </Grid>
                 ))}

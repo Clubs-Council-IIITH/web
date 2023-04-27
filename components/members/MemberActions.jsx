@@ -61,7 +61,7 @@ function DeletionView({ setView }) {
     return (
         <Alert color="error" icon={false} sx={{ display: "block" }}>
             <AlertTitle> Confirm Deletion </AlertTitle>
-            Are you sure you want to delete this user's membership?{" "}
+            Are you sure you want to delete this user&apos;s membership?{" "}
             <b>All of their positions in the club, ever, will be revoked!</b>
             <Box mt={2} width="100%" display="flex" justifyContent="flex-end">
                 <Button variant="contained" color="inherit" onClick={handleCancel}>
