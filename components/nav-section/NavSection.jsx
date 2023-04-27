@@ -38,14 +38,14 @@ NavItem.propTypes = {
 };
 
 function NavItem({ item }) {
-    const { title, path, page, icon, info } = item;
+    const { title, path, icon, info } = item;
     const { pathname, asPath } = useRouter();
 
     const active = getActive(item.path, pathname, asPath);
     const external = isExternalLink(item.path);
 
     return (
-        <StyledNavItem component={NextLink} href={`${path}/${page || ""}`} active={active}>
+        <StyledNavItem component={NextLink} href={path} active={active}>
             <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
             <ListItemText

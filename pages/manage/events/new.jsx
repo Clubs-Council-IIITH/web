@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
-// import { CREATE_EVENT } from "gql/mutations/events";
+import { CREATE_EVENT } from "gql/mutations/events";
+import { GET_ALL_EVENTS, GET_CLUB_EVENTS } from "gql/queries/events";
 
 import { Container } from "@mui/material";
 
@@ -14,11 +15,8 @@ export default function NewEvent() {
         datetimeperiod: [null, null],
         description: null,
         audience: [],
-
         poster: null,
-
         budget: [],
-
         mode: 0,
         link: null,
         location: [],
@@ -28,17 +26,17 @@ export default function NewEvent() {
     };
 
     // mutation to create event
-    // const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB, {
-    //     // refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
-    // });
+    const [createEvent, { data, loading, error }] = useMutation(CREATE_EVENT, {
+        refetchQueries: [{ query: GET_CLUB_EVENTS }, { query: GET_ALL_EVENTS }],
+    });
 
     return (
         <Page title={"New Event"}>
             <Container>
                 <EventForm
                     defaultValues={defaultValues}
-                    // submitMutation={createEvent}
-                    // submitState={{ data, loading, error }}
+                    submitMutation={createEvent}
+                    submitState={{ data, loading, error }}
                     submitButtonText="Create"
                 />
             </Container>

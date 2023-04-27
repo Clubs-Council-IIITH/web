@@ -3,7 +3,9 @@ import { match } from "path-to-regexp";
 import jwt_decode from "jwt-decode";
 
 import routes from "acl/routes";
+import clubRedirects from "acl/clubRedirects";
 
+// TODO: make multiple middlewares (one for route acl, one for club redirects) and combine them
 export function middleware(req) {
     // check if current route is protected
     const protectedRoute = Object.keys(routes).find((r) => match(r)(req.nextUrl.pathname)) || false;
@@ -18,17 +20,29 @@ export function middleware(req) {
         return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // if logged in, check if user has access
+    // if logged in, extract user attributes
     const token = req.cookies.get("Authorization"); // get token from request header
     const user = jwt_decode(token?.value);
-    if (routes[protectedRoute].includes(user?.role)) {
-        return NextResponse.next();
+
+    // check if current route is to be redirected for club accounts
+    const clubRedirectRoute =
+        Object.keys(clubRedirects).find((r) => match(r)(req.nextUrl.pathname)) || false;
+
+    // club account specific redirects
+    if (clubRedirectRoute && user?.role === "club") {
+        return NextResponse.redirect(new URL(clubRedirects[req.nextUrl.pathname], req.url));
     }
 
-    // redirect to home page if user does not have access
-    return NextResponse.redirect(new URL("/", req.url));
+    // check if user has access to route
+    if (!routes[protectedRoute].includes(user?.role)) {
+        // redirect to home page if user does not have access
+        return NextResponse.redirect(new URL("/", req.url));
+    }
+
+    // continue to page
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: Object.keys(routes),
+    matcher: [...Object.keys(routes), ...Object.keys(clubRedirects)],
 };

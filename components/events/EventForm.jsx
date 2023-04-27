@@ -19,6 +19,7 @@ import {
     FormControl,
     OutlinedInput,
     FormHelperText,
+    CircularProgress,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers";
@@ -26,9 +27,11 @@ import { renderTimeViewClock } from "@mui/x-date-pickers";
 import { useForm, Controller } from "react-hook-form";
 
 import { useQuery } from "@apollo/client";
+import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import { GET_AVAILABLE_LOCATIONS } from "gql/queries/events";
 
 import { uploadFile } from "utils/files";
+import { fileConstants } from "constants/files";
 import { datetimeConstants } from "constants/datetime";
 
 import Iconify from "components/iconify";
@@ -36,6 +39,7 @@ import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
 import { EventBudget } from "components/events";
 import { fToISO } from "utils/formatTime";
+import { useAuth } from "contexts/AuthContext";
 
 export default function EventForm({
     defaultValues,
@@ -44,6 +48,7 @@ export default function EventForm({
     submitButtonText = "Done",
 }) {
     const router = useRouter();
+    const { user } = useAuth();
 
     // check if form is submitting from the client side
     // needed to track multiple API calls (apart from the `submitState`, which is only for submitMutation)
@@ -132,7 +137,7 @@ export default function EventForm({
     }, [startDateInput, endDateInput]);
 
     // get available locations
-    const { data: { availableRooms } = {}, loading: availableLocationsLoading } = useQuery(
+    const { data: { availableRooms } = {}, loading: availableRoomsLoading } = useQuery(
         GET_AVAILABLE_LOCATIONS,
         {
             skip: !(startDateInput && endDateInput),
@@ -142,6 +147,11 @@ export default function EventForm({
             onCompleted: console.log,
         }
     );
+
+    // populate club IDs if user is CC
+    const { data: { allClubs: clubs } = {}, loading: clubsLoading } = useQuery(GET_ALL_CLUB_IDS, {
+        skip: user?.role !== "cc",
+    });
 
     // submission logic
     const onSubmit = async (data) => {
@@ -158,15 +168,33 @@ export default function EventForm({
             budget: budget,
         };
 
-        // preprocess certain values
+        // set club ID for event if current user is a club
+        if (user?.role === "club") {
+            formData.clubid = user?.uid;
+        }
+
+        // upload poster
         if (formData?.poster && typeof formData?.poster !== "string") {
             formData.poster = await uploadFile(poster, "image");
         }
 
+        // convert dates to ISO strings
+        formData.datetimeperiod = formData.datetimeperiod.map(fToISO);
+
+        // convert budget to array of objects with only required attributes
+        // remove budget items without a name (they're invalid)
+        formData.budget = formData.budget
+            .filter((i) => i?.name)
+            .map((i) => ({
+                name: i.name,
+                amount: i.amount,
+                reimbursable: i.reimbursable,
+            }));
+
         // perform mutation
         submitMutation({
             variables: {
-                eventInput: formData,
+                details: formData,
             },
         });
 
@@ -174,7 +202,7 @@ export default function EventForm({
         setSubmitting(false);
 
         // redirect to manage page
-        router.push("/manage/clubs");
+        // router.push("/manage/events");
     };
 
     return (
@@ -187,6 +215,38 @@ export default function EventForm({
                         </Typography>
 
                         <Stack spacing={2}>
+                            {/* show club selection input if current user is CC */}
+                            {user?.role === "cc" ? (
+                                <Controller
+                                    name="clubid"
+                                    control={control}
+                                    rules={{ required: "Name can not be empty!" }}
+                                    render={({ field }) =>
+                                        clubsLoading ? (
+                                            <Box w={100} display="flex" justifyContent="center">
+                                                <CircularProgress />
+                                            </Box>
+                                        ) : (
+                                            <FormControl>
+                                                <InputLabel id="clubSelect">Club*</InputLabel>
+                                                <Select
+                                                    id="club"
+                                                    labelId="clubSelect"
+                                                    input={<OutlinedInput label="Location" />}
+                                                    {...field}
+                                                >
+                                                    {clubs?.map((club) => (
+                                                        <MenuItem key={club?.cid} value={club?.cid}>
+                                                            {club?.name}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        )
+                                    }
+                                />
+                            ) : null}
+
                             <Controller
                                 name="name"
                                 control={control}
@@ -360,46 +420,60 @@ export default function EventForm({
                                     <Controller
                                         name="location"
                                         control={control}
-                                        render={({ field }) => (
-                                            <FormControl>
-                                                <InputLabel id="locationSelect">
-                                                    Location
-                                                </InputLabel>
-                                                <Select
-                                                    multiple
-                                                    id="location"
-                                                    labelId="locationSelect"
-                                                    disabled={!(startDateInput && endDateInput)}
-                                                    input={<OutlinedInput label="Location" />}
-                                                    renderValue={(selected) => (
-                                                        <Box
-                                                            sx={{
-                                                                display: "flex",
-                                                                flexWrap: "wrap",
-                                                                gap: 0.5,
-                                                            }}
-                                                        >
-                                                            {selected.map((value) => (
-                                                                <Chip key={value} label={value} />
-                                                            ))}
-                                                        </Box>
-                                                    )}
-                                                    {...field}
-                                                >
-                                                    {availableRooms?.locations?.map((location) => (
-                                                        <MenuItem key={location} value={location}>
-                                                            {location}
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select>
-                                                {!(startDateInput && endDateInput) ? (
-                                                    <FormHelperText>
-                                                        Enter start and end dates to get available
-                                                        rooms
-                                                    </FormHelperText>
-                                                ) : null}
-                                            </FormControl>
-                                        )}
+                                        render={({ field }) =>
+                                            availableRoomsLoading ? (
+                                                <Box w={100} display="flex" justifyContent="center">
+                                                    <CircularProgress />
+                                                </Box>
+                                            ) : (
+                                                <FormControl>
+                                                    <InputLabel id="locationSelect">
+                                                        Location
+                                                    </InputLabel>
+                                                    <Select
+                                                        multiple
+                                                        id="location"
+                                                        labelId="locationSelect"
+                                                        disabled={!(startDateInput && endDateInput)}
+                                                        input={<OutlinedInput label="Location" />}
+                                                        renderValue={(selected) => (
+                                                            <Box
+                                                                sx={{
+                                                                    display: "flex",
+                                                                    flexWrap: "wrap",
+                                                                    gap: 0.5,
+                                                                }}
+                                                            >
+                                                                {selected.map((value) => (
+                                                                    <Chip
+                                                                        key={value}
+                                                                        label={value}
+                                                                    />
+                                                                ))}
+                                                            </Box>
+                                                        )}
+                                                        {...field}
+                                                    >
+                                                        {availableRooms?.locations?.map(
+                                                            (location) => (
+                                                                <MenuItem
+                                                                    key={location}
+                                                                    value={location}
+                                                                >
+                                                                    {location}
+                                                                </MenuItem>
+                                                            )
+                                                        )}
+                                                    </Select>
+                                                    {!(startDateInput && endDateInput) ? (
+                                                        <FormHelperText>
+                                                            Enter start and end dates to get
+                                                            available rooms
+                                                        </FormHelperText>
+                                                    ) : null}
+                                                </FormControl>
+                                            )
+                                        }
                                     />
 
                                     {/* additional fields only if room is requested */}
@@ -472,10 +546,9 @@ export default function EventForm({
                                 <ImageUpload
                                     name="poster"
                                     accept="image/*"
-                                    maxSize={3145728} // TODO: set file size limits
+                                    maxSize={fileConstants.maxSize}
                                     onDrop={handlePosterDrop}
                                     file={poster}
-                                    // shape="circle"
                                 />
                             </Box>
                         </Stack>
