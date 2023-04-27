@@ -27,7 +27,7 @@ export default function Event() {
 
     return (
         <Page title={title}>
-            <Container>
+            <Container maxWidth="xl">
                 <Card>
                     <ClientOnly>
                         <EventDisplay id={id} setTitle={setTitle} />
