@@ -53,6 +53,7 @@ export default function ClubCard({ club, index }) {
                         }}
                     >
                         <StyledCover
+                            loading="lazy"
                             alt={name}
                             src={banner ? downloadFile(banner) : mediaConstants.placeholderImg}
                         />

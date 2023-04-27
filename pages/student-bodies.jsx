@@ -33,6 +33,7 @@ function StudentBodiesList() {
         <Grid container spacing={3}>
             {clubs
                 ?.filter((club) => club.category === "other")
+                ?.sort((a, b) => a.name.localeCompare(b.name))
                 ?.map((club, index) => (
                     <ClubCard key={index} club={club} index={index} />
                 ))}

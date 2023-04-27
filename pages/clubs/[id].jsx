@@ -9,7 +9,7 @@ import useResponsive from "hooks/useResponsive";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
-import { ClubHero } from "components/clubs";
+import { ClubHero, ClubSocial } from "components/clubs";
 import { EventCard } from "components/events";
 import { UserCard } from "components/users";
 import { RichTextEditor } from "components/RichTextEditor";
@@ -64,15 +64,20 @@ function ClubDetails({ cid, setTitle }) {
 
     // TODO: handle loading screen and non-existent club
     return loading ? null : !club ? null : (
-        <Card sx={{ mb: 4 }}>
-            <ClubHero club={club} />
-            <Box sx={{ p: { xs: 3, md: 5 } }}>
-                <RichTextEditor
-                    editing={false}
-                    editorState={[JSON.parse(club.description), null]}
-                />
+        <>
+            <Card sx={{ mb: 2 }}>
+                <ClubHero club={club} />
+                <Box sx={{ p: { xs: 3, md: 5 } }}>
+                    <RichTextEditor
+                        editing={false}
+                        editorState={[JSON.parse(club.description), null]}
+                    />
+                </Box>
+            </Card>
+            <Box mb={2}>
+                <ClubSocial socials={club?.socials} />
             </Box>
-        </Card>
+        </>
     );
 }
 
