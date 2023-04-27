@@ -1,4 +1,4 @@
 export const datetimeConstants = {
-    dateFormat: "DD/MM/YYYY",
+    dateFormat: "dd MMM yyyy",
     timeFormat: "hh:mm a",
 };

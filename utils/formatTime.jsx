@@ -27,3 +27,7 @@ export function fToNow(date) {
 export function fToISO(datetime) {
     return datetime ? formatISO(new Date(datetime)) : "";
 }
+
+export function fFromISO(datetime) {
+    return datetime ? new Date(datetime) : "";
+}
