@@ -15,17 +15,17 @@ import {
 import { useAuth } from "contexts/AuthContext";
 
 const AUTHENTICATED_MENU_OPTIONS = [
-    {
-        label: "Profile",
-        icon: "eva:person-fill",
-    },
+    // {
+    //     label: "Profile",
+    //     icon: "eva:person-fill",
+    // },
 ];
 
 const COMMON_MENU_OPTIONS = [
-    {
-        label: "Settings",
-        icon: "eva:settings-2-fill",
-    },
+    // {
+    //     label: "Settings",
+    //     icon: "eva:settings-2-fill",
+    // },
 ];
 
 export default function AccountPopover() {

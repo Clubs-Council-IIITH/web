@@ -23,7 +23,7 @@ export default function Upcoming() {
             <Typography variant="h4" sx={{ mb: 2 }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     Upcoming and recent events
-                    <Button
+                    {/* <Button
                         component={Link}
                         href="/events"
                         size="small"
@@ -32,7 +32,7 @@ export default function Upcoming() {
                         endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
                     >
                         View more
-                    </Button>
+                    </Button> */}
                 </Box>
             </Typography>
             <Grid container spacing={3}>

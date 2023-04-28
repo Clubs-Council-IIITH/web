@@ -110,13 +110,15 @@ function ClubEvents({ cid }) {
             <Typography variant="h4">Events</Typography>
             <Grid container spacing={3} mt={1}>
                 {/* display only 8 (or 4 on mobile) events on the main page */}
-                {events?.slice(0, isDesktop ? 8 : 4).map((event) => (
-                    <Grid key={event.id} item xs={12} sm={6} md={3}>
-                        <EventCard event={event} />
-                    </Grid>
-                ))}
+                {events
+                    // ?.slice(0, isDesktop ? 8 : 4)
+                    ?.map((event) => (
+                        <Grid key={event.id} item xs={12} sm={6} md={3}>
+                            <EventCard event={event} />
+                        </Grid>
+                    ))}
             </Grid>
-            <Box sx={{ py: 2, textAlign: "right" }}>
+            {/* <Box sx={{ py: 2, textAlign: "right" }}>
                 <Button
                     component={Link}
                     href={`${asPath}/events`}
@@ -127,7 +129,7 @@ function ClubEvents({ cid }) {
                 >
                     View more
                 </Button>
-            </Box>
+            </Box> */}
         </Box>
     );
 }
@@ -168,7 +170,7 @@ function ClubMembers({ cid }) {
                         </Grid>
                     ))}
             </Grid>
-            <Box sx={{ py: 2, textAlign: "right" }}>
+            {/* <Box sx={{ py: 2, textAlign: "right" }}>
                 <Button
                     component={Link}
                     href={`${asPath}/members`}
@@ -179,7 +181,7 @@ function ClubMembers({ cid }) {
                 >
                     View all
                 </Button>
-            </Box>
+            </Box> */}
         </Box>
     );
 }
