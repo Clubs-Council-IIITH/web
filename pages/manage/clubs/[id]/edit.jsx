@@ -17,6 +17,7 @@ export default function EditClub() {
 
     // default form values
     const [defaultValues, setDefaultValues] = useState({
+        cid: cid,
         code: null,
         name: null,
         email: null,
@@ -47,6 +48,7 @@ export default function EditClub() {
         },
         onCompleted: ({ club }) => {
             setDefaultValues({
+                cid: cid,
                 code: club?.code,
                 name: club?.name,
                 email: club?.email,
