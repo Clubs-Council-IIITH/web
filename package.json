@@ -40,7 +40,6 @@
         "react-dom": "18.2.0",
         "react-dropzone": "^14.2.3",
         "react-hook-form": "^7.43.9",
-        "react-lazy-load-image-component": "^1.5.5",
         "react-nice-avatar": "^1.4.0",
         "react-slick": "^0.29.0",
         "react-social-icons": "^5.15.0",

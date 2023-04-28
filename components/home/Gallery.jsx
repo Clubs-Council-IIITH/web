@@ -1,10 +1,7 @@
-// react
 import { useState } from "react";
 
-// @mui
 import { Box, Card, ImageList, ImageListItem, Typography, Button } from "@mui/material";
 
-// components
 import Image from "components/Image";
 import Iconify from "components/iconify";
 

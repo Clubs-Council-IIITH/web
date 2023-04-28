@@ -1,14 +1,10 @@
-// next
 import Link from "next/link";
 
-// hooks
 import useResponsive from "hooks/useResponsive";
 
-// @mui
 import { Divider, Box, Grid, Typography, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-// components
 import Iconify from "components/iconify";
 import Image from "components/Image";
 
@@ -18,8 +14,8 @@ const FACEBOOK_URL = "https://www.facebook.com/IIITH";
 const INSTAGRAM_URL = "https://www.instagram.com/iiit.hyderabad/";
 const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
 
-const IIITLogo = "assets/img/iiit_logo_white.png";
-const CCLogo = "assets/vector/logo_full.svg";
+const IIITLogo = "/assets/img/iiit_logo_white.png";
+const CCLogo = "/assets/vector/logo_full.svg";
 
 export default function Footer() {
     const theme = useTheme();

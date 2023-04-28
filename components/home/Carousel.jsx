@@ -49,6 +49,7 @@ function CarouselItem({ item }) {
     return (
         <>
             <Image
+                priority
                 src={image}
                 alt={title}
                 ratio={isDesktop ? "21/9" : "3/4"}

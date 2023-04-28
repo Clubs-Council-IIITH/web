@@ -92,7 +92,6 @@ function ClubsTableRow(club) {
         >
             <TableCell align="left" sx={{ display: "flex", alignItems: "center", border: "none" }}>
                 <Image
-                    disabledEffect
                     alt={name}
                     src={downloadFile(logo)}
                     sx={{

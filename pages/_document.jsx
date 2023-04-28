@@ -1,12 +1,9 @@
 import * as React from "react";
 
-// next
 import Document, { Html, Head, Main, NextScript } from "next/document";
-// emotion
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import createEmotionServer from "@emotion/server/create-instance";
-// theme
 import palette from "theme/palette";
 
 function createEmotionCache() {
@@ -20,7 +17,7 @@ export default class MyDocument extends Document {
                 <Head>
                     <meta charSet="utf-8" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <meta name="theme-color" content={palette.light.primary.main} />
+                    <meta name="theme-color" content={palette.light.background.default} />
                     <meta
                         name="description"
                         content="Official portal for all Clubs Council resources of IIIT Hyderabad."

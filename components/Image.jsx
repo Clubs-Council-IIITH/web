@@ -1,15 +1,14 @@
 import PropTypes from "prop-types";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import NextImage from "next/image";
+
 import { Box } from "@mui/material";
 
 Image.propTypes = {
-    disabledEffect: PropTypes.bool,
-    effect: PropTypes.string,
     ratio: PropTypes.oneOf(["4/3", "3/4", "6/4", "4/6", "16/9", "9/16", "21/9", "9/21", "1/1"]),
     sx: PropTypes.object,
 };
 
-export default function Image({ ratio, disabledEffect = false, effect = "blur", sx, ...other }) {
+export default function Image({ ratio, sx, ...other }) {
     if (ratio) {
         return (
             <Box
@@ -33,21 +32,14 @@ export default function Image({ ratio, disabledEffect = false, effect = "blur", 
                     ...sx,
                 }}
             >
-                <Box
-                    component={LazyLoadImage}
-                    wrapperClassName="wrapper"
-                    effect={disabledEffect ? undefined : effect}
-                    placeholderSrc="https://zone-assets-api.vercel.app/assets/img_placeholder.svg"
-                    sx={{ width: 1, height: 1, objectFit: "cover" }}
-                    {...other}
-                />
+                <NextImage fill style={{ objectFit: "cover" }} {...other} />
             </Box>
         );
     }
 
     return (
         <Box
-            component="span"
+            component="div"
             sx={{
                 lineHeight: 0,
                 display: "block",
@@ -56,12 +48,11 @@ export default function Image({ ratio, disabledEffect = false, effect = "blur", 
                 ...sx,
             }}
         >
-            <Box
-                component={LazyLoadImage}
-                wrapperClassName="wrapper"
-                effect={disabledEffect ? undefined : effect}
-                placeholderSrc="https://zone-assets-api.vercel.app/assets/img_placeholder.svg"
-                sx={{ width: 1, height: 1, objectFit: "cover" }}
+            <NextImage
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: "100%", height: "100%" }}
                 {...other}
             />
         </Box>
