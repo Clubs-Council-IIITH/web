@@ -16,16 +16,6 @@ const PRIMARY = {
 };
 
 const SECONDARY = {
-    // lighter: "#D6E4FF",
-    // light: "#84A9FF",
-    // main: "#3366FF",
-    // dark: "#1939B7",
-    // darker: "#091A7A",
-    // lighter: "#F4F6F8",
-    // light: "#DFE3E8",
-    // main: "#C4CDD5",
-    // dark: "#919EAB",
-    // darker: "#637381",
     lighter: "#C4CDD5",
     light: "#919EAB",
     main: "#637381",
@@ -134,7 +124,7 @@ const palette = {
         ...COMMON,
         mode: "dark",
         text: { primary: "#fff", secondary: GREY[500], disabled: GREY[600] },
-        background: { paper: GREY[800], default: "#0D1117", neutral: GREY[500_16] },
+        background: { paper: GREY[800], default: "#0c0c12", neutral: GREY[500_16] },
         action: { active: GREY[500], ...COMMON.action },
         accent: "#803DB2",
     },
