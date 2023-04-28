@@ -28,13 +28,11 @@ export async function uploadFile(file, filetype = "image") {
 }
 
 export function downloadFile(filepath) {
-    const host = process.env.NEXT_PUBLIC_HOST;
-
     if (filepath?.toLowerCase()?.startsWith("http")) {
         // return the full URL if global URL
         return filepath;
     } else if (filepath) {
         // call files service if local URL
-        return `${host}/files/download?filename=${filepath}`;
+        return `/files/download?filename=${filepath}`;
     }
 }
