@@ -48,7 +48,7 @@ export default function UserCard({ user }) {
         },
     });
 
-    return (
+    return loading ? null : !userProfile ? null : (
         <Card>
             <Box sx={{ position: "relative" }}>
                 {img ? (
@@ -92,14 +92,14 @@ export default function UserCard({ user }) {
                     </Box>
                 )}
                 <OverlayStyle />
-                <Image src={img} alt={img} ratio="16/9" />
+                <Image src={img} alt={name} ratio="16/9" />
             </Box>
             <Box pb={4} textAlign={"center"}>
                 <Typography variant="subtitle1" sx={{ mt: 6, textTransform: "capitalize" }}>
                     {name?.toLowerCase()}
                 </Typography>
 
-                {roles.map((role, key) => (
+                {roles?.map((role, key) => (
                     <Box key={key} mt={0.5}>
                         <Typography
                             variant="body2"

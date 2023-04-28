@@ -156,20 +156,24 @@ function ClubMembers({ cid }) {
     return loading ? null : !members?.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
             <Typography variant="h4">Members</Typography>
-            <Grid container spacing={3} mt={1}>
-                {/* display only current members */}
-                {members
-                    .filter(
-                        // check if user has any current roles
-                        (user) =>
-                            user.roles?.map((role) => role.endYear).some((year) => year === null)
-                    )
-                    .map((user) => (
-                        <Grid key={user.uid} item xs={12} sm={6} md={3}>
-                            <UserCard user={user} />
-                        </Grid>
-                    ))}
-            </Grid>
+            <ClientOnly>
+                <Grid container spacing={3} mt={1}>
+                    {/* display only current members */}
+                    {members
+                        .filter(
+                            // check if user has any current roles
+                            (user) =>
+                                user.roles
+                                    ?.map((role) => role.endYear)
+                                    .some((year) => year === null)
+                        )
+                        .map((user) => (
+                            <Grid key={user.uid} item xs={12} sm={6} md={3}>
+                                <UserCard user={user} />
+                            </Grid>
+                        ))}
+                </Grid>
+            </ClientOnly>
             {/* <Box sx={{ py: 2, textAlign: "right" }}>
                 <Button
                     component={Link}

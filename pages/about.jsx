@@ -1,6 +1,7 @@
 import { Typography, Grid, Container } from "@mui/material";
 
 import Page from "components/Page";
+import ClientOnly from "components/ClientOnly";
 import { UserCard } from "components/users";
 
 import ccMembers from "public/assets/json/ccMembers.json";
@@ -36,13 +37,15 @@ export default function About() {
                     Executive Board
                 </Typography>
 
-                <Grid container spacing={3}>
-                    {ccMembers.map((user, key) => (
-                        <Grid key={key} item xs={12} sm={6} md={3}>
-                            <UserCard user={user} />
-                        </Grid>
-                    ))}
-                </Grid>
+                <ClientOnly>
+                    <Grid container spacing={3}>
+                        {ccMembers.map((user, key) => (
+                            <Grid key={key} item xs={12} sm={6} md={3}>
+                                <UserCard user={user} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </ClientOnly>
 
                 <Typography variant="h5" gutterBottom mt={5}>
                     The Clubs Council Team

@@ -8,7 +8,7 @@ Image.propTypes = {
     sx: PropTypes.object,
 };
 
-export default function Image({ ratio, sx, ...other }) {
+export default function Image({ ratio, sx, src, ...other }) {
     if (ratio) {
         return (
             <Box
@@ -32,7 +32,9 @@ export default function Image({ ratio, sx, ...other }) {
                     ...sx,
                 }}
             >
-                <NextImage fill style={{ objectFit: "cover" }} {...other} />
+                {src ? (
+                    <NextImage fill src={src} style={{ objectFit: "cover" }} {...other} />
+                ) : null}
             </Box>
         );
     }
@@ -48,13 +50,16 @@ export default function Image({ ratio, sx, ...other }) {
                 ...sx,
             }}
         >
-            <NextImage
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: "100%", height: "100%" }}
-                {...other}
-            />
+            {src ? (
+                <NextImage
+                    src={src}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: "100%", height: "100%" }}
+                    {...other}
+                />
+            ) : null}
         </Box>
     );
 }
