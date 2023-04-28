@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
 
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 import { styled } from "@mui/material/styles";
-import { Box, Card, Avatar, Divider, Typography, Stack } from "@mui/material";
+import { Box, Card, Avatar, Typography } from "@mui/material";
 import { bgBlur } from "utils/cssStyles";
 
 import Image from "components/Image";
 import { downloadFile } from "utils/files";
+
+import GenAvatar, { genConfig } from "react-nice-avatar";
 
 const OverlayStyle = styled("div")(({ theme }) => ({
     ...bgBlur({ blur: 2, color: theme.palette.accent }),
@@ -40,33 +42,59 @@ export default function UserCard({ user }) {
                 uid: uid,
             },
         },
-        onCompleted: ({ userProfile }) => {
+        onCompleted: ({ userProfile, userMeta }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            // setImg(downloadFile(userProfile?.img));
+            setImg(downloadFile(userMeta?.img));
         },
     });
 
     return (
-        <Card sx={{ textAlign: "center" }}>
+        <Card>
             <Box sx={{ position: "relative" }}>
-                <Avatar
-                    alt={name}
-                    src={img}
-                    sx={{
-                        width: 128,
-                        height: 128,
-                        zIndex: 11,
-                        left: 0,
-                        right: 0,
-                        bottom: -32,
-                        mx: "auto",
-                        position: "absolute",
-                    }}
-                />
+                {img ? (
+                    <Avatar
+                        alt={name}
+                        src={img}
+                        sx={{
+                            width: 128,
+                            height: 128,
+                            zIndex: 11,
+                            left: 0,
+                            right: 0,
+                            bottom: -32,
+                            mx: "auto",
+                            position: "absolute",
+                        }}
+                    />
+                ) : (
+                    <Box
+                        sx={{
+                            width: 128,
+                            height: 128,
+                            zIndex: 11,
+                            left: 0,
+                            right: 0,
+                            bottom: -32,
+                            mx: "auto",
+                            position: "absolute",
+                        }}
+                    >
+                        <GenAvatar
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            {...genConfig({
+                                sex:
+                                    userProfile?.gender?.toLowerCase() === "male" ? "man" : "woman",
+                            })}
+                        />
+                    </Box>
+                )}
                 <OverlayStyle />
                 <Image src={img} alt={img} ratio="16/9" />
             </Box>
-            <Box pb={4}>
+            <Box pb={4} textAlign={"center"}>
                 <Typography variant="subtitle1" sx={{ mt: 6, textTransform: "capitalize" }}>
                     {name?.toLowerCase()}
                 </Typography>
