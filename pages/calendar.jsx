@@ -11,6 +11,8 @@ import { GET_ALL_EVENTS } from "gql/queries/events.jsx";
 import { Container } from "@mui/material";
 import Page from "components/Page";
 
+import { useProgressbar } from "contexts/ProgressbarContext";
+
 const EventCalendar = () => {
     const localizer = momentLocalizer(moment);
     const [events, setEvents] = useState([]);
@@ -19,7 +21,7 @@ const EventCalendar = () => {
         variables: {
             clubid: null,
         },
-        onCompleted: ({ allEvents }) => {
+        onCompleted: ({ events: allEvents }) => {
             setEvents(
                 allEvents?.map((e) => ({
                     start: moment(e.datetimeperiod[0]).toDate(),
@@ -29,6 +31,10 @@ const EventCalendar = () => {
             );
         },
     });
+
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
 
     return loading ? null : (
         <Page title="Calendar">
