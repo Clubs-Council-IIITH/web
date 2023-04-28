@@ -37,8 +37,8 @@ export default function Upcoming() {
             </Typography>
             <Grid container spacing={3}>
                 {/* display only 4 events on the main page */}
-                {events?.slice(0, 4)?.map((event) => (
-                    <Grid key={event?.id} item xs={12} sm={6} md={3}>
+                {events?.slice(0, 4)?.map((event, key) => (
+                    <Grid key={key} item xs={12} sm={6} md={3}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
