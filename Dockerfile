@@ -2,7 +2,6 @@
 FROM node:18-slim as node_cache
 WORKDIR /cache/
 COPY package*.json .
-RUN npm prune
 RUN npm install --prefer-offline --no-audit --progress=false
 
 # build and start
