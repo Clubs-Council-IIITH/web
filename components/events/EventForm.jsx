@@ -135,7 +135,6 @@ export default function EventForm({
 
     // reset location input if start/end dates are modified
     useEffect(() => {
-        console.log(fToISO(startDateInput));
         if (
             // if start and end dates are same as default values, reset location to default value
             fToISO(startDateInput) === fToISO(defaultValues?.datetimeperiod[0]) &&

@@ -128,7 +128,6 @@ function ApprovalView({ setView }) {
     };
 
     const handleApprove = () => {
-        console.log(SLO, SLC, GAD);
         // TODO: API call
         setView("base");
     };
