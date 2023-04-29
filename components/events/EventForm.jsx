@@ -487,6 +487,9 @@ export default function EventForm({
                                                         autoComplete="off"
                                                         error={errors.population}
                                                         helperText={errors.population?.message}
+                                                        InputProps={{
+                                                            inputProps: { min: 0 }
+                                                        }}
                                                         InputLabelProps={{ shrink: field.value }}
                                                         {...field}
                                                     />
