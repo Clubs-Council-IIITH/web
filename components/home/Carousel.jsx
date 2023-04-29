@@ -65,7 +65,7 @@ function CarouselItem({ item }) {
                 }}
             />
 
-            <CardContent sx={{ pt: 4, pl: 4, bottom: 0, width: "100%", position: "absolute" }}>
+            <CardContent sx={{ px: 4, py: 4, bottom: 0, width: "100%", position: "absolute" }}>
                 <StyledTitle
                     color="inherit"
                     variant="subtitle2"
