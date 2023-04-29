@@ -87,7 +87,7 @@ export default function EventForm({
     );
 
     // manage budget
-    const emptyBudgetItem = { name: null, amount: 0, reimbursable: false };
+    const emptyBudgetItem = { name: null, amount: 0, advance: false };
     const [budget, setBudget] = useState(defaultValues?.budget);
     const addBudgetItem = () => {
         setBudget([...budget, { id: budget.length, ...emptyBudgetItem }]);
@@ -198,7 +198,7 @@ export default function EventForm({
             .map((i) => ({
                 description: i.description,
                 amount: i.amount,
-                reimbursable: i.reimbursable,
+                advance: i.advance,
             }));
 
         // perform mutation

@@ -36,9 +36,9 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
             valueFormatter: (p) => fCurrency(p?.value),
         },
         {
-            field: "reimbursable",
+            field: "advance",
             type: "boolean",
-            headerName: "Reimbursable",
+            headerName: "Advance",
             width: 130,
             editable: editable,
             headerAlign: "center",

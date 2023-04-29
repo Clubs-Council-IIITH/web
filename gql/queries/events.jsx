@@ -98,7 +98,7 @@ export const GET_FULL_EVENT = gql`
             budget {
                 amount
                 description
-                reimbursable
+                advance
             }
             clubid
             datetimeperiod
