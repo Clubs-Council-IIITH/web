@@ -1,14 +1,12 @@
 import { useEffect } from "react";
-import Link from "next/link";
 
 import { useQuery } from "@apollo/client";
 import { GET_RECENT_EVENTS } from "gql/queries/events";
 
-import { Typography, Button, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid } from "@mui/material";
 import { useProgressbar } from "contexts/ProgressbarContext";
 
 import { EventCard } from "components/events";
-import Iconify from "components/iconify";
 
 export default function Upcoming() {
     // get recent events

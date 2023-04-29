@@ -17,8 +17,8 @@ export default function Gallery({ images }) {
                 Gallery
             </Typography>
             <ImageList variant="masonry" cols={isDesktop ? 3 : 2} gap={10}>
-                {/* show only 9 images if collapsed */}
-                {images.slice(0, collapsed ? 9 : images.length).map((image, key) => (
+                {/* show only 8 images if collapsed */}
+                {images.slice(0, collapsed ? 8 : images.length).map((image, key) => (
                     <ImageListItem key={key}>
                         <Card>
                             <Image priority src={image} alt="" />

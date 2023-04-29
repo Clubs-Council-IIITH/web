@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
+import useResponsive from "hooks/useResponsive";
+
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import Label from "components/label";
@@ -13,6 +15,7 @@ EventCard.propTypes = {
 
 export default function EventCard({ event }) {
     const { _id, name, datetimeperiod } = event;
+    const isDesktop = useResponsive("up", "sm");
     const router = useRouter();
 
     return (
@@ -37,7 +40,7 @@ export default function EventCard({ event }) {
                     <EventPoster event={event} />
                 </Box>
 
-                <Stack spacing={1} sx={{ p: 3 }}>
+                <Stack spacing={1} sx={{ p: isDesktop ? 3 : 2 }}>
                     <Typography variant="subtitle2" fontSize={16} noWrap>
                         {name}
                     </Typography>
