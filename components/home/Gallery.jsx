@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import useResponsive from "hooks/useResponsive";
+
 import { Box, Card, ImageList, ImageListItem, Typography, Button } from "@mui/material";
 
 import Image from "components/Image";
@@ -7,18 +9,19 @@ import Iconify from "components/iconify";
 
 export default function Gallery({ images }) {
     const [collapsed, setCollapsed] = useState(true);
+    const isDesktop = useResponsive("up", "sm");
 
     return (
         <Box mt={4}>
             <Typography variant="h3" sx={{ mb: 2 }}>
                 Gallery
             </Typography>
-            <ImageList variant="masonry" cols={3} gap={12}>
+            <ImageList variant="masonry" cols={isDesktop ? 3 : 2} gap={10}>
                 {/* show only 9 images if collapsed */}
                 {images.slice(0, collapsed ? 9 : images.length).map((image, key) => (
                     <ImageListItem key={key}>
                         <Card>
-                            <Image src={image} alt="" />
+                            <Image priority src={image} alt="" />
                         </Card>
                     </ImageListItem>
                 ))}

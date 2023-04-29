@@ -6,7 +6,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// hooks
 import useResponsive from "hooks/useResponsive";
 
 import Image from "components/Image";
