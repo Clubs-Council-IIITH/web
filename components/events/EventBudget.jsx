@@ -6,6 +6,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import { fCurrency } from "utils/formatCurrency";
 import Iconify from "components/iconify/Iconify";
 
+function checkAmountValidation(value) {
+    if (value >= 0)
+        return True;
+    return False;
+}
+
 export default function EventBudget({ rows, onUpdate = null, onDelete = null, editable = false }) {
     const handleProcessRowUpdateError = useCallback((error) => {
         console.error(error);
@@ -43,6 +49,7 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
             editable: editable,
             headerAlign: "center",
             align: "center",
+            isValid: checkAmountValidation,
             renderCell: (p) => (
                 <Iconify
                     color={!!p.value ? "success.main" : "error.main"}
