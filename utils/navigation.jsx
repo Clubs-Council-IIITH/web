@@ -45,7 +45,7 @@ const helpConfig = {
         },
         {
             title: "bugs",
-            path: "/bugs",
+            path: "https://forms.office.com/r/zBLuvbBPXZ",
             icon: <BugsIcon fontSize="small" />,
         },
     ],
