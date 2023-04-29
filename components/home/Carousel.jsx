@@ -65,13 +65,21 @@ function CarouselItem({ item }) {
                 }}
             />
 
-            <CardContent sx={{ px: 4, py: 4, bottom: 0, width: "100%", position: "absolute" }}>
+            <CardContent
+                sx={{
+                    px: isDesktop ? 4 : 2,
+                    py: isDesktop ? 4 : 2,
+                    bottom: 0,
+                    width: "100%",
+                    position: "absolute",
+                }}
+            >
                 <StyledTitle
                     color="inherit"
                     variant="subtitle2"
                     underline="none"
                     sx={{
-                        typography: "h3",
+                        typography: isDesktop ? "h3" : "h4",
                         color: "common.white",
                     }}
                 >
@@ -80,9 +88,9 @@ function CarouselItem({ item }) {
 
                 <Typography
                     gutterBottom
-                    variant="h6"
+                    variant={isDesktop ? "h6" : "body2"}
                     fontWeight={400}
-                    sx={{ color: "common.white", display: "block" }}
+                    sx={{ color: "common.white", display: "flex" }}
                 >
                     {description}
                 </Typography>
