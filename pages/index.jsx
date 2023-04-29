@@ -1,4 +1,3 @@
-// @mui
 import { Container } from "@mui/material";
 
 import Page from "components/Page";

@@ -26,7 +26,7 @@ export default function Footer() {
     return (
         <Box>
             <Divider sx={{ py: 4 }} />
-            <Grid container py={6} spacing={2} justifyContent="space-between">
+            <Grid container py={5} spacing={2} justifyContent="space-between">
                 <Grid
                     item
                     xs={12}
@@ -37,6 +37,7 @@ export default function Footer() {
                 >
                     <Box mr={3}>
                         <Image
+                            priority
                             src={IIITLogo}
                             alt={"IIIT Hyderabad"}
                             sx={{ height: 50, filter: `invert(${isLight ? 100 : 0}%)` }}
@@ -44,6 +45,7 @@ export default function Footer() {
                     </Box>
                     <Box>
                         <Image
+                            priority
                             src={CCLogo}
                             alt={"Clubs Council"}
                             sx={{ height: 50, filter: `invert(${isLight ? 100 : 0}%)` }}
@@ -88,22 +90,24 @@ export default function Footer() {
                     </IconButton>
                 </Grid>
             </Grid>
-            <Grid container>
+
+            <Grid container px={isDesktop ? 0 : 2}>
                 <Grid item xs>
-                    <Typography variant="body1" fontWeight={500}>
+                    <Typography variant="body2" fontWeight={500}>
                         © 2022, IIIT Hyderabad
                     </Typography>
                 </Grid>
                 <Grid item xs>
                     <Box width="100%" display="flex" justifyContent="flex-end">
-                        <Link
+                        <Typography
+                            component={Link}
                             href={PRIVACY_POLICY_URL}
                             underline="hover"
-                            variant="body1"
+                            variant="body2"
                             fontWeight={500}
                         >
                             Privacy Policy
-                        </Link>
+                        </Typography>
                     </Box>
                 </Grid>
             </Grid>
