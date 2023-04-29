@@ -35,10 +35,10 @@ export default function Upcoming() {
                     </Button> */}
                 </Box>
             </Typography>
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
                 {/* display only 4 events on the main page */}
                 {events?.slice(0, 4)?.map((event, key) => (
-                    <Grid key={key} item xs={12} sm={6} md={3}>
+                    <Grid key={key} item xs={6} sm={6} md={3}>
                         <EventCard event={event} />
                     </Grid>
                 ))}
