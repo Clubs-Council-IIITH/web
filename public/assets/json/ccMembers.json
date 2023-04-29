@@ -8,10 +8,6 @@
         "roles": [{ "name": "Secretary", "startYear": 2021, "endYear": null }]
     },
     {
-        "uid": "advaith.malladi",
-        "roles": [{ "name": "Undersecretary", "startYear": 2022, "endYear": null }]
-    },
-    {
         "uid": "bhav.beri",
         "roles": [
             { "name": "Undersecretary", "startYear": 2022, "endYear": null },
