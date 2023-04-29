@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import NextLink from "next/link";
+import Image from 'next/image';
+const CCLogo = "/assets/vector/logo_full_coloured.svg";
 // @mui
 import { Box } from "@mui/material";
 
@@ -9,7 +11,12 @@ import { Box } from "@mui/material";
 const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
     const logo = (
         <Box ref={ref} sx={{ width: 32, height: 32, cursor: "pointer", py: 1, ...sx }}>
-            <svg
+            <Image
+                src={CCLogo}
+                alt={"Clubs Council"}
+                sx={{ height: 32, width: 32, filter: `invert(${isLight ? 100 : 0}%)` }}
+            />
+            {/* <svg
                 width="32"
                 height="32"
                 viewBox="0 0 231 273"
@@ -44,7 +51,7 @@ const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
                     fill="#5D2589"
                     fillOpacity="0.992157"
                 />
-            </svg>
+            </svg> */}
         </Box>
     );
 
