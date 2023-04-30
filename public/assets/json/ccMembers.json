@@ -1,11 +1,17 @@
 [
     {
         "uid": "hariharan.k",
-        "roles": [{ "name": "Secretary", "startYear": 2021, "endYear": null }]
+        "roles": [
+            { "name": "Secretary", "startYear": 2021, "endYear": null },
+            { "name": "Undersecretary", "startYear": 2021, "endYear": 2022 }
+        ]
     },
     {
         "uid": "radheshyam.t",
-        "roles": [{ "name": "Secretary", "startYear": 2021, "endYear": null }]
+        "roles": [
+            { "name": "Secretary", "startYear": 2021, "endYear": null },
+            { "name": "Undersecretary", "startYear": 2021, "endYear": 2022 }
+        ]
     },
     {
         "uid": "bhav.beri",
@@ -36,6 +42,9 @@
     },
     {
         "uid": "naren.akash",
-        "roles": [{ "name": "Advisor", "startYear": 2019, "endYear": null }]
+        "roles": [
+            { "name": "Advisor", "startYear": 2021, "endYear": null },
+            { "name": "Secretary", "startYear": 2019, "endYear": 2021 }
+        ]
     }
 ]
