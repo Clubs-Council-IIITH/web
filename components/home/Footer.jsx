@@ -15,7 +15,7 @@ const INSTAGRAM_URL = "https://www.instagram.com/iiit.hyderabad/";
 const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
 
 const IIITLogo = "/assets/img/iiit_logo_white.png";
-const CCLogo = "/assets/vector/logo_full.svg";
+const CCLogo = "/assets/vector/logo_cc.svg";
 
 export default function Footer() {
     const theme = useTheme();

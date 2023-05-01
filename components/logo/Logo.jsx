@@ -5,7 +5,7 @@ import NextLink from "next/link";
 import Image from "next/image";
 import { Box } from "@mui/material";
 
-const CCLogo = "/assets/vector/logo_full_coloured.svg";
+const CCLogo = "/assets/vector/logo_full_b_w.svg";
 
 const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
     const theme = useTheme();
