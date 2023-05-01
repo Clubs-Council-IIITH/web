@@ -5,6 +5,8 @@ import ClientOnly from "components/ClientOnly";
 import { UserCard } from "components/users";
 
 import ccMembers from "public/assets/json/ccMembers.json";
+import extendedMembers from "public/assets/json/extendedMembers.json";
+import techMembers from "public/assets/json/techMembers.json";
 
 export default function About() {
     return (
@@ -40,6 +42,34 @@ export default function About() {
                 <ClientOnly>
                     <Grid container spacing={3}>
                         {ccMembers.map((user, key) => (
+                            <Grid key={key} item xs={12} sm={6} md={3}>
+                                <UserCard user={user} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </ClientOnly>
+
+                <Typography variant="h5" gutterBottom mt={4}>
+                    Tech Team
+                </Typography>
+
+                <ClientOnly>
+                    <Grid container spacing={3}>
+                        {techMembers.map((user, key) => (
+                            <Grid key={key} item xs={12} sm={6} md={3}>
+                                <UserCard user={user} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </ClientOnly>
+
+                <Typography variant="h5" gutterBottom mt={4}>
+                    Extended Team
+                </Typography>
+
+                <ClientOnly>
+                    <Grid container spacing={3}>
+                        {extendedMembers.map((user, key) => (
                             <Grid key={key} item xs={12} sm={6} md={3}>
                                 <UserCard user={user} />
                             </Grid>
