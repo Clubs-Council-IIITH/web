@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 import { useQuery, useMutation } from "@apollo/client";
-import { CREATE_EVENT } from "gql/mutations/events";
-import { GET_FULL_EVENT, GET_ALL_EVENTS, GET_CLUB_EVENTS } from "gql/queries/events";
+import { EDIT_EVENT } from "gql/mutations/events";
+import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
 
 import { Container } from "@mui/material";
 
@@ -18,6 +18,7 @@ export default function EditEvent() {
 
     // default form values
     const [defaultValues, setDefaultValues] = useState({
+        eventid: eid,
         clubid: null,
         name: null,
         datetimeperiod: [null, null],
@@ -45,6 +46,7 @@ export default function EditEvent() {
         },
         onCompleted: ({ event }) => {
             setDefaultValues({
+                eventid: eid,
                 clubid: event?.clubid,
                 name: event?.name,
                 datetimeperiod: event?.datetimeperiod?.map(fFromISO),
@@ -63,17 +65,20 @@ export default function EditEvent() {
     });
 
     // mutation to update event
-    // const [createEvent, { data, loading, error }] = useMutation(CREATE_EVENT, {
-    //     refetchQueries: [{ query: GET_CLUB_EVENTS }, { query: GET_ALL_EVENTS }],
-    // });
+    const [editEvent, { data, loading, error }] = useMutation(EDIT_EVENT, {
+        refetchQueries: [
+            { query: GET_ALL_EVENTS },
+            { query: GET_FULL_EVENT, variables: { eventid: eid } },
+        ],
+    });
 
     return eventLoading ? null : !event ? null : (
         <Page title={"Edit Event"}>
             <Container>
                 <EventForm
                     defaultValues={defaultValues}
-                    // submitMutation={createEvent}
-                    // submitState={{ data, loading, error }}
+                    submitMutation={editEvent}
+                    submitState={{ data, loading, error }}
                     submitButtonText="Save"
                 />
             </Container>

@@ -107,8 +107,10 @@ function ClubEvents({ cid }) {
 
     return loading ? null : !events?.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
-            <Typography variant="h4">Events</Typography>
-            <Grid container spacing={3} mt={1}>
+            <Typography variant="h4" mb={2}>
+                Events
+            </Typography>
+            <Grid container spacing={3}>
                 {/* display only 8 (or 4 on mobile) events on the main page */}
                 {events
                     // ?.slice(0, isDesktop ? 8 : 4)
@@ -155,9 +157,11 @@ function ClubMembers({ cid }) {
 
     return loading ? null : !members?.length ? null : (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
-            <Typography variant="h4">Members</Typography>
+            <Typography variant="h4" mb={2}>
+                Members
+            </Typography>
             <ClientOnly>
-                <Grid container spacing={3} mt={1}>
+                <Grid container spacing={3}>
                     {/* display only current members */}
                     {members
                         .filter(

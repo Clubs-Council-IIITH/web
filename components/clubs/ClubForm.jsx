@@ -23,7 +23,6 @@ import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
 import { RichTextEditor } from "components/RichTextEditor";
-import { fileConstants } from "constants/files";
 
 export default function ClubForm({
     defaultValues,
@@ -385,7 +384,6 @@ export default function ClubForm({
                                 <ImageUpload
                                     name="logo"
                                     accept="image/*"
-                                    maxSize={fileConstants.maxSize}
                                     onDrop={handleLogoDrop}
                                     file={logo}
                                     // shape="circle"
@@ -397,7 +395,6 @@ export default function ClubForm({
                                 <ImageUpload
                                     name="banner"
                                     accept="image/*"
-                                    maxSize={fileConstants.maxSize} // TODO: set file size limits
                                     onDrop={handleBannerDrop}
                                     file={banner}
                                 />

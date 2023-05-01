@@ -31,7 +31,6 @@ import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import { GET_AVAILABLE_LOCATIONS } from "gql/queries/events";
 
 import { uploadFile } from "utils/files";
-import { fileConstants } from "constants/files";
 import { datetimeConstants } from "constants/datetime";
 
 import Iconify from "components/iconify";
@@ -230,7 +229,7 @@ export default function EventForm({
                                 <Controller
                                     name="clubid"
                                     control={control}
-                                    rules={{ required: "Name can not be empty!" }}
+                                    rules={{ required: "ID can not be empty!" }}
                                     render={({ field }) =>
                                         clubsLoading ? (
                                             <Box w={100} display="flex" justifyContent="center">
@@ -238,11 +237,13 @@ export default function EventForm({
                                             </Box>
                                         ) : (
                                             <FormControl>
-                                                <InputLabel id="clubSelect">Club*</InputLabel>
+                                                <InputLabel id="clubSelect" shrink={!!field.value}>
+                                                    Club*
+                                                </InputLabel>
                                                 <Select
-                                                    id="club"
+                                                    id="clubSelect"
                                                     labelId="clubSelect"
-                                                    input={<OutlinedInput label="Location" />}
+                                                    input={<OutlinedInput label="Club*" />}
                                                     {...field}
                                                 >
                                                     {clubs?.map((club) => (
@@ -488,7 +489,7 @@ export default function EventForm({
                                                         error={errors.population}
                                                         helperText={errors.population?.message}
                                                         InputProps={{
-                                                            inputProps: { min: 0 }
+                                                            inputProps: { min: 0 },
                                                         }}
                                                         InputLabelProps={{ shrink: field.value }}
                                                         {...field}
@@ -547,7 +548,6 @@ export default function EventForm({
                                 <ImageUpload
                                     name="poster"
                                     accept="image/*"
-                                    maxSize={fileConstants.maxSize}
                                     onDrop={handlePosterDrop}
                                     file={poster}
                                 />

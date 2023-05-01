@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import Image from "components/Image";
 import { downloadFile } from "utils/files";
+import { fileConstants, MB } from "constants/files";
 
 export default function ImageUpload({
     file,
@@ -32,6 +33,7 @@ export default function ImageUpload({
     const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone(
         {
             multiple: false,
+            maxSize: fileConstants.maxSize,
             ...rest,
         }
     );
@@ -52,7 +54,7 @@ export default function ImageUpload({
                     border: `1px dashed ${theme.palette.grey[500_32]}`,
                     "&:hover": { opacity: 0.7, cursor: "pointer" },
                     ...(isDragActive && { opacity: 0.7 }),
-                    ...((isDragReject || error) && {
+                    ...((isDragReject || error || fileRejections.length) && {
                         color: "error.main",
                         borderColor: "error.light",
                         bgcolor: "error.lighter",
@@ -88,6 +90,11 @@ export default function ImageUpload({
             </Box>
 
             {helpText && helpText}
+            {fileRejections.length ? (
+                <Typography variant="caption" color="error">
+                    File is too large! Maximum allowed size: {fileConstants.maxSize / MB} MB
+                </Typography>
+            ) : null}
         </Box>
     );
 }

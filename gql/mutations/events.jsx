@@ -7,3 +7,11 @@ export const CREATE_EVENT = gql`
         }
     }
 `;
+
+export const EDIT_EVENT = gql`
+    mutation EditEvent($details: InputEditEventDetails!) {
+        editEvent(details: $details) {
+            _id
+        }
+    }
+`;

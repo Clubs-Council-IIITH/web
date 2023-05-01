@@ -1,15 +1,6 @@
 import { useRouter } from "next/router";
 
-import {
-    Box,
-    Button,
-    Card,
-    TableRow,
-    TableCell,
-    Stack,
-    Container,
-    Typography,
-} from "@mui/material";
+import { TableRow, TableCell, Typography } from "@mui/material";
 
 import { useQuery } from "@apollo/client";
 import { GET_CLUB } from "gql/queries/clubs";
