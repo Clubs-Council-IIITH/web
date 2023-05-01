@@ -9,8 +9,8 @@ export default function Details() {
         n_technical_clubs: 8,
         n_cultural_clubs: 15,
         n_student_constitutent_groups: 23,
-        n_student_coordinators: 50,
-        n_organizing_team_members: 250,
+        n_student_coordinators: 70,
+        n_organizing_team_members: 350,
     };
 
     return (
