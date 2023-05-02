@@ -1,3 +1,5 @@
+import Head from "next/head";
+
 import Layout from "layouts/MainLayout";
 
 import { useRouter } from "next/router";
@@ -19,23 +21,28 @@ function MyApp({ Component, pageProps }) {
     const router = useRouter();
 
     return (
-        <ApolloProvider client={client}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <AuthProvider>
-                    <ThemeProvider>
-                        <ProgressbarProvider>
-                            <AnimatePresence mode="wait" initial={false}>
-                                <Layout>
-                                    <TransitionProvider route={router.route}>
-                                        <Component {...pageProps} />
-                                    </TransitionProvider>
-                                </Layout>
-                            </AnimatePresence>
-                        </ProgressbarProvider>
-                    </ThemeProvider>
-                </AuthProvider>
-            </LocalizationProvider>
-        </ApolloProvider>
+        <>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
+            <ApolloProvider client={client}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <AuthProvider>
+                        <ThemeProvider>
+                            <ProgressbarProvider>
+                                <AnimatePresence mode="wait" initial={false}>
+                                    <Layout>
+                                        <TransitionProvider route={router.route}>
+                                            <Component {...pageProps} />
+                                        </TransitionProvider>
+                                    </Layout>
+                                </AnimatePresence>
+                            </ProgressbarProvider>
+                        </ThemeProvider>
+                    </AuthProvider>
+                </LocalizationProvider>
+            </ApolloProvider>
+        </>
     );
 }
 
