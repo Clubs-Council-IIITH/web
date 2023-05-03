@@ -7,7 +7,7 @@ import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import Label from "components/label";
 import EventPoster from "./EventPoster";
-import { fDateTime } from "utils/formatTime";
+import { fDateTime, fLocalTime } from "utils/formatTime";
 
 EventCard.propTypes = {
     event: PropTypes.object,
@@ -46,9 +46,9 @@ export default function EventCard({ event }) {
                     </Typography>
                     <Typography variant="caption" noWrap>
                         {fDateTime(
-                            datetimeperiod?.[0],
+                            fLocalTime(datetimeperiod?.[0]),
                             // show year if event didn't happen this year
-                            parseInt(fDateTime(datetimeperiod?.[0], "Y")) !==
+                            parseInt(fDateTime(fLocalTime(datetimeperiod?.[0]), "Y")) !==
                                 parseInt(new Date().getFullYear())
                                 ? "dd MMM Y, p"
                                 : "dd MMM, p"

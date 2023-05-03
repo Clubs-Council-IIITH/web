@@ -55,7 +55,7 @@ export function EventsTableRow(event) {
                 {club?.name}
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
-                {fDateTime(datetimeperiod?.[0], "dd MMM, p")}
+                {fDateTime(fLocalTime(datetimeperiod?.[0]), "dd MMM, p")}
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
                 <Iconify

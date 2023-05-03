@@ -1,3 +1,4 @@
+import moment from "moment";
 import { format, getTime, formatDistanceToNow, formatISO } from "date-fns";
 
 export function fDate(date, newFormat) {
@@ -19,8 +20,8 @@ export function fTimestamp(date) {
 export function fToNow(date) {
     return date
         ? formatDistanceToNow(new Date(date), {
-              addSuffix: true,
-          })
+            addSuffix: true,
+        })
         : "";
 }
 
@@ -30,4 +31,8 @@ export function fToISO(datetime) {
 
 export function fFromISO(datetime) {
     return datetime ? new Date(datetime) : "";
+}
+
+export function fLocalTime(datetime) {
+    return moment(datetime).local();
 }

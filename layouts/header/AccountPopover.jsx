@@ -64,7 +64,7 @@ export default function AccountPopover() {
                     alt="logged in"
                     {...(user?.firstName && {
                         children: `${user?.firstName?.[0]}${user?.lastName?.[0]}`,
-                        sx: { backgroundColor: "black" },
+                        sx: { backgroundColor: theme.palette.accent },
                     })}
                 />
             </IconButton>
