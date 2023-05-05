@@ -36,7 +36,7 @@ export const locationMap = {
     va3_117: "Vindhya A3 117",
     vsh1: "Vindhya SH1",
     vsh2: "Vindhya SH2",
-    ampi: "Amphitheatre",
+    amphi: "Amphitheatre",
     cieg: "CIE Gaming",
     sarg: "Saranga Hall",
     h105: "Himalaya 105",
