@@ -20,7 +20,7 @@ export default function NewEvent() {
         mode: "hybrid",
         link: null,
         location: [],
-        population: null,
+        population: 0,
         additional: null,
         equipment: null,
     };
