@@ -4,13 +4,14 @@ import { forwardRef } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { Box } from "@mui/material";
+import { useMode } from "contexts/ModeContext";
 
 const CCLogo = "/assets/vector/logo_full_coloured.svg";
 
 const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
     const theme = useTheme();
 
-    const isLight = theme.palette.mode === "light";
+    const { isLight } = useMode();
 
     const logo = (
         <Box ref={ref} sx={{ width: 128, height: 64, cursor: "pointer", py: 1, ...sx }}>

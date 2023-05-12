@@ -7,6 +7,7 @@ import { useTheme } from "@mui/material/styles";
 
 import Iconify from "components/iconify";
 import Image from "components/Image";
+import { useMode } from "contexts/ModeContext";
 
 const PRIVACY_POLICY_URL = "https://www.iiit.ac.in/privacy-policy/";
 const TWITTER_URL = "https://twitter.com/iiit_hyderabad";
@@ -21,7 +22,7 @@ export default function Footer() {
     const theme = useTheme();
 
     const isDesktop = useResponsive("up", "sm");
-    const isLight = theme.palette.mode === "light";
+    const { isLight } = useMode();
 
     return (
         <Box>
