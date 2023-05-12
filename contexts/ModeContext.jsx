@@ -1,4 +1,5 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export const ModeContext = createContext({
     isLight: true,
@@ -10,15 +11,16 @@ export function useMode() {
 }
 
 export function ModeProvider({ children }) {
-    const [isLight, setIsLight] = useState(true);
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+    const [isLight, setMode] = useState(!prefersDarkMode);
+
+    useEffect(() => {
+        setMode(!prefersDarkMode);
+    }, [prefersDarkMode]);
 
     const changeMode = () => {
-        setIsLight(!isLight);
+        setMode(!isLight);
     };
-
-    const setMode = (mode) => {
-        setIsLight(mode);
-    }
 
     return (
         <ModeContext.Provider value={{ isLight, changeMode, setMode }}>
