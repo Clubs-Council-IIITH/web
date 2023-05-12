@@ -97,11 +97,13 @@ export default function AccountPopover() {
                 }}
             >
 
-                <ModeSwitch
-                    checked={!isLight}
-                    onChange={handleChange}
-                    sx={{ m: 1 }}
-                />
+                <center>
+                    <ModeSwitch
+                        checked={!isLight}
+                        onChange={handleChange}
+                        sx={{ m: 1 }}
+                    />
+                </center>
 
                 {isAuthenticated ? (
                     // if authenticated, show user details and options
