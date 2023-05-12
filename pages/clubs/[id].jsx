@@ -49,6 +49,8 @@ export default function Club() {
 }
 
 function ClubDetails({ cid, setTitle }) {
+    const router = useRouter();
+
     const {
         data: { club } = {},
         loading,
@@ -59,7 +61,12 @@ function ClubDetails({ cid, setTitle }) {
             clubInput: { cid: cid },
         },
         onCompleted: ({ club }) => {
+            console.log(1, club)
             setTitle(club?.name);
+        },
+        onError: (error) => {
+            if (error.message == "No Club Found")
+                router.push(`/404`)
         },
     });
 
