@@ -12,7 +12,10 @@ import {
     Popover,
 } from "@mui/material";
 
+import { ModeSwitch } from "components/ModeSwitch";
+
 import { useAuth } from "contexts/AuthContext";
+import { useMode } from "contexts/ModeContext";
 
 const AUTHENTICATED_MENU_OPTIONS = [
     // {
@@ -31,6 +34,11 @@ const COMMON_MENU_OPTIONS = [
 export default function AccountPopover() {
     const { isAuthenticated, user, login, logout } = useAuth();
     const [open, setOpen] = useState(null);
+    const { isLight, setMode } = useMode();
+
+    const handleChange = (event) => {
+        setMode(!isLight);
+    };
 
     const handleOpen = (event) => {
         setOpen(event.currentTarget);
@@ -88,6 +96,13 @@ export default function AccountPopover() {
                     },
                 }}
             >
+
+                <ModeSwitch
+                    checked={!isLight}
+                    onChange={handleChange}
+                    sx={{ m: 1 }}
+                />
+
                 {isAuthenticated ? (
                     // if authenticated, show user details and options
                     <>

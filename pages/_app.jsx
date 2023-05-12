@@ -8,6 +8,7 @@ import ThemeProvider from "theme";
 import TransitionProvider from "components/TransitionProvider";
 import { ProgressbarProvider } from "contexts/ProgressbarContext";
 import { AuthProvider } from "contexts/AuthContext";
+import { ModeProvider } from "contexts/ModeContext";
 import { ApolloProvider } from "@apollo/client";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -28,17 +29,19 @@ function MyApp({ Component, pageProps }) {
             <ApolloProvider client={client}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <AuthProvider>
-                        <ThemeProvider>
-                            <ProgressbarProvider>
-                                <AnimatePresence mode="wait" initial={false}>
-                                    <Layout>
-                                        <TransitionProvider route={router.route}>
-                                            <Component {...pageProps} />
-                                        </TransitionProvider>
-                                    </Layout>
-                                </AnimatePresence>
-                            </ProgressbarProvider>
-                        </ThemeProvider>
+                        <ModeProvider>
+                            <ThemeProvider>
+                                <ProgressbarProvider>
+                                    <AnimatePresence mode="wait" initial={false}>
+                                        <Layout>
+                                            <TransitionProvider route={router.route}>
+                                                <Component {...pageProps} />
+                                            </TransitionProvider>
+                                        </Layout>
+                                    </AnimatePresence>
+                                </ProgressbarProvider>
+                            </ThemeProvider>
+                        </ModeProvider>
                     </AuthProvider>
                 </LocalizationProvider>
             </ApolloProvider>

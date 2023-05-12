@@ -10,12 +10,14 @@ import breakpoints from "./breakpoints";
 import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
+import { useMode } from "contexts/ModeContext";
+
 ThemeProvider.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
 export default function ThemeProvider({ children }) {
-    const isLight = true; // TODO: add dark mode
+    const { isLight } = useMode();
 
     const themeOptions = useMemo(
         () => ({
