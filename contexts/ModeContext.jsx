@@ -34,7 +34,7 @@ export function ModeProvider({ children }) {
     useEffect(() => {
         let theme = localStorage.getItem("cc-theme");
         if (theme != null)
-        dispatch({ type: theme.toString() });
+            dispatch({ type: theme.toString() });
     }, []);
 
     const setMode = (mode) => {

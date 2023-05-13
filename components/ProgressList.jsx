@@ -18,7 +18,7 @@ const ProgressList = (props) => {
                         })
                         .map((data, key) => (
                             <>
-                                <Typography variant="h6" color={theme.palette.secondary.dark} gutterBottom mt={3}>
+                                <Typography variant="h6" color={theme.palette.secondary.light} gutterBottom mt={3}>
                                     {data.month}
                                 </Typography>
                                 <List
