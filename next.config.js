@@ -13,6 +13,14 @@ const nextConfig = {
                 hostname: "localhost",
             },
             {
+                protocol: "http",
+                hostname: "dev.clubs.iiit.ac.in",
+            },
+            {
+                protocol: "https",
+                hostname: "dev.clubs.iiit.ac.in",
+            },
+            {
                 protocol: "https",
                 hostname: "zone-assets-api.vercel.app",
             },
