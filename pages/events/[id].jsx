@@ -37,6 +37,8 @@ export default function Event() {
 }
 
 function EventDisplay({ id, setTitle }) {
+    const router = useRouter();
+
     // get event data
     const {
         loading: eventLoading,
@@ -49,6 +51,10 @@ function EventDisplay({ id, setTitle }) {
         },
         onCompleted: ({ event }) => {
             setTitle(event?.name);
+        },
+        onError: (error) => {
+            if (error.message == "No Club Found")
+                router.push(`/404`)
         },
     });
 
