@@ -53,8 +53,8 @@ function EventDisplay({ id, setTitle }) {
             setTitle(event?.name);
         },
         onError: (error) => {
-            if (error.message == "No Club Found")
-                router.push(`/404`)
+            // if (error.message == "No Club Found")
+            router.push(`/404`)
         },
     });
 
