@@ -61,7 +61,7 @@ function ClubDetails({ cid, setTitle }) {
             clubInput: { cid: cid },
         },
         onCompleted: ({ club }) => {
-            console.log(1, club)
+            // console.log(1, club)
             setTitle(club?.name);
         },
         onError: (error) => {

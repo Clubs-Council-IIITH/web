@@ -44,7 +44,7 @@ function AuthProvider({ children }) {
     useEffect(() => {
         // if `logout` flag is set, redirect to auth server to expire token
         if (cookieCutter.get("logout")) {
-            console.log("logging out...");
+            // console.log("logging out...");
 
             // clear `logout` flag
             cookieCutter.set("logout", "", { expires: new Date(0) });

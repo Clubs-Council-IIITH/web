@@ -26,7 +26,7 @@ export default function Gallery({ images }) {
                             <Image
                                 priority
                                 src={image}
-                                alt=""
+                                alt="Gallery Image"
                                 sx={{
                                     border: `5px solid ${alpha(theme.palette.accent, 0.5)}`,
                                     "border-radius": "15px"
