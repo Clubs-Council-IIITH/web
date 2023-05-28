@@ -21,11 +21,11 @@ export default function EventDetails({
             <Box display="flex" alignItems="center">
                 <Iconify icon="ic:outline-calendar-today" sx={{ mr: 2, width: 16 }} />
                 <Typography variant="body2">
-                    {fDateTime(datetimeperiod?.[0], "dd MMM, p")}
+                    {fDateTime(datetimeperiod?.[0], "D MMM, H:mm")}
                 </Typography>
                 <Box mx={1}>-</Box>
                 <Typography variant="body2">
-                    {fDateTime(datetimeperiod?.[1], "dd MMM, p")}
+                    {fDateTime(datetimeperiod?.[1], "D MMM, H:mm")}
                 </Typography>
             </Box>
 

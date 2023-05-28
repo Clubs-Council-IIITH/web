@@ -50,8 +50,8 @@ export default function EventCard({ event }) {
                             // show year if event didn't happen this year
                             parseInt(fDateTime(datetimeperiod?.[0], "Y")) !==
                                 parseInt(new Date().getFullYear())
-                                ? "dd MMM Y, p"
-                                : "dd MMM, p"
+                                ? "D MMM Y, H:mm"
+                                : "D MMM, H:mm"
                         )}
                     </Typography>
                 </Stack>
