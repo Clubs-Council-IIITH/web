@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
 
 import { Avatar, Button, Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { downloadFile } from "utils/files";
 
 export default function ClubBanner({ cid, logo, name, ...other }) {
     const router = useRouter();
+    const theme = useTheme();
 
     return (
         <Box
@@ -18,7 +20,7 @@ export default function ClubBanner({ cid, logo, name, ...other }) {
             {...other}
         >
             <Avatar src={downloadFile(logo)} alt={name} sx={{ height: 18, width: 18, mr: 1 }} />
-            <Typography variant="body2" fontSize={14}>
+            <Typography variant="body2" fontSize={14} color={theme.palette.text.primary}>
                 {name}
             </Typography>
         </Box>
