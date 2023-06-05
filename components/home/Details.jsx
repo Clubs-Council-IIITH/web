@@ -1,17 +1,34 @@
+import { useEffect, useState } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+
 // @mui
-import { Typography, Button, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid } from "@mui/material";
 
 // components
 import Statistic from "components/Statistic";
 
 export default function Details() {
-    const stats = {
+    const [loadQuery, { loading, error, data: { activeClubs: clubs } = {} }] = useLazyQuery(GET_ACTIVE_CLUBS);
+    useEffect(() => { loadQuery() }, []);
+
+    const [stats, setStats] = useState({
         n_technical_clubs: 7,
         n_cultural_clubs: 16,
         n_student_constitutent_groups: 23,
         n_student_coordinators: 70,
         n_organizing_team_members: 350,
-    };
+    });
+
+    useEffect(() => {
+        if (!clubs && !error) return;
+        setStats({
+            ...stats,
+            n_technical_clubs: clubs.filter((club) => club.category === "technical").length,
+            n_cultural_clubs: clubs.filter((club) => club.category === "cultural").length,
+            n_student_constitutent_groups: clubs.filter((club) => ["cultural", "technical"].includes(club.category)).length
+        })
+    }, [loading]);
 
     return (
         <Box mt={5}>
