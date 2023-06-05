@@ -6,8 +6,8 @@ import Statistic from "components/Statistic";
 
 export default function Details() {
     const stats = {
-        n_technical_clubs: 8,
-        n_cultural_clubs: 15,
+        n_technical_clubs: 7,
+        n_cultural_clubs: 16,
         n_student_constitutent_groups: 23,
         n_student_coordinators: 70,
         n_organizing_team_members: 350,
