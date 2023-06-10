@@ -1,4 +1,4 @@
-import moment from "moment";
+import momenttz from "moment-timezone";
 
 import { useState, useEffect } from "react";
 
@@ -10,11 +10,12 @@ import { GET_ALL_EVENTS } from "gql/queries/events.jsx";
 
 import { Container } from "@mui/material";
 import Page from "components/Page";
+import { fDateTime } from "utils/formatTime";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
 
 const EventCalendar = () => {
-    const localizer = momentLocalizer(moment);
+    const localizer = momentLocalizer(momenttz);
     const [events, setEvents] = useState([]);
 
     const { loading } = useQuery(GET_ALL_EVENTS, {
@@ -24,8 +25,8 @@ const EventCalendar = () => {
         onCompleted: ({ events: allEvents }) => {
             setEvents(
                 allEvents?.map((e) => ({
-                    start: moment(e.datetimeperiod[0]).toDate(),
-                    end: moment(e.datetimeperiod[1]).toDate(),
+                    start: fDateTime(e.datetimeperiod[0], 'YYYY-MM-DDTHH:mm:ss'),
+                    end: fDateTime(e.datetimeperiod[1], 'YYYY-MM-DDTHH:mm:ss'),
                     title: e.name,
                 })) || []
             );
