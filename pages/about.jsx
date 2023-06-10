@@ -1,17 +1,53 @@
-import { Typography, Grid, Container } from "@mui/material";
+import { Typography, Grid, Container, Box } from "@mui/material";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
 import { UserCard } from "components/users";
+import Image from "next/image";
 
 import ccMembers from "public/assets/json/ccMembers.json";
 import extendedMembers from "public/assets/json/extendedMembers.json";
 import techMembers from "public/assets/json/techMembers.json";
+const CCMiniLogo = "/assets/vector/logo_mini_coloured.svg";
 
 export default function About() {
     return (
         <Page title="About">
             <Container>
+                <Box
+                    component="div"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        mb: 2,
+                    }}
+                >
+                    <Image
+                        priority
+                        src={CCMiniLogo}
+                        alt={"Clubs Council"}
+                        width={0}
+                        height={0}
+                        style={{ width: "2.8rem", height: "3rem" }}
+                    />
+                    <Typography variant="h1">
+                        lubs
+                    </Typography>
+                    <Image
+                        priority
+                        src={CCMiniLogo}
+                        alt={"Clubs Council"}
+                        width={0}
+                        height={0}
+                        style={{ width: "2.8rem", height: "3rem", marginLeft: "1rem" }}
+                    />
+                    <Typography variant="h1">
+                        ouncil
+                    </Typography>
+                </Box>
+
+
                 <Typography variant="h5" gutterBottom>
                     What do we do?
                 </Typography>
