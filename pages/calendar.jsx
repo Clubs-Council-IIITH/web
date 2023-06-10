@@ -11,10 +11,12 @@ import { GET_ALL_EVENTS } from "gql/queries/events.jsx";
 import { Container } from "@mui/material";
 import Page from "components/Page";
 import { fDateTime } from "utils/formatTime";
+import useResponsive from "hooks/useResponsive";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
 
 const EventCalendar = () => {
+    const isDesktop = useResponsive("up", "sm");
     const localizer = momentLocalizer(momenttz);
     const [events, setEvents] = useState([]);
 
@@ -42,7 +44,7 @@ const EventCalendar = () => {
             <Container>
                 <Calendar
                     defaultDate={new Date()}
-                    //defaultView={isTabletOrMobile ? "agenda" : "month"}
+                    defaultView={isDesktop ? "month" : "agenda"}
                     localizer={localizer}
                     events={events}
                     style={{ height: "80vh" }}
