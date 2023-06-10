@@ -27,6 +27,16 @@ export default function StudentBodies() {
     );
 }
 
+const cc_details = {
+    "_id": "0",
+    "cid": "clubs",
+    "state": "active",
+    "category": "other",
+    "banner": "",
+    "name": "Clubs Council",
+    "tagline": "Let's make college life fun!",
+}
+
 function StudentBodiesList() {
     const { loading, error, data: { activeClubs: clubs } = {} } = useQuery(GET_ACTIVE_CLUBS);
 
@@ -36,6 +46,7 @@ function StudentBodiesList() {
 
     return loading ? null : !clubs?.length ? null : (
         <Grid container spacing={3}>
+            <ClubCard key={-1} club={cc_details} index={-1} url="/about"/>
             {clubs
                 ?.filter((club) => club.category === "other")
                 ?.sort((a, b) => a.name.localeCompare(b.name))

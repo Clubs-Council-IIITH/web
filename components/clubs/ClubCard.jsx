@@ -31,14 +31,14 @@ ClubCard.propTypes = {
     index: PropTypes.number,
 };
 
-export default function ClubCard({ club, index }) {
+export default function ClubCard({ club, index, url }) {
     const { cid, banner, name, tagline } = club;
     const router = useRouter();
 
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ position: "relative" }}>
-                <CardActionArea onClick={() => router.push(`/clubs/${cid}`)}>
+                <CardActionArea onClick={() => router.push(url || `/clubs/${cid}`)}>
                     <StyledCardMedia
                         sx={{
                             pt: "100%",
