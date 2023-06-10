@@ -48,6 +48,7 @@ function ClubsList({ type }) {
     return loading ? null : !clubs?.length ? null : (
         <Grid container spacing={3}>
             {clubs
+                ?.filter((club) => club.studentBody == false)
                 ?.filter((club) => club.category === type)
                 ?.sort((a, b) => a.name.localeCompare(b.name))
                 ?.map((club, index) => (
