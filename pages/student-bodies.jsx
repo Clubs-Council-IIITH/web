@@ -32,7 +32,7 @@ const cc_details = {
     "cid": "clubs",
     "state": "active",
     "category": "other",
-    "banner": "",
+    "banner": "https://clubs.iiit.ac.in/assets/vector/logo_full_coloured.svg",
     "name": "Clubs Council",
     "tagline": "Let's make college life fun!",
 }
