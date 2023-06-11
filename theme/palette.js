@@ -124,8 +124,8 @@ const palette = {
     dark: {
         ...COMMON,
         mode: "dark",
-        text: { primary: "#fff", secondary: GREY[500], disabled: GREY[600] },
-        background: { paper: GREY[800], default: "#0c0c12", neutral: GREY[500_16] },
+        text: { primary: "#fff", secondary: alpha(GREY[400], 0.82), disabled: GREY[600] },
+        background: { paper: GREY[800], default: "#323232", neutral: GREY[500_16] },
         action: { active: GREY[500], ...COMMON.action },
         accent_opp: "#803DB2",
         accent: "#1EC3BD",
