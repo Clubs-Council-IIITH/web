@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import useResponsive from "hooks/useResponsive";
+import { useMode } from "contexts/ModeContext";
 
 import Image from "components/Image";
 
@@ -18,6 +19,8 @@ const StyledTitle = styled(Link)({
 });
 
 export default function Carousel({ items }) {
+    const { isLight } = useMode();
+    
     const settings = {
         dots: false,
         lazyLoad: true,
@@ -31,7 +34,7 @@ export default function Carousel({ items }) {
     };
 
     return (
-        <Card sx={{ position: "relative" }}>
+        <Card sx={{ position: "relative", boxShadow: `0px 5px 10px 0px ${isLight ? alpha("#000000", 0.5) : alpha("#504f58", 0.5)}` }}>
             <Slider {...settings}>
                 {items.map((item, key) => (
                     <CarouselItem key={key} item={item} />
