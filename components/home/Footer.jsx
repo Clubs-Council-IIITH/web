@@ -95,7 +95,7 @@ export default function Footer() {
             <Grid container px={isDesktop ? 0 : 2}>
                 <Grid item xs>
                     <Typography variant="body2" fontWeight={500}>
-                        © 2022, IIIT Hyderabad
+                        © 2023, IIIT Hyderabad
                     </Typography>
                 </Grid>
                 <Grid item xs>
