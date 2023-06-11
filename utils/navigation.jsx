@@ -55,6 +55,17 @@ const aboutConfig = {
     ],
 };
 
+const helpConfig = {
+    header: "help",
+    items: [
+        {
+            title: "bugs",
+            path: "https://forms.office.com/r/zBLuvbBPXZ",
+            icon: <BugsIcon fontSize="small" />,
+        },
+    ],
+};
+
 // Gets the navigation configuration for the sidebar
 export function getNavConfig(user) {
     const navConfig = [];
