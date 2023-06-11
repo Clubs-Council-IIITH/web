@@ -27,9 +27,16 @@ export default function Gallery({ images }) {
                                 priority
                                 src={image}
                                 alt="Gallery Image"
+                                // sx={{
+                                //     border: `10px solid ${alpha(theme.palette.accent_opp, 0.5)}`,
+                                //     borderRadius: "22.5px",
+                                //     outline: `5px solid ${alpha(theme.palette.accent_opp, 1)}`,
+                                //     outlineOffset: "-5px",
+                                //     outlineRadius: "15px",
+                                // }}
                                 sx={{
-                                    border: `5px solid ${alpha(theme.palette.accent, 0.5)}`,
-                                    "border-radius": "15px"
+                                    border: `5px solid ${alpha(theme.palette.accent_opp, 0.6)}`,
+                                    borderRadius: "15px"
                                 }}
                             />
                         </Card>

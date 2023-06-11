@@ -118,7 +118,8 @@ const palette = {
         text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
         background: { paper: "#fff", default: "#FAFEFE", neutral: GREY[200] },
         action: { active: GREY[600], ...COMMON.action },
-        accent: "#1EC3BD",
+        accent_opp: "#1EC3BD",
+        accent: "#803DB2",
     },
     dark: {
         ...COMMON,
@@ -126,7 +127,8 @@ const palette = {
         text: { primary: "#fff", secondary: GREY[500], disabled: GREY[600] },
         background: { paper: GREY[800], default: "#0c0c12", neutral: GREY[500_16] },
         action: { active: GREY[500], ...COMMON.action },
-        accent: "#803DB2",
+        accent_opp: "#803DB2",
+        accent: "#1EC3BD",
     },
 };
 

@@ -14,7 +14,7 @@ import { downloadFile } from "utils/files";
 import GenAvatar, { genConfig } from "react-nice-avatar";
 
 const OverlayStyle = styled("div")(({ theme }) => ({
-    ...bgBlur({ blur: 2, color: theme.palette.accent }),
+    ...bgBlur({ blur: 2, color: theme.palette.accent_opp }),
     top: 0,
     zIndex: 8,
     content: "''",
