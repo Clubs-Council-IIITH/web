@@ -31,7 +31,7 @@ export default function About() {
                         height={0}
                         style={{ width: "2.8rem", height: "3rem" }}
                     />
-                    <Typography variant="h1">
+                    <Typography variant="h1" sx={{fontWeight: 500}}>
                         lubs
                     </Typography>
                     <Image
@@ -42,7 +42,7 @@ export default function About() {
                         height={0}
                         style={{ width: "2.8rem", height: "3rem", marginLeft: "1rem" }}
                     />
-                    <Typography variant="h1">
+                    <Typography variant="h1" sx={{fontWeight: 500}}>
                         ouncil
                     </Typography>
                 </Box>
