@@ -8,6 +8,7 @@ import {
     LocalActivityTwoTone as EventsIcon,
     GroupsTwoTone as MembersIcon,
 } from "@mui/icons-material";
+import SvgIcon from '@mui/material/SvgIcon';
 
 const publicConfig = {
     header: "",
@@ -35,29 +36,33 @@ const publicConfig = {
     ],
 };
 
-const helpConfig = {
-    header: "help",
+const aboutConfig = {
+    header: "about",
     items: [
+        // {
+        //     title: "SLC/SLO",
+        //     path: "/slc",
+        //     icon: <AboutIcon fontSize="small" />,
+        // },
         {
-            title: "about",
+            title: "Clubs Council",
+            // path: "/clubscouncil",
             path: "/about",
-            icon: <AboutIcon fontSize="small" />,
-        },
-        {
-            title: "bugs",
-            path: "https://forms.office.com/r/zBLuvbBPXZ",
-            icon: <BugsIcon fontSize="small" />,
+            icon: <SvgIcon>
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M329.1 142.9c-62.5-62.5-155.8-62.5-218.3 0s-62.5 163.8 0 226.3s155.8 62.5 218.3 0c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3c-87.5 87.5-221.3 87.5-308.8 0s-87.5-229.3 0-316.8s221.3-87.5 308.8 0c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0z" /></svg>
+            </SvgIcon>,
         },
     ],
 };
 
+// Gets the navigation configuration for the sidebar
 export function getNavConfig(user) {
     const navConfig = [];
 
-    // all public items
+    // Add public items
     navConfig.push(publicConfig);
 
-    // if user is an admin, add manage items
+    // If user is an admin, add manage items
     if (["cc"].includes(user?.role)) {
         navConfig.push({
             header: "manage",
@@ -81,7 +86,7 @@ export function getNavConfig(user) {
         });
     }
 
-    // if user is a club, add club-specific items
+    // If user is a club, add club-specific items
     if (user?.role === "club") {
         navConfig.push({
             header: "manage",
@@ -105,7 +110,10 @@ export function getNavConfig(user) {
         });
     }
 
-    // all help items
+    // Add about items
+    navConfig.push(aboutConfig);
+
+    // Add help items
     navConfig.push(helpConfig);
 
     return navConfig;
