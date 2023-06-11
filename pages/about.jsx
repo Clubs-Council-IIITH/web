@@ -1,9 +1,11 @@
 import { Typography, Grid, Container, Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Image from "next/image";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
 import { UserCard } from "components/users";
-import Image from "next/image";
+import { useMode } from "contexts/ModeContext";
 
 import ccMembers from "public/assets/json/ccMembers.json";
 import extendedMembers from "public/assets/json/extendedMembers.json";
@@ -11,6 +13,9 @@ import techMembers from "public/assets/json/techMembers.json";
 const CCMiniLogo = "/assets/vector/logo_mini_coloured.svg";
 
 export default function About() {
+    const theme = useTheme();
+    const { isLight } = useMode();
+
     return (
         <Page title="About">
             <Container>
@@ -31,7 +36,7 @@ export default function About() {
                         height={0}
                         style={{ width: "2.8rem", height: "3rem" }}
                     />
-                    <Typography variant="h1" sx={{fontWeight: 500}}>
+                    <Typography variant="h1" sx={{ fontWeight: 500, color: isLight ? "grey.700" : "grey.400" }}>
                         lubs
                     </Typography>
                     <Image
@@ -42,7 +47,7 @@ export default function About() {
                         height={0}
                         style={{ width: "2.8rem", height: "3rem", marginLeft: "1rem" }}
                     />
-                    <Typography variant="h1" sx={{fontWeight: 500}}>
+                    <Typography variant="h1" sx={{ fontWeight: 500, color: isLight ? "grey.700" : "grey.400" }}>
                         ouncil
                     </Typography>
                 </Box>
