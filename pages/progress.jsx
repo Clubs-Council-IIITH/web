@@ -32,7 +32,7 @@ function TabPanel(props) {
 export default function About() {
     const theme = useTheme();
 
-    const [tabvalue, setTabValue] = useState(1);
+    const [tabvalue, setTabValue] = useState(2);
 
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
