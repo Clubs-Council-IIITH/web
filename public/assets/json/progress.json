@@ -4,6 +4,7 @@
         "version": "v2",
         "tasks": [
             "Added Dev Website",
+            "Minor Restructuring of the website",
             "Update clubs service and model to handle student bodies separately",
             "Integrated new apollo rover version",
             "Fixed Timezone issue for the calendar",

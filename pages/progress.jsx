@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Typography, Grid, Container, Box, Tabs, Tab } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { Typography, Grid, Container, Box, Tabs, Tab, Divider } from "@mui/material";
+import { useTheme, alpha } from "@mui/material/styles";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
@@ -70,6 +70,7 @@ export default function About() {
                                 backgroundColor: theme.palette.accent
                             }
                         }}
+                        sx={{ backgroundColor: alpha(theme.palette.accent, 0.07) }}
                         fullWidth
                     >
                         <Tab
@@ -81,6 +82,10 @@ export default function About() {
                                 width: "50%"
                             }}
                             wrapped
+                        />
+                        <Divider
+                            orientation="vertical"
+                            style={{ height: 35, alignSelf: "center", color: alpha(theme.palette.accent, 0.6) }}
                         />
                         <Tab
                             label="Website v2 (Current)"
@@ -102,9 +107,9 @@ export default function About() {
                         </Typography>
                         <ProgressList id="v1" />
                     </TabPanel>
-                    <TabPanel value={tabvalue} index={1}>
+                    <TabPanel value={tabvalue} index={2}>
                         <Typography variant="body1" mt={1}>
-                        <u><a href="https://clubs.iiit.ac.in">Main Website</a></u> Release Month: <i>May, 2023</i>
+                            <u><a href="https://clubs.iiit.ac.in">Main Website</a></u> Release Month: <i>May, 2023</i>
                         </Typography>
                         <Typography variant="body1" mt={1}>
                             <u><a href="https://dev.clubs.iiit.ac.in">Dev Version</a></u> Release Month: <i>June, 2023</i> &nbsp; (Only on IIIT internal network)
