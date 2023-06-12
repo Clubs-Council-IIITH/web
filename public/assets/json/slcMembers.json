@@ -3,7 +3,7 @@
         "uid": "radhika.mamidi",
         "roles": [
             {
-                "name": "SAC Chair",
+                "name": "Student Affairs Committee Chair",
                 "startYear": 2021,
                 "endYear": null
             },
@@ -18,7 +18,7 @@
         "uid": "tapan.sau",
         "roles": [
             {
-                "name": "SLC Chair",
+                "name": "Student Life Committee Chair",
                 "startYear": 2021,
                 "endYear": null
             }
@@ -28,7 +28,7 @@
         "uid": "indranil.chakrabarty",
         "roles": [
             {
-                "name": " Co-ordinator, Cultural",
+                "name": "Cultural Coordinator",
                 "startYear": 2021,
                 "endYear": null
             }
@@ -38,7 +38,27 @@
         "uid": "subhadip.mitra",
         "roles": [
             {
-                "name": "Co-ordinator, Cultural",
+                "name": "Cultural Coordinator",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "sunitha.palissery",
+        "roles": [
+            {
+                "name": "Campus Life Coordinator",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "rcprasad",
+        "roles": [
+            {
+                "name": "Campus Life Coordinator",
                 "startYear": 2021,
                 "endYear": null
             }
@@ -65,26 +85,6 @@
             {
                 "name": "Yoga Incharge",
                 "startYear": 2020,
-                "endYear": null
-            }
-        ]
-    },
-    {
-        "uid": "sunitha.palissery",
-        "roles": [
-            {
-                "name": "Campus Life Co-ordinator",
-                "startYear": 2021,
-                "endYear": null
-            }
-        ]
-    },
-    {
-        "uid": "rcprasad",
-        "roles": [
-            {
-                "name": "Campus Life Co-ordinator",
-                "startYear": 2021,
                 "endYear": null
             }
         ]
