@@ -39,11 +39,11 @@ const publicConfig = {
 const aboutConfig = {
     header: "about",
     items: [
-        // {
-        //     title: "SLC/SLO",
-        //     path: "/slc-slo",
-        //     icon: <AboutIcon fontSize="small" />,
-        // },
+        {
+            title: "SLC/SLO",
+            path: "/slc-slo",
+            icon: <AboutIcon fontSize="small" />,
+        },
         {
             title: "Clubs Council",
             // path: "/clubscouncil",
