@@ -75,6 +75,7 @@ export default function About() {
                         alignItems: 'center',
                         flexWrap: 'wrap',
                         mb: 2,
+                        mt: 5,
                     }}
                 >
                     <Typography variant="h1" sx={{ fontWeight: 500, color: isLight ? "grey.700" : "grey.400" }}>
