@@ -41,7 +41,7 @@ const aboutConfig = {
     items: [
         // {
         //     title: "SLC/SLO",
-        //     path: "/slc",
+        //     path: "/slc-slo",
         //     icon: <AboutIcon fontSize="small" />,
         // },
         {

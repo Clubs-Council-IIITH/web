@@ -1,0 +1,112 @@
+[
+    {
+        "uid": "radhika.mamidi",
+        "roles": [
+            {
+                "name": "SAC Chair",
+                "startYear": 2021,
+                "endYear": null
+            },
+            {
+                "name": "Anti-Ragging Commitee Chair",
+                "startYear": 2018,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "tapan.sau",
+        "roles": [
+            {
+                "name": "SLC Chair",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "indranil.chakrabarty",
+        "roles": [
+            {
+                "name": " Co-ordinator, Cultural",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "subhadip.mitra",
+        "roles": [
+            {
+                "name": "Co-ordinator, Cultural",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "chiranjeevi.yarra",
+        "roles": [
+            {
+                "name": "NSS Officer",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "prasad.krishnan",
+        "roles": [
+            {
+                "name": "NSS Officer",
+                "startYear": 2021,
+                "endYear": null
+            },
+            {
+                "name": "Yoga Incharge",
+                "startYear": 2020,
+                "endYear": null
+            }
+        ]
+    }
+    {
+        "uid": "sunitha.palissery",
+        "roles": [
+            {
+                "name": "Campus Life Co-ordinator",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "rcprasad",
+        "roles": [
+            {
+                "name": "Campus Life Co-ordinator",
+                "startYear": 2021,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "priyanka.srivastava",
+        "roles": [
+            {
+                "name": "Counselling Coordinator",
+                "startYear": 2023,
+                "endYear": null
+            }
+        ]
+    },
+    {
+        "uid": "vinod.pk",
+        "roles": [
+            {
+                "name": "Sports Chair",
+                "startYear": 2020,
+                "endYear": null
+            }
+        ]
+    }
+]
