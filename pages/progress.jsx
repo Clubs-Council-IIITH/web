@@ -97,9 +97,18 @@ export default function About() {
 
                 <Box>
                     <TabPanel value={tabvalue} index={0}>
+                        <Typography variant="body1" mt={1}>
+                            Release Month: <i>August, 2022</i>
+                        </Typography>
                         <ProgressList id="v1" />
                     </TabPanel>
                     <TabPanel value={tabvalue} index={1}>
+                        <Typography variant="body1" mt={1}>
+                        <u><a href="https://clubs.iiit.ac.in">Main Website</a></u> Release Month: <i>May, 2023</i>
+                        </Typography>
+                        <Typography variant="body1" mt={1}>
+                            <u><a href="https://dev.clubs.iiit.ac.in">Dev Version</a></u> Release Month: <i>June, 2023</i> &nbsp; (Only on IIIT internal network)
+                        </Typography>
                         <ProgressList id="v2" />
                     </TabPanel>
                 </Box>
