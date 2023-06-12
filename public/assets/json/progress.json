@@ -1,5 +1,47 @@
 [
     {
+        "month": "June 2023",
+        "version": "v2",
+        "tasks": [
+            "Added Dev Website",
+            "Update clubs service and model to handle student bodies separately",
+            "Integrated new apollo rover version",
+            "Fixed Timezone issue for the calendar",
+            "Updated information of the clubs",
+            "Added responsive view for the calendar",
+            "Updated clubs/bodies filter and view on the website",
+            "Major UI changes for the Dark Mode",
+            "Updated CC Main Logos and others",
+            "Updated Color Scheme of the website",
+            "Updated Carousel box ui"
+        ]
+    },
+    {
+        "month": "May 2023",
+        "version": "v2",
+        "tasks": [
+            "Added a Feeder Service for easier pushing of events data",
+            "Added error pages in web service",
+            "Added custom nginx error pages",
+            "Lighter Dockerfiles for faster buildups",
+            "Updated package versions to latest",
+            "Updated handling of events and approvals",
+            "Updated population and rooms data and working for events",
+            "Added new CC members data",
+            "Separate Cultural and Technical clubs on frontend",
+            "Add random avatars for userProfiles without an image",
+            "Stop prepending global host to image downloads",
+            "Added Bug Form Link",
+            "Validation for budget fields and others in events form",
+            "Padding and Grids changes to make site look better",
+            "Add event edit mutation",
+            "Port progress page from v1 to v2 site",
+            "Added Light-Dark Mode Control",
+            "Added Mode Switch Component for Light and Dark Mode",
+            "Fixed Timezone issue for the events card"
+        ]
+    },
+    {
         "month": "April 2023",
         "version": "v2",
         "tasks": [
@@ -14,7 +56,16 @@
             "Add new club form and mutation in frontend",
             "Add edit club form",
             "Fix ClubHero Banner",
-            "Fixed scrollbar rendering glitch"
+            "Fixed scrollbar rendering glitch",
+            "Add page switch transitions",
+            "Add create member mutation",
+            "Fix event form submission",
+            "Render club social media links",
+            "Linting fixes",
+            "Add universal progressbar",
+            "Added calendar to frontend",
+            "Fix club editing",
+            "Fix CAS logout"
         ]
     },
     {
