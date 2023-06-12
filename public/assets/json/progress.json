@@ -5,6 +5,7 @@
         "tasks": [
             "Added Dev Website",
             "Minor Restructuring of the website",
+            "Added SLC/SLO pages",
             "Update clubs service and model to handle student bodies separately",
             "Integrated new apollo rover version",
             "Fixed Timezone issue for the calendar",
