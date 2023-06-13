@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers";
+import { useConfirm } from "material-ui-confirm";
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -50,6 +51,7 @@ export default function EventForm({
 }) {
     const router = useRouter();
     const { user } = useAuth();
+    const confirm = useConfirm();
 
     // check if form is submitting from the client side
     // needed to track multiple API calls (apart from the `submitState`, which is only for submitMutation)
@@ -212,6 +214,16 @@ export default function EventForm({
 
         // redirect to manage page
         router.push("/manage/events");
+    };
+
+    const onCancel = () => {
+        confirm({ title: "Cancellation", description: "Are you sure to do this!?", "confirmationText": "Yes" })
+            .then(() => {
+                router.back()
+            })
+            .catch(() => {
+                // nothing
+            });
     };
 
     return (
@@ -560,7 +572,7 @@ export default function EventForm({
                             color="inherit"
                             variant="outlined"
                             size="large"
-                            onClick={() => router.back()}
+                            onClick={onCancel}
                         >
                             Cancel
                         </Button>

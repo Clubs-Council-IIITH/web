@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-
 import { useRouter } from "next/router";
 
 import {
@@ -14,6 +13,7 @@ import {
     Select,
     MenuItem,
 } from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -32,6 +32,7 @@ export default function ClubForm({
     submitButtonText = "Done",
 }) {
     const router = useRouter();
+    const confirm = useConfirm();
 
     // check if form is submitting from the client side
     // needed to track multiple API calls (apart from the `submitState`, which is only for submitMutation)
@@ -119,6 +120,16 @@ export default function ClubForm({
 
         // redirect to manage page
         router.push("/manage/clubs");
+    };
+
+    const onCancel = () => {
+        confirm({ title: "Cancellation", description: "Are you sure to do this!?", "confirmationText": "Yes" })
+            .then(() => {
+                router.back()
+            })
+            .catch(() => {
+                // nothing
+            });
     };
 
     return (
@@ -386,7 +397,7 @@ export default function ClubForm({
                                     accept="image/*"
                                     onDrop={handleLogoDrop}
                                     file={logo}
-                                    // shape="circle"
+                                // shape="circle"
                                 />
                             </Box>
 
@@ -407,7 +418,7 @@ export default function ClubForm({
                             color="inherit"
                             variant="outlined"
                             size="large"
-                            onClick={() => router.back()}
+                            onClick={onCancel}
                         >
                             Cancel
                         </Button>

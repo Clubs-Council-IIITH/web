@@ -12,6 +12,7 @@ import { ModeProvider } from "contexts/ModeContext";
 import { ApolloProvider } from "@apollo/client";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { ConfirmProvider } from "material-ui-confirm";
 
 import { AnimatePresence } from "framer-motion";
 import client from "apollo-client";
@@ -34,9 +35,14 @@ function MyApp({ Component, pageProps }) {
                                 <ProgressbarProvider>
                                     <AnimatePresence mode="wait" initial={false}>
                                         <Layout>
-                                            <TransitionProvider route={router.route}>
-                                                <Component {...pageProps} />
-                                            </TransitionProvider>
+                                            <ConfirmProvider
+                                                defaultOptions={{
+                                                    confirmationButtonProps: { autoFocus: true },
+                                                }}>
+                                                <TransitionProvider route={router.route}>
+                                                    <Component {...pageProps} />
+                                                </TransitionProvider>
+                                            </ConfirmProvider>
                                         </Layout>
                                     </AnimatePresence>
                                 </ProgressbarProvider>
@@ -44,7 +50,7 @@ function MyApp({ Component, pageProps }) {
                         </ModeProvider>
                     </AuthProvider>
                 </LocalizationProvider>
-            </ApolloProvider>
+            </ApolloProvider >
         </>
     );
 }
