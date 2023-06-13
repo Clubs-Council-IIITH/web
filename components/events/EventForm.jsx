@@ -258,11 +258,13 @@ export default function EventForm({
                                                     input={<OutlinedInput label="Club*" />}
                                                     {...field}
                                                 >
-                                                    {clubs?.map((club) => (
-                                                        <MenuItem key={club?.cid} value={club?.cid}>
-                                                            {club?.name}
-                                                        </MenuItem>
-                                                    ))}
+                                                    {clubs.slice()
+                                                        ?.sort((a, b) => a.name.localeCompare(b.name))
+                                                        ?.map((club) => (
+                                                            <MenuItem key={club?.cid} value={club?.cid}>
+                                                                {club?.name}
+                                                            </MenuItem>
+                                                        ))}
                                                 </Select>
                                             </FormControl>
                                         )
