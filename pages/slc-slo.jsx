@@ -55,7 +55,7 @@ export default function About() {
                 </Typography> */}
 
                 <Typography variant="h5" gutterBottom mt={4}>
-                    The Team
+                    Members
                 </Typography>
 
                 <ClientOnly>
@@ -96,7 +96,7 @@ export default function About() {
                 </Typography>
 
                 <Typography variant="h5" gutterBottom mt={4}>
-                    The Team
+                    Members
                 </Typography>
 
                 <ClientOnly>
