@@ -503,9 +503,9 @@ export default function EventForm({
                                                         error={errors.population}
                                                         helperText={errors.population?.message}
                                                         InputProps={{
-                                                            inputProps: { min: 0 },
+                                                            inputProps: { min: 1 },
                                                         }}
-                                                        InputLabelProps={{ shrink: field.value }}
+                                                        // InputLabelProps={{ shrink: field.value }}
                                                         {...field}
                                                     />
                                                 )}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { alpha } from "@mui/material/styles";
+import { useTheme, alpha } from "@mui/material/styles";
 import {
     Box,
     Divider,
@@ -35,6 +35,7 @@ export default function AccountPopover() {
     const { isAuthenticated, user, login, logout } = useAuth();
     const [open, setOpen] = useState(null);
     const { isLight, setMode } = useMode();
+    const theme = useTheme();
 
     const handleChange = (event) => {
         setMode(!isLight);
@@ -62,7 +63,7 @@ export default function AccountPopover() {
                             height: "100%",
                             borderRadius: "50%",
                             position: "absolute",
-                            bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
+                            bgcolor: (theme) => alpha(theme.palette.grey[isLight ? 700: 400], 0.6),
                         },
                     }),
                 }}
@@ -72,7 +73,7 @@ export default function AccountPopover() {
                     alt="logged in"
                     {...(user?.firstName && {
                         children: `${user?.firstName?.[0]}${user?.lastName?.[0]}`,
-                        sx: { backgroundColor: "black" },
+                        sx: { backgroundColor: isLight ? "black" : theme.palette.grey[300] },
                     })}
                 />
             </IconButton>
