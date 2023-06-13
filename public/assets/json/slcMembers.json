@@ -6,11 +6,6 @@
                 "name": "Student Affairs Committee Chair",
                 "startYear": 2021,
                 "endYear": null
-            },
-            {
-                "name": "Anti-Ragging Commitee Chair",
-                "startYear": 2018,
-                "endYear": null
             }
         ]
     },
@@ -20,6 +15,11 @@
             {
                 "name": "Student Life Committee Chair",
                 "startYear": 2021,
+                "endYear": null
+            },
+            {
+                "name": "Anti-Ragging Commitee Chair",
+                "startYear": 2018,
                 "endYear": null
             }
         ]
