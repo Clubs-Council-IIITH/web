@@ -38,7 +38,7 @@ export default function ClubCard({ club, index, url }) {
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ position: "relative" }}>
-                <CardActionArea onClick={() => router.push(url || studentBody ? `/student-bodies/${cid}` : `/clubs/${cid}`)}>
+                <CardActionArea onClick={() => router.push(url ? url : (studentBody ? `/student-bodies/${cid}` : `/clubs/${cid}`))}>
                     <StyledCardMedia
                         sx={{
                             pt: "100%",

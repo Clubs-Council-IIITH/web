@@ -17,7 +17,7 @@ export default function About() {
     const { isLight } = useMode();
 
     return (
-        <Page title="About">
+        <Page title="Clubs Council">
             <Container>
                 <Box
                     component="div"
