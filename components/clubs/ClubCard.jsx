@@ -75,7 +75,7 @@ export default function ClubCard({ club, index, url }) {
                         <Typography
                             gutterBottom
                             variant="caption"
-                            sx={{ color: "text.disabled", display: "block", fontSize: 14 }}
+                            sx={{ color: "text.disabled", display: "block", fontSize: 14, "mix-blend-mode": "difference" }}
                         >
                             {tagline}
                         </Typography>
