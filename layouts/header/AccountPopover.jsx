@@ -117,17 +117,19 @@ export default function AccountPopover() {
                             </Typography>
                         </Box>
 
-                        <Divider sx={{ borderStyle: "dashed" }} />
+                        {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length > 0 ? (<>
+                            <Divider sx={{ borderStyle: "dashed" }} />
 
-                        <Stack sx={{ p: 1 }}>
-                            {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map(
-                                (option) => (
-                                    <MenuItem key={option.label} onClick={handleClose}>
-                                        {option.label}
-                                    </MenuItem>
-                                )
-                            )}
-                        </Stack>
+                            <Stack sx={{ p: 1 }}>
+                                {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map(
+                                    (option) => (
+                                        <MenuItem key={option.label} onClick={handleClose}>
+                                            {option.label}
+                                        </MenuItem>
+                                    )
+                                )}
+                            </Stack>
+                        </>) : null}
 
                         <Divider sx={{ borderStyle: "dashed" }} />
 
