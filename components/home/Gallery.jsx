@@ -57,7 +57,19 @@ export default function Gallery({ images }) {
                         <Iconify icon="ic:baseline-expand-more" />
                     </Button>
                 </Box>
-            ) : null}
+            ) : <Box width="100%" display="flex" justifyContent="center">
+                <Button
+                    onClick={() => setCollapsed(true)}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        color: "text.primary",
+                    }}
+                >
+                    View less
+                    <Iconify icon="ic:baseline-expand-less" />
+                </Button>
+            </Box>}
         </Box>
     );
 }
