@@ -560,7 +560,7 @@ export default function EventForm({
                             color="inherit"
                             variant="outlined"
                             size="large"
-                            onClick={() => console.log("cancel")}
+                            onClick={() => router.back()}
                         >
                             Cancel
                         </Button>
