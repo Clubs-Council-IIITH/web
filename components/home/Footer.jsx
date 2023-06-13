@@ -21,7 +21,7 @@ const CCLogo = "/assets/vector/logo_full_iiith.svg";
 export default function Footer() {
     const theme = useTheme();
 
-    const isDesktop = useResponsive("up", "sm");
+    const isDesktop = useResponsive("up", "lg");
     const { isLight } = useMode();
 
     return (
@@ -41,7 +41,7 @@ export default function Footer() {
                             priority
                             src={IIITLogo}
                             alt={"IIIT Hyderabad"}
-                            sx={{ height: 50, filter: `invert(${isLight ? 100 : 0}%)` }}
+                            sx={{ height: 50, width: 99, filter: `invert(${isLight ? 100 : 0}%)` }}
                         />
                     </Box>
                     <Box>
@@ -49,7 +49,7 @@ export default function Footer() {
                             priority
                             src={CCLogo}
                             alt={"Clubs Council"}
-                            sx={{ height: 50, filter: `invert(${isLight ? 100 : 0}%)` }}
+                            sx={{ height: 50, width: 97, filter: `invert(${isLight ? 100 : 0}%)` }}
                         />
                     </Box>
                 </Grid>
