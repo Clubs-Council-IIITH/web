@@ -169,6 +169,8 @@ export default function EventForm({
         // start submitting form
         setSubmitting(true);
 
+        data = { ...data, population: parseInt(data.population) };
+
         // construct form data
         // upload poster if they are File objects (which they will be if they have been modified)
         const formData = {
