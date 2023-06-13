@@ -407,7 +407,7 @@ export default function ClubForm({
                             color="inherit"
                             variant="outlined"
                             size="large"
-                            onClick={() => console.log("cancel")}
+                            onClick={() => router.back()}
                         >
                             Cancel
                         </Button>
