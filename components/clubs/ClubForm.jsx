@@ -95,6 +95,7 @@ export default function ClubForm({
             description: description,
             logo: logo,
             banner: banner,
+            cid: data?.email.substring(0, data?.email.indexOf("@")),
         };
 
         // preprocess certain values
