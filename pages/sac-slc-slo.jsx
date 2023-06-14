@@ -6,6 +6,7 @@ import ClientOnly from "components/ClientOnly";
 import { UserCard } from "components/users";
 import { useMode } from "contexts/ModeContext";
 
+import sacMembers from "public/assets/json/sacMembers.json";
 import slcMembers from "public/assets/json/slcMembers.json";
 import sloMembers from "public/assets/json/sloMembers.json";
 
@@ -26,10 +27,9 @@ export default function About() {
                     }}
                 >
                     <Typography variant="h1" sx={{ fontWeight: 500, color: isLight ? "grey.700" : "grey.400" }}>
-                        SLC - <i>Student Life Committee</i>
+                        SAC - <i>Student Affairs Committee</i>
                     </Typography>
                 </Box>
-
 
                 <Typography variant="h5" gutterBottom>
                     ABOUT
@@ -53,6 +53,48 @@ export default function About() {
                     life experiences throughout the year, and enrich the thriving campus community
                     outside the classroom, while fostering inclusion.
                 </Typography> */}
+
+                <Typography variant="h5" gutterBottom mt={4}>
+                    Members
+                </Typography>
+
+                <ClientOnly>
+                    <Grid container spacing={3}>
+                        {sacMembers.map((user, key) => (
+                            <Grid key={key} item xs={12} sm={6} md={3}>
+                                <UserCard user={user} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </ClientOnly>
+
+                <Box
+                    component="div"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        mb: 2,
+                        mt: 5,
+                    }}
+                >
+                    <Typography variant="h1" sx={{ fontWeight: 500, color: isLight ? "grey.700" : "grey.400" }}>
+                        SLC - <i>Student Life Committee</i>
+                    </Typography>
+                </Box>
+
+
+                <Typography variant="h5" gutterBottom>
+                    ABOUT
+                </Typography>
+
+                <Typography variant="body1">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Praesent facilisis velit pellentesque posuere euismod.
+                    Morbi maximus lacus nec tincidunt dapibus. Nulla consectetur gravida velit ut consectetur.
+                    Etiam vel euismod odio. Vestibulum vitae est at ante ultricies ultricies.
+                    Maecenas arcu urna, sagittis ornare auctor et, mattis sed ex. Nulla dignissim accumsan.
+                </Typography>
 
                 <Typography variant="h5" gutterBottom mt={4}>
                     Members
