@@ -136,8 +136,7 @@ export default function Member() {
                                         </Grid>
                                         <Grid item xs>
                                             <Typography>
-                                                {role?.name} asdhaskdjyh asjbd asghj bdasgjhd
-                                                gbhaskj bgashjf bgjsdhfgd bvajshdg ba
+                                                {role?.name}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} display="flex" justifyContent="flex-end">
