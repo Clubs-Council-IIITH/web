@@ -100,13 +100,10 @@
         ]
     },
     {
-        "uid": "vinod.pk",
+        "uid": "prabhakar",
         "roles": [
-            {
-                "name": "Sports Chair",
-                "startYear": 2020,
-                "endYear": null
-            }
+            { "name": "Admin Support", "startYear": 2019, "endYear": null }
         ]
     }
+    
 ]
