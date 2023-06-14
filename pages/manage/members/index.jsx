@@ -79,7 +79,7 @@ function MembersTableRow(member) {
             ),
             onClick: () => null,
         },
-        {
+        ...(approved ? [] : [{
             name: (
                 <Box display="flex" alignItems="center" sx={{ color: "success.main" }}>
                     <Iconify icon="eva:checkmark-outline" sx={{ mr: 1 }} />
@@ -87,7 +87,7 @@ function MembersTableRow(member) {
                 </Box>
             ),
             onClick: () => null,
-        },
+        }]),
         {
             name: (
                 <Box display="flex" alignItems="center" sx={{ color: "error.main" }}>

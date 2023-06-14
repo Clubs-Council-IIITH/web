@@ -17,7 +17,7 @@ export default function NewEvent() {
         audience: [],
         poster: null,
         budget: [],
-        mode: "hybrid",
+        mode: "offline",
         link: null,
         location: [],
         population: 0,
