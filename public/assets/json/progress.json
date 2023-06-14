@@ -13,9 +13,18 @@
             "Added responsive view for the calendar",
             "Updated clubs/bodies filter and view on the website",
             "Major UI changes for the Dark Mode",
+            "Cancel button in event form",
             "Updated CC Main Logos and others",
             "Updated Color Scheme of the website",
-            "Updated Carousel box ui"
+            "Cancel button for club form",
+            "Updated Carousel box ui",
+            "Fix Footer UI bug for Safari",
+            "Change upcoming events size for tablet sized devices",
+            "Add View Less button for Gallery",
+            "Added confirmation for cancel on club/event form",
+            "Fix Account Popover color",
+            "Fix New Event Form",
+            "Fixed Events service objectID issue"
         ]
     },
     {
