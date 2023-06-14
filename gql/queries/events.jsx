@@ -85,6 +85,7 @@ export const GET_EVENT = gql`
             datetimeperiod
             link
             poster
+            mode
         }
     }
 `;

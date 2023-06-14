@@ -38,9 +38,13 @@ export default function EventDetails({
             <Box display="flex" mt={4} alignItems="center">
                 <Iconify icon="ic:outline-location-on" sx={{ mr: 2 }} />
                 <Typography variant="body1">
-                    {mode === "offline"
-                        ? location?.map((l) => locationLabel(l).name)?.join(", ")
-                        : "Online"}
+                    {
+                        (mode === "offline" || mode === "hybrid")
+                            ? location?.length
+                                ? location?.map((l) => locationLabel(l).name)?.join(", ")
+                                : mode.charAt(0).toUpperCase() + mode.slice(1)
+                            : "Online"
+                    }
                 </Typography>
             </Box>
 
