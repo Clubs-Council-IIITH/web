@@ -40,8 +40,8 @@ const aboutConfig = {
     header: "about",
     items: [
         {
-            title: "SLC/SLO",
-            path: "/slc-slo",
+            title: "SAC/SLC/SLO",
+            path: "/sac-slc-slo",
             icon: <AboutIcon fontSize="small" />,
         },
         {

@@ -67,6 +67,7 @@ export default function About() {
                         ))}
                     </Grid>
                 </ClientOnly>
+                {/* Add two students - 1B and 1G */}
 
                 <Box
                     component="div"
