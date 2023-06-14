@@ -19,3 +19,23 @@ export const EDIT_CLUB = gql`
         }
     }
 `;
+
+export const DELETE_CLUB = gql`
+    mutation DeleteClub($clubInput: SimpleClubInput!) {
+        deleteClub(clubInput: $clubInput) {
+            cid
+            name
+            state
+        }
+    }
+`;
+
+export const RESTART_CLUB = gql`
+    mutation RestartClub($clubInput: SimpleClubInput!) {
+        restartClub(clubInput: $clubInput) {
+            cid
+            name
+            state
+        }
+    }
+`;
