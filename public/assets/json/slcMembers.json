@@ -1,25 +1,20 @@
 [
     {
-        "uid": "radhika.mamidi",
-        "roles": [
-            {
-                "name": "Student Affairs Committee Chair",
-                "startYear": 2021,
-                "endYear": null
-            }
-        ]
-    },
-    {
         "uid": "tapan.sau",
         "roles": [
             {
                 "name": "Student Life Committee Chair",
                 "startYear": 2021,
                 "endYear": null
-            },
+            }
+        ]
+    },
+    {
+        "uid": "radhika.mamidi",
+        "roles": [
             {
-                "name": "Anti-Ragging Commitee Chair",
-                "startYear": 2018,
+                "name": "Student Affairs Committee Chair",
+                "startYear": 2021,
                 "endYear": null
             }
         ]
@@ -80,11 +75,6 @@
             {
                 "name": "NSS Officer",
                 "startYear": 2021,
-                "endYear": null
-            },
-            {
-                "name": "Yoga Incharge",
-                "startYear": 2020,
                 "endYear": null
             }
         ]
