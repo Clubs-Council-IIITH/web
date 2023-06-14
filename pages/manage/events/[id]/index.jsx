@@ -76,7 +76,7 @@ function EventDisplay({ id, setTitle }) {
 
             {/* current status */}
             <Box mt={3}>
-                <EventStatus status={event?.status} />
+                <EventStatus status={event?.status} location={event?.location} />
             </Box>
 
             {/* details */}

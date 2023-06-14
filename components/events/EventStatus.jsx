@@ -5,7 +5,7 @@ import { Alert, Grid } from "@mui/material";
 import Iconify from "components/iconify";
 import { stateLabel } from "utils/formatEvent";
 
-export default function EventStatus({ status }) {
+export default function EventStatus({ status, location }) {
     const [currentState, setCurrentState] = useState({});
 
     useEffect(() => {
@@ -51,12 +51,12 @@ export default function EventStatus({ status }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     icon={
                         <Iconify
-                            icon={status?.venue ? "eva:checkmark-outline" : "eva:close-outline"}
+                            icon={status?.room && location?.length ? "eva:checkmark-outline" : "eva:close-outline"}
                         />
                     }
-                    severity={status?.venue ? "success" : "error"}
+                    severity={status?.room && location?.length ? "success" : "error"}
                 >
-                    {status?.venue ? "Venue approved" : "Venue not approved"}
+                    {location?.length ? (status?.room ? "Venue approved" : "Venue not approved") : "No Venue"}
                 </Alert>
             </Grid>
         </Grid>
