@@ -5,7 +5,7 @@ import { Alert, Grid } from "@mui/material";
 import Iconify from "components/iconify";
 import { stateLabel } from "utils/formatEvent";
 
-export default function EventStatus({ status, location }) {
+export default function EventStatus({ status, location, budget }) {
     const [currentState, setCurrentState] = useState({});
 
     useEffect(() => {
@@ -36,12 +36,12 @@ export default function EventStatus({ status, location }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     icon={
                         <Iconify
-                            icon={status?.budget ? "eva:checkmark-outline" : "eva:close-outline"}
+                            icon={status?.budget || !budget?.length ? "eva:checkmark-outline" : "eva:close-outline"}
                         />
                     }
-                    severity={status?.budget ? "success" : "error"}
+                    severity={status?.budget || !budget?.length ? "success" : "error"}
                 >
-                    {status?.budget ? "Budget approved" : "Budget not approved"}
+                    {budget?.length ? (status?.budget ? "Budget approved" : "Budget not approved") : "No Budget"}
                 </Alert>
             </Grid>
 
@@ -51,10 +51,10 @@ export default function EventStatus({ status, location }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     icon={
                         <Iconify
-                            icon={status?.room && location?.length ? "eva:checkmark-outline" : "eva:close-outline"}
+                            icon={status?.room || !location?.length ? "eva:checkmark-outline" : "eva:close-outline"}
                         />
                     }
-                    severity={status?.room && location?.length ? "success" : "error"}
+                    severity={status?.room || !location?.length ? "success" : "error"}
                 >
                     {location?.length ? (status?.room ? "Venue approved" : "Venue not approved") : "No Venue"}
                 </Alert>

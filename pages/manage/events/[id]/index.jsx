@@ -76,7 +76,7 @@ function EventDisplay({ id, setTitle }) {
 
             {/* current status */}
             <Box mt={3}>
-                <EventStatus status={event?.status} location={event?.location} />
+                <EventStatus status={event?.status} location={event?.location} budget={event?.budget} />
             </Box>
 
             {/* details */}
@@ -105,10 +105,12 @@ function EventDisplay({ id, setTitle }) {
                 <Typography mb={2} color="text.secondary" variant="subtitle2">
                     BUDGET
                 </Typography>
-                <EventBudget
-                    rows={event?.budget?.map((b, key) => ({ ...b, id: b?.id || key }))} // add ID to each budget item if it doesn't exist (MUI requirement)
-                    editable={false}
-                />
+                {event?.budget?.length ?
+                    <EventBudget
+                        rows={event?.budget?.map((b, key) => ({ ...b, id: b?.id || key }))} // add ID to each budget item if it doesn't exist (MUI requirement)
+                        editable={false}
+                    />
+                    : "Zero Budget Requested"}
             </Card>
 
             {/* venue */}
