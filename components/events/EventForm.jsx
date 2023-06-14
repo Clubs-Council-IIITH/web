@@ -364,6 +364,7 @@ export default function EventForm({
                                 control={control}
                                 render={({ field }) => (
                                     <TextField
+                                        type={"url"}
                                         label="Link"
                                         autoComplete="off"
                                         error={errors.link}
