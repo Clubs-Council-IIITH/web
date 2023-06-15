@@ -61,7 +61,6 @@ function ClubDetails({ cid, setTitle }) {
             clubInput: { cid: cid },
         },
         onCompleted: ({ club }) => {
-            // console.log(1, club)
             setTitle(club?.name);
         },
         onError: (error) => {
@@ -187,18 +186,18 @@ function ClubMembers({ cid }) {
                         ))}
                 </Grid>
             </ClientOnly>
-            {/* <Box sx={{ py: 2, textAlign: "right" }}>
+            <Box sx={{ py: 2, textAlign: "right" }}>
                 <Button
                     component={Link}
                     href={`${asPath}/members`}
-                    size="small"
+                    size="large"
                     color="inherit"
                     sx={{ p: 2 }}
                     endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
                 >
                     View all
                 </Button>
-            </Box> */}
+            </Box>
         </Box>
     );
 }

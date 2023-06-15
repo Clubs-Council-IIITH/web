@@ -29,6 +29,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import { GET_CLUB } from "gql/queries/clubs";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
+import { downloadFile } from "utils/files";
 
 export default function Members() {
     return (
@@ -188,9 +189,9 @@ function MembersTableRow(member) {
                 uid: uid,
             },
         },
-        onCompleted: ({ userProfile }) => {
+        onCompleted: ({ userProfile, userMeta }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            setImg(userProfile?.img);
+            setImg(downloadFile(userMeta?.img));
         },
     });
 

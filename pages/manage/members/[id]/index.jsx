@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { useRouter } from "next/router";
 
 import { useQuery } from "@apollo/client";
@@ -9,6 +8,7 @@ import { Avatar, Box, Card, Grid, Container, Typography } from "@mui/material";
 
 import ActionPalette from "components/ActionPalette";
 import { editAction, deleteAction } from "components/members/MemberActions";
+import { downloadFile } from "utils/files";
 
 import Label from "components/label";
 import Page from "components/Page";
@@ -41,9 +41,9 @@ export default function Member() {
                 uid: id?.split(":")[1],
             },
         },
-        onCompleted: ({ userProfile }) => {
+        onCompleted: ({ userProfile, userMeta }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            setImg(userProfile?.img);
+            setImg(downloadFile(userMeta?.img));
         },
     });
 
