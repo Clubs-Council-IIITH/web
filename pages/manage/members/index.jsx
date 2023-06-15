@@ -26,6 +26,7 @@ import { useAuth } from "contexts/AuthContext";
 import { useQuery } from "@apollo/client";
 import { GET_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
+import { GET_CLUB } from "gql/queries/clubs";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
 
@@ -72,7 +73,7 @@ function MembersTable() {
         skip: !user?.uid,
         variables: {
             clubInput: {
-                cid: null,
+                cid: "clubs",
             },
         },
     });
@@ -91,6 +92,7 @@ function MembersTableHeader() {
         <TableRow>
             <TableCell align="left">Name</TableCell>
             <TableCell align="left">Email</TableCell>
+            <TableCell align="left">Club</TableCell>
             <TableCell align="left">Positions</TableCell>
         </TableRow>
     );
@@ -193,6 +195,17 @@ function MembersTableRow(member) {
         },
     });
 
+    const {
+        loading: clubLoading,
+        error: clubError,
+        data: { club } = {},
+    } = useQuery(GET_CLUB, {
+        skip: !cid,
+        variables: {
+            clubInput: { cid: cid },
+        },
+    });
+
     // track loading state
     const { trackProgress } = useProgressbar();
     useEffect(() => trackProgress(loading), [loading]);
@@ -235,6 +248,9 @@ function MembersTableRow(member) {
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
                 {userProfile?.email}
+            </TableCell>
+            <TableCell align="left" sx={{ border: "none" }}>
+                {club?.name}
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
                 {roles?.map((role, key) => (
