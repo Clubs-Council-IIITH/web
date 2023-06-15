@@ -74,8 +74,6 @@ export default function MemberForm({
         control,
         handleSubmit,
         reset,
-        watch,
-        setValue,
         formState: { errors },
     } = useForm({ defaultValues });
 
@@ -98,7 +96,9 @@ export default function MemberForm({
         // construct form data
         // upload poster if they are File objects (which they will be if they have been modified)
         const formData = {
-            ...data,
+            cid: data?.cid,
+            poc: data?.poc,
+            uid: data?.email.substring(0, data?.email.indexOf("@")),
             roles: roles,
         };
 
@@ -116,8 +116,6 @@ export default function MemberForm({
                 startYear: i.startYear,
                 endYear: i.endYear,
             }));
-
-        console.log(formData)
 
         // perform mutation
         submitMutation({
@@ -142,8 +140,6 @@ export default function MemberForm({
                 // nothing
             });
     };
-
-    // console.log(errors)
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
