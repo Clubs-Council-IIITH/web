@@ -21,21 +21,16 @@ import {
     FormHelperText,
     CircularProgress,
 } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers";
 import { useConfirm } from "material-ui-confirm";
 
 import { useForm, Controller } from "react-hook-form";
 
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
-import { GET_AVAILABLE_LOCATIONS } from "gql/queries/events";
-import { datetimeConstants } from "constants/datetime";
 
 import Iconify from "components/iconify";
 import LoadingButton from "components/LoadingButton";
 import { MemberRoles } from "components/members";
-import { fToISO } from "utils/formatTime";
 import { useAuth } from "contexts/AuthContext";
 
 export default function MemberForm({
@@ -53,7 +48,7 @@ export default function MemberForm({
     const [submitting, setSubmitting] = useState(false);
 
     // manage roles
-    const emptyRolesItem = { name: null, startYear: null, endYear: null };
+    const emptyRolesItem = { name: null, startYear: new Date().getFullYear(), endYear: null };
     const [roles, setRoles] = useState(defaultValues?.roles);
     const addRolesItem = () => {
         setRoles([...roles, { id: roles.length, ...emptyRolesItem }]);
@@ -72,6 +67,7 @@ export default function MemberForm({
         setRoles(newRoles);
         return newRow;
     };
+    const [roleError, setRoleError] = useState(false);
 
     // controlled form
     const {
@@ -96,8 +92,6 @@ export default function MemberForm({
 
     // submission logic
     const onSubmit = async (data) => {
-        console.log(1)
-
         // start submitting form
         setSubmitting(true);
 
@@ -107,8 +101,6 @@ export default function MemberForm({
             ...data,
             roles: roles,
         };
-
-        console.log(formData)
 
         // set club ID for event if current user is a club
         if (user?.role === "club") {
@@ -120,23 +112,25 @@ export default function MemberForm({
         formData.roles = formData.roles
             .filter((i) => i?.name)
             .map((i) => ({
-                description: i.description,
-                amount: i.amount,
-                advance: i.advance,
+                name: i.name,
+                startYear: i.startYear,
+                endYear: i.endYear,
             }));
 
+        console.log(formData)
+
         // perform mutation
-        // submitMutation({
-        //     variables: {
-        //         details: formData,
-        //     },
-        // });
+        submitMutation({
+            variables: {
+                details: formData,
+            },
+        });
 
         // finish submitting form
         setSubmitting(false);
 
         // redirect to manage page
-        // router.push("/manage/members");
+        router.push("/manage/members");
     };
 
     const onCancel = () => {
@@ -199,7 +193,7 @@ export default function MemberForm({
 
                             <Controller
                                 name="email"
-                                control={control}string
+                                control={control}
                                 rules={{ required: "Club email is required!" }}
                                 render={({ field }) => (
                                     <TextField
@@ -258,6 +252,7 @@ export default function MemberForm({
                             variant="contained"
                             size="large"
                             loading={(submitting || submitState?.loading) && !submitState?.error}
+                            disabled={roleError}
                         >
                             {submitButtonText}
                         </LoadingButton>
@@ -283,6 +278,8 @@ export default function MemberForm({
                             onUpdate={editRolesItem}
                             onDelete={deleteRolesItem}
                             editable={true}
+                            roleError={roleError}
+                            setRoleError={setRoleError}
                         />
                     </Card>
                 </Grid>

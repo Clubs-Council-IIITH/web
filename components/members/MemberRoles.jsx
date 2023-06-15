@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,31 +12,25 @@ function checkYear(year) {
     return year <= maxYear && year > minYear ? true : false;
 }
 
-let promiseTimeout;
-function validateYear(year) {
-  return new Promise((resolve) => {
-    promiseTimeout = setTimeout(() => {
-      resolve(checkYear(year) ? true : false);
-    }, Math.random() * 500 + 100); // simulate network latency
-  });
-}
-
-export default function MemberRoles({ rows, onUpdate = null, onDelete = null, editable = false }) {
+export default function MemberRoles({ rows, onUpdate = null, onDelete = null, editable = false, roleError = false, setRoleError = null }) {
     // const handleProcessRowUpdateError = useCallback((error) => {
     //     console.error(error);
     // }, []);
 
     const preProcessEditCellProps = async (params) => {
-        const error = !(validateYear(params.props.value));
-        console.log(error, params.props)
-        return { ...params.props, error: error };
+        if (params.hasChanged) {
+            if ("startYear" in params.otherFieldsProps && params.props.value != null) {
+                if (params.otherFieldsProps.startYear.value && params.otherFieldsProps.startYear.value > params.props.value) {
+                    setRoleError(true);
+                    return { ...params.props, error: true };
+                }
+            }
+            const error = !(checkYear(params.props.value));
+            setRoleError(error);
+            return { ...params.props, error: error };
+        }
+        return params.props;
     };
-
-    useEffect(() => {
-        return () => {
-          clearTimeout(promiseTimeout);
-        };
-      }, []);
 
     const columns = [
         {
@@ -60,13 +54,11 @@ export default function MemberRoles({ rows, onUpdate = null, onDelete = null, ed
             headerName: "Start Year",
             flex: 1,
             editable: editable,
+            headerAlign: "center",
+            align: "center",
             cellClassName: (params) => {
-                if (params.value == null) {
-                    return '';
-                }
-
                 return clsx('super-app', {
-                    negative: !checkYear(params.value),
+                    negative: !checkYear(params.value) || params.value == null,
                     positive: checkYear(params.value),
                 });
             },
@@ -77,6 +69,7 @@ export default function MemberRoles({ rows, onUpdate = null, onDelete = null, ed
             type: "number",
             headerName: "End Year",
             editable: editable,
+            flex: 1,
             headerAlign: "center",
             align: "center",
             cellClassName: (params) => {
@@ -130,7 +123,7 @@ export default function MemberRoles({ rows, onUpdate = null, onDelete = null, ed
                 disableRowSelectionOnClick
                 experimentalFeatures={{ newEditingApi: true }}
                 processRowUpdate={onUpdate}
-                // onProcessRowUpdateError={handleProcessRowUpdateError}
+            // onProcessRowUpdateError={handleProcessRowUpdateError}
             />
         </Box>
     );

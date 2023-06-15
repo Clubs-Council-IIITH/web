@@ -14,8 +14,7 @@ export default function NewEvent() {
     const defaultValues = {
         cid: null,
         email: null,
-        description: null,
-        poc: false,
+        poc: null,
         roles: [],
     };
 
