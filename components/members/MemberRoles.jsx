@@ -103,7 +103,7 @@ export default function MemberRoles({ rows, onUpdate = null, onDelete = null, ed
 
     return (
         <Box sx={{
-            height: 500,
+            height: 450,
             width: "100%",
             '& .super-app.positive': {
                 backgroundColor: 'rgba(157, 255, 118, 0.49)',

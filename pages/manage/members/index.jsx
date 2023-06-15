@@ -99,7 +99,6 @@ function MembersTableHeader() {
 }
 
 function MembersTableRow1(member) {
-    console.log(member)
     const {
         user: { img, firstName, lastName, mail },
         role,

@@ -69,8 +69,6 @@ export default function MemberForm({
     };
     const [roleError, setRoleError] = useState(false);
 
-    console.log(roles);
-
     // controlled form
     const {
         control,
@@ -147,7 +145,7 @@ export default function MemberForm({
         <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={6} xl={6}>
-                    <Card sx={{ p: 2, mt: 3 }}>
+                    <Card sx={{ p: 2, mt: 2 }}>
                         <Typography color="text.secondary" variant="subtitle2" pb={2}>
                             DETAILS
                         </Typography>
@@ -234,7 +232,7 @@ export default function MemberForm({
                         </Stack>
                     </Card>
 
-                    <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                    <Stack direction="row" spacing={1.5} sx={{ mt: 4 }}>
                         <Button
                             fullWidth
                             color="inherit"
@@ -258,7 +256,7 @@ export default function MemberForm({
                 </Grid>
 
                 <Grid item xs md lg xl>
-                    <Card sx={{ p: 2, mt: 3 }}>
+                    <Card sx={{ p: 2, mt: 2 }}>
                         <Typography color="text.secondary" variant="subtitle2" pb={2}>
                             ROLES
                         </Typography>
