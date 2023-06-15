@@ -55,9 +55,11 @@ export default function ClubMembers() {
         <Page title={title}>
             <Container>
                 <center>
-                    <Typography variant="h2" sx={{ mb: 4 }}>
-                        Members - <i>{club?.name}</i>
-                    </Typography>
+                    {loading ? null : (
+                        <Typography variant="h2" sx={{ mb: 4 }}>
+                            Members - <i>{club?.name}</i>
+                        </Typography>
+                    )}
                 </center>
                 <ClientOnly>
                     <MembersTable cid={id} />

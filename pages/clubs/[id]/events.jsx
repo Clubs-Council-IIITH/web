@@ -66,9 +66,11 @@ export default function ClubEvents() {
         <Page title={title}>
             <Container>
                 <center>
-                    <Typography variant="h2" sx={{ mb: 4 }}>
-                        Events - <i>{club?.name}</i>
-                    </Typography>
+                    {loadingClub ? null : (
+                        <Typography variant="h2" sx={{ mb: 4 }}>
+                            Events - <i>{club?.name}</i>
+                        </Typography>
+                    )}
                 </center>
 
                 {loading ? null : !events?.length ? null :
