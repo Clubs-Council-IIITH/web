@@ -80,16 +80,12 @@ export default function MemberRoles({ rows, onUpdate = null, onDelete = null, ed
             headerAlign: "center",
             align: "center",
             cellClassName: (params) => {
-                if (params.value == null) {
-                    return '';
-                }
-
                 return clsx('super-app', {
                     negative: !checkYear(params.value) && params.value !== null,
                     positive: checkYear(params.value) || params.value === null,
                 });
             },
-            // preProcessEditCellProps
+            preProcessEditCellProps
         },
         ...(editable
             ? [

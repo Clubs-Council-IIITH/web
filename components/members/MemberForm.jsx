@@ -53,7 +53,7 @@ export default function MemberForm({
     const [submitting, setSubmitting] = useState(false);
 
     // manage roles
-    const emptyRolesItem = { name: null, startYear: 0, endYear: null };
+    const emptyRolesItem = { name: null, startYear: null, endYear: null };
     const [roles, setRoles] = useState(defaultValues?.roles);
     const addRolesItem = () => {
         setRoles([...roles, { id: roles.length, ...emptyRolesItem }]);
@@ -149,7 +149,7 @@ export default function MemberForm({
             });
     };
 
-    console.log(errors)
+    // console.log(errors)
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
