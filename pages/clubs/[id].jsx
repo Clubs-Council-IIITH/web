@@ -175,6 +175,8 @@ function ClubMembers({ cid }) {
                             // check if user has any current roles
                             (user) =>
                                 user.roles
+                                    ?.filter((role) => !role?.deleted)
+                                    ?.filter((role) => role?.approved)
                                     ?.map((role) => role.endYear)
                                     .some((year) => year === null)
                         )

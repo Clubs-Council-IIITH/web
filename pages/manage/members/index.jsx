@@ -62,7 +62,7 @@ export default function Members() {
 }
 
 function MembersTable() {
-    const { user, role } = useAuth();
+    const { user } = useAuth();
 
     // get members of current club
     const {

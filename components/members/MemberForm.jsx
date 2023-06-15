@@ -69,6 +69,8 @@ export default function MemberForm({
     };
     const [roleError, setRoleError] = useState(false);
 
+    console.log(roles);
+
     // controlled form
     const {
         control,

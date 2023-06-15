@@ -127,25 +127,27 @@ export default function Member() {
                             </Typography>
 
                             <Grid container spacing={2}>
-                                {member?.roles?.map((role, key) => (
-                                    <Grid item container xs={12} mt={1} key={key}>
-                                        <Grid item xs={3}>
-                                            <Typography fontWeight={400} color="text.secondary">
-                                                {role?.startYear} - {role?.endYear || "present"}
-                                            </Typography>
+                                {member?.roles
+                                    ?.filter((role) => !role?.deleted)
+                                    ?.map((role, key) => (
+                                        <Grid item container xs={12} mt={1} key={key}>
+                                            <Grid item xs={3}>
+                                                <Typography fontWeight={400} color="text.secondary">
+                                                    {role?.startYear} - {role?.endYear || "present"}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs>
+                                                <Typography>
+                                                    {role?.name}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={3} display="flex" justifyContent="flex-end">
+                                                <Label color={role?.approved ? "success" : "warning"}>
+                                                    {role?.approved ? "APPROVED" : "PENDING"}
+                                                </Label>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs>
-                                            <Typography>
-                                                {role?.name}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3} display="flex" justifyContent="flex-end">
-                                            <Label color={role?.approved ? "success" : "warning"}>
-                                                {role?.approved ? "APPROVED" : "PENDING"}
-                                            </Label>
-                                        </Grid>
-                                    </Grid>
-                                ))}
+                                    ))}
                             </Grid>
                         </Card>
                     </Grid>

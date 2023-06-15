@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 
@@ -23,6 +23,8 @@ export default function EditEvent() {
         roles: []
     });
 
+    const [roles, setRoles] = useState([]);
+
     // query to get event details
     const {
         loading: memberLoading,
@@ -41,14 +43,29 @@ export default function EditEvent() {
             },
         },
         onCompleted: ({ member, userProfile }) => {
+            member?.roles?.forEach((role, i) => {
+                setRoles([...roles, {
+                    id: i,
+                    name: role?.name,
+                    startYear: role?.startYear,
+                    endYear: role?.endYear,
+                }]);
+            });
             setDefaultValues({
                 email: userProfile?.email,
                 cid: member?.cid,
                 poc: member?.poc,
-                roles: member?.roles
+                roles: roles
             });
         },
     });
+
+    useEffect(() => {
+        setDefaultValues({
+            ...defaultValues,
+            roles: roles
+        });
+    }, [roles]);
 
     // mutation to update event
     const [editMember, { data, loading, error }] = useMutation(EDIT_MEMBER, {
@@ -59,7 +76,7 @@ export default function EditEvent() {
     });
 
     return memberLoading ? null : !member ? null : (
-        <Page title={"Edit Event"}>
+        <Page title={"Edit Member"}>
             <Container>
                 <MemberForm
                     defaultValues={defaultValues}

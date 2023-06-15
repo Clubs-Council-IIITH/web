@@ -42,6 +42,7 @@ export const GET_MEMBER = gql`
         member(memberInput: $memberInput) {
             _id
             uid
+            cid
             poc
             roles {
                 startYear
