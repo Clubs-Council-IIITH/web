@@ -108,6 +108,8 @@ export default function EventForm({
         return newRow;
     };
 
+    const [budgetError, setBudgetError] = useState(false);
+
     // controlled form
     const {
         control,
@@ -396,6 +398,8 @@ export default function EventForm({
                             onUpdate={editBudgetItem}
                             onDelete={deleteBudgetItem}
                             editable={true}
+                            budgetError={budgetError}
+                            setBudgetError={setBudgetError}
                         />
                     </Card>
                 </Grid>
@@ -588,6 +592,7 @@ export default function EventForm({
                             variant="contained"
                             size="large"
                             loading={(submitting || submitState?.loading) && !submitState?.error}
+                            disabled={budgetError}
                         >
                             {submitButtonText}
                         </LoadingButton>

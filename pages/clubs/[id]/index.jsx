@@ -180,7 +180,7 @@ function ClubMembers({ cid }) {
                                     .some((year) => year === null)
                         )
                         .map((user) => (
-                            <Grid key={user.uid} item xs={12} sm={6} md={3}>
+                            <Grid key={user.uid} item xs={12} sm={6} md={4} lg={3}>
                                 <UserCard user={user} />
                             </Grid>
                         ))}
