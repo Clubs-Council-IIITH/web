@@ -39,7 +39,7 @@ export default function Members() {
 
                     <Button
                         component={Link}
-                        href="#"
+                        href="/manage/members/new"
                         variant="contained"
                         startIcon={<Iconify icon="eva:plus-fill" />}
                     >
@@ -114,7 +114,7 @@ function MembersTableRow(member) {
         },
         onCompleted: ({ userProfile }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            // setImg(userProfile?.img);
+            setImg(userProfile?.img);
         },
     });
 

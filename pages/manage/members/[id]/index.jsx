@@ -43,7 +43,7 @@ export default function Member() {
         },
         onCompleted: ({ userProfile }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            // setImg(userProfile?.img);
+            setImg(userProfile?.img);
         },
     });
 

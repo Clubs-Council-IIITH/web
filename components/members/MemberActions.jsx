@@ -20,8 +20,7 @@ function EditButton({ setView }) {
     const router = useRouter();
 
     const handleEdit = () => {
-        // TODO: redirect to edit page
-        // router.push(`${router.asPath}/edit`);
+        router.push(`${router.asPath}/edit`);
     };
 
     return (
