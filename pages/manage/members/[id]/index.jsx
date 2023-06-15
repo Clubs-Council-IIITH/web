@@ -59,7 +59,7 @@ export default function Member() {
 
                 {/* user profile */}
                 <Grid container spacing={2} mt={1}>
-                    <Grid item xs={12} md={6} xl={4}>
+                    <Grid item xs={12} md={6} xl={6}>
                         <Card sx={{ p: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
