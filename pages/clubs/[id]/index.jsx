@@ -119,25 +119,25 @@ function ClubEvents({ cid }) {
             <Grid container spacing={3}>
                 {/* display only 8 (or 4 on mobile) events on the main page */}
                 {events
-                    // ?.slice(0, isDesktop ? 8 : 4)
+                    ?.slice(0, isDesktop ? 8 : 4)
                     ?.map((event) => (
-                        <Grid key={event.id} item xs={12} sm={6} md={3}>
+                        <Grid key={event.id} item xs={12} sm={6} md={4} lg={3}>
                             <EventCard event={event} />
                         </Grid>
                     ))}
             </Grid>
-            {/* <Box sx={{ py: 2, textAlign: "right" }}>
+            <Box sx={{ py: 2, textAlign: "right" }}>
                 <Button
                     component={Link}
                     href={`${asPath}/events`}
-                    size="small"
+                    size="large"
                     color="inherit"
                     sx={{ p: 2 }}
                     endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
                 >
                     View more
                 </Button>
-            </Box> */}
+            </Box>
         </Box>
     );
 }

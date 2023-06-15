@@ -25,7 +25,7 @@ import { GET_CLUB } from "gql/queries/clubs";
 import { GET_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-export default function Club() {
+export default function ClubMembers() {
     const {
         query: { id },
     } = useRouter();
@@ -55,8 +55,8 @@ export default function Club() {
         <Page title={title}>
             <Container>
                 <center>
-                    <Typography variant="h2" sx={{mb: 4}}>
-                        List of Members of {club?.name}
+                    <Typography variant="h2" sx={{ mb: 4 }}>
+                        Members - <i>{club?.name}</i>
                     </Typography>
                 </center>
                 <ClientOnly>
