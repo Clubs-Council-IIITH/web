@@ -47,7 +47,7 @@ export default function EventForm({
     defaultValues,
     submitMutation = console.log,
     submitState = {},
-    submitButtonText = "Done",
+    submitButtonText = "Submit",
 }) {
     const router = useRouter();
     const { user } = useAuth();
@@ -321,6 +321,7 @@ export default function EventForm({
                                                 minutes: renderTimeViewClock,
                                                 seconds: renderTimeViewClock,
                                             }}
+                                            minDate={startDateInput}
                                             {...field}
                                         />
                                     )}
