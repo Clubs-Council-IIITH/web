@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { Box, Card, Container, TableRow, TableCell, Typography } from "@mui/material";
+import { Box, Card, Container, InputAdornment, TextField, TableRow, TableCell, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
 
@@ -22,7 +23,24 @@ export default function Events() {
         variables: {
             clubid: null,
         },
+        onCompleted: ({ events }) => {
+            setFilteredEvents(events);
+        },
     });
+
+    const [filteredEvents, setFilteredEvents] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        const filteredRows = events?.filter((event) =>
+            event?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredEvents(filteredRows);
+    }, [searchTerm]);
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
 
     // track loading state
     const { trackProgress } = useProgressbar();
@@ -37,11 +55,33 @@ export default function Events() {
                     </Typography>
                 </center>
 
+                <TextField
+                    id="search"
+                    type="search"
+                    label="Search"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    fullWidth
+                    disabled={loading}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+
                 <Card>
                     <Box m={1}>
                         <ClientOnly>
                             {loading ? null : !events?.length ? null : (
-                                <Table data={events} header={EventsTableHeader} row={EventsTableRow} />
+                                <Table
+                                    data={filteredEvents}
+                                    header={EventsTableHeader}
+                                    row={EventsTableRow}
+                                    noDataMessage="No Search Results Found!"
+                                />
                             )}
                         </ClientOnly>
                     </Box>
@@ -83,12 +123,20 @@ function EventsTableRow(event) {
             onClick={() => router.push(`/events/${event._id}`)}
             sx={{ cursor: "pointer" }}
         >
-            <TableCell align="left" sx={{ border: "none" }}>
+            <TableCell
+                align="left"
+                sx={{ border: "none" }}
+                style={{ maxWidth: 450 }}
+            >
                 <Typography variant="subtitle2" noWrap>
                     {name}
                 </Typography>
             </TableCell>
-            <TableCell align="left" sx={{ border: "none" }}>
+            <TableCell
+                align="left"
+                sx={{ border: "none" }}
+                style={{ maxWidth: 250 }}
+            >
                 <ClubBanner {...club} border={false} onclick={false} />
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
