@@ -4,7 +4,7 @@ import { Avatar, Button, Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { downloadFile } from "utils/files";
 
-export default function ClubBanner({ cid, logo, name, ...other }) {
+export default function ClubBanner({ cid, logo, name, border = true, onclick = true, ...other }) {
     const router = useRouter();
     const theme = useTheme();
 
@@ -14,9 +14,10 @@ export default function ClubBanner({ cid, logo, name, ...other }) {
             color="black"
             display="flex"
             alignItems="center"
-            border={1}
-            borderColor={"grey.300"}
+            border={border ? 1 : 0}
+            borderColor={border ? "grey.300" : "transparent"}
             onClick={() => router.push(`/clubs/${cid}`)}
+            disabled={!onclick}
             {...other}
         >
             <Avatar src={downloadFile(logo)} alt={name} sx={{ height: 18, width: 18, mr: 1 }} />

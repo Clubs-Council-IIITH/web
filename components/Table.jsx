@@ -8,9 +8,10 @@ import {
     TableCell,
     TableContainer,
     TablePagination,
+    Typography,
 } from "@mui/material";
 
-export default function Table({ data, header: Header, row: Row, pagination = true }) {
+export default function Table({ data, header: Header, row: Row, pagination = true , noDataMessage = "No Data to Display"}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
@@ -23,28 +24,35 @@ export default function Table({ data, header: Header, row: Row, pagination = tru
     return (
         <>
             <TableContainer sx={{ borderRadius: 1 }}>
-                <MUITable>
-                    <TableHead>
-                        <Header />
-                    </TableHead>
+                {data && data?.length > 0 ? (
+                    <MUITable>
+                        <TableHead>
+                            <Header />
+                        </TableHead>
 
-                    <TableBody>
-                        {data
-                            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            ?.map((row, key) => (
-                                <Row key={key} {...row} />
-                            ))}
+                        <TableBody>
+                            {data
+                                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                ?.map((row, key) => (
+                                    <Row key={key} {...row} />
+                                ))}
 
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </MUITable>
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </MUITable>)
+                    : <center>
+                        <Typography variant="h5" sx={{ mt: 2 }}>
+                            {noDataMessage}
+                        </Typography>
+                    </center>
+                }
             </TableContainer>
 
-            {pagination ? (
+            {data && data?.length >= 10 && pagination ? (
                 <TablePagination
                     rowsPerPageOptions={[10, 20, 30]}
                     component="div"

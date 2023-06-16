@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { useRouter } from "next/router";
 
 import { useQuery } from "@apollo/client";
@@ -9,6 +8,7 @@ import { Avatar, Box, Card, Grid, Container, Typography } from "@mui/material";
 
 import ActionPalette from "components/ActionPalette";
 import { editAction, deleteAction } from "components/members/MemberActions";
+import { downloadFile } from "utils/files";
 
 import Label from "components/label";
 import Page from "components/Page";
@@ -41,9 +41,9 @@ export default function Member() {
                 uid: id?.split(":")[1],
             },
         },
-        onCompleted: ({ userProfile }) => {
+        onCompleted: ({ userProfile, userMeta }) => {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
-            // setImg(userProfile?.img);
+            setImg(downloadFile(userMeta?.img));
         },
     });
 
@@ -59,7 +59,7 @@ export default function Member() {
 
                 {/* user profile */}
                 <Grid container spacing={2} mt={1}>
-                    <Grid item xs={12} md={6} xl={4}>
+                    <Grid item xs={12} md={6} xl={6}>
                         <Card sx={{ p: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -127,25 +127,27 @@ export default function Member() {
                             </Typography>
 
                             <Grid container spacing={2}>
-                                {member?.roles?.map((role, key) => (
-                                    <Grid item container xs={12} mt={1} key={key}>
-                                        <Grid item xs={3}>
-                                            <Typography fontWeight={400} color="text.secondary">
-                                                {role?.startYear} - {role?.endYear || "present"}
-                                            </Typography>
+                                {member?.roles
+                                    ?.filter((role) => !role?.deleted)
+                                    ?.map((role, key) => (
+                                        <Grid item container xs={12} mt={1} key={key}>
+                                            <Grid item xs={3}>
+                                                <Typography fontWeight={400} color="text.secondary">
+                                                    {role?.startYear} - {role?.endYear || "present"}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs>
+                                                <Typography>
+                                                    {role?.name}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={3} display="flex" justifyContent="flex-end">
+                                                <Label color={role?.approved ? "success" : "warning"}>
+                                                    {role?.approved ? "APPROVED" : "PENDING"}
+                                                </Label>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs>
-                                            <Typography>
-                                                {role?.name}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3} display="flex" justifyContent="flex-end">
-                                            <Label color={role?.approved ? "success" : "warning"}>
-                                                {role?.approved ? "APPROVED" : "PENDING"}
-                                            </Label>
-                                        </Grid>
-                                    </Grid>
-                                ))}
+                                    ))}
                             </Grid>
                         </Card>
                     </Grid>

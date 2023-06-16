@@ -1,83 +1,92 @@
 import { useState, useEffect } from "react";
 
-import Link from "next/link";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import {
     Avatar,
     Box,
-    Button,
-    Card,
     TableRow,
     TableCell,
-    Stack,
     Container,
     Typography,
-    Tooltip,
 } from "@mui/material";
+
+import useResponsive from "hooks/useResponsive";
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 import Page from "components/Page";
 import Table from "components/Table";
-import Iconify from "components/iconify";
-
-import { useAuth } from "contexts/AuthContext";
-import { useQuery } from "@apollo/client";
-import { GET_MEMBERS } from "gql/queries/members";
-import { GET_USER_PROFILE } from "gql/queries/users";
-
-import { useProgressbar } from "contexts/ProgressbarContext";
 import ClientOnly from "components/ClientOnly";
 import { downloadFile } from "utils/files";
 
-export default function Members() {
+import { useQuery } from "@apollo/client";
+import { GET_CLUB } from "gql/queries/clubs";
+import { GET_MEMBERS } from "gql/queries/members";
+import { GET_USER_PROFILE } from "gql/queries/users";
+
+export default function ClubMembers() {
+    const {
+        query: { id },
+    } = useRouter();
+
+    // set title asynchronously
+    const [title, setTitle] = useState("...");
+
+    const {
+        data: { club } = {},
+        loading,
+        error,
+    } = useQuery(GET_CLUB, {
+        skip: !id,
+        variables: {
+            clubInput: { cid: id },
+        },
+        onCompleted: ({ club }) => {
+            setTitle(club?.name + " | Members");
+        },
+        onError: (error) => {
+            if (error.message == "No Club Found")
+                router.push(`/404`)
+        },
+    });
+
     return (
-        <Page title="Manage Members">
+        <Page title={title}>
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-                    <Typography variant="h3" gutterBottom>
-                        Manage Members
-                    </Typography>
-
-                    <Button
-                        component={Link}
-                        href="/manage/members/new"
-                        variant="contained"
-                        startIcon={<Iconify icon="eva:plus-fill" />}
-                    >
-                        New Member
-                    </Button>
-                </Stack>
-
-                <Card>
-                    <Box m={1}>
-                        <ClientOnly>
-                            <MembersTable />
-                        </ClientOnly>
-                    </Box>
-                </Card>
+                <center>
+                    {loading ? null : (
+                        <Typography variant="h2" sx={{ mb: 4 }}>
+                            Members - <i>{club?.name}</i>
+                        </Typography>
+                    )}
+                </center>
+                <ClientOnly>
+                    <MembersTable cid={id} />
+                </ClientOnly>
             </Container>
         </Page>
     );
 }
 
-function MembersTable() {
-    const { user } = useAuth();
-
+function MembersTable(id) {
+    const { cid } = id;
+    console.log(cid)
     // get members of current club
     const {
         loading,
         error,
         data: { members } = {},
     } = useQuery(GET_MEMBERS, {
-        skip: !user?.uid,
+        skip: !cid,
         variables: {
             clubInput: {
-                cid: user?.uid,
+                cid: cid,
             },
         },
     });
 
-    // track loading state
+    // track loading state</center>
     const { trackProgress } = useProgressbar();
     useEffect(() => trackProgress(loading), [loading]);
 
@@ -124,11 +133,7 @@ function MembersTableRow(member) {
     useEffect(() => trackProgress(loading), [loading]);
 
     return (
-        <TableRow
-            hover
-            onClick={() => router.push(`/manage/members/${cid}:${uid}`)}
-            sx={{ cursor: "pointer" }}
-        >
+        <TableRow>
             <TableCell
                 align="left"
                 sx={{
@@ -152,37 +157,28 @@ function MembersTableRow(member) {
                     >
                         {name?.toLowerCase()}
                     </Typography>
-                    {poc ? (
-                        <Tooltip arrow title="Point of contact">
-                            <Iconify color="error.main" icon="material-symbols:contact-emergency" />
-                        </Tooltip>
-                    ) : null}
                 </Box>
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
                 {userProfile?.email}
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
-                {roles?.map((role, key) => (
-                    <Typography
-                        key={key}
-                        noWrap
-                        variant="body2"
-                        my={1}
-                        sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}
-                    >
-                        {role?.name}
-                        <Box key={key} color="grey.400" display="inline-block" mx={0.5}>
-                            ({role?.startYear} - {role?.endYear || "present"})
-                        </Box>
-                        <Tooltip arrow title={role?.approved ? "Approved" : "Pending approval"}>
-                            <Iconify
-                                color={role?.approved ? "success.main" : "warning.main"}
-                                icon={role?.approved ? "eva:checkmark-outline" : "eva:refresh-fill"}
-                            />
-                        </Tooltip>
-                    </Typography>
-                ))}
+                {roles
+                    ?.filter((role) => role?.approved && !role?.deleted)
+                    ?.map((role, key) => (
+                        <Typography
+                            key={key}
+                            noWrap
+                            variant="body2"
+                            my={1}
+                            sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}
+                        >
+                            {role?.name}
+                            <Box key={key} color="grey.400" display="inline-block" mx={0.5}>
+                                ({role?.startYear} - {role?.endYear || "present"})
+                            </Box>
+                        </Typography>
+                    ))}
             </TableCell>
         </TableRow>
     );

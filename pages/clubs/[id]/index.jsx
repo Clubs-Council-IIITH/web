@@ -61,7 +61,6 @@ function ClubDetails({ cid, setTitle }) {
             clubInput: { cid: cid },
         },
         onCompleted: ({ club }) => {
-            // console.log(1, club)
             setTitle(club?.name);
         },
         onError: (error) => {
@@ -120,25 +119,27 @@ function ClubEvents({ cid }) {
             <Grid container spacing={3}>
                 {/* display only 8 (or 4 on mobile) events on the main page */}
                 {events
-                    // ?.slice(0, isDesktop ? 8 : 4)
+                    ?.slice(0, isDesktop ? 8 : 4)
                     ?.map((event) => (
-                        <Grid key={event.id} item xs={12} sm={6} md={3}>
+                        <Grid key={event.id} item xs={12} sm={6} md={4} lg={3}>
                             <EventCard event={event} />
                         </Grid>
                     ))}
             </Grid>
-            {/* <Box sx={{ py: 2, textAlign: "right" }}>
-                <Button
-                    component={Link}
-                    href={`${asPath}/events`}
-                    size="small"
-                    color="inherit"
-                    sx={{ p: 2 }}
-                    endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
-                >
-                    View more
-                </Button>
-            </Box> */}
+            {(!isDesktop && events?.length > 4) || events?.length > 8 ? (
+                <Box sx={{ pt: 2, textAlign: "right" }}>
+                    <Button
+                        component={Link}
+                        href={`${asPath}/events`}
+                        size="large"
+                        color="inherit"
+                        sx={{ p: 2 }}
+                        endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                    >
+                        View more
+                    </Button>
+                </Box>
+            ) : null}
         </Box>
     );
 }
@@ -175,28 +176,43 @@ function ClubMembers({ cid }) {
                             // check if user has any current roles
                             (user) =>
                                 user.roles
+                                    ?.filter((role) => !role?.deleted)
+                                    ?.filter((role) => role?.approved)
                                     ?.map((role) => role.endYear)
                                     .some((year) => year === null)
                         )
                         .map((user) => (
-                            <Grid key={user.uid} item xs={12} sm={6} md={3}>
+                            <Grid key={user.uid} item xs={12} sm={6} md={4} lg={3}>
                                 <UserCard user={user} />
                             </Grid>
                         ))}
                 </Grid>
             </ClientOnly>
-            {/* <Box sx={{ py: 2, textAlign: "right" }}>
-                <Button
-                    component={Link}
-                    href={`${asPath}/members`}
-                    size="small"
-                    color="inherit"
-                    sx={{ p: 2 }}
-                    endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
-                >
-                    View all
-                </Button>
-            </Box> */}
+            {members
+                .filter(member => !members
+                    .filter(
+                        // check if user has any current roles
+                        (user) =>
+                            user.roles
+                                ?.filter((role) => !role?.deleted)
+                                ?.filter((role) => role?.approved)
+                                ?.map((role) => role.endYear)
+                                .some((year) => year === null)
+                    ).includes(member))
+                ?.length > 0 ? (
+                <Box sx={{ pt: 2, textAlign: "right" }}>
+                    <Button
+                        component={Link}
+                        href={`${asPath}/members`}
+                        size="large"
+                        color="inherit"
+                        sx={{ p: 2 }}
+                        endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                    >
+                        View all
+                    </Button>
+                </Box>
+            ) : null}
         </Box>
     );
 }

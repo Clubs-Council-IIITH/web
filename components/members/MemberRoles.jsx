@@ -4,18 +4,29 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import clsx from 'clsx';
 
-import { fCurrency } from "utils/formatCurrency";
 import Iconify from "components/iconify/Iconify";
 
-export default function EventBudget({ rows, onUpdate = null, onDelete = null, editable = false, budgetError = false, setBudgetError = null }) {
+function checkYear(year) {
+    const minYear = 2010;
+    const maxYear = new Date().getFullYear();
+    return year <= maxYear && year > minYear ? true : false;
+}
+
+export default function MemberRoles({ rows, onUpdate = null, onDelete = null, editable = false, roleError = false, setRoleError = null }) {
     // const handleProcessRowUpdateError = useCallback((error) => {
     //     console.error(error);
     // }, []);
 
     const preProcessEditCellProps = async (params) => {
         if (params.hasChanged) {
-            const error = params.props.value <= 0;
-            setBudgetError(error);
+            if ("startYear" in params.otherFieldsProps && params.props.value != null) {
+                if (params.otherFieldsProps.startYear.value && params.otherFieldsProps.startYear.value > params.props.value) {
+                    setRoleError(true);
+                    return { ...params.props, error: true };
+                }
+            }
+            const error = !(checkYear(params.props.value));
+            setRoleError(error);
             return { ...params.props, error: error };
         }
         return params.props;
@@ -23,9 +34,9 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
 
     const columns = [
         {
-            field: "description",
-            headerName: "Description",
-            width: 250,
+            field: "name",
+            headerName: "Title",
+            width: 100,
             flex: 2,
             editable: editable,
             renderCell: (p) =>
@@ -38,37 +49,36 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
                 ),
         },
         {
-            field: "amount",
+            field: "startYear",
             type: "number",
-            headerName: "Amount",
+            headerName: "Start Year",
             flex: 1,
-            editable: editable,
-            cellClassName: (params) => {
-                if (params.value > 0)
-                    return '';
-
-                return clsx('amount', {
-                    negative: params.value == null || params.value <= 0,
-                    positive: params.value > 0,
-                });
-            },
-            valueFormatter: (p) => fCurrency(p?.value),
-            preProcessEditCellProps
-        },
-        {
-            field: "advance",
-            type: "boolean",
-            headerName: "Advance",
-            width: 130,
             editable: editable,
             headerAlign: "center",
             align: "center",
-            renderCell: (p) => (
-                <Iconify
-                    color={!!p.value ? "success.main" : "error.main"}
-                    icon={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
-                />
-            ),
+            cellClassName: (params) => {
+                return clsx('super-app', {
+                    negative: !checkYear(params.value) || params.value == null,
+                    positive: checkYear(params.value),
+                });
+            },
+            preProcessEditCellProps
+        },
+        {
+            field: "endYear",
+            type: "number",
+            headerName: "End Year",
+            editable: editable,
+            flex: 1,
+            headerAlign: "center",
+            align: "center",
+            cellClassName: (params) => {
+                return clsx('super-app', {
+                    negative: !checkYear(params.value) && params.value !== null,
+                    positive: checkYear(params.value) || params.value === null,
+                });
+            },
+            preProcessEditCellProps
         },
         ...(editable
             ? [
@@ -93,14 +103,14 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
 
     return (
         <Box sx={{
-            height: 500,
+            height: 450,
             width: "100%",
-            '& .amount.positive': {
+            '& .super-app.positive': {
                 backgroundColor: 'rgba(157, 255, 118, 0.49)',
                 color: '#1a3e72',
                 fontWeight: '600',
             },
-            '& .amount.negative': {
+            '& .super-app.negative': {
                 backgroundColor: '#d47483',
                 color: '#1a3e72',
                 fontWeight: '600',
