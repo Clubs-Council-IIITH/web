@@ -27,16 +27,28 @@ export default function Upcoming() {
             <Typography variant="h4" sx={{ mb: 2 }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     Upcoming and Recent Events
-                    <Button
-                        component={Link}
-                        href="/events/upcoming"
-                        size="small"
-                        color="inherit"
-                        sx={{ p: 2 }}
-                        endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
-                    >
-                        View more
-                    </Button>
+                    <Box display="flex" alignItems="center">
+                        <Button
+                            component={Link}
+                            href="/events/upcoming"
+                            size="small"
+                            color="inherit"
+                            sx={{ p: 2 }}
+                            endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                        >
+                            View more
+                        </Button>
+                        <Button
+                            component={Link}
+                            href="/events"
+                            size="small"
+                            color="inherit"
+                            sx={{ p: 2 }}
+                            endIcon={<Iconify icon={"solar:double-alt-arrow-right-line-duotone"} />}
+                        >
+                            View all
+                        </Button>
+                    </Box>
                 </Box>
             </Typography>
             <Grid container spacing={2}>
@@ -44,10 +56,10 @@ export default function Upcoming() {
                 {events
                     ?.slice(0, !isDesktop && !isMobile ? 3 : 4)
                     ?.map((event, key) => (
-                    <Grid key={key} item xs={6} sm={4} md={3}>
-                        <EventCard event={event} />
-                    </Grid>
-                ))}
+                        <Grid key={key} item xs={6} sm={4} md={3}>
+                            <EventCard event={event} />
+                        </Grid>
+                    ))}
             </Grid>
         </Box>
     );

@@ -41,7 +41,7 @@ export default function ClubEvents() {
                         size="large"
                         color="inherit"
                         sx={{ p: 2 }}
-                        endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                        endIcon={<Iconify icon={"solar:double-alt-arrow-right-line-duotone"} />}
                     >
                         View all Events
                     </Button>
