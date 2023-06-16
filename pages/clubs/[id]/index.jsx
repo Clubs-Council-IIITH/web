@@ -126,7 +126,8 @@ function ClubEvents({ cid }) {
                         </Grid>
                     ))}
             </Grid>
-            <Box sx={{ py: 2, textAlign: "right" }}>
+            {(!isDesktop &&  events?.length > 4) || events?.length > 8  ? (
+                <Box sx={{ py: 2, textAlign: "right" }}>
                 <Button
                     component={Link}
                     href={`${asPath}/events`}
@@ -137,7 +138,8 @@ function ClubEvents({ cid }) {
                 >
                     View more
                 </Button>
-            </Box>
+                </Box>
+            ) : null}
         </Box>
     );
 }
