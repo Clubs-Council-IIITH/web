@@ -13,7 +13,7 @@ EventCard.propTypes = {
     event: PropTypes.object,
 };
 
-export default function EventCard({ event }) {
+export default function EventCard({ event, state_label=false }) {
     const { _id, name, datetimeperiod } = event;
     const isDesktop = useResponsive("up", "sm");
     const router = useRouter();
@@ -22,10 +22,10 @@ export default function EventCard({ event }) {
         <Card>
             <CardActionArea onClick={() => router.push(`/events/${_id}`)}>
                 <Box sx={{ pt: "100%", position: "relative" }}>
-                    {event?.status?.state && (
+                    {state_label && event?.status?.state && (
                         <Label
                             variant="filled"
-                            color={(state === "A_6" && "error") || "info"}
+                            color={(event?.status?.state  === "deleted" && "error") || "info"}
                             sx={{
                                 zIndex: 9,
                                 top: 16,

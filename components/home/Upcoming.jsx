@@ -1,13 +1,15 @@
 import { useEffect } from "react";
+import Link from "next/link";
 
 import { useQuery } from "@apollo/client";
 import { GET_RECENT_EVENTS } from "gql/queries/events";
 
-import { Typography, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid, Button } from "@mui/material";
 import { useProgressbar } from "contexts/ProgressbarContext";
 import useResponsive from "hooks/useResponsive";
 
 import { EventCard } from "components/events";
+import Iconify from "components/iconify";
 
 export default function Upcoming() {
     // get recent events
@@ -24,21 +26,21 @@ export default function Upcoming() {
         <Box mt={4}>
             <Typography variant="h4" sx={{ mb: 2 }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
-                    Upcoming and recent events
-                    {/* <Button
+                    Upcoming and Recent Events
+                    <Button
                         component={Link}
-                        href="/events"
+                        href="/events/upcoming"
                         size="small"
                         color="inherit"
                         sx={{ p: 2 }}
                         endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
                     >
                         View more
-                    </Button> */}
+                    </Button>
                 </Box>
             </Typography>
             <Grid container spacing={2}>
-                {/* display only 4 events on the main page */}
+                {/* display only 3/4 events on the main page */}
                 {events
                     ?.slice(0, !isDesktop && !isMobile ? 3 : 4)
                     ?.map((event, key) => (
