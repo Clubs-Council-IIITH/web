@@ -126,18 +126,18 @@ function ClubEvents({ cid }) {
                         </Grid>
                     ))}
             </Grid>
-            {(!isDesktop &&  events?.length > 4) || events?.length > 8  ? (
-                <Box sx={{ py: 2, textAlign: "right" }}>
-                <Button
-                    component={Link}
-                    href={`${asPath}/events`}
-                    size="large"
-                    color="inherit"
-                    sx={{ p: 2 }}
-                    endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
-                >
-                    View more
-                </Button>
+            {(!isDesktop && events?.length > 4) || events?.length > 8 ? (
+                <Box sx={{ pt: 2, textAlign: "right" }}>
+                    <Button
+                        component={Link}
+                        href={`${asPath}/events`}
+                        size="large"
+                        color="inherit"
+                        sx={{ p: 2 }}
+                        endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                    >
+                        View more
+                    </Button>
                 </Box>
             ) : null}
         </Box>
@@ -188,18 +188,31 @@ function ClubMembers({ cid }) {
                         ))}
                 </Grid>
             </ClientOnly>
-            <Box sx={{ py: 2, textAlign: "right" }}>
-                <Button
-                    component={Link}
-                    href={`${asPath}/members`}
-                    size="large"
-                    color="inherit"
-                    sx={{ p: 2 }}
-                    endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
-                >
-                    View all
-                </Button>
-            </Box>
+            {members
+                .filter(member => !members
+                    .filter(
+                        // check if user has any current roles
+                        (user) =>
+                            user.roles
+                                ?.filter((role) => !role?.deleted)
+                                ?.filter((role) => role?.approved)
+                                ?.map((role) => role.endYear)
+                                .some((year) => year === null)
+                    ).includes(member))
+                ?.length > 0 ? (
+                <Box sx={{ pt: 2, textAlign: "right" }}>
+                    <Button
+                        component={Link}
+                        href={`${asPath}/members`}
+                        size="large"
+                        color="inherit"
+                        sx={{ p: 2 }}
+                        endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                    >
+                        View all
+                    </Button>
+                </Box>
+            ) : null}
         </Box>
     );
 }
