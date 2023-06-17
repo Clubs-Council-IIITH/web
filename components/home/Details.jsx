@@ -28,7 +28,7 @@ export default function Details() {
             n_cultural_clubs: clubs.filter((club) => club.category === "cultural").length,
             n_student_constitutent_groups: clubs.filter((club) => ["cultural", "technical"].includes(club.category)).length
         })
-    }, [loading]);
+    }, [loading, clubs, error]);
 
     return (
         <Box mt={5}>

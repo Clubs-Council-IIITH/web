@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useMode } from "contexts/ModeContext";
+import Image from "next/image";
 
 const Error404Light = "/assets/vector/404_light.svg";
 const Error404Dark = "/assets/vector/404_dark.svg";
@@ -18,7 +19,7 @@ export default function Custom404() {
             justifyContent="center"
         >
             <Box mb={3}>
-                <img
+                <Image
                     src={isLight ? Error404Light: Error404Dark}
                     alt="404: Page Not Found"
                     width="350px"

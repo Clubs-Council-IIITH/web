@@ -148,7 +148,7 @@ export default function EventForm({
             // else make location input null
             setValue("location", []);
         }
-    }, [startDateInput, endDateInput]);
+    }, [startDateInput, endDateInput, defaultValues]);
 
     // get available locations
     const { data: { availableRooms } = {}, loading: availableRoomsLoading } = useQuery(

@@ -22,10 +22,7 @@ export default function Events() {
     const { loading, error, data: { events } = {} } = useQuery(GET_ALL_EVENTS, {
         variables: {
             clubid: null,
-        },
-        onCompleted: ({ events }) => {
-            setFilteredEvents(events);
-        },
+        }
     });
 
     const [filteredEvents, setFilteredEvents] = useState([]);
@@ -36,7 +33,7 @@ export default function Events() {
             event?.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredEvents(filteredRows);
-    }, [searchTerm]);
+    }, [searchTerm, events]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
