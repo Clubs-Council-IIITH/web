@@ -42,7 +42,7 @@ export default function RichTextEditor({ editing = false, editorState: [value, s
     return (
         <Slate
             editor={editor}
-            value={value}
+            initialValue={value}
             onChange={(v) => {
                 const isAstChange = editor.operations.some((op) => "set_selection" !== op.type);
                 if (isAstChange) {
