@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -13,14 +14,16 @@ import {
     Stack,
     Container,
     Typography,
+    InputAdornment,
+    TextField,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { sentenceCase } from "change-case";
 
 import Page from "components/Page";
 import Image from "components/Image";
 import Label from "components/label";
-import Kebab from "components/Kebab";
 import Table from "components/Table";
 import Iconify from "components/iconify";
 
@@ -29,6 +32,21 @@ import ClientOnly from "components/ClientOnly";
 
 export default function Clubs() {
     const { asPath } = useRouter();
+    const { loading, error, data: { allClubs: clubs } = {} } = useQuery(GET_ALL_CLUBS);
+
+    const [filteredClubs, setFilteredClubs] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        const filteredRows = clubs?.filter((club) =>
+            club?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredClubs(filteredRows);
+    }, [searchTerm, clubs]);
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
 
     // handle loading and error
     return (
@@ -49,23 +67,39 @@ export default function Clubs() {
                     </Button>
                 </Stack>
 
+                <TextField
+                    id="search"
+                    type="search"
+                    label="Search"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    fullWidth
+                    disabled={loading}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+
                 <Card>
                     <Box m={1}>
                         <ClientOnly>
-                            <ClubsTable />
+                            {loading ? null : error ? null : (
+                                <Table
+                                    data={filteredClubs}
+                                    header={ClubsTableHeader}
+                                    row={ClubsTableRow}
+                                    noDataMessage="No Search Results Found!"
+                                />
+                            )}
                         </ClientOnly>
                     </Box>
                 </Card>
             </Container>
         </Page>
-    );
-}
-
-function ClubsTable() {
-    const { loading, error, data: { allClubs: clubs } = {} } = useQuery(GET_ALL_CLUBS);
-
-    return loading ? null : error ? null : (
-        <Table data={clubs} header={ClubsTableHeader} row={ClubsTableRow} />
     );
 }
 
