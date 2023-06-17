@@ -31,7 +31,7 @@ export default function About() {
                     </Typography>
                 </Box>
 
-                <Typography variant="h5" gutterBottom>
+                {/* <Typography variant="h5" gutterBottom>
                     ABOUT
                 </Typography>
 
@@ -41,7 +41,7 @@ export default function About() {
                     Morbi maximus lacus nec tincidunt dapibus. Nulla consectetur gravida velit ut consectetur.
                     Etiam vel euismod odio. Vestibulum vitae est at ante ultricies ultricies.
                     Maecenas arcu urna, sagittis ornare auctor et, mattis sed ex. Nulla dignissim accumsan.
-                </Typography>
+                </Typography> */}
                 {/* <Typography variant="body1" mt={1}>
                     The Clubs Council works closely with the institute&apos;s Students&apos; Life
                     Office, Finance Council, Outreach, IT Offices, SLC and SAC faculty members, and
@@ -89,11 +89,15 @@ export default function About() {
                 </Typography>
 
                 <Typography variant="body1">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Praesent facilisis velit pellentesque posuere euismod.
-                    Morbi maximus lacus nec tincidunt dapibus. Nulla consectetur gravida velit ut consectetur.
-                    Etiam vel euismod odio. Vestibulum vitae est at ante ultricies ultricies.
-                    Maecenas arcu urna, sagittis ornare auctor et, mattis sed ex. Nulla dignissim accumsan.
+                    Student Life Comittee is dedicated to enhancing the overall student experience and fostering a vibrant and inclusive campus community.
+                    We believe that student life is an integral part of a well-rounded education, and we strive to create opportunities for personal growth,
+                    leadership development, and meaningful connections among students.
+                    <br /> <br />
+                    Our committee consists of passionate student representatives who work closely with faculty, staff,
+                    and the wider student body to organize and coordinate a wide range of events, programs, and initiatives.
+                    From social gatherings and cultural celebrations to educational workshops and community service projects,
+                    we aim to provide diverse opportunities for students to explore their interests, build lasting friendships,
+                    and make a positive impact on campus.
                 </Typography>
 
                 <Typography variant="h5" gutterBottom mt={4}>
@@ -131,11 +135,15 @@ export default function About() {
                 </Typography>
 
                 <Typography variant="body1">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Praesent facilisis velit pellentesque posuere euismod.
-                    Morbi maximus lacus nec tincidunt dapibus. Nulla consectetur gravida velit ut consectetur.
-                    Etiam vel euismod odio. Vestibulum vitae est at ante ultricies ultricies.
-                    Maecenas arcu urna, sagittis ornare auctor et, mattis sed ex. Nulla dignissim accumsan.
+                    Our mission is to enhance the overall student experience and promote a vibrant campus community.
+                    We are dedicated to encouraging an equitable balance between academics and extra-curricular activities
+                    for all students across campus and empowering students throughout their academic journey.
+                    <br /> <br />
+                    Student Life Office here to assist you and ensure that your time at our institution is
+                    fulfilling, enjoyable, memorable and our friendly staff is ready to answer your questions
+                    and provide the support you need. We understand that your time in college is about more than
+                    just attending classes and studying; it's about discovering your passions and creating lasting memories.
+                    That's why we offer a variety of programs and initiatives designed to enrich your student life experience.
                 </Typography>
 
                 <Typography variant="h5" gutterBottom mt={4}>
