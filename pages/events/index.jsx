@@ -103,7 +103,7 @@ function EventsTableHeader() {
 
 function EventsTableRow(event) {
     const router = useRouter();
-    const { name, datetimeperiod, status } = event;
+    const { name, datetimeperiod } = event;
 
     // get club
     const {
@@ -137,7 +137,9 @@ function EventsTableRow(event) {
                 sx={{ border: "none" }}
                 style={{ maxWidth: 250 }}
             >
-                <ClubBanner {...club} border={false} onclick={false} />
+                { clubLoading ? null : clubError ? null :
+                    <ClubBanner {...club} border={false} onclick={false} />
+                }
             </TableCell>
             <TableCell align="left" sx={{ border: "none" }}>
                 <Box display="flex" alignItems="center">

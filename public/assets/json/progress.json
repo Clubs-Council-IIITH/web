@@ -5,10 +5,17 @@
         "tasks": [
             "Added Dev Website",
             "Minor Restructuring of the website",
-            "Added SLC/SLO pages",
+            "Remove duplicate image data for current members on the main server",
+            "Added SAC/SLC/SLO pages",
             "Update clubs service and model to handle student bodies separately",
+            "Updated Member Queries",
+            "Fixed Events service objectID issue",
+            "Update available rooms query room checking condition",
+            "Updated package version for a security vulnerability in Starlette",
             "Integrated new apollo rover version",
+            "Updated Scripts for manual data pushing",
             "Fixed Timezone issue for the calendar",
+            "Remove old out-dated un-necessary mock data",
             "Updated information of the clubs",
             "Added responsive view for the calendar",
             "Updated clubs/bodies filter and view on the website",
@@ -24,7 +31,18 @@
             "Added confirmation for cancel on club/event form",
             "Fix Account Popover color",
             "Fix New Event Form",
-            "Fixed Events service objectID issue"
+            "Event form link validation",
+            "Added Members Mutations",
+            "Updated Events Budget Field Validation",
+            "Added Members Form - completely",
+            "Added Roles validation",
+            "Added all members public page and add images to all member lists",
+            "Added all events public page",
+            "Student Bodies pages",
+            "Added upcoming events page",
+            "Added All Events Page",
+            "Search Bar in All Events Page",
+            "View all events button on homepage"
         ]
     },
     {

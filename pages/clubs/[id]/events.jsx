@@ -77,8 +77,8 @@ export default function ClubEvents() {
                     (<Box sx={{ p: { xs: 2, md: 3 } }}>
                         <Grid container spacing={3}>
                             {events
-                                ?.map((event) => (
-                                    <Grid key={event.id} item xs={12} sm={6} md={4} lg={3}>
+                                ?.map((event, index) => (
+                                    <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                                         <EventCard event={event} />
                                     </Grid>
                                 ))}

@@ -120,8 +120,8 @@ function ClubEvents({ cid }) {
                 {/* display only 8 (or 4 on mobile) events on the main page */}
                 {events
                     ?.slice(0, isDesktop ? 8 : 4)
-                    ?.map((event) => (
-                        <Grid key={event.id} item xs={12} sm={6} md={4} lg={3}>
+                    ?.map((event, index) => (
+                        <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                             <EventCard event={event} />
                         </Grid>
                     ))}
@@ -181,8 +181,8 @@ function ClubMembers({ cid }) {
                                     ?.map((role) => role.endYear)
                                     .some((year) => year === null)
                         )
-                        .map((user) => (
-                            <Grid key={user.uid} item xs={12} sm={6} md={4} lg={3}>
+                        .map((user, index) => (
+                            <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                                 <UserCard user={user} />
                             </Grid>
                         ))}
