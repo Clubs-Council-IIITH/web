@@ -1,6 +1,17 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-import { Box, Button, Card, Stack, Container, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    Stack,
+    Container,
+    Typography,
+    InputAdornment,
+    TextField,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 import Page from "components/Page";
 import Table from "components/Table";
@@ -11,8 +22,33 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
 
 import { EventsTableHeader, EventsTableRow } from "components/events/EventsTable";
+import { useProgressbar } from "contexts/ProgressbarContext";
 
 export default function Events() {
+    const {
+        loading,
+        error,
+        data: { events } = {},
+    } = useQuery(GET_ALL_EVENTS, { variables: { clubid: null } });
+
+    // track loading state
+    const { trackProgress } = useProgressbar();
+    useEffect(() => trackProgress(loading), [loading]);
+
+    const [filteredEvents, setFilteredEvents] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        const filteredRows = events?.filter((event) =>
+            event?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredEvents(filteredRows);
+    }, [searchTerm, events]);
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
     return (
         <Page title="Manage Events">
             <Container>
@@ -31,26 +67,38 @@ export default function Events() {
                     </Button>
                 </Stack>
 
+                <TextField
+                    id="search"
+                    type="search"
+                    label="Search"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    fullWidth
+                    disabled={loading}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+
                 <Card>
                     <Box m={1}>
                         <ClientOnly>
-                            <EventsTable />
+                            {loading ? null : error ? null : (
+                                <Table
+                                    data={filteredEvents}
+                                    header={EventsTableHeader}
+                                    row={EventsTableRow}
+                                    noDataMessage="No Search Results Found!"
+                                />
+                            )}
                         </ClientOnly>
                     </Box>
                 </Card>
             </Container>
         </Page>
-    );
-}
-
-function EventsTable() {
-    const {
-        loading,
-        error,
-        data: { events } = {},
-    } = useQuery(GET_ALL_EVENTS, { variables: { clubid: null } });
-
-    return loading ? null : error ? null : (
-        <Table data={events} header={EventsTableHeader} row={EventsTableRow} />
     );
 }
