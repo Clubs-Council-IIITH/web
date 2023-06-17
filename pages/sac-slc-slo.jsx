@@ -142,8 +142,8 @@ export default function About() {
                     Student Life Office here to assist you and ensure that your time at our institution is
                     fulfilling, enjoyable, memorable and our friendly staff is ready to answer your questions
                     and provide the support you need. We understand that your time in college is about more than
-                    just attending classes and studying; it's about discovering your passions and creating lasting memories.
-                    That's why we offer a variety of programs and initiatives designed to enrich your student life experience.
+                    just attending classes and studying; it&apos;s about discovering your passions and creating lasting memories.
+                    That&apos;s why we offer a variety of programs and initiatives designed to enrich your student life experience.
                 </Typography>
 
                 <Typography variant="h5" gutterBottom mt={4}>
