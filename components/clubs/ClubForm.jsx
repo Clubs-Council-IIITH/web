@@ -29,6 +29,7 @@ export default function ClubForm({
     submitMutation = console.log,
     submitState = {},
     disableRequiredFields = false,
+    disableClubCode = false,
     submitButtonText = "Done",
 }) {
     const router = useRouter();
@@ -155,7 +156,7 @@ export default function ClubForm({
                                                 autoComplete="off"
                                                 error={errors.code}
                                                 helperText={errors.code?.message}
-                                                disabled={disableRequiredFields}
+                                                disabled={disableRequiredFields || disableClubCode}
                                                 InputLabelProps={{ shrink: field.value }}
                                                 {...field}
                                             />
