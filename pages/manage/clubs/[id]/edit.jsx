@@ -74,7 +74,7 @@ export default function EditClub() {
 
     // mutation to create club
     const [editClub, editClubState] = useMutation(EDIT_CLUB, {
-        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }, { query: GET_CLUB, variables: { clubInput: { cid: cid } } }],
     });
 
     return clubLoading ? null : !club ? null : (
@@ -85,6 +85,7 @@ export default function EditClub() {
                     submitMutation={editClub}
                     submitState={editClubState}
                     submitButtonText="Save"
+                    disableClubCode={true}
                 />
             </Container>
         </Page>

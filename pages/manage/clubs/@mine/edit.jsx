@@ -16,6 +16,7 @@ export default function EditClub() {
 
     // default form values
     const [defaultValues, setDefaultValues] = useState({
+        cid: null,
         code: null,
         name: null,
         email: null,
@@ -47,10 +48,12 @@ export default function EditClub() {
         },
         onCompleted: ({ club }) => {
             setDefaultValues({
+                cid: user?.uid,
                 code: club?.code,
                 name: club?.name,
                 email: club?.email,
                 category: club?.category,
+                studentBody: club?.studentBody,
                 tagline: club?.tagline,
                 description: JSON.parse(club?.description || {}),
                 socials: {
@@ -70,7 +73,7 @@ export default function EditClub() {
 
     // mutation to create club
     const [editClub, editClubState] = useMutation(EDIT_CLUB, {
-        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }, { query: GET_CLUB, variables: { clubInput: { cid: user?.uid } } }],
     });
 
     return clubLoading ? null : !club ? null : (
@@ -82,6 +85,7 @@ export default function EditClub() {
                     submitMutation={editClub}
                     submitState={editClubState}
                     submitButtonText="Save"
+                    disableClubCode={true}
                 />
             </Container>
         </Page>
