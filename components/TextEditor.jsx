@@ -14,20 +14,15 @@ export default function TextEditor({ editorState: [description, setDescription],
 
     // TODO: Re-Solve Circular Dependency
 
-    const [text, setText] = useState('');
-    const [htmlcode, setHtmlcode] = useState('');
+    const [text, setText] = useState(description?.md || '');
+    const [htmlcode, setHtmlcode] = useState(description?.htmlcode || '');
     useEffect(() => {
-        let isMounted = true;
-
-        if (isMounted) {
-            setText(description.md || '');
-            setHtmlcode(description.html || '');
+        if (description) {
+            setText(description?.md || '');
+            setHtmlcode(description?.html || '');
         }
-
-        return () => {
-            isMounted = false;
-        };
     }, [description]);
+
     useEffect(() => {
         if (editing) {
             setDescription({
@@ -101,7 +96,6 @@ export default function TextEditor({ editorState: [description, setDescription],
                     footers={footer}
                     preview={false}
                 /> :
-                // { htmlcode }
                 // null
                 <Box>
                     <div dangerouslySetInnerHTML={{ __html: htmlcode }} />
