@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import Image from "next/image";
 
 const Error401SVG = "/assets/vector/401.svg";
 
@@ -15,7 +14,7 @@ export default function Custom401() {
             justifyContent="center"
         >
             <Box mb={3}>
-                <Image
+                <img
                     src={Error401SVG}
                     alt="401: Unauthorized"
                     width="300px"
