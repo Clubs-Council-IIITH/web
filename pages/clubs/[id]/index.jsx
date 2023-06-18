@@ -14,6 +14,7 @@ import { ClubHero, ClubSocial } from "components/clubs";
 import { EventCard } from "components/events";
 import { UserCard } from "components/users";
 import { RichTextEditor } from "components/RichTextEditor";
+import TextEditor from "components/TextEditor";
 import Iconify from "components/iconify";
 
 import { useQuery } from "@apollo/client";
@@ -77,10 +78,14 @@ function ClubDetails({ cid, setTitle }) {
         <>
             <Card sx={{ mb: 2 }}>
                 <ClubHero club={club} />
-                <Box sx={{ p: { xs: 3, md: 5 } }}>
-                    <RichTextEditor
+                <Box sx={{ p: { xs: 3, md: 3 } }}>
+                    {/* <RichTextEditor
                         editing={false}
                         editorState={[JSON.parse(club.description), null]}
+                    /> */}
+                    <TextEditor
+                        editorState={[JSON.parse(club.description), null]}
+                        editing={false}
                     />
                 </Box>
             </Card>

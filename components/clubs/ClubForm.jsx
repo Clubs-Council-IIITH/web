@@ -17,12 +17,14 @@ import { useConfirm } from "material-ui-confirm";
 
 import { useForm, Controller } from "react-hook-form";
 
+import { useMode } from "contexts/ModeContext";
 import { uploadFile } from "utils/files";
 
 import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
 import { RichTextEditor } from "components/RichTextEditor";
+import TextEditor from "components/TextEditor";
 
 export default function ClubForm({
     defaultValues,
@@ -32,6 +34,7 @@ export default function ClubForm({
     disableClubCode = false,
     submitButtonText = "Done",
 }) {
+    const { isLight } = useMode();
     const router = useRouter();
     const confirm = useConfirm();
 
@@ -41,7 +44,7 @@ export default function ClubForm({
 
     // manage rich-text description
     const [description, setDescription] = useState(
-        defaultValues?.description || [{ type: "paragraph", children: [{ text: "" }] }]
+        defaultValues?.description || { "md": "", "html": "" }
     );
 
     // manage logo upload
@@ -237,13 +240,16 @@ export default function ClubForm({
                                 <InputLabel shrink>Description</InputLabel>
                                 <Box
                                     border={1}
-                                    borderColor={"grey.300"}
+                                    borderColor={isLight ? "grey.300" : "grey.700"}
                                     borderRadius={1}
-                                    py={1}
-                                    px={2}
+                                // py={1}
+                                // px={2}
                                 >
-                                    <RichTextEditor
+                                    {/* <RichTextEditor
                                         editing={true}
+                                        editorState={[description, setDescription]}
+                                    /> */}
+                                    <TextEditor
                                         editorState={[description, setDescription]}
                                     />
                                 </Box>
