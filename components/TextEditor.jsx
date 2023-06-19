@@ -13,13 +13,19 @@ export default function TextEditor({ editorState: [description, setDescription],
     const [footer, setFooter] = useState([]);
 
     // TODO: Re-Solve Circular Dependency
+    // One solution is to add a count and run first useEffect only 10 times or so
 
     const [text, setText] = useState(description?.md || '');
     const [htmlcode, setHtmlcode] = useState(description?.htmlcode || '');
+    const [updateCount, setUpdateCount] = useState(0);
+    const descriptionRef = useRef('');
+    descriptionRef.current = description;
+
     useEffect(() => {
-        if (description) {
-            setText(description?.md || '');
-            setHtmlcode(description?.html || '');
+        if (description && updateCount < 11) {
+            setText(descriptionRef.current?.md || '');
+            setHtmlcode(descriptionRef.current?.html || '');
+            setUpdateCount(updateCount + 1);
         }
     }, [description]);
 
