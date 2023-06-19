@@ -38,44 +38,6 @@ export default function TextEditor({ editorState: [description, setDescription],
         }
     }, [editing, text, htmlcode]);
 
-    // const [text, setText] = useState('');
-    // const [htmlcode, setHtmlcode] = useState('');
-    // const descriptionRef = useRef(description);
-
-    // useEffect(() => {
-    //     let isMounted = true;
-
-    //     if (isMounted) {
-    //         setText(description.md || '');
-    //         setHtmlcode(description.html || '');
-    //     }
-
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [description]);
-
-    // useEffect(() => {
-    //     if (editing) {
-    //         setDescription((prevDescription) => {
-    //             const updatedDescription = {
-    //                 md: prevDescription.md !== text ? text : prevDescription.md,
-    //                 html: prevDescription.html !== htmlcode ? htmlcode : prevDescription.html,
-    //             };
-
-    //             descriptionRef.current = updatedDescription;
-    //             return updatedDescription;
-    //         });
-    //     }
-    // }, [editing, text, htmlcode]);
-
-    // useEffect(() => {
-    //     if (!editing) {
-    //         setText(descriptionRef.current.md || '');
-    //         setHtmlcode(descriptionRef.current.html || '');
-    //     }
-    // }, [editing]);
-
     editorRef.current?.on('preview', (status) => {
         if (status)
             setFooter(['=', 'scrollSwitch']);
@@ -104,7 +66,7 @@ export default function TextEditor({ editorState: [description, setDescription],
                 /> :
                 // null
                 <Box>
-                    <div dangerouslySetInnerHTML={{ __html: htmlcode }} />
+                    <div dangerouslySetInnerHTML={{ __html: htmlcode || "<p>No Description Provided.<p>" }} />
                 </Box>
             }
         </>
