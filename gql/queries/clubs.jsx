@@ -20,6 +20,7 @@ export const GET_ALL_CLUBS = gql`
         allClubs {
             _id
             cid
+            code
             state
             category
             studentBody

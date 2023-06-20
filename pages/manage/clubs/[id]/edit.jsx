@@ -24,7 +24,7 @@ export default function EditClub() {
         category: "cultural",
         studentBody: false,
         tagline: null,
-        description: null,
+        description: { "md": "", "html": "" },
         socials: {
             website: null,
             instagram: null,
@@ -56,7 +56,7 @@ export default function EditClub() {
                 category: club?.category,
                 studentBody: club?.studentBody,
                 tagline: club?.tagline,
-                description: JSON.parse(club?.description || {}),
+                description: JSON.parse(club?.description || { "md": "", "html": "" }),
                 socials: {
                     website: club?.socials?.website,
                     instagram: club?.socials?.instagram,

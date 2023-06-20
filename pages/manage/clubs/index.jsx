@@ -40,6 +40,8 @@ export default function Clubs() {
     useEffect(() => {
         const filteredRows = clubs?.filter((club) =>
             club?.name.toLowerCase().includes(searchTerm.toLowerCase())
+            ||
+            club?.code.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredClubs(filteredRows);
     }, [searchTerm, clubs]);

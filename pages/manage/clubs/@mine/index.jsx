@@ -8,7 +8,7 @@ import { useProgressbar } from "contexts/ProgressbarContext";
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
 import { ClubHero, ClubSocial } from "components/clubs";
-import { RichTextEditor } from "components/RichTextEditor";
+import TextEditor from "components/TextEditor";
 
 import ActionPalette from "components/ActionPalette";
 import { editAction } from "components/clubs/ClubActions";
@@ -61,9 +61,9 @@ function ClubDetails({ cid, setTitle }) {
             <Card sx={{ mb: 4, mt: 3 }}>
                 <ClubHero club={club} />
                 <Box sx={{ p: { xs: 3, md: 5 } }}>
-                    <RichTextEditor
+                    <TextEditor
+                        editorhtmlState={[JSON.parse(club.description)?.md, null]}
                         editing={false}
-                        editorState={[JSON.parse(club.description), null]}
                     />
                 </Box>
             </Card>
