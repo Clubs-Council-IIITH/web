@@ -42,7 +42,7 @@ export default function TextEditor({
                     preview={false}
                 /> :
                 <Box>
-                    <div dangerouslySetInnerHTML={{ __html: htmlcode || "<p>No Description Provided.<p>" }} />
+                    <div dangerouslySetInnerHTML={{ __html: htmlcode || "<p style=\"opacity: 0.4\">No Description Provided.<p>" }} />
                 </Box>
             }
         </>
