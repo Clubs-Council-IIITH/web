@@ -126,7 +126,7 @@ export default function MemberForm({
         // perform mutation
         submitMutation({
             variables: {
-                details: formData,
+                memberInput: formData,
             },
         });
 
