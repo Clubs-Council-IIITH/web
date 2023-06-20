@@ -22,12 +22,14 @@ export default function MemberRoles({ rows, onUpdate = null, onDelete = null, ed
             if ("startYear" in params.otherFieldsProps && params.props.value != null) {
                 if (params.otherFieldsProps.startYear.value && params.otherFieldsProps.startYear.value > params.props.value) {
                     setRoleError(true);
-                    return { ...params.props, error: true };
+                    // return { ...params.props, error: true };
+                    return params.props;
                 }
             }
             const error = !(checkYear(params.props.value));
             setRoleError(error);
-            return { ...params.props, error: error };
+            // return { ...params.props, error: error };
+            return params.props;
         }
         return params.props;
     };

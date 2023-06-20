@@ -256,7 +256,7 @@ export default function MemberForm({
                     </Stack>
                 </Grid>
 
-                <Grid item xs md lg xl>
+                <Grid item xs={12} md={6} lg={6} xl={6}>
                     <Card sx={{ p: 2, mt: 2 }}>
                         <Typography color="text.secondary" variant="subtitle2" pb={2}>
                             ROLES

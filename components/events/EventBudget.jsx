@@ -16,7 +16,7 @@ export default function EventBudget({ rows, onUpdate = null, onDelete = null, ed
         if (params.hasChanged) {
             const error = params.props.value <= 0;
             setBudgetError(error);
-            return { ...params.props, error: error };
+            // return { ...params.props, error: error };
         }
         return params.props;
     };
