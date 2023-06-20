@@ -70,9 +70,9 @@ export default function MemberForm({
     };
 
     const [roleError, setRoleError] = useState(false);
+    const [rolelengthError, setRoleLengthError] = useState(false);
     useEffect(() => {
-        if (roles?.length <= 0)
-            setRoleError(true);
+        setRoleLengthError(roles?.length <= 0);
     }, [roles]);
 
     // controlled form
@@ -254,7 +254,7 @@ export default function MemberForm({
                             variant="contained"
                             size="large"
                             loading={(submitting || submitState?.loading) && !submitState?.error}
-                            disabled={roleError}
+                            disabled={roleError || rolelengthError}
                         >
                             {submitButtonText}
                         </LoadingButton>
