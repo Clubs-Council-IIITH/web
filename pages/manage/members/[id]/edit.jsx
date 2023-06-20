@@ -60,13 +60,6 @@ export default function EditEvent() {
         },
     });
 
-    useEffect(() => {
-        setDefaultValues({
-            ...defaultValues,
-            roles: roles
-        });
-    }, [roles]);
-
     // mutation to update event
     const [editMember, { data, loading, error }] = useMutation(EDIT_MEMBER, {
         refetchQueries: [
