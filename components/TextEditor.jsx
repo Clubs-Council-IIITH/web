@@ -41,7 +41,7 @@ export default function TextEditor({
                     footers={footer}
                     preview={false}
                 /> :
-                <Box>
+                <Box py={1} px={1.25}>
                     <div dangerouslySetInnerHTML={{ __html: htmlcode || "<p style=\"opacity: 0.4\">No Description Provided.<p>" }} />
                 </Box>
             }
