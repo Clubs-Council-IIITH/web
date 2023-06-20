@@ -19,11 +19,11 @@ export default function EditEvent() {
     const [defaultValues, setDefaultValues] = useState({
         email: null,
         cid: null,
-        poc: false,
-        roles: []
+        poc: false
     });
 
     const [roles, setRoles] = useState([]);
+    const [queryloading, setQueryLoading] = useState(true);
 
     // query to get event details
     const {
@@ -43,6 +43,16 @@ export default function EditEvent() {
             },
         },
         onCompleted: ({ member, userProfile }) => {
+            setDefaultValues({
+                email: userProfile?.email,
+                cid: member?.cid,
+                poc: member?.poc
+            });
+        },
+    });
+
+    useEffect(() => {
+        if (!memberLoading) {
             member?.roles?.forEach((role, i) => {
                 setRoles([...roles, {
                     id: i,
@@ -51,14 +61,9 @@ export default function EditEvent() {
                     endYear: role?.endYear,
                 }]);
             });
-            setDefaultValues({
-                email: userProfile?.email,
-                cid: member?.cid,
-                poc: member?.poc,
-                roles: roles
-            });
-        },
-    });
+            setQueryLoading(false);
+        }
+    }, [member]);
 
     // mutation to update event
     const [editMember, { data, loading, error }] = useMutation(EDIT_MEMBER, {
@@ -68,7 +73,7 @@ export default function EditEvent() {
         ],
     });
 
-    return memberLoading ? null : !member ? null : (
+    return queryloading || memberLoading ? null : !member ? null : (
         <Page title={"Edit Member"}>
             <Container>
                 <MemberForm
@@ -76,6 +81,7 @@ export default function EditEvent() {
                     submitMutation={editMember}
                     submitState={{ data, loading, error }}
                     submitButtonText="Save"
+                    defaultRoles={roles}
                 />
             </Container>
         </Page>

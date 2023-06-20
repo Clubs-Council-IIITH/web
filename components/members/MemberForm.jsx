@@ -38,6 +38,7 @@ export default function MemberForm({
     submitMutation = console.log,
     submitState = {},
     submitButtonText = "Submit",
+    defaultRoles = [],
 }) {
     const router = useRouter();
     const { user } = useAuth();
@@ -49,7 +50,7 @@ export default function MemberForm({
 
     // manage roles
     const emptyRolesItem = { name: null, startYear: new Date().getFullYear(), endYear: null };
-    const [roles, setRoles] = useState(defaultValues?.roles);
+    const [roles, setRoles] = useState(defaultRoles);
     const addRolesItem = () => {
         setRoles([...roles, { id: roles.length, ...emptyRolesItem }]);
     };
