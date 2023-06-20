@@ -59,7 +59,7 @@ const helpConfig = {
     header: "help",
     items: [
         {
-            title: "bugs",
+            title: "Report Bugs",
             path: "https://forms.office.com/r/zBLuvbBPXZ",
             icon: <BugsIcon fontSize="small" />,
         },
