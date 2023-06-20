@@ -8,7 +8,7 @@ import { useProgressbar } from "contexts/ProgressbarContext";
 
 import Page from "components/Page";
 import ClientOnly from "components/ClientOnly";
-import { ClubHero } from "components/clubs";
+import { ClubHero, ClubSocial } from "components/clubs";
 import TextEditor from "components/TextEditor";
 
 import ActionPalette from "components/ActionPalette";
@@ -70,6 +70,10 @@ function ClubDetails({ cid, setTitle }) {
                     />
                 </Box>
             </Card>
+
+            <Box mb={2}>
+                <ClubSocial socials={club?.socials} />
+            </Box>
         </Box>
     );
 }
