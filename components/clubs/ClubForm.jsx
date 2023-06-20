@@ -23,7 +23,6 @@ import { uploadFile } from "utils/files";
 import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
-import { RichTextEditor } from "components/RichTextEditor";
 import TextEditor from "components/TextEditor";
 
 export default function ClubForm({
@@ -43,8 +42,11 @@ export default function ClubForm({
     const [submitting, setSubmitting] = useState(false);
 
     // manage rich-text description
-    const [description, setDescription] = useState(
-        defaultValues?.description || { "md": "", "html": "" }
+    const [descriptionmd, setDescriptionmd] = useState(
+        defaultValues?.description?.md || ""
+    );
+    const [descriptionhtml, setDescriptionhtml] = useState(
+        defaultValues?.description?.html || ""
     );
 
     // manage logo upload
@@ -84,7 +86,8 @@ export default function ClubForm({
         reset(defaultValues);
         if (defaultValues?.logo) setLogo(defaultValues?.logo);
         if (defaultValues?.banner) setBanner(defaultValues?.banner);
-        if (defaultValues?.description) setDescription(defaultValues?.description);
+        setDescriptionmd(defaultValues?.description?.md || "");
+        setDescriptionhtml(defaultValues?.description?.html || "");
     }, [defaultValues]);
 
     // submission logic
@@ -96,7 +99,7 @@ export default function ClubForm({
         // upload logo and banner if they are File objects (which they will be if they have been modified)
         const formData = {
             ...data,
-            description: description,
+            description: { md: descriptionmd, html: descriptionhtml },
             logo: logo,
             banner: banner,
             cid: data?.email.substring(0, data?.email.indexOf("@")),
@@ -245,12 +248,9 @@ export default function ClubForm({
                                 // py={1}
                                 // px={2}
                                 >
-                                    {/* <RichTextEditor
-                                        editing={true}
-                                        editorState={[description, setDescription]}
-                                    /> */}
                                     <TextEditor
-                                        editorState={[description, setDescription]}
+                                        editormdState={[descriptionmd, setDescriptionmd]}
+                                        editorhtmlState={[descriptionhtml, setDescriptionhtml]}
                                     />
                                 </Box>
                             </Box>

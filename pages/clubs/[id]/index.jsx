@@ -13,7 +13,6 @@ import ClientOnly from "components/ClientOnly";
 import { ClubHero, ClubSocial } from "components/clubs";
 import { EventCard } from "components/events";
 import { UserCard } from "components/users";
-import { RichTextEditor } from "components/RichTextEditor";
 import TextEditor from "components/TextEditor";
 import Iconify from "components/iconify";
 
@@ -79,12 +78,8 @@ function ClubDetails({ cid, setTitle }) {
             <Card sx={{ mb: 2 }}>
                 <ClubHero club={club} />
                 <Box sx={{ p: { xs: 3, md: 3 } }}>
-                    {/* <RichTextEditor
-                        editing={false}
-                        editorState={[JSON.parse(club.description), null]}
-                    /> */}
                     <TextEditor
-                        editorState={[JSON.parse(club.description), null]}
+                        editorhtmlState={[JSON.parse(club.description)?.md, null]}
                         editing={false}
                     />
                 </Box>

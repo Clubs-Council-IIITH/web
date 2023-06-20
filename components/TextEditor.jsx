@@ -7,36 +7,13 @@ import sanitizeHtml from 'sanitize-html';
 
 import { useMode } from 'contexts/ModeContext';
 
-export default function TextEditor({ editorState: [description, setDescription], editing = true }) {
+export default function TextEditor({
+    editormdState: [text, setText] = ["", null],
+    editorhtmlState: [htmlcode, setHtmlcode], editing = true
+}) {
     const { isLight } = useMode();
     const editorRef = useRef();
     const [footer, setFooter] = useState([]);
-
-    // TODO: Re-Solve Circular Dependency
-    // One solution is to add a count and run first useEffect only 10 times or so
-
-    const [text, setText] = useState(description?.md || '');
-    const [htmlcode, setHtmlcode] = useState(description?.htmlcode || '');
-    const [updateCount, setUpdateCount] = useState(0);
-    const descriptionRef = useRef('');
-    descriptionRef.current = description;
-
-    useEffect(() => {
-        if (description && updateCount < 11) {
-            setText(descriptionRef.current?.md || '');
-            setHtmlcode(descriptionRef.current?.html || '');
-            setUpdateCount(updateCount + 1);
-        }
-    }, [description]);
-
-    useEffect(() => {
-        if (editing) {
-            setDescription({
-                md: text,
-                html: htmlcode,
-            });
-        }
-    }, [editing, text, htmlcode]);
 
     editorRef.current?.on('preview', (status) => {
         if (status)
@@ -47,7 +24,7 @@ export default function TextEditor({ editorState: [description, setDescription],
 
     return (
         <>
-            {editing ?
+            {editing && setText ?
                 <MdEditor
                     theme={isLight ? 'light' : 'dark'}
                     modelValue={text}
@@ -64,7 +41,6 @@ export default function TextEditor({ editorState: [description, setDescription],
                     footers={footer}
                     preview={false}
                 /> :
-                // null
                 <Box>
                     <div dangerouslySetInnerHTML={{ __html: htmlcode || "<p>No Description Provided.<p>" }} />
                 </Box>
