@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
 
-import { Alert, AlertTitle, Button, Checkbox, Grid, Box, FormControlLabel } from "@mui/material";
+import { Alert, AlertTitle, Button, Box } from "@mui/material";
 import {
     EditOutlined as EditIcon,
     DeleteOutlined as DeleteIcon,
-    ThumbUpOutlined as SubmitIcon,
-    DoneOutlined as ApproveIcon,
 } from "@mui/icons-material";
 
 // edit
@@ -51,14 +48,13 @@ function DeleteButton({ setView }) {
     );
 }
 
-function DeletionView({ setView }) {
+function DeletionView({ setView, deleteMember }) {
     const handleCancel = () => {
         setView("base");
     };
 
-    const handleDelete = () => {
-        // TODO: API call
-        setView("base");
+    const handleDelete = async () => {
+        deleteMember();
     };
 
     return (

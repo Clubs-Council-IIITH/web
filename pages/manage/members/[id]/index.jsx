@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { useQuery } from "@apollo/client";
-import { GET_MEMBER } from "gql/queries/members";
+import { useQuery, useMutation } from "@apollo/client";
+import { DELETE_MEMBER } from "gql/mutations/members";
+import { GET_MEMBER, GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 
 import { Avatar, Box, Card, Grid, Container, Typography } from "@mui/material";
 
@@ -18,6 +19,7 @@ import ClientOnly from "components/ClientOnly";
 import { useProgressbar } from "contexts/ProgressbarContext";
 
 export default function Member() {
+    const router = useRouter();
     const { query } = useRouter();
     const { id } = query;
 
@@ -45,7 +47,32 @@ export default function Member() {
             setName(`${userProfile?.firstName} ${userProfile?.lastName}`);
             setImg(downloadFile(userMeta?.img));
         },
+        onError: (error) => {
+            // if (error.message == 'No such Record')
+            router.push(`/404`)
+        },
     });
+
+    const [deleteMemberMutation, { data, deleteloading, deleteerror }] = useMutation(DELETE_MEMBER, {
+        refetchQueries: [
+            { query: GET_MEMBERS, variables: { clubInput: { cid: "clubs" } } },
+            { query: GET_PENDING_MEMBERS }
+        ],
+        awaitRefetchQueries: true,
+    });
+
+    const deleteMember = async () => {
+        deleteMemberMutation({
+            variables: {
+                memberInput: {
+                    cid: id?.split(":")[0],
+                    uid: id?.split(":")[1],
+                    rid: null,
+                },
+            },
+        });
+        router.push("/manage/members");
+    };
 
     // track loading state
     const { trackProgress } = useProgressbar();
@@ -55,7 +82,7 @@ export default function Member() {
         <Page title={"View Member"}>
             <Container>
                 {/* action palette */}
-                <ActionPalette actions={[editAction, deleteAction]} />
+                <ActionPalette actions={[editAction, deleteAction]} deleteMember={deleteMember} />
 
                 {/* user profile */}
                 <Grid container spacing={2} mt={1}>
