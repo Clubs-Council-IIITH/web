@@ -68,7 +68,12 @@ export default function MemberForm({
         setRoles(newRoles);
         return newRow;
     };
+
     const [roleError, setRoleError] = useState(false);
+    useEffect(() => {
+        if (roles?.length <= 0)
+            setRoleError(true);
+    }, [roles]);
 
     // controlled form
     const {
