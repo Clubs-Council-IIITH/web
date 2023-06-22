@@ -73,37 +73,28 @@ export function getNavConfig(user) {
     // Add public items
     navConfig.push(publicConfig);
 
-    // If user is an admin, add manage items
-    if (["cc"].includes(user?.role)) {
+    // If user is an admin (slc/slo), add manage event
+    if (["slc", "slo"].includes(user?.role)) {
         navConfig.push({
             header: "manage",
             items: [
                 {
-                    title: "Clubs",
-                    path: "/manage/clubs",
-                    icon: <ClubsIcon fontSize="small" />,
-                },
-                {
                     title: "Events",
                     path: "/manage/events",
                     icon: <EventsIcon fontSize="small" />,
-                },
-                {
-                    title: "Members",
-                    path: "/manage/members",
-                    icon: <MembersIcon fontSize="small" />,
                 },
             ],
         });
     }
 
     // If user is a club, add club-specific items
-    if (user?.role === "club") {
+    // If user is cc, add manage items
+    if (["cc", "club"].includes(user?.role)) {
         navConfig.push({
             header: "manage",
             items: [
                 {
-                    title: "Club",
+                    title: "Club".concat(user?.role==="cc" ? "s" : ""),
                     path: "/manage/clubs",
                     icon: <ClubsIcon fontSize="small" />,
                 },
