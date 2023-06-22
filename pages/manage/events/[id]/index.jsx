@@ -44,14 +44,16 @@ export default function Event() {
 function EventDisplay({ id, setTitle }) {
     const router = useRouter();
     const { user } = useAuth();
-    let actions = [];
+    const [actions, setActions] = useState([]);
 
-    if (user?.role == "club")
-        actions = ([editAction, deleteAction, submitAction]);
-    else if (user?.role == "cc")
-        actions = ([editAction, deleteAction, submitAction, approveAction]);
-    else if (["slc", "slo"].includes(user?.role))
-        actions = ([approveAction]);
+    const setConditionalActions = (event) => {
+        if (user?.role == "club" && event)
+            setActions([editAction, submitAction, deleteAction]);
+        else if (user?.role == "cc")
+            setActions([approveAction, editAction, submitAction, deleteAction]);
+        else if (["slc", "slo"].includes(user?.role))
+            setActions([approveAction,]);
+    }
 
     // get event data
     const {
@@ -65,6 +67,7 @@ function EventDisplay({ id, setTitle }) {
         },
         onCompleted: ({ event }) => {
             setTitle(event?.name);
+            setConditionalActions(event);
         },
         onError: (error) => {
             router.push(`/404`)
