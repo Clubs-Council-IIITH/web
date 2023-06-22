@@ -136,7 +136,7 @@ function ApprovalView({ setView }) {
         <Alert color="success" icon={false} sx={{ display: "block" }}>
             <AlertTitle> Approving Event </AlertTitle>
 
-            <Grid container spacing={4}>
+            <Grid container spacing={5}>
                 <Grid item>
                     <FormControlLabel
                         control={
@@ -161,7 +161,7 @@ function ApprovalView({ setView }) {
                         label="Request SLC approval"
                     />
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -172,7 +172,7 @@ function ApprovalView({ setView }) {
                         }
                         label="Request GAD approval"
                     />
-                </Grid>
+                </Grid> */}
             </Grid>
 
             <Box mt={2} width="100%" display="flex" justifyContent="flex-end">
