@@ -63,7 +63,7 @@ export default function AccountPopover() {
                             height: "100%",
                             borderRadius: "50%",
                             position: "absolute",
-                            bgcolor: (theme) => alpha(theme.palette.grey[isLight ? 700: 400], 0.6),
+                            bgcolor: (theme) => alpha(theme.palette.grey[isLight ? 700 : 400], 0.6),
                         },
                     }),
                 }}
@@ -72,7 +72,7 @@ export default function AccountPopover() {
                     src={null}
                     alt="logged in"
                     {...(user?.firstName && {
-                        children: `${user?.firstName?.[0]}${user?.lastName?.[0]}`,
+                        children: `${user?.firstName?.[0]}${user?.lastName == "" ? "" : user?.lastName?.[0]}`,
                         sx: { backgroundColor: isLight ? "black" : theme.palette.grey[300] },
                     })}
                 />
