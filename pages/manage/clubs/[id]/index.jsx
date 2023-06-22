@@ -14,8 +14,9 @@ import TextEditor from "components/TextEditor";
 import ActionPalette from "components/ActionPalette";
 import { editAction, deleteAction } from "components/clubs/ClubActions";
 
-import { useQuery } from "@apollo/client";
-import { GET_CLUB } from "gql/queries/clubs";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_CLUB, GET_ALL_CLUBS } from "gql/queries/clubs";
+import { DELETE_CLUB } from "gql/mutations/clubs";
 
 export default function Club() {
     const {
@@ -39,7 +40,7 @@ export default function Club() {
 
 function ClubDetails({ cid, setTitle }) {
     const router = useRouter();
-    
+
     const {
         data: { club } = {},
         loading,
@@ -58,6 +59,24 @@ function ClubDetails({ cid, setTitle }) {
         },
     });
 
+    const [deleteClubMutation, { data, deleteloading, deleteerror }] = useMutation(DELETE_CLUB, {
+        refetchQueries: [{ query: GET_ALL_CLUBS }],
+        awaitRefetchQueries: true,
+    });
+
+    // delete action
+    const deleteClub = async () => {
+        await deleteClubMutation({
+            variables: {
+                clubInput: {
+                    cid: cid,
+                },
+            },
+        });
+        router.push(`/manage/clubs`);
+    };
+
+
     // track loading state
     const { trackProgress } = useProgressbar();
     useEffect(() => trackProgress(loading), [loading]);
@@ -65,7 +84,7 @@ function ClubDetails({ cid, setTitle }) {
     return loading ? null : !club ? null : (
         <Box>
             {/* action palette */}
-            <ActionPalette actions={[editAction, deleteAction]} />
+            <ActionPalette actions={[editAction, deleteAction]} deleteClub={deleteClub} />
 
             <Card sx={{ mb: 4, mt: 3 }}>
                 <ClubHero club={club} />

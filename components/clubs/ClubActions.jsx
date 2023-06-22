@@ -45,14 +45,13 @@ function DeleteButton({ setView }) {
     );
 }
 
-function DeletionView({ setView }) {
+function DeletionView({ setView, deleteClub }) {
     const handleCancel = () => {
         setView("base");
     };
 
     const handleDelete = () => {
-        // TODO: API call
-        setView("base");
+        deleteClub();
     };
 
     return (
