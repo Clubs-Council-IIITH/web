@@ -46,11 +46,23 @@ function EventDisplay({ id, setTitle }) {
     const { user } = useAuth();
     const [actions, setActions] = useState([]);
 
+    // TODO: set conditional actions based on event datetime, current status and user role
+    // Rewrite below code to restructure as first check event status and then check user role
+    // Club - past event - nothing (check based on event start time and current time)
+    // Club - upcoming event - edit, delete
+    // Club - incomplete event - edit, submit, delete
+    // CC - past event - delete, edit (check based on event start time and current time)
+    // CC - upcoming event - approve, edit, delete
+    // CC - incomplete event - edit
+    // SLC/SLO - upcoming event - approve
+    // else - nothing
     const setConditionalActions = (event) => {
-        if (user?.role == "club" && event)
+        if (user?.role == "club" && event && event?.status?.state == "incomplete")
             setActions([editAction, submitAction, deleteAction]);
+        else if (user?.role == "club" && event)
+            setActions([editAction, deleteAction]);
         else if (user?.role == "cc")
-            setActions([approveAction, editAction, submitAction, deleteAction]);
+            setActions([approveAction, editAction, deleteAction]);
         else if (["slc", "slo"].includes(user?.role))
             setActions([approveAction,]);
     }
@@ -89,7 +101,9 @@ function EventDisplay({ id, setTitle }) {
     return (
         <Box>
             {/* action palette */}
-            <ActionPalette actions={actions} />
+            {!actions.length ? null : 
+                <ActionPalette actions={actions} />
+            }
 
             {/* current status */}
             <Box mt={3}>

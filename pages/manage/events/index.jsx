@@ -25,6 +25,8 @@ import { EventsTableHeader, EventsTableRow } from "components/events/EventsTable
 import { useProgressbar } from "contexts/ProgressbarContext";
 
 export default function Events() {
+    // TODO: Change this page to show pending events and all events separately
+    // Also, showing the events based on the roles, etc if required
     const {
         loading,
         error,
