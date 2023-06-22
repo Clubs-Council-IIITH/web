@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { useRouter } from "next/router";
 
 import { Box, Card, Grid, Container, Typography, Chip } from "@mui/material";
@@ -7,6 +6,7 @@ import { Box, Card, Grid, Container, Typography, Chip } from "@mui/material";
 import Page from "components/Page";
 import Image from "components/Image";
 import ActionPalette from "components/ActionPalette";
+import ClientOnly from "components/ClientOnly";
 
 import {
     editAction,
@@ -15,13 +15,13 @@ import {
     approveAction,
 } from "components/events/EventActions";
 import { EventDetails, EventPoster, EventStatus, EventBudget } from "components/events";
+import { locationLabel } from "utils/formatEvent";
+import { useAuth } from "contexts/AuthContext";
 
 import { useQuery } from "@apollo/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";
-
-import ClientOnly from "components/ClientOnly";
-import { locationLabel } from "utils/formatEvent";
+import { set } from "date-fns";
 
 export default function Event() {
     const { query } = useRouter();
@@ -43,6 +43,15 @@ export default function Event() {
 
 function EventDisplay({ id, setTitle }) {
     const router = useRouter();
+    const { user } = useAuth();
+    let actions = [];
+
+    if (user?.role == "club")
+        actions = ([editAction, deleteAction, submitAction]);
+    else if (user?.role == "cc")
+        actions = ([editAction, deleteAction, submitAction, approveAction]);
+    else if (["slc", "slo"].includes(user?.role))
+        actions = ([approveAction]);
 
     // get event data
     const {
@@ -77,7 +86,7 @@ function EventDisplay({ id, setTitle }) {
     return (
         <Box>
             {/* action palette */}
-            <ActionPalette actions={[editAction, deleteAction, submitAction, approveAction]} />
+            <ActionPalette actions={actions} />
 
             {/* current status */}
             <Box mt={3}>
