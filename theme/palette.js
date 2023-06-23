@@ -1,7 +1,5 @@
 import { alpha } from "@mui/material/styles";
 
-// ----------------------------------------------------------------------
-
 function createGradient(color1, color2) {
     return `linear-gradient(to bottom, ${color1}, ${color2})`;
 }
@@ -14,7 +12,6 @@ const PRIMARY = {
     dark: "#103996",
     darker: "#061B64",
 };
-
 const SECONDARY = {
     lighter: "#C4CDD5",
     light: "#919EAB",
@@ -60,8 +57,8 @@ const GREY = {
     500: "#919EAB",
     600: "#637381",
     700: "#454F5B",
-    800: "#212B36",
-    900: "#161C24",
+    800: "#1e1e1e",
+    900: "#111111",
     500_8: alpha("#919EAB", 0.08),
     500_12: alpha("#919EAB", 0.12),
     500_16: alpha("#919EAB", 0.16),
@@ -118,16 +115,14 @@ const palette = {
         text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
         background: { paper: "#fff", default: "#FAFEFE", neutral: GREY[200] },
         action: { active: GREY[600], ...COMMON.action },
-        accent_opp: "#1EC3BD",
         accent: "#803DB2",
     },
     dark: {
         ...COMMON,
         mode: "dark",
-        text: { primary: "#fff", secondary: alpha(GREY[400], 0.82), disabled: GREY[600] },
-        background: { paper: GREY[800], default: "#323232", neutral: GREY[500_16] },
+        text: { primary: "#e3e3e3", secondary: alpha(GREY[400], 0.82), disabled: GREY[600] },
+        background: { paper: GREY[800], default: "#111111", neutral: GREY[500_16] },
         action: { active: GREY[500], ...COMMON.action },
-        accent_opp: "#803DB2",
         accent: "#1EC3BD",
     },
 };
