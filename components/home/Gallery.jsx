@@ -35,7 +35,7 @@ export default function Gallery({ images }) {
                                 //     outlineRadius: "15px",
                                 // }}
                                 sx={{
-                                    border: `5px solid ${alpha(theme.palette.accent_opp, 0.6)}`,
+                                    border: `3px solid ${alpha(theme.palette.accent, 0.6)}`,
                                     borderRadius: "15px"
                                 }}
                             />

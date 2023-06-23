@@ -34,7 +34,7 @@ export default function Carousel({ items }) {
     };
 
     return (
-        <Card sx={{ position: "relative", boxShadow: `0px 5px 10px 0px ${isLight ? alpha("#000000", 0.5) : alpha("#504f58", 0.5)}` }}>
+        <Card>
             <Slider {...settings}>
                 {items.map((item, key) => (
                     <CarouselItem key={key} item={item} />
