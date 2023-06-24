@@ -61,8 +61,12 @@ function EventDisplay({ id, setTitle }) {
             setActions([editAction, submitAction, deleteAction]);
         else if (user?.role == "club" && event)
             setActions([editAction, deleteAction]);
-        else if (user?.role == "cc")
-            setActions([approveAction, editAction, deleteAction]);
+        else if (user?.role == "cc") {
+            if (event && event?.status?.state == "pending_cc")
+                setActions([approveAction, editAction, deleteAction]);
+            else
+                setActions([editAction, deleteAction]);
+        }
         else if (["slc", "slo"].includes(user?.role))
             setActions([approveAction,]);
     }
@@ -101,7 +105,7 @@ function EventDisplay({ id, setTitle }) {
     return (
         <Box>
             {/* action palette */}
-            {!actions.length ? null : 
+            {!actions.length ? null :
                 <ActionPalette actions={actions} />
             }
 
