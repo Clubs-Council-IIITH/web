@@ -26,7 +26,7 @@ export function EventsTableHeader() {
 
 export function EventsTableRow(event) {
     const router = useRouter();
-    const { name, datetimeperiod, status } = event;
+    const { name, datetimeperiod, status, location } = event;
 
     // get club
     const {
@@ -65,8 +65,8 @@ export function EventsTableRow(event) {
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
                 <Iconify
-                    sx={{ color: status?.venue ? "success.main" : "error.main" }}
-                    icon={status?.venue ? "eva:checkmark-outline" : "eva:close-outline"}
+                    sx={{ color: location?.length ? (status?.room ? "success.main" : "error.main"): "info.main"  }}
+                    icon={location?.length ? (status?.room ? "eva:checkmark-outline" : "eva:close-outline") : "ic:outline-minus"}
                 />
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>

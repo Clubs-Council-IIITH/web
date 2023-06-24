@@ -47,24 +47,41 @@ function EventDisplay({ id, setTitle }) {
     const [actions, setActions] = useState([]);
 
     // TODO: set conditional actions based on event datetime, current status and user role
-    // Rewrite below code to restructure as first check event status and then check user role
     // Club - past event - nothing (check based on event start time and current time)
     // Club - upcoming event - edit, delete
     // Club - incomplete event - edit, submit, delete
     // CC - past event - delete, edit (check based on event start time and current time)
-    // CC - upcoming event - approve, edit, delete
+    // CC - upcoming event - approve (check for approved or not), edit, delete
     // CC - incomplete event - edit
-    // SLC/SLO - upcoming event - approve
+    // SLC/SLO - upcoming event - approve (check for approved or not)
     // else - nothing
     const setConditionalActions = (event) => {
-        if (user?.role == "club" && event && event?.status?.state == "incomplete")
-            setActions([editAction, submitAction, deleteAction]);
-        else if (user?.role == "club" && event)
-            setActions([editAction, deleteAction]);
-        else if (user?.role == "cc")
-            setActions([approveAction, editAction, deleteAction]);
-        else if (["slc", "slo"].includes(user?.role))
+        if (!event)
+            return;
+        
+        let upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
+        if (user?.role == "club") {
+            if (event?.status?.state == "incomplete")
+                setActions([editAction, submitAction, deleteAction]);
+            else if(upcoming)
+                setActions([editAction, deleteAction]);
+            else
+                setActions([]);
+        }
+        else if (user?.role == "cc") {
+            if (event?.status?.state == "pending_cc")
+                setActions([approveAction, editAction, deleteAction]);
+            else if (event?.status?.state != "incomplete")
+                setActions([editAction, deleteAction]);
+            else
+                setActions([editAction]);
+        }
+        else if (user?.role == "slo" && upcoming && !event?.status?.room)
             setActions([approveAction,]);
+        else if (user?.role == "slc" && upcoming && !event?.status?.budget)
+            setActions([approveAction,]);
+        else
+            setActions([]);
     }
 
     // get event data
@@ -101,12 +118,12 @@ function EventDisplay({ id, setTitle }) {
     return (
         <Box>
             {/* action palette */}
-            {!actions.length ? null : 
+            {!actions.length ? null :
                 <ActionPalette actions={actions} />
             }
 
             {/* current status */}
-            <Box mt={3}>
+            <Box mt={actions.length ? 3 : 0}>
                 <EventStatus status={event?.status} location={event?.location} budget={event?.budget} />
             </Box>
 

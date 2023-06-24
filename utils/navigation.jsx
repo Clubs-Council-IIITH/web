@@ -94,7 +94,7 @@ export function getNavConfig(user) {
             header: "manage",
             items: [
                 {
-                    title: "Club".concat(user?.role==="cc" ? "s" : ""),
+                    title: "Club".concat(user?.role==="cc" ? "s & Bodies" : ""),
                     path: "/manage/clubs",
                     icon: <ClubsIcon fontSize="small" />,
                 },

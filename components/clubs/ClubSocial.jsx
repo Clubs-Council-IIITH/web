@@ -41,6 +41,7 @@ export default function ClubSocial({ socials = {} }) {
                     <Button
                         component={Link}
                         href={socials[item]}
+                        target="_blank"
                         key={index}
                         sx={{
                             mx: 1,

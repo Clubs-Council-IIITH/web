@@ -36,10 +36,10 @@ export default function EventStatus({ status, location, budget }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     icon={
                         <Iconify
-                            icon={status?.budget || !budget?.length ? "eva:checkmark-outline" : "eva:close-outline"}
+                            icon={budget?.length ? (status?.budget ? "eva:checkmark-outline" : "eva:close-outline") : "ic:outline-minus"}
                         />
                     }
-                    severity={status?.budget || !budget?.length ? "success" : "error"}
+                    severity={budget?.length ? (status?.budget ? "success" : "error") : "info"}
                 >
                     {budget?.length ? (status?.budget ? "Budget approved" : "Budget not approved") : "No Budget"}
                 </Alert>
@@ -51,10 +51,10 @@ export default function EventStatus({ status, location, budget }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     icon={
                         <Iconify
-                            icon={status?.room || !location?.length ? "eva:checkmark-outline" : "eva:close-outline"}
+                            icon={location?.length ? (status?.room ? "eva:checkmark-outline" : "eva:close-outline") : "ic:outline-minus"}
                         />
                     }
-                    severity={status?.room || !location?.length ? "success" : "error"}
+                    severity={location?.length ? (status?.room ? "success" : "error") : "info"}
                 >
                     {location?.length ? (status?.room ? "Venue approved" : "Venue not approved") : "No Venue"}
                 </Alert>
