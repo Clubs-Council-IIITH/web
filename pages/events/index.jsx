@@ -148,7 +148,7 @@ export default function Events() {
                 id="stateSelect"
                 labelId="stateSelect"
                 input={<OutlinedInput label="State" />}
-                defaultValue={"all"}
+                defaultValue={stateFilter || "all"}
                 onChange={(e) =>
                   router.replace({
                     query: { ...router.query, state: e.target.value },

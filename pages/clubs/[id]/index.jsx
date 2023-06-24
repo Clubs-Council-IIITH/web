@@ -130,10 +130,10 @@ function ClubEvents({ cid }) {
                 <Box sx={{ pt: 2, textAlign: "right" }}>
                     <Button
                         component={Link}
-                        href={`${asPath}/events`}
+                        href={`/events?club=${cid}`}
                         size="large"
                         color="inherit"
-                        sx={{ p: 2 }}
+                        sx={{ p: 1 }}
                         endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
                     >
                         View more

@@ -30,23 +30,13 @@ export default function Upcoming() {
                     <Box display="flex" alignItems="center">
                         <Button
                             component={Link}
-                            href="/events/upcoming"
-                            size="small"
-                            color="inherit"
-                            sx={{ p: 2 }}
-                            endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
-                        >
-                            View more
-                        </Button>
-                        <Button
-                            component={Link}
                             href="/events"
                             size="small"
                             color="inherit"
-                            sx={{ p: 2 }}
-                            endIcon={<Iconify icon={"solar:double-alt-arrow-right-line-duotone"} />}
+                            sx={{ p: 1 }}
+                            endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
                         >
-                            View all
+                            View more
                         </Button>
                     </Box>
                 </Box>
