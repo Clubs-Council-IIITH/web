@@ -51,7 +51,7 @@ export default function EventStatus({ status, location, budget }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     icon={
                         <Iconify
-                            icon={status?.room || !location?.length ? "eva:checkmark-outline" : "eva:close-outline"}
+                            icon={location?.length ? (status?.room ? "eva:checkmark-outline" : "eva:close-outline") : "ic:outline-minus"}
                         />
                     }
                     severity={status?.room || !location?.length ? "success" : "error"}

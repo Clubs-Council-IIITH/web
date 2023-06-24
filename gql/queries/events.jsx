@@ -69,6 +69,7 @@ export const GET_ALL_EVENTS = gql`
                 room
                 budget
             }
+            location
         }
     }
 `;
