@@ -49,7 +49,7 @@ function AuthProvider({ children }) {
             // clear `logout` flag
             cookieCutter.set("logout", "", { expires: new Date(0) });
 
-            router.push("/logoutCallback");
+            router.push("/");
             return;
         }
 
