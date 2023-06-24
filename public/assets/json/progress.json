@@ -7,6 +7,8 @@
             "Minor Restructuring of the website",
             "Remove duplicate image data for current members on the main server",
             "Added SAC/SLC/SLO pages",
+            "Move from RichTextEditor to Markdown based TextEditor in the web",
+            "Removed Composer service and merge it into each microservice and gateway exclusively",
             "Update clubs service and model to handle student bodies separately",
             "Updated Member Queries",
             "Fixed Events service objectID issue",
@@ -43,7 +45,11 @@
             "Added All Events Page",
             "Search Bar in All Events Page",
             "View all events button on homepage",
-            "Search Bar in Manage Clubs & Manage Events Page"
+            "Search Bar in Manage Clubs & Manage Events Page",
+            "Updated ActionPalette to support passing of items forward",
+            "Integrate Action Buttons for Members and Clubs pages",
+            "Bug Fixes in Member Form, Error pages, manage pages, Account-popover",
+            "Added conditionals for the events page action buttons"
         ]
     },
     {
