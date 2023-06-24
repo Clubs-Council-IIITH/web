@@ -65,8 +65,8 @@ export function EventsTableRow(event) {
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
                 <Iconify
-                    sx={{ color: status?.venue ? "success.main" : "error.main" }}
-                    icon={status?.venue ? "eva:checkmark-outline" : "eva:close-outline"}
+                    sx={{ color: status?.room ? "success.main" : "error.main" }}
+                    icon={status?.room ? "eva:checkmark-outline" : "eva:close-outline"}
                 />
             </TableCell>
             <TableCell align="center" sx={{ border: "none" }}>
