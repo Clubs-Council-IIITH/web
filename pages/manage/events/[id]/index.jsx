@@ -52,9 +52,9 @@ function EventDisplay({ id, setTitle }) {
     // Club - upcoming event - edit, delete
     // Club - incomplete event - edit, submit, delete
     // CC - past event - delete, edit (check based on event start time and current time)
-    // CC - upcoming event - approve, edit, delete
+    // CC - upcoming event - approve (check for approved or not), edit, delete
     // CC - incomplete event - edit
-    // SLC/SLO - upcoming event - approve
+    // SLC/SLO - upcoming event - approve (check for approved or not)
     // else - nothing
     const setConditionalActions = (event) => {
         if (user?.role == "club" && event && event?.status?.state == "incomplete")
