@@ -10,5 +10,9 @@
     {
         "uid": "bhav.beri",
         "roles": [{ "name": "Tech Team Member", "startYear": 2022, "endYear": null }]
+    },
+    {
+        "uid": "anirudh.vempati",
+        "roles": [{ "name": "Tech Team Member", "startYear": 2023, "endYear": null }]
     }    
 ]
