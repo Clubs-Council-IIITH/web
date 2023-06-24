@@ -54,7 +54,7 @@ export default function EventStatus({ status, location, budget }) {
                             icon={location?.length ? (status?.room ? "eva:checkmark-outline" : "eva:close-outline") : "ic:outline-minus"}
                         />
                     }
-                    severity={status?.room || !location?.length ? "success" : "error"}
+                    severity={location?.length ? (status?.room ? "success" : "error"): "info"}
                 >
                     {location?.length ? (status?.room ? "Venue approved" : "Venue not approved") : "No Venue"}
                 </Alert>
