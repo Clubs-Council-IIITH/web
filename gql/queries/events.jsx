@@ -70,6 +70,7 @@ export const GET_ALL_EVENTS = gql`
                 budget
             }
             location
+            poster
         }
     }
 `;

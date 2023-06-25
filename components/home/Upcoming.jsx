@@ -34,7 +34,7 @@ export default function Upcoming() {
                             size="small"
                             color="inherit"
                             sx={{ p: 1 }}
-                            endIcon={<Iconify icon={"eva:arrow-ios-forward-fill"} />}
+                            endIcon={<Iconify icon={"solar:double-alt-arrow-right-line-duotone"} />}
                         >
                             View more
                         </Button>
