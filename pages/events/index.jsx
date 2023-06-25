@@ -43,6 +43,10 @@ export default function Events() {
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
     // get filters from query params
     const { club: clubFilter, state: stateFilter } = router.query;
 
@@ -78,10 +82,6 @@ export default function Events() {
             setFilteredEvents(filteredRows);
         }
     }, [events, searchTerm, clubFilter, stateFilter]);
-
-    const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value);
-    };
 
     // populate club IDs if user is CC
     const { data: { allClubs: clubs } = {}, loading: clubsLoading } = useQuery(
@@ -180,7 +180,7 @@ function EventsGrid({ data }) {
         <Grid container spacing={2}>
             {/* display only 3/4 events on the main page */}
             {data?.map((event, key) => (
-                <Grid key={key} item xs={6} sm={4} md={3}>
+                <Grid key={key} item xs={12} sm={6} md={4} lg={3}>
                     <EventCard event={event} />
                 </Grid>
             ))}
