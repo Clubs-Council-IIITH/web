@@ -1,8 +1,5 @@
-import { useCallback } from "react";
-
 import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import clsx from "clsx";
 
 import { fCurrency } from "utils/formatCurrency";
 import Iconify from "components/iconify/Iconify";
@@ -50,14 +47,6 @@ export default function EventBudget({
       headerName: "Amount",
       flex: 1,
       editable: editable,
-      cellClassName: (params) => {
-        if (params.value > 0) return "";
-
-        return clsx("amount", {
-          negative: params.value == null || params.value <= 0,
-          positive: params.value > 0,
-        });
-      },
       valueFormatter: (p) => fCurrency(p?.value),
       preProcessEditCellProps,
     },
@@ -102,16 +91,6 @@ export default function EventBudget({
       sx={{
         height: 500,
         width: "100%",
-        "& .amount.positive": {
-          backgroundColor: "rgba(157, 255, 118, 0.49)",
-          color: "#1a3e72",
-          fontWeight: "600",
-        },
-        "& .amount.negative": {
-          backgroundColor: "#d47483",
-          color: "#1a3e72",
-          fontWeight: "600",
-        },
       }}
     >
       <DataGrid

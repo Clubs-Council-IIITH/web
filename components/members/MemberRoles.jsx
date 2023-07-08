@@ -1,8 +1,5 @@
-import { useCallback } from "react";
-
 import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import clsx from "clsx";
 
 import Iconify from "components/iconify/Iconify";
 
@@ -68,12 +65,6 @@ export default function MemberRoles({
       editable: editable,
       headerAlign: "center",
       align: "center",
-      cellClassName: (params) => {
-        return clsx("super-app", {
-          negative: !checkYear(params.value) || params.value == null,
-          positive: checkYear(params.value),
-        });
-      },
       preProcessEditCellProps,
     },
     {
@@ -84,12 +75,6 @@ export default function MemberRoles({
       flex: 1,
       headerAlign: "center",
       align: "center",
-      cellClassName: (params) => {
-        return clsx("super-app", {
-          negative: !checkYear(params.value) && params.value !== null,
-          positive: checkYear(params.value) || params.value === null,
-        });
-      },
       preProcessEditCellProps,
     },
     ...(editable
@@ -118,16 +103,6 @@ export default function MemberRoles({
       sx={{
         height: 450,
         width: "100%",
-        "& .super-app.positive": {
-          backgroundColor: "rgba(157, 255, 118, 0.49)",
-          color: "#1a3e72",
-          fontWeight: "600",
-        },
-        "& .super-app.negative": {
-          backgroundColor: "#d47483",
-          color: "#1a3e72",
-          fontWeight: "600",
-        },
       }}
     >
       <DataGrid
