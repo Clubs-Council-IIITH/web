@@ -62,18 +62,18 @@ export default function Events() {
       // filter by state
       if (stateFilter === "upcoming") {
         filteredRows = filteredRows.filter(
-          (event) => new Date(event?.datetimeperiod[1]) > new Date(),
+          (event) => new Date(event?.datetimeperiod[1]) > new Date()
         );
       } else if (stateFilter === "completed") {
         filteredRows = filteredRows.filter(
-          (event) => new Date(event?.datetimeperiod[1]) <= new Date(),
+          (event) => new Date(event?.datetimeperiod[1]) <= new Date()
         );
       }
 
       // filter by search term
       if (searchTerm) {
         filteredRows = filteredRows.filter((event) =>
-          event?.name.toLowerCase().includes(searchTerm.toLowerCase()),
+          event?.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
 
@@ -101,6 +101,7 @@ export default function Events() {
               onChange={handleSearchChange}
               fullWidth
               disabled={loading}
+              autoComplete="off"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

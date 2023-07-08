@@ -146,12 +146,19 @@ function ApprovalView({ setView }) {
   const [SLC, setSLC] = useState(false);
   const [GAD, setGAD] = useState(false);
 
+  const { query } = useRouter();
+  const { id: eid } = query;
+  const [progressEvent, { data, error, loading }] = useMutation(PROGRESS_EVENT);
+
   const handleCancel = () => {
     setView("base");
   };
 
   const handleApprove = () => {
-    // TODO: API call
+    progressEvent({
+      variables: { eventid: eid, cc_progress_budget: !SLC, cc_progress_room: !SLO },
+      refetchQueries: [{ query: GET_FULL_EVENT, variables: { eventid: eid } }],
+    });
     setView("base");
   };
 
@@ -159,21 +166,21 @@ function ApprovalView({ setView }) {
     <Alert color="success" icon={false} sx={{ display: "block" }}>
       <AlertTitle> Approving Event </AlertTitle>
 
-      <Grid container spacing={5}>
-        <Grid item>
-          <FormControlLabel
-            control={
-              <Checkbox checked={SLO} onClick={(e) => setSLO(e.target.checked)} color="success" />
-            }
-            label="Request SLO approval"
-          />
-        </Grid>
+      <Grid container spacing={1}>
         <Grid item>
           <FormControlLabel
             control={
               <Checkbox checked={SLC} onClick={(e) => setSLC(e.target.checked)} color="success" />
             }
-            label="Request SLC approval"
+            label="Request SLC approval (for budget)"
+          />
+        </Grid>
+        <Grid item>
+          <FormControlLabel
+            control={
+              <Checkbox checked={SLO} onClick={(e) => setSLO(e.target.checked)} color="success" />
+            }
+            label="Request SLO approval (for venue)"
           />
         </Grid>
         {/* <Grid item>
