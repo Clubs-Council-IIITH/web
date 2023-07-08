@@ -18,10 +18,10 @@ const routes = {
   "/manage/members/:id": ["cc", "club"],
   "/manage/members/:id/edit": ["cc", "club"],
 
-  "/manage/events": ["cc"],
+  "/manage/events": ["cc", "slc", "slo"],
   "/manage/events/new": ["cc", "club"], // has to be higher to not conflict with :id
   "/manage/events/@mine": ["club"], // has to be higher to not conflict with :id
-  "/manage/events/:id": ["cc", "club"],
+  "/manage/events/:id": ["cc", "club", "slc", "slo"],
   "/manage/events/:id/edit": ["cc", "club"],
 
   "/manage/clubs": ["cc"],

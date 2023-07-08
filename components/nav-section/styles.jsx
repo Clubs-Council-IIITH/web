@@ -7,7 +7,7 @@ export const StyledNavItem = styled(ListItemButton, {
 })(({ active, theme }) => ({
   ...theme.typography.body2,
   position: "relative",
-  height: 42,
+  height: 46,
   textTransform: "capitalize",
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(1.5),
