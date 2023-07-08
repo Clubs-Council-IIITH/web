@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { Box, Card, Grid, Container, Typography, Chip } from "@mui/material";
@@ -45,34 +45,6 @@ function EventDisplay({ id, setTitle }) {
   const { user } = useAuth();
   const [actions, setActions] = useState([]);
 
-  // TODO: set conditional actions based on event datetime, current status and user role
-  // Club - past event - nothing (check based on event start time and current time)
-  // Club - upcoming event - edit, delete
-  // Club - incomplete event - edit, submit, delete
-  // CC - past event - delete, edit (check based on event start time and current time)
-  // CC - upcoming event - approve (check for approved or not), edit, delete
-  // CC - incomplete event - edit
-  // SLC/SLO - upcoming event - approve (check for approved or not)
-  // else - nothing
-  const setConditionalActions = (event) => {
-    if (!event) return;
-
-    let upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
-    if (user?.role == "club") {
-      if (event?.status?.state == "incomplete")
-        setActions([submitAction, editAction, deleteAction]);
-      else if (upcoming) setActions([editAction, deleteAction]);
-      else setActions([]);
-    } else if (user?.role == "cc") {
-      if (event?.status?.state == "pending_cc")
-        setActions([approveAction, editAction, deleteAction]);
-      else if (event?.status?.state != "incomplete") setActions([editAction, deleteAction]);
-      else setActions([editAction]);
-    } else if (user?.role == "slo" && upcoming && !event?.status?.room) setActions([approveAction]);
-    else if (user?.role == "slc" && upcoming && !event?.status?.budget) setActions([approveAction]);
-    else setActions([]);
-  };
-
   // get event data
   const {
     loading: eventLoading,
@@ -103,6 +75,42 @@ function EventDisplay({ id, setTitle }) {
       clubInput: { cid: event?.clubid },
     },
   });
+
+  // set conditional actions based on event datetime, current status and user role
+  // Club - past event - nothing (check based on event start time and current time)
+  // Club - upcoming event - edit, delete
+  // Club - incomplete event - edit, submit, delete
+  // CC - past event - delete, edit (check based on event start time and current time)
+  // CC - upcoming event - approve (check for approved or not), edit, delete
+  // CC - incomplete event - edit
+  // SLC/SLO - upcoming event - approve (check for approved or not)
+  // else - nothing
+  const setConditionalActions = (event) => {
+    if (!event) return;
+
+    // remove all actions if event is deleted
+    if (event?.status?.state === "deleted") return setActions([]);
+
+    let upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
+    if (user?.role === "club") {
+      if (event?.status?.state === "incomplete")
+        setActions([submitAction, editAction, deleteAction]);
+      else if (upcoming) setActions([editAction, deleteAction]);
+      else setActions([]);
+    } else if (user?.role === "cc") {
+      if (event?.status?.state === "pending_cc")
+        setActions([approveAction, editAction, deleteAction]);
+      else if (event?.status?.state !== "incomplete") setActions([editAction, deleteAction]);
+      else setActions([editAction]);
+    } else if (user?.role === "slo" && upcoming && !event?.status?.room)
+      setActions([approveAction]);
+    else if (user?.role === "slc" && upcoming && !event?.status?.budget)
+      setActions([approveAction]);
+    else setActions([]);
+  };
+
+  // update actions every time event changes
+  useEffect(() => setConditionalActions(event), [event]);
 
   return (
     <Box>

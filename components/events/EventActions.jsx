@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 import { useMutation } from "@apollo/client";
-import { PROGRESS_EVENT } from "gql/mutations/events";
+import { PROGRESS_EVENT, DELETE_EVENT } from "gql/mutations/events";
 import { GET_FULL_EVENT } from "gql/queries/events";
 
 import { Alert, AlertTitle, Button, Checkbox, Grid, Box, FormControlLabel } from "@mui/material";
@@ -96,9 +96,15 @@ function DeletionView({ setView }) {
     setView("base");
   };
 
+  const { query } = useRouter();
+  const { id: eid } = query;
+  const [deleteEvent, { data, error, loading }] = useMutation(DELETE_EVENT);
+
   const handleDelete = () => {
-    // TODO: API call
-    setView("base");
+    deleteEvent({
+      variables: { eventid: eid },
+      refetchQueries: [{ query: GET_FULL_EVENT, variables: { eventid: eid } }],
+    });
   };
 
   return (

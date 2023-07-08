@@ -16,6 +16,14 @@ export const EDIT_EVENT = gql`
   }
 `;
 
+export const DELETE_EVENT = gql`
+  mutation DeleteEvent($eventid: String!) {
+    deleteEvent(eventid: $eventid) {
+      _id
+    }
+  }
+`;
+
 export const PROGRESS_EVENT = gql`
   mutation ProgressEvent($eventid: String!, $ccProgressBudget: Boolean, $ccProgressRoom: Boolean) {
     progressEvent(
