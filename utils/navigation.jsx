@@ -45,13 +45,7 @@ const aboutConfig = {
     header: "about",
     items: [
         {
-            title: "SAC/SLC/SLO",
-            path: "/sac-slc-slo",
-            icon: <AboutIcon fontSize="small" />,
-        },
-        {
             title: "Clubs Council",
-            // path: "/clubscouncil",
             path: "/about",
             icon: (
                 <SvgIcon>
@@ -64,6 +58,11 @@ const aboutConfig = {
                     </svg>
                 </SvgIcon>
             ),
+        },
+        {
+            title: "Supervisory Bodies",
+            path: "/supervisory-bodies",
+            icon: <AboutIcon fontSize="small" />,
         },
     ],
 };
