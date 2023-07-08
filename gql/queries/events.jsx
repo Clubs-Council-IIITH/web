@@ -20,6 +20,9 @@ export const GET_CLUB_EVENTS = gql`
       clubid
       datetimeperiod
       poster
+      status {
+        state
+      }
     }
     club(clubInput: $clubInput) {
       banner

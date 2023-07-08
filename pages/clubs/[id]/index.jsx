@@ -114,11 +114,14 @@ function ClubEvents({ cid }) {
       </Typography>
       <Grid container spacing={3}>
         {/* display only 8 (or 4 on mobile) events on the main page */}
-        {events?.slice(0, isDesktop ? 8 : 4)?.map((event, index) => (
-          <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
-            <EventCard event={event} />
-          </Grid>
-        ))}
+        {events
+          ?.filter((e) => e?.status?.state !== "deleted")
+          ?.slice(0, isDesktop ? 8 : 4)
+          ?.map((event, index) => (
+            <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+              <EventCard event={event} />
+            </Grid>
+          ))}
       </Grid>
       {(!isDesktop && events?.length > 4) || events?.length > 8 ? (
         <Box sx={{ pt: 2, textAlign: "right" }}>
@@ -173,7 +176,7 @@ function ClubMembers({ cid }) {
                   ?.filter((role) => !role?.deleted)
                   ?.filter((role) => role?.approved)
                   ?.map((role) => role.endYear)
-                  .some((year) => year === null),
+                  .some((year) => year === null)
             )
             .map((user, index) => (
               <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
@@ -192,9 +195,9 @@ function ClubMembers({ cid }) {
                   ?.filter((role) => !role?.deleted)
                   ?.filter((role) => role?.approved)
                   ?.map((role) => role.endYear)
-                  .some((year) => year === null),
+                  .some((year) => year === null)
             )
-            .includes(member),
+            .includes(member)
       )?.length > 0 ? (
         <Box sx={{ pt: 2, textAlign: "right" }}>
           <Button
