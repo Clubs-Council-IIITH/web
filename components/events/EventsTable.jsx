@@ -1,87 +1,107 @@
 import { useRouter } from "next/router";
 
-import { TableRow, TableCell, Typography } from "@mui/material";
-
-import { useQuery } from "@apollo/client";
-import { GET_CLUB } from "gql/queries/clubs";
+import { Box } from "@mui/material";
+import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import { fDateTime } from "utils/formatTime";
+import { stateLabel } from "utils/formatEvent";
 
 import Label from "components/label";
 import Iconify from "components/iconify";
-import { stateLabel } from "utils/formatEvent";
+import QuickSearchToolbar from "components/QuickSearchToolbar";
 
-export function EventsTableHeader() {
-  return (
-    <TableRow>
-      <TableCell align="left">Name</TableCell>
-      <TableCell align="left">Club</TableCell>
-      <TableCell align="left">Scheduled</TableCell>
-      <TableCell align="center">Budget</TableCell>
-      <TableCell align="center">Venue</TableCell>
-      <TableCell align="center">Status</TableCell>
-    </TableRow>
-  );
-}
+const columns = [
+  {
+    field: "name",
+    headerName: "Name",
+    flex: 5,
+  },
+  {
+    field: "club",
+    headerName: "Club",
+    flex: 3,
+    valueGetter: ({ row }) => row.clubid,
+  },
+  {
+    field: "scheduled",
+    headerName: "Scheduled",
+    flex: 3,
+    align: "center",
+    headerAlign: "center",
+    valueGetter: ({ row }) => fDateTime(row.datetimeperiod[0]),
+  },
+  {
+    field: "budget",
+    headerName: "Budget",
+    flex: 2,
+    align: "center",
+    headerAlign: "center",
+    valueGetter: ({ row }) => row.status.budget,
+    renderCell: ({ value }) => (
+      <Iconify
+        sx={{ color: value ? "success.main" : "error.main" }}
+        icon={value ? "mdi:check" : "mdi:close"}
+      />
+    ),
+  },
+  {
+    field: "venue",
+    headerName: "Venue",
+    flex: 2,
+    align: "center",
+    headerAlign: "center",
+    valueGetter: ({ row }) => row.status.room,
+    renderCell: ({ value }) => (
+      <Iconify
+        sx={{ color: value ? "success.main" : "error.main" }}
+        icon={value ? "mdi:check" : "mdi:close"}
+      />
+    ),
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 3,
+    align: "center",
+    headerAlign: "center",
+    valueGetter: ({ row }) => row.status.state,
+    renderCell: ({ value }) => (
+      <Label color={stateLabel(value).color}>{stateLabel(value).shortName}</Label>
+    ),
+  },
+];
 
-export function EventsTableRow(event) {
+export function EventsTable({ events }) {
   const router = useRouter();
-  const { name, datetimeperiod, status, location } = event;
 
-  // get club
-  const {
-    loading: clubLoading,
-    error: clubError,
-    data: { club } = {},
-  } = useQuery(GET_CLUB, {
-    skip: !event?.clubid,
-    variables: {
-      clubInput: { cid: event?.clubid },
-    },
-  });
-
+  if (!events) return null;
   return (
-    <TableRow
-      hover
-      onClick={() => router.push(`/manage/events/${event._id}`)}
-      sx={{ cursor: "pointer" }}
-    >
-      <TableCell align="left" sx={{ border: "none" }}>
-        <Typography variant="subtitle2" noWrap>
-          {name}
-        </Typography>
-      </TableCell>
-      <TableCell align="left" sx={{ border: "none" }}>
-        {club?.name}
-      </TableCell>
-      <TableCell align="left" sx={{ border: "none" }}>
-        {fDateTime(datetimeperiod?.[0], "D MMM, H:mm")}
-      </TableCell>
-      <TableCell align="center" sx={{ border: "none" }}>
-        <Iconify
-          sx={{ color: status?.budget ? "success.main" : "error.main" }}
-          icon={status?.budget ? "eva:checkmark-outline" : "eva:close-outline"}
-        />
-      </TableCell>
-      <TableCell align="center" sx={{ border: "none" }}>
-        <Iconify
-          sx={{
-            color: location?.length ? (status?.room ? "success.main" : "error.main") : "info.main",
-          }}
-          icon={
-            location?.length
-              ? status?.room
-                ? "eva:checkmark-outline"
-                : "eva:close-outline"
-              : "ic:outline-minus"
-          }
-        />
-      </TableCell>
-      <TableCell align="center" sx={{ border: "none" }}>
-        <Label color={stateLabel(status?.state)?.color}>
-          {stateLabel(status?.state)?.shortName}
-        </Label>
-      </TableCell>
-    </TableRow>
+    <Box width="100%">
+      <DataGrid
+        rows={events}
+        columns={columns}
+        getRowId={(r) => r._id}
+        onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
+        initialState={{
+          filter: {
+            filterModel: {
+              items: [],
+              quickFilterLogicOperator: GridLogicOperator.Or,
+            },
+          },
+        }}
+        slots={{ toolbar: QuickSearchToolbar }}
+        sx={{
+          // disable cell selection style
+          ".MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          // pointer cursor on ALL rows
+          "& .MuiDataGrid-row:hover": {
+            cursor: "pointer",
+          },
+        }}
+      />
+    </Box>
   );
 }
