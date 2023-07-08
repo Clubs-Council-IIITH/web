@@ -74,6 +74,9 @@ export const GET_ALL_EVENTS = gql`
       }
       location
       poster
+      budget {
+        amount
+      }
     }
   }
 `;

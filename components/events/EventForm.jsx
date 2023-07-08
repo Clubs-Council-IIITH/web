@@ -200,7 +200,7 @@ export default function EventForm({
     // convert budget to array of objects with only required attributes
     // remove budget items without a name (they're invalid)
     formData.budget = formData.budget
-      .filter((i) => i?.name)
+      .filter((i) => i?.description)
       .map((i) => ({
         description: i.description,
         amount: i.amount,

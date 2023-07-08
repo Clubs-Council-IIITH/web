@@ -36,11 +36,17 @@ const columns = [
     flex: 2,
     align: "center",
     headerAlign: "center",
-    valueGetter: ({ row }) => row.status.budget,
+    valueGetter: ({ row }) => ({ requested: row.budget.length > 0, approved: row.status.budget }),
     renderCell: ({ value }) => (
       <Iconify
-        sx={{ color: value ? "success.main" : "error.main" }}
-        icon={value ? "mdi:check" : "mdi:close"}
+        sx={{
+          color: !value.requested
+            ? "secondary.main"
+            : value.approved
+            ? "success.main"
+            : "error.main",
+        }}
+        icon={!value.requested ? "mdi:minus" : value.approved ? "mdi:check" : "mdi:close"}
       />
     ),
   },
@@ -50,11 +56,17 @@ const columns = [
     flex: 2,
     align: "center",
     headerAlign: "center",
-    valueGetter: ({ row }) => row.status.room,
+    valueGetter: ({ row }) => ({ requested: row.location.length > 0, approved: row.status.room }),
     renderCell: ({ value }) => (
       <Iconify
-        sx={{ color: value ? "success.main" : "error.main" }}
-        icon={value ? "mdi:check" : "mdi:close"}
+        sx={{
+          color: !value.requested
+            ? "secondary.main"
+            : value.approved
+            ? "success.main"
+            : "error.main",
+        }}
+        icon={!value.requested ? "mdi:minus" : value.approved ? "mdi:check" : "mdi:close"}
       />
     ),
   },

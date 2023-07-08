@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { CREATE_EVENT } from "gql/mutations/events";
 import { GET_ALL_EVENTS, GET_CLUB_EVENTS } from "gql/queries/events";
 
+import { useAuth } from "contexts/AuthContext";
 import { Container } from "@mui/material";
 
 import Page from "components/Page";
@@ -25,9 +26,14 @@ export default function NewEvent() {
     equipment: null,
   };
 
+  const { user } = useAuth();
+
   // mutation to create event
   const [createEvent, { data, loading, error }] = useMutation(CREATE_EVENT, {
-    refetchQueries: [{ query: GET_CLUB_EVENTS }, { query: GET_ALL_EVENTS }],
+    refetchQueries: [
+      { query: GET_CLUB_EVENTS, variables: { clubid: user?.uid, clubInput: { cid: user?.uid } } },
+      { query: GET_ALL_EVENTS, variables: { clubid: user?.uid } },
+    ],
   });
 
   return (
