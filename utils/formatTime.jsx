@@ -1,29 +1,22 @@
-import moment from "moment-timezone";
+const LOCALE = "en-IN";
 
-const timezone = moment.tz.guess() || "UTC";
-
-export function fDate(date, newFormat) {
-  const fm = newFormat || "D MMM yyyy";
-  return date ? moment.utc(date).tz(timezone).format(fm) : "";
+// get datetime components from ISO string
+export function ISOtoDateTime(iso) {
+  const dt = new Date(iso);
+  const options = { hour12: true };
+  return {
+    weekday: dt.toLocaleString(LOCALE, { weekday: "short", ...options }),
+    day: dt.toLocaleString(LOCALE, { day: "numeric", ...options }),
+    month: dt.toLocaleString(LOCALE, { month: "short", ...options }),
+    year: dt.toLocaleString(LOCALE, { year: "numeric", ...options }),
+    time: dt.toLocaleString(LOCALE, { timeStyle: "short", ...options }),
+  };
 }
 
-export function fDateTime(date, newFormat) {
-  const fm = newFormat || "D MMM yyyy, H:mm";
-  return date ? moment.utc(date).tz(timezone).format(fm) : "";
-}
-
-export function fTimestamp(date) {
-  return date ? moment.utc(date).tz(timezone).unix() : "";
-}
-
-export function fToNow(date) {
-  return date ? moment.utc(date).tz(timezone).fromNow() : "";
-}
-
-export function fToISO(datetime) {
-  return datetime ? moment.tz(datetime, timezone).utc().toISOString() : "";
-}
-
-export function fFromISO(datetime) {
-  return datetime ? moment.utc(datetime).tz(timezone) : "";
+// get human readable date time from ISO string
+export function ISOtoHuman(iso, weekDay = false) {
+  const dt = ISOtoDateTime(iso);
+  return `${weekDay ? `${dt.weekday} ` : ""}${dt.day} ${dt.month}${
+    dt.year !== String(new Date().getFullYear()) ? ` ${dt.year}` : ""
+  }, ${dt.time.toUpperCase()}`;
 }

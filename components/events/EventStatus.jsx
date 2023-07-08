@@ -51,7 +51,7 @@ export default function EventStatus({ status, location, budget }) {
             ? status?.budget
               ? "Budget approved"
               : "Budget not approved"
-            : "No Budget"}
+            : "No budget"}
         </Alert>
       </Grid>
 
@@ -72,7 +72,7 @@ export default function EventStatus({ status, location, budget }) {
           }
           severity={location?.length ? (status?.room ? "success" : "error") : "info"}
         >
-          {location?.length ? (status?.room ? "Venue approved" : "Venue not approved") : "No Venue"}
+          {location?.length ? (status?.room ? "Venue approved" : "Venue not approved") : "No venue"}
         </Alert>
       </Grid>
     </Grid>

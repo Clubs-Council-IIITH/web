@@ -60,6 +60,7 @@ export default function Events() {
       }
 
       // filter by state
+      filteredRows = filteredRows.filter((event) => event?.status?.state !== "deleted");
       if (stateFilter === "upcoming") {
         filteredRows = filteredRows.filter(
           (event) => new Date(event?.datetimeperiod[1]) > new Date()

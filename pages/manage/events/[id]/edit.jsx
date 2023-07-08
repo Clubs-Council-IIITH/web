@@ -10,7 +10,6 @@ import { Container } from "@mui/material";
 
 import Page from "components/Page";
 import { EventForm } from "components/events";
-import { fFromISO } from "utils/formatTime";
 
 export default function EditEvent() {
   const { query } = useRouter();
@@ -49,7 +48,7 @@ export default function EditEvent() {
         eventid: eid,
         clubid: event?.clubid,
         name: event?.name,
-        datetimeperiod: event?.datetimeperiod?.map(fFromISO),
+        datetimeperiod: event?.datetimeperiod?.map((d) => new Date(d)),
         description: event?.description,
         audience: event?.audience,
         poster: event?.poster,

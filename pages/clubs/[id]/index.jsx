@@ -115,7 +115,7 @@ function ClubEvents({ cid }) {
       <Grid container spacing={3}>
         {/* display only 8 (or 4 on mobile) events on the main page */}
         {events
-          ?.filter((e) => e?.status?.state !== "deleted")
+          ?.filter((e) => ["approved", "completed"].includes(e?.status?.state))
           ?.slice(0, isDesktop ? 8 : 4)
           ?.map((event, index) => (
             <Grid key={index} item xs={12} sm={6} md={4} lg={3}>

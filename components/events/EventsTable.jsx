@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Box } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import { fDateTime } from "utils/formatTime";
+import { ISOtoHuman } from "utils/formatTime";
 import { stateLabel } from "utils/formatEvent";
 
 import Label from "components/label";
@@ -28,7 +28,7 @@ const columns = [
     flex: 3,
     align: "center",
     headerAlign: "center",
-    valueGetter: ({ row }) => fDateTime(row.datetimeperiod[0]),
+    valueGetter: ({ row }) => ISOtoHuman(row.datetimeperiod[0]),
   },
   {
     field: "budget",
@@ -71,7 +71,7 @@ const columns = [
   },
 ];
 
-export function EventsTable({ events }) {
+export function EventsTable({ events, hideClub = false }) {
   const router = useRouter();
 
   if (!events) return null;
@@ -79,7 +79,7 @@ export function EventsTable({ events }) {
     <Box width="100%">
       <DataGrid
         rows={events}
-        columns={columns}
+        columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
         getRowId={(r) => r._id}
         onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
         initialState={{

@@ -1,5 +1,5 @@
 import { Box, Divider, Typography } from "@mui/material";
-import { fDateTime } from "utils/formatTime";
+import { ISOtoHuman } from "utils/formatTime";
 
 import Iconify from "components/iconify";
 import AudienceChips from "./AudienceChips";
@@ -20,9 +20,9 @@ export default function EventDetails({
     <Box p={3}>
       <Box display="flex" alignItems="center">
         <Iconify icon="ic:outline-calendar-today" sx={{ mr: 2, width: 16 }} />
-        <Typography variant="body2">{fDateTime(datetimeperiod?.[0], "D MMM, H:mm")}</Typography>
+        <Typography variant="body2">{ISOtoHuman(datetimeperiod?.[0])}</Typography>
         <Box mx={1}>-</Box>
-        <Typography variant="body2">{fDateTime(datetimeperiod?.[1], "D MMM, H:mm")}</Typography>
+        <Typography variant="body2">{ISOtoHuman(datetimeperiod?.[1])}</Typography>
       </Box>
 
       <Typography variant="h3" paragraph mt={1}>

@@ -1,57 +1,73 @@
-import momenttz from "moment-timezone";
+import stc from "string-to-color";
 
-import { useState, useEffect } from "react";
-
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useRouter } from "next/router";
 
 import { useQuery } from "@apollo/client";
 import { GET_ALL_EVENTS } from "gql/queries/events.jsx";
 
-import { Container } from "@mui/material";
+import { ViewState } from "@devexpress/dx-react-scheduler";
+import {
+  Scheduler,
+  MonthView,
+  Toolbar,
+  DateNavigator,
+  Appointments,
+  TodayButton,
+} from "@devexpress/dx-react-scheduler-material-ui";
+
+import { Card, Container } from "@mui/material";
 import Page from "components/Page";
-import { fDateTime } from "utils/formatTime";
-import useResponsive from "hooks/useResponsive";
 
-import { useProgressbar } from "contexts/ProgressbarContext";
+function transformEventDetails(event) {
+  return {
+    id: event._id,
+    clubid: event.clubid,
+    title: event.name,
+    startDate: event.datetimeperiod[0],
+    endDate: event.datetimeperiod[1],
+  };
+}
 
-const EventCalendar = () => {
-  const isDesktop = useResponsive("up", "sm");
-  const localizer = momentLocalizer(momenttz);
-  const [events, setEvents] = useState([]);
+const Appointment = ({ children, style, ...restProps }) => {
+  const router = useRouter();
 
-  const { loading } = useQuery(GET_ALL_EVENTS, {
+  return (
+    <Appointments.Appointment
+      {...restProps}
+      style={{
+        ...style,
+        backgroundColor: stc(restProps.data.clubid),
+      }}
+      onClick={() => router.push(`/events/${restProps.data.id}`)}
+    >
+      {children}
+    </Appointments.Appointment>
+  );
+};
+
+export default function Calendar() {
+  const { data: { events } = {}, loading } = useQuery(GET_ALL_EVENTS, {
     variables: {
       clubid: null,
     },
-    onCompleted: ({ events: allEvents }) => {
-      setEvents(
-        allEvents?.map((e) => ({
-          start: fDateTime(e.datetimeperiod[0], "YYYY-MM-DDTHH:mm:ss"),
-          end: fDateTime(e.datetimeperiod[1], "YYYY-MM-DDTHH:mm:ss"),
-          title: e.name,
-        })) || [],
-      );
-    },
   });
-
-  // track loading state
-  const { trackProgress } = useProgressbar();
-  useEffect(() => trackProgress(loading), [loading]);
 
   return loading ? null : (
     <Page title="Calendar">
       <Container>
-        <Calendar
-          defaultDate={new Date()}
-          defaultView={isDesktop ? "month" : "agenda"}
-          localizer={localizer}
-          events={events}
-          style={{ height: "80vh" }}
-        />
+        <Card variant="outlined" sx={{ p: 1 }}>
+          <Scheduler
+            data={events?.filter((e) => e?.status?.state !== "deleted")?.map(transformEventDetails)}
+          >
+            <ViewState defaultCurrentDate={new Date().toISOString()} />
+            <MonthView />
+            <Toolbar />
+            <DateNavigator />
+            <TodayButton />
+            <Appointments appointmentComponent={Appointment} />
+          </Scheduler>
+        </Card>
       </Container>
     </Page>
   );
-};
-
-export default EventCalendar;
+}

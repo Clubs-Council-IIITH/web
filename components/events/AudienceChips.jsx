@@ -2,6 +2,7 @@ import { Chip, Grid } from "@mui/material";
 import { audienceLabels } from "utils/formatEvent";
 
 export default function AudienceChips({ audience }) {
+  if (!audience?.length) return "—";
   return (
     <Grid container spacing={1}>
       {audienceLabels(audience)

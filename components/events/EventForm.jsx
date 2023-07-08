@@ -38,7 +38,6 @@ import Iconify from "components/iconify";
 import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
 import { EventBudget } from "components/events";
-import { fToISO } from "utils/formatTime";
 import { useAuth } from "contexts/AuthContext";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
@@ -63,7 +62,7 @@ export default function EventForm({
     (_, newMode) => {
       setMode(newMode);
     },
-    [setMode],
+    [setMode]
   );
 
   // manage audience
@@ -72,7 +71,7 @@ export default function EventForm({
     (_, newAudience) => {
       setAudience(newAudience);
     },
-    [setAudience],
+    [setAudience]
   );
 
   // manage poster upload
@@ -84,7 +83,7 @@ export default function EventForm({
         setPoster(Object.assign(file, { preview: URL.createObjectURL(file) }));
       }
     },
-    [setPoster],
+    [setPoster]
   );
 
   // manage budget
@@ -140,8 +139,10 @@ export default function EventForm({
   useEffect(() => {
     if (
       // if start and end dates are same as default values, reset location to default value
-      fToISO(startDateInput) === fToISO(defaultValues?.datetimeperiod[0]) &&
-      fToISO(endDateInput) === fToISO(defaultValues?.datetimeperiod[1])
+      new Date(startDateInput).toISOString() ===
+        new Date(defaultValues?.datetimeperiod[0]).toISOString() &&
+      new Date(endDateInput).toISOString() ===
+        new Date(defaultValues?.datetimeperiod[1]).toISOString()
     ) {
       setValue("location", defaultValues?.location);
     } else {
@@ -156,9 +157,9 @@ export default function EventForm({
     {
       skip: !(startDateInput && endDateInput),
       variables: {
-        timeslot: [fToISO(startDateInput), fToISO(endDateInput)],
+        timeslot: [new Date(startDateInput).toISOString(), new Date(endDateInput).toISOString()],
       },
-    },
+    }
   );
 
   // populate club IDs if user is CC
@@ -194,7 +195,7 @@ export default function EventForm({
     }
 
     // convert dates to ISO strings
-    formData.datetimeperiod = formData.datetimeperiod.map(fToISO);
+    formData.datetimeperiod = formData.datetimeperiod.map((d) => new Date(d).toISOString());
 
     // convert budget to array of objects with only required attributes
     // remove budget items without a name (they're invalid)
