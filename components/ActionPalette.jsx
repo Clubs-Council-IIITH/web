@@ -11,21 +11,19 @@ export default function ActionPalette({ actions = [], ...props }) {
       {},
       ...actions
         ?.filter((a) => a.view !== null)
-        ?.map((a) => ({ [a.name]: <a.view setView={setView} {...props} /> })),
+        ?.map((a) => ({ [a.name]: <a.view setView={setView} {...props} /> }))
     ),
   }[view];
 }
 
 function BaseView({ actions, setView, ...props }) {
   return (
-    <Box sx={{ border: 1, borderRadius: 1, borderColor: "grey.300", borderStyle: "dashed" }}>
-      <Grid container spacing={2} p={2}>
-        {actions?.map((Action, key) => (
-          <Grid item xs key={key}>
-            <Action.button setView={setView} {...props} />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <Grid container spacing={1} justifyContent="flex-end">
+      {actions?.map((Action, key) => (
+        <Grid item key={key}>
+          <Action.button setView={setView} {...props} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }

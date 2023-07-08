@@ -21,7 +21,6 @@ import { useAuth } from "contexts/AuthContext";
 import { useQuery } from "@apollo/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";
-import { set } from "date-fns";
 
 export default function Event() {
   const { query } = useRouter();
@@ -61,7 +60,7 @@ function EventDisplay({ id, setTitle }) {
     let upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
     if (user?.role == "club") {
       if (event?.status?.state == "incomplete")
-        setActions([editAction, submitAction, deleteAction]);
+        setActions([submitAction, editAction, deleteAction]);
       else if (upcoming) setActions([editAction, deleteAction]);
       else setActions([]);
     } else if (user?.role == "cc") {
@@ -107,13 +106,24 @@ function EventDisplay({ id, setTitle }) {
 
   return (
     <Box>
-      {/* action palette */}
-      {!actions.length ? null : <ActionPalette actions={actions} />}
+      <Grid container justifyContent="space-between">
+        {/* current status */}
+        <Grid item xs={12} lg>
+          <EventStatus status={event?.status} location={event?.location} budget={event?.budget} />
+        </Grid>
 
-      {/* current status */}
-      <Box mt={actions.length ? 3 : 0}>
-        <EventStatus status={event?.status} location={event?.location} budget={event?.budget} />
-      </Box>
+        {/* action palette */}
+        {!actions.length ? null : (
+          <Grid
+            item
+            xs={12}
+            lg
+            sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
+          >
+            <ActionPalette actions={actions} />
+          </Grid>
+        )}
+      </Grid>
 
       {/* details */}
       <Card sx={{ mt: 2 }}>

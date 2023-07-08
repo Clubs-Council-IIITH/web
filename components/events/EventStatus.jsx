@@ -18,9 +18,9 @@ export default function EventStatus({ status, location, budget }) {
   }, [status?.state]);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
       {/* current event status */}
-      <Grid item xs md={12} lg>
+      <Grid item>
         <Alert
           sx={{ display: "flex", alignItems: "center" }}
           icon={currentState?.icon}
@@ -31,7 +31,7 @@ export default function EventStatus({ status, location, budget }) {
       </Grid>
 
       {/* budget status */}
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item>
         <Alert
           sx={{ display: "flex", alignItems: "center" }}
           icon={
@@ -56,7 +56,7 @@ export default function EventStatus({ status, location, budget }) {
       </Grid>
 
       {/* venue status */}
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item>
         <Alert
           sx={{ display: "flex", alignItems: "center" }}
           icon={

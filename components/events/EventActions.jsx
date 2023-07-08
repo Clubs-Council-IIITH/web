@@ -7,12 +7,8 @@ import { PROGRESS_EVENT } from "gql/mutations/events";
 import { GET_FULL_EVENT } from "gql/queries/events";
 
 import { Alert, AlertTitle, Button, Checkbox, Grid, Box, FormControlLabel } from "@mui/material";
-import {
-  EditOutlined as EditIcon,
-  DeleteOutlined as DeleteIcon,
-  ThumbUpOutlined as SubmitIcon,
-  DoneOutlined as ApproveIcon,
-} from "@mui/icons-material";
+
+import Iconify from "components/iconify";
 
 // edit
 export const editAction = {
@@ -29,8 +25,12 @@ function EditButton({ setView }) {
   };
 
   return (
-    <Button fullWidth size="large" variant="outlined" color="warning" onClick={handleEdit}>
-      <EditIcon fontSize="small" sx={{ mr: 1 }} />
+    <Button
+      variant="contained"
+      color="warning"
+      onClick={handleEdit}
+      startIcon={<Iconify icon="mdi:pencil" />}
+    >
       Edit
     </Button>
   );
@@ -56,8 +56,12 @@ function SubmitButton({ setView }) {
   };
 
   return (
-    <Button fullWidth size="large" variant="outlined" color="info" onClick={handleSubmit}>
-      <SubmitIcon fontSize="small" sx={{ mr: 1 }} />
+    <Button
+      variant="contained"
+      color="info"
+      onClick={handleSubmit}
+      startIcon={<Iconify icon="mdi:thumb-up" />}
+    >
       Submit
     </Button>
   );
@@ -76,8 +80,12 @@ function DeleteButton({ setView }) {
   };
 
   return (
-    <Button fullWidth size="large" variant="outlined" color="error" onClick={handleDelete}>
-      <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
+    <Button
+      variant="contained"
+      color="error"
+      onClick={handleDelete}
+      startIcon={<Iconify icon="mdi:delete" />}
+    >
       Delete
     </Button>
   );
@@ -122,8 +130,12 @@ function ApproveButton({ setView }) {
   };
 
   return (
-    <Button fullWidth size="large" variant="outlined" color="success" onClick={handleApprove}>
-      <ApproveIcon fontSize="small" sx={{ mr: 1 }} />
+    <Button
+      variant="contained"
+      color="success"
+      onClick={handleApprove}
+      startIcon={<Iconify icon="mdi:check" />}
+    >
       Approve
     </Button>
   );

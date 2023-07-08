@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
 
 import { Alert, AlertTitle, Button, Box } from "@mui/material";
-import { EditOutlined as EditIcon, DeleteOutlined as DeleteIcon } from "@mui/icons-material";
+
+import Iconify from "components/iconify";
 
 // edit
 export const editAction = {
@@ -18,8 +19,12 @@ function EditButton({ setView }) {
   };
 
   return (
-    <Button fullWidth size="large" variant="outlined" color="warning" onClick={handleEdit}>
-      <EditIcon fontSize="small" sx={{ mr: 1 }} />
+    <Button
+      variant="contained"
+      color="warning"
+      onClick={handleEdit}
+      startIcon={<Iconify icon="mdi:pencil" />}
+    >
       Edit
     </Button>
   );
@@ -38,8 +43,12 @@ function DeleteButton({ setView }) {
   };
 
   return (
-    <Button fullWidth size="large" variant="outlined" color="error" onClick={handleDelete}>
-      <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
+    <Button
+      variant="contained"
+      color="error"
+      onClick={handleDelete}
+      startIcon={<Iconify icon="mdi:delete" />}
+    >
       Delete
     </Button>
   );
