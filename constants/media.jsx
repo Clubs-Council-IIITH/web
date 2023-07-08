@@ -1,3 +1,3 @@
 export const mediaConstants = {
-    placeholderImg: "assets/img/placeholder.jpg",
+  placeholderImg: "assets/img/placeholder.jpg",
 };

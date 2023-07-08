@@ -6,15 +6,7 @@ import { useMutation } from "@apollo/client";
 import { PROGRESS_EVENT } from "gql/mutations/events";
 import { GET_FULL_EVENT } from "gql/queries/events";
 
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Checkbox,
-  Grid,
-  Box,
-  FormControlLabel,
-} from "@mui/material";
+import { Alert, AlertTitle, Button, Checkbox, Grid, Box, FormControlLabel } from "@mui/material";
 import {
   EditOutlined as EditIcon,
   DeleteOutlined as DeleteIcon,
@@ -37,13 +29,7 @@ function EditButton({ setView }) {
   };
 
   return (
-    <Button
-      fullWidth
-      size="large"
-      variant="outlined"
-      color="warning"
-      onClick={handleEdit}
-    >
+    <Button fullWidth size="large" variant="outlined" color="warning" onClick={handleEdit}>
       <EditIcon fontSize="small" sx={{ mr: 1 }} />
       Edit
     </Button>
@@ -65,20 +51,12 @@ function SubmitButton({ setView }) {
   const handleSubmit = () => {
     progressEvent({
       variables: { eventid: eid },
-      refetchQueries: [
-        { query: GET_FULL_EVENT, variables: { eventid: eid } },
-      ],
+      refetchQueries: [{ query: GET_FULL_EVENT, variables: { eventid: eid } }],
     });
   };
 
   return (
-    <Button
-      fullWidth
-      size="large"
-      variant="outlined"
-      color="info"
-      onClick={handleSubmit}
-    >
+    <Button fullWidth size="large" variant="outlined" color="info" onClick={handleSubmit}>
       <SubmitIcon fontSize="small" sx={{ mr: 1 }} />
       Submit
     </Button>
@@ -98,13 +76,7 @@ function DeleteButton({ setView }) {
   };
 
   return (
-    <Button
-      fullWidth
-      size="large"
-      variant="outlined"
-      color="error"
-      onClick={handleDelete}
-    >
+    <Button fullWidth size="large" variant="outlined" color="error" onClick={handleDelete}>
       <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
       Delete
     </Button>
@@ -129,12 +101,7 @@ function DeletionView({ setView }) {
         <Button variant="contained" color="inherit" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button
-          variant="contained"
-          color="error"
-          sx={{ ml: 1 }}
-          onClick={handleDelete}
-        >
+        <Button variant="contained" color="error" sx={{ ml: 1 }} onClick={handleDelete}>
           Yes, delete it
         </Button>
       </Box>
@@ -155,13 +122,7 @@ function ApproveButton({ setView }) {
   };
 
   return (
-    <Button
-      fullWidth
-      size="large"
-      variant="outlined"
-      color="success"
-      onClick={handleApprove}
-    >
+    <Button fullWidth size="large" variant="outlined" color="success" onClick={handleApprove}>
       <ApproveIcon fontSize="small" sx={{ mr: 1 }} />
       Approve
     </Button>
@@ -190,11 +151,7 @@ function ApprovalView({ setView }) {
         <Grid item>
           <FormControlLabel
             control={
-              <Checkbox
-                checked={SLO}
-                onClick={(e) => setSLO(e.target.checked)}
-                color="success"
-              />
+              <Checkbox checked={SLO} onClick={(e) => setSLO(e.target.checked)} color="success" />
             }
             label="Request SLO approval"
           />
@@ -202,11 +159,7 @@ function ApprovalView({ setView }) {
         <Grid item>
           <FormControlLabel
             control={
-              <Checkbox
-                checked={SLC}
-                onClick={(e) => setSLC(e.target.checked)}
-                color="success"
-              />
+              <Checkbox checked={SLC} onClick={(e) => setSLC(e.target.checked)} color="success" />
             }
             label="Request SLC approval"
           />
@@ -229,12 +182,7 @@ function ApprovalView({ setView }) {
         <Button variant="contained" color="inherit" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button
-          variant="contained"
-          color="success"
-          sx={{ ml: 1 }}
-          onClick={handleApprove}
-        >
+        <Button variant="contained" color="success" sx={{ ml: 1 }} onClick={handleApprove}>
           Confirm Approval
         </Button>
       </Box>

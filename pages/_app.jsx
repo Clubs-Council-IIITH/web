@@ -20,39 +20,40 @@ import client from "apollo-client";
 import "styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
-    const router = useRouter();
+  const router = useRouter();
 
-    return (
-        <>
-            <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-            </Head>
-            <ApolloProvider client={client}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <AuthProvider>
-                        <ModeProvider>
-                            <ThemeProvider>
-                                <ProgressbarProvider>
-                                    <AnimatePresence mode="wait" initial={false}>
-                                        <Layout>
-                                            <ConfirmProvider
-                                                defaultOptions={{
-                                                    confirmationButtonProps: { autoFocus: true },
-                                                }}>
-                                                <TransitionProvider route={router.route}>
-                                                    <Component {...pageProps} />
-                                                </TransitionProvider>
-                                            </ConfirmProvider>
-                                        </Layout>
-                                    </AnimatePresence>
-                                </ProgressbarProvider>
-                            </ThemeProvider>
-                        </ModeProvider>
-                    </AuthProvider>
-                </LocalizationProvider>
-            </ApolloProvider >
-        </>
-    );
+  return (
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <ApolloProvider client={client}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <AuthProvider>
+            <ModeProvider>
+              <ThemeProvider>
+                <ProgressbarProvider>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <Layout>
+                      <ConfirmProvider
+                        defaultOptions={{
+                          confirmationButtonProps: { autoFocus: true },
+                        }}
+                      >
+                        <TransitionProvider route={router.route}>
+                          <Component {...pageProps} />
+                        </TransitionProvider>
+                      </ConfirmProvider>
+                    </Layout>
+                  </AnimatePresence>
+                </ProgressbarProvider>
+              </ThemeProvider>
+            </ModeProvider>
+          </AuthProvider>
+        </LocalizationProvider>
+      </ApolloProvider>
+    </>
+  );
 }
 
 export default MyApp;

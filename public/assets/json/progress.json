@@ -1,224 +1,222 @@
 [
-    {
-        "month": "June 2023",
-        "version": "v2",
-        "tasks": [
-            "Added Dev Website",
-            "Minor Restructuring of the website",
-            "Remove duplicate image data for current members on the main server",
-            "Added SAC/SLC/SLO pages",
-            "Move from RichTextEditor to Markdown based TextEditor in the web",
-            "Removed Composer service and merge it into each microservice and gateway exclusively",
-            "Update clubs service and model to handle student bodies separately",
-            "Updated Member Queries",
-            "Fixed Events service objectID issue",
-            "Update available rooms query room checking condition",
-            "Updated package version for a security vulnerability in Starlette",
-            "Integrated new apollo rover version",
-            "Updated Scripts for manual data pushing",
-            "Fixed Timezone issue for the calendar",
-            "Remove old out-dated un-necessary mock data",
-            "Updated information of the clubs",
-            "Added responsive view for the calendar",
-            "Updated clubs/bodies filter and view on the website",
-            "Major UI changes for the Dark Mode",
-            "Cancel button in event form",
-            "Updated CC Main Logos and others",
-            "Updated Color Scheme of the website",
-            "Cancel button for club form",
-            "Updated Carousel box ui",
-            "Fix Footer UI bug for Safari",
-            "Change upcoming events size for tablet sized devices",
-            "Add View Less button for Gallery",
-            "Added confirmation for cancel on club/event form",
-            "Fix Account Popover color",
-            "Fix New Event Form",
-            "Event form link validation",
-            "Added Members Mutations",
-            "Updated Events Budget Field Validation",
-            "Added Members Form - completely",
-            "Added Roles validation",
-            "Added all members public page and add images to all member lists",
-            "Added all events public page",
-            "Student Bodies pages",
-            "Added upcoming events page",
-            "Added All Events Page",
-            "Search Bar in All Events Page",
-            "View all events button on homepage",
-            "Search Bar in Manage Clubs & Manage Events Page",
-            "Updated ActionPalette to support passing of items forward",
-            "Integrate Action Buttons for Members and Clubs pages",
-            "Bug Fixes in Member Form, Error pages, manage pages, Account-popover",
-            "Added conditionals for the events page action buttons"
-        ]
-    },
-    {
-        "month": "May 2023",
-        "version": "v2",
-        "tasks": [
-            "Added a Feeder Service for easier pushing of events data",
-            "Added error pages in web service",
-            "Added custom nginx error pages",
-            "Lighter Dockerfiles for faster buildups",
-            "Updated package versions to latest",
-            "Updated handling of events and approvals",
-            "Updated population and rooms data and working for events",
-            "Added new CC members data",
-            "Separate Cultural and Technical clubs on frontend",
-            "Add random avatars for userProfiles without an image",
-            "Stop prepending global host to image downloads",
-            "Added Bug Form Link",
-            "Validation for budget fields and others in events form",
-            "Padding and Grids changes to make site look better",
-            "Add event edit mutation",
-            "Port progress page from v1 to v2 site",
-            "Added Light-Dark Mode Control",
-            "Added Mode Switch Component for Light and Dark Mode",
-            "Fixed Timezone issue for the events card"
-        ]
-    },
-    {
-        "month": "April 2023",
-        "version": "v2",
-        "tasks": [
-            "Added a Dev Data repository for better testing purposes",
-            "Multi-Stage Images to Cache Dependencies for better docker builds",
-            "Added Mongo-Express Container for better handling of mongo db data",
-            "Integrated Events Subgraph",
-            "Added Documentaion for the Queries in the code for clubs and events services",
-            "Integrate Club Members Queries in Frontend",
-            "Rewrite Members Model completely",
-            "Rewrite all Members Mutations & Queries for better and secure implementation",
-            "Add new club form and mutation in frontend",
-            "Add edit club form",
-            "Fix ClubHero Banner",
-            "Fixed scrollbar rendering glitch",
-            "Add page switch transitions",
-            "Add create member mutation",
-            "Fix event form submission",
-            "Render club social media links",
-            "Linting fixes",
-            "Add universal progressbar",
-            "Added calendar to frontend",
-            "Fix club editing",
-            "Fix CAS logout"
-        ]
-    },
-    {
-        "month": "April 2023",
-        "version": "v1",
-        "tasks": [
-            "Added Interviews Schedule Page",
-            "Added Tech Team Progress Page for easier access to the data",
-            "Fixed Routing Issue with the Club Tabs Pages",
-            "Fixed Members Drop Down Issue"
-        ]
-    },
-    {
-        "month": "March 2023",
-        "version": "v2",
-        "tasks": [
-            "Added Mailing in the interfaces service",
-            "Completely implemented the clubs service - Queries & Mutations",
-            "Completely implemented the members information storage feature (club members)",
-            "Completely implemented user management microservice with integration with IIIT LDAP service",
-            "Implemented Cookies based role control system",
-            "Implemented RichTextEditor, for better on-site text editing by the user/s"
-        ]
-    },
-    {
-        "month": "February 2023",
-        "version": "v2",
-        "tasks": [
-            "Implemented Files uploading and handling backend, which ensures secure file access and no risk file uploads",
-            "Introduce composer subgraphs",
-            "Implemented interfaces service which is used to handle all the REST APIs based tasks as a microservice",
-            "Implemented development authentication microservice (for local use only), which can bypass the CAS login system and help for testing purposes",
-            "Implemented authentication service which uses CAS for login and uses JWT session tokens for the access control",
-            "Added Basic User Management Microservice",
-            "Added Models & Queries for the events service",
-            "Integrate Authentication with the new frontend"
-        ]
-    },
-    {
-        "month": "January 2023",
-        "version": "v2",
-        "tasks": [
-            "Started development of the various backend microservices - clubs, events, authentication",
-            "Implemented gateway for single backend API and managing microservices",
-            "Implemented Features in the frontend",
-            "Added nginx configuration and composer system for faster buildups of the website and microservices",
-            "Added submodules based repository structure",
-            "Added all models for clubs and members service",
-            "Completed the homepage for the new frontend"
-        ]
-    },
-    {
-        "month": "December 2022",
-        "version": "v2",
-        "tasks": [
-            "Started Requirements Gathering for the new version of the website",
-            "Started Scoping for the new Website requirements & use-cases",
-            "Designing for the new frontend",
-            "Implemented Basic Frontend part",
-            "Decided Best Framework choices, which can serve the purpose of website for atleast next 10 years",
-            "Started using team management software - Asana for better management of the tasks",
-            "Made a basic template for all the major backend microservices",
-            "Worked upon authentication for users, easier to manage and change. Also, the one which could serve easily in the development"
-        ]
-    },
-    {
-        "month": "October 2022",
-        "version": "v1",
-        "tasks": [
-            "Setup Mailing Server (Server)",
-            "Integrated Mailing Service with event flow (Backend)",
-            "Setup Reverse-Proxy to provide secure connections over https (Server)",
-            "Updated clubs decription page to involve social media, website, etc (Frontend, Backend)",
-            "Updated User Model to store club member details (Backend)",
-            "Added Image Gallery on homepage (Frontend)",
-            "Added Bug Report Form (Frontend)",
-            "Implemented Rich Text Editor (Frontend)",
-            "Added Clubs Council About Page (Frontend)",
-            "Added ansible playbooks for easier and safe deployment on the server (Server)"
-        ]
-    },
-    {
-        "month": "November 2022",
-        "version": "v1",
-        "tasks": [
-            "Updated Event Budget Model & Flow (Backend)",
-            "Added Induction Pages & Data (Frontend, Backend)",
-            "Added Clash of Clusters Scoreboard (Frontend, Backend)",
-            "Updated Rooms Data (Frontend, Backend)",
-            "Implemented Inter-bodies discussions completely (Frontend, Backend)",
-            "Updated Event Approval Flow (Frontend, Backend)",
-            "Pushed Clubs Data (Backend)",
-            "Added last 1 month data including induction events (Backend)",
-            "Bug Fixes (Common)",
-            "Added Remind for Approval option for Clubs Council (Frontend, Backend)",
-            "Increased type checking for more robustness in terms of club event creation - Timings, Venue, Budget, Clashes, Venue availability, etc (Frontend, Backend)",
-            "Added docs for the current website source code file structure for easier knowledge pass-down and easier access for any person working on the codebase (Server)"
-        ]
-    },
-    {
-        "month": "December 2022",
-        "version": "v1",
-        "tasks": [
-            "Re-shifted to mails for use by clubs, due to no confirmation of approval flows for the events, and no clarity and details needed for an event to happen :(",
-            "Bug Fixes (Common)",
-            "Added POC Detail Form for each event, as requested by Slo (Frontend, Backend)",
-            "Pushed Members Data of all clubs (Backend)",
-            "Updated Event Approval Flow, as told by SLO (Frontend, Backend)",
-            "Implemented Better Backend Security & checking (Server, Backend)",
-            "Added edit permissions for venues with separate availability checking (Frontend, Backend)"
-        ]
-    },
-    {
-        "month": "January 2023",
-        "version": "v1",
-        "tasks": [
-            "Added past year event data with filteration"
-        ]
-    }
+  {
+    "month": "June 2023",
+    "version": "v2",
+    "tasks": [
+      "Added Dev Website",
+      "Minor Restructuring of the website",
+      "Remove duplicate image data for current members on the main server",
+      "Added SAC/SLC/SLO pages",
+      "Move from RichTextEditor to Markdown based TextEditor in the web",
+      "Removed Composer service and merge it into each microservice and gateway exclusively",
+      "Update clubs service and model to handle student bodies separately",
+      "Updated Member Queries",
+      "Fixed Events service objectID issue",
+      "Update available rooms query room checking condition",
+      "Updated package version for a security vulnerability in Starlette",
+      "Integrated new apollo rover version",
+      "Updated Scripts for manual data pushing",
+      "Fixed Timezone issue for the calendar",
+      "Remove old out-dated un-necessary mock data",
+      "Updated information of the clubs",
+      "Added responsive view for the calendar",
+      "Updated clubs/bodies filter and view on the website",
+      "Major UI changes for the Dark Mode",
+      "Cancel button in event form",
+      "Updated CC Main Logos and others",
+      "Updated Color Scheme of the website",
+      "Cancel button for club form",
+      "Updated Carousel box ui",
+      "Fix Footer UI bug for Safari",
+      "Change upcoming events size for tablet sized devices",
+      "Add View Less button for Gallery",
+      "Added confirmation for cancel on club/event form",
+      "Fix Account Popover color",
+      "Fix New Event Form",
+      "Event form link validation",
+      "Added Members Mutations",
+      "Updated Events Budget Field Validation",
+      "Added Members Form - completely",
+      "Added Roles validation",
+      "Added all members public page and add images to all member lists",
+      "Added all events public page",
+      "Student Bodies pages",
+      "Added upcoming events page",
+      "Added All Events Page",
+      "Search Bar in All Events Page",
+      "View all events button on homepage",
+      "Search Bar in Manage Clubs & Manage Events Page",
+      "Updated ActionPalette to support passing of items forward",
+      "Integrate Action Buttons for Members and Clubs pages",
+      "Bug Fixes in Member Form, Error pages, manage pages, Account-popover",
+      "Added conditionals for the events page action buttons"
+    ]
+  },
+  {
+    "month": "May 2023",
+    "version": "v2",
+    "tasks": [
+      "Added a Feeder Service for easier pushing of events data",
+      "Added error pages in web service",
+      "Added custom nginx error pages",
+      "Lighter Dockerfiles for faster buildups",
+      "Updated package versions to latest",
+      "Updated handling of events and approvals",
+      "Updated population and rooms data and working for events",
+      "Added new CC members data",
+      "Separate Cultural and Technical clubs on frontend",
+      "Add random avatars for userProfiles without an image",
+      "Stop prepending global host to image downloads",
+      "Added Bug Form Link",
+      "Validation for budget fields and others in events form",
+      "Padding and Grids changes to make site look better",
+      "Add event edit mutation",
+      "Port progress page from v1 to v2 site",
+      "Added Light-Dark Mode Control",
+      "Added Mode Switch Component for Light and Dark Mode",
+      "Fixed Timezone issue for the events card"
+    ]
+  },
+  {
+    "month": "April 2023",
+    "version": "v2",
+    "tasks": [
+      "Added a Dev Data repository for better testing purposes",
+      "Multi-Stage Images to Cache Dependencies for better docker builds",
+      "Added Mongo-Express Container for better handling of mongo db data",
+      "Integrated Events Subgraph",
+      "Added Documentaion for the Queries in the code for clubs and events services",
+      "Integrate Club Members Queries in Frontend",
+      "Rewrite Members Model completely",
+      "Rewrite all Members Mutations & Queries for better and secure implementation",
+      "Add new club form and mutation in frontend",
+      "Add edit club form",
+      "Fix ClubHero Banner",
+      "Fixed scrollbar rendering glitch",
+      "Add page switch transitions",
+      "Add create member mutation",
+      "Fix event form submission",
+      "Render club social media links",
+      "Linting fixes",
+      "Add universal progressbar",
+      "Added calendar to frontend",
+      "Fix club editing",
+      "Fix CAS logout"
+    ]
+  },
+  {
+    "month": "April 2023",
+    "version": "v1",
+    "tasks": [
+      "Added Interviews Schedule Page",
+      "Added Tech Team Progress Page for easier access to the data",
+      "Fixed Routing Issue with the Club Tabs Pages",
+      "Fixed Members Drop Down Issue"
+    ]
+  },
+  {
+    "month": "March 2023",
+    "version": "v2",
+    "tasks": [
+      "Added Mailing in the interfaces service",
+      "Completely implemented the clubs service - Queries & Mutations",
+      "Completely implemented the members information storage feature (club members)",
+      "Completely implemented user management microservice with integration with IIIT LDAP service",
+      "Implemented Cookies based role control system",
+      "Implemented RichTextEditor, for better on-site text editing by the user/s"
+    ]
+  },
+  {
+    "month": "February 2023",
+    "version": "v2",
+    "tasks": [
+      "Implemented Files uploading and handling backend, which ensures secure file access and no risk file uploads",
+      "Introduce composer subgraphs",
+      "Implemented interfaces service which is used to handle all the REST APIs based tasks as a microservice",
+      "Implemented development authentication microservice (for local use only), which can bypass the CAS login system and help for testing purposes",
+      "Implemented authentication service which uses CAS for login and uses JWT session tokens for the access control",
+      "Added Basic User Management Microservice",
+      "Added Models & Queries for the events service",
+      "Integrate Authentication with the new frontend"
+    ]
+  },
+  {
+    "month": "January 2023",
+    "version": "v2",
+    "tasks": [
+      "Started development of the various backend microservices - clubs, events, authentication",
+      "Implemented gateway for single backend API and managing microservices",
+      "Implemented Features in the frontend",
+      "Added nginx configuration and composer system for faster buildups of the website and microservices",
+      "Added submodules based repository structure",
+      "Added all models for clubs and members service",
+      "Completed the homepage for the new frontend"
+    ]
+  },
+  {
+    "month": "December 2022",
+    "version": "v2",
+    "tasks": [
+      "Started Requirements Gathering for the new version of the website",
+      "Started Scoping for the new Website requirements & use-cases",
+      "Designing for the new frontend",
+      "Implemented Basic Frontend part",
+      "Decided Best Framework choices, which can serve the purpose of website for atleast next 10 years",
+      "Started using team management software - Asana for better management of the tasks",
+      "Made a basic template for all the major backend microservices",
+      "Worked upon authentication for users, easier to manage and change. Also, the one which could serve easily in the development"
+    ]
+  },
+  {
+    "month": "October 2022",
+    "version": "v1",
+    "tasks": [
+      "Setup Mailing Server (Server)",
+      "Integrated Mailing Service with event flow (Backend)",
+      "Setup Reverse-Proxy to provide secure connections over https (Server)",
+      "Updated clubs decription page to involve social media, website, etc (Frontend, Backend)",
+      "Updated User Model to store club member details (Backend)",
+      "Added Image Gallery on homepage (Frontend)",
+      "Added Bug Report Form (Frontend)",
+      "Implemented Rich Text Editor (Frontend)",
+      "Added Clubs Council About Page (Frontend)",
+      "Added ansible playbooks for easier and safe deployment on the server (Server)"
+    ]
+  },
+  {
+    "month": "November 2022",
+    "version": "v1",
+    "tasks": [
+      "Updated Event Budget Model & Flow (Backend)",
+      "Added Induction Pages & Data (Frontend, Backend)",
+      "Added Clash of Clusters Scoreboard (Frontend, Backend)",
+      "Updated Rooms Data (Frontend, Backend)",
+      "Implemented Inter-bodies discussions completely (Frontend, Backend)",
+      "Updated Event Approval Flow (Frontend, Backend)",
+      "Pushed Clubs Data (Backend)",
+      "Added last 1 month data including induction events (Backend)",
+      "Bug Fixes (Common)",
+      "Added Remind for Approval option for Clubs Council (Frontend, Backend)",
+      "Increased type checking for more robustness in terms of club event creation - Timings, Venue, Budget, Clashes, Venue availability, etc (Frontend, Backend)",
+      "Added docs for the current website source code file structure for easier knowledge pass-down and easier access for any person working on the codebase (Server)"
+    ]
+  },
+  {
+    "month": "December 2022",
+    "version": "v1",
+    "tasks": [
+      "Re-shifted to mails for use by clubs, due to no confirmation of approval flows for the events, and no clarity and details needed for an event to happen :(",
+      "Bug Fixes (Common)",
+      "Added POC Detail Form for each event, as requested by Slo (Frontend, Backend)",
+      "Pushed Members Data of all clubs (Backend)",
+      "Updated Event Approval Flow, as told by SLO (Frontend, Backend)",
+      "Implemented Better Backend Security & checking (Server, Backend)",
+      "Added edit permissions for venues with separate availability checking (Frontend, Backend)"
+    ]
+  },
+  {
+    "month": "January 2023",
+    "version": "v1",
+    "tasks": ["Added past year event data with filteration"]
+  }
 ]

@@ -17,11 +17,7 @@ export const EDIT_EVENT = gql`
 `;
 
 export const PROGRESS_EVENT = gql`
-  mutation ProgressEvent(
-    $eventid: String!
-    $ccProgressBudget: Boolean
-    $ccProgressRoom: Boolean
-  ) {
+  mutation ProgressEvent($eventid: String!, $ccProgressBudget: Boolean, $ccProgressRoom: Boolean) {
     progressEvent(
       eventid: $eventid
       ccProgressBudget: $ccProgressBudget

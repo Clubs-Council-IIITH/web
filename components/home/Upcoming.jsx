@@ -12,45 +12,43 @@ import { EventCard } from "components/events";
 import Iconify from "components/iconify";
 
 export default function Upcoming() {
-    // get recent events
-    const { loading, error, data: { recentEvents: events } = {} } = useQuery(GET_RECENT_EVENTS);
+  // get recent events
+  const { loading, error, data: { recentEvents: events } = {} } = useQuery(GET_RECENT_EVENTS);
 
-    // track loading state
-    const { trackProgress } = useProgressbar();
-    useEffect(() => trackProgress(loading), [loading]);
+  // track loading state
+  const { trackProgress } = useProgressbar();
+  useEffect(() => trackProgress(loading), [loading]);
 
-    const isDesktop = useResponsive("up", "md");
-    const isMobile = useResponsive("down", "sm");
+  const isDesktop = useResponsive("up", "md");
+  const isMobile = useResponsive("down", "sm");
 
-    return loading ? null : !events.length ? null : (
-        <Box mt={4}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                    Upcoming and Recent Events
-                    <Box display="flex" alignItems="center">
-                        <Button
-                            component={Link}
-                            href="/events"
-                            size="small"
-                            color="inherit"
-                            sx={{ p: 1 }}
-                            endIcon={<Iconify icon={"solar:double-alt-arrow-right-line-duotone"} />}
-                        >
-                            View more
-                        </Button>
-                    </Box>
-                </Box>
-            </Typography>
-            <Grid container spacing={2}>
-                {/* display only 3/4 events on the main page */}
-                {events
-                    ?.slice(0, !isDesktop && !isMobile ? 3 : 4)
-                    ?.map((event, key) => (
-                        <Grid key={key} item xs={6} sm={4} md={3}>
-                            <EventCard event={event} />
-                        </Grid>
-                    ))}
-            </Grid>
+  return loading ? null : !events.length ? null : (
+    <Box mt={4}>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          Upcoming and Recent Events
+          <Box display="flex" alignItems="center">
+            <Button
+              component={Link}
+              href="/events"
+              size="small"
+              color="inherit"
+              sx={{ p: 1 }}
+              endIcon={<Iconify icon={"solar:double-alt-arrow-right-line-duotone"} />}
+            >
+              View more
+            </Button>
+          </Box>
         </Box>
-    );
+      </Typography>
+      <Grid container spacing={2}>
+        {/* display only 3/4 events on the main page */}
+        {events?.slice(0, !isDesktop && !isMobile ? 3 : 4)?.map((event, key) => (
+          <Grid key={key} item xs={6} sm={4} md={3}>
+            <EventCard event={event} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
 }

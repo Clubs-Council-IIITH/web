@@ -13,32 +13,32 @@ import shadows, { customShadows } from "./shadows";
 import { useMode } from "contexts/ModeContext";
 
 ThemeProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default function ThemeProvider({ children }) {
-    const { isLight } = useMode();
+  const { isLight } = useMode();
 
-    const themeOptions = useMemo(
-        () => ({
-            palette: isLight ? palette.light : palette.dark,
-            typography,
-            breakpoints,
-            shape: { borderRadius: 8 },
-            direction: "ltr",
-            shadows: isLight ? shadows.light : shadows.dark,
-            customShadows: isLight ? customShadows.light : customShadows.dark,
-        }),
-        [isLight]
-    );
+  const themeOptions = useMemo(
+    () => ({
+      palette: isLight ? palette.light : palette.dark,
+      typography,
+      breakpoints,
+      shape: { borderRadius: 8 },
+      direction: "ltr",
+      shadows: isLight ? shadows.light : shadows.dark,
+      customShadows: isLight ? customShadows.light : customShadows.dark,
+    }),
+    [isLight],
+  );
 
-    const theme = createTheme(themeOptions);
-    theme.components = componentsOverride(theme);
+  const theme = createTheme(themeOptions);
+  theme.components = componentsOverride(theme);
 
-    return (
-        <MUIThemeProvider theme={theme}>
-            <CssBaseline />
-            {children}
-        </MUIThemeProvider>
-    );
+  return (
+    <MUIThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </MUIThemeProvider>
+  );
 }

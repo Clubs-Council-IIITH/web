@@ -1,5 +1,3 @@
-// ----------------------------------------------------------------------
-
 export default function Paper() {
   return {
     MuiPaper: {
@@ -8,7 +6,7 @@ export default function Paper() {
       },
       styleOverrides: {
         root: {
-          backgroundImage: 'none',
+          backgroundImage: "none",
         },
       },
     },

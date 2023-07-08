@@ -7,15 +7,15 @@ import carouselItems from "public/assets/json/carouselItems.json";
 import galleryItems from "public/assets/json/galleryItems.json";
 
 export default function GeneralApp() {
-    return (
-        <Page title="Home">
-            <Container maxWidth="xl">
-                <Carousel items={carouselItems} />
-                <Upcoming />
-                <Details />
-                <Gallery images={galleryItems} />
-                <Footer />
-            </Container>
-        </Page>
-    );
+  return (
+    <Page title="Home">
+      <Container maxWidth="xl">
+        <Carousel items={carouselItems} />
+        <Upcoming />
+        <Details />
+        <Gallery images={galleryItems} />
+        <Footer />
+      </Container>
+    </Page>
+  );
 }

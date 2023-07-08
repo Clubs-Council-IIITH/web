@@ -1,5 +1,5 @@
 import MainLayout from "./MainLayout";
 
 export default function Layout({ children }) {
-    return <MainLayout>{children}</MainLayout>;
+  return <MainLayout>{children}</MainLayout>;
 }

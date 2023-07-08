@@ -7,58 +7,56 @@ import { StyledNavItem, StyledNavItemIcon } from "./styles";
 import { LaunchTwoTone as ExternalIcon } from "@mui/icons-material";
 
 export function isExternalLink(path) {
-    return path.includes("http");
+  return path.includes("http");
 }
 
 export function getActive(path, pathname, asPath) {
-    if (path === "/") return pathname === path || asPath === path;
-    return pathname.startsWith(path) || asPath.startsWith(path);
+  if (path === "/") return pathname === path || asPath === path;
+  return pathname.startsWith(path) || asPath.startsWith(path);
 }
 
 NavSection.propTypes = {
-    data: PropTypes.array,
+  data: PropTypes.array,
 };
 
 export default function NavSection({ data = [], ...other }) {
-    return (
-        <Box {...other}>
-            <List disablePadding sx={{ p: 1, pt: 1 }}>
-                {data.map((item) => (
-                    <NavItem key={item.title} item={item} />
-                ))}
-            </List>
-        </Box>
-    );
+  return (
+    <Box {...other}>
+      <List disablePadding sx={{ p: 1, pt: 1 }}>
+        {data.map((item) => (
+          <NavItem key={item.title} item={item} />
+        ))}
+      </List>
+    </Box>
+  );
 }
 
-// ----------------------------------------------------------------------
-
 NavItem.propTypes = {
-    item: PropTypes.object,
+  item: PropTypes.object,
 };
 
 function NavItem({ item }) {
-    const { title, path, icon, info } = item;
-    const { pathname, asPath } = useRouter();
+  const { title, path, icon, info } = item;
+  const { pathname, asPath } = useRouter();
 
-    const active = getActive(item.path, pathname, asPath);
-    const external = isExternalLink(item.path);
+  const active = getActive(item.path, pathname, asPath);
+  const external = isExternalLink(item.path);
 
-    return (
-        <StyledNavItem component={NextLink} href={path} active={active}>
-            <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
+  return (
+    <StyledNavItem component={NextLink} href={path} active={active}>
+      <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
-            <ListItemText
-                disableTypography
-                primary={
-                    <Box display="flex" alignItems="center" justifyContent="space-between">
-                        {title}
-                        {external && <ExternalIcon fontSize="small" sx={{ mx: 2 }} />}
-                    </Box>
-                }
-            />
+      <ListItemText
+        disableTypography
+        primary={
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            {title}
+            {external && <ExternalIcon fontSize="small" sx={{ mx: 2 }} />}
+          </Box>
+        }
+      />
 
-            {info && info}
-        </StyledNavItem>
-    );
+      {info && info}
+    </StyledNavItem>
+  );
 }

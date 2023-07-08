@@ -4,23 +4,23 @@ import Head from "next/head";
 import { Box } from "@mui/material";
 
 const Page = forwardRef(({ children, title = "", meta, ...other }, ref) => (
-    <>
-        <Head>
-            <title>{`${title}`}</title>
-            {meta}
-        </Head>
+  <>
+    <Head>
+      <title>{`${title}`}</title>
+      {meta}
+    </Head>
 
-        <Box ref={ref} {...other}>
-            {children}
-        </Box>
-    </>
+    <Box ref={ref} {...other}>
+      {children}
+    </Box>
+  </>
 ));
 
 Page.displayName = "Page";
 Page.propTypes = {
-    children: PropTypes.node.isRequired,
-    title: PropTypes.string,
-    meta: PropTypes.node,
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  meta: PropTypes.node,
 };
 
 export default Page;

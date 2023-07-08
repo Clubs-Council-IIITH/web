@@ -8,43 +8,43 @@ import Page from "components/Page";
 import { ClubForm } from "components/clubs";
 
 export default function NewClub() {
-    // default form values
-    const defaultValues = {
-        cid: null,
-        name: null,
-        email: null,
-        category: "cultural",
-        studentBody: false,
-        tagline: null,
-        description: { "md": "", "html": "" },
-        socials: {
-            website: null,
-            instagram: null,
-            facebook: null,
-            youtube: null,
-            twitter: null,
-            linkedin: null,
-            discord: null,
-        },
-        logo: null,
-        banner: null,
-    };
+  // default form values
+  const defaultValues = {
+    cid: null,
+    name: null,
+    email: null,
+    category: "cultural",
+    studentBody: false,
+    tagline: null,
+    description: { md: "", html: "" },
+    socials: {
+      website: null,
+      instagram: null,
+      facebook: null,
+      youtube: null,
+      twitter: null,
+      linkedin: null,
+      discord: null,
+    },
+    logo: null,
+    banner: null,
+  };
 
-    // mutation to create club
-    const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB, {
-        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
-    });
+  // mutation to create club
+  const [createClub, { data, loading, error }] = useMutation(CREATE_CLUB, {
+    refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
+  });
 
-    return (
-        <Page title={"New Club"}>
-            <Container>
-                <ClubForm
-                    defaultValues={defaultValues}
-                    submitMutation={createClub}
-                    submitState={{ data, loading, error }}
-                    submitButtonText="Create"
-                />
-            </Container>
-        </Page>
-    );
+  return (
+    <Page title={"New Club"}>
+      <Container>
+        <ClubForm
+          defaultValues={defaultValues}
+          submitMutation={createClub}
+          submitState={{ data, loading, error }}
+          submitButtonText="Create"
+        />
+      </Container>
+    </Page>
+  );
 }

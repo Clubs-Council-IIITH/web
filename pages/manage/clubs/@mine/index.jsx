@@ -17,60 +17,57 @@ import { useQuery } from "@apollo/client";
 import { GET_CLUB } from "gql/queries/clubs";
 
 export default function Club() {
-    // set title asynchronously
-    const [title, setTitle] = useState("...");
+  // set title asynchronously
+  const [title, setTitle] = useState("...");
 
-    return (
-        <Page title={title}>
-            <Container>
-                {/* details */}
-                <ClientOnly>
-                    <ClubDetails setTitle={setTitle} />
-                </ClientOnly>
-            </Container>
-        </Page>
-    );
+  return (
+    <Page title={title}>
+      <Container>
+        {/* details */}
+        <ClientOnly>
+          <ClubDetails setTitle={setTitle} />
+        </ClientOnly>
+      </Container>
+    </Page>
+  );
 }
 
 function ClubDetails({ cid, setTitle }) {
-    const { user } = useAuth();
+  const { user } = useAuth();
 
-    const {
-        data: { club } = {},
-        loading,
-        error,
-    } = useQuery(GET_CLUB, {
-        skip: !user?.uid,
-        variables: {
-            clubInput: { cid: user?.uid },
-        },
-        onCompleted: ({ club }) => {
-            setTitle(club?.name);
-        },
-    });
+  const {
+    data: { club } = {},
+    loading,
+    error,
+  } = useQuery(GET_CLUB, {
+    skip: !user?.uid,
+    variables: {
+      clubInput: { cid: user?.uid },
+    },
+    onCompleted: ({ club }) => {
+      setTitle(club?.name);
+    },
+  });
 
-    // track loading state
-    const { trackProgress } = useProgressbar();
-    useEffect(() => trackProgress(loading), [loading]);
+  // track loading state
+  const { trackProgress } = useProgressbar();
+  useEffect(() => trackProgress(loading), [loading]);
 
-    return loading ? null : !club ? null : (
-        <Box>
-            {/* action palette */}
-            <ActionPalette actions={[editAction]} />
+  return loading ? null : !club ? null : (
+    <Box>
+      {/* action palette */}
+      <ActionPalette actions={[editAction]} />
 
-            <Card sx={{ mb: 4, mt: 3 }}>
-                <ClubHero club={club} />
-                <Box sx={{ p: { xs: 3, md: 5 } }}>
-                    <TextEditor
-                        editorhtmlState={[JSON.parse(club.description)?.md, null]}
-                        editing={false}
-                    />
-                </Box>
-            </Card>
-
-            <Box mb={2}>
-                <ClubSocial socials={club?.socials} />
-            </Box>
+      <Card sx={{ mb: 4, mt: 3 }}>
+        <ClubHero club={club} />
+        <Box sx={{ p: { xs: 3, md: 5 } }}>
+          <TextEditor editorhtmlState={[JSON.parse(club.description)?.md, null]} editing={false} />
         </Box>
-    );
+      </Card>
+
+      <Box mb={2}>
+        <ClubSocial socials={club?.socials} />
+      </Box>
+    </Box>
+  );
 }

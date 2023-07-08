@@ -17,74 +17,74 @@ import { GET_CLUB } from "gql/queries/clubs";
 import ClientOnly from "components/ClientOnly";
 
 export default function Event() {
-    const { query } = useRouter();
-    const { id } = query;
+  const { query } = useRouter();
+  const { id } = query;
 
-    // set title asynchronously
-    const [title, setTitle] = useState("...");
+  // set title asynchronously
+  const [title, setTitle] = useState("...");
 
-    return (
-        <Page title={title}>
-            <Container maxWidth="xl">
-                <Card>
-                    <ClientOnly>
-                        <EventDisplay id={id} setTitle={setTitle} />
-                    </ClientOnly>
-                </Card>
-            </Container>
-        </Page>
-    );
+  return (
+    <Page title={title}>
+      <Container maxWidth="xl">
+        <Card>
+          <ClientOnly>
+            <EventDisplay id={id} setTitle={setTitle} />
+          </ClientOnly>
+        </Card>
+      </Container>
+    </Page>
+  );
 }
 
 function EventDisplay({ id, setTitle }) {
-    const router = useRouter();
+  const router = useRouter();
 
-    // get event data
-    const {
-        loading: eventLoading,
-        error: eventError,
-        data: { event } = {},
-    } = useQuery(GET_EVENT, {
-        skip: !id,
-        variables: {
-            eventid: id,
-        },
-        onCompleted: ({ event }) => {
-            setTitle(event?.name);
-        },
-        onError: (error) => {
-            // if (error.message == "No Club Found")
-            router.push(`/404`)
-        },
-    });
+  // get event data
+  const {
+    loading: eventLoading,
+    error: eventError,
+    data: { event } = {},
+  } = useQuery(GET_EVENT, {
+    skip: !id,
+    variables: {
+      eventid: id,
+    },
+    onCompleted: ({ event }) => {
+      setTitle(event?.name);
+    },
+    onError: (error) => {
+      // if (error.message == "No Club Found")
+      router.push(`/404`);
+    },
+  });
 
-    // get club
-    const {
-        loading: clubLoading,
-        error: clubError,
-        data: { club } = {},
-    } = useQuery(GET_CLUB, {
-        skip: !event?.clubid,
-        variables: {
-            clubInput: { cid: event?.clubid },
-        },
-    });
+  // get club
+  const {
+    loading: clubLoading,
+    error: clubError,
+    data: { club } = {},
+  } = useQuery(GET_CLUB, {
+    skip: !event?.clubid,
+    variables: {
+      clubInput: { cid: event?.clubid },
+    },
+  });
 
-    // track loading state
-    const { trackProgress } = useProgressbar();
-    useEffect(() => trackProgress(clubLoading && eventLoading), [clubLoading, eventLoading]);
+  // track loading state
+  const { trackProgress } = useProgressbar();
+  useEffect(() => trackProgress(clubLoading && eventLoading), [clubLoading, eventLoading]);
 
-    return eventLoading ? null : !event ? null : (
-        <Grid container>
-            <Grid item xs={12} md={6} lg={6}>
-                <Card sx={{ m: 1 }}>
-                    <Image src={event?.poster} ratio="1/1" alt={event?.name} />
-                    <EventPoster event={event} club={club} />
-                </Card>
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-                <EventDetails club={club} {...event} />
-            </Grid>
-        </Grid>
-    );
+  return eventLoading ? null : !event ? null : (
+    <Grid container>
+      <Grid item xs={12} md={6} lg={6}>
+        <Card sx={{ m: 1 }}>
+          <Image src={event?.poster} ratio="1/1" alt={event?.name} />
+          <EventPoster event={event} club={club} />
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={6}>
+        <EventDetails club={club} {...event} />
+      </Grid>
+    </Grid>
+  );
 }
