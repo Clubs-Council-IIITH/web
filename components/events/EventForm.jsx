@@ -22,7 +22,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers";
 import { useConfirm } from "material-ui-confirm";
 
 import { useForm, Controller } from "react-hook-form";
@@ -303,17 +302,7 @@ export default function EventForm({
                   name="datetimeperiod.0"
                   control={control}
                   render={({ field }) => (
-                    <DateTimePicker
-                      label="Starts*"
-                      format={`${datetimeConstants.dateFormat} ${datetimeConstants.timeFormat}`}
-                      sx={{ width: "100%" }}
-                      viewRenderers={{
-                        hours: renderTimeViewClock,
-                        minutes: renderTimeViewClock,
-                        seconds: renderTimeViewClock,
-                      }}
-                      {...field}
-                    />
+                    <DateTimePicker label="Starts*" sx={{ width: "100%" }} {...field} />
                   )}
                 />
                 <Controller
@@ -322,13 +311,7 @@ export default function EventForm({
                   render={({ field }) => (
                     <DateTimePicker
                       label="Ends*"
-                      format={`${datetimeConstants.dateFormat} ${datetimeConstants.timeFormat}`}
                       sx={{ width: "100%" }}
-                      viewRenderers={{
-                        hours: renderTimeViewClock,
-                        minutes: renderTimeViewClock,
-                        seconds: renderTimeViewClock,
-                      }}
                       minDate={startDateInput}
                       {...field}
                     />
