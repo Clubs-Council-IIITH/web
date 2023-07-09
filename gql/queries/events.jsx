@@ -48,13 +48,19 @@ export const GET_APPROVED_EVENTS = gql`
 export const GET_PENDING_EVENTS = gql`
   query PendingEvents($clubid: String) {
     pendingEvents(clubid: $clubid) {
+      _id
       name
       clubid
       datetimeperiod
       status {
-        budget
-        room
         state
+        room
+        budget
+      }
+      location
+      poster
+      budget {
+        amount
       }
     }
   }

@@ -18,6 +18,8 @@ import { EventDetails, EventPoster, EventStatus, EventBudget } from "components/
 import { locationLabel } from "utils/formatEvent";
 import { useAuth } from "contexts/AuthContext";
 
+import { useProgressbar } from "contexts/ProgressbarContext";
+
 import { useQuery } from "@apollo/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";
@@ -76,6 +78,10 @@ function EventDisplay({ id, setTitle }) {
     },
   });
 
+  // track loading state
+  const { trackProgress } = useProgressbar();
+  useEffect(() => trackProgress(eventLoading || clubLoading), [eventLoading, clubLoading]);
+
   // set conditional actions based on event datetime, current status and user role
   // Club - past event - nothing (check based on event start time and current time)
   // Club - upcoming event - edit, delete
@@ -102,9 +108,19 @@ function EventDisplay({ id, setTitle }) {
         setActions([approveAction, editAction, deleteAction]);
       else if (event?.status?.state !== "incomplete") setActions([editAction, deleteAction]);
       else setActions([editAction]);
-    } else if (user?.role === "slo" && upcoming && !event?.status?.room)
+    } else if (
+      user?.role === "slo" &&
+      upcoming &&
+      event?.status?.state !== "incomplete" &&
+      !event?.status?.room
+    )
       setActions([approveAction]);
-    else if (user?.role === "slc" && upcoming && !event?.status?.budget)
+    else if (
+      user?.role === "slc" &&
+      upcoming &&
+      event?.status?.state !== "incomplete" &&
+      !event?.status?.budget
+    )
       setActions([approveAction]);
     else setActions([]);
   };

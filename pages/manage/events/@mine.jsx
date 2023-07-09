@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 
-import { Button, Stack, Container, Typography } from "@mui/material";
+import { Box, Button, Stack, Container, Typography } from "@mui/material";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
 
@@ -11,7 +11,7 @@ import ClientOnly from "components/ClientOnly";
 
 import { useAuth } from "contexts/AuthContext";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_PENDING_EVENTS, GET_ALL_EVENTS } from "gql/queries/events";
 
 import { EventsTable } from "components/events/EventsTable";
 
@@ -30,9 +30,18 @@ export default function Events() {
     },
   });
 
+  const {
+    pendingLoading,
+    pendingError,
+    data: { pendingEvents } = {},
+  } = useQuery(GET_PENDING_EVENTS, {
+    skip: !user?.uid,
+    variables: { clubid: user?.uid },
+  });
+
   // track loading state
   const { trackProgress } = useProgressbar();
-  useEffect(() => trackProgress(loading), [loading]);
+  useEffect(() => trackProgress(loading || pendingLoading), [loading, pendingLoading]);
 
   return (
     <Page title="Manage Events">
@@ -53,6 +62,20 @@ export default function Events() {
         </Stack>
 
         <ClientOnly>
+          {pendingEvents?.length ? (
+            <Box mb={3}>
+              <Typography color="text.secondary" variant="subtitle2" gutterBottom>
+                PENDING EVENTS
+              </Typography>
+              <EventsTable hideClub events={pendingEvents} />
+            </Box>
+          ) : null}
+        </ClientOnly>
+
+        <ClientOnly>
+          <Typography color="text.secondary" variant="subtitle2" gutterBottom>
+            ALL EVENTS
+          </Typography>
           <EventsTable hideClub events={events} />
         </ClientOnly>
       </Container>
