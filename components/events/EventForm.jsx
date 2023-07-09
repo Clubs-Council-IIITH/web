@@ -302,7 +302,12 @@ export default function EventForm({
                   name="datetimeperiod.0"
                   control={control}
                   render={({ field }) => (
-                    <DateTimePicker label="Starts*" sx={{ width: "100%" }} {...field} />
+                    <DateTimePicker
+                      label="Starts*"
+                      sx={{ width: "100%" }}
+                      renderInput={(props) => <TextField {...props} />}
+                      {...field}
+                    />
                   )}
                 />
                 <Controller
@@ -312,6 +317,7 @@ export default function EventForm({
                     <DateTimePicker
                       label="Ends*"
                       sx={{ width: "100%" }}
+                      renderInput={(props) => <TextField {...props} />}
                       minDate={startDateInput}
                       {...field}
                     />
