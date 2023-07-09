@@ -491,7 +491,7 @@ export default function EventForm({
                         render={({ field }) => (
                           <TextField
                             type="number"
-                            label="Expected Population Count"
+                            label="Expected Population Count*"
                             autoComplete="off"
                             error={errors.population}
                             helperText={errors.population?.message}
@@ -572,6 +572,7 @@ export default function EventForm({
               size="large"
               loading={(submitting || submitState?.loading) && !submitState?.error}
               disabled={budgetError}
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
             >
               {submitButtonText}
             </LoadingButton>
