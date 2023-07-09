@@ -29,6 +29,10 @@ export default function ClubSocial({ socials = {} }) {
         content = content.split("/").slice(-1)[0]; // get only the relevant part of the URL
         content = content.split("?")[0]; // remove querystring
         if (content !== "") processed[k] = content; // only add if not empty
+
+        // exceptions (because the URL is not the username)
+        if (k == "discord") processed[k] = "Discord";
+        if (k == "youtube") processed[k] = "YouTube";
       });
     setProcessedSocials(processed);
   }, [socials]);

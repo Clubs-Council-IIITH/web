@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { useRouter } from "next/router";
 
+import { useAuth } from "contexts/AuthContext";
+
 import { useMutation } from "@apollo/client";
 import { PROGRESS_EVENT, DELETE_EVENT } from "gql/mutations/events";
 import { GET_FULL_EVENT } from "gql/queries/events";
@@ -150,7 +152,8 @@ function ApproveButton({ setView }) {
 function ApprovalView({ setView }) {
   const [SLO, setSLO] = useState(false);
   const [SLC, setSLC] = useState(false);
-  const [GAD, setGAD] = useState(false);
+
+  const { user } = useAuth();
 
   const { query } = useRouter();
   const { id: eid } = query;
@@ -162,7 +165,10 @@ function ApprovalView({ setView }) {
 
   const handleApprove = () => {
     progressEvent({
-      variables: { eventid: eid, cc_progress_budget: !SLC, cc_progress_room: !SLO },
+      variables: {
+        eventid: eid,
+        ...(user.role === "cc" && { cc_progress_budget: !SLC, cc_progress_room: !SLO }),
+      },
       refetchQueries: [{ query: GET_FULL_EVENT, variables: { eventid: eid } }],
     });
     setView("base");
@@ -172,36 +178,29 @@ function ApprovalView({ setView }) {
     <Alert color="success" icon={false} sx={{ display: "block" }}>
       <AlertTitle> Approving Event </AlertTitle>
 
-      <Grid container spacing={1}>
-        <Grid item>
-          <FormControlLabel
-            control={
-              <Checkbox checked={SLC} onClick={(e) => setSLC(e.target.checked)} color="success" />
-            }
-            label="Request SLC approval (for budget)"
-          />
+      {user.role === "cc" ? (
+        <Grid container spacing={1}>
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Checkbox checked={SLC} onClick={(e) => setSLC(e.target.checked)} color="success" />
+              }
+              label="Request SLC approval (for budget, if requested)"
+            />
+          </Grid>
+
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Checkbox checked={SLO} onClick={(e) => setSLO(e.target.checked)} color="success" />
+              }
+              label="Request SLO approval (for venue, if requested)"
+            />
+          </Grid>
         </Grid>
-        <Grid item>
-          <FormControlLabel
-            control={
-              <Checkbox checked={SLO} onClick={(e) => setSLO(e.target.checked)} color="success" />
-            }
-            label="Request SLO approval (for venue)"
-          />
-        </Grid>
-        {/* <Grid item>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={GAD}
-                                onClick={(e) => setGAD(e.target.checked)}
-                                color="success"
-                            />
-                        }
-                        label="Request GAD approval"
-                    />
-                </Grid> */}
-      </Grid>
+      ) : (
+        <Box> Are you sure you want to approve this event? This can not be undone. </Box>
+      )}
 
       <Box mt={2} width="100%" display="flex" justifyContent="flex-end">
         <Button variant="contained" color="inherit" onClick={handleCancel}>
