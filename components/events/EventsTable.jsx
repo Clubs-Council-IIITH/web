@@ -84,7 +84,7 @@ const columns = [
   },
 ];
 
-export function EventsTable({ events, hideClub = false }) {
+export function EventsTable({ events, scheduleSort = "asc", hideClub = false }) {
   const router = useRouter();
 
   if (!events) return null;
@@ -96,6 +96,9 @@ export function EventsTable({ events, hideClub = false }) {
         getRowId={(r) => r._id}
         onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
         initialState={{
+          sorting: {
+            sortModel: [{ field: "scheduled", sort: scheduleSort }],
+          },
           filter: {
             filterModel: {
               items: [],

@@ -56,7 +56,7 @@ export default function Events() {
               <Typography color="text.secondary" variant="subtitle2" gutterBottom>
                 PENDING EVENTS
               </Typography>
-              <EventsTable events={pendingEvents} />
+              <EventsTable events={pendingEvents} scheduleSort="asc" />
             </Box>
           ) : null}
         </ClientOnly>
@@ -65,7 +65,7 @@ export default function Events() {
           <Typography color="text.secondary" variant="subtitle2" gutterBottom>
             ALL EVENTS
           </Typography>
-          <EventsTable events={events} />
+          <EventsTable events={events} scheduleSort="desc" />
         </ClientOnly>
       </Container>
     </Page>
