@@ -13,25 +13,21 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  ToggleButton,
-  ToggleButtonGroup,
-  Chip,
   FormControl,
   OutlinedInput,
-  FormHelperText,
   CircularProgress,
 } from "@mui/material";
-import { useConfirm } from "material-ui-confirm";
 
 import { useForm, Controller } from "react-hook-form";
 
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
 import Iconify from "components/iconify";
 import LoadingButton from "components/LoadingButton";
 import { MemberRoles } from "components/members";
 import { useAuth } from "contexts/AuthContext";
+import { GET_USER_PROFILE } from "gql/queries/users";
 
 export default function MemberForm({
   defaultValues,
@@ -42,11 +38,13 @@ export default function MemberForm({
 }) {
   const router = useRouter();
   const { user } = useAuth();
-  const confirm = useConfirm();
 
   // check if form is submitting from the client side
   // needed to track multiple API calls (apart from the `submitState`, which is only for submitMutation)
   const [submitting, setSubmitting] = useState(false);
+
+  // manage data
+  const [userData, setUserData] = useState(defaultValues);
 
   // manage roles
   const emptyRolesItem = { name: null, startYear: new Date().getFullYear(), endYear: null };
@@ -86,6 +84,7 @@ export default function MemberForm({
   // refresh form if default values change
   useEffect(() => {
     reset(defaultValues);
+    setUserData(defaultValues);
     if (defaultValues?.roles) setRoles(defaultValues?.roles);
   }, [defaultValues]);
 
@@ -93,6 +92,33 @@ export default function MemberForm({
   const { data: { allClubs: clubs } = {}, loading: clubsLoading } = useQuery(GET_ALL_CLUB_IDS, {
     skip: user?.role !== "cc",
   });
+
+  const [getUser] = useLazyQuery(GET_USER_PROFILE);
+  const [emailError, setEmailError] = useState(false);
+
+  // progression logic
+  const onProgress = async (data) => {
+    const formData = {
+      cid: data?.cid,
+      email: null,
+    };
+
+    // set club ID for event if current user is a club
+    if (user?.role === "club") {
+      formData.cid = user?.uid;
+    }
+
+    // verify email
+    getUser({
+      variables: {
+        userInput: { uid: data?.email.substring(0, data?.email.indexOf("@")) },
+      },
+      onCompleted: () => (formData.email = data.email),
+      onError: () => setEmailError(true),
+    });
+
+    setUserData(formData);
+  };
 
   // submission logic
   const onSubmit = async (data) => {
@@ -137,22 +163,89 @@ export default function MemberForm({
     router.push("/manage/members");
   };
 
-  const onCancel = () => {
-    confirm({
-      title: "Cancellation",
-      description: "Are you sure to do this!?",
-      confirmationText: "Yes",
-    })
-      .then(() => {
-        router.back();
-      })
-      .catch(() => {
-        // nothing
-      });
-  };
-
-  return (
+  return userData?.cid && userData?.email ? (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6} lg={6} xl={6}>
+          <Card sx={{ p: 2, mt: 2 }}>
+            <Typography color="text.secondary" variant="subtitle2" pb={2}>
+              DETAILS
+            </Typography>
+
+            <Stack spacing={2}>
+              {/* show club selection input if current user is CC */}
+              {user?.role === "cc" ? <Box>{defaultValues?.cid}</Box> : null}
+
+              <Box>{defaultValues?.email}</Box>
+
+              <Controller
+                name="poc"
+                control={control}
+                rules={{ required: "It can't be empty" }}
+                render={({ field }) => (
+                  <FormControl>
+                    <InputLabel id="clubSelect" shrink={field.value != null}>
+                      POC*
+                    </InputLabel>
+                    <Select
+                      id="clubSelect"
+                      labelId="clubSelect"
+                      input={<OutlinedInput label="POC*" />}
+                      {...field}
+                    >
+                      <MenuItem key={0} value={true}>
+                        YES
+                      </MenuItem>
+                      <MenuItem key={1} value={false}>
+                        NO
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </Stack>
+          </Card>
+
+          <Stack direction="row" spacing={1.5} sx={{ mt: 4 }}>
+            <Button fullWidth color="inherit" variant="outlined" size="large" onClick={() => null}>
+              Cancel
+            </Button>
+            <LoadingButton
+              fullWidth
+              type="submit"
+              variant="contained"
+              size="large"
+              loading={(submitting || submitState?.loading) && !submitState?.error}
+              disabled={roleError || rolelengthError}
+            >
+              {submitButtonText}
+            </LoadingButton>
+          </Stack>
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={6} xl={6}>
+          <Card sx={{ p: 2, mt: 2 }}>
+            <Typography color="text.secondary" variant="subtitle2" pb={2}>
+              ROLES
+            </Typography>
+            <Button size="small" variant="outlined" onClick={addRolesItem} sx={{ mb: 1 }}>
+              <Iconify icon="mdi:plus" />
+              Add New Role
+            </Button>
+            <MemberRoles
+              rows={roles}
+              onUpdate={editRolesItem}
+              onDelete={deleteRolesItem}
+              editable={true}
+              roleError={roleError}
+              setRoleError={setRoleError}
+            />
+          </Card>
+        </Grid>
+      </Grid>
+    </form>
+  ) : (
+    <form onSubmit={handleSubmit(onProgress)}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6} xl={6}>
           <Card sx={{ p: 2, mt: 2 }}>
@@ -206,8 +299,8 @@ export default function MemberForm({
                   <TextField
                     label="Email*"
                     autoComplete="off"
-                    error={errors.email}
-                    helperText={errors.email?.message}
+                    error={errors.email || emailError}
+                    helperText={errors.email?.message || emailError ? "Email not found!" : ""}
                     InputLabelProps={{
                       shrink: field.value != "" && field.value != null,
                     }}
@@ -215,69 +308,22 @@ export default function MemberForm({
                   />
                 )}
               />
-
-              <Controller
-                name="poc"
-                control={control}
-                rules={{ required: "It can't be empty" }}
-                render={({ field }) => (
-                  <FormControl>
-                    <InputLabel id="clubSelect" shrink={field.value != null}>
-                      POC*
-                    </InputLabel>
-                    <Select
-                      id="clubSelect"
-                      labelId="clubSelect"
-                      input={<OutlinedInput label="POC*" />}
-                      {...field}
-                    >
-                      <MenuItem key={0} value={true}>
-                        YES
-                      </MenuItem>
-                      <MenuItem key={1} value={false}>
-                        NO
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                )}
-              />
             </Stack>
-          </Card>
 
-          <Stack direction="row" spacing={1.5} sx={{ mt: 4 }}>
-            <Button fullWidth color="inherit" variant="outlined" size="large" onClick={onCancel}>
-              Cancel
-            </Button>
-            <LoadingButton
-              fullWidth
-              type="submit"
-              variant="contained"
-              size="large"
-              loading={(submitting || submitState?.loading) && !submitState?.error}
-              disabled={roleError || rolelengthError}
-            >
-              {submitButtonText}
-            </LoadingButton>
-          </Stack>
-        </Grid>
-
-        <Grid item xs={12} md={6} lg={6} xl={6}>
-          <Card sx={{ p: 2, mt: 2 }}>
-            <Typography color="text.secondary" variant="subtitle2" pb={2}>
-              ROLES
-            </Typography>
-            <Button size="small" variant="outlined" onClick={addRolesItem} sx={{ mb: 1 }}>
-              <Iconify icon="mdi:plus" />
-              Add New Role
-            </Button>
-            <MemberRoles
-              rows={roles}
-              onUpdate={editRolesItem}
-              onDelete={deleteRolesItem}
-              editable={true}
-              roleError={roleError}
-              setRoleError={setRoleError}
-            />
+            <Stack direction="row" spacing={1.5} sx={{ mt: 2 }}>
+              <Button fullWidth color="inherit" variant="outlined" size="large">
+                Cancel
+              </Button>
+              <LoadingButton
+                fullWidth
+                type="submit"
+                variant="contained"
+                size="large"
+                loading={(submitting || submitState?.loading) && !submitState?.error}
+              >
+                Search
+              </LoadingButton>
+            </Stack>
           </Card>
         </Grid>
       </Grid>
