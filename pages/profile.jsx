@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import { useQuery, useMutation } from "@apollo/client";
+import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER_PROFILE } from "gql/queries/users";
 import { UPDATE_IMG } from "gql/mutations/users";
 
@@ -25,21 +26,12 @@ import ImageUpload from "components/ImageUpload";
 import LoadingButton from "components/LoadingButton";
 
 import { useProgressbar } from "contexts/ProgressbarContext";
+import { useRouter } from "next/router";
 
 export default function Profile() {
   const { user } = useAuth();
+  const router = useRouter();
   const isDesktop = useResponsive("up", "sm");
-
-  const {
-    data: { userProfile, userMeta } = {},
-    loading,
-    error,
-  } = useQuery(GET_USER_PROFILE, {
-    skip: !user,
-    variables: {
-      userInput: { uid: user?.uid },
-    },
-  });
 
   const [updateImg, {}] = useMutation(UPDATE_IMG, {
     refetchQueries: [
@@ -50,13 +42,13 @@ export default function Profile() {
         },
       },
     ],
-    onCompleted: () => setUploading(false),
+    onCompleted: () => router.push("/login"),
   });
 
   // manage image upload
   const [uploading, setUploading] = useState(false);
-  const [image, setImage] = useState(userMeta?.img);
-  useEffect(() => setImage(userMeta?.img), [userMeta]);
+  const [image, setImage] = useState(user?.img);
+  useEffect(() => setImage(user?.img), [user]);
 
   const handleImageDrop = useCallback(
     (files) => {
@@ -75,11 +67,7 @@ export default function Profile() {
     });
   };
 
-  // track loading state
-  const { trackProgress } = useProgressbar();
-  useEffect(() => trackProgress(loading), [loading]);
-
-  return !userProfile ? null : (
+  return !user?.email ? null : (
     <Page title="Profile">
       <Container>
         <Grid container spacing={2}>
@@ -108,12 +96,18 @@ export default function Profile() {
                   </LoadingButton>
                 </Stack>
               </Box>
+            ) : user?.role === "club" ? (
+              <Avatar
+                src={downloadFile(user?.img)}
+                alt={`${user?.firstName} ${user?.lastName}`}
+                sx={{ width: isDesktop ? 150 : 80, height: isDesktop ? 150 : 80, mr: 3 }}
+              />
             ) : (
               <Tooltip title="Upload photo">
                 <IconButton onClick={() => setUploading(true)} sx={{ mr: 3 }}>
                   <Avatar
-                    src={downloadFile(userMeta?.img)}
-                    alt={`${userProfile?.firstName} ${userProfile?.lastName}`}
+                    src={downloadFile(user?.img)}
+                    alt={`${user?.firstName} ${user?.lastName}`}
                     sx={{ width: isDesktop ? 150 : 80, height: isDesktop ? 150 : 80 }}
                   />
                 </IconButton>
@@ -123,8 +117,8 @@ export default function Profile() {
               <Typography
                 variant="h3"
                 gutterBottom
-              >{`${userProfile?.firstName} ${userProfile?.lastName}`}</Typography>
-              <Typography fontFamily="monospace">{userProfile?.email}</Typography>
+              >{`${user?.firstName} ${user?.lastName}`}</Typography>
+              <Typography fontFamily="monospace">{user?.email}</Typography>
             </Box>
           </Grid>
         </Grid>

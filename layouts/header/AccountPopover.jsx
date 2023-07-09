@@ -17,6 +17,7 @@ import { useMode } from "contexts/ModeContext";
 import { useAuth } from "contexts/AuthContext";
 import { useRouter } from "next/router";
 import Iconify from "components/iconify/Iconify";
+import { downloadFile } from "utils/files";
 
 export default function AccountPopover() {
   const { isAuthenticated, user, login, logout } = useAuth();
@@ -72,7 +73,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={null}
+          src={downloadFile(user?.img)}
           alt="logged in"
           {...(user?.firstName && {
             children: `${user?.firstName?.[0]}${user?.lastName == "" ? "" : user?.lastName?.[0]}`,

@@ -5,11 +5,11 @@ import cookieCutter from "cookie-cutter";
 
 import { useLazyQuery } from "@apollo/client";
 import { GET_USER } from "gql/queries/auth";
+import { GET_CLUB } from "gql/queries/clubs";
 
 const initialState = {
   isAuthenticated: false,
   user: {
-    displayName: null,
     email: null,
   },
 };
@@ -29,6 +29,14 @@ function AuthProvider({ children }) {
   const router = useRouter();
   const [authState, setAuthState] = useState(initialState);
 
+  const [getClub] = useLazyQuery(GET_CLUB, {
+    onCompleted: ({ club }) => {
+      const currentAuthState = authState;
+      currentAuthState.user.img = club.logo;
+      setAuthState(currentAuthState);
+    },
+  });
+
   // API call to fetch user details and isAuthenticated status
   const [getUser] = useLazyQuery(GET_USER, {
     variables: { userInput: null },
@@ -37,6 +45,11 @@ function AuthProvider({ children }) {
         isAuthenticated: Boolean(userProfile),
         user: { ...userMeta, ...userProfile },
       });
+
+      // use club logo as user image if user is a club
+      if (userMeta?.role === "club") {
+        getClub({ variables: { clubInput: { cid: userMeta.uid } } });
+      }
     },
   });
 
@@ -44,8 +57,6 @@ function AuthProvider({ children }) {
   useEffect(() => {
     // if `logout` flag is set, redirect to auth server to expire token
     if (cookieCutter.get("logout")) {
-      // console.log("logging out...");
-
       // clear `logout` flag
       cookieCutter.set("logout", "", { expires: new Date(0) });
 
