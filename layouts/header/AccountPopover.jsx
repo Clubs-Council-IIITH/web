@@ -16,6 +16,7 @@ import { useMode } from "contexts/ModeContext";
 
 import { useAuth } from "contexts/AuthContext";
 import { useRouter } from "next/router";
+import Iconify from "components/iconify/Iconify";
 
 export default function AccountPopover() {
   const { isAuthenticated, user, login, logout } = useAuth();
@@ -35,17 +36,18 @@ export default function AccountPopover() {
 
   // options to show only when user is logged in
   const AUTHENTICATED_MENU_OPTIONS = [
-    // {
-    //     label: "Profile",
-    //     icon: "eva:person-fill",
-    // },
+    {
+      label: "Profile",
+      icon: "mdi:user-outline",
+      onClick: () => router.push("/profile") && handleClose(),
+    },
   ];
 
   // options to show even when user is not logged in
   const COMMON_MENU_OPTIONS = [
     {
       label: "Settings",
-      icon: "eva:settings-2-fill",
+      icon: "mdi:settings-outline",
       onClick: () => router.push("/settings") && handleClose(),
     },
   ];
@@ -117,6 +119,7 @@ export default function AccountPopover() {
                 <Stack sx={{ p: 1 }}>
                   {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map((option) => (
                     <MenuItem key={option.label} onClick={option.onClick}>
+                      <Iconify icon={option.icon} sx={{ mr: 2 }} />
                       {option.label}
                     </MenuItem>
                   ))}
@@ -136,6 +139,7 @@ export default function AccountPopover() {
             <Stack sx={{ p: 1 }}>
               {COMMON_MENU_OPTIONS.map((option) => (
                 <MenuItem key={option.label} onClick={option.onClick}>
+                  <Iconify icon={option.icon} sx={{ mr: 2 }} />
                   {option.label}
                 </MenuItem>
               ))}
