@@ -28,7 +28,8 @@ const columns = [
     flex: 3,
     align: "center",
     headerAlign: "center",
-    valueGetter: ({ row }) => ISOtoHuman(row.datetimeperiod[0]),
+    valueGetter: ({ row }) => row.datetimeperiod[0],
+    valueFormatter: ({ value }) => ISOtoHuman(value),
   },
   {
     field: "budget",
