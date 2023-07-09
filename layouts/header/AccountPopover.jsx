@@ -12,34 +12,18 @@ import {
   Popover,
 } from "@mui/material";
 
-import { ModeSwitch } from "components/ModeSwitch";
-
-import { useAuth } from "contexts/AuthContext";
 import { useMode } from "contexts/ModeContext";
 
-const AUTHENTICATED_MENU_OPTIONS = [
-  // {
-  //     label: "Profile",
-  //     icon: "eva:person-fill",
-  // },
-];
-
-const COMMON_MENU_OPTIONS = [
-  // {
-  //     label: "Settings",
-  //     icon: "eva:settings-2-fill",
-  // },
-];
+import { useAuth } from "contexts/AuthContext";
+import { useRouter } from "next/router";
 
 export default function AccountPopover() {
   const { isAuthenticated, user, login, logout } = useAuth();
   const [open, setOpen] = useState(null);
-  const { isLight, setMode } = useMode();
-  const theme = useTheme();
+  const { isLight } = useMode();
 
-  const handleChange = (event) => {
-    setMode(!isLight);
-  };
+  const theme = useTheme();
+  const router = useRouter();
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -48,6 +32,23 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  // options to show only when user is logged in
+  const AUTHENTICATED_MENU_OPTIONS = [
+    // {
+    //     label: "Profile",
+    //     icon: "eva:person-fill",
+    // },
+  ];
+
+  // options to show even when user is not logged in
+  const COMMON_MENU_OPTIONS = [
+    {
+      label: "Settings",
+      icon: "eva:settings-2-fill",
+      onClick: () => router.push("/settings") && handleClose(),
+    },
+  ];
 
   return (
     <>
@@ -97,10 +98,6 @@ export default function AccountPopover() {
           },
         }}
       >
-        <center>
-          <ModeSwitch checked={!isLight} onChange={handleChange} sx={{ m: 1 }} />
-        </center>
-
         {isAuthenticated ? (
           // if authenticated, show user details and options
           <>
@@ -119,7 +116,7 @@ export default function AccountPopover() {
 
                 <Stack sx={{ p: 1 }}>
                   {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map((option) => (
-                    <MenuItem key={option.label} onClick={handleClose}>
+                    <MenuItem key={option.label} onClick={option.onClick}>
                       {option.label}
                     </MenuItem>
                   ))}
@@ -138,7 +135,7 @@ export default function AccountPopover() {
           <>
             <Stack sx={{ p: 1 }}>
               {COMMON_MENU_OPTIONS.map((option) => (
-                <MenuItem key={option.label} onClick={handleClose}>
+                <MenuItem key={option.label} onClick={option.onClick}>
                   {option.label}
                 </MenuItem>
               ))}
