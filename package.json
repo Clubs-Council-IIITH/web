@@ -36,7 +36,7 @@
     "jwt-decode": "^3.1.2",
     "material-ui-confirm": "^3.0.9",
     "md-editor-rt": "^4.1.1",
-    "next": "^13.4.9",
+    "next": "13.4.7",
     "path-to-regexp": "^6.2.1",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
