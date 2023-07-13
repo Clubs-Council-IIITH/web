@@ -83,7 +83,7 @@ export default function ClubCard({ club, index, url }) {
                 color: "text.disabled",
                 display: "block",
                 fontSize: 14,
-                "mix-blend-mode": "difference",
+                mixBlendMode: "difference",
               }}
             >
               {tagline}
