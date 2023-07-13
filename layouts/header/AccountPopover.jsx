@@ -46,11 +46,11 @@ export default function AccountPopover() {
 
   // options to show even when user is not logged in
   const COMMON_MENU_OPTIONS = [
-    {
-      label: "Settings",
-      icon: "mdi:settings-outline",
-      onClick: () => router.push("/settings") && handleClose(),
-    },
+    // {
+    //   label: "Settings",
+    //   icon: "mdi:settings-outline",
+    //   onClick: () => router.push("/settings") && handleClose(),
+    // },
   ];
 
   return (
