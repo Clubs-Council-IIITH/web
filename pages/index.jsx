@@ -15,7 +15,7 @@ export default function GeneralApp() {
   const confirm = useConfirm();
   const [displayPopUp, setDisplayPopUp] = useState(false);
 
-  const environment = process.env.NODE_ENV;
+  const environment = process.env.NEXT_PUBLIC_ENV;
   // development, test, production
 
   useEffect(() => {
@@ -32,14 +32,12 @@ export default function GeneralApp() {
       setDisplayPopUp(false);
     }
     if (environment && environment === 'test' && displayPopUp) {
-      console.log(environment);
       confirm({
         title: "Testing Website",
         description: "This is a testing website. Do you want to go to the public website? (https://clubs.iiit.ac.in)",
         confirmationText: "Yes",
       })
         .then(() => {
-          sessionStorage.setItem("seenPopUpCCTestWebsite", true);
           router.push('https://clubs.iiit.ac.in');
         })
         .catch(() => {
@@ -47,6 +45,7 @@ export default function GeneralApp() {
         });
 
       setDisplayPopUp(false);
+      sessionStorage.setItem("seenPopUpCCTestWebsite", true);
     }
   }, [displayPopUp]);
 
