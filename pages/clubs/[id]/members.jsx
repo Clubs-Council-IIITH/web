@@ -63,7 +63,6 @@ export default function ClubMembers() {
 
 function MembersTable(id) {
   const { cid } = id;
-  console.log(cid);
   // get members of current club
   const {
     loading,

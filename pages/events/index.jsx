@@ -37,7 +37,7 @@ export default function Events() {
     variables: {
       clubid: null,
     },
-    onCompleted: console.log,
+    // onCompleted: console.log,
   });
 
   const [filteredEvents, setFilteredEvents] = useState([]);
