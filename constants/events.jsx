@@ -54,8 +54,8 @@ export const locationMap = {
 export const stateMap = {
   incomplete: "Incomplete",
   pending_cc: "Pending Clubs Council Approval",
-  pending_budget: "Pending Budget Approval",
-  pending_room: "Pending Room Approval",
+  pending_budget: "Pending SLC/Budget Approval",
+  pending_room: "Pending SLO/Room Approval",
   approved: "Approved",
   completed: "Completed",
   deleted: "Deleted",
