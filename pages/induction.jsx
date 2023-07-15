@@ -3,11 +3,6 @@ import { Typography, Grid, Container, Box, Tabs, Tab, Divider } from "@mui/mater
 import { useTheme, alpha } from "@mui/material/styles";
 
 import Page from "components/Page";
-import ClientOnly from "components/ClientOnly";
-import { UserCard } from "components/users";
-import ProgressList from "components/ProgressList";
-
-import techMembers from "public/assets/json/techMembers.json";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,34 +20,24 @@ function TabPanel(props) {
   );
 }
 
-export default function Progress() {
+export default function Induction() {
   const theme = useTheme();
 
-  const [tabvalue, setTabValue] = useState(2);
+  const [tabvalue, setTabValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
   return (
-    <Page title="Progress Report">
+    <Page title="Induction '23">
       <Container>
         <Typography variant="h3" gutterBottom align="center">
-          Progress Report
+          Induction 2023
         </Typography>
-        <Typography variant="h5" gutterBottom mt={4}>
-          Tech Team
+        <Typography variant="body1" gutterBottom mt={4} align="center">
+          Organised by <i>Clubs Council</i> & <i>Apex</i>, in partnership with all Student Bodies and Clubs on Campus
         </Typography>
-
-        <ClientOnly>
-          <Grid container spacing={3}>
-            {techMembers.map((user, key) => (
-              <Grid key={key} item xs={12} sm={6} md={3}>
-                <UserCard user={user} />
-              </Grid>
-            ))}
-          </Grid>
-        </ClientOnly>
 
         <Box sx={{ mt: 3 }}>
           <Tabs
@@ -70,7 +55,7 @@ export default function Progress() {
             fullWidth
           >
             <Tab
-              label="Website v1 (Previous)"
+              label="Events Schedule"
               sx={{
                 fontWeight: 600,
                 fontSize: "1.0em",
@@ -88,7 +73,7 @@ export default function Progress() {
               }}
             />
             <Tab
-              label="Website v2 (Current)"
+              label="Intro to Clubs"
               sx={{
                 fontWeight: 600,
                 fontSize: "1.0em",
@@ -103,24 +88,13 @@ export default function Progress() {
         <Box>
           <TabPanel value={tabvalue} index={0}>
             <Typography variant="body1" mt={1}>
-              Release Month: <i>August, 2022</i>
+              Schedule Comes here
             </Typography>
-            <ProgressList id="v1" />
           </TabPanel>
           <TabPanel value={tabvalue} index={2}>
             <Typography variant="body1" mt={1}>
-              <u>
-                <a href="https://clubs.iiit.ac.in">Main Website</a>
-              </u>{" "}
-              Release Month: <i>May, 2023</i>
+              Intro to Clubs Sequence comes here
             </Typography>
-            <Typography variant="body1" mt={1}>
-              <u>
-                <a href="https://dev.clubs.iiit.ac.in">Dev Version</a>
-              </u>{" "}
-              Release Month: <i>June, 2023</i> &nbsp; (Only on IIIT internal network)
-            </Typography>
-            <ProgressList id="v2" />
           </TabPanel>
         </Box>
       </Container>
