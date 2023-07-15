@@ -130,6 +130,7 @@ export default function EventForm({
   // watch start and end dates
   const startDateInput = watch("datetimeperiod.0");
   const endDateInput = watch("datetimeperiod.1");
+  const [dateError, setDateError] = useState(true);
 
   // watch location
   const locationInput = watch("location");
@@ -148,6 +149,8 @@ export default function EventForm({
       // else make location input null
       setValue("location", []);
     }
+
+    setDateError(endDateInput <= startDateInput)
   }, [startDateInput, endDateInput, defaultValues]);
 
   // get available locations
@@ -560,7 +563,7 @@ export default function EventForm({
               variant="contained"
               size="large"
               loading={(submitting || submitState?.loading) && !submitState?.error}
-              disabled={budgetError}
+              disabled={budgetError || dateError}
               onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
             >
               {submitButtonText}
