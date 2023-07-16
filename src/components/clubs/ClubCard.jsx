@@ -25,34 +25,13 @@ export default function ClubCard({
           url ? url : studentBody ? `/student-bodies/${cid}` : `/clubs/${cid}`
         }
       >
-        <Box
-          sx={{
-            position: "relative",
-            paddingTop: "calc(100% * 3 / 4)",
-            pt: "100%",
-            "&:after": {
-              top: 0,
-              content: "''",
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-            },
-          }}
-        >
-          <ClubBanner
-            name={name}
-            banner={banner}
-            width={640}
-            height={480}
-            style={{
-              top: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              position: "absolute",
-            }}
-          />
-        </Box>
+        <ClubBanner
+          name={name}
+          banner={banner}
+          width={640}
+          height={480}
+          containerHeight="100%"
+        />
         <CardContent
           sx={{ pt: 4, bottom: 0, width: "100%", position: "absolute" }}
         >
