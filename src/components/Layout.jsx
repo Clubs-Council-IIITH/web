@@ -229,6 +229,7 @@ export function Content({ children }) {
         display: "flex",
         minHeight: "100%",
         overflow: "hidden",
+        width: "100%",
       }}
     >
       <Box
@@ -236,6 +237,7 @@ export function Content({ children }) {
         sx={{
           overflow: "auto",
           minHeight: "100%",
+          width: "100%",
           paddingTop: `${BAR_HEIGHT_MOBILE}px`,
           paddingBottom: theme.spacing(5),
           [theme.breakpoints.up("lg")]: {
