@@ -1,4 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
+
+import EventsGrid from "components/events/EventsGrid";
 import Statistic from "components/Statistic";
 
 export const metadata = {
@@ -8,7 +10,12 @@ export const metadata = {
 export default function Home() {
   return (
     <Box>
-      <Typography variant="h3" sx={{ mb: 2 }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        Upcoming & Recent Events
+      </Typography>
+      <EventsGrid type="recent" limit={4} />
+
+      <Typography variant="h3" sx={{ mb: 2, mt: 4 }}>
         Clubs @ IIITH
       </Typography>
 

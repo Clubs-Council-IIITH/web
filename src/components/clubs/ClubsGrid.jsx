@@ -11,8 +11,6 @@ export default async function ClubsGrid({ category }) {
     query: GET_ACTIVE_CLUBS,
   });
 
-  console.log(activeClubs);
-
   return (
     <Grid container spacing={2}>
       {activeClubs

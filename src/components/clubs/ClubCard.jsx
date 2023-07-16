@@ -1,12 +1,6 @@
 import Link from "next/link";
 
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardActionArea,
-} from "@mui/material";
+import { Typography, Card, CardContent, CardActionArea } from "@mui/material";
 import ClubBanner from "components/clubs/ClubBanner";
 
 export default function ClubCard({

@@ -20,7 +20,7 @@ export default function ClubInfo({ name, logo, tagline }) {
         mr={isDesktop ? 3 : 2}
       />
       <Box>
-        <Typography variant={isDesktop ? "h2" : "h4"}>{name}</Typography>
+        <Typography variant={isDesktop ? "h3" : "h4"}>{name}</Typography>
         <Typography
           variant={isDesktop ? "subtitle1" : "subtitle2"}
           color="text.disabled"
