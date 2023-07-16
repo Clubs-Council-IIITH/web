@@ -223,20 +223,28 @@ export function Content({ children }) {
 
   return (
     <Box
-      component="main"
       sx={{
-        overflow: "auto",
+        display: "flex",
         minHeight: "100%",
-        paddingTop: BAR_HEIGHT_MOBILE + 24,
-        paddingBottom: theme.spacing(5),
-        [theme.breakpoints.up("lg")]: {
-          paddingTop: BAR_HEIGHT_DESKTOP + 24,
-          paddingLeft: theme.spacing(2),
-          paddingRight: theme.spacing(2),
-        },
+        overflow: "hidden",
       }}
     >
-      {children}
+      <Box
+        component="main"
+        sx={{
+          overflow: "auto",
+          minHeight: "100%",
+          paddingTop: `${BAR_HEIGHT_MOBILE}px`,
+          paddingBottom: theme.spacing(5),
+          [theme.breakpoints.up("lg")]: {
+            paddingTop: `${BAR_HEIGHT_DESKTOP}px`,
+            paddingLeft: `${DRAWER_WIDTH}px`,
+            paddingRight: theme.spacing(2),
+          },
+        }}
+      >
+        <Box p={1}>{children}</Box>
+      </Box>
     </Box>
   );
 }
