@@ -20,6 +20,7 @@ import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
 import Icon from "components/Icon";
 import DrawerItem from "components/DrawerItem";
+import Footer from "components/Footer";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
@@ -220,6 +221,7 @@ export function Navigation() {
 
 export function Content({ children }) {
   const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
     <Box
@@ -243,7 +245,10 @@ export function Content({ children }) {
           },
         }}
       >
-        <Box p={3}>{children}</Box>
+        <Box px={isDesktop ? 4 : 2}>
+          {children}
+          <Footer />
+        </Box>
       </Box>
     </Box>
   );
