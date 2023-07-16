@@ -243,7 +243,7 @@ export function Content({ children }) {
           },
         }}
       >
-        <Box p={1}>{children}</Box>
+        <Box p={3}>{children}</Box>
       </Box>
     </Box>
   );
