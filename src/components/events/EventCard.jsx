@@ -20,7 +20,12 @@ export default function EventCard({
           {poster ? (
             <EventPoster name={name} poster={poster} width={200} height={300} />
           ) : (
-            <EventFallbackPoster clubid={clubid} />
+            <EventFallbackPoster
+              name={name}
+              clubid={clubid}
+              width={200}
+              height={300}
+            />
           )}
         </Box>
 
