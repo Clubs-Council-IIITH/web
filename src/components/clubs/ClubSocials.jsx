@@ -6,7 +6,6 @@ import Link from "next/link";
 
 import { Button, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 
@@ -22,7 +21,6 @@ const sites = {
 
 export default function ClubSocials({ socials = {} }) {
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   const [processedSocials, setProcessedSocials] = useState({});
 
@@ -55,7 +53,7 @@ export default function ClubSocials({ socials = {} }) {
             target="_blank"
             key={index}
             sx={{
-              mx: isDesktop ? 1 : 0.5,
+              mx: 0.5,
               textTransform: "none",
               color: sites[item].color,
             }}

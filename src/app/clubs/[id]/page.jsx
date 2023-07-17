@@ -12,6 +12,7 @@ import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
 
 import EventsGrid from "components/events/EventsGrid";
+import MembersGrid from "components/members/MembersGrid";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
@@ -75,6 +76,27 @@ export default async function Club({ params }) {
             </Button>
           </Box>
           <EventsGrid type="club" clubid={id} limit={4} />
+        </Box>
+
+        <Box my={4}>
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Box display="flex" alignItems="center">
+              <Icon variant="group-outline-rounded" mr={1} />
+              <Typography variant="h4">Members</Typography>
+            </Box>
+            <Button
+              variant="none"
+              color="secondary"
+              component={Link}
+              href={`/clubs/${id}/members`}
+            >
+              <Typography variant="button" color="text.primary">
+                View all
+              </Typography>
+              <Icon variant="chevron-right" />
+            </Button>
+          </Box>
+          <MembersGrid onlyCurrent clubid={id} />
         </Box>
       </Stack>
     </Box>

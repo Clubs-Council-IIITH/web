@@ -36,6 +36,7 @@ export default async function EventsGrid({
   );
 }
 
+// construct graphql query based on type
 function constructQuery({ type, clubid }) {
   if (type === "recent") {
     return { query: GET_RECENT_EVENTS };
