@@ -116,6 +116,7 @@ const palette = {
     background: { paper: "#fff", default: "#FAFEFE", neutral: GREY[200] },
     action: { active: GREY[600], ...COMMON.action },
     accent: "#803DB2",
+    accent_opp: "#1EC3BD",
   },
   dark: {
     ...COMMON,
@@ -124,6 +125,7 @@ const palette = {
     background: { paper: GREY[800], default: "#111111", neutral: GREY[500_16] },
     action: { active: GREY[500], ...COMMON.action },
     accent: "#1EC3BD",
+    accent_opp: "#803DB2",
   },
 };
 
