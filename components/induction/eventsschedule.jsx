@@ -1,7 +1,7 @@
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 
-import eventsschedule from "components/induction/eventsschedule.json";
+import eventsschedule from "public/assets/json/eventsschedule.json";
 
 import {
     AbcOutlined,
