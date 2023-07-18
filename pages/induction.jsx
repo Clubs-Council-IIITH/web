@@ -3,6 +3,7 @@ import { Typography, Grid, Container, Box, Tabs, Tab, Divider } from "@mui/mater
 import { useTheme, alpha } from "@mui/material/styles";
 
 import Page from "components/Page";
+import EventsSchedule from "components/induction/eventsschedule";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -87,9 +88,9 @@ export default function Induction() {
 
         <Box>
           <TabPanel value={tabvalue} index={0}>
-            <Typography variant="body1" mt={1}>
-              Schedule Comes here
-            </Typography>
+            <Box sx={{ mt: 3 }}>
+              <EventsSchedule />
+            </Box>
           </TabPanel>
           <TabPanel value={tabvalue} index={2}>
             <Typography variant="body1" mt={1}>

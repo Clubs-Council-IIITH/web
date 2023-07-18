@@ -1,0 +1,56 @@
+[
+    {
+        "className": "date"
+    },
+    {
+        "className": "red",
+        "date": "30 July, 10:00am - 12:30pm",
+        "title": "Intro to Clubs & Student Bodies",
+        "location": "H-105",
+        "description": "For UG Students",
+        "icon": "Groups2Outlined",
+        "eventid": ""
+    },
+    {
+        "className": "red",
+        "date": "30 July, 10:30am - 1:00pm",
+        "title": "Intro to Clubs & Student Bodies",
+        "location": "",
+        "description": "For PG/LE Students",
+        "icon": "Groups2Outlined",
+        "eventid": ""
+    },
+    {
+        "className": "red",
+        "date": "30 July, 02:00pm - 05:00pm",
+        "title": "Intro to Clubs & Student Bodies",
+        "location": "",
+        "description": "Common Session - 2",
+        "icon": "Groups2Outlined",
+        "eventid": ""
+    },
+    {
+        "className": "blue",
+        "date": "30 July, 05:00pm - 08:30pm",
+        "title": "Linux Fest",
+        "location": "",
+        "description": "",
+        "icon": "Computer",
+        "eventid": ""
+    },
+    {
+        "className": "green",
+        "date": "30 July, 09:30pm",
+        "title": "Apex Meet",
+        "location": "",
+        "description": "",
+        "icon": "",
+        "eventid": ""
+    },
+    {
+        "className": "date"
+    },
+    {
+        "className": "empty"
+    }
+]
