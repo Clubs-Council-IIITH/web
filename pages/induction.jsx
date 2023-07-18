@@ -6,6 +6,9 @@ import Page from "components/Page";
 import EventsSchedule from "components/induction/eventsschedule";
 import IntroToClubs from "components/induction/introtoclubs";
 
+import introtoclubsschedule from "public/assets/json/introtoclubsschedule.json";
+import introtoclubsschedule_pg from "public/assets/json/introtoclubsschedule-pg.json";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -153,13 +156,13 @@ export default function Induction() {
             <Box>
               <TabPanel value={introtabvalue} index={0}>
                 <Box sx={{ mt: 3 }}>
-                  <IntroToClubs />
+                  <IntroToClubs jsonfile={introtoclubsschedule} />
                 </Box>
               </TabPanel>
               <TabPanel value={introtabvalue} index={2}>
-                <Typography variant="body1" mt={1}>
-                  Intro to PG Clubs Sequence comes here
-                </Typography>
+                <Box sx={{ mt: 3 }}>
+                  <IntroToClubs jsonfile={introtoclubsschedule_pg} />
+                </Box>
               </TabPanel>
             </Box>
           </TabPanel>

@@ -1,6 +1,6 @@
 [
     {
-        "header": "Session 1 (10:00 - 12:30) - Sunday, 30th August, 2023",
+        "header": "Session 1 (10:00 - 12:30) - Sunday, 30th July, 2023",
         "rows": [
             "Clubs Council",
             "Literary Club",
@@ -9,7 +9,12 @@
             "Cyclorama",
             "Skateboarding Club",
             "Electronics and Robotics Club",
-            "Pentaprism",
+            "Pentaprism"
+        ]
+    },
+    {
+        "header": "Session 2 (14:30 - 17:00) - Sunday, 30th July, 2023",
+        "rows": [
             "TVRQC",
             "OSDG",
             "Language Club",
@@ -23,30 +28,7 @@
         ]
     },
     {
-        "header": "Session 2 (14:30 - 17:00) - Sunday, 30th August, 2023",
-        "rows": [
-            "Clubs Council",
-            "Literary Club",
-            "Ping!",
-            "Programming Club",
-            "Cyclorama",
-            "Skateboarding Club",
-            "Electronics and Robotics Club",
-            "Pentaprism",
-            "TVRQC",
-            "OSDG",
-            "Language Club",
-            "Gaming Club",
-            "The Debate Society",
-            "The Art Society",
-            "Cultural Council",
-            "NSS",
-            "Campus Life Council",
-            "Felicity"
-        ]
-    },
-    {
-        "header": "Session 3 (17:30 - 20:00) - Monday",
+        "header": "Session 3 (17:30 - 20:00) - Monday, 31st July, 2023",
         "rows": [
             "Parliament",
             "Music Club",
