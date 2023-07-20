@@ -14,6 +14,9 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@fullcalendar/core": "^6.1.8",
+    "@fullcalendar/daygrid": "^6.1.8",
+    "@fullcalendar/react": "^6.1.8",
     "@iconify/react": "^4.1.1",
     "@mdx-js/loader": "^2.3.0",
     "@mdx-js/react": "^2.3.0",
@@ -24,6 +27,7 @@
     "next": "^13.4.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-nice-avatar": "^1.4.1"
+    "react-nice-avatar": "^1.4.1",
+    "string-to-color": "^2.2.2"
   }
 }
