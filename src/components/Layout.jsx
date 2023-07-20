@@ -21,6 +21,7 @@ import Logo from "components/Logo";
 import Icon from "components/Icon";
 import DrawerItem from "components/DrawerItem";
 import Footer from "components/Footer";
+import AccountPopover from "components/profile/AccountPopover";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
@@ -29,7 +30,7 @@ const BAR_HEIGHT_DESKTOP = 92;
 // define navigation drawer width
 const DRAWER_WIDTH = 280;
 
-function Bar({ onOpenDrawer }) {
+function Bar({ user = null, onOpenDrawer }) {
   const theme = useTheme();
 
   return (
@@ -71,13 +72,15 @@ function Bar({ onOpenDrawer }) {
             xs: 0.5,
             sm: 1,
           }}
-        ></Stack>
+        >
+          <AccountPopover user={user} />
+        </Stack>
       </Toolbar>
     </AppBar>
   );
 }
 
-function Drawer({ drawerOpen, onCloseDrawer }) {
+function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
   const theme = useTheme();
   const pathname = usePathname();
 
@@ -205,13 +208,14 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   );
 }
 
-export function Navigation() {
+export function Navigation({ user = null }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <>
-      <Bar onOpenDrawer={() => setDrawerOpen(true)} />
+      <Bar user={user} onOpenDrawer={() => setDrawerOpen(true)} />
       <Drawer
+        user={user}
         drawerOpen={drawerOpen}
         onCloseDrawer={() => setDrawerOpen(false)}
       />

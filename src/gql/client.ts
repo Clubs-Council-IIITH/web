@@ -6,13 +6,14 @@ import {
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 
 const GRAPHQL_ENDPOINT =
-  process.env.GRAPHQL_ENDPOINT || "http://localhost/graphql";
+  process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";
 
 export const { getClient } = registerApolloClient(() => {
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
       uri: GRAPHQL_ENDPOINT,
+      credentials: "include",
     }),
   });
 });
