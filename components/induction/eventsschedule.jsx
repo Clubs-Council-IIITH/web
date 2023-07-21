@@ -4,16 +4,18 @@ import "react-vertical-timeline-component/style.min.css";
 import eventsschedule from "public/assets/json/eventsschedule.json";
 
 import {
-    AbcOutlined,
     RemoveOutlined,
+    TodayOutlined,
+    ParkOutlined,
+    PetsOutlined,
+    Groups2Outlined,
+    AbcOutlined,
     SportsSoccerOutlined,
     PrecisionManufacturing,
     EscalatorWarningOutlined,
     CameraEnhanceOutlined,
-    TodayOutlined,
     PlayCircleFilledOutlined,
     Computer,
-    Groups2Outlined,
     TravelExploreOutlined,
     VideogameAssetOutlined,
     PeopleOutlined,
@@ -31,28 +33,31 @@ import { Divider } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 const IconsList = {
-    "AbcOutlined": <AbcOutlined />,
-    "RemoveOutlined": <RemoveOutlined />,
-    "SportsSoccerOutlined": <SportsSoccerOutlined />,
-    "PrecisionManufacturing": <PrecisionManufacturing />,
-    "EscalatorWarningOutlined": <EscalatorWarningOutlined />,
-    "CameraEnhanceOutlined": <CameraEnhanceOutlined />,
-    "TodayOutlined": <TodayOutlined />,
-    "PlayCircleFilledOutlined": <PlayCircleFilledOutlined />,
-    "Computer": <Computer />,
+    "ParkOutlined": <ParkOutlined />,
+    "PetsOutlined": <PetsOutlined />,
     "Groups2Outlined": <Groups2Outlined />,
-    "TravelExploreOutlined": <TravelExploreOutlined />,
-    "VideogameAssetOutlined": <VideogameAssetOutlined />,
-    "PeopleOutlined": <PeopleOutlined />,
-    "NightlifeOutlined": <NightlifeOutlined />,
-    "EmojiEmotionsOutlined": <EmojiEmotionsOutlined />,
-    "BrushOutlined": <BrushOutlined />,
-    "ColorLensOutlined": <ColorLensOutlined />,
-    "PsychologyOutlined": <PsychologyOutlined />,
-    "QuizOutlined": <QuizOutlined />,
-    "BorderColorOutlined": <BorderColorOutlined />,
-    "LanguageOutlined": <LanguageOutlined />,
-    "MovieCreationOutlined": <MovieCreationOutlined />,
+
+    // "AbcOutlined": <AbcOutlined />,
+    // "RemoveOutlined": <RemoveOutlined />,
+    // "SportsSoccerOutlined": <SportsSoccerOutlined />,
+    // "PrecisionManufacturing": <PrecisionManufacturing />,
+    // "EscalatorWarningOutlined": <EscalatorWarningOutlined />,
+    // "CameraEnhanceOutlined": <CameraEnhanceOutlined />,
+    // "TodayOutlined": <TodayOutlined />,
+    // "PlayCircleFilledOutlined": <PlayCircleFilledOutlined />,
+    // "Computer": <Computer />,
+    // "TravelExploreOutlined": <TravelExploreOutlined />,
+    // "VideogameAssetOutlined": <VideogameAssetOutlined />,
+    // "PeopleOutlined": <PeopleOutlined />,
+    // "NightlifeOutlined": <NightlifeOutlined />,
+    // "EmojiEmotionsOutlined": <EmojiEmotionsOutlined />,
+    // "BrushOutlined": <BrushOutlined />,
+    // "ColorLensOutlined": <ColorLensOutlined />,
+    // "PsychologyOutlined": <PsychologyOutlined />,
+    // "QuizOutlined": <QuizOutlined />,
+    // "BorderColorOutlined": <BorderColorOutlined />,
+    // "LanguageOutlined": <LanguageOutlined />,
+    // "MovieCreationOutlined": <MovieCreationOutlined />,
 };
 
 
@@ -86,7 +91,7 @@ const TimelineElement = ({
             icon={Icon}
         >
             <h3 className="vertical-timeline-element-title"><u>{title}</u></h3>
-            <h4 className="vertical-timeline-element-subtitle">{location}</h4>
+            <h5 className="vertical-timeline-element-subtitle">{location}</h5>
             <p>{description}</p>
         </VerticalTimelineElement>
     ) : className === "red" ? (
@@ -114,7 +119,7 @@ const TimelineElement = ({
             icon={Icon}
         >
             <h3 className="vertical-timeline-element-title"><u>{title}</u></h3>
-            <h4 className="vertical-timeline-element-subtitle">{location}</h4>
+            <h5 className="vertical-timeline-element-subtitle">{location}</h5>
             <p>{description}</p>
         </VerticalTimelineElement>
     ) : className === "green" ? (
@@ -128,7 +133,7 @@ const TimelineElement = ({
             icon={Icon}
         >
             <h3 className="vertical-timeline-element-title"><u>{title}</u></h3>
-            <h4 className="vertical-timeline-element-subtitle">{location}</h4>
+            <h5 className="vertical-timeline-element-subtitle">{location}</h5>
             <p>{description}</p>
         </VerticalTimelineElement>
     ) : (
@@ -142,7 +147,7 @@ const TimelineElement = ({
             icon={Icon}
         >
             <h3 className="vertical-timeline-element-title"><u>{title}</u></h3>
-            <h4 className="vertical-timeline-element-subtitle">{location}</h4>
+            <h5 className="vertical-timeline-element-subtitle">{location}</h5>
             <p>{description}</p>
         </VerticalTimelineElement>
     )
