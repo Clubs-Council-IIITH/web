@@ -1,8 +1,6 @@
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 
-import eventsschedule from "public/assets/json/eventsschedule.json";
-
 import {
     RemoveOutlined,
     TodayOutlined,
@@ -153,7 +151,7 @@ const TimelineElement = ({
     )
 );
 
-export default function EventsSchedule() {
+export default function EventsSchedule({eventsschedule}) {
     const theme = useTheme();
     return (
         <>

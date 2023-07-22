@@ -8,6 +8,7 @@ import IntroToClubs from "components/induction/introtoclubs";
 
 import introtoclubsschedule from "public/assets/json/introtoclubsschedule.json";
 import introtoclubsschedule_pg from "public/assets/json/introtoclubsschedule-pg.json";
+import eventsschedule from "public/assets/json/eventsschedule.json";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -101,7 +102,7 @@ export default function Induction() {
               {
                 environment && environment === 'production' ?
                   <Typography variant="body1"> To be announced soon !<br/>Stay Tuned !!</Typography>
-                  : <EventsSchedule />
+                  : <EventsSchedule eventsschedule={eventsschedule} />
               }
             </Box>
           </TabPanel>
