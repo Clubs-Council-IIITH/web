@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Grid, Container, Box, Tabs, Tab, Divider } from "@mui/material";
 import { useTheme, alpha } from "@mui/material/styles";
 
@@ -6,9 +6,9 @@ import Page from "components/Page";
 import EventsSchedule from "components/induction/eventsschedule";
 import IntroToClubs from "components/induction/introtoclubs";
 
-import introtoclubsschedule from "public/assets/json/introtoclubsschedule.json";
-import introtoclubsschedule_pg from "public/assets/json/introtoclubsschedule-pg.json";
-import eventsschedule from "public/assets/json/eventsschedule.json";
+// import introtoclubsschedule from "public/assets/json/introtoclubsschedule.json";
+// import introtoclubsschedule_pg from "public/assets/json/introtoclubsschedule-pg.json";
+// import eventsschedule from "public/assets/json/eventsschedule.json";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,6 +39,39 @@ export default function Induction() {
   const handleIntroChange = (event, newValue) => {
     setIntroTabValue(newValue);
   };
+
+  const [eventsschedule, setEventsSchedule] = useState(null);
+  useEffect(() => {
+    fetch("/static/eventsschedule.json")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setEventsSchedule(data)
+      })
+  }, []);
+
+  const [introtoclubsschedule, setIntroToClubsSchedule] = useState(null);
+  useEffect(() => {
+    fetch("/static/introtoclubsschedule.json")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setIntroToClubsSchedule(data)
+      })
+  }, [eventsschedule]);
+
+  const [introtoclubsschedule_pg, setIntroToClubsSchedulePG] = useState(null);
+  useEffect(() => {
+    fetch("/static/introtoclubsschedule-pg.json")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setIntroToClubsSchedulePG(data)
+      })
+  }, [eventsschedule]);
 
   return (
     <Page title="Induction '23">
@@ -101,8 +134,9 @@ export default function Induction() {
             <Box sx={{ mt: 3 }}>
               {
                 environment && environment === 'production' ?
-                  <Typography variant="body1"> To be announced soon !<br/>Stay Tuned !!</Typography>
-                  : <EventsSchedule eventsschedule={eventsschedule} />
+                  <Typography variant="body1"> To be announced soon !<br />Stay Tuned !!</Typography>
+                  : !eventsschedule ? <Typography variant="body1">Loading...</Typography>
+                    : <EventsSchedule eventsschedule={eventsschedule} />
               }
             </Box>
           </TabPanel>
@@ -112,7 +146,7 @@ export default function Induction() {
             </Typography> */}
             {
               environment && environment === 'production' ?
-                <Typography variant="body1"> To be announced soon !<br/>Stay Tuned !!</Typography>
+                <Typography variant="body1"> To be announced soon !<br />Stay Tuned !!</Typography>
                 : <>
                   <Divider
                     style={{
@@ -166,12 +200,14 @@ export default function Induction() {
                   <Box>
                     <TabPanel value={introtabvalue} index={0}>
                       <Box sx={{ mt: 3 }}>
-                        <IntroToClubs jsonfile={introtoclubsschedule} />
+                        {!introtoclubsschedule ? <Typography variant="body1">Loading...</Typography> :
+                          <IntroToClubs jsonfile={introtoclubsschedule} />}
                       </Box>
                     </TabPanel>
                     <TabPanel value={introtabvalue} index={2}>
                       <Box sx={{ mt: 3 }}>
-                        <IntroToClubs jsonfile={introtoclubsschedule_pg} />
+                        {!introtoclubsschedule_pg ? <Typography variant="body1">Loading...</Typography> :
+                          <IntroToClubs jsonfile={introtoclubsschedule_pg} />}
                       </Box>
                     </TabPanel>
                   </Box>
