@@ -28,7 +28,7 @@ export default function GeneralApp() {
   }, []);
 
   useEffect(() => {
-    if (environment !== 'test') {
+    if (environment === 'development') {
       setDisplayPopUp(false);
     }
     if (environment && environment === 'test' && displayPopUp) {
@@ -39,6 +39,22 @@ export default function GeneralApp() {
       })
         .then(() => {
           router.push('https://clubs.iiit.ac.in');
+        })
+        .catch(() => {
+          // nothing
+        });
+
+      setDisplayPopUp(false);
+      sessionStorage.setItem("seenPopUpCCTestWebsite", true);
+    }
+    if (environment && environment === 'production' && displayPopUp) {
+      confirm({
+        title: "Induction Page",
+        description: "Do you want to go to the Induction 2023 page? (https://clubs.iiit.ac.in/induction)",
+        confirmationText: "Yes",
+      })
+        .then(() => {
+          router.push('/induction');
         })
         .catch(() => {
           // nothing
