@@ -146,7 +146,7 @@ export default function Induction() {
             </Typography> */}
             {
               environment && environment === 'production' ?
-                <Typography variant="body1"> To be announced soon !<br />Stay Tuned !!</Typography>
+                <Typography variant="body1" sx={{ mt: 3 }}> To be announced soon !<br />Stay Tuned !!</Typography>
                 : <>
                   <Divider
                     style={{
