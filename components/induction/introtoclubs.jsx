@@ -39,7 +39,7 @@ export default function IntroToClubs({ jsonfile }) {
                     <Grid container spacing={2}>
                         {
                             jsonfile.map((slot, index) => (
-                                <Grid item xs={12} sm={6} lg={4}>
+                                <Grid item xs={12} sm={6} lg={4} key={index}>
                                     <TableContainer component={Paper} variant="outlined">
                                         <Table>
                                             <TableHead>
