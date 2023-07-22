@@ -48,6 +48,7 @@
     "react-slick": "^0.29.0",
     "react-social-icons": "^5.15.0",
     "react-top-loading-bar": "^2.3.1",
+    "react-vertical-timeline-component": "^3.6.0",
     "sanitize-html": "^2.10.0",
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2"
