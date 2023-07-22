@@ -27,6 +27,7 @@ function TabPanel(props) {
 
 export default function Induction() {
   const theme = useTheme();
+  const environment = process.env.NEXT_PUBLIC_ENV;
 
   const [tabvalue, setTabValue] = useState(0);
   const [introtabvalue, setIntroTabValue] = useState(0);
@@ -97,74 +98,84 @@ export default function Induction() {
         <Box>
           <TabPanel value={tabvalue} index={0}>
             <Box sx={{ mt: 3 }}>
-              <EventsSchedule />
+              {
+                environment && environment === 'production' ?
+                  <Typography variant="body1"> To be announced soon !<br/>Stay Tuned !!</Typography>
+                  : <EventsSchedule />
+              }
             </Box>
           </TabPanel>
           <TabPanel value={tabvalue} index={2}>
             {/* <Typography variant="body1" mt={1}>
               Intro to Clubs Sequence comes here
             </Typography> */}
-            <Divider
-              style={{
-                color: "black"
-              }} />
-            <Box sx={{ mt: 1.5 }}>
-              <Tabs
-                value={introtabvalue}
-                onChange={handleIntroChange}
-                scrollButtons="auto"
-                textColor="black"
-                variant="scrollable"
-                TabIndicatorProps={{
-                  style: {
-                    backgroundColor: theme.palette.accent_opp,
-                  },
-                }}
-                sx={{ backgroundColor: alpha(theme.palette.accent_opp, 0.07) }}
-                fullWidth
-              >
-                <Tab
-                  label="UG 2k22"
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: "1.0em",
-                    minWidth: "50%",
-                    width: "50%",
-                  }}
-                  wrapped
-                />
-                <Divider
-                  orientation="vertical"
-                  style={{
-                    height: 35,
-                    alignSelf: "center",
-                    color: alpha(theme.palette.accent_opp, 0.6),
-                  }}
-                />
-                <Tab
-                  label="LE 2k22, PG 2k22 & PhD 2k22"
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: "1.0em",
-                    minWidth: "50%",
-                    width: "50%",
-                  }}
-                  wrapped
-                />
-              </Tabs>
-            </Box>
-            <Box>
-              <TabPanel value={introtabvalue} index={0}>
-                <Box sx={{ mt: 3 }}>
-                  <IntroToClubs jsonfile={introtoclubsschedule} />
-                </Box>
-              </TabPanel>
-              <TabPanel value={introtabvalue} index={2}>
-                <Box sx={{ mt: 3 }}>
-                  <IntroToClubs jsonfile={introtoclubsschedule_pg} />
-                </Box>
-              </TabPanel>
-            </Box>
+            {
+              environment && environment === 'production' ?
+                <Typography variant="body1"> To be announced soon !<br/>Stay Tuned !!</Typography>
+                : <>
+                  <Divider
+                    style={{
+                      color: "black"
+                    }} />
+                  <Box sx={{ mt: 1.5 }}>
+                    <Tabs
+                      value={introtabvalue}
+                      onChange={handleIntroChange}
+                      scrollButtons="auto"
+                      textColor="black"
+                      variant="scrollable"
+                      TabIndicatorProps={{
+                        style: {
+                          backgroundColor: theme.palette.accent_opp,
+                        },
+                      }}
+                      sx={{ backgroundColor: alpha(theme.palette.accent_opp, 0.07) }}
+                      fullWidth
+                    >
+                      <Tab
+                        label="UG 2k22"
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: "1.0em",
+                          minWidth: "50%",
+                          width: "50%",
+                        }}
+                        wrapped
+                      />
+                      <Divider
+                        orientation="vertical"
+                        style={{
+                          height: 35,
+                          alignSelf: "center",
+                          color: alpha(theme.palette.accent_opp, 0.6),
+                        }}
+                      />
+                      <Tab
+                        label="LE 2k22, PG 2k22 & PhD 2k22"
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: "1.0em",
+                          minWidth: "50%",
+                          width: "50%",
+                        }}
+                        wrapped
+                      />
+                    </Tabs>
+                  </Box>
+                  <Box>
+                    <TabPanel value={introtabvalue} index={0}>
+                      <Box sx={{ mt: 3 }}>
+                        <IntroToClubs jsonfile={introtoclubsschedule} />
+                      </Box>
+                    </TabPanel>
+                    <TabPanel value={introtabvalue} index={2}>
+                      <Box sx={{ mt: 3 }}>
+                        <IntroToClubs jsonfile={introtoclubsschedule_pg} />
+                      </Box>
+                    </TabPanel>
+                  </Box>
+                </>
+            }
           </TabPanel>
         </Box>
       </Container>
