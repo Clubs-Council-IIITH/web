@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { Typography, Grid, Container, Box, Tabs, Tab, Divider } from "@mui/material";
+import Link from "next/link";
+import { Typography, Button, Container, Box, Tabs, Tab, Divider } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 import { useTheme, alpha } from "@mui/material/styles";
 
 import Page from "components/Page";
@@ -83,7 +85,22 @@ export default function Induction() {
           Organised by <i>Clubs Council</i> & <i>Apex</i>, in partnership with all Student Bodies and Clubs on Campus
         </Typography>
 
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ mt: 2 }}>
+          <Button
+            component={Link}
+            href="https://apexbody.github.io/"
+            target="_blank"
+            color="primary"
+            variant="outlined"
+            sx={{ p: 1 }}
+            style={{ border: '2px solid' }}
+            endIcon={<SendIcon />}
+          >
+            View Student's Kit 2023-24
+          </Button>
+        </Box>
+
+        <Box sx={{ mt: 2 }}>
           <Tabs
             value={tabvalue}
             onChange={handleChange}
