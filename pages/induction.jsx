@@ -150,9 +150,10 @@ export default function Induction() {
           <TabPanel value={tabvalue} index={0}>
             <Box sx={{ mt: 3 }}>
               {
-                environment && environment === 'production' ?
-                  <Typography variant="body1"> To be announced soon !<br />Stay Tuned !!</Typography>
-                  : !eventsschedule ? <Typography variant="body1">Loading...</Typography>
+                // environment && environment === 'production' ?
+                //   <Typography variant="body1"> To be announced soon !<br />Stay Tuned !!</Typography>
+                //   :
+                  !eventsschedule ? <Typography variant="body1">Loading...</Typography>
                     : <EventsSchedule eventsschedule={eventsschedule} />
               }
             </Box>
