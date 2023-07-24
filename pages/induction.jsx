@@ -96,7 +96,7 @@ export default function Induction() {
             style={{ border: '2px solid' }}
             endIcon={<SendIcon />}
           >
-            View Student's Kit 2023-24
+            View Student&apos;s Kit 2023-24
           </Button>
         </Box>
 
