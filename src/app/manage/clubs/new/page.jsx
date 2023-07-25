@@ -13,7 +13,7 @@ export default function NewClub() {
         Create a New Club
       </Typography>
 
-      <ClubForm defaultValues={{}} />
+      <ClubForm defaultValues={{}} action="create" />
     </Container>
   );
 }

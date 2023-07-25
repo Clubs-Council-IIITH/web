@@ -1,6 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useForm, Controller } from "react-hook-form";
+
+import { useToast } from "components/Toast";
+
+import { makeClient } from "gql/provider";
+import { CREATE_CLUB, EDIT_CLUB } from "gql/mutations/clubs";
+import { GET_ACTIVE_CLUBS, GET_ALL_CLUBS, GET_CLUB } from "gql/queries/clubs";
 
 import { LoadingButton } from "@mui/lab";
 import {
@@ -9,16 +17,117 @@ import {
   TextField,
   Typography,
   InputAdornment,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
 
-export default function ClubForm({
-  defaultValues = {},
-  onSubmit = console.log,
-}) {
+import { uploadFile } from "utils/files";
+
+export default function ClubForm({ defaultValues = {}, action = "log" }) {
+  const router = useRouter();
+
   const { control, handleSubmit } = useForm({ defaultValues });
+  const { triggerToast } = useToast();
+
+  // different form submission handlers
+  const submitHandlers = {
+    log: console.log,
+    create: async (data) =>
+      await makeClient().mutate({
+        mutation: CREATE_CLUB,
+        variables: {
+          clubInput: data,
+        },
+        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
+      }),
+    edit: async (data) =>
+      await makeClient().mutate({
+        mutation: EDIT_CLUB,
+        variables: {
+          clubInput: data,
+        },
+        refetchQueries: [
+          { query: GET_ACTIVE_CLUBS },
+          { query: GET_ALL_CLUBS },
+          { query: GET_CLUB, variables: { clubInput: { cid: data.cid } } },
+        ],
+      }),
+  };
+
+  // transform data and mutate
+  async function onSubmit(formData) {
+    const {
+      code,
+      name,
+      email,
+      category,
+      tagline,
+      description,
+      socials: {
+        website,
+        instagram,
+        facebook,
+        youtube,
+        twitter,
+        linkedin,
+        discord,
+      },
+      logo,
+      banner,
+    } = formData;
+
+    const cid = email.split("@")[0];
+    try {
+      const logoUrl = logo?.[0] ? await uploadFile(logo?.[0]) : null;
+      const bannerUrl = banner?.[0] ? await uploadFile(banner?.[0]) : null;
+      await submitHandlers[action]({
+        cid,
+        code,
+        name,
+        email,
+        category,
+        tagline,
+        description,
+        socials: {
+          website,
+          instagram,
+          facebook,
+          youtube,
+          twitter,
+          linkedin,
+          discord,
+        },
+        logo: logoUrl,
+        banner: bannerUrl,
+      });
+
+      // show success toast
+      triggerToast({
+        title: "Success!",
+        message: `${formData.name} was ${
+          action === "edit" ? "edited" : "created"
+        }.`,
+        severity: "success",
+      });
+
+      // redirect to manage page
+      router.push("/manage/clubs");
+    } catch (e) {
+      console.log(JSON.stringify(e));
+
+      // show error toast
+      triggerToast({
+        title: e.name,
+        message: e?.graphQLErrors?.map((g) => g?.message)?.join("\n"),
+        severity: "error",
+      });
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -42,6 +151,9 @@ export default function ClubForm({
               </Grid>
               <Grid item xs={12}>
                 <ClubEmailInput control={control} />
+              </Grid>
+              <Grid item xs={12}>
+                <ClubCategorySelect control={control} />
               </Grid>
               <Grid item xs={12}>
                 <ClubTaglineInput control={control} />
@@ -153,11 +265,14 @@ export default function ClubForm({
 function ClubCodeInput({ control }) {
   return (
     <Controller
-      name="cid"
+      name="code"
       control={control}
-      // rules={{
-      //   validate: (value) => value === "test" || "Invalid club code!",
-      // }}
+      rules={{
+        maxLength: {
+          value: 15,
+          message: "Club code must be at most 15 characters long!",
+        },
+      }}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
@@ -184,8 +299,8 @@ function ClubNameInput({ control }) {
       control={control}
       rules={{
         minLength: {
-          value: 3,
-          message: "Club name must be at least 3 characters long!",
+          value: 5,
+          message: "Club name must be at least 5 characters long!",
         },
         maxLength: {
           value: 50,
@@ -226,6 +341,27 @@ function ClubEmailInput({ control }) {
         />
       )}
     />
+  );
+}
+
+// club category dropdown
+function ClubCategorySelect({ control }) {
+  return (
+    <FormControl fullWidth>
+      <InputLabel id="category">Category *</InputLabel>
+      <Controller
+        name="category"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <Select labelId="category" label="Category *" fullWidth {...field}>
+            <MenuItem value="cultural">Cultural</MenuItem>
+            <MenuItem value="technical">Technical</MenuItem>
+            <MenuItem value="other">Other</MenuItem>
+          </Select>
+        )}
+      />
+    </FormControl>
   );
 }
 

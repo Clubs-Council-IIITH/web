@@ -1,8 +1,11 @@
 import { Roboto } from "next/font/google";
 import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 
+import Toast, { ToastProvider } from "components/Toast";
 import { Navigation, Content } from "components/Layout";
+
 import { getClient } from "gql/client";
+import { ApolloWrapper } from "gql/provider";
 import { GET_USER } from "gql/queries/auth";
 
 export const metadata = {
@@ -25,8 +28,13 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={roboto.className}>
         <ThemeRegistry>
-          <Navigation user={{ ...userMeta, ...userProfile }} />
-          <Content>{children}</Content>
+          <ApolloWrapper>
+            <ToastProvider>
+              <Navigation user={{ ...userMeta, ...userProfile }} />
+              <Content>{children}</Content>
+              <Toast />
+            </ToastProvider>
+          </ApolloWrapper>
         </ThemeRegistry>
       </body>
     </html>
