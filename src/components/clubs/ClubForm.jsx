@@ -155,12 +155,18 @@ function ClubCodeInput({ control }) {
     <Controller
       name="cid"
       control={control}
+      // rules={{
+      //   validate: (value) => value === "test" || "Invalid club code!",
+      // }}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
-          error={error}
           label="Club Code"
-          helperText="A custom, short code to identify this club."
+          autoComplete="off"
+          error={invalid}
+          helperText={
+            error?.message || "A custom, short code to identify this club."
+          }
           variant="outlined"
           fullWidth
           required
@@ -176,10 +182,23 @@ function ClubNameInput({ control }) {
     <Controller
       name="name"
       control={control}
-      render={({ field }) => (
+      rules={{
+        minLength: {
+          value: 3,
+          message: "Club name must be at least 3 characters long!",
+        },
+        maxLength: {
+          value: 50,
+          message: "Club name must be at most 50 characters long!",
+        },
+      }}
+      render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
           label="Name"
+          autoComplete="off"
+          error={invalid}
+          helperText={error?.message}
           variant="outlined"
           fullWidth
           required
@@ -198,7 +217,9 @@ function ClubEmailInput({ control }) {
       render={({ field }) => (
         <TextField
           {...field}
+          type="email"
           label="Email"
+          autoComplete="off"
           variant="outlined"
           fullWidth
           required
@@ -214,8 +235,22 @@ function ClubTaglineInput({ control }) {
     <Controller
       name="tagline"
       control={control}
-      render={({ field }) => (
-        <TextField {...field} label="Tagline" variant="outlined" fullWidth />
+      rules={{
+        maxLength: {
+          value: 200,
+          message: "Club tagline must be at most 200 characters long!",
+        },
+      }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <TextField
+          {...field}
+          label="Tagline"
+          autoComplete="off"
+          error={invalid}
+          helperText={error?.message}
+          variant="outlined"
+          fullWidth
+        />
       )}
     />
   );
@@ -227,14 +262,23 @@ function ClubDescriptionInput({ control }) {
     <Controller
       name="description"
       control={control}
-      render={({ field }) => (
+      rules={{
+        maxLength: {
+          value: 1000,
+          message: "Club description must be at most 1000 characters long!",
+        },
+      }}
+      render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
           label="Description"
+          autoComplete="off"
+          error={invalid}
+          helperText={error?.message}
           variant="outlined"
+          rows={8}
           fullWidth
           multiline
-          rows={8}
         />
       )}
     />
@@ -261,6 +305,7 @@ function ClubSocialInput({ name, control }) {
         <TextField
           {...field}
           label={attributeMap[name].label}
+          autoComplete="off"
           variant="outlined"
           fullWidth
           InputProps={{
