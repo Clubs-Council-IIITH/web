@@ -21,12 +21,16 @@
     "@mdx-js/loader": "^2.3.0",
     "@mdx-js/react": "^2.3.0",
     "@mui/icons-material": "^5.14.0",
+    "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.14.0",
     "@next/mdx": "^13.4.10",
+    "cookie-cutter": "^0.2.0",
     "graphql": "^16.7.1",
     "next": "^13.4.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.45.2",
     "react-nice-avatar": "^1.4.1",
     "string-to-color": "^2.2.2"
   }

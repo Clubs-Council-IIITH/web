@@ -23,7 +23,7 @@ import { login, logout } from "utils/auth";
 
 export default function AccountPopover({ user }) {
   const pathname = usePathname();
-  const isAuthenticated = !Object.keys(user);
+  const isAuthenticated = !!Object.keys(user).length;
 
   const [open, setOpen] = useState(null);
 
@@ -39,7 +39,7 @@ export default function AccountPopover({ user }) {
   const AUTHENTICATED_MENU_OPTIONS = [
     {
       label: "Profile",
-      icon: "profile",
+      icon: "person",
       url: "/profile",
       // onClick: () => router.push("/profile") && handleClose(),
     },

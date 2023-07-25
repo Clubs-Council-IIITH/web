@@ -17,7 +17,7 @@ export default async function ClubsGrid({ category }) {
         ?.filter((club) => club.category === category)
         ?.sort((a, b) => a.name.localeCompare(b.name))
         ?.map((club) => (
-          <Grid key={club._id} item xs={12} md={6} lg={4}>
+          <Grid key={club._id} item xs={12} md={6} lg={4} xl={3}>
             <ClubCard
               cid={club.cid}
               name={club.name}
