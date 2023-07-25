@@ -83,6 +83,7 @@ function Bar({ user = null, onOpenDrawer }) {
 function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
   const theme = useTheme();
   const pathname = usePathname();
+  const isAuthenticated = !!Object.keys(user).length;
 
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -91,6 +92,7 @@ function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  // nav items that everybody can see
   const publicItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
       <DrawerItem
@@ -121,39 +123,94 @@ function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
     </List>
   );
 
-  const aboutItems = (
-    <>
-      <List disablePadding sx={{ p: 1, pt: 1 }}>
-        <Box px={4}>
-          <Typography variant="overline">About</Typography>
-        </Box>
-        <DrawerItem
-          title="clubs council"
-          path="/clubs-council"
-          icon={<Icon variant="admin-panel-settings-outline-rounded" />}
-        />
-        <DrawerItem
-          title="supervisory bodies"
-          path="/supervisory-bodies"
-          icon={<Icon variant="info-outline-rounded" />}
-        />
-      </List>
-    </>
+  // nav items that only club accounts can see
+  const clubItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Manage</Typography>
+      </Box>
+      <DrawerItem
+        title="events"
+        path="/manage/events"
+        icon={<Icon variant="local-activity-outline-rounded" />}
+      />
+      <DrawerItem
+        title="members"
+        path="/manage/members"
+        icon={<Icon variant="group-outline-rounded" />}
+      />
+    </List>
   );
 
+  // nav items that only CC can see
+  const ccItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Manage</Typography>
+      </Box>
+      <DrawerItem
+        title="clubs & bodies"
+        path="/manage/clubs"
+        icon={<Icon variant="explore-outline-rounded" />}
+      />
+      <DrawerItem
+        title="events"
+        path="/manage/events"
+        icon={<Icon variant="local-activity-outline-rounded" />}
+      />
+      <DrawerItem
+        title="members"
+        path="/manage/members"
+        icon={<Icon variant="group-outline-rounded" />}
+      />
+    </List>
+  );
+
+  // nav items that only SLC + SLO can see
+  const adminItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Manage</Typography>
+      </Box>
+      <DrawerItem
+        title="events"
+        path="/manage/events"
+        icon={<Icon variant="local-activity-outline-rounded" />}
+      />
+    </List>
+  );
+
+  // nav items with about info that everybody can see
+  const aboutItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">About</Typography>
+      </Box>
+      <DrawerItem
+        title="clubs council"
+        path="/clubs-council"
+        icon={<Icon variant="admin-panel-settings-outline-rounded" />}
+      />
+      <DrawerItem
+        title="supervisory bodies"
+        path="/supervisory-bodies"
+        icon={<Icon variant="info-outline-rounded" />}
+      />
+    </List>
+  );
+
+  // nav items with help info that everybody can see
   const helpItems = (
-    <>
-      <List disablePadding sx={{ p: 1, pt: 1 }}>
-        <Box px={4}>
-          <Typography variant="overline">Help</Typography>
-        </Box>
-        <DrawerItem
-          title="report bugs"
-          path="https://forms.office.com/r/zBLuvbBPXZ"
-          icon={<Icon variant="bug-report-outline-rounded" />}
-        />
-      </List>
-    </>
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Help</Typography>
+      </Box>
+      <DrawerItem
+        title="report bugs"
+        path="https://forms.office.com/r/zBLuvbBPXZ"
+        icon={<Icon variant="bug-report-outline-rounded" />}
+      />
+    </List>
   );
 
   const drawerContent = (
@@ -162,6 +219,9 @@ function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
         <Logo />
       </Box>
       {publicItems}
+      {["club"].includes(user.role) ? clubItems : null}
+      {["cc"].includes(user.role) ? ccItems : null}
+      {["slc", "slo"].includes(user.role) ? adminItems : null}
       {aboutItems}
       {helpItems}
       <Box sx={{ flexGrow: 1 }} />
