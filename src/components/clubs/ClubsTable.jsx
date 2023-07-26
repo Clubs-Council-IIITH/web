@@ -69,7 +69,7 @@ const columns = [
   },
 ];
 
-export function ClubsTable({ clubs }) {
+export default function ClubsTable({ clubs }) {
   const router = useRouter();
 
   if (!clubs) return null;
