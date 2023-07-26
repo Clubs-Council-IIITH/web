@@ -122,6 +122,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/calendar"
         icon={<Icon variant="calendar-month-outline-rounded" />}
       />
+      <DrawerItem
+        title="gallery"
+        path="/gallery"
+        icon={<Icon variant="gallery-thumbnail-outline-rounded" />}
+      />
     </List>
   );
 
