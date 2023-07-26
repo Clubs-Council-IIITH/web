@@ -36,6 +36,8 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.2",
     "react-nice-avatar": "^1.4.1",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2"
   }
 }

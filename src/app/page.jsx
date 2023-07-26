@@ -1,7 +1,20 @@
 import { Box, Grid, Typography } from "@mui/material";
+import Carousel from "components/Carousel";
 
 import EventsGrid from "components/events/EventsGrid";
 import Statistic from "components/Statistic";
+
+// carousel images
+import carousel1 from "/public/assets/img/carousel/1.jpg";
+import carousel2 from "/public/assets/img/carousel/2.jpg";
+import carousel3 from "/public/assets/img/carousel/3.jpg";
+import carousel4 from "/public/assets/img/carousel/4.jpg";
+import carousel5 from "/public/assets/img/carousel/5.jpg";
+import carousel6 from "/public/assets/img/carousel/6.jpg";
+import carousel7 from "/public/assets/img/carousel/7.jpg";
+import carousel8 from "/public/assets/img/carousel/8.jpg";
+import carousel9 from "/public/assets/img/carousel/9.jpg";
+import carousel12 from "/public/assets/img/carousel/12.jpg";
 
 export const metadata = {
   title: "Home",
@@ -10,6 +23,8 @@ export const metadata = {
 export default function Home() {
   return (
     <Box>
+      <Carousel items={carouselItems} sx={{ mb: 3 }} />
+
       <Typography variant="h4" sx={{ mb: 2 }}>
         Upcoming & Recent Events
       </Typography>
@@ -97,3 +112,56 @@ export default function Home() {
     </Box>
   );
 }
+
+const carouselItems = [
+  {
+    image: carousel1,
+    title: "Life at IIIT",
+    description: "Eat. Sleep. Code? Not Quite.",
+  },
+  {
+    image: carousel2,
+    title: "Clubs at IIIT",
+    description: "Explore your student life beyond the classroom.",
+  },
+  {
+    image: carousel3,
+    title: "Unrestricted Fun!",
+    description: "Join in on fun events!",
+  },
+  {
+    image: carousel4,
+    title: "Connect IIIT",
+    description: "Come together to learn, work, live and play.",
+  },
+  {
+    image: carousel5,
+    title: "Success Stories",
+    description: "Witness legends in the making.",
+  },
+  {
+    image: carousel6,
+    title: "Experience IIIT",
+    description: "Expand your mind, explore your passion.",
+  },
+  {
+    image: carousel7,
+    title: "Challengers",
+    description: "Up the potential for fun.",
+  },
+  {
+    image: carousel8,
+    title: "Perform Together",
+    description: "Let the beat take over.",
+  },
+  {
+    image: carousel9,
+    title: "Artistry",
+    description: "Unleash your creativity.",
+  },
+  {
+    image: carousel12,
+    title: "Campus Life",
+    description: "A vibrant residential community.",
+  },
+];
