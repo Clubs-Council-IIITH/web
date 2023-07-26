@@ -73,7 +73,9 @@ export default function Toast() {
     >
       <Alert variant="standard" onClose={handleClose} severity={severity}>
         <AlertTitle>{title}</AlertTitle>
-        {message}
+        {message?.split("\n")?.map((line, key) => (
+          <Box key={key}>{line}</Box>
+        ))}
       </Alert>
     </Snackbar>
   ) : null;

@@ -139,6 +139,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               textTransform="uppercase"
               color="text.secondary"
               gutterBottom
+              mb={2}
             >
               Details
             </Typography>
@@ -347,21 +348,21 @@ function ClubEmailInput({ control }) {
 // club category dropdown
 function ClubCategorySelect({ control }) {
   return (
-    <FormControl fullWidth>
-      <InputLabel id="category">Category *</InputLabel>
-      <Controller
-        name="category"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
+    <Controller
+      name="category"
+      control={control}
+      rules={{ required: true }}
+      render={({ field }) => (
+        <FormControl fullWidth>
+          <InputLabel id="category">Category *</InputLabel>
           <Select labelId="category" label="Category *" fullWidth {...field}>
             <MenuItem value="cultural">Cultural</MenuItem>
             <MenuItem value="technical">Technical</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
-        )}
-      />
-    </FormControl>
+        </FormControl>
+      )}
+    />
   );
 }
 
