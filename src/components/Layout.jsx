@@ -22,6 +22,7 @@ import Icon from "components/Icon";
 import DrawerItem from "components/DrawerItem";
 import Footer from "components/Footer";
 import AccountPopover from "components/profile/AccountPopover";
+import ScrollbarWrapper from "./ScrollbarWrapper";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
@@ -214,7 +215,7 @@ function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
   );
 
   const drawerContent = (
-    <>
+    <ScrollbarWrapper>
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
         <Logo />
       </Box>
@@ -225,7 +226,7 @@ function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
       {aboutItems}
       {helpItems}
       <Box sx={{ flexGrow: 1 }} />
-    </>
+    </ScrollbarWrapper>
   );
 
   return (
@@ -288,34 +289,36 @@ export function Content({ children }) {
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        minHeight: "100%",
-        overflow: "hidden",
-        width: "100%",
-      }}
-    >
+    <ScrollbarWrapper>
       <Box
-        component="main"
         sx={{
-          overflow: "auto",
+          display: "flex",
           minHeight: "100%",
+          overflow: "hidden",
           width: "100%",
-          paddingTop: `${BAR_HEIGHT_MOBILE}px`,
-          paddingBottom: theme.spacing(5),
-          [theme.breakpoints.up("lg")]: {
-            paddingTop: `${BAR_HEIGHT_DESKTOP}px`,
-            paddingLeft: `${DRAWER_WIDTH}px`,
-            paddingRight: theme.spacing(2),
-          },
         }}
       >
-        <Box px={isDesktop ? 4 : 2}>
-          {children}
-          <Footer />
+        <Box
+          component="main"
+          sx={{
+            overflow: "auto",
+            minHeight: "100%",
+            width: "100%",
+            paddingTop: `${BAR_HEIGHT_MOBILE}px`,
+            paddingBottom: theme.spacing(5),
+            [theme.breakpoints.up("lg")]: {
+              paddingTop: `${BAR_HEIGHT_DESKTOP}px`,
+              paddingLeft: `${DRAWER_WIDTH}px`,
+              paddingRight: theme.spacing(2),
+            },
+          }}
+        >
+          <Box px={isDesktop ? 4 : 2}>
+            {children}
+            <Footer />
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </ScrollbarWrapper>
   );
 }
