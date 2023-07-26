@@ -8,6 +8,7 @@ import { getFile } from "utils/files";
 import { getPlaceholder } from "utils/placeholder";
 
 export default function EventPoster({ name, poster, width, height }) {
+  console.log(poster);
   const [img, setImg] = useState(
     poster
       ? getFile(poster)

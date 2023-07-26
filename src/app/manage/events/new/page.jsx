@@ -30,7 +30,7 @@ export default function NewEvent() {
         Create a New Event
       </Typography>
 
-      <EventForm defaultValues={defaultValues} action="log" />
+      <EventForm defaultValues={defaultValues} action="create" />
     </Container>
   );
 }

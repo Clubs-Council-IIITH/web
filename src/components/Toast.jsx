@@ -3,6 +3,7 @@
 import { createContext, useContext, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import {
+  Box,
   Alert,
   Slide,
   AlertTitle,
@@ -13,7 +14,7 @@ import {
 const ToastContext = createContext({
   open: false,
   title: "",
-  message: "",
+  messages: "",
   severity: "info",
   handleClose: () => null,
   triggerToast: () => null,
@@ -27,13 +28,13 @@ export function ToastProvider({ children }) {
   const [toast, setToast] = useState({
     open: false,
     title: null,
-    message: null,
+    messages: null,
     severity: null,
   });
   const handleClose = () => setToast({ ...toast, open: false });
 
-  const triggerToast = ({ title, message, severity }) => {
-    setToast({ open: true, title, message, severity });
+  const triggerToast = ({ title, messages, severity }) => {
+    setToast({ open: true, title, messages, severity });
   };
 
   return (
@@ -52,9 +53,9 @@ export function ToastProvider({ children }) {
 export default function Toast() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
-  const { open, title, message, severity, handleClose } = useToast();
+  const { open, title, messages, severity, handleClose } = useToast();
 
-  return message?.length ? (
+  return messages?.length ? (
     <Snackbar
       open={open}
       anchorOrigin={{
@@ -71,7 +72,7 @@ export default function Toast() {
     >
       <Alert variant="standard" onClose={handleClose} severity={severity}>
         <AlertTitle>{title}</AlertTitle>
-        {message?.split("\n")?.map((line, key) => (
+        {messages?.map((line, key) => (
           <Box key={key}>{line}</Box>
         ))}
       </Alert>

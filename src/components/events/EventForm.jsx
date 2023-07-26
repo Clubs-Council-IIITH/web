@@ -1,6 +1,7 @@
 "use client";
 
 import dayjs from "dayjs";
+
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +9,9 @@ import { useForm, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 
+import { useMutation } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { CREATE_EVENT, EDIT_EVENT } from "gql/mutations/events";
 import { GET_AVAILABLE_LOCATIONS } from "gql/queries/events";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
@@ -38,25 +41,120 @@ import EventBudget from "./EventBudget";
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
+import { useAuth } from "components/AuthProvider";
 
-export default function EventForm({ defaultValues = {}, action = "log" }) {
+export default function EventForm({
+  id = null,
+  defaultValues = {},
+  action = "log",
+}) {
   const router = useRouter();
-
-  console.log(defaultValues);
-  console.log(dayjs());
+  const { user } = useAuth();
 
   const { control, handleSubmit, watch, resetField } = useForm({
     defaultValues,
   });
   const { triggerToast } = useToast();
 
+  // mutations
+  const [createEvent] = useMutation(CREATE_EVENT, {
+    onCompleted: () => {
+      // show success toast
+      triggerToast({
+        title: "Success!",
+        messages: ["Event created successfully."],
+        severity: "success",
+      });
+
+      // redirect to manage page
+      router.push("/manage/events");
+    },
+    onError: (error) => {
+      // show error toast
+      triggerToast({
+        title: error.name,
+        messages: error?.graphQLErrors?.map((g) => g?.message),
+        severity: "error",
+      });
+    },
+  });
+  const [editEvent] = useMutation(EDIT_EVENT, {
+    onCompleted: () => {
+      // show success toast
+      triggerToast({
+        title: "Success!",
+        messages: ["Event edited successfully."],
+        severity: "success",
+      });
+
+      // redirect to manage page
+      router.push("/manage/events");
+    },
+    onError: (error) => {
+      // show error toast
+      triggerToast({
+        title: error.name,
+        messages: error?.graphQLErrors?.map((g) => g?.message),
+        severity: "error",
+      });
+    },
+  });
+
   // different form submission handlers
   const submitHandlers = {
     log: console.log,
+    create: (data) => createEvent({ variables: { details: data } }),
+    edit: (data) =>
+      editEvent({ variables: { details: { ...data, eventid: id } } }),
   };
 
   async function onSubmit(formData) {
-    console.log(formData);
+    const data = {
+      name: formData.name,
+      description: formData.description,
+      audience: formData.audience,
+      mode: formData.mode,
+      link: formData.link,
+      location: formData.location,
+      population: parseInt(formData.population),
+      additional: formData.additional,
+      equipment: formData.equipment,
+    };
+
+    // set club ID for event based on user role
+    if (user?.role === "club") {
+      data.clubid = user?.uid;
+    } else if (user?.role === "cc") {
+      data.clubid = formData.clubid;
+    }
+
+    // upload poster
+    if (formData?.poster && typeof formData?.poster !== "string") {
+      data.poster = formData?.poster?.[0]
+        ? await uploadFile(formData?.poster?.[0], "image")
+        : null;
+    }
+
+    // convert dates to ISO strings
+    data.datetimeperiod = formData.datetimeperiod.map((d) =>
+      new Date(d).toISOString()
+    );
+
+    // convert budget to array of objects with only required attributes
+    // remove budget items without a description (they're invalid)
+    data.budget = formData.budget
+      .filter((i) => i?.description)
+      .map((i) => ({
+        description: i.description,
+        amount: i.amount,
+        advance: i.advance,
+      }));
+
+    // TODO: fix event link field
+    data.link = null;
+
+    // mutate
+    submitHandlers[action](data);
   }
 
   return (
@@ -89,9 +187,11 @@ export default function EventForm({ defaultValues = {}, action = "log" }) {
               <Grid item xs={12}>
                 <EventDescriptionInput control={control} />
               </Grid>
+              {/*
               <Grid item xs={12}>
                 <EventLinkInput control={control} />
               </Grid>
+              */}
             </Grid>
           </Grid>
 

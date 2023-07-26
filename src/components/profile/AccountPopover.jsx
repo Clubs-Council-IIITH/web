@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { alpha } from "@mui/material/styles";
@@ -20,10 +21,11 @@ import {
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { login, logout } from "utils/auth";
+import { useAuth } from "components/AuthProvider";
 
-export default function AccountPopover({ user }) {
+export default function AccountPopover() {
   const pathname = usePathname();
-  const isAuthenticated = !!Object.keys(user).length;
+  const { user, isAuthenticated } = useAuth();
 
   const [open, setOpen] = useState(null);
 
@@ -75,7 +77,6 @@ export default function AccountPopover({ user }) {
         }}
       >
         <Avatar
-          src={getFile(user?.img)}
           alt="logged in"
           {...(user?.firstName && {
             children: `${user?.firstName?.[0]}${
@@ -85,7 +86,14 @@ export default function AccountPopover({ user }) {
               backgroundColor: "black",
             },
           })}
-        />
+        >
+          <Image
+            alt={user?.firstName}
+            src={getFile(user?.img)}
+            width={40}
+            height={40}
+          />
+        </Avatar>
       </IconButton>
 
       <Popover

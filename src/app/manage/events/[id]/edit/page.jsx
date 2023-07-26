@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_EVENT } from "gql/queries/events";
+import { GET_FULL_EVENT } from "gql/queries/events";
 
 import { Container, Typography } from "@mui/material";
 
@@ -18,10 +18,16 @@ function transformEvent(event) {
       new Date(event?.datetimeperiod[1]),
     ],
     // add mandatory ID field for DataGrid
-    budget: event?.budget?.map((budget, key) => ({
-      ...budget,
-      id: budget?.id || key,
-    })),
+    budget:
+      event?.budget?.map((budget, key) => ({
+        ...budget,
+        id: budget?.id || key,
+      })) || [],
+    // parse population as int
+    population: parseInt(event?.population || 0),
+    // default fallbacks for text fields
+    additional: event?.additional || "",
+    equipment: event?.equipment || "",
   };
 }
 
@@ -29,7 +35,7 @@ export default async function EditEvent({ params }) {
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query({
-    query: GET_EVENT,
+    query: GET_FULL_EVENT,
     variables: {
       eventid: id,
     },
@@ -41,7 +47,7 @@ export default async function EditEvent({ params }) {
         Edit Event Details
       </Typography>
 
-      <EventForm defaultValues={transformEvent(event)} action="log" />
+      <EventForm id={id} defaultValues={transformEvent(event)} action="edit" />
     </Container>
   );
 }

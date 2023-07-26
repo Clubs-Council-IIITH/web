@@ -23,6 +23,7 @@ import DrawerItem from "components/DrawerItem";
 import Footer from "components/Footer";
 import AccountPopover from "components/profile/AccountPopover";
 import ScrollbarWrapper from "./ScrollbarWrapper";
+import { useAuth } from "./AuthProvider";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
@@ -31,7 +32,7 @@ const BAR_HEIGHT_DESKTOP = 92;
 // define navigation drawer width
 const DRAWER_WIDTH = 280;
 
-function Bar({ user = null, onOpenDrawer }) {
+function Bar({ onOpenDrawer }) {
   const theme = useTheme();
 
   return (
@@ -74,17 +75,17 @@ function Bar({ user = null, onOpenDrawer }) {
             sm: 1,
           }}
         >
-          <AccountPopover user={user} />
+          <AccountPopover />
         </Stack>
       </Toolbar>
     </AppBar>
   );
 }
 
-function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
+function Drawer({ drawerOpen, onCloseDrawer }) {
   const theme = useTheme();
   const pathname = usePathname();
-  const isAuthenticated = !!Object.keys(user).length;
+  const { user } = useAuth();
 
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -269,14 +270,13 @@ function Drawer({ user = null, drawerOpen, onCloseDrawer }) {
   );
 }
 
-export function Navigation({ user = null }) {
+export function Navigation() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <>
-      <Bar user={user} onOpenDrawer={() => setDrawerOpen(true)} />
+      <Bar onOpenDrawer={() => setDrawerOpen(true)} />
       <Drawer
-        user={user}
         drawerOpen={drawerOpen}
         onCloseDrawer={() => setDrawerOpen(false)}
       />

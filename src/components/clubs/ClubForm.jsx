@@ -83,8 +83,10 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
 
     const cid = email.split("@")[0];
     try {
-      const logoUrl = logo?.[0] ? await uploadFile(logo?.[0]) : null;
-      const bannerUrl = banner?.[0] ? await uploadFile(banner?.[0]) : null;
+      const logoUrl = logo?.[0] ? await uploadFile(logo?.[0], "image") : null;
+      const bannerUrl = banner?.[0]
+        ? await uploadFile(banner?.[0], "image")
+        : null;
       await submitHandlers[action]({
         cid,
         code,

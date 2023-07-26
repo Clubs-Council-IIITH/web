@@ -23,8 +23,8 @@ export default function EventDetails({ event }) {
               <EventPoster
                 name={event.name}
                 poster={event.poster}
-                width={200}
-                height={300}
+                width={2000}
+                height={2000}
               />
             ) : (
               <EventFallbackPoster

@@ -3,13 +3,15 @@
 import { makeClient } from "gql/provider";
 import { GET_SIGNED_UPLOAD_URL } from "gql/queries/misc";
 
+const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
+
 export function getFile(filepath) {
   if (filepath?.toLowerCase()?.startsWith("http")) {
     // return the full URL if global URL
     return filepath;
   } else if (filepath) {
     // call files service if local URL
-    return `/files/download?filename=${filepath}`;
+    return `${FILESERVER_URL}/files/download?filename=${filepath}`;
   }
 }
 
@@ -34,7 +36,8 @@ export async function uploadFile(file, filetype = "image") {
       body: body,
       method: "POST",
     });
-    if (filename.status === 200) filename = await filename.text();
+    if (filename.status >= 200 && filename.status < 300)
+      filename = await filename.text();
     else filename = null;
   } catch (e) {
     filename = null;

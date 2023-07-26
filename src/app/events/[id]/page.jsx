@@ -13,6 +13,8 @@ export async function generateMetadata({ params }, parent) {
     },
   });
 
+  console.log(event);
+
   return {
     title: event.name,
   };

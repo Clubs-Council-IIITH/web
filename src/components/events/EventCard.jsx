@@ -20,7 +20,7 @@ export default function EventCard({
       <CardActionArea component={Link} href={`/events/${_id}`}>
         <Box sx={{ pt: "100%", position: "relative" }}>
           {poster ? (
-            <EventPoster name={name} poster={poster} width={200} height={300} />
+            <EventPoster name={name} poster={poster} width={600} height={600} />
           ) : (
             <EventFallbackPoster
               name={name}
