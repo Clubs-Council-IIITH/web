@@ -22,7 +22,14 @@ import {
     PsychologyOutlined,
     Woman2Outlined,
     SetMealOutlined,
+    SchoolOutlined,
     ColorLensOutlined,
+    NoFoodOutlined,
+    PeopleOutlined,
+    TheaterComedyOutlined,
+    LuggageOutlined,
+    CameraEnhanceOutlined,
+    ModeOfTravelOutlined,
     QuizOutlined,
     EmojiEmotionsOutlined,
     BorderColorOutlined,
@@ -30,8 +37,6 @@ import {
     SportsSoccerOutlined,
     VideogameAssetOutlined,
     EscalatorWarningOutlined,
-    CameraEnhanceOutlined,
-    PeopleOutlined,
 } from "@mui/icons-material";
 import { Divider } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -55,18 +60,23 @@ const IconsList = {
     "NightlifeOutlined": <NightlifeOutlined />,
     "BrushOutlined": <BrushOutlined />,
     "LanguageOutlined": <LanguageOutlined />,
+    "SchoolOutlined": <SchoolOutlined />,
+    "ColorLensOutlined": <ColorLensOutlined />,
+    "NoFoodOutlined": <NoFoodOutlined />,
+    "PeopleOutlined": <PeopleOutlined />,
+    "ModeOfTravelOutlined": <ModeOfTravelOutlined />,
+    "TheaterComedyOutlined": <TheaterComedyOutlined />,
+    "LuggageOutlined": <LuggageOutlined />,
+    "CameraEnhanceOutlined": <CameraEnhanceOutlined />,
 
-    
+
     // "EmojiEmotionsOutlined": <EmojiEmotionsOutlined />,
     // "AbcOutlined": <AbcOutlined />,
     // "RemoveOutlined": <RemoveOutlined />,
     // "SportsSoccerOutlined": <SportsSoccerOutlined />,
-    // "ColorLensOutlined": <ColorLensOutlined />,
     // "VideogameAssetOutlined": <VideogameAssetOutlined />,
-    // "PeopleOutlined": <PeopleOutlined />,
     // "QuizOutlined": <QuizOutlined />,
     // "EscalatorWarningOutlined": <EscalatorWarningOutlined />,
-    // "CameraEnhanceOutlined": <CameraEnhanceOutlined />,
     // "TodayOutlined": <TodayOutlined />,
     // "BorderColorOutlined": <BorderColorOutlined />,
 };
