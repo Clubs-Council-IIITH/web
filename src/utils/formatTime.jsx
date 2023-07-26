@@ -1,8 +1,11 @@
+"use client";
+
 const LOCALE = "en-IN";
 
 // get datetime components from ISO string
 export function ISOtoDateTime(iso) {
   const dt = new Date(iso);
+
   const options = { hour12: true };
   return {
     weekday: dt.toLocaleString(LOCALE, { weekday: "short", ...options }),

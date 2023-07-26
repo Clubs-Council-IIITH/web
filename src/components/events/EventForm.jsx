@@ -1,5 +1,6 @@
 "use client";
 
+import dayjs from "dayjs";
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
@@ -40,6 +41,9 @@ import { locationLabel } from "utils/formatEvent";
 
 export default function EventForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
+
+  console.log(defaultValues);
+  console.log(dayjs());
 
   const { control, handleSubmit, watch, resetField } = useForm({
     defaultValues,
@@ -270,7 +274,10 @@ function EventDatetimeInput({ control, watch }) {
           rules={{
             required: "Start date is required!",
           }}
-          render={({ field, fieldState: { error, invalid } }) => (
+          render={({
+            field: { value, ...rest },
+            fieldState: { error, invalid },
+          }) => (
             <DateTimePicker
               label="Starts *"
               slotProps={{
@@ -285,7 +292,8 @@ function EventDatetimeInput({ control, watch }) {
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              {...field}
+              value={value ? dayjs(value) : value}
+              {...rest}
             />
           )}
         />
@@ -297,7 +305,10 @@ function EventDatetimeInput({ control, watch }) {
           rules={{
             required: "End date is required!",
           }}
-          render={({ field, fieldState: { error, invalid } }) => (
+          render={({
+            field: { value, ...rest },
+            fieldState: { error, invalid },
+          }) => (
             <DateTimePicker
               label="Ends *"
               disabled={!startDateInput}
@@ -315,7 +326,8 @@ function EventDatetimeInput({ control, watch }) {
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              {...field}
+              value={value ? dayjs(value) : value}
+              {...rest}
             />
           )}
         />

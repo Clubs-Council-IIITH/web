@@ -1,10 +1,12 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
-import { ISOtoHuman } from "utils/formatTime";
 import EventPoster from "components/events/EventPoster";
 import EventFallbackPoster from "components/events/EventFallbackPoster";
+
+const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
 export default function EventCard({
   _id,
@@ -34,7 +36,7 @@ export default function EventCard({
             {name}
           </Typography>
           <Typography variant="caption" noWrap>
-            {ISOtoHuman(datetimeperiod?.[0], true)}
+            <DateTime dt={datetimeperiod?.[0]} showWeekDay={true} />
           </Typography>
         </Stack>
       </CardActionArea>
