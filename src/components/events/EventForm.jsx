@@ -21,7 +21,6 @@ import {
   Grid,
   TextField,
   Typography,
-  InputAdornment,
   ToggleButtonGroup,
   ToggleButton,
   FormHelperText,
@@ -32,8 +31,8 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
+import EventBudget from "./EventBudget";
 
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
@@ -52,7 +51,9 @@ export default function EventForm({ defaultValues = {}, action = "log" }) {
     log: console.log,
   };
 
-  async function onSubmit(formData) {}
+  async function onSubmit(formData) {
+    console.log(formData);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -100,7 +101,11 @@ export default function EventForm({ defaultValues = {}, action = "log" }) {
             >
               Budget
             </Typography>
-            {/* TODO */}
+            <Grid container item spacing={2}>
+              <Grid item xs={12}>
+                <EventBudgetTable control={control} watch={watch} />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 
@@ -184,9 +189,9 @@ function EventClubSelect({ control }) {
     <Controller
       name="clubid"
       control={control}
-      rules={{ required: true }}
-      render={({ field }) => (
-        <FormControl fullWidth>
+      rules={{ required: "Select a club!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
           <InputLabel id="clubid">Club *</InputLabel>
           <Select labelId="clubid" label="clubid *" fullWidth {...field}>
             {clubs
@@ -198,6 +203,7 @@ function EventClubSelect({ control }) {
                 </MenuItem>
               ))}
           </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
       )}
     />
@@ -262,12 +268,17 @@ function EventDatetimeInput({ control, watch }) {
           name="datetimeperiod.0"
           control={control}
           rules={{
-            required: true,
+            required: "Start date is required!",
           }}
-          render={({ field }) => (
+          render={({ field, fieldState: { error, invalid } }) => (
             <DateTimePicker
               label="Starts *"
-              renderInput={(props) => <TextField {...props} />}
+              slotProps={{
+                textField: {
+                  error: invalid,
+                  helperText: error?.message,
+                },
+              }}
               viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,
@@ -284,9 +295,9 @@ function EventDatetimeInput({ control, watch }) {
           name="datetimeperiod.1"
           control={control}
           rules={{
-            required: true,
+            required: "End date is required!",
           }}
-          render={({ field }) => (
+          render={({ field, fieldState: { error, invalid } }) => (
             <DateTimePicker
               label="Ends *"
               disabled={!startDateInput}
@@ -294,7 +305,8 @@ function EventDatetimeInput({ control, watch }) {
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
-                  helperText: errorMessage,
+                  error: errorMessage || invalid,
+                  helperText: errorMessage || error?.message,
                 },
               }}
               viewRenderers={{
@@ -519,6 +531,7 @@ function EventVenueInput({ control, watch, resetField }) {
   );
 }
 
+// select location from available rooms
 function EventLocationInput({ control, startDateInput, endDateInput }) {
   const { data: { availableRooms } = {} } = useSuspenseQuery(
     GET_AVAILABLE_LOCATIONS,
@@ -572,6 +585,19 @@ function EventLocationInput({ control, startDateInput, endDateInput }) {
               ))}
           </Select>
         </FormControl>
+      )}
+    />
+  );
+}
+
+// input event budget as a table
+function EventBudgetTable({ control, watch }) {
+  return (
+    <Controller
+      name="budget"
+      control={control}
+      render={({ field: { value, onChange } }) => (
+        <EventBudget editable rows={value} setRows={onChange} />
       )}
     />
   );

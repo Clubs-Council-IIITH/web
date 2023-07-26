@@ -54,8 +54,6 @@ export default function Toast() {
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const { open, title, message, severity, handleClose } = useToast();
 
-  console.log(open, title, message, severity);
-
   return message?.length ? (
     <Snackbar
       open={open}

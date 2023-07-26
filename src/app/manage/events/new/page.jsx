@@ -7,13 +7,30 @@ export const metadata = {
 };
 
 export default function NewEvent() {
+  // default form values
+  const defaultValues = {
+    clubid: "",
+    name: "",
+    datetimeperiod: [null, null],
+    description: "",
+    audience: [],
+    poster: "",
+    budget: [],
+    mode: "online",
+    link: "",
+    location: [],
+    population: 0,
+    additional: "",
+    equipment: "",
+  };
+
   return (
     <Container>
       <Typography variant="h3" gutterBottom mb={3}>
         Create a New Event
       </Typography>
 
-      <EventForm defaultValues={{}} action="create" />
+      <EventForm defaultValues={defaultValues} action="log" />
     </Container>
   );
 }
