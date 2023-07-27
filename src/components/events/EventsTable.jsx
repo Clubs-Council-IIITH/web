@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation";
 
-import { Box, Chip } from "@mui/material";
+import { Box } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import { ISOtoHuman } from "utils/formatTime";
 import { stateLabel } from "utils/formatEvent";
 
+import Tag from "components/Tag";
 import Icon from "components/Icon";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
@@ -98,17 +99,9 @@ const columns = [
     headerAlign: "center",
     valueGetter: ({ row }) => row.status.state,
     renderCell: ({ value }) => (
-      <Chip
-        variant="outlined"
+      <Tag
         label={stateLabel(value).shortName}
         color={stateLabel(value).color}
-        sx={{
-          textTransform: "capitalize",
-          borderRadius: 1,
-          color: `${stateLabel(value).color}.dark`,
-          fontWeight: "bold",
-          backgroundColor: `${stateLabel(value).color}.lighter`,
-        }}
       />
     ),
   },

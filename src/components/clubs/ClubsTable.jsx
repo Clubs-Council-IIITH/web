@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
-import { Box, Chip, Avatar } from "@mui/material";
+import { Box, Avatar } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
+import Tag from "components/Tag";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import { getFile } from "utils/files";
@@ -51,20 +52,7 @@ const columns = [
     headerAlign: "center",
     flex: 2,
     renderCell: ({ value }) => (
-      <Chip
-        variant="outlined"
-        label={value}
-        color={value === "active" ? "success" : "error"}
-        sx={{
-          textTransform: "capitalize",
-          borderRadius: 1,
-          color: `${value === "active" ? "success" : "error"}.dark`,
-          fontWeight: "bold",
-          backgroundColor: `${
-            value === "active" ? "success" : "error"
-          }.lighter`,
-        }}
-      />
+      <Tag label={value} color={value === "active" ? "success" : "error"} />
     ),
   },
 ];
