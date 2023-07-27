@@ -50,13 +50,6 @@ export default function EventForm({
   });
   const { triggerToast } = useToast();
 
-  // // different form submission handlers
-  // const submitHandlers = {
-  //   log: console.log,
-  //   create: (data) => createEvent({ variables: { details: data } }),
-  //   edit: (data) =>
-  //     editEvent({ variables: { details: { ...data, eventid: id } } }),
-  // };
   // different form submission handlers
   const submitHandlers = {
     log: console.log,
@@ -174,9 +167,11 @@ export default function EventForm({
               Details
             </Typography>
             <Grid container item spacing={2}>
-              <Grid item xs={12}>
-                <EventClubSelect control={control} />
-              </Grid>
+              {user?.role === "cc" ? (
+                <Grid item xs={12}>
+                  <EventClubSelect control={control} />
+                </Grid>
+              ) : null}
               <Grid item xs={12}>
                 <EventNameInput control={control} />
               </Grid>

@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
+import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
@@ -12,8 +13,12 @@ export const metadata = {
 export default async function EditClub({ params }) {
   const { id } = params;
 
+  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+    userInput: null,
+  });
+
   const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id },
+    clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
   });
 
   return (

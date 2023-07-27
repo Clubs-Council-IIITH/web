@@ -137,6 +137,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Typography variant="overline">Manage</Typography>
       </Box>
       <DrawerItem
+        title="club"
+        path="/manage/clubs"
+        icon={<Icon variant="explore-outline-rounded" />}
+      />
+      <DrawerItem
         title="events"
         path="/manage/events"
         icon={<Icon variant="local-activity-outline-rounded" />}

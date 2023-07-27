@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
 
 import { Box, Container, Typography, Button, Stack } from "@mui/material";
@@ -13,13 +14,17 @@ export const metadata = {
 };
 
 export default async function ManageEvents() {
+  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+    userInput: null,
+  });
+
   const { data: { pendingEvents } = {} } = await getClient().query(
     GET_PENDING_EVENTS,
-    { clubid: null }
+    { clubid: userMeta?.role === "club" ? userMeta.uid : null }
   );
 
   const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: null,
+    clubid: userMeta?.role === "club" ? userMeta.uid : null,
   });
 
   return (
@@ -54,7 +59,11 @@ export default async function ManageEvents() {
         >
           Pending Events
         </Typography>
-        <EventsTable events={pendingEvents} scheduleSort="asc" />
+        <EventsTable
+          events={pendingEvents}
+          scheduleSort="asc"
+          hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+        />
       </Box>
 
       {/* all events */}
@@ -67,7 +76,11 @@ export default async function ManageEvents() {
         >
           All Events
         </Typography>
-        <EventsTable events={events} scheduleSort="desc" />
+        <EventsTable
+          events={events}
+          scheduleSort="desc"
+          hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+        />
       </Box>
     </Container>
   );
