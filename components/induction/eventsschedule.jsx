@@ -4,7 +4,6 @@ import "react-vertical-timeline-component/style.min.css";
 import {
     RemoveOutlined,
     TodayOutlined,
-    PetsOutlined,
     Groups2Outlined,
     MeetingRoomOutlined,
     MicExternalOnOutlined,
