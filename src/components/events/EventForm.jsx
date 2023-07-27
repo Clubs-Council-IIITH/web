@@ -9,12 +9,6 @@ import { useForm, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 
-import { useMutation } from "@apollo/client";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { CREATE_EVENT, EDIT_EVENT } from "gql/mutations/events";
-import { GET_AVAILABLE_LOCATIONS } from "gql/queries/events";
-import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
-
 import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
@@ -56,56 +50,64 @@ export default function EventForm({
   });
   const { triggerToast } = useToast();
 
-  // mutations
-  const [createEvent] = useMutation(CREATE_EVENT, {
-    onCompleted: () => {
-      // show success toast
-      triggerToast({
-        title: "Success!",
-        messages: ["Event created successfully."],
-        severity: "success",
-      });
-
-      // redirect to manage page
-      router.push("/manage/events");
-    },
-    onError: (error) => {
-      // show error toast
-      triggerToast({
-        title: error.name,
-        messages: error?.graphQLErrors?.map((g) => g?.message),
-        severity: "error",
-      });
-    },
-  });
-  const [editEvent] = useMutation(EDIT_EVENT, {
-    onCompleted: () => {
-      // show success toast
-      triggerToast({
-        title: "Success!",
-        messages: ["Event edited successfully."],
-        severity: "success",
-      });
-
-      // redirect to manage page
-      router.push("/manage/events");
-    },
-    onError: (error) => {
-      // show error toast
-      triggerToast({
-        title: error.name,
-        messages: error?.graphQLErrors?.map((g) => g?.message),
-        severity: "error",
-      });
-    },
-  });
-
+  // // different form submission handlers
+  // const submitHandlers = {
+  //   log: console.log,
+  //   create: (data) => createEvent({ variables: { details: data } }),
+  //   edit: (data) =>
+  //     editEvent({ variables: { details: { ...data, eventid: id } } }),
+  // };
   // different form submission handlers
   const submitHandlers = {
     log: console.log,
-    create: (data) => createEvent({ variables: { details: data } }),
-    edit: (data) =>
-      editEvent({ variables: { details: { ...data, eventid: id } } }),
+    create: async (data) => {
+      let res = await fetch("/actions/events/create", {
+        method: "POST",
+        body: JSON.stringify({ details: data }),
+      });
+      res = await res.json();
+
+      if (res.ok) {
+        // show success toast & redirect to manage page
+        triggerToast({
+          title: "Success!",
+          messages: ["Event created."],
+          severity: "success",
+        });
+        router.push("/manage/events");
+        router.refresh();
+      } else {
+        // show error toast
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+      }
+    },
+    edit: async (data) => {
+      let res = await fetch("/actions/events/edit", {
+        method: "POST",
+        body: JSON.stringify({ details: data, eventid: id }),
+      });
+      res = await res.json();
+
+      if (res.ok) {
+        // show success toast & redirect to manage page
+        triggerToast({
+          title: "Success!",
+          messages: ["Event edited."],
+          severity: "success",
+        });
+        router.push("/manage/events");
+        router.refresh();
+      } else {
+        // show error toast
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+      }
+    },
   };
 
   async function onSubmit(formData) {
@@ -287,7 +289,25 @@ export default function EventForm({
 
 // select club to which event belongs to
 function EventClubSelect({ control }) {
-  const { data: { allClubs: clubs } = {} } = useSuspenseQuery(GET_ALL_CLUB_IDS);
+  const { triggerToast } = useToast();
+
+  // fetch list of clubs
+  const [clubs, setClubs] = useState([]);
+  useEffect(() => {
+    (async () => {
+      let res = await fetch("/actions/clubs/ids");
+      res = await res.json();
+      if (!res.ok) {
+        triggerToast({
+          title: "Unable to fetch clubs",
+          messages: res.error.messages,
+          severity: "error",
+        });
+      } else {
+        setClubs(res.data);
+      }
+    })();
+  }, []);
 
   return (
     <Controller
@@ -645,18 +665,30 @@ function EventVenueInput({ control, watch, resetField }) {
 
 // select location from available rooms
 function EventLocationInput({ control, startDateInput, endDateInput }) {
-  const { data: { availableRooms } = {} } = useSuspenseQuery(
-    GET_AVAILABLE_LOCATIONS,
-    {
-      skip: !(startDateInput && endDateInput),
-      variables: {
-        timeslot: [
-          new Date(startDateInput).toISOString(),
-          new Date(endDateInput).toISOString(),
-        ],
-      },
-    }
-  );
+  const [availableRooms, setAvailableRooms] = useState([]);
+  useEffect(() => {
+    if (!(startDateInput && endDateInput)) return;
+
+    (async () => {
+      let res = await fetch("/actions/events/venues", {
+        method: "POST",
+        body: JSON.stringify({
+          startDate: new Date(startDateInput).toISOString(),
+          endDate: new Date(endDateInput).toISOString(),
+        }),
+      });
+      res = await res.json();
+      if (!res.ok) {
+        triggerToast({
+          title: "Unable to fetch available rooms",
+          messages: res.error.messages,
+          severity: "error",
+        });
+      } else {
+        setAvailableRooms(res.data);
+      }
+    })();
+  }, [startDateInput, endDateInput]);
 
   return (
     <Controller
