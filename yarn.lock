@@ -531,6 +531,11 @@
     "@0no-co/graphql.web" "^1.0.1"
     wonka "^6.3.2"
 
+"@urql/next@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@urql/next/-/next-1.0.0.tgz#694317946891e6ee2e3eb4606c1b3854377a756b"
+  integrity sha512-t3c3eBccmbAzi1Y2vH8ZubSwFgJ3yA2rc4427oYfnJdLl0o7Zh4LrPxUCz1yVdCz4N/MebrnLzDiM5tAeDd9yA==
+
 acorn-jsx@^5.0.0:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
@@ -1456,13 +1461,6 @@ nanoid@^3.3.4:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
   integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
 
-next-urql@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/next-urql/-/next-urql-5.0.2.tgz#37a895b1844f3ab7c091526e0894caddd3abcf82"
-  integrity sha512-/ntMdlDNhduT1xmnZ0ZgH9Vtbaz/Gnx5VdTyExHjRqKpKnqZU49vHiik/qctscwFnPBVTRNxQ1BjhrOtfsm8oQ==
-  dependencies:
-    react-ssr-prepass "^1.4.0"
-
 next@^13.4.12:
   version "13.4.12"
   resolved "https://registry.yarnpkg.com/next/-/next-13.4.12.tgz#809b21ea0aabbe88ced53252c88c4a5bd5af95df"
@@ -1657,11 +1655,6 @@ react-slick@^0.29.0:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
-
-react-ssr-prepass@^1.4.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-ssr-prepass/-/react-ssr-prepass-1.5.0.tgz#bc4ca7fcb52365e6aea11cc254a3d1bdcbd030c5"
-  integrity sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==
 
 react-transition-group@^4.4.5:
   version "4.4.5"

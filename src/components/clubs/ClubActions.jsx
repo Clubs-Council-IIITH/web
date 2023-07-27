@@ -38,7 +38,7 @@ export function DeleteClub({ sx }) {
   const deleteClub = async () => {
     let res = await fetch("/actions/clubs/delete", {
       method: "POST",
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ cid: id }),
     });
     res = await res.json();
 
@@ -50,6 +50,7 @@ export function DeleteClub({ sx }) {
         severity: "success",
       });
       router.push("/manage/clubs");
+      router.refresh();
     } else {
       // show error toast
       triggerToast({

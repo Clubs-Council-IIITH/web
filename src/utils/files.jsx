@@ -17,7 +17,7 @@ export async function uploadFile(file, filetype = "image") {
   if (!file) return null;
 
   // get signed url
-  let res = await fetch("/actions/files/upload", { method: "POST" });
+  let res = await fetch("/actions/files/upload");
   let {
     data: { url },
   } = await res.json();

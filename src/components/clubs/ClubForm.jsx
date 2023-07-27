@@ -48,6 +48,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           severity: "success",
         });
         router.push("/manage/clubs");
+        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -71,6 +72,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           severity: "success",
         });
         router.push("/manage/clubs");
+        router.refresh();
       } else {
         // show error toast
         triggerToast({
