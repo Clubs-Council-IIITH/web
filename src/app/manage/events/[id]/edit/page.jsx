@@ -34,11 +34,8 @@ function transformEvent(event) {
 export default async function EditEvent({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query({
-    query: GET_FULL_EVENT,
-    variables: {
-      eventid: id,
-    },
+  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+    eventid: id,
   });
 
   return (

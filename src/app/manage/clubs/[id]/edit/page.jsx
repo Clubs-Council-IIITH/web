@@ -12,11 +12,8 @@ export const metadata = {
 export default async function EditClub({ params }) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: id },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: id },
   });
 
   return (

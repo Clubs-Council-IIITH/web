@@ -7,13 +7,9 @@ import MemberCard from "components/members/MemberCard";
 export const dynamic = "force-dynamic";
 
 export default async function MembersGrid({ clubid, onlyCurrent = false }) {
-  const { data: { members } = {} } = await getClient().query({
-    query: GET_MEMBERS,
-    skip: !clubid,
-    variables: {
-      clubInput: {
-        cid: clubid,
-      },
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: clubid,
     },
   });
 

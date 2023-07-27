@@ -21,11 +21,8 @@ import MembersGrid from "components/members/MembersGrid";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: id },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: id },
   });
 
   return {
@@ -36,11 +33,8 @@ export async function generateMetadata({ params }, parent) {
 export default async function Club({ params }) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: id },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: id },
   });
 
   return (

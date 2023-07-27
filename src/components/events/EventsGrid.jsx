@@ -8,14 +8,12 @@ import {
 import { Grid } from "@mui/material";
 import EventCard from "components/events/EventCard";
 
-export const dynamic = "force-dynamic";
-
 export default async function EventsGrid({
   type = "all", // must be one of: {recent, club, all}
   clubid = null,
   limit = undefined,
 }) {
-  const data = await getClient().query(constructQuery({ type, clubid }));
+  const data = await getClient().query(...constructQuery({ type, clubid }));
 
   return (
     <Grid container spacing={2}>
@@ -39,25 +37,24 @@ export default async function EventsGrid({
 // construct graphql query based on type
 function constructQuery({ type, clubid }) {
   if (type === "recent") {
-    return { query: GET_RECENT_EVENTS };
+    return [GET_RECENT_EVENTS];
   } else if (type === "club") {
-    return {
-      query: GET_CLUB_EVENTS,
-      skip: !clubid,
-      variables: {
+    return [
+      GET_CLUB_EVENTS,
+      {
         clubid,
         clubInput: {
           cid: clubid,
         },
       },
-    };
+    ];
   } else if (type === "all") {
-    return {
-      query: GET_ALL_EVENTS,
-      variables: {
+    return [
+      GET_ALL_EVENTS,
+      {
         clubid: null,
       },
-    };
+    ];
   }
 }
 

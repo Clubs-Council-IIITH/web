@@ -9,11 +9,8 @@ export default async function EventFallbackPoster({
   width,
   height,
 }) {
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: clubid },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: clubid },
   });
 
   return (

@@ -16,11 +16,8 @@ import { EditClub, DeleteClub } from "components/clubs/ClubActions";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: id },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: id },
   });
 
   return {
@@ -31,11 +28,8 @@ export async function generateMetadata({ params }, parent) {
 export default async function ManageClub({ params }) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: id },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: id },
   });
 
   return (

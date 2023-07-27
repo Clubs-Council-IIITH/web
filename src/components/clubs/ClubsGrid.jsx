@@ -4,12 +4,11 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { Grid } from "@mui/material";
 import ClubCard from "components/clubs/ClubCard";
 
-export const dynamic = "force-dynamic";
-
 export default async function ClubsGrid({ category }) {
-  const { data: { activeClubs } = {} } = await getClient().query({
-    query: GET_ACTIVE_CLUBS,
-  });
+  const { data: { activeClubs } = {} } = await getClient().query(
+    GET_ACTIVE_CLUBS,
+    {}
+  );
 
   return (
     <Grid container spacing={2}>

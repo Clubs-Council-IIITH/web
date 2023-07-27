@@ -6,10 +6,6 @@ import { useForm, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 
-import { makeClient } from "gql/provider";
-import { CREATE_CLUB, EDIT_CLUB } from "gql/mutations/clubs";
-import { GET_ACTIVE_CLUBS, GET_ALL_CLUBS, GET_CLUB } from "gql/queries/clubs";
-
 import { LoadingButton } from "@mui/lab";
 import {
   Button,

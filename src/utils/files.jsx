@@ -1,8 +1,5 @@
 "use client";
 
-import { makeClient } from "gql/provider";
-import { GET_SIGNED_UPLOAD_URL } from "gql/queries/misc";
-
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
 
 export function getFile(filepath) {
@@ -16,15 +13,14 @@ export function getFile(filepath) {
 }
 
 export async function uploadFile(file, filetype = "image") {
-  // get signed upload URL
-  const {
-    data: {
-      signedUploadURL: { url },
-    },
-  } = await makeClient().query({
-    query: GET_SIGNED_UPLOAD_URL,
-    fetchPolicy: "network-only",
-  });
+  // early return if no file
+  if (!file) return null;
+
+  // get signed url
+  let res = await fetch("/actions/files/upload", { method: "POST" });
+  let {
+    data: { url },
+  } = await res.json();
 
   // upload file to signed URL
   const body = new FormData();

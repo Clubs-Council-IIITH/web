@@ -8,11 +8,8 @@ import { Box, Button, Typography } from "@mui/material";
 import ClubLogo from "./ClubLogo";
 
 export default async function ClubButton({ clubid }) {
-  const { data: { club } = {} } = await getClient().query({
-    query: GET_CLUB,
-    variables: {
-      clubInput: { cid: clubid },
-    },
+  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+    clubInput: { cid: clubid },
   });
 
   return (

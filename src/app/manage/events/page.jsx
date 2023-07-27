@@ -13,14 +13,13 @@ export const metadata = {
 };
 
 export default async function ManageEvents() {
-  const { data: { pendingEvents } = {} } = await getClient().query({
-    query: GET_PENDING_EVENTS,
-    variables: { clubid: null },
-  });
+  const { data: { pendingEvents } = {} } = await getClient().query(
+    GET_PENDING_EVENTS,
+    { clubid: null }
+  );
 
-  const { data: { events } = {} } = await getClient().query({
-    query: GET_ALL_EVENTS,
-    variables: { clubid: null },
+  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: null,
   });
 
   return (

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import gql from "graphql-tag";
 
 export const CREATE_EVENT = gql`
   mutation CreateEvent($details: InputEventDetails!) {
@@ -25,7 +25,11 @@ export const DELETE_EVENT = gql`
 `;
 
 export const PROGRESS_EVENT = gql`
-  mutation ProgressEvent($eventid: String!, $ccProgressBudget: Boolean, $ccProgressRoom: Boolean) {
+  mutation ProgressEvent(
+    $eventid: String!
+    $ccProgressBudget: Boolean
+    $ccProgressRoom: Boolean
+  ) {
     progressEvent(
       eventid: $eventid
       ccProgressBudget: $ccProgressBudget

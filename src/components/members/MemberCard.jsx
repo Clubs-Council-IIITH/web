@@ -7,15 +7,14 @@ import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
 
 export default async function MemberCard({ uid, poc, roles }) {
-  const { data: { userProfile, userMeta } = {} } = await getClient().query({
-    query: GET_USER_PROFILE,
-    skip: !uid,
-    variables: {
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(
+    GET_USER_PROFILE,
+    {
       userInput: {
         uid: uid,
       },
-    },
-  });
+    }
+  );
 
   return (
     <Card

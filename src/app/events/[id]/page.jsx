@@ -6,11 +6,8 @@ import EventDetails from "components/events/EventDetails";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query({
-    query: GET_EVENT,
-    variables: {
-      eventid: id,
-    },
+  const { data: { event } = {} } = await getClient().query(GET_EVENT, {
+    eventid: id,
   });
 
   console.log(event);
@@ -23,11 +20,8 @@ export async function generateMetadata({ params }, parent) {
 export default async function Event({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query({
-    query: GET_EVENT,
-    variables: {
-      eventid: id,
-    },
+  const { data: { event } = {} } = await getClient().query(GET_EVENT, {
+    eventid: id,
   });
 
   return <EventDetails event={event} />;

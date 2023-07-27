@@ -9,8 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.0-rc.0",
-    "@apollo/experimental-nextjs-app-support": "^0.0.0-commit-473354a",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -29,16 +27,20 @@
     "cookie-cutter": "^0.2.0",
     "dayjs": "^1.11.9",
     "graphql": "^16.7.1",
+    "graphql-tag": "^2.12.6",
     "next": "^13.4.10",
+    "next-urql": "^5.0.2",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.2",
+    "react-is": "^18.2.0",
     "react-nice-avatar": "^1.4.1",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
-    "string-to-color": "^2.2.2"
+    "string-to-color": "^2.2.2",
+    "urql": "^4.0.5"
   }
 }

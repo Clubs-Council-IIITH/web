@@ -7,7 +7,6 @@ import Toast, { ToastProvider } from "components/Toast";
 import { Navigation, Content } from "components/Layout";
 
 import { getClient } from "gql/client";
-import { ApolloWrapper } from "gql/provider";
 import { GET_USER } from "gql/queries/auth";
 import { AuthProvider } from "components/AuthProvider";
 
@@ -22,27 +21,25 @@ const roboto = Roboto({
 });
 
 export default async function RootLayout({ children }) {
-  const { data: { userMeta, userProfile } = {} } = await getClient().query({
-    query: GET_USER,
-    variables: { userInput: null },
-  });
+  const { data: { userMeta, userProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null }
+  );
 
   return (
     <html lang="en">
       <body className={roboto.className}>
         <ThemeRegistry>
           <Progressbar />
-          <ApolloWrapper>
-            <LocalizationWrapper>
-              <AuthProvider user={{ ...userMeta, ...userProfile }}>
-                <ToastProvider>
-                  <Navigation />
-                  <Content>{children}</Content>
-                  <Toast />
-                </ToastProvider>
-              </AuthProvider>
-            </LocalizationWrapper>
-          </ApolloWrapper>
+          <LocalizationWrapper>
+            <AuthProvider user={{ ...userMeta, ...userProfile }}>
+              <ToastProvider>
+                <Navigation />
+                <Content>{children}</Content>
+                <Toast />
+              </ToastProvider>
+            </AuthProvider>
+          </LocalizationWrapper>
         </ThemeRegistry>
       </body>
     </html>
