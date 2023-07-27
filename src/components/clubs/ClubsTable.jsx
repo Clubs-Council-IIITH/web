@@ -18,8 +18,8 @@ const columns = [
     flex: 1,
     valueGetter: ({ row }) => ({ name: row.name, logo: row.logo }),
     renderCell: ({ value }) => (
-      <Avatar alt={value.name} sx={{ height: 32, width: 32 }}>
-        <Image src={getFile(value.logo)} fill={true} />
+      <Avatar sx={{ height: 32, width: 32 }}>
+        <Image alt={value.name} src={getFile(value.logo)} fill={true} />
       </Avatar>
     ),
   },
