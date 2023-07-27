@@ -31,5 +31,11 @@ export const { getClient } = registerApolloClient(() => {
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: authLink.concat(httpLink),
+    defaultOptions: {
+      query: {
+        fetchPolicy: "network-only",
+        errorPolicy: "all",
+      },
+    },
   });
 });

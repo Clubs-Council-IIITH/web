@@ -37,98 +37,87 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
   // different form submission handlers
   const submitHandlers = {
     log: console.log,
-    create: async (data) =>
-      await makeClient().mutate({
-        mutation: CREATE_CLUB,
-        variables: {
-          clubInput: data,
-        },
-        refetchQueries: [{ query: GET_ACTIVE_CLUBS }, { query: GET_ALL_CLUBS }],
-      }),
-    edit: async (data) =>
-      await makeClient().mutate({
-        mutation: EDIT_CLUB,
-        variables: {
-          clubInput: data,
-        },
-        refetchQueries: [
-          { query: GET_ACTIVE_CLUBS },
-          { query: GET_ALL_CLUBS },
-          { query: GET_CLUB, variables: { clubInput: { cid: data.cid } } },
-        ],
-      }),
+    create: async (data) => {
+      let res = await fetch("/actions/clubs/create", {
+        method: "POST",
+        body: JSON.stringify({ clubInput: data }),
+      });
+      res = await res.json();
+
+      if (res.ok) {
+        // show success toast & redirect to manage page
+        triggerToast({
+          title: "Success!",
+          messages: ["Club created."],
+          severity: "success",
+        });
+        router.push("/manage/clubs");
+      } else {
+        // show error toast
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+      }
+    },
+    edit: async (data) => {
+      let res = await fetch("/actions/clubs/edit", {
+        method: "POST",
+        body: JSON.stringify({ clubInput: data, cid: data.cid }),
+      });
+      res = await res.json();
+
+      if (res.ok) {
+        // show success toast & redirect to manage page
+        triggerToast({
+          title: "Success!",
+          messages: ["Club edited."],
+          severity: "success",
+        });
+        router.push("/manage/clubs");
+      } else {
+        // show error toast
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+      }
+    },
   };
 
   // transform data and mutate
   async function onSubmit(formData) {
-    const {
-      code,
-      name,
-      email,
-      category,
-      tagline,
-      description,
+    const data = {
+      code: formData.code,
+      name: formData.name,
+      email: formData.email,
+      category: formData.category,
+      tagline: formData.tagline,
+      description: formData.description,
       socials: {
-        website,
-        instagram,
-        facebook,
-        youtube,
-        twitter,
-        linkedin,
-        discord,
+        website: formData.website,
+        instagram: formData.instagram,
+        facebook: formData.facebook,
+        youtube: formData.youtube,
+        twitter: formData.twitter,
+        linkedin: formData.linkedin,
+        discord: formData.discord,
       },
-      logo,
-      banner,
-    } = formData;
+    };
 
-    const cid = email.split("@")[0];
-    try {
-      const logoUrl = logo?.[0] ? await uploadFile(logo?.[0], "image") : null;
-      const bannerUrl = banner?.[0]
-        ? await uploadFile(banner?.[0], "image")
-        : null;
-      await submitHandlers[action]({
-        cid,
-        code,
-        name,
-        email,
-        category,
-        tagline,
-        description,
-        socials: {
-          website,
-          instagram,
-          facebook,
-          youtube,
-          twitter,
-          linkedin,
-          discord,
-        },
-        logo: logoUrl,
-        banner: bannerUrl,
-      });
+    // set CID based on club email
+    data.cid = formData.email.split("@")[0];
 
-      // show success toast
-      triggerToast({
-        title: "Success!",
-        message: `${formData.name} was ${
-          action === "edit" ? "edited" : "created"
-        }.`,
-        severity: "success",
-      });
+    // upload media
+    data.logo = formData?.logo?.[0]
+      ? await uploadFile(formData?.logo?.[0], "image")
+      : null;
+    data.banner = formData?.banner?.[0]
+      ? await uploadFile(formData?.banner?.[0], "image")
+      : null;
 
-      // redirect to manage page
-      router.push("/manage/clubs");
-    } catch (e) {
-      console.log(JSON.stringify(e));
-
-      // show error toast
-      triggerToast({
-        title: e.name,
-        message: e?.graphQLErrors?.map((g) => g?.message)?.join("\n"),
-        severity: "error",
-      });
-    }
+    // mutate
+    await submitHandlers[action](data);
   }
 
   return (
@@ -375,6 +364,10 @@ function ClubTaglineInput({ control }) {
       name="tagline"
       control={control}
       rules={{
+        minLength: {
+          value: 2,
+          message: "Club tagline must be at least 2 characters long!",
+        },
         maxLength: {
           value: 200,
           message: "Club tagline must be at most 200 characters long!",
@@ -389,6 +382,7 @@ function ClubTaglineInput({ control }) {
           helperText={error?.message}
           variant="outlined"
           fullWidth
+          required
         />
       )}
     />

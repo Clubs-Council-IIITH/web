@@ -5,10 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 
 import { useState } from "react";
 
-import { useMutation } from "@apollo/client";
-import { DELETE_CLUB } from "gql/mutations/clubs";
-import { GET_ALL_CLUBS } from "gql/queries/clubs";
-
 import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
@@ -39,34 +35,29 @@ export function DeleteClub({ sx }) {
   const { triggerToast } = useToast();
   const [dialog, setDialog] = useState(false);
 
-  const [deleteClub] = useMutation(DELETE_CLUB, {
-    awaitRefetchQueries: true,
-    refetchQueries: [{ query: GET_ALL_CLUBS }],
-    variables: {
-      clubInput: {
-        cid: id,
-      },
-    },
-    onCompleted: () => {
-      // show success toast
+  const deleteClub = async () => {
+    let res = await fetch("/actions/clubs/delete", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+    });
+    res = await res.json();
+
+    if (res.ok) {
+      // show success toast & redirect to manage page
       triggerToast({
         title: "Success!",
         messages: ["Club deleted."],
         severity: "success",
       });
-
-      // redirect to manage page
       router.push("/manage/clubs");
-    },
-    onError: (error) => {
+    } else {
       // show error toast
       triggerToast({
-        title: error.name,
-        messages: error?.graphQLErrors?.map((g) => g?.message),
+        ...res.error,
         severity: "error",
       });
-    },
-  });
+    }
+  };
 
   return (
     <>
