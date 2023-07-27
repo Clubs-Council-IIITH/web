@@ -23,6 +23,7 @@ export function EditClub({ sx }) {
     <Button
       component={Link}
       href={`/manage/clubs/${id}/edit`}
+      variant="contained"
       color="warning"
       startIcon={<Icon variant="edit-outline" />}
       sx={sx}
@@ -70,6 +71,7 @@ export function DeleteClub({ sx }) {
   return (
     <>
       <Button
+        variant="contained"
         color="error"
         startIcon={<Icon variant="delete-forever-outline" />}
         onClick={() => setDialog(true)}

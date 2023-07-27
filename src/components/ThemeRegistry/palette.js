@@ -7,12 +7,12 @@ function createGradient(color1, color2) {
 }
 
 // SETUP COLORS
-const PRIMARY = {
-  lighter: "#D1E9FC",
-  light: "#76B0F1",
-  main: "#2065D1",
-  dark: "#103996",
-  darker: "#061B64",
+const PRIMARY_LIGHT = {
+  lighter: "#9575cd",
+  light: "#7e57c2",
+  main: "#673ab7",
+  dark: "#5e35b1",
+  darker: "#512da8",
 };
 const SECONDARY = {
   lighter: "#C4CDD5",
@@ -72,7 +72,7 @@ const GREY = {
 };
 
 const GRADIENTS = {
-  primary: createGradient(PRIMARY.light, PRIMARY.main),
+  primary: createGradient(PRIMARY_LIGHT.light, PRIMARY_LIGHT.main), // TODO: define PRIMARY_DARK palette
   info: createGradient(INFO.light, INFO.main),
   success: createGradient(SUCCESS.light, SUCCESS.main),
   warning: createGradient(WARNING.light, WARNING.main),
@@ -89,7 +89,6 @@ const CHART_COLORS = {
 
 const COMMON = {
   common: { black: "#000", white: "#fff" },
-  primary: { ...PRIMARY, contrastText: "#fff" },
   secondary: { ...SECONDARY, contrastText: "#fff" },
   info: { ...INFO, contrastText: "#fff" },
   success: { ...SUCCESS, contrastText: GREY[800] },
@@ -113,14 +112,16 @@ const COMMON = {
 const palette = {
   light: {
     ...COMMON,
+    primary: { ...PRIMARY_LIGHT, contrastText: "#fff" },
     mode: "light",
     text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
     background: { paper: "#fff", default: "#fefefe", neutral: GREY[200] },
     action: { active: GREY[600], ...COMMON.action },
-    accent: "#803DB2",
+    accent: PRIMARY_LIGHT.main,
   },
   dark: {
     ...COMMON,
+    primary: { ...PRIMARY_LIGHT, contrastText: "#fff" }, // TODO: define PRIMARY_DARK palette
     mode: "dark",
     text: {
       primary: "#e3e3e3",
@@ -129,7 +130,7 @@ const palette = {
     },
     background: { paper: GREY[800], default: "#111111", neutral: GREY[500_16] },
     action: { active: GREY[500], ...COMMON.action },
-    accent: "#1EC3BD",
+    accent: PRIMARY_LIGHT.main, // TODO: define PRIMARY_DARK palette
   },
 };
 
