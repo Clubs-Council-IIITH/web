@@ -1,6 +1,7 @@
 import { Roboto } from "next/font/google";
 import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 import LocalizationWrapper from "components/LocalizationWrapper";
+import Progressbar from "components/Progressbar";
 
 import Toast, { ToastProvider } from "components/Toast";
 import { Navigation, Content } from "components/Layout";
@@ -29,8 +30,9 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <ApolloWrapper>
-          <ThemeRegistry>
+        <ThemeRegistry>
+          <Progressbar />
+          <ApolloWrapper>
             <LocalizationWrapper>
               <AuthProvider user={{ ...userMeta, ...userProfile }}>
                 <ToastProvider>
@@ -40,8 +42,8 @@ export default async function RootLayout({ children }) {
                 </ToastProvider>
               </AuthProvider>
             </LocalizationWrapper>
-          </ThemeRegistry>
-        </ApolloWrapper>
+          </ApolloWrapper>
+        </ThemeRegistry>
       </body>
     </html>
   );
