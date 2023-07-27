@@ -1,4 +1,3 @@
-import { Roboto } from "next/font/google";
 import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 import LocalizationWrapper from "components/LocalizationWrapper";
 import Progressbar from "components/Progressbar";
@@ -9,16 +8,13 @@ import { Navigation, Content } from "components/Layout";
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { AuthProvider } from "components/AuthProvider";
+import { fontClass } from "components/ThemeRegistry/typography";
+import TransitionProvider from "components/TransitionProvider";
 
 export const metadata = {
   title: "Clubs Council IIITH",
   description: "Clubs Council IIITH", // TODO: change
 };
-
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-});
 
 export default async function RootLayout({ children }) {
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -28,14 +24,16 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={fontClass}>
         <ThemeRegistry>
           <Progressbar />
           <LocalizationWrapper>
             <AuthProvider user={{ ...userMeta, ...userProfile }}>
               <ToastProvider>
                 <Navigation />
-                <Content>{children}</Content>
+                <Content>
+                  <TransitionProvider>{children}</TransitionProvider>
+                </Content>
                 <Toast />
               </ToastProvider>
             </AuthProvider>

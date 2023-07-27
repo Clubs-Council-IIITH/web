@@ -1,0 +1,24 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+
+export default function TransitionProvider({ children }) {
+  const pathname = usePathname();
+
+  return (
+    <motion.div
+      key={pathname}
+      initial={{ y: 20, opacity: 0.5 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 20, opacity: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}

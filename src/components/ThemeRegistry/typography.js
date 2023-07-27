@@ -1,5 +1,13 @@
 "use client";
 
+import { Public_Sans } from "next/font/google";
+
+const fontPrimary = Public_Sans({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+});
+export const fontClass = fontPrimary.className;
+
 export function remToPx(value) {
   return Math.round(parseFloat(value) * 16);
 }
@@ -22,7 +30,7 @@ export function responsiveFontSizes({ sm, md, lg }) {
   };
 }
 
-const FONT_PRIMARY = "Public Sans, sans-serif"; // Google Font
+const FONT_PRIMARY = `${fontPrimary.style.fontFamily}, sans-serif`; // Google Font
 // const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
 
 const typography = {

@@ -27,6 +27,7 @@
     "@urql/next": "^1.0.0",
     "cookie-cutter": "^0.2.0",
     "dayjs": "^1.11.9",
+    "framer-motion": "^10.14.0",
     "graphql": "^16.7.1",
     "graphql-tag": "^2.12.6",
     "next": "^13.4.12",
