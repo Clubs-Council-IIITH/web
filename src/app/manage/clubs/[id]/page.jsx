@@ -1,11 +1,8 @@
-import Link from "next/link";
-
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 
-import { Divider, Stack, Button, Box, Card, Typography } from "@mui/material";
+import { Box, Card } from "@mui/material";
 
-import Icon from "components/Icon";
 import ActionPalette from "components/ActionPalette";
 
 import ClubBanner from "components/clubs/ClubBanner";

@@ -1,3 +1,5 @@
+"use client";
+
 import { DataGrid } from "@mui/x-data-grid";
 import { Button, IconButton, Typography } from "@mui/material";
 

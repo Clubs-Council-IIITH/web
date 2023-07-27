@@ -2,7 +2,7 @@
 
 import { Chip } from "@mui/material";
 
-export default function Tag({ label, color, icon }) {
+export default function Tag({ label, color, icon, sx = {} }) {
   return (
     <Chip
       variant="outlined"
@@ -15,6 +15,7 @@ export default function Tag({ label, color, icon }) {
         color: `${color}.dark`,
         fontWeight: "bold",
         backgroundColor: `${color}.lighter`,
+        ...sx,
       }}
     />
   );

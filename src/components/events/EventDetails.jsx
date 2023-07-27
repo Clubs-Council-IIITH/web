@@ -46,7 +46,9 @@ export default function EventDetails({ event }) {
               <DateTime dt={event.datetimeperiod[0]} />
             </Typography>
             <Box mx={1}>-</Box>
-            <DateTime dt={event.datetimeperiod[1]} />
+            <Typography variant="body2">
+              <DateTime dt={event.datetimeperiod[1]} />
+            </Typography>
           </Box>
 
           <Typography variant="h3" paragraph mt={1}>

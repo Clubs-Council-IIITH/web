@@ -10,8 +10,6 @@ export async function generateMetadata({ params }, parent) {
     eventid: id,
   });
 
-  console.log(event);
-
   return {
     title: event.name,
   };

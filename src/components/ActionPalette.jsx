@@ -1,22 +1,27 @@
 import { Box, Stack, Divider } from "@mui/material";
 
-export default function ActionPalette({ left = [], right = [] }) {
+export default function ActionPalette({
+  left = [],
+  right = [],
+  leftProps = [],
+  rightProps = [],
+}) {
   return (
     <>
-      <Stack direction="row">
+      <Stack direction="row" alignItems="center">
         <Stack direction="row">
-          {left.map((Component) => (
-            <Component sx={{ mr: 1 }} />
+          {left.map((Component, key) => (
+            <Component sx={{ mr: 1 }} {...leftProps[key]} />
           ))}
         </Stack>
         <Box sx={{ flexGrow: 1 }} />
         <Stack direction="row">
-          {right.map((Component) => (
-            <Component sx={{ ml: 1 }} />
+          {right.map((Component, key) => (
+            <Component sx={{ ml: 1 }} {...rightProps[key]} />
           ))}
         </Stack>
       </Stack>
-      <Divider sx={{ borderStyle: "dashed", mt: 1, mb: 3 }} />
+      <Divider sx={{ borderStyle: "dashed", mt: 2, mb: 2 }} />
     </>
   );
 }
