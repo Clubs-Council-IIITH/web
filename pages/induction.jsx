@@ -163,9 +163,10 @@ export default function Induction() {
               Intro to Clubs Sequence comes here
             </Typography> */}
             {
-              environment && environment === 'production' ?
-                <Typography variant="body1" sx={{ mt: 3 }}> To be announced soon !<br />Stay Tuned !!</Typography>
-                : <>
+              // environment && environment === 'production' ?
+              //   <Typography variant="body1" sx={{ mt: 3 }}> To be announced soon !<br />Stay Tuned !!</Typography>
+              //   :
+                <>
                   <Divider
                     style={{
                       color: "black"
