@@ -15,6 +15,7 @@ export default async function MemberCard({ uid, poc, roles }) {
       },
     }
   );
+  const user = { ...userMeta, ...userProfile };
 
   return (
     <Card
@@ -34,14 +35,14 @@ export default async function MemberCard({ uid, poc, roles }) {
         }}
       >
         <UserImage
-          image={userMeta.img}
-          name={userProfile.firstName}
-          gender={userProfile.gender}
+          image={user.img}
+          name={user.firstName}
+          gender={user.gender}
           width={150}
           height={150}
         />
         <Typography variant="subtitle1" textTransform="capitalize" mt={3}>
-          {`${userProfile.firstName} ${userProfile.lastName}`.toLowerCase()}
+          {`${user.firstName} ${user.lastName}`.toLowerCase()}
         </Typography>
 
         {poc ? (
