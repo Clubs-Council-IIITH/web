@@ -31,7 +31,7 @@ export default function DrawerItem({ title, path, icon }) {
       sx={{
         ...theme.typography.body2,
         position: "relative",
-        height: 46,
+        height: 44,
         textTransform: "capitalize",
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1.5),

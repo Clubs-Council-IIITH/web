@@ -104,7 +104,9 @@ function DropZone({ files, onDrop, type, maxFiles }) {
           <Image
             alt="Upload preview"
             src={
-              typeof files[0] === "string"
+              typeof files === "string"
+                ? getFile(files)
+                : typeof files[0] === "string"
                 ? getFile(files[0])
                 : URL.createObjectURL(files[0])
             }
