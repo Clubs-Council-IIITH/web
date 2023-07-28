@@ -37,8 +37,8 @@ export default async function MemberCard({ uid, poc, roles }) {
           image={userMeta.img}
           name={userProfile.firstName}
           gender={userProfile.gender}
-          width={128}
-          height={128}
+          width={150}
+          height={150}
         />
         <Typography variant="subtitle1" textTransform="capitalize" mt={3}>
           {`${userProfile.firstName} ${userProfile.lastName}`.toLowerCase()}

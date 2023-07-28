@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Grid } from "@mui/material";
+import { Divider, Grid, Typography } from "@mui/material";
 import MemberCard from "components/members/MemberCard";
 
 export const dynamic = "force-dynamic";
@@ -13,21 +13,51 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
     },
   });
 
-  return (
-    <Grid container spacing={2}>
-      {members
-        ?.filter((member) =>
-          onlyCurrent ? member.roles.some((r) => r.endYear === null) : true
-        )
-        ?.map((member) => (
-          <Grid key={member.uid} item xs={12} sm={6} md={4} lg={2.4}>
-            <MemberCard
-              uid={member.uid}
-              poc={member.poc}
-              roles={member.roles}
-            />
-          </Grid>
-        ))}
-    </Grid>
+  const currentYear = (new Date().getFullYear() + 1).toString();
+
+  // construct dict of { year: [members] } where each year is a key
+  const targetMembers = members.reduce((acc, member) => {
+    const latestYear = parseInt(extractLatestYear(member));
+    if (!acc[latestYear]) {
+      acc[latestYear] = [];
+    }
+    acc[latestYear].push(member);
+    return acc;
+  }, {});
+
+  return Object.keys(targetMembers)
+    ?.filter((year) => (onlyCurrent ? year === currentYear : true))
+    ?.sort((a, b) => parseInt(b) - parseInt(a))
+    ?.map((year) => (
+      <>
+        {!onlyCurrent ? (
+          <Divider textAlign="left" sx={{ mb: 2 }}>
+            <Typography variant="h5" textTransform="uppercase">
+              {year === currentYear ? "Current Members" : year}
+            </Typography>
+          </Divider>
+        ) : null}
+        <Grid container spacing={2} mb={3}>
+          {targetMembers[year]?.map((member) => (
+            <Grid key={member.uid} item xs={12} sm={6} md={4} lg={2.4}>
+              <MemberCard
+                uid={member.uid}
+                poc={member.poc}
+                roles={member.roles}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </>
+    ));
+}
+
+// get the last year a member was in the club
+// if member is still present, return current year + 1
+function extractLatestYear(member) {
+  return Math.max(
+    member.roles.map((r) =>
+      !r.endYear ? new Date().getFullYear() + 1 : r.endYear
+    )
   );
 }
