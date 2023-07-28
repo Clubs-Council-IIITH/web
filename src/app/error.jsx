@@ -28,7 +28,7 @@ export default function GlobalError({ error, reset }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        pt: 8,
+        py: 8,
       }}
     >
       <Stack direction="column" spacing={4} alignItems="center">
