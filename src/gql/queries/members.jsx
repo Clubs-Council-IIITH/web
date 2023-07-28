@@ -56,7 +56,11 @@ export const GET_MEMBER = gql`
     userProfile(userInput: $userInput) {
       firstName
       lastName
+      gender
       email
+    }
+    userMeta(userInput: $userInput) {
+      img
     }
   }
 `;
