@@ -32,6 +32,9 @@ const BAR_HEIGHT_DESKTOP = 92;
 // define navigation drawer width
 const DRAWER_WIDTH = 280;
 
+// bug report external link
+export const BUG_REPORT_URL = "https://forms.office.com/r/zBLuvbBPXZ";
+
 function Bar({ onOpenDrawer }) {
   const theme = useTheme();
 
@@ -219,7 +222,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       </Box>
       <DrawerItem
         title="report bugs"
-        path="https://forms.office.com/r/zBLuvbBPXZ"
+        path={BUG_REPORT_URL}
         icon={<Icon variant="bug-report-outline-rounded" />}
       />
     </List>
