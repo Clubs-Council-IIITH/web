@@ -101,11 +101,17 @@ export default function Footer() {
         <Grid item xs>
           <Box width="100%" display="flex" justifyContent="flex-end">
             <Typography
+              variant="body2"
               component={Link}
               href={PRIVACY_POLICY_URL}
-              underline="hover"
-              variant="body2"
-              fontWeight={500}
+              sx={{
+                fontWeight: 600,
+                textDecoration: "none",
+                color: "black",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
             >
               Privacy Policy
             </Typography>
