@@ -187,7 +187,7 @@ export default function Induction() {
                       fullWidth
                     >
                       <Tab
-                        label="UG 2k22"
+                        label="UG 2k23"
                         sx={{
                           fontWeight: 600,
                           fontSize: "1.0em",
@@ -205,7 +205,7 @@ export default function Induction() {
                         }}
                       />
                       <Tab
-                        label="LE 2k22, PG 2k22 & PhD 2k22"
+                        label="LE 2k23, PG 2k23 & PhD 2k23"
                         sx={{
                           fontWeight: 600,
                           fontSize: "1.0em",
