@@ -3,20 +3,24 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Button, IconButton, Typography } from "@mui/material";
 
+import Tag from "components/Tag";
 import Icon from "components/Icon";
-import { fCurrency } from "utils/formatCurrency";
 
-export default function EventBudget({
+export default function MemberPositions({
   editable,
   rows = [],
   setRows = console.log,
 }) {
-  // budget item template
-  const emptyBudgetItem = { description: null, amount: 0, advance: false };
+  // position item template
+  const emptyPositionItem = {
+    name: null,
+    startYear: new Date().getFullYear(),
+    endYear: null,
+  };
 
   // data manipulation functions
   const onAdd = () => {
-    setRows([...rows, { id: rows?.length || 0, ...emptyBudgetItem }]);
+    setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
     const newRows = rows.map((r) => {
@@ -30,13 +34,11 @@ export default function EventBudget({
     setRows(rows.filter((r) => r.id !== row.id));
   };
 
-  // grid column definition
   const columns = [
     {
-      field: "description",
-      headerName: "Description",
-      width: 250,
-      flex: 2,
+      field: "name",
+      headerName: "Role",
+      flex: 4,
       editable: editable,
       renderCell: (p) =>
         p.value ? (
@@ -48,28 +50,17 @@ export default function EventBudget({
         ),
     },
     {
-      field: "amount",
-      type: "number",
-      headerName: "Amount",
-      flex: 1,
+      field: "startYear",
+      headerName: "Start Year",
+      flex: 2,
       editable: editable,
-      valueFormatter: (p) => fCurrency(p?.value),
     },
     {
-      field: "advance",
-      type: "boolean",
-      headerName: "Advance",
-      width: 130,
+      field: "endYear",
+      headerName: "End Year",
+      valueGetter: ({ row }) => row.endYear || "-",
+      flex: 2,
       editable: editable,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (p) => (
-        <Icon
-          external
-          color={!!p.value ? "success.main" : "error.main"}
-          variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
-        />
-      ),
     },
     ...(editable
       ? [
@@ -89,7 +80,21 @@ export default function EventBudget({
             ),
           },
         ]
-      : []),
+      : [
+          {
+            field: "approved",
+            headerName: "Status",
+            align: "center",
+            headerAlign: "center",
+            flex: 2,
+            renderCell: ({ value }) => (
+              <Tag
+                label={value ? "Approved" : "Pending"}
+                color={value ? "success" : "warning"}
+              />
+            ),
+          },
+        ]),
   ];
 
   return (
@@ -102,8 +107,8 @@ export default function EventBudget({
       ) : null}
 
       <DataGrid
-        columns={columns}
         rows={rows}
+        columns={columns}
         editMode="row"
         processRowUpdate={onUpdate}
         disableRowSelectionOnClick

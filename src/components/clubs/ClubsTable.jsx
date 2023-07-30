@@ -62,36 +62,34 @@ export default function ClubsTable({ clubs }) {
 
   if (!clubs) return null;
   return (
-    <Box width="100%">
-      <DataGrid
-        rows={clubs}
-        columns={columns}
-        getRowId={(r) => r.cid}
-        onRowClick={(params) => router.push(`/manage/clubs/${params.row.cid}`)}
-        disableRowSelectionOnClick
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "name", sort: "asc" }],
+    <DataGrid
+      rows={clubs}
+      columns={columns}
+      getRowId={(r) => r.cid}
+      onRowClick={(params) => router.push(`/manage/clubs/${params.row.cid}`)}
+      disableRowSelectionOnClick
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "name", sort: "asc" }],
+        },
+        filter: {
+          filterModel: {
+            items: [],
+            quickFilterLogicOperator: GridLogicOperator.Or,
           },
-          filter: {
-            filterModel: {
-              items: [],
-              quickFilterLogicOperator: GridLogicOperator.Or,
-            },
-          },
-        }}
-        slots={{ toolbar: QuickSearchToolbar }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-          // pointer cursor on ALL rows
-          "& .MuiDataGrid-row:hover": {
-            cursor: "pointer",
-          },
-        }}
-      />
-    </Box>
+        },
+      }}
+      slots={{ toolbar: QuickSearchToolbar }}
+      sx={{
+        // disable cell selection style
+        ".MuiDataGrid-cell:focus": {
+          outline: "none",
+        },
+        // pointer cursor on ALL rows
+        "& .MuiDataGrid-row:hover": {
+          cursor: "pointer",
+        },
+      }}
+    />
   );
 }

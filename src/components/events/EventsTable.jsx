@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 
-import { Box } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import { ISOtoHuman } from "utils/formatTime";
@@ -116,36 +115,34 @@ export default function EventsTable({
 
   if (!events) return null;
   return (
-    <Box width="100%">
-      <DataGrid
-        rows={events}
-        columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
-        getRowId={(r) => r._id}
-        onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
-        disableRowSelectionOnClick
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "scheduled", sort: scheduleSort }],
+    <DataGrid
+      rows={events}
+      columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
+      getRowId={(r) => r._id}
+      onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
+      disableRowSelectionOnClick
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "scheduled", sort: scheduleSort }],
+        },
+        filter: {
+          filterModel: {
+            items: [],
+            quickFilterLogicOperator: GridLogicOperator.Or,
           },
-          filter: {
-            filterModel: {
-              items: [],
-              quickFilterLogicOperator: GridLogicOperator.Or,
-            },
-          },
-        }}
-        slots={{ toolbar: QuickSearchToolbar }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-          // pointer cursor on ALL rows
-          "& .MuiDataGrid-row:hover": {
-            cursor: "pointer",
-          },
-        }}
-      />
-    </Box>
+        },
+      }}
+      slots={{ toolbar: QuickSearchToolbar }}
+      sx={{
+        // disable cell selection style
+        ".MuiDataGrid-cell:focus": {
+          outline: "none",
+        },
+        // pointer cursor on ALL rows
+        "& .MuiDataGrid-row:hover": {
+          cursor: "pointer",
+        },
+      }}
+    />
   );
 }

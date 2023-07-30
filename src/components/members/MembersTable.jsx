@@ -86,39 +86,35 @@ export default function MembersTable({ members }) {
 
   if (!members) return null;
   return (
-    <Box width="100%">
-      <DataGrid
-        rows={members}
-        columns={columns}
-        getRowId={(r) => r.mid}
-        getRowHeight={() => "auto"}
-        onRowClick={(params) =>
-          router.push(`/manage/members/${params.row.mid}`)
-        }
-        disableRowSelectionOnClick
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "name", sort: "asc" }],
+    <DataGrid
+      rows={members}
+      columns={columns}
+      getRowId={(r) => r.mid}
+      getRowHeight={() => "auto"}
+      onRowClick={(params) => router.push(`/manage/members/${params.row.mid}`)}
+      disableRowSelectionOnClick
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "name", sort: "asc" }],
+        },
+        filter: {
+          filterModel: {
+            items: [],
+            quickFilterLogicOperator: GridLogicOperator.Or,
           },
-          filter: {
-            filterModel: {
-              items: [],
-              quickFilterLogicOperator: GridLogicOperator.Or,
-            },
-          },
-        }}
-        slots={{ toolbar: QuickSearchToolbar }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-          // pointer cursor on ALL rows
-          "& .MuiDataGrid-row:hover": {
-            cursor: "pointer",
-          },
-        }}
-      />
-    </Box>
+        },
+      }}
+      slots={{ toolbar: QuickSearchToolbar }}
+      sx={{
+        // disable cell selection style
+        ".MuiDataGrid-cell:focus": {
+          outline: "none",
+        },
+        // pointer cursor on ALL rows
+        "& .MuiDataGrid-row:hover": {
+          cursor: "pointer",
+        },
+      }}
+    />
   );
 }

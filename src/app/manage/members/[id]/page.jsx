@@ -1,9 +1,9 @@
 import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
 
-import { Container, Grid, Stack, Avatar, Typography } from "@mui/material";
+import { Container, Grid, Stack, Typography } from "@mui/material";
 import UserImage from "components/users/UserImage";
-import MemberPositionsTable from "components/members/MemberPositionsTable";
+import MemberPositions from "components/members/MemberPositions";
 
 export const metadata = {
   title: "Viewing Member",
@@ -72,7 +72,13 @@ export default async function ManageMember({ params }) {
             >
               Positions
             </Typography>
-            <MemberPositionsTable roles={member.roles} />
+            <MemberPositions
+              rows={member?.roles?.map((r, key) => ({
+                ...r,
+                id: r?.mid || key,
+              }))} // add ID to each position item if it doesn't exist (MUI requirement)
+              editable={false}
+            />
           </Grid>
         </Grid>
       </Grid>
