@@ -2,7 +2,7 @@
 FROM node:20-slim as node_cache
 WORKDIR /cache/
 COPY package*.json .
-RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose --production
+RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose --omit=dev
 
 # build and start
 FROM node:20-slim as build
