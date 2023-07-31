@@ -56,8 +56,8 @@ const aboutConfig = {
       ),
     },
     {
-      title: "Supervisory Bodies",
-      path: "/supervisory-bodies",
+      title: "Office Of Student Life",
+      path: "/office-of-student-life",
       icon: <AboutIcon fontSize="small" />,
     },
   ],
