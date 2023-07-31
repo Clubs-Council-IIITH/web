@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+// import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 import NextAppDirEmotionCacheProvider from "./EmotionCache";
 
@@ -13,7 +13,7 @@ import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
 export default function ThemeRegistry({ children }) {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const prefersDarkMode = false; // useMediaQuery("(prefers-color-scheme: dark)");
 
   const themeOptions = React.useMemo(
     () => ({

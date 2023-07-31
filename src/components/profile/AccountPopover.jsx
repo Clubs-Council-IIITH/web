@@ -77,7 +77,6 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          alt="logged in"
           {...(user?.firstName && {
             children: `${user?.firstName?.[0]}${
               user?.lastName == "" ? "" : user?.lastName?.[0]
@@ -87,12 +86,14 @@ export default function AccountPopover() {
             },
           })}
         >
-          <Image
-            alt={user?.firstName}
-            src={getFile(user?.img)}
-            width={40}
-            height={40}
-          />
+          {user?.img ? (
+            <Image
+              alt={user?.firstName}
+              src={getFile(user?.img)}
+              width={40}
+              height={40}
+            />
+          ) : null}
         </Avatar>
       </IconButton>
 

@@ -63,6 +63,7 @@ function CarouselItem({ item }) {
         }}
       >
         <Image
+          priority
           placeholder="blur"
           alt={title}
           src={image}
