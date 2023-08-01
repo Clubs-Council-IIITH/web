@@ -87,6 +87,7 @@ export default function MembersTable({ members }) {
   if (!members) return null;
   return (
     <DataGrid
+      autoHeight
       rows={members}
       columns={columns}
       getRowId={(r) => r.mid}

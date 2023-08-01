@@ -107,6 +107,7 @@ export default function MemberPositions({
       ) : null}
 
       <DataGrid
+        autoHeight
         rows={rows}
         columns={columns}
         editMode="row"

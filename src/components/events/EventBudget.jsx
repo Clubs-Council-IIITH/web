@@ -102,6 +102,7 @@ export default function EventBudget({
       ) : null}
 
       <DataGrid
+        autoHeight
         columns={columns}
         rows={rows}
         editMode="row"

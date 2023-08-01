@@ -116,6 +116,7 @@ export default function EventsTable({
   if (!events) return null;
   return (
     <DataGrid
+      autoHeight
       rows={events}
       columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
       getRowId={(r) => r._id}

@@ -63,6 +63,7 @@ export default function ClubsTable({ clubs }) {
   if (!clubs) return null;
   return (
     <DataGrid
+      autoHeight
       rows={clubs}
       columns={columns}
       getRowId={(r) => r.cid}
