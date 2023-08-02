@@ -37,7 +37,15 @@ export default function UserImage({
         src={img}
         width={width}
         height={height}
-        style={style}
+        style={{
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          position: "absolute",
+          ...style,
+        }}
         onError={() =>
           setImg(getPlaceholder({ seed: name, w: width, h: height }))
         }
@@ -46,8 +54,8 @@ export default function UserImage({
   ) : (
     <GenAvatar
       style={{
-        width: "8rem",
-        height: "8rem",
+        width: width,
+        height: height,
       }}
       {...genConfig({
         sex: gender?.toLowerCase() === "male" ? "man" : "woman",
