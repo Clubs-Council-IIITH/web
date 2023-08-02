@@ -93,6 +93,10 @@ export default function AccountPopover() {
               width={40}
               height={40}
             />
+          ) : user?.firstName ? (
+            `${user?.firstName?.[0]}${
+              user?.lastName === "" ? "" : user?.lastName?.[0]
+            }`
           ) : null}
         </Avatar>
       </IconButton>

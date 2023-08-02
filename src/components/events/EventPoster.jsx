@@ -7,7 +7,7 @@ import { useState } from "react";
 import { getFile } from "utils/files";
 import { getPlaceholder } from "utils/placeholder";
 
-export default function EventPoster({ name, poster, width, height }) {
+export default function EventPoster({ name, poster, width, height, style }) {
   const [img, setImg] = useState(
     poster
       ? getFile(poster)
@@ -26,6 +26,7 @@ export default function EventPoster({ name, poster, width, height }) {
         height: "100%",
         objectFit: "cover",
         position: "absolute",
+        ...style,
       }}
       onError={() =>
         setImg(getPlaceholder({ seed: name, w: width, h: height }))

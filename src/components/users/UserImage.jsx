@@ -22,9 +22,7 @@ export default function UserImage({
   height,
   style = {},
 }) {
-  const [img, setImg] = useState(
-    image ? getFile(image) : getPlaceholder({ seed: name, w: width, h: height })
-  );
+  const [img, setImg] = useState(getFile(image));
 
   return img ? (
     <Avatar
@@ -48,8 +46,8 @@ export default function UserImage({
   ) : (
     <GenAvatar
       style={{
-        width: width,
-        height: height,
+        width: "8rem",
+        height: "8rem",
       }}
       {...genConfig({
         sex: gender?.toLowerCase() === "male" ? "man" : "woman",

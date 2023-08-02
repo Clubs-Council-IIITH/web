@@ -2,11 +2,13 @@ import Link from "next/link";
 
 import { Typography, Card, CardContent, CardActionArea } from "@mui/material";
 import ClubBanner from "components/clubs/ClubBanner";
+import ClubLogo from "./ClubLogo";
 
 export default function ClubCard({
   cid,
   banner,
   name,
+  logo,
   tagline,
   studentBody,
   url = null,
@@ -29,6 +31,14 @@ export default function ClubCard({
         <CardContent
           sx={{ pt: 4, bottom: 0, width: "100%", position: "absolute" }}
         >
+          <ClubLogo
+            name={name}
+            logo={logo}
+            width={64}
+            height={64}
+            border={3}
+            mb={2}
+          />
           <Typography variant="h5" underline="none" color="common.white">
             {name}
           </Typography>

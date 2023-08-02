@@ -20,6 +20,7 @@ export default async function ClubsGrid({ category }) {
             <ClubCard
               cid={club.cid}
               name={club.name}
+              logo={club.logo}
               banner={club.banner}
               tagline={club.tagline}
               studentBody={club.studentBody}

@@ -31,7 +31,8 @@ export default async function MemberCard({ uid, poc, roles }) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          textAlign: "center",
+          alignItems: "center",
+          textAlign: "left",
         }}
       >
         <UserImage
@@ -59,7 +60,7 @@ export default async function MemberCard({ uid, poc, roles }) {
         ) : null}
 
         {roles?.map((role, key) => (
-          <Box key={key} mt={0.5}>
+          <Box key={key} mt={0.5} textAlign="center">
             <Typography
               variant="body2"
               sx={{ display: "inline-block", color: "text.secondary" }}

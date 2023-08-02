@@ -2,15 +2,13 @@
 
 import { useRouter } from "next/navigation";
 
-import Image from "next/image";
-
-import { Box, Avatar } from "@mui/material";
+import { Box } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Tag from "components/Tag";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
-import { getFile } from "utils/files";
+import ClubLogo from "./ClubLogo";
 
 const columns = [
   {
@@ -19,9 +17,7 @@ const columns = [
     flex: 1,
     valueGetter: ({ row }) => ({ name: row.name, logo: row.logo }),
     renderCell: ({ value }) => (
-      <Avatar sx={{ height: 32, width: 32 }}>
-        <Image alt={value.name} src={getFile(value.logo)} fill={true} />
-      </Avatar>
+      <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
     ),
   },
   {
