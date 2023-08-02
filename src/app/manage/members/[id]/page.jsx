@@ -78,6 +78,7 @@ export default async function ManageMember({ params }) {
                 id: r?.mid || key,
               }))} // add ID to each position item if it doesn't exist (MUI requirement)
               editable={false}
+              member={member}
             />
           </Grid>
         </Grid>

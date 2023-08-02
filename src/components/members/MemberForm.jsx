@@ -30,7 +30,7 @@ import UserImage from "components/users/UserImage";
 
 import MemberPositions from "./MemberPositions";
 
-export default function ClubForm({ defaultValues = {}, action = "log" }) {
+export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
   const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
@@ -96,6 +96,17 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       uid: formData.uid,
       poc: formData.poc,
     };
+
+    // show error toast if uid is empty
+    if (!data.uid) {
+      return triggerToast({
+        title: "Error!",
+        messages: [
+          "User has not been confirmed! Enter a valid email and click the 👍 button to confirm.",
+        ],
+        severity: "error",
+      });
+    }
 
     // convert roles to array of objects with only required attributes
     // remove roles items without a name (they're invalid)
@@ -269,7 +280,9 @@ function MemberUserInput({ control, watch, setValue }) {
             label="Email"
             autoComplete="off"
             variant="outlined"
-            helperText={"Click the confirm button to verify and save the user"}
+            helperText={
+              "Click the 👍 button to confirm the user and verify their email"
+            }
             fullWidth
             required
           />

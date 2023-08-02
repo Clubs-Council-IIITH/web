@@ -1,16 +1,23 @@
 "use client";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, IconButton, Typography } from "@mui/material";
+import { Tooltip, Button, IconButton, Typography } from "@mui/material";
 
 import Tag from "components/Tag";
 import Icon from "components/Icon";
+
+import { useToast } from "components/Toast";
+import { useAuth } from "components/AuthProvider";
 
 export default function MemberPositions({
   editable,
   rows = [],
   setRows = console.log,
+  member = {},
 }) {
+  const { user } = useAuth();
+  const { triggerToast } = useToast();
+
   // position item template
   const emptyPositionItem = {
     name: null,
@@ -32,6 +39,35 @@ export default function MemberPositions({
   };
   const onDelete = (row) => {
     setRows(rows.filter((r) => r.id !== row.id));
+  };
+  const onApprove = async (row) => {
+    const data = {
+      cid: member.cid,
+      uid: member.uid,
+      rid: row.rid,
+    };
+
+    let res = await fetch("/actions/members/approve", {
+      method: "POST",
+      body: JSON.stringify({ memberInput: data }),
+    });
+    res = await res.json();
+
+    if (res.ok) {
+      // show success toast & refresh server
+      triggerToast({
+        title: "Success!",
+        messages: ["Membership approved."],
+        severity: "success",
+      });
+      router.refresh();
+    } else {
+      // show error toast
+      triggerToast({
+        ...res.error,
+        severity: "error",
+      });
+    }
   };
 
   const columns = [
@@ -62,6 +98,7 @@ export default function MemberPositions({
       flex: 2,
       editable: editable,
     },
+    // if editing, show delete button
     ...(editable
       ? [
           {
@@ -94,6 +131,35 @@ export default function MemberPositions({
               />
             ),
           },
+
+          // if not editing and if user is cc, show approve button
+          ...(user.role === "cc"
+            ? [
+                {
+                  field: "action",
+                  align: "center",
+                  headerName: "",
+                  width: 50,
+                  getValue: ({ row }) => row.approved,
+                  renderCell: (p) =>
+                    !p.value ? null : (
+                      <Tooltip arrow title="Approve">
+                        <IconButton
+                          onClick={async () => await onApprove(p.row)}
+                          size="small"
+                          sx={{ border: 1, borderColor: "success.main" }}
+                        >
+                          <Icon
+                            color="success.main"
+                            variant="done"
+                            sx={{ height: 16, width: 16 }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    ),
+                },
+              ]
+            : []),
         ]),
   ];
 
