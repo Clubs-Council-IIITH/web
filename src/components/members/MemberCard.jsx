@@ -42,7 +42,12 @@ export default async function MemberCard({ uid, poc, roles }) {
           width={150}
           height={150}
         />
-        <Typography variant="subtitle1" textTransform="capitalize" mt={3}>
+        <Typography
+          textAlign="center"
+          variant="subtitle1"
+          textTransform="capitalize"
+          mt={3}
+        >
           {`${user.firstName} ${user.lastName}`.toLowerCase()}
         </Typography>
 

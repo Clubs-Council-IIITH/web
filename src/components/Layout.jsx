@@ -117,7 +117,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       <DrawerItem
         title="events"
-        path="/events"
+        path="/events?upcoming=true&completed=true"
         icon={<Icon variant="local-activity-outline-rounded" />}
       />
       <DrawerItem

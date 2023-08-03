@@ -17,7 +17,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
 
   // construct dict of { year: [members] } where each year is a key
   const targetMembers = members.reduce((acc, member) => {
-    const latestYear = parseInt(extractLatestYear(member));
+    const latestYear = extractLatestYear(member);
     if (!acc[latestYear]) {
       acc[latestYear] = [];
     }
@@ -56,7 +56,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
 // if member is still present, return current year + 1
 function extractLatestYear(member) {
   return Math.max(
-    member.roles.map((r) =>
+    ...member.roles.map((r) =>
       !r.endYear ? new Date().getFullYear() + 1 : r.endYear
     )
   );

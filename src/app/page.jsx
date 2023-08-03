@@ -37,7 +37,7 @@ export default function Home() {
             variant="none"
             color="secondary"
             component={Link}
-            href={"/events"}
+            href="/events?upcoming=true&completed=true"
           >
             <Typography variant="button" color="text.primary">
               View all
