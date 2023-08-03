@@ -23,7 +23,9 @@ export default function MembersTable({ members }) {
       valueGetter: ({ row }) => ({ name: row.firstName, img: row.img }),
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32 }}>
-          <Image alt={value.name} src={getFile(value.img)} fill={true} />
+          {value.img ? (
+            <Image alt={value.name} src={getFile(value.img)} fill={true} />
+          ) : null}
         </Avatar>
       ),
     },

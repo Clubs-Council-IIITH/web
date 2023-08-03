@@ -25,8 +25,8 @@ export default function ClubLogo({
       <Image
         alt={name}
         src={img}
-        width={width + 100}
-        height={height + 100}
+        width={width + 50}
+        height={height + 50}
         style={{
           top: 0,
           left: 0,
