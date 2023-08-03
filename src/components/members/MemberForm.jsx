@@ -34,6 +34,7 @@ import MemberPositions from "./MemberPositions";
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
 
   const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
@@ -94,6 +95,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 
   // transform data and mutate
   async function onSubmit(formData) {
+    setLoading(true);
+
     const data = {
       cid: formData.cid,
       uid: formData.uid,
@@ -199,6 +202,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   variant="outlined"
                   color="secondary"
                   fullWidth
+                  disabled={loading}
                   onClick={() => setCancelDialog(true)}
                 >
                   Cancel
@@ -216,6 +220,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
               </Grid>
               <Grid item xs={6}>
                 <LoadingButton
+                  loading={loading}
                   type="submit"
                   size="large"
                   variant="contained"

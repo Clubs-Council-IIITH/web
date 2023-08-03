@@ -46,6 +46,7 @@ export default function EventForm({
   const router = useRouter();
   const { user } = useAuth();
 
+  const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
 
   const { control, handleSubmit, watch, resetField } = useForm({
@@ -134,6 +135,8 @@ export default function EventForm({
   };
 
   async function onSubmit(formData, opts) {
+    setLoading(true);
+
     const data = {
       name: formData.name,
       description: formData.description,
@@ -290,6 +293,7 @@ export default function EventForm({
                 variant="outlined"
                 color="secondary"
                 fullWidth
+                disabled={loading}
                 onClick={() => setCancelDialog(true)}
               >
                 Cancel
@@ -307,6 +311,7 @@ export default function EventForm({
             </Grid>
             <Grid item xs={6}>
               <LoadingButton
+                loading={loading}
                 type="submit"
                 size="large"
                 variant="outlined"
@@ -318,6 +323,7 @@ export default function EventForm({
             </Grid>
             <Grid item xs={12}>
               <LoadingButton
+                loading={loading}
                 size="large"
                 variant="contained"
                 color="primary"

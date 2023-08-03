@@ -30,6 +30,7 @@ import { uploadFile } from "utils/files";
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
 
   const { control, handleSubmit } = useForm({ defaultValues });
@@ -90,6 +91,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
 
   // transform data and mutate
   async function onSubmit(formData) {
+    setLoading(true);
+
     const data = {
       code: formData.code,
       name: formData.name,
@@ -233,6 +236,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   variant="outlined"
                   color="secondary"
                   fullWidth
+                  disabled={loading}
                   onClick={() => setCancelDialog(true)}
                 >
                   Cancel
@@ -250,6 +254,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               </Grid>
               <Grid item xs={6}>
                 <LoadingButton
+                  loading={loading}
                   type="submit"
                   size="large"
                   variant="contained"
