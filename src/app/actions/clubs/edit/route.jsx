@@ -7,7 +7,7 @@ export async function POST(request) {
   const response = { ok: false, error: null };
   const { clubInput } = await request.json();
 
-  const { error } = await getClient().mutate(EDIT_CLUB, { clubInput });
+  const { error } = await getClient().mutation(EDIT_CLUB, { clubInput });
   if (error) {
     response.error = {
       title: error.name,
