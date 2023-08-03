@@ -9,6 +9,7 @@ export const GET_ACTIVE_CLUBS = gql`
       category
       studentBody
       banner
+      logo
       name
       tagline
     }
