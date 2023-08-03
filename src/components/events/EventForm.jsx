@@ -56,7 +56,7 @@ export default function EventForm({
   // different form submission handlers
   const submitHandlers = {
     log: console.log,
-    create: async (data) => {
+    create: async (data, opts) => {
       let res = await fetch("/actions/events/create", {
         method: "POST",
         body: JSON.stringify({ details: data }),
@@ -64,7 +64,34 @@ export default function EventForm({
       res = await res.json();
 
       if (res.ok) {
-        // show success toast & redirect to manage page
+        // also submit event if requested
+        if (opts?.shouldSubmit) {
+          let submit_res = await fetch("/actions/events/progress", {
+            method: "POST",
+            body: JSON.stringify({ eventid: res.data._id }),
+          });
+          submit_res = await submit_res.json();
+
+          if (submit_res.ok) {
+            triggerToast({
+              title: "Success!",
+              messages: ["Event created and submitted for approval."],
+              severity: "success",
+            });
+            router.push("/manage/events");
+            router.refresh();
+          } else {
+            // show error toast
+            triggerToast({
+              ...submit_res.error,
+              severity: "error",
+            });
+          }
+
+          return;
+        }
+
+        // else show success toast & redirect to manage page
         triggerToast({
           title: "Success!",
           messages: ["Event created."],
@@ -80,7 +107,7 @@ export default function EventForm({
         });
       }
     },
-    edit: async (data) => {
+    edit: async (data, opts) => {
       let res = await fetch("/actions/events/edit", {
         method: "POST",
         body: JSON.stringify({ details: data, eventid: id }),
@@ -106,7 +133,7 @@ export default function EventForm({
     },
   };
 
-  async function onSubmit(formData) {
+  async function onSubmit(formData, opts) {
     const data = {
       name: formData.name,
       description: formData.description,
@@ -152,7 +179,7 @@ export default function EventForm({
     data.link = null;
 
     // mutate
-    submitHandlers[action](data);
+    submitHandlers[action](data, opts);
   }
 
   return (
@@ -256,7 +283,7 @@ export default function EventForm({
             </Grid>
           </Grid>
 
-          <Grid container item direction="row" xs={12} spacing={2} pt={3}>
+          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
             <Grid item xs={6}>
               <Button
                 size="large"
@@ -282,11 +309,26 @@ export default function EventForm({
               <LoadingButton
                 type="submit"
                 size="large"
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 fullWidth
               >
-                Save
+                Save as draft
+              </LoadingButton>
+            </Grid>
+            <Grid item xs={12}>
+              <LoadingButton
+                size="large"
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={() =>
+                  handleSubmit((data) =>
+                    onSubmit(data, { shouldSubmit: true })
+                  )()
+                }
+              >
+                Save & Submit
               </LoadingButton>
             </Grid>
           </Grid>

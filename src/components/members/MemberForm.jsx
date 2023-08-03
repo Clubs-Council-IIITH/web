@@ -192,7 +192,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={2} pt={3}>
+            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
               <Grid item xs={6}>
                 <Button
                   size="large"
