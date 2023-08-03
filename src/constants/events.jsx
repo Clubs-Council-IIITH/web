@@ -62,7 +62,7 @@ export const stateMap = {
 };
 
 export const stateShortMap = {
-  incomplete: "Incomplete",
+  incomplete: "Draft",
   pending_cc: "CC Pending",
   pending_budget: "Budget Pending",
   pending_room: "Room Pending",
@@ -77,7 +77,7 @@ export const stateColorMap = {
   pending_budget: "warning",
   pending_room: "warning",
   approved: "success",
-  completed: "primary",
+  completed: "info",
   deleted: "error",
 };
 

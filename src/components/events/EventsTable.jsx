@@ -96,13 +96,22 @@ const columns = [
     flex: 3,
     align: "center",
     headerAlign: "center",
-    valueGetter: ({ row }) => row.status.state,
-    renderCell: ({ value }) => (
-      <Tag
-        label={stateLabel(value).shortName}
-        color={stateLabel(value).color}
-      />
-    ),
+    valueGetter: ({ row }) => ({
+      state: row.status.state,
+      start: row.datetimeperiod[0],
+    }),
+    renderCell: ({ value }) => {
+      // change state to 'completed' if it has been approved and is in the past
+      if (value.state === "approved" && new Date(value.start) < new Date())
+        value.state = "completed";
+
+      return (
+        <Tag
+          label={stateLabel(value.state).shortName}
+          color={stateLabel(value.state).color}
+        />
+      );
+    },
   },
 ];
 
