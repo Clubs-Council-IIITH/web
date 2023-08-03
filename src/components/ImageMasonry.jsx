@@ -8,13 +8,18 @@ import { Card, CardActionArea, ImageList, ImageListItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-export default function ImageMasonry({ images, linkPrefix }) {
+export default function ImageMasonry({
+  images,
+  linkPrefix,
+  limit = undefined,
+  cols = 4,
+}) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
-    <ImageList variant="masonry" cols={isDesktop ? 4 : 2} gap={10}>
-      {images.map((url, id) => (
+    <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
+      {images.slice(0, limit).map((url, id) => (
         <ImageListItem key={id}>
           <Card
             variant="outlined"

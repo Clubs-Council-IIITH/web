@@ -1,8 +1,11 @@
-import { Box, Grid, Typography } from "@mui/material";
+import Link from "next/link";
+
+import { Box, Grid, Typography, Stack, Button } from "@mui/material";
 import Carousel from "components/Carousel";
 
 import EventsGrid from "components/events/EventsGrid";
 import Statistic from "components/Statistic";
+import Icon from "components/Icon";
 
 // carousel images
 import carousel1 from "/public/assets/img/carousel/1.jpg";
@@ -15,6 +18,7 @@ import carousel7 from "/public/assets/img/carousel/7.jpg";
 import carousel8 from "/public/assets/img/carousel/8.jpg";
 import carousel9 from "/public/assets/img/carousel/9.jpg";
 import carousel12 from "/public/assets/img/carousel/12.jpg";
+import Gallery from "./gallery/page";
 
 export const metadata = {
   title: "Home",
@@ -25,9 +29,23 @@ export default function Home() {
     <Box>
       <Carousel items={carouselItems} sx={{ mb: 3 }} />
 
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        Upcoming & Recent Events
-      </Typography>
+      <Stack direction="row" pt={2} mb={2}>
+        <Typography variant="h4">Upcoming & Recent Events</Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box display="flex" alignItems="center">
+          <Button
+            variant="none"
+            color="secondary"
+            component={Link}
+            href={"/events"}
+          >
+            <Typography variant="button" color="text.primary">
+              View all
+            </Typography>
+            <Icon variant="chevron-right" />
+          </Button>
+        </Box>
+      </Stack>
       <EventsGrid type="recent" limit={4} />
 
       <Typography variant="h3" sx={{ mb: 2, mt: 4 }}>
@@ -108,6 +126,27 @@ export default function Home() {
             />
           </Grid>
         </Grid>
+      </Box>
+
+      <Box my={3}>
+        <Stack direction="row" pt={2}>
+          <Typography variant="h4">Gallery</Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box display="flex" alignItems="center">
+            <Button
+              variant="none"
+              color="secondary"
+              component={Link}
+              href={"/gallery"}
+            >
+              <Typography variant="button" color="text.primary">
+                View more
+              </Typography>
+              <Icon variant="chevron-right" />
+            </Button>
+          </Box>
+        </Stack>
+        <Gallery limit={8} />
       </Box>
     </Box>
   );

@@ -30,10 +30,14 @@ export const metadata = {
   title: "Gallery",
 };
 
-export default function Gallery({ searchParams }) {
+export default function Gallery({ searchParams, limit = undefined }) {
   return (
     <>
-      <ImageMasonry images={galleryItems} linkPrefix="/gallery?img=" />
+      <ImageMasonry
+        images={galleryItems}
+        linkPrefix="/gallery?img="
+        limit={limit}
+      />
       <ImageModal images={galleryItems} id={searchParams?.img} />
     </>
   );

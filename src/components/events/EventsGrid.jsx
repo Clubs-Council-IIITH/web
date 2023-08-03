@@ -12,6 +12,7 @@ export default async function EventsGrid({
   type = "all", // must be one of: {recent, club, all}
   clubid = null,
   limit = undefined,
+  filter = () => true,
 }) {
   const data = await getClient().query(...constructQuery({ type, clubid }));
 
@@ -19,6 +20,7 @@ export default async function EventsGrid({
     <Grid container spacing={2}>
       {extractEvents({ type, data })
         ?.slice(0, limit)
+        ?.filter(filter)
         ?.map((event) => (
           <Grid key={event._id} item xs={12} sm={6} md={4} lg={3}>
             <EventCard
