@@ -7,8 +7,6 @@ export async function POST(request) {
   const response = { ok: false, error: null };
   const { memberInput } = await request.json();
 
-  console.log("mi:", memberInput);
-
   const { error } = await getClient().mutation(CREATE_MEMBER, { memberInput });
   if (error) {
     response.error = {

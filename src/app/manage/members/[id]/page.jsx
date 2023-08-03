@@ -2,8 +2,12 @@ import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
+
+import ActionPalette from "components/ActionPalette";
+
 import UserImage from "components/users/UserImage";
 import MemberPositions from "components/members/MemberPositions";
+import { EditMember } from "components/members/MemberActions";
 
 export const metadata = {
   title: "Viewing Member",
@@ -27,6 +31,7 @@ export default async function ManageMember({ params }) {
 
   return (
     <Container>
+      <ActionPalette right={[EditMember]} />
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
           <Stack direction="row" alignItems="center" spacing={4}>

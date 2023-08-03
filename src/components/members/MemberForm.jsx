@@ -33,6 +33,8 @@ import MemberPositions from "./MemberPositions";
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
+  console.log(defaultValues);
+
   const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
 
@@ -223,20 +225,25 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 function MemberUserInput({ control, watch, setValue }) {
   const { triggerToast } = useToast();
 
+  const uid = watch("uid");
   const emailInput = watch("userSelector");
   const [user, setUser] = useState(null);
+  useEffect(() => {
+    (async () => {
+      if (uid) await getUser();
+    })();
+  }, [uid]);
 
   const getUser = async () => {
     let res = await fetch("/actions/users/get", {
       method: "POST",
-      body: JSON.stringify({ uid: emailInput.split("@")[0] }),
+      body: JSON.stringify({ uid }),
     });
     res = await res.json();
 
     if (res.ok) {
       // set current user
       setUser(res.data);
-      setValue("uid", res.data.email.split("@")[0]);
     } else {
       // show error toast
       triggerToast({
@@ -286,7 +293,11 @@ function MemberUserInput({ control, watch, setValue }) {
             fullWidth
             required
           />
-          <Button color="primary" variant="contained" onClick={getUser}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => setValue("uid", emailInput.split("@")[0])}
+          >
             <Icon variant="thumb-up-outline-rounded" />
           </Button>
         </Stack>
@@ -371,7 +382,9 @@ function MemberPOCSwitch({ control, watch }) {
         <FormGroup row>
           <FormControlLabel
             value="left"
-            control={<Switch color="primary" {...field} />}
+            control={
+              <Switch color="primary" checked={field.value} {...field} />
+            }
             label="Point of Contact"
             labelPlacement="left"
           />

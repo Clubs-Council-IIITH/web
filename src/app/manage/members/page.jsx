@@ -98,8 +98,6 @@ async function MembersDataGrid({ club }) {
     clubInput: { cid: club },
   });
 
-  console.log(members);
-
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
   const userPromises = [];
