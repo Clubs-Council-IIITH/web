@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 
+import { useState } from "react";
+
 import { useForm, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
@@ -21,11 +23,14 @@ import {
 
 import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
+import ConfirmDialog from "components/ConfirmDialog";
 
 import { uploadFile } from "utils/files";
 
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
+
+  const [cancelDialog, setCancelDialog] = useState(false);
 
   const { control, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
@@ -228,9 +233,20 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   variant="outlined"
                   color="secondary"
                   fullWidth
+                  onClick={() => setCancelDialog(true)}
                 >
                   Cancel
                 </Button>
+
+                <ConfirmDialog
+                  open={cancelDialog}
+                  title="Confirm cancellation"
+                  description="Are you sure you want to cancel? Any unsaved changes will be lost."
+                  onConfirm={() => router.back()}
+                  onClose={() => setCancelDialog(false)}
+                  confirmProps={{ color: "primary" }}
+                  confirmText="Yes, discard my changes"
+                />
               </Grid>
               <Grid item xs={6}>
                 <LoadingButton

@@ -27,13 +27,14 @@ import {
 
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
+import ConfirmDialog from "components/ConfirmDialog";
 
 import MemberPositions from "./MemberPositions";
 
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
-  console.log(defaultValues);
+  const [cancelDialog, setCancelDialog] = useState(false);
 
   const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
@@ -198,9 +199,20 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   variant="outlined"
                   color="secondary"
                   fullWidth
+                  onClick={() => setCancelDialog(true)}
                 >
                   Cancel
                 </Button>
+
+                <ConfirmDialog
+                  open={cancelDialog}
+                  title="Confirm cancellation"
+                  description="Are you sure you want to cancel? Any unsaved changes will be lost."
+                  onConfirm={() => router.back()}
+                  onClose={() => setCancelDialog(false)}
+                  confirmProps={{ color: "primary" }}
+                  confirmText="Yes, discard my changes"
+                />
               </Grid>
               <Grid item xs={6}>
                 <LoadingButton

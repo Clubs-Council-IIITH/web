@@ -31,6 +31,7 @@ import {
 
 import FileUpload from "components/FileUpload";
 import EventBudget from "./EventBudget";
+import ConfirmDialog from "components/ConfirmDialog";
 
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
@@ -44,6 +45,8 @@ export default function EventForm({
 }) {
   const router = useRouter();
   const { user } = useAuth();
+
+  const [cancelDialog, setCancelDialog] = useState(false);
 
   const { control, handleSubmit, watch, resetField } = useForm({
     defaultValues,
@@ -260,9 +263,20 @@ export default function EventForm({
                 variant="outlined"
                 color="secondary"
                 fullWidth
+                onClick={() => setCancelDialog(true)}
               >
                 Cancel
               </Button>
+
+              <ConfirmDialog
+                open={cancelDialog}
+                title="Confirm cancellation"
+                description="Are you sure you want to cancel? Any unsaved changes will be lost."
+                onConfirm={() => router.back()}
+                onClose={() => setCancelDialog(false)}
+                confirmProps={{ color: "primary" }}
+                confirmText="Yes, discard my changes"
+              />
             </Grid>
             <Grid item xs={6}>
               <LoadingButton
