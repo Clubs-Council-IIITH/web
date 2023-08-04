@@ -41,7 +41,7 @@ export default function Carousel({ items, sx }) {
 function CarouselItem({ item }) {
   const { image, title, description } = item;
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   const [size, setSize] = useState("40%");
   useEffect(() => setSize(isDesktop ? "40%" : "120%"), [isDesktop]);
