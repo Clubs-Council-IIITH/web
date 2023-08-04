@@ -9,9 +9,15 @@ export const metadata = {
 };
 
 export default async function SupervisoryBodies() {
-  const sacMembers = await fetch(getStaticFile("json/sacMembers.json"));
-  const slcMembers = await fetch(getStaticFile("json/slcMembers.json"));
-  const sloMembers = await fetch(getStaticFile("json/sloMembers.json"));
+  const sacMembers = await fetch(getStaticFile("json/sacMembers.json"), {
+    next: { revalidate: 60 },
+  });
+  const slcMembers = await fetch(getStaticFile("json/slcMembers.json"), {
+    next: { revalidate: 60 },
+  });
+  const sloMembers = await fetch(getStaticFile("json/sloMembers.json"), {
+    next: { revalidate: 60 },
+  });
 
   return (
     <Container>

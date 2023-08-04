@@ -12,9 +12,15 @@ export const metadata = {
 };
 
 export default async function Changelog() {
-  const status = await fetch(getStaticFile("json/status.json"));
-  const techMembers = await fetch(getStaticFile("json/techMembers.json"));
-  const logs = await fetch(getStaticFile("mdx/logs.mdx"));
+  const status = await fetch(getStaticFile("json/status.json"), {
+    cache: "no-store",
+  });
+  const logs = await fetch(getStaticFile("mdx/logs.mdx"), {
+    cache: "no-store",
+  });
+  const techMembers = await fetch(getStaticFile("json/techMembers.json"), {
+    next: { revalidate: 60 },
+  });
 
   return (
     <Container>

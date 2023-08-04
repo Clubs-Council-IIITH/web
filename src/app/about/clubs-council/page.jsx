@@ -9,10 +9,17 @@ export const metadata = {
 };
 
 export default async function ClubsCouncil() {
-  const ccMembers = await fetch(getStaticFile("json/ccMembers.json"));
-  const techMembers = await fetch(getStaticFile("json/techMembers.json"));
+  const ccMembers = await fetch(getStaticFile("json/ccMembers.json"), {
+    next: { revalidate: 60 },
+  });
+  const techMembers = await fetch(getStaticFile("json/techMembers.json"), {
+    next: { revalidate: 60 },
+  });
   const extendedMembers = await fetch(
-    getStaticFile("json/extendedMembers.json")
+    getStaticFile("json/extendedMembers.json"),
+    {
+      next: { revalidate: 60 },
+    }
   );
 
   return (
