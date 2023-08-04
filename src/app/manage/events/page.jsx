@@ -50,21 +50,25 @@ export default async function ManageEvents() {
       </Stack>
 
       {/* only pending events */}
-      <Box mb={3}>
-        <Typography
-          color="text.secondary"
-          variant="subtitle2"
-          textTransform="uppercase"
-          gutterBottom
-        >
-          Pending Events
-        </Typography>
-        <EventsTable
-          events={pendingEvents}
-          scheduleSort="asc"
-          hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
-        />
-      </Box>
+      {
+        pendingEvents.length ?
+          <Box mb={3}>
+            <Typography
+              color="text.secondary"
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+            >
+              Pending Events
+            </Typography>
+            <EventsTable
+              events={pendingEvents}
+              scheduleSort="asc"
+              hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+            />
+          </Box>
+          : null
+      }
 
       {/* all events */}
       <Box>
