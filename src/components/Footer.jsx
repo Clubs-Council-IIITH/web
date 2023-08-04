@@ -4,7 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { useTheme } from "@mui/material/styles";
-import { Divider, Box, Grid, Typography, IconButton } from "@mui/material";
+import {
+  Stack,
+  Divider,
+  Box,
+  Grid,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
@@ -100,32 +107,45 @@ export default function Footer() {
         </Grid>
       </Grid>
 
-      <Grid container px={isDesktop ? 0 : 2}>
-        <Grid item xs>
-          <Typography variant="body2" fontWeight={500}>
-            © 2023, IIIT Hyderabad
-          </Typography>
-        </Grid>
-        <Grid item xs>
-          <Box width="100%" display="flex" justifyContent="flex-end">
-            <Typography
-              variant="body2"
-              component={Link}
-              href={PRIVACY_POLICY_URL}
-              sx={{
-                fontWeight: 600,
-                textDecoration: "none",
-                color: "black",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              Privacy Policy
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
+      <Stack direction="row" spacing={1}>
+        <Typography variant="body2" fontWeight={500}>
+          © 2023, IIIT Hyderabad
+        </Typography>
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Typography
+          variant="body2"
+          component={Link}
+          href="/changelog"
+          sx={{
+            fontWeight: 600,
+            textDecoration: "none",
+            color: "black",
+            "&:hover": {
+              textDecoration: "underline",
+            },
+          }}
+        >
+          Changelog
+        </Typography>
+        <Box mx={1}>·</Box>
+        <Typography
+          variant="body2"
+          component={Link}
+          href={PRIVACY_POLICY_URL}
+          sx={{
+            fontWeight: 600,
+            textDecoration: "none",
+            color: "black",
+            "&:hover": {
+              textDecoration: "underline",
+            },
+          }}
+        >
+          Privacy Policy
+        </Typography>
+      </Stack>
     </Box>
   );
 }

@@ -22,7 +22,7 @@ export default async function EventsGrid({
         ?.slice(0, limit)
         ?.filter(filter)
         ?.map((event) => (
-          <Grid key={event._id} item xs={12} sm={6} md={4} lg={3}>
+          <Grid key={event._id} item xs={6} md={4} lg={3}>
             <EventCard
               _id={event._id}
               name={event.name}
