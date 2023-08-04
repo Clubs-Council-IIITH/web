@@ -141,6 +141,7 @@ export default function EventsTable({
             quickFilterLogicOperator: GridLogicOperator.Or,
           },
         },
+        pagination: { paginationModel: { pageSize: 25 } },
       }}
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
