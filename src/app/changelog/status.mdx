@@ -1,3 +1,3 @@
 **Environment:** {props.status.environment}  
-**Deployed Commit:** {props.status.commit}  
+**Deployed Commit:** [{props.status.commit}](https://github.com/Clubs-Council-IIITH/services/commit/{props.status.commit})
 **Latest release:** {new Date(props.status.timestamp).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "medium" })}
