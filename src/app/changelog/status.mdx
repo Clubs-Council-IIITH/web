@@ -1,9 +1,3 @@
-### Production
-**URL:** [clubs.iiit.ac.in](https://clubs.iiit.ac.in)  
-**Commit:** {props.status.production.commit}  
-**Latest release:** {new Date(props.status.production.timestamp).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "medium" })}
-
-### Development
-**URL:** [dev.clubs.iiit.ac.in](http://dev.clubs.iiit.ac.in)  
-**Commit:** {props.status.staging.commit}  
-**Latest release:** {new Date(props.status.staging.timestamp).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "medium" })}
+**Environment:** {props.status.environment}  
+**Deployed Commit:** {props.status.commit}  
+**Latest release:** {new Date(props.status.timestamp).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "medium" })}

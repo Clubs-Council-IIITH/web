@@ -18,7 +18,7 @@ export default async function Changelog() {
 
   return (
     <Container>
-      <Typography variant="h3">Live Status</Typography>
+      <Typography variant="h3">Status</Typography>
       <Status status={await status.json()} />
 
       <Typography variant="h3" mt={3}>
