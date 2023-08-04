@@ -12,7 +12,7 @@ import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import { getFile } from "utils/files";
 
-export default function MembersTable({ members }) {
+export default function MembersTable({ members, showClub = false }) {
   const router = useRouter();
 
   const columns = [
@@ -45,6 +45,15 @@ export default function MembersTable({ members }) {
         </Box>
       ),
     },
+    ...(showClub
+      ? [
+          {
+            field: "cid",
+            headerName: "Club",
+            flex: 4,
+          },
+        ]
+      : []),
     {
       field: "positions",
       headerName: "Positions",

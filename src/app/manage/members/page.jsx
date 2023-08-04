@@ -2,11 +2,12 @@ import Link from "next/link";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { GET_MEMBERS } from "gql/queries/members";
+import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
 import {
+  Box,
   Container,
   Typography,
   Button,
@@ -56,10 +57,35 @@ export default async function ManageMembers({ searchParams }) {
         </Button>
       </Stack>
 
-      {user?.role === "cc" ? <MembersClubSelect club={club} /> : null}
-      {user?.role === "club" || club ? (
-        <MembersDataGrid club={user?.role === "club" ? user?.uid : club} />
-      ) : null}
+      {/* only pending members */}
+      <Box mb={3}>
+        <Typography
+          color="text.secondary"
+          variant="subtitle2"
+          textTransform="uppercase"
+          gutterBottom
+        >
+          Pending Approval
+        </Typography>
+        <PendingMembersDataGrid />
+      </Box>
+
+      {/* all members */}
+      <Box>
+        <Typography
+          color="text.secondary"
+          variant="subtitle2"
+          textTransform="uppercase"
+          gutterBottom
+          mb={2}
+        >
+          All Members
+        </Typography>
+        {user?.role === "cc" ? <MembersClubSelect club={club} /> : null}
+        {user?.role === "club" || club ? (
+          <MembersDataGrid club={user?.role === "club" ? user?.uid : club} />
+        ) : null}
+      </Box>
     </Container>
   );
 }
@@ -91,6 +117,36 @@ async function MembersClubSelect({ club }) {
       </Select>
     </FormControl>
   );
+}
+
+async function PendingMembersDataGrid() {
+  const { data: { pendingMembers: members } = {} } = await getClient().query(
+    GET_PENDING_MEMBERS
+  );
+
+  // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
+  // concurrently fetch user profile for each member
+  const userPromises = [];
+  members?.forEach((member) => {
+    userPromises.push(
+      getClient()
+        .query(GET_USER_PROFILE, {
+          userInput: {
+            uid: member.uid,
+          },
+        })
+        .toPromise()
+    );
+  });
+  const users = await Promise.all(userPromises);
+  const processedMembers = members.map((member, index) => ({
+    ...member,
+    ...users[index].data.userProfile,
+    ...users[index].data.userMeta,
+    mid: `${member.cid}:${member.uid}`,
+  }));
+
+  return <MembersTable members={processedMembers} />;
 }
 
 async function MembersDataGrid({ club }) {
