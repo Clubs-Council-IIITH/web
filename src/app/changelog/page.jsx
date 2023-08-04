@@ -1,31 +1,35 @@
+import { MDXRemote } from "next-mdx-remote/rsc";
+
 import { Container, Typography } from "@mui/material";
 
 import Status from "./status.mdx";
-import Logs from "./logs.mdx";
-
-import techMembers from "app/about/clubs-council/techMembers.json";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
+import { getStaticFile } from "utils/files";
 
 export const metadata = {
   title: "Changelog",
 };
 
-export default function Changelog() {
+export default async function Changelog() {
+  const status = await fetch(getStaticFile("json/status.json"));
+  const techMembers = await fetch(getStaticFile("json/techMembers.json"));
+  const logs = await fetch(getStaticFile("mdx/logs.mdx"));
+
   return (
     <Container>
       <Typography variant="h3">Live Status</Typography>
-      <Status />
+      <Status status={await status.json()} />
 
       <Typography variant="h3" mt={3}>
         Maintainers
       </Typography>
-      <LocalUsersGrid users={techMembers} />
+      <LocalUsersGrid users={await techMembers.json()} />
 
       <Typography variant="h3" mt={3}>
         Changelog
       </Typography>
-      <Logs />
+      <MDXRemote source={await logs.text()} />
     </Container>
   );
 }

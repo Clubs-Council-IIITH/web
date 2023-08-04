@@ -1,6 +1,9 @@
-"use client";
-
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
+const STATIC_URL = process.env.STATIC_URL || "http://nginx/static";
+
+export function getStaticFile(filepath) {
+  return `${STATIC_URL}/${filepath}`;
+}
 
 export function getFile(filepath) {
   if (filepath?.toLowerCase()?.startsWith("http")) {

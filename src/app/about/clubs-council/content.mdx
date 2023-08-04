@@ -1,9 +1,5 @@
 import LocalUsersGrid from "components/users/LocalUsersGrid"
 
-import ccMembers from "./ccMembers.json";
-import techMembers from "./techMembers.json";
-import extendedMembers from "./extendedMembers.json";
-
 
 # Clubs Council
 
@@ -15,13 +11,13 @@ The Clubs Council works closely with the institute's Students' Life Office, Fina
 The primary aim of the Clubs Council is to ensure that all student-driven organizations on campus are successful in their aim to cultivate diverse campus life experiences throughout the year, and enrich the thriving campus community outside the classroom, while fostering inclusion.
 
 ### Executive Board
-<LocalUsersGrid users={ccMembers} />
+<LocalUsersGrid users={props.ccMembers} />
 
 ### Tech Team
-<LocalUsersGrid users={techMembers} />
+<LocalUsersGrid users={props.techMembers} />
 
 ### Extended Team
-<LocalUsersGrid users={extendedMembers} />
+<LocalUsersGrid users={props.extendedMembers} />
 
 ### The Clubs Council Team
 The Club Coordinators are an essential part of the Clubs Council, and they come together to collaboratively organise and provide an extraordinary range of opportunities through the form of various events, enabling students to pursue their hobbies and develop their extra-curricular skills.
