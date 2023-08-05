@@ -44,7 +44,9 @@ export default function EventsFilter({ name, club, state }) {
   // show both upcoming and completed if no state is selected
   useEffect(() => {
     if (state.length === 0)
-      router.push(`${pathname}?upcoming=true&completed=true`);
+      router.push(
+        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`
+      );
   }, [state]);
 
   // fetch list of clubs
