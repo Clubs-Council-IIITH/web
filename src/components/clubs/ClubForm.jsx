@@ -61,6 +61,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           ...res.error,
           severity: "error",
         });
+        setLoading(false);
       }
     },
     edit: async (data) => {
@@ -85,6 +86,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           ...res.error,
           severity: "error",
         });
+        setLoading(false);
       }
     },
   };
@@ -98,16 +100,16 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       name: formData.name,
       email: formData.email,
       category: formData.category,
-      tagline: formData.tagline,
+      tagline: formData.tagline === "" ? null : formData.tagline,
       description: formData.description,
       socials: {
-        website: formData.website,
-        instagram: formData.instagram,
-        facebook: formData.facebook,
-        youtube: formData.youtube,
-        twitter: formData.twitter,
-        linkedin: formData.linkedin,
-        discord: formData.discord,
+        website: formData.socials.website,
+        instagram: formData.socials.instagram,
+        facebook: formData.socials.facebook,
+        youtube: formData.socials.youtube,
+        twitter: formData.socials.twitter,
+        linkedin: formData.socials.linkedin,
+        discord: formData.socials.discord,
       },
     };
 
@@ -407,7 +409,6 @@ function ClubTaglineInput({ control }) {
           helperText={error?.message}
           variant="outlined"
           fullWidth
-          required
         />
       )}
     />

@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 import { Button, Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
 import Icon from "components/Icon";
 
@@ -20,8 +19,6 @@ const sites = {
 };
 
 export default function ClubSocials({ socials = {} }) {
-  const theme = useTheme();
-
   const [processedSocials, setProcessedSocials] = useState({});
 
   useEffect(() => {
@@ -36,6 +33,7 @@ export default function ClubSocials({ socials = {} }) {
         if (content !== "") processed[k] = content; // only add if not empty
 
         // exceptions (because the URL is not the username)
+        if (k == "website") processed[k] = "Website";
         if (k == "discord") processed[k] = "Discord";
         if (k == "youtube") processed[k] = "YouTube";
       });

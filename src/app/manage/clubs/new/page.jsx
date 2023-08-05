@@ -14,7 +14,7 @@ export default function NewClub() {
     email: "",
     category: "cultural",
     studentBody: false,
-    tagline: "",
+    tagline: null,
     description: "",
     socials: {
       website: null,
