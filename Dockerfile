@@ -11,8 +11,6 @@ ENV NEXT_PUBLIC_ENV=$ENV
 WORKDIR /web
 COPY --from=node_cache /cache/ .
 COPY . .
-RUN mkdir -p /web/.next/cache
-VOLUME [ "/web/.next/cache" ]
 RUN printf "NEXT_PUBLIC_ENV=${ENV}" >> .env
 RUN npm run build
 ENTRYPOINT [ "npm", "start" ]
