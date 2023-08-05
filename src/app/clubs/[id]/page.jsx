@@ -44,7 +44,12 @@ export default async function Club({ params }) {
         />
       </Card>
       <Box my={4}>
-        <ClubInfo name={club.name} logo={club.logo} tagline={club.tagline} />
+        <ClubInfo
+          name={club.name}
+          logo={club.logo}
+          tagline={club.tagline}
+          description={club.description}
+        />
       </Box>
       <ClubSocials socials={club.socials} />
 
