@@ -44,8 +44,8 @@ export default function ClubBanner({
       <Image
         alt={name}
         src={img}
-        width={width}
-        height={height}
+        width={width + 300}
+        height={height + 300}
         style={{
           top: 0,
           width: "100%",
