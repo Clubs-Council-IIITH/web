@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import NProgress from "nprogress";
 
 import { useTheme } from "@mui/material/styles";
@@ -49,7 +50,8 @@ export default function Progressbar() {
     const handleAnchorClick = (event) => {
       const targetUrl = event.currentTarget.href;
       const currentUrl = location.href;
-      if (targetUrl !== currentUrl) {
+      const isExternal = event.currentTarget.host !== location.host;
+      if (!isExternal && targetUrl !== currentUrl) {
         NProgress.start();
       }
     };
