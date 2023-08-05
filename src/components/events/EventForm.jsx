@@ -87,6 +87,7 @@ export default function EventForm({
               ...submit_res.error,
               severity: "error",
             });
+            setLoading(false);
           }
 
           return;
@@ -106,6 +107,7 @@ export default function EventForm({
           ...res.error,
           severity: "error",
         });
+        setLoading(false);
       }
     },
     edit: async (data, opts) => {
@@ -130,6 +132,7 @@ export default function EventForm({
           ...res.error,
           severity: "error",
         });
+        setLoading(false);
       }
     },
   };

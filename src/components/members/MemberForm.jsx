@@ -65,6 +65,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           ...res.error,
           severity: "error",
         });
+        setLoading(false);
       }
     },
     edit: async (data) => {
@@ -89,6 +90,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           ...res.error,
           severity: "error",
         });
+        setLoading(false);
       }
     },
   };
