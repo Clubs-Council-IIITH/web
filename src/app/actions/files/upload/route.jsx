@@ -20,6 +20,7 @@ export async function GET() {
       title: e.name,
       messages: e?.graphQLErrors?.map((ge) => ge?.message),
     };
+    console.error(e);
   }
 
   return NextResponse.json(response);
