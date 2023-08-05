@@ -24,7 +24,7 @@ const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
 const EMAIL_URL = "mailto:clubs@iiit.ac.in";
 
 const IIITLogo = "/assets/iiit-logo-white.png";
-const CCLogo = "/assets/cc-logo-black.svg";
+const CCLogo = "/assets/cc-logo-full-black.svg";
 
 export default function Footer() {
   const theme = useTheme();

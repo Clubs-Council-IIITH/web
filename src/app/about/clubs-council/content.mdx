@@ -1,7 +1,17 @@
+import { Card } from "@mui/material"
+import ClubBanner from "components/clubs/ClubBanner";
 import LocalUsersGrid from "components/users/LocalUsersGrid"
+import { getStaticFile } from "utils/files";
 
 
-# Clubs Council
+<Card variant="none" sx={{ boxShadow: 0 }}>
+  <ClubBanner
+    name="Clubs Council"
+    banner={getStaticFile("img/cc-banner-logo.png")}
+    width={1500}
+    height={500}
+  />
+</Card>
 
 ### What do we do?
 As a constituent body of the **Students' Life Committee (SLC)**, the Clubs Council oversees all the student-driven activities and the functioning of the clubs. It handles the annual budget of clubs, events, coordinates among different clubs and helps in creating new clubs, societies and special interest groups.

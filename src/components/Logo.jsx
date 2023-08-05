@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const CCLogoColor = "/assets/cc-logo-color.svg";
+const CCLogoColor = "/assets/cc-logo-full-color.svg";
 
 export default function Logo() {
   return (

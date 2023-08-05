@@ -7,6 +7,11 @@ import clubRedirects from "acl/clubRedirects";
 
 // TODO: make multiple middlewares (one for route acl, one for club redirects) and combine them
 export function middleware(req) {
+  // redirect to CC about page
+  if (req.nextUrl.pathname === "/student-bodies/clubs") {
+    return NextResponse.redirect(new URL("/about/clubs-council", req.url));
+  }
+
   // check if current route is protected
   const protectedRoute =
     Object.keys(routes).find((r) => match(r)(req.nextUrl.pathname)) || false;

@@ -26,6 +26,10 @@ const nextConfig = {
       },
       {
         protocol: "http",
+        hostname: "nginx",
+      },
+      {
+        protocol: "http",
         hostname: "dev.clubs.iiit.ac.in",
       },
     ],

@@ -17,6 +17,7 @@ export default function ClubBanner({
   width,
   height,
   containerHeight = null,
+  dim = false,
 }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
@@ -38,6 +39,7 @@ export default function ClubBanner({
           width: "100%",
           height: "100%",
           position: "absolute",
+          backgroundImage: dim ? "linear-gradient(transparent, #111)" : "none",
         },
       }}
     >
