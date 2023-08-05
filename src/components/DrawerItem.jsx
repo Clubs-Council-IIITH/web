@@ -48,6 +48,12 @@ export default function DrawerItem({ title, path, icon }) {
           ),
         }),
       }}
+      {...(external
+        ? {
+            rel: "noopener noreferrer",
+            target: "_blank",
+          }
+        : {})}
     >
       <ListItemIcon
         sx={{
