@@ -106,12 +106,14 @@ function DropZone({ files, onDrop, type, maxFiles }) {
             src={
               typeof files === "string"
                 ? getFile(files)
-                : typeof files[0] === "string"
-                ? getFile(files[0])
-                : URL.createObjectURL(files[0])
+                : Array.isArray(files)
+                ? typeof files[0] === "string"
+                  ? getFile(files[0])
+                  : URL.createObjectURL(files[0])
+                : null
             }
-            width={100}
-            height={100}
+            width={800}
+            height={800}
             style={{
               top: 0,
               left: 0,

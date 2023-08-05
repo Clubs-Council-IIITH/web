@@ -115,12 +115,18 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     data.cid = formData.email.split("@")[0];
 
     // upload media
-    data.logo = formData?.logo?.[0]
-      ? await uploadFile(formData?.logo?.[0], "image")
-      : null;
-    data.banner = formData?.banner?.[0]
-      ? await uploadFile(formData?.banner?.[0], "image")
-      : null;
+    data.logo =
+      typeof formData.logo === "string"
+        ? formData.logo
+        : Array.isArray(formData.logo) && formData.logo.length > 0
+        ? await uploadFile(formData.logo[0], "image")
+        : null;
+    data.banner =
+      typeof formData.banner === "string"
+        ? formData.banner
+        : Array.isArray(formData.banner) && formData.banner.length > 0
+        ? await uploadFile(formData.banner[0], "image")
+        : null;
 
     // mutate
     await submitHandlers[action](data);

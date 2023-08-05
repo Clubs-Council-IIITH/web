@@ -157,11 +157,12 @@ export default function EventForm({
     }
 
     // upload poster
-    if (formData?.poster && typeof formData?.poster !== "string") {
-      data.poster = formData?.poster?.[0]
-        ? await uploadFile(formData?.poster?.[0], "image")
+    data.poster =
+      typeof formData.poster === "string"
+        ? formData.poster
+        : Array.isArray(formData.poster) && formData.poster.length > 0
+        ? await uploadFile(formData.poster[0], "image")
         : null;
-    }
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
