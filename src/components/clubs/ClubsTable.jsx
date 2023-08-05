@@ -21,6 +21,11 @@ const columns = [
     ),
   },
   {
+    field: "code",
+    headerName: "Code",
+    flex: 3,
+  },
+  {
     field: "name",
     headerName: "Name",
     flex: 6,
