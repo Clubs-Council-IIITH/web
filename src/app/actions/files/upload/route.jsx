@@ -19,8 +19,8 @@ export async function GET() {
     response.error = {
       title: e.name,
       messages: e?.graphQLErrors?.map((ge) => ge?.message),
+      full: e,
     };
-    console.error(e);
   }
 
   return NextResponse.json(response);
