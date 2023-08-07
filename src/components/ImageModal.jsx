@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 
 import { Box, Modal } from "@mui/material";
 
-export default function ImageModal({ images, id }) {
+export default function ImageModal({ images, id = null }) {
   const router = useRouter();
   const pathname = usePathname();
 
