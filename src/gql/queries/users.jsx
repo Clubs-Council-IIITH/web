@@ -7,8 +7,10 @@ export const GET_USER_PROFILE = gql`
       lastName
       email
       gender
+      batch
     }
     userMeta(userInput: $userInput) {
+      uid
       img
     }
   }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
@@ -24,7 +26,9 @@ export default async function MemberCard({ uid, poc, roles }) {
       sx={{ backgroundColor: "inherit", border: "none", boxShadow: 0 }}
     >
       <CardActionArea
-        disabled // TODO: Link to public user profile
+        // disabled // TODO: Link to public user profile
+        component={Link}
+        href={`/profile/${uid}`}
         sx={{
           p: 2,
           width: "100%",
