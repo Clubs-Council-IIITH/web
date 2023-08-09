@@ -21,7 +21,7 @@ export default async function UserDetails({ user }) {
         </Typography>
       </Box>
 
-      {user?.role !== "club" ? (
+      {user?.role !== "club" && user?.stream?.toLowerCase() !== "faculty" ? (
         <>
           {user?.batch ? (
             <Box>

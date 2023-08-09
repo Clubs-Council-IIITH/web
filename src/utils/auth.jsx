@@ -1,10 +1,10 @@
 "use client";
 
-import cookieCutter from "cookie-cutter";
+import { setCookie } from "cookies-next";
 
 export function login(pathname) {
   // save path to continue from
-  cookieCutter.set("continue", pathname);
+  setCookie("continue", pathname);
 
   // redirect to CAS login
   window.location.replace("/login");
@@ -12,10 +12,10 @@ export function login(pathname) {
 
 export function logout(pathname) {
   // save path to continue from
-  cookieCutter.set("continue", pathname);
+  setCookie("continue", pathname);
 
   // set flag to expire token the next time someone visits the site, because CAS doesn't follow ?service for some reason
-  cookieCutter.set("logout", true);
+  setCookie("logout", true);
 
   // redirect to CAS logout
   window.location.replace("/logout");

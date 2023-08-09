@@ -1,6 +1,6 @@
 "use client";
 
-import cookieCutter from "cookie-cutter";
+import { hasCookie } from "cookies-next";
 
 import { createContext, useContext } from "react";
 
@@ -15,10 +15,8 @@ export function useAuth() {
 
 export function AuthProvider({ user, children }) {
   const value = {
-    user: cookieCutter.get("logout") ? null : user,
-    isAuthenticated: cookieCutter.get("logout")
-      ? false
-      : !!Object.keys(user).length,
+    user: hasCookie("logout") ? null : user,
+    isAuthenticated: hasCookie("logout") ? false : !!Object.keys(user).length,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
