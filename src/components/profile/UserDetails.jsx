@@ -38,7 +38,8 @@ export default async function UserDetails({ user }) {
             </Box>
           ) : null}
 
-          {currentUser?.role === "cc" ? (
+          {currentUser?.role === "cc" ||
+          (currentUser?.uid === user?.uid && user?.role !== "club") ? (
             <Box>
               <Typography
                 variant="subtitle2"
