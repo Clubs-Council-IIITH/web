@@ -52,7 +52,7 @@ export default async function UserDetails({ user }) {
                 Phone Number
               </Typography>
               <Typography variant="h5" fontWeight={400}>
-                {user.phone}
+                {user.phone || "Unknown"}
               </Typography>
             </Box>
           ) : null}

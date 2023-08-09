@@ -2,6 +2,7 @@ import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
+import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -10,6 +11,7 @@ import ClubLogo from "components/clubs/ClubLogo";
 import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
+import UserMemberships from "components/profile/UserMemberships";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
@@ -49,8 +51,6 @@ export default async function Profile({ params }) {
   );
   const user = { ...userMeta, ...userProfile };
 
-  console.log(user);
-
   // if user is a club, display the club's logo as profile picture
   let club = null;
   if (user.role === "club") {
@@ -59,6 +59,22 @@ export default async function Profile({ params }) {
       { clubInput: { cid: user.uid } }
     );
     club = targetClub;
+  }
+
+  // get memberships if user is a person
+  let memberships = [];
+  if (user.role === "public") {
+    const {
+      data: { memberRoles },
+    } = await getClient().query(GET_MEMBERSHIPS, {
+      uid: user.uid,
+    });
+
+    // get list of memberRoles.roles along with member.cid
+    memberships = memberRoles.reduce(
+      (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
+      []
+    );
   }
 
   return (
@@ -108,6 +124,17 @@ export default async function Profile({ params }) {
 
         <Grid item container xs spacing={2} mt={5}>
           <UserDetails user={user} />
+        </Grid>
+
+        <Grid item xs={9} mt={5}>
+          {user.role === "public" ? (
+            <Stack direction="column" spacing={2}>
+              <Typography variant="subtitle2" textTransform="uppercase">
+                Memberships
+              </Typography>
+              <UserMemberships rows={memberships} />
+            </Stack>
+          ) : null}
         </Grid>
       </Grid>
     </Container>

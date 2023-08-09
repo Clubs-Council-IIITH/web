@@ -71,3 +71,20 @@ export const GET_CLUB = gql`
     }
   }
 `;
+
+export const GET_MEMBERSHIPS = gql`
+  query MemberRoles($uid: String!) {
+    memberRoles(uid: $uid) {
+      _id
+      cid
+      poc
+      roles {
+        startYear
+        deleted
+        name
+        rid
+        endYear
+      }
+    }
+  }
+`;
