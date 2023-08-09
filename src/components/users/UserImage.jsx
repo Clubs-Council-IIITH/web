@@ -26,7 +26,6 @@ export default function UserImage({
 
   return img ? (
     <Avatar
-      alt={name}
       sx={{
         width: width,
         height: height,

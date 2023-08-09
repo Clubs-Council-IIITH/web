@@ -77,6 +77,8 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
+          width={40}
+          height={40}
           {...(user?.firstName && {
             children: `${user?.firstName?.[0]}${
               user?.lastName == "" ? "" : user?.lastName?.[0]
@@ -90,8 +92,16 @@ export default function AccountPopover() {
             <Image
               alt={user?.firstName}
               src={getFile(user?.img)}
-              width={40}
-              height={40}
+              width={400}
+              height={400}
+              style={{
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                position: "absolute",
+              }}
             />
           ) : user?.firstName ? (
             `${user?.firstName?.[0]}${
