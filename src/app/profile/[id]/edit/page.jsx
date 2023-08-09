@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
@@ -22,6 +24,7 @@ export default async function EditProfile({ params }) {
     }
   );
   const user = { ...userMeta, ...userProfile };
+  console.log(user);
 
   // if user is a club, redirect to club edit page
   if (user.role === "club") {
@@ -30,7 +33,7 @@ export default async function EditProfile({ params }) {
 
   return (
     <Container>
-      <UserForm defaultValues={user} action="log" />
+      <UserForm defaultValues={user} action="save" />
     </Container>
   );
 }

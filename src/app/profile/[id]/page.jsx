@@ -1,4 +1,5 @@
 import { getClient } from "gql/client";
+import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
@@ -47,6 +48,8 @@ export default async function Profile({ params }) {
     }
   );
   const user = { ...userMeta, ...userProfile };
+
+  console.log(user);
 
   // if user is a club, display the club's logo as profile picture
   let club = null;

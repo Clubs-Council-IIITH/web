@@ -31,7 +31,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
     save: async (data) => {
       let res = await fetch("/actions/users/save", {
         method: "POST",
-        body: JSON.stringify({ userInput: data }),
+        body: JSON.stringify({ userDataInput: data }),
       });
       res = await res.json();
 
@@ -42,7 +42,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           messages: ["Profile saved."],
           severity: "success",
         });
-        router.push("/profile");
+        router.push(`/profile/${defaultValues.uid}`);
         router.refresh();
       } else {
         // show error toast
@@ -89,16 +89,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           alignItems="flex-start"
         >
           <Grid container item>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              gutterBottom
-              mb={2}
-            >
-              Details
-            </Typography>
-            <Grid container item spacing={2}>
+            <Grid container item spacing={2} mt={1}>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
@@ -123,11 +114,56 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.email}
                 />
               </Grid>
+              <Grid container item xs={12} spacing={1}>
+                <Grid item>
+                  <TextField
+                    disabled
+                    label="Batch"
+                    value={defaultValues?.batch?.toUpperCase()}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    disabled
+                    label="Stream"
+                    value={defaultValues?.stream?.toUpperCase()}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container item>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              color="text.secondary"
+              gutterBottom
+              mb={defaultValues?.phone ? 2 : 1}
+            >
+              Details
+            </Typography>
+            <Grid container item spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  disabled
-                  label="Batch"
-                  value={defaultValues?.batch?.toUpperCase()}
+                <Controller
+                  name="phone"
+                  control={control}
+                  rules={{
+                    pattern: {
+                      value:
+                        /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g,
+                      message: "Invalid phone number!",
+                    },
+                  }}
+                  render={({ field, fieldState: { error, invalid } }) => (
+                    <TextField
+                      {...field}
+                      error={invalid}
+                      helperText={error?.message}
+                      label="Phone Number"
+                      variant="outlined"
+                      fullWidth
+                    />
+                  )}
                 />
               </Grid>
             </Grid>

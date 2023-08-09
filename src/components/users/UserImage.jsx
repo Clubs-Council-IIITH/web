@@ -35,8 +35,8 @@ export default function UserImage({
       <Image
         alt={name}
         src={img}
-        width={width}
-        height={height}
+        width={width + 300}
+        height={height + 300}
         style={{
           top: 0,
           left: 0,

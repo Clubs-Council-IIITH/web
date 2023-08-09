@@ -13,6 +13,8 @@ export const GET_USER_PROFILE = gql`
     userMeta(userInput: $userInput) {
       uid
       img
+      role
+      phone
     }
   }
 `;

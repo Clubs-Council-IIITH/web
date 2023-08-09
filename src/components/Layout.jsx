@@ -306,7 +306,6 @@ export function Content({ children }) {
       <Box
         sx={{
           display: "flex",
-          minHeight: "100%",
           overflow: "hidden",
           width: "100%",
         }}
@@ -315,7 +314,6 @@ export function Content({ children }) {
           component="main"
           sx={{
             overflow: "auto",
-            minHeight: "100%",
             width: "100%",
             paddingTop: `${BAR_HEIGHT_MOBILE}px`,
             paddingBottom: theme.spacing(5),
