@@ -32,7 +32,9 @@ export default function ClubInfo({ name, logo, tagline, description }) {
         </Box>
       </Box>
       <Box pt={2}>
-        <Typography variant="body1">{description}</Typography>
+        <Typography variant="body1" mx={1}>
+          {description}
+        </Typography>
       </Box>
     </>
   );

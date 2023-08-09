@@ -59,6 +59,19 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
   async function onSubmit(formData) {
     setLoading(true);
 
+    const data = {
+      uid: defaultValues.uid,
+      phone: formData.phone,
+    };
+
+    // upload image
+    data.img =
+      typeof formData.img === "string"
+        ? formData.img
+        : Array.isArray(formData.img) && formData.img.length > 0
+        ? await uploadFile(formData.img[0], "image")
+        : null;
+
     // mutate
     await submitHandlers[action](data);
   }
