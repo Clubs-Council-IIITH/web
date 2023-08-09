@@ -22,7 +22,7 @@ export default function UserDetails({ user }) {
             Batch
           </Typography>
           <Typography variant="h5" fontWeight={400} textTransform="uppercase">
-            {user.batch}
+            {user.batch} · {user.stream}
           </Typography>
         </Box>
       ) : null}

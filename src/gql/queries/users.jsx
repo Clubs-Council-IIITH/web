@@ -8,6 +8,7 @@ export const GET_USER_PROFILE = gql`
       email
       gender
       batch
+      stream
     }
     userMeta(userInput: $userInput) {
       uid
