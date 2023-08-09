@@ -1,5 +1,7 @@
 "use client";
 
+import cookieCutter from "cookie-cutter";
+
 import { createContext, useContext } from "react";
 
 const AuthContext = createContext({
@@ -12,11 +14,12 @@ export function useAuth() {
 }
 
 export function AuthProvider({ user, children }) {
-  return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated: !!Object.keys(user).length }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    user: cookieCutter.get("logout") ? null : user,
+    isAuthenticated: cookieCutter.get("logout")
+      ? false
+      : !!Object.keys(user).length,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

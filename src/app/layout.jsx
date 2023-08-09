@@ -26,11 +26,11 @@ export default async function RootLayout({ children }) {
   const user = { ...userMeta, ...userProfile };
 
   // if user is a club, display the club's logo as profile img
-  if (user.role === "club") {
+  if (user?.role === "club") {
     const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-      clubInput: { cid: user.uid },
+      clubInput: { cid: user?.uid },
     });
-    user.img = club.logo;
+    user.img = club?.logo;
   }
 
   return (

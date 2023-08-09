@@ -7,6 +7,14 @@ import clubRedirects from "acl/clubRedirects";
 
 // TODO: make multiple middlewares (one for route acl, one for club redirects) and combine them
 export function middleware(req) {
+  // if logout cookie is set, log the user out
+  if (req.cookies.has("logout")) {
+    // clear logout cookie
+    req.cookies.set("logout", "", { maxAge: 0 });
+
+    return NextResponse.redirect(new URL("/logoutCallback", req.url));
+  }
+
   // redirect to CC about page
   if (req.nextUrl.pathname === "/student-bodies/clubs") {
     return NextResponse.redirect(new URL("/about/clubs-council", req.url));

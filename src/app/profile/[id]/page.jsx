@@ -84,8 +84,8 @@ export default async function Profile({ params }) {
         1. if current user is CC, or
         2. if current user is viewing their own profile and is not a club
       */}
-      {currentUser.role === "cc" ||
-      (currentUser.uid === user.uid && user.role !== "club") ? (
+      {currentUser?.role === "cc" ||
+      (currentUser?.uid === user.uid && user.role !== "club") ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
