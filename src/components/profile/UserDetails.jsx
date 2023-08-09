@@ -16,7 +16,7 @@ export default async function UserDetails({ user }) {
         <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
           User ID
         </Typography>
-        <Typography variant="h5" fontWeight={400} fontFamily="monospace">
+        <Typography fontWeight={400} fontFamily="monospace">
           {user.uid}
         </Typography>
       </Box>
@@ -32,11 +32,7 @@ export default async function UserDetails({ user }) {
               >
                 Batch
               </Typography>
-              <Typography
-                variant="h5"
-                fontWeight={400}
-                textTransform="uppercase"
-              >
+              <Typography fontWeight={400} textTransform="uppercase">
                 {user.batch} · {user.stream}
               </Typography>
             </Box>
@@ -51,7 +47,7 @@ export default async function UserDetails({ user }) {
               >
                 Phone Number
               </Typography>
-              <Typography variant="h5" fontWeight={400}>
+              <Typography fontWeight={400}>
                 {user.phone || "Unknown"}
               </Typography>
             </Box>
