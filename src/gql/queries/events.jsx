@@ -54,8 +54,8 @@ export const GET_PENDING_EVENTS = gql`
       datetimeperiod
       status {
         state
-        room
-        budget
+        slo
+        slc
       }
       location
       poster
@@ -75,8 +75,8 @@ export const GET_ALL_EVENTS = gql`
       datetimeperiod
       status {
         state
-        room
-        budget
+        slo
+        slc
       }
       location
       poster
@@ -127,8 +127,8 @@ export const GET_FULL_EVENT = gql`
       poster
       status {
         state
-        room
-        budget
+        slo
+        slc
       }
     }
   }

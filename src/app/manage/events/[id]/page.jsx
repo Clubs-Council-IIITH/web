@@ -176,7 +176,7 @@ function getActions(event, user) {
     if (
       upcoming &&
       event?.status?.state !== "incomplete" &&
-      !event?.status?.budget
+      !event?.status?.slc
     )
       return [ApproveEvent];
     else return [];
@@ -185,7 +185,7 @@ function getActions(event, user) {
     if (
       upcoming &&
       event?.status?.state !== "incomplete" &&
-      !event?.status?.room
+      !event?.status?.slo
     )
       return [ApproveEvent];
     else return [];

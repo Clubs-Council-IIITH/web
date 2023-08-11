@@ -18,7 +18,7 @@ export function EventStatus({ status, sx }) {
 
 export function BudgetStatus({ status, budget, sx }) {
   const state = budget?.length
-    ? status?.budget
+    ? status?.slc
       ? "approved"
       : "pending"
     : "empty";
@@ -48,7 +48,7 @@ export function BudgetStatus({ status, budget, sx }) {
 
 export function VenueStatus({ status, location, sx }) {
   const state = location?.length
-    ? status?.room
+    ? status?.slo
       ? "approved"
       : "pending"
     : "empty";

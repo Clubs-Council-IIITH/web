@@ -5,13 +5,13 @@ import { PROGRESS_EVENT } from "gql/mutations/events";
 
 export async function POST(request) {
   const response = { ok: false, error: null };
-  const { eventid, cc_progress_budget, cc_progress_room } =
+  const { eventid, cc_progress_slc, cc_progress_slo } =
     await request.json();
 
   const { error } = await getClient().mutation(PROGRESS_EVENT, {
     eventid,
-    cc_progress_budget,
-    cc_progress_room,
+    cc_progress_slc,
+    cc_progress_slo,
   });
   if (error) {
     response.error = {

@@ -150,7 +150,7 @@ export function ApproveEvent({ sx }) {
               color="success"
             />
           }
-          label="Request SLC approval (for budget, if requested)"
+          label="Request SLC approval"
         />
         <FormControlLabel
           control={
@@ -160,7 +160,7 @@ export function ApproveEvent({ sx }) {
               color="success"
             />
           }
-          label="Request SLO approval (for venue, if requested)"
+          label="Request SLO approval"
         />
       </Box>
     ) : (
@@ -172,8 +172,8 @@ export function ApproveEvent({ sx }) {
       method: "POST",
       body: JSON.stringify({
         eventid: id,
-        cc_progress_budget: !SLC,
-        cc_progress_room: !SLO,
+        cc_progress_slc: !SLC,
+        cc_progress_slo: !SLO,
       }),
     });
     res = await res.json();

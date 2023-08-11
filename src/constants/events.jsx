@@ -54,8 +54,8 @@ export const locationMap = {
 export const stateMap = {
   incomplete: "Incomplete",
   pending_cc: "Pending Clubs Council Approval",
-  pending_budget: "Pending SLC/Budget Approval",
-  pending_room: "Pending SLO/Room Approval",
+  pending_slc: "Pending SLC/Budget Approval",
+  pending_slo: "Pending SLO/Room Approval",
   approved: "Approved",
   completed: "Completed",
   deleted: "Deleted",
@@ -64,8 +64,8 @@ export const stateMap = {
 export const stateShortMap = {
   incomplete: "Draft",
   pending_cc: "CC Pending",
-  pending_budget: "Budget Pending",
-  pending_room: "Room Pending",
+  pending_slc: "SLC Pending",
+  pending_slo: "SLO Pending",
   approved: "Approved",
   completed: "Completed",
   deleted: "Deleted",
@@ -74,8 +74,8 @@ export const stateShortMap = {
 export const stateColorMap = {
   incomplete: "secondary",
   pending_cc: "warning",
-  pending_budget: "warning",
-  pending_room: "warning",
+  pending_slc: "warning",
+  pending_slo: "warning",
   approved: "success",
   completed: "info",
   deleted: "error",
@@ -84,8 +84,8 @@ export const stateColorMap = {
 export const stateIconMap = {
   incomplete: "eva:alert-circle-outline",
   pending_cc: "eva:refresh-outline",
-  pending_budget: "eva:refresh-outline",
-  pending_room: "eva:refresh-outline",
+  pending_slc: "eva:refresh-outline",
+  pending_slo: "eva:refresh-outline",
   approved: "eva:checkmark-outline",
   completed: "eva:checkmark-circle-outline",
   deleted: "eva:close-outline",

@@ -40,7 +40,7 @@ const columns = [
     headerAlign: "center",
     valueGetter: ({ row }) => ({
       requested: row.budget.length > 0,
-      approved: row.status.budget,
+      approved: row.status.slc,
     }),
     renderCell: ({ value }) => (
       <Icon
@@ -69,7 +69,7 @@ const columns = [
     headerAlign: "center",
     valueGetter: ({ row }) => ({
       requested: row.location.length > 0,
-      approved: row.status.room,
+      approved: row.status.slo,
     }),
     renderCell: ({ value }) => (
       <Icon
