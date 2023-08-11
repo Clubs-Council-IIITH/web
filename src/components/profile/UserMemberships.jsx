@@ -26,7 +26,7 @@ export default function UserMemberships({ rows = [] }) {
           res.data.reduce((acc, { cid, name }) => {
             acc[cid] = name;
             return acc;
-          }, {})
+          }, {}),
         );
       }
     })();
@@ -50,7 +50,7 @@ export default function UserMemberships({ rows = [] }) {
       headerName: "Start Year",
       headerAlign: "center",
       align: "center",
-      flex: 2,
+      flex: 3,
     },
     {
       field: "endYear",
@@ -58,7 +58,7 @@ export default function UserMemberships({ rows = [] }) {
       headerAlign: "center",
       align: "center",
       valueGetter: ({ row }) => row.endYear || "-",
-      flex: 2,
+      flex: 3,
     },
   ];
 

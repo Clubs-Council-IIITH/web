@@ -22,7 +22,7 @@ export async function generateMetadata({ params }, parent) {
       userInput: {
         uid: id,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -47,7 +47,7 @@ export default async function Profile({ params }) {
       userInput: {
         uid: id,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -56,7 +56,7 @@ export default async function Profile({ params }) {
   if (user.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } }
+      { clubInput: { cid: user.uid } },
     );
     club = targetClub;
   }
@@ -73,7 +73,7 @@ export default async function Profile({ params }) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      []
+      [],
     );
   }
 
@@ -90,7 +90,11 @@ export default async function Profile({ params }) {
       ) : null}
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
-          <Stack direction="row" alignItems="center" spacing={4}>
+          <Stack
+            direction={{ xs: "column", lg: "row" }}
+            alignItems="center"
+            spacing={4}
+          >
             {club ? (
               <ClubLogo
                 name={club.name}
@@ -108,13 +112,24 @@ export default async function Profile({ params }) {
               />
             )}
             <Stack direction="column" spacing={1}>
-              <Typography variant="h2" wordWrap="break-word">
+              <Typography
+                variant="h2"
+                wordWrap="break-word"
+                textAlign={{ xs: "center", lg: "left" }}
+                sx={{
+                  fontSize: { xs: 25, lg: 38 },
+                }}
+              >
                 {user.firstName} {user.lastName}
               </Typography>
               <Typography
                 variant="body1"
                 color="text.secondary"
                 fontFamily="monospace"
+                textAlign={{ xs: "center", lg: "left" }}
+                sx={{
+                  fontSize: { xs: 14, lg: 20 },
+                }}
               >
                 {user.email}
               </Typography>
@@ -126,7 +141,7 @@ export default async function Profile({ params }) {
           <UserDetails user={user} />
         </Grid>
 
-        <Grid item xs={9} mt={5}>
+        <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
           {user.role === "public" ? (
             <Stack direction="column" spacing={2}>
               <Typography variant="subtitle2" textTransform="uppercase">
