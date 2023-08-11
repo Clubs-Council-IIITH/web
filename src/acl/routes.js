@@ -2,7 +2,6 @@
 
 const routes = {
   // "/": [],
-  // "/authRedirect": [],
 
   // "/about": [],
   // "/events": [],

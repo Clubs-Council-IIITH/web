@@ -65,7 +65,7 @@ function Bar({ onOpenDrawer }) {
             display: { lg: "none" },
           }}
         >
-          <Icon variant="menu-open-rounded" />
+          <Icon variant="menu-rounded" />
         </IconButton>
 
         <Box sx={{ flexGrow: 1 }} />
