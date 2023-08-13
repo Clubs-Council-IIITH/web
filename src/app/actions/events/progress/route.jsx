@@ -10,8 +10,8 @@ export async function POST(request) {
 
   const { error } = await getClient().mutation(PROGRESS_EVENT, {
     eventid,
-    cc_progress_budget,
-    cc_progress_room,
+    ccProgressBudget: cc_progress_budget,
+    ccProgressRoom: cc_progress_room,
   });
   if (error) {
     response.error = {

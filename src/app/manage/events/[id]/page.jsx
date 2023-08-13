@@ -43,7 +43,7 @@ export default async function ManageEvent({ params }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
 
   return (
@@ -96,7 +96,7 @@ export default async function ManageEvent({ params }) {
                   <Chip
                     key={key}
                     label={locationLabel(venue)?.name}
-                    sx={{ mr: 1, p: 1 }}
+                    sx={{ mr: 1, mb: 1, p: 1 }}
                   />
                 ))}
               </Box>
