@@ -118,6 +118,34 @@ export default function EventForm({
       res = await res.json();
 
       if (res.ok) {
+        // also submit event if requested
+        if (opts?.shouldSubmit) {
+          let submit_res = await fetch("/actions/events/progress", {
+            method: "POST",
+            body: JSON.stringify({ eventid: res.data._id }),
+          });
+          submit_res = await submit_res.json();
+
+          if (submit_res.ok) {
+            triggerToast({
+              title: "Success!",
+              messages: ["Event edited and submitted for approval."],
+              severity: "success",
+            });
+            router.push("/manage/events");
+            router.refresh();
+          } else {
+            // show error toast
+            triggerToast({
+              ...submit_res.error,
+              severity: "error",
+            });
+            setLoading(false);
+          }
+
+          return;
+        }
+
         // show success toast & redirect to manage page
         triggerToast({
           title: "Success!",
@@ -169,7 +197,7 @@ export default function EventForm({
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString()
+      new Date(d).toISOString(),
     );
 
     // convert budget to array of objects with only required attributes
@@ -334,7 +362,7 @@ export default function EventForm({
                 fullWidth
                 onClick={() =>
                   handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true })
+                    onSubmit(data, { shouldSubmit: true }),
                   )()
                 }
               >
