@@ -49,14 +49,14 @@ const columns = [
             ? "secondary.main"
             : value.approved
             ? "success.main"
-            : "error.main",
+            : "warning.main",
         }}
         variant={
           !value.requested
             ? "remove-rounded"
             : value.approved
             ? "check"
-            : "close-rounded"
+            : "refresh-rounded"
         }
       />
     ),
@@ -78,14 +78,14 @@ const columns = [
             ? "secondary.main"
             : value.approved
             ? "success.main"
-            : "error.main",
+            : "warning.main",
         }}
         variant={
           !value.requested
             ? "remove-rounded"
             : value.approved
             ? "check"
-            : "close-rounded"
+            : "refresh-rounded"
         }
       />
     ),
