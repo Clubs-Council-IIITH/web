@@ -39,7 +39,7 @@ export function DeleteEvent({ sx }) {
   const deleteEvent = async () => {
     let res = await fetch("/actions/events/delete", {
       method: "POST",
-      body: JSON.stringify({ cid: id }),
+      body: JSON.stringify({ eventid: id }),
     });
     res = await res.json();
 
