@@ -16,7 +16,6 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Grid,
 } from "@mui/material";
 
 import Icon from "components/Icon";
@@ -31,7 +30,7 @@ export default async function ManageMembers({ searchParams }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -58,30 +57,36 @@ export default async function ManageMembers({ searchParams }) {
       </Stack>
 
       {/* only pending members */}
-      <Box mb={3}>
-        <Typography
-          color="text.secondary"
-          variant="subtitle2"
-          textTransform="uppercase"
-          gutterBottom
-        >
-          Pending Approval
-        </Typography>
-        <PendingMembersDataGrid />
-      </Box>
+      {user?.role === "cc" ? (
+        <Box mb={3}>
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            textTransform="uppercase"
+            gutterBottom
+          >
+            Pending Approval
+          </Typography>
+          <PendingMembersDataGrid />
+        </Box>
+      ) : null}
 
       {/* all members */}
       <Box>
-        <Typography
-          color="text.secondary"
-          variant="subtitle2"
-          textTransform="uppercase"
-          gutterBottom
-          mb={2}
-        >
-          All Members
-        </Typography>
-        {user?.role === "cc" ? <MembersClubSelect club={club} /> : null}
+        {user?.role === "cc" ? (
+          <>
+            <Typography
+              color="text.secondary"
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+              mb={2}
+            >
+              All Members
+            </Typography>
+            <MembersClubSelect club={club} />
+          </>
+        ) : null}
         {user?.role === "club" || club ? (
           <MembersDataGrid club={user?.role === "club" ? user?.uid : club} />
         ) : null}
@@ -93,7 +98,7 @@ export default async function ManageMembers({ searchParams }) {
 async function MembersClubSelect({ club }) {
   const { data: { allClubs } = {} } = await getClient().query(
     GET_ALL_CLUB_IDS,
-    {}
+    {},
   );
 
   return (
@@ -120,14 +125,14 @@ async function MembersClubSelect({ club }) {
 }
 
 async function PendingMembersDataGrid() {
-  const { data: { pendingMembers: members } = {} } = await getClient().query(
-    GET_PENDING_MEMBERS
+  const { data: { pendingMembers } = {} } = await getClient().query(
+    GET_PENDING_MEMBERS,
   );
 
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
   const userPromises = [];
-  members?.forEach((member) => {
+  pendingMembers?.forEach((member) => {
     userPromises.push(
       getClient()
         .query(GET_USER_PROFILE, {
@@ -135,11 +140,11 @@ async function PendingMembersDataGrid() {
             uid: member.uid,
           },
         })
-        .toPromise()
+        .toPromise(),
     );
   });
   const users = await Promise.all(userPromises);
-  const processedMembers = members.map((member, index) => ({
+  const processedMembers = pendingMembers.map((member, index) => ({
     ...member,
     ...users[index].data.userProfile,
     ...users[index].data.userMeta,
@@ -165,7 +170,7 @@ async function MembersDataGrid({ club }) {
             uid: member.uid,
           },
         })
-        .toPromise()
+        .toPromise(),
     );
   });
   const users = await Promise.all(userPromises);

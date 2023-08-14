@@ -21,9 +21,9 @@ export default async function UserDetails({ user }) {
         </Typography>
       </Box>
 
-      {user?.role !== "club" && user?.stream?.toLowerCase() !== "faculty" ? (
+      {user?.role !== "club" ? (
         <>
-          {user?.batch ? (
+          {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff from rendering batch and stream
             <Box>
               <Typography
                 variant="subtitle2"
