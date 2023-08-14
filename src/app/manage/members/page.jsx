@@ -154,7 +154,7 @@ async function PendingMembersDataGrid() {
           >
             Pending Approval
           </Typography>
-          <MembersTable members={processedMembers} />
+            <MembersTable members={processedMembers} showClub={true} />
           </Box >
           : null
       }
