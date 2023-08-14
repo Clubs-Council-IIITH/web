@@ -142,7 +142,7 @@ export default async function Profile({ params }) {
         </Grid>
 
         <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
-          {user.role === "public" ? (
+          {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff from rendering memberships
             <Stack direction="column" spacing={2}>
               <Typography variant="subtitle2" textTransform="uppercase">
                 Memberships
