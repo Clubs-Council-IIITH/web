@@ -34,7 +34,7 @@ const columns = [
   },
   {
     field: "budget",
-    headerName: "Budget",
+    headerName: "Budget/SLC",
     flex: 2,
     align: "center",
     headerAlign: "center",
@@ -45,25 +45,25 @@ const columns = [
     renderCell: ({ value }) => (
       <Icon
         sx={{
-          color: !value.requested
-            ? "secondary.main"
-            : value.approved
-            ? "success.main"
-            : "warning.main",
+          color: !value.approved
+            ? "warning.main"
+            : !value.requested
+              ? "secondary.main"
+              : "success.main",
         }}
         variant={
-          !value.requested
-            ? "remove-rounded"
-            : value.approved
-            ? "check"
-            : "refresh-rounded"
+          !value.approved
+            ? "refresh-rounded"
+            : !value.requested
+              ? "remove-rounded"
+              : "check"
         }
       />
     ),
   },
   {
     field: "venue",
-    headerName: "Venue",
+    headerName: "Venue/SLO",
     flex: 2,
     align: "center",
     headerAlign: "center",
@@ -74,18 +74,18 @@ const columns = [
     renderCell: ({ value }) => (
       <Icon
         sx={{
-          color: !value.requested
-            ? "secondary.main"
-            : value.approved
-            ? "success.main"
-            : "warning.main",
+          color: !value.approved
+            ? "warning.main"
+            : !value.requested
+              ? "secondary.main"
+              : "success.main",
         }}
         variant={
-          !value.requested
-            ? "remove-rounded"
-            : value.approved
-            ? "check"
-            : "refresh-rounded"
+          !value.approved
+            ? "refresh-rounded"
+            : !value.requested
+              ? "remove-rounded"
+              : "check"
         }
       />
     ),
