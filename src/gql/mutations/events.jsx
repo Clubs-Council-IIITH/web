@@ -27,13 +27,13 @@ export const DELETE_EVENT = gql`
 export const PROGRESS_EVENT = gql`
   mutation ProgressEvent(
     $eventid: String!
-    $ccProgressBudget: Boolean
-    $ccProgressRoom: Boolean
+    $ccProgressSLC: Boolean
+    $ccProgressSLO: Boolean
   ) {
     progressEvent(
       eventid: $eventid
-      ccProgressBudget: $ccProgressBudget
-      ccProgressRoom: $ccProgressRoom
+      ccProgressSLC: $ccProgressSLC
+      ccProgressSLO: $ccProgressSLO
     ) {
       _id
     }
