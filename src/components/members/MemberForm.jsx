@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
+import { useAuth } from "components/AuthProvider";
 
 import { LoadingButton } from "@mui/lab";
 import {
@@ -33,6 +34,7 @@ import MemberPositions from "./MemberPositions";
 
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
@@ -105,6 +107,13 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
       poc: formData.poc,
     };
 
+    // set club ID for member based on user role
+    if (user?.role === "club") {
+      data.cid = user?.uid;
+    } else if (user?.role === "cc") {
+      data.cid = formData.cid;
+    }
+
     // show error toast if uid is empty
     if (!data.uid) {
       return triggerToast({
@@ -136,9 +145,11 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
         <Grid container item xs={12} md={7} xl={8} spacing={3}>
           <Grid container item>
             <Grid container item spacing={2}>
-              <Grid item xs={12}>
-                <MemberClubSelect control={control} watch={watch} />
-              </Grid>
+              {user?.role === "cc" ? (
+                <Grid item xs={12}>
+                  <MemberClubSelect control={control} watch={watch} />
+                </Grid>
+              ) : null}
             </Grid>
           </Grid>
 
