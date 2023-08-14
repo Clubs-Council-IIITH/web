@@ -150,7 +150,7 @@ export function ApproveEvent({ sx }) {
               color="success"
             />
           }
-          label="Request SLC approval (for budget, if requested)"
+          label="Request SLC approval"
         />
         <FormControlLabel
           control={
@@ -160,7 +160,7 @@ export function ApproveEvent({ sx }) {
               color="success"
             />
           }
-          label="Request SLO approval (for venue, if requested)"
+          label="Request SLO approval"
         />
       </Box>
     ) : (
