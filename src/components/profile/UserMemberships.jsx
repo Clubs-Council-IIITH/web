@@ -73,7 +73,7 @@ export default function UserMemberships({ rows = [] }) {
         sorting: {
           sortModel: [{ field: "endYear", sort: "asc" }],
         },
-        pagination: { paginationModel: { pageSize: 10 } },
+        pagination: { paginationModel: { pageSize: 5 } },
       }}
       pageSizeOptions={[5, 10, 25]}
       sx={{

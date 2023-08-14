@@ -8,6 +8,7 @@ import ActionPalette from "components/ActionPalette";
 import UserImage from "components/users/UserImage";
 import MemberPositions from "components/members/MemberPositions";
 import { EditMember } from "components/members/MemberActions";
+import ClubButton from "components/clubs/ClubButton";
 
 export const metadata = {
   title: "Viewing Member",
@@ -56,7 +57,7 @@ export default async function ManageMember({ params }) {
             </Stack>
           </Stack>
         </Grid>
-        <Grid item container xs spacing={2} mt={5}>
+        <Grid item container xs spacing={1} mt={5}>
           <Grid item xs>
             <Typography
               variant="subtitle2"
@@ -65,11 +66,23 @@ export default async function ManageMember({ params }) {
             >
               Point of Contact
             </Typography>
-            <Typography variant="h5" fontWeight={400}>
+            <Typography variant="h5" fontWeight={300}>
               {member.poc ? "Yes" : "No"}
             </Typography>
           </Grid>
-          <Grid item xs={12} lg={8}>
+          <Grid item xs>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+            >
+              Club
+            </Typography>
+            <ClubButton clubid={id?.split(encodeURIComponent(":"))[0]} />
+          </Grid>
+        </Grid>
+        <Grid item container mt={3}>
+          <Grid item xs={12}>
             <Typography
               variant="subtitle2"
               textTransform="uppercase"
