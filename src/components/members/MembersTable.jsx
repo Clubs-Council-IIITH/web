@@ -117,6 +117,7 @@ export default function MembersTable({ members, showClub = false }) {
             quickFilterLogicOperator: GridLogicOperator.Or,
           },
         },
+        pagination: { paginationModel: { pageSize: 25 } },
       }}
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
