@@ -96,10 +96,10 @@ export default function EventForm({
         // else show success toast & redirect to manage page
         triggerToast({
           title: "Success!",
-          messages: ["Event created."],
+          messages: ["Event created & saved as draft."],
           severity: "success",
         });
-        router.push("/manage/events");
+        router.push(`/manage/events/${res.data._id}`);
         router.refresh();
       } else {
         // show error toast
@@ -152,7 +152,7 @@ export default function EventForm({
           messages: ["Event edited."],
           severity: "success",
         });
-        router.push("/manage/events");
+        router.push(`/manage/events/${res.data._id}`);
         router.refresh();
       } else {
         // show error toast
@@ -192,8 +192,8 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-        ? await uploadFile(formData.poster[0], "image")
-        : null;
+          ? await uploadFile(formData.poster[0], "image")
+          : null;
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
@@ -342,33 +342,47 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="large"
-                variant="outlined"
-                color="primary"
-                fullWidth
-              >
-                Save as draft
-              </LoadingButton>
+              {user?.role === "cc" ?
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Save
+                </LoadingButton>
+                : <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  size="large"
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                >
+                  Save as draft
+                </LoadingButton>
+              }
             </Grid>
-            <Grid item xs={12}>
-              <LoadingButton
-                loading={loading}
-                size="large"
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={() =>
-                  handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true }),
-                  )()
-                }
-              >
-                Save & Submit
-              </LoadingButton>
-            </Grid>
+            {user?.role === "cc" ? null :
+              <Grid item xs={12}>
+                <LoadingButton
+                  loading={loading}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={() =>
+                    handleSubmit((data) =>
+                      onSubmit(data, { shouldSubmit: true }),
+                    )()
+                  }
+                >
+                  Save & Submit
+                </LoadingButton>
+              </Grid>
+            }
           </Grid>
         </Grid>
       </Grid>

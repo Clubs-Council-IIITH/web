@@ -147,7 +147,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             <Grid container item spacing={2}>
               {user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <MemberClubSelect control={control} watch={watch} />
+                  <MemberClubSelect control={control} watch={watch} edit={action === "edit"} />
                 </Grid>
               ) : null}
             </Grid>
@@ -337,7 +337,7 @@ function MemberUserInput({ control, watch, setValue }) {
 }
 
 // select club to which member belongs to
-function MemberClubSelect({ control }) {
+function MemberClubSelect({ control, edit }) {
   const { triggerToast } = useToast();
 
   // fetch list of clubs
@@ -366,7 +366,12 @@ function MemberClubSelect({ control }) {
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
           <InputLabel id="cid">Club *</InputLabel>
-          <Select labelId="cid" label="Club *" fullWidth {...field}>
+          <Select
+            labelId="cid"
+            label="Club *"
+            fullWidth
+            disabled={edit}
+            {...field}>
             {clubs
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))

@@ -1,11 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+
+import { useState } from "react";
 
 import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
+import ConfirmDialog from "components/ConfirmDialog";
+import { useToast } from "components/Toast";
 
 export function EditMember({ sx }) {
   const { id } = useParams();
@@ -21,5 +25,67 @@ export function EditMember({ sx }) {
     >
       Edit
     </Button>
+  );
+}
+
+export function DeleteMember({ sx }) {
+  const router = useRouter();
+  const { id } = useParams();
+  const { triggerToast } = useToast();
+  const [dialog, setDialog] = useState(false);
+
+  const deleteMember = async () => {
+    let res = await fetch("/actions/members/delete", {
+      method: "POST",
+      body: JSON.stringify({
+        memberInput: {
+          cid: id?.split(encodeURIComponent(":"))[0],
+          uid: id?.split(encodeURIComponent(":"))[1],
+          rid: null,
+        }
+      }),
+    });
+    res = await res.json();
+
+    if (res.ok) {
+      // show success toast & redirect to manage page
+      triggerToast({
+        title: "Success!",
+        messages: ["Member deleted."],
+        severity: "success",
+      });
+      router.push("/manage/members");
+      router.refresh();
+    } else {
+      // show error toast
+      triggerToast({
+        ...res.error,
+        severity: "error",
+      });
+    }
+  };
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        color="error"
+        startIcon={<Icon variant="delete-forever-outline" />}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Delete
+      </Button>
+
+      <ConfirmDialog
+        open={dialog}
+        title="Are you sure you want to delete this member?"
+        description="This action cannot be undone."
+        onConfirm={deleteMember}
+        onClose={() => setDialog(false)}
+        confirmProps={{ color: "error" }}
+        confirmText="Yes, delete it"
+      />
+    </>
   );
 }

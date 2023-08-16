@@ -58,17 +58,7 @@ export default async function ManageMembers({ searchParams }) {
 
       {/* only pending members */}
       {user?.role === "cc" ? (
-        <Box mb={3}>
-          <Typography
-            color="text.secondary"
-            variant="subtitle2"
-            textTransform="uppercase"
-            gutterBottom
-          >
-            Pending Approval
-          </Typography>
-          <PendingMembersDataGrid />
-        </Box>
+        <PendingMembersDataGrid />
       ) : null}
 
       {/* all members */}
@@ -151,7 +141,25 @@ async function PendingMembersDataGrid() {
     mid: `${member.cid}:${member.uid}`,
   }));
 
-  return <MembersTable members={processedMembers} />;
+  return (
+    <>
+      {
+        processedMembers.length > 0 ?
+        <Box mb={3} >
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            textTransform="uppercase"
+            gutterBottom
+          >
+            Pending Approval
+          </Typography>
+            <MembersTable members={processedMembers} showClub={true} />
+          </Box >
+          : null
+      }
+    </>
+  );
 }
 
 async function MembersDataGrid({ club }) {
