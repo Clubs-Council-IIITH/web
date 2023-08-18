@@ -3,11 +3,9 @@ import { GET_MEMBER } from "gql/queries/members";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
-import ActionPalette from "components/ActionPalette";
-
 import UserImage from "components/users/UserImage";
 import MemberPositions from "components/members/MemberPositions";
-import { EditMember, DeleteMember } from "components/members/MemberActions";
+import MemberActionsList from "components/members/MemberActionsList";
 import ClubButton from "components/clubs/ClubButton";
 
 export const metadata = {
@@ -32,7 +30,7 @@ export default async function ManageMember({ params }) {
 
   return (
     <Container>
-      <ActionPalette right={[EditMember, DeleteMember]} />
+      <MemberActionsList member={member} />
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
           <Stack direction="row" alignItems="center" spacing={4}>

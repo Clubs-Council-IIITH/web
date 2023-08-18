@@ -89,3 +89,65 @@ export function DeleteMember({ sx }) {
     </>
   );
 }
+
+export function ApproveAllMember({ sx }) {
+  const router = useRouter();
+  const { id } = useParams();
+  const { triggerToast } = useToast();
+  const [dialog, setDialog] = useState(false);
+
+  const approveMember = async () => {
+    let res = await fetch("/actions/members/approve", {
+      method: "POST",
+      body: JSON.stringify({
+        memberInput: {
+          cid: id?.split(encodeURIComponent(":"))[0],
+          uid: id?.split(encodeURIComponent(":"))[1],
+          rid: null,
+        }
+      }),
+    });
+    res = await res.json();
+
+    if (res.ok) {
+      // show success toast & redirect to manage page
+      triggerToast({
+        title: "Success!",
+        messages: ["Membership approved."],
+        severity: "success",
+      });
+      router.push("/manage/members");
+      router.refresh();
+    } else {
+      // show error toast
+      triggerToast({
+        ...res.error,
+        severity: "primary",
+      });
+    }
+  };
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<Icon variant="done" />}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Approve All Roles
+      </Button>
+
+      <ConfirmDialog
+        open={dialog}
+        title="Are you sure you want to approve all the roles of this member?"
+        description="This action cannot be undone."
+        onConfirm={approveMember}
+        onClose={() => setDialog(false)}
+        confirmProps={{ color: "success" }}
+        confirmText="Yes, approve them"
+      />
+    </>
+  );
+}
