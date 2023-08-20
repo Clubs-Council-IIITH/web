@@ -145,15 +145,15 @@ async function PendingMembersDataGrid() {
     <>
       {
         processedMembers.length > 0 ?
-        <Box mb={3} >
-          <Typography
-            color="text.secondary"
-            variant="subtitle2"
-            textTransform="uppercase"
-            gutterBottom
-          >
-            Pending Approval
-          </Typography>
+          <Box mb={3} >
+            <Typography
+              color="text.secondary"
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+            >
+              Pending Approval
+            </Typography>
             <MembersTable members={processedMembers} showClub={true} />
           </Box >
           : null

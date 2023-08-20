@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
+import { GET_USER } from "gql/queries/auth";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -28,9 +29,16 @@ export default async function ManageMember({ params }) {
     },
   });
 
+  // fetch currently logged in user
+  const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null }
+  );
+  const user = { ...currentUserMeta, ...currentUserProfile };
+
   return (
     <Container>
-      <MemberActionsList member={member} />
+      <MemberActionsList member={member} user={user} />
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
           <Stack direction="row" alignItems="center" spacing={4}>
@@ -42,7 +50,7 @@ export default async function ManageMember({ params }) {
               height={150}
             />
             <Stack direction="column" spacing={1}>
-              <Typography variant="h2" wordWrap="break-word">
+              <Typography variant="h2" word-wrap="break-word">
                 {userProfile.firstName} {userProfile.lastName}
               </Typography>
               <Typography
