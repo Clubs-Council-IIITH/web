@@ -5,7 +5,7 @@ import {
   GET_ALL_EVENTS,
 } from "gql/queries/events";
 
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import EventCard from "components/events/EventCard";
 
 export default async function EventsGrid({
@@ -19,19 +19,24 @@ export default async function EventsGrid({
   return (
     <Grid container spacing={2}>
       {extractEvents({ type, data })
-        ?.slice(0, limit)
-        ?.filter(filter)
-        ?.map((event) => (
-          <Grid key={event._id} item xs={6} md={4} lg={3}>
-            <EventCard
-              _id={event._id}
-              name={event.name}
-              datetimeperiod={event.datetimeperiod}
-              poster={event.poster}
-              clubid={event.clubid}
-            />
-          </Grid>
-        ))}
+        ?.filter(filter).length ? extractEvents({ type, data })
+          ?.slice(0, limit)
+          ?.filter(filter)
+          ?.map((event) => (
+            <Grid key={event._id} item xs={6} md={4} lg={3}>
+              <EventCard
+                _id={event._id}
+                name={event.name}
+                datetimeperiod={event.datetimeperiod}
+                poster={event.poster}
+                clubid={event.clubid}
+              />
+            </Grid>
+          )) :
+          <Typography variant="h4" color="text.secondary" sx={{flexGrow: 1, textAlign: "center", mt: 5}}>
+            No events found.
+          </Typography>
+      }
     </Grid>
   );
 }
