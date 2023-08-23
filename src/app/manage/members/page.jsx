@@ -78,7 +78,7 @@ export default async function ManageMembers({ searchParams }) {
           </>
         ) : null}
         {user?.role === "club" || club ? (
-          <MembersDataGrid club={user?.role === "club" ? user?.uid : club} />
+          <MembersDataGrid club={user?.role === "club" ? user?.uid : club} onlyCurrent={false} />
         ) : null}
       </Box>
     </Container>
@@ -162,15 +162,21 @@ async function PendingMembersDataGrid() {
   );
 }
 
-async function MembersDataGrid({ club }) {
+async function MembersDataGrid({ club, onlyCurrent = false }) {
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: { cid: club },
   });
 
+  const currentYear = (new Date().getFullYear() + 1).toString();
+
+  // extract the current year's members if onlyCurrent is true
+  const targetMembers = members
+    ?.filter((member) => (onlyCurrent ? extractLatestYear(member).toString() === currentYear : true));
+
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
   const userPromises = [];
-  members?.forEach((member) => {
+  targetMembers?.forEach((member) => {
     userPromises.push(
       getClient()
         .query(GET_USER_PROFILE, {
@@ -182,7 +188,7 @@ async function MembersDataGrid({ club }) {
     );
   });
   const users = await Promise.all(userPromises);
-  const processedMembers = members.map((member, index) => ({
+  const processedMembers = targetMembers.map((member, index) => ({
     ...member,
     ...users[index].data.userProfile,
     ...users[index].data.userMeta,
@@ -190,4 +196,14 @@ async function MembersDataGrid({ club }) {
   }));
 
   return <MembersTable members={processedMembers} />;
+}
+
+// get the last year a member was in the club
+// if member is still present, return current year + 1
+function extractLatestYear(member) {
+  return Math.max(
+    ...member.roles.map((r) =>
+      !r.endYear ? new Date().getFullYear() + 1 : r.endYear
+    )
+  );
 }
