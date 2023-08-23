@@ -38,6 +38,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const [positionEditing, setPositionEditing] = useState(false);
 
   const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
@@ -186,7 +187,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             </Typography>
             <Grid container item spacing={2}>
               <Grid item xs={12}>
-                <MemberPositionsTable control={control} watch={watch} />
+                <MemberPositionsTable control={control} watch={watch} positionEditing={positionEditing} setPositionEditing={setPositionEditing} />
               </Grid>
             </Grid>
           </Grid>
@@ -239,6 +240,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  disabled={positionEditing}
                 >
                   Save
                 </LoadingButton>
@@ -389,7 +391,7 @@ function MemberClubSelect({ control, edit }) {
 }
 
 // input event budget as a table
-function MemberPositionsTable({ control, watch }) {
+function MemberPositionsTable({ control, watch, positionEditing, setPositionEditing }) {
   // TODO: watch for uid & cid change, populate table with existing data
   // [AFTER create and edit member mutations have been merged into one]
 
@@ -398,7 +400,7 @@ function MemberPositionsTable({ control, watch }) {
       name="roles"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <MemberPositions editable rows={value} setRows={onChange} />
+        <MemberPositions editable rows={value} setRows={onChange} positionEditing={positionEditing} setPositionEditing={setPositionEditing} />
       )}
     />
   );

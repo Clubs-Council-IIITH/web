@@ -23,6 +23,8 @@ export default function MemberPositions({
   rows = [],
   setRows = console.log,
   member = {},
+  positionEditing = false,
+  setPositionEditing = console.log,
 }) {
   const { user } = useAuth();
 
@@ -47,6 +49,16 @@ export default function MemberPositions({
   };
   const onDelete = (row) => {
     setRows(rows.filter((r) => r.id !== row.id));
+  };
+
+  // if editing, set position editing to true
+  const onEdit = () => {
+    setPositionEditing(true);
+  };
+
+  // if not editing, set position editing to false
+  const onEditStop = () => {
+    setPositionEditing(false);
   };
 
   const columns = [
@@ -153,6 +165,8 @@ export default function MemberPositions({
         processRowUpdate={onUpdate}
         disableRowSelectionOnClick
         experimentalFeatures={{ newEditingApi: true }}
+        onRowEditStart={onEdit}
+        onRowEditStop={onEditStop}
         sx={{
           // disable cell selection style
           ".MuiDataGrid-cell:focus": {
