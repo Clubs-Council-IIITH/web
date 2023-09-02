@@ -4,10 +4,10 @@ import {
     Card,
     CardHeader,
     CardContent,
-    CardActionArea,
     Grid
 } from "@mui/material";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+// import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 import ClubButton from "components/clubs/ClubButton";
 
 import { getStaticFile } from "utils/files";
@@ -28,12 +28,12 @@ export default async function RecruitmentSchedule() {
 
     return (
         <Box>
-            {/* Give a nice heading to the page */}
             <center>
                 <Typography variant="h3" sx={{ mb: 4 }}>
                     Clubs Recruitment Calendar
                 </Typography>
             </center>
+
             <Grid container spacing={2}>
                 {months.map((month) => (
                     <Grid item xs={12} md={6} lg={3} xl={3}>
