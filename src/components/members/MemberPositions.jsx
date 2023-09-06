@@ -243,3 +243,65 @@ function ApproveButton({ member, approved, rid }) {
     </Tooltip>
   );
 }
+
+function RejectButton({ member, approved, rid }) {
+  const router = useRouter();
+  const { triggerToast } = useToast();
+
+  const [loading, setLoading] = useState(false);
+
+  const onApprove = async (rid) => {
+    const data = {
+      cid: member.cid,
+      uid: member.uid,
+      rid: rid,
+    };
+
+    let res = await fetch("/actions/members/approve", {
+      method: "POST",
+      body: JSON.stringify({ memberInput: data }),
+    });
+    res = await res.json();
+
+    if (res.ok) {
+      // show success toast & refresh server
+      triggerToast({
+        title: "Success!",
+        messages: ["Membership approved."],
+        severity: "success",
+      });
+      setLoading(false);
+      router.refresh();
+    } else {
+      // show error toast
+      triggerToast({
+        ...res.error,
+        severity: "error",
+      });
+    }
+  };
+
+  return approved ? null : (
+    <Tooltip arrow title="Approve">
+      <IconButton
+        disabled={loading}
+        onClick={async () => {
+          setLoading(true);
+          await onApprove(rid);
+        }}
+        size="small"
+        sx={{ border: 1, borderColor: "success.main" }}
+      >
+        {loading ? (
+          <CircularProgress color="success" size={16} />
+        ) : (
+          <Icon
+            color="success.main"
+            variant="done"
+            sx={{ height: 16, width: 16 }}
+          />
+        )}
+      </IconButton>
+    </Tooltip>
+  );
+}

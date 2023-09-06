@@ -12,6 +12,7 @@ export const GET_MEMBERS = gql`
         startYear
         endYear
         approved
+        rejected
         deleted
       }
     }
@@ -31,6 +32,7 @@ export const GET_PENDING_MEMBERS = gql`
         startYear
         endYear
         approved
+        rejected
         deleted
       }
     }
@@ -51,6 +53,7 @@ export const GET_MEMBER = gql`
         endYear
         deleted
         approved
+        rejected
       }
     }
     userProfile(userInput: $userInput) {

@@ -31,3 +31,11 @@ export const APPROVE_MEMBER = gql`
     }
   }
 `;
+
+export const REJECT_MEMBER = gql`
+  mutation ApproveMember($memberInput: SimpleMemberInput!) {
+    approveMember(memberInput: $memberInput) {
+      _id
+    }
+  }
+`;
