@@ -33,8 +33,8 @@ export const APPROVE_MEMBER = gql`
 `;
 
 export const REJECT_MEMBER = gql`
-  mutation ApproveMember($memberInput: SimpleMemberInput!) {
-    approveMember(memberInput: $memberInput) {
+  mutation RejectMember($memberInput: SimpleMemberInput!) {
+    rejectMember(memberInput: $memberInput) {
       _id
     }
   }
