@@ -92,60 +92,85 @@ export default function MemberPositions({
     // if editing, show delete button
     ...(editable
       ? [
-          {
-            field: "action",
-            align: "center",
-            headerName: "",
-            width: 50,
-            renderCell: (p) => (
-              <IconButton onClick={() => onDelete(p)} size="small">
-                <Icon
-                  color="error.main"
-                  variant="delete-forever-outline"
-                  sx={{ height: 16, width: 16 }}
-                />
-              </IconButton>
-            ),
-          },
-        ]
-      : [
-          {
-            field: "approved",
-            headerName: "Status",
-            align: "center",
-            headerAlign: "center",
-            flex: 2,
-            renderCell: ({ value }) => (
-              <Tag
-                label={value ? "Approved" : "Pending"}
-                color={value ? "success" : "warning"}
+        {
+          field: "action",
+          align: "center",
+          headerName: "",
+          width: 50,
+          renderCell: (p) => (
+            <IconButton onClick={() => onDelete(p)} size="small">
+              <Icon
+                color="error.main"
+                variant="delete-forever-outline"
+                sx={{ height: 16, width: 16 }}
               />
-            ),
-          },
+            </IconButton>
+          ),
+        },
+      ]
+      : [
+        {
+          field: "approved",
+          headerName: "Status",
+          align: "center",
+          headerAlign: "center",
+          flex: 2,
+          valueGetter: ({ row }) => ({
+            approved: row.approved,
+            rejected: row.rejected,
+          }),
+          renderCell: ({ value: { approved, rejected } }) => (
+            <Tag
+              label={approved ? "Approved" : rejected ? "Rejected" : "Pending"}
+              color={approved ? "success" : rejected ? "error" : "warning"}
+            />
+          ),
+        },
 
-          // if not editing and if user is cc, show approve button
-          ...(user.role === "cc"
-            ? [
-                {
-                  field: "action",
-                  align: "center",
-                  headerName: "",
-                  width: 50,
-                  valueGetter: ({ row }) => ({
-                    approved: row.approved,
-                    rid: row.rid,
-                  }),
-                  renderCell: ({ value: { approved, rid } }) => (
-                    <ApproveButton
-                      approved={approved}
-                      rid={rid}
-                      member={member}
-                    />
-                  ),
-                },
-              ]
-            : []),
-        ]),
+        // if not editing and if user is cc, show approve button
+        ...(user.role === "cc"
+          ? [
+            {
+              field: "action",
+              align: "center",
+              headerName: "",
+              width: 50,
+              valueGetter: ({ row }) => ({
+                approved: row.approved,
+                rejected: row.rejected,
+                rid: row.rid,
+              }),
+              renderCell: ({ value: { approved, rejected, rid } }) => (
+                <ApproveButton
+                  approved={approved}
+                  rejected={rejected}
+                  rid={rid}
+                  member={member}
+                />
+              ),
+            },
+            {
+              field: "action",
+              align: "center",
+              headerName: "",
+              width: 50,
+              valueGetter: ({ row }) => ({
+                approved: row.approved,
+                rejected: row.rejected,
+                rid: row.rid,
+              }),
+              renderCell: ({ value: { approved, rejected, rid } }) => (
+                <RejectButton
+                  approved={approved}
+                  rejected={rejected}
+                  rid={rid}
+                  member={member}
+                />
+              ),
+            },
+          ]
+          : []),
+      ]),
   ];
 
   return (
@@ -182,7 +207,7 @@ export default function MemberPositions({
   );
 }
 
-function ApproveButton({ member, approved, rid }) {
+function ApproveButton({ member, approved, rejected, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
 
@@ -219,7 +244,7 @@ function ApproveButton({ member, approved, rid }) {
     }
   };
 
-  return approved ? null : (
+  return approved || rejected ? null : (
     <Tooltip arrow title="Approve">
       <IconButton
         disabled={loading}
@@ -244,20 +269,20 @@ function ApproveButton({ member, approved, rid }) {
   );
 }
 
-function RejectButton({ member, approved, rid }) {
+function RejectButton({ member, approved, rejected, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
 
   const [loading, setLoading] = useState(false);
 
-  const onApprove = async (rid) => {
+  const onReject = async (rid) => {
     const data = {
       cid: member.cid,
       uid: member.uid,
       rid: rid,
     };
 
-    let res = await fetch("/actions/members/approve", {
+    let res = await fetch("/actions/members/reject", {
       method: "POST",
       body: JSON.stringify({ memberInput: data }),
     });
@@ -266,8 +291,8 @@ function RejectButton({ member, approved, rid }) {
     if (res.ok) {
       // show success toast & refresh server
       triggerToast({
-        title: "Success!",
-        messages: ["Membership approved."],
+        title: "Success in Rejecting!",
+        messages: ["Membership rejected."],
         severity: "success",
       });
       setLoading(false);
@@ -281,22 +306,22 @@ function RejectButton({ member, approved, rid }) {
     }
   };
 
-  return approved ? null : (
-    <Tooltip arrow title="Approve">
+  return approved || rejected ? null : (
+    <Tooltip arrow title="Reject">
       <IconButton
         disabled={loading}
         onClick={async () => {
           setLoading(true);
-          await onApprove(rid);
+          await onReject(rid);
         }}
         size="small"
-        sx={{ border: 1, borderColor: "success.main" }}
+        sx={{ border: 1, borderColor: "error.main" }}
       >
         {loading ? (
-          <CircularProgress color="success" size={16} />
+          <CircularProgress color="error" size={16} />
         ) : (
           <Icon
-            color="success.main"
+            color="error.main"
             variant="done"
             sx={{ height: 16, width: 16 }}
           />
