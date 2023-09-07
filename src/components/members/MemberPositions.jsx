@@ -322,7 +322,7 @@ function RejectButton({ member, approved, rejected, rid }) {
         ) : (
           <Icon
             color="error.main"
-            variant="done"
+            variant="close"
             sx={{ height: 16, width: 16 }}
           />
         )}
