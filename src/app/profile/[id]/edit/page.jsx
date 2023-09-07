@@ -24,7 +24,7 @@ export default async function EditProfile({ params }) {
     }
   );
   const user = { ...userMeta, ...userProfile };
-  console.log(user);
+  // console.log(user);
 
   // if user is a club, redirect to club edit page
   if (user.role === "club") {

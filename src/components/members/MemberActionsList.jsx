@@ -13,7 +13,7 @@ export default function MemberActionsList({ member, user }) {
       setActions([EditMember, DeleteMember]);
       let i = 0;
       for (i in member.roles) {
-        if (member.roles[i].approved == false) {
+        if (member.roles[i].approved == false && member.roles[i].rejected == false) {
           setActions([ApproveAllMember, EditMember, DeleteMember]);
           break;
         }

@@ -168,7 +168,7 @@ export function ApproveEvent({ sx }) {
     );
 
   const approveEvent = async () => {
-    console.log("requested approvals:", SLC, SLO);
+    // console.log("requested approvals:", SLC, SLO);
     let res = await fetch("/actions/events/progress", {
       method: "POST",
       body: JSON.stringify({
