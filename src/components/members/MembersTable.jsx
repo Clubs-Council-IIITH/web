@@ -78,14 +78,16 @@ export default function MembersTable({ members, showClub = false }) {
               </Box>
               <Tooltip
                 arrow
-                title={role?.approved ? "Approved" : "Pending approval"}
+                title={role?.approved ? "Approved" : role?.rejected ? "Rejected" : "Pending approval"}
               >
                 <Icon
                   external
-                  color={role?.approved ? "success.main" : "warning.main"}
+                  color={role?.approved ? "success.main" : role?.rejected ? "error.main" : "warning.main"}
                   variant={
                     role?.approved
                       ? "eva:checkmark-outline"
+                      : role?.rejected
+                      ? "eva:close-outline"
                       : "eva:refresh-fill"
                   }
                 />
