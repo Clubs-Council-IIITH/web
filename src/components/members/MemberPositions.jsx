@@ -131,7 +131,7 @@ export default function MemberPositions({
         ...(user.role === "cc"
           ? [
             {
-              field: "action",
+              field: "actionApprove",
               align: "center",
               headerName: "",
               width: 50,
@@ -150,7 +150,7 @@ export default function MemberPositions({
               ),
             },
             {
-              field: "action",
+              field: "actionReject",
               align: "center",
               headerName: "",
               width: 50,
