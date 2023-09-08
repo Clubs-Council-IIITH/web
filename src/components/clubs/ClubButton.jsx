@@ -28,6 +28,9 @@ export default async function ClubButton({ clubid }) {
           width={18}
           height={18}
           mr={1}
+          style={{
+            border: '0.3px solid lightgray'
+          }}
         />
         <Typography variant="body2" color="text.primary">
           {club.name}

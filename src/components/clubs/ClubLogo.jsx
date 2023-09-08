@@ -13,7 +13,6 @@ export default function ClubLogo({
   logo,
   width,
   height,
-  style = {},
   ...rest
 }) {
   const [img, setImg] = useState(
@@ -34,7 +33,6 @@ export default function ClubLogo({
           height: "100%",
           objectFit: "cover",
           position: "absolute",
-          ...style,
         }}
         onError={() =>
           setImg(getPlaceholder({ seed: name, w: width, h: height }))
