@@ -571,7 +571,6 @@ function EventAudienceSelect({ control }) {
       const index = newValue.indexOf('internal');
       if (index > -1)
         newValue.splice(index, 1);
-
       field.onChange(newValue);
     } else if (!field.value.includes('internal') && newValue.includes('internal')) {
       field.onChange(['internal']);
