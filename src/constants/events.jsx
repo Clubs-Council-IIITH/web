@@ -7,6 +7,7 @@ export const audienceMap = {
   pg: "PG",
   stf: "Staff",
   fac: "Faculty",
+  internal: "Internal",
 };
 
 export const audienceColorMap = {
@@ -17,6 +18,7 @@ export const audienceColorMap = {
   pg: "primary",
   stf: "common.grey",
   fac: "common.grey",
+  internal: "secondary",
 };
 
 // event venue

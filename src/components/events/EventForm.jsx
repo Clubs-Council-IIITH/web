@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useController } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 
@@ -561,27 +561,39 @@ function EventDatetimeInput({ control, watch }) {
 
 // event audience selector
 function EventAudienceSelect({ control }) {
+  const { field } = useController({
+    name: 'audience',
+    control,
+  });
+
+  const handleChange = (event, newValue) => {
+    if (field.value.includes('internal')) {
+      const index = newValue.indexOf('internal');
+      if (index > -1)
+        newValue.splice(index, 1);
+
+      field.onChange(newValue);
+    } else if (!field.value.includes('internal') && newValue.includes('internal')) {
+      field.onChange(['internal']);
+    } else {
+      field.onChange(newValue);
+    }
+  }
   return (
-    <Controller
-      name="audience"
-      control={control}
-      render={({ field }) => (
-        <Box>
-          <InputLabel shrink>Audience</InputLabel>
-          <ToggleButtonGroup
-            {...field}
-            color="primary"
-            onChange={(_, v) => field.onChange(v)}
-          >
-            {Object.keys(audienceMap).map((key) => (
-              <ToggleButton disableRipple key={key} value={key}>
-                {audienceMap[key]}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-        </Box>
-      )}
-    />
+    <Box>
+      <InputLabel shrink>Audience</InputLabel>
+      <ToggleButtonGroup
+        {...field}
+        color="primary"
+        onChange={(u, v) => handleChange(u, v)}
+      >
+        {Object.keys(audienceMap).map((key) => (
+          <ToggleButton disableRipple key={key} value={key}>
+            {audienceMap[key]}
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
+    </Box>
   );
 }
 
