@@ -38,7 +38,7 @@ export default async function UserDetails({ user }) {
             </Box>
           ) : null}
 
-          {currentUser?.role === "cc" ||
+          {["cc", "slo", "slc"].includes(currentUser?.role) ||
           (currentUser?.uid === user?.uid && user?.role !== "club") ? (
             <Box>
               <Typography
