@@ -234,14 +234,14 @@ export default function EventForm({
             <Grid container item spacing={2}>
               {user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <EventClubSelect control={control} />
+                  <EventClubSelect control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"} />
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <EventNameInput control={control} />
+                <EventNameInput control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"} />
               </Grid>
               <Grid item xs={12}>
-                <EventDatetimeInput control={control} watch={watch} />
+                <EventDatetimeInput control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"}/>
               </Grid>
               <Grid item xs={12}>
                 <EventAudienceSelect control={control} />
@@ -269,7 +269,7 @@ export default function EventForm({
             </Typography>
             <Grid container item spacing={2}>
               <Grid item xs={12}>
-                <EventBudgetTable control={control} watch={watch} />
+                <EventBudgetTable control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"}/>
               </Grid>
             </Grid>
           </Grid>
@@ -291,6 +291,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   resetField={resetField}
+                  disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"}
                 />
               </Grid>
             </Grid>
@@ -342,7 +343,7 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              {user?.role === "cc" ?
+              {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != "incomplete" ?
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -365,7 +366,7 @@ export default function EventForm({
                 </LoadingButton>
               }
             </Grid>
-            {user?.role === "cc" ? null :
+            {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != "incomplete" ? null :
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
@@ -391,7 +392,7 @@ export default function EventForm({
 }
 
 // select club to which event belongs to
-function EventClubSelect({ control }) {
+function EventClubSelect({ control, disabled = true }) {
   const { triggerToast } = useToast();
 
   // fetch list of clubs
@@ -420,7 +421,13 @@ function EventClubSelect({ control }) {
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
           <InputLabel id="clubid">Club *</InputLabel>
-          <Select labelId="clubid" label="clubid *" fullWidth {...field}>
+          <Select
+            labelId="clubid"
+            label="clubid *"
+            fullWidth
+            disabled={disabled}
+            {...field}
+          >
             {clubs
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))
@@ -438,7 +445,7 @@ function EventClubSelect({ control }) {
 }
 
 // event name input
-function EventNameInput({ control }) {
+function EventNameInput({ control, disabled = true }) {
   return (
     <Controller
       name="name"
@@ -463,6 +470,7 @@ function EventNameInput({ control }) {
           variant="outlined"
           fullWidth
           required
+          disabled={disabled}
         />
       )}
     />
@@ -470,7 +478,7 @@ function EventNameInput({ control }) {
 }
 
 // event datetime range input
-function EventDatetimeInput({ control, watch }) {
+function EventDatetimeInput({ control, watch, disabled = true }) {
   const startDateInput = watch("datetimeperiod.0");
   const [error, setError] = useState(null);
 
@@ -516,6 +524,7 @@ function EventDatetimeInput({ control, watch }) {
               }}
               sx={{ width: "100%" }}
               value={value ? dayjs(value) : value}
+              disabled={disabled}
               {...rest}
             />
           )}
@@ -550,6 +559,7 @@ function EventDatetimeInput({ control, watch }) {
               }}
               sx={{ width: "100%" }}
               value={value ? dayjs(value) : value}
+              disabled={disabled}
               {...rest}
             />
           )}
@@ -651,7 +661,7 @@ function EventLinkInput({ control }) {
 }
 
 // conditional event venue selector
-function EventVenueInput({ control, watch, resetField }) {
+function EventVenueInput({ control, watch, resetField, disabled = true }) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
   const startDateInput = watch("datetimeperiod.0");
@@ -669,7 +679,11 @@ function EventVenueInput({ control, watch, resetField }) {
           render={({ field }) => (
             <Box>
               <InputLabel shrink>Mode</InputLabel>
-              <ToggleButtonGroup {...field} exclusive color="primary">
+              <ToggleButtonGroup {...field}
+                exclusive
+                color="primary"
+                disabled={disabled}
+              >
                 <ToggleButton disableRipple key={0} value="online">
                   Online
                 </ToggleButton>
@@ -694,6 +708,7 @@ function EventVenueInput({ control, watch, resetField }) {
               control={control}
               startDateInput={startDateInput}
               endDateInput={endDateInput}
+              disabled={disabled}
             />
           ) : (
             <FormHelperText>
@@ -728,6 +743,7 @@ function EventVenueInput({ control, watch, resetField }) {
                   InputProps={{
                     inputProps: { min: 1 },
                   }}
+                  disabled={false}
                   {...field}
                 />
               )}
@@ -748,6 +764,7 @@ function EventVenueInput({ control, watch, resetField }) {
                   rows={4}
                   fullWidth
                   multiline
+                  disabled={false}
                 />
               )}
             />
@@ -767,6 +784,7 @@ function EventVenueInput({ control, watch, resetField }) {
                   rows={4}
                   fullWidth
                   multiline
+                  disabled={false}
                 />
               )}
             />
@@ -778,7 +796,7 @@ function EventVenueInput({ control, watch, resetField }) {
 }
 
 // select location from available rooms
-function EventLocationInput({ control, startDateInput, endDateInput }) {
+function EventLocationInput({ control, startDateInput, endDateInput, disabled = true }) {
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
@@ -816,7 +834,7 @@ function EventLocationInput({ control, startDateInput, endDateInput }) {
             multiple
             id="location"
             labelId="locationSelect"
-            disabled={!(startDateInput && endDateInput)}
+            disabled={!(startDateInput && endDateInput) || disabled}
             input={<OutlinedInput label="Location" />}
             renderValue={(selected) => (
               <Box
@@ -849,13 +867,13 @@ function EventLocationInput({ control, startDateInput, endDateInput }) {
 }
 
 // input event budget as a table
-function EventBudgetTable({ control, watch }) {
+function EventBudgetTable({ control, watch, disabled = true }) {
   return (
     <Controller
       name="budget"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <EventBudget editable rows={value} setRows={onChange} />
+        <EventBudget editable={!disabled} rows={value} setRows={onChange} />
       )}
     />
   );

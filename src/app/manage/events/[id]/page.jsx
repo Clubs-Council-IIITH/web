@@ -153,7 +153,7 @@ function getActions(event, user) {
     if (event?.status?.state === "incomplete")
       return [SubmitEvent, EditEvent, DeleteEvent];
     else if (upcoming) return [EditEvent, DeleteEvent];
-    else return [];
+    else return [EditEvent];
   }
 
   /*

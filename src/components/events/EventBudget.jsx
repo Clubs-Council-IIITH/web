@@ -7,7 +7,7 @@ import Icon from "components/Icon";
 import { fCurrency } from "utils/formatCurrency";
 
 export default function EventBudget({
-  editable,
+  editable = false,
   rows = [],
   setRows = console.log,
 }) {
