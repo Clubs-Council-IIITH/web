@@ -234,14 +234,14 @@ export default function EventForm({
             <Grid container item spacing={2}>
               {user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <EventClubSelect control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"} />
+                  <EventClubSelect control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <EventNameInput control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"} />
+                <EventNameInput control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
               </Grid>
               <Grid item xs={12}>
-                <EventDatetimeInput control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"}/>
+                <EventDatetimeInput control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
               </Grid>
               <Grid item xs={12}>
                 <EventAudienceSelect control={control} />
@@ -269,7 +269,7 @@ export default function EventForm({
             </Typography>
             <Grid container item spacing={2}>
               <Grid item xs={12}>
-                <EventBudgetTable control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"}/>
+                <EventBudgetTable control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
               </Grid>
             </Grid>
           </Grid>
@@ -291,7 +291,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   resetField={resetField}
-                  disabled={user?.role != "cc" && defaultValues?.status?.state != "incomplete"}
+                  disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"}
                 />
               </Grid>
             </Grid>
@@ -343,7 +343,7 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != "incomplete" ?
+              {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete" ?
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -366,7 +366,7 @@ export default function EventForm({
                 </LoadingButton>
               }
             </Grid>
-            {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != "incomplete" ? null :
+            {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete" ? null :
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
