@@ -5,6 +5,7 @@ export const GET_RECENT_EVENTS = gql`
     recentEvents {
       _id
       name
+      code
       clubid
       datetimeperiod
       poster
@@ -17,6 +18,7 @@ export const GET_CLUB_EVENTS = gql`
     events(clubid: $clubid) {
       _id
       name
+      code
       clubid
       datetimeperiod
       poster
@@ -35,6 +37,7 @@ export const GET_APPROVED_EVENTS = gql`
     approvedEvents(clubid: $clubid) {
       _id
       name
+      code
       clubid
       datetimeperiod
       poster
@@ -50,6 +53,7 @@ export const GET_PENDING_EVENTS = gql`
     pendingEvents(clubid: $clubid) {
       _id
       name
+      code
       clubid
       datetimeperiod
       status {
@@ -71,6 +75,7 @@ export const GET_ALL_EVENTS = gql`
     events(clubid: $clubid) {
       _id
       name
+      code
       clubid
       datetimeperiod
       status {
@@ -92,6 +97,7 @@ export const GET_EVENT = gql`
     event(eventid: $eventid) {
       _id
       name
+      code
       clubid
       location
       audience
@@ -108,6 +114,7 @@ export const GET_FULL_EVENT = gql`
   query Event($eventid: String!) {
     event(eventid: $eventid) {
       _id
+      code
       additional
       audience
       budget {

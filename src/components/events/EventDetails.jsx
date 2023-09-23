@@ -13,7 +13,7 @@ import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
-export default function EventDetails({ event }) {
+export default function EventDetails({ event, showCode = false }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
@@ -51,8 +51,17 @@ export default function EventDetails({ event }) {
             </Typography>
           </Box>
 
-          <Typography variant="h3" paragraph mt={1}>
+          <Typography variant="h3" paragraph mt={1} mb={3}>
             {event.name}
+            {showCode ? (
+              <Typography
+                color="text.disabled"
+                variant="subtitle2"
+                fontFamily="monospace"
+              >
+                #{event.code}
+              </Typography>
+            ) : null}
           </Typography>
 
           <ClubButton clubid={event.clubid} />

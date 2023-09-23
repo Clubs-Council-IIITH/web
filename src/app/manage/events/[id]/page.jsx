@@ -57,7 +57,7 @@ export default async function ManageEvent({ params }) {
         ]}
         right={getActions(event, { ...userMeta, ...userProfile })}
       />
-      <EventDetails event={event} />
+      <EventDetails showCode event={event} />
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
       <Grid container spacing={6}>
         <Grid item xs={12} lg={7}>

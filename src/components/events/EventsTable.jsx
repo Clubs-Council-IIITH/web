@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
+import { Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import { ISOtoHuman } from "utils/formatTime";
@@ -12,6 +13,16 @@ import Icon from "components/Icon";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 const columns = [
+  {
+    field: "code",
+    headerName: "",
+    flex: 2,
+    renderCell: ({ value }) => (
+      <Typography variant="body2" color="text.disabled">
+        {value}
+      </Typography>
+    ),
+  },
   {
     field: "name",
     headerName: "Name",
@@ -48,15 +59,15 @@ const columns = [
           color: !value.approved
             ? "warning.main"
             : !value.requested
-              ? "secondary.main"
-              : "success.main",
+            ? "secondary.main"
+            : "success.main",
         }}
         variant={
           !value.approved
             ? "refresh-rounded"
             : !value.requested
-              ? "remove-rounded"
-              : "check"
+            ? "remove-rounded"
+            : "check"
         }
       />
     ),
@@ -77,15 +88,15 @@ const columns = [
           color: !value.approved
             ? "warning.main"
             : !value.requested
-              ? "secondary.main"
-              : "success.main",
+            ? "secondary.main"
+            : "success.main",
         }}
         variant={
           !value.approved
             ? "refresh-rounded"
             : !value.requested
-              ? "remove-rounded"
-              : "check"
+            ? "remove-rounded"
+            : "check"
         }
       />
     ),
