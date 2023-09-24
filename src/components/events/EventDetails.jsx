@@ -51,18 +51,22 @@ export default function EventDetails({ event, showCode = false }) {
             </Typography>
           </Box>
 
-          <Typography variant="h3" paragraph mt={1} mb={3}>
+          <Typography variant="h3" paragraph mt={1} mb={0}>
             {event.name}
-            {showCode ? (
-              <Typography
-                color="text.disabled"
-                variant="subtitle2"
-                fontFamily="monospace"
-              >
-                #{event.code}
-              </Typography>
-            ) : null}
           </Typography>
+          {showCode ? (
+            <Typography
+              color="text.disabled"
+              variant="subtitle2"
+              fontFamily="monospace"
+              mt={0}
+              mb={3}
+            >
+              #{event.code}
+            </Typography>
+          ) : null}
+
+          <Box my={1} />
 
           <ClubButton clubid={event.clubid} />
 

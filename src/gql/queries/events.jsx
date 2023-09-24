@@ -1,5 +1,11 @@
 import gql from "graphql-tag";
 
+export const GET_EVENT_ID_FROM_CODE = gql`
+  query Query($code: String!) {
+    eventid(code: $code)
+  }
+`;
+
 export const GET_RECENT_EVENTS = gql`
   query RecentEvents {
     recentEvents {
