@@ -1,4 +1,4 @@
-import { Box, Stack, Divider } from "@mui/material";
+import { Box, Grid, Divider } from "@mui/material";
 
 export default function ActionPalette({
   left = [],
@@ -7,21 +7,49 @@ export default function ActionPalette({
   rightProps = [],
 }) {
   return (
-    <>
-      <Stack direction="row" alignItems="center">
-        <Stack direction="row">
+    <Box width="100%">
+      <Grid
+        container
+        direction={{ xs: "column-reverse", md: "row" }}
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={2}
+      >
+        <Grid
+          item
+          container
+          xs={12}
+          md={6}
+          spacing={1}
+          justifyContent={{ xs: "center", md: "flex-start" }}
+          alignItems="center"
+          my={0.5}
+        >
           {left.map((Component, key) => (
-            <Component sx={{ mr: 1 }} {...leftProps[key]} key={key} />
+            <Grid item xs="auto">
+              <Component {...leftProps[key]} key={key} />
+            </Grid>
           ))}
-        </Stack>
-        <Box sx={{ flexGrow: 1 }} />
-        <Stack direction="row">
+        </Grid>
+
+        <Grid
+          item
+          container
+          xs={12}
+          md={6}
+          spacing={1}
+          justifyContent={{ xs: "center", md: "flex-end" }}
+          alignItems="center"
+          my={0.5}
+        >
           {right.map((Component, key) => (
-            <Component sx={{ ml: 1 }} {...rightProps[key]} key={key} />
+            <Grid item>
+              <Component {...rightProps[key]} key={key} />
+            </Grid>
           ))}
-        </Stack>
-      </Stack>
+        </Grid>
+      </Grid>
       <Divider sx={{ borderStyle: "dashed", mt: 2, mb: 2 }} />
-    </>
+    </Box>
   );
 }
