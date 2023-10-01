@@ -39,6 +39,7 @@ export const locationMap = {
   vsh1: "Vindhya SH1",
   vsh2: "Vindhya SH2",
   amphi: "Amphitheatre",
+  warehouse: "Bakul Warehouse",
   cieg: "CIE Gaming",
   sarg: "Saranga Hall",
   h105: "Himalaya 105",
