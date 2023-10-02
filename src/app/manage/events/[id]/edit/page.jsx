@@ -28,6 +28,7 @@ function transformEvent(event) {
     // default fallbacks for text fields
     additional: event?.additional || "",
     equipment: event?.equipment || "",
+    poc: event?.poc,
   };
 }
 

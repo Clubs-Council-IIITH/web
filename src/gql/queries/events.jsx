@@ -120,6 +120,7 @@ export const GET_FULL_EVENT = gql`
   query Event($eventid: String!) {
     event(eventid: $eventid) {
       _id
+      poc
       code
       additional
       audience

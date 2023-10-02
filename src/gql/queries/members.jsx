@@ -19,6 +19,25 @@ export const GET_MEMBERS = gql`
   }
 `;
 
+export const GET_CURRENT_MEMBERS = gql`
+  query CurrentMembers($clubInput: SimpleClubInput!) {
+    currentMembers(clubInput: $clubInput) {
+      _id
+      cid
+      uid
+      poc
+      roles {
+        name
+        startYear
+        endYear
+        approved
+        rejected
+        deleted
+      }
+    }
+  }
+`;
+
 export const GET_PENDING_MEMBERS = gql`
   query PendingMembers {
     pendingMembers {

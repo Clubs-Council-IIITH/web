@@ -21,6 +21,7 @@ import {
 } from "components/events/EventStates";
 
 import { locationLabel } from "utils/formatEvent";
+import MemberListItem from "components/members/MemberListItem";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
@@ -59,6 +60,11 @@ export default async function ManageEvent({ params }) {
       />
       <EventDetails showCode event={event} />
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+        Point of Contact
+      </Typography>
+      <MemberListItem uid={event?.poc} />
+      <Box my={3} />
       <Grid container spacing={6}>
         <Grid item xs={12} lg={7}>
           <Typography

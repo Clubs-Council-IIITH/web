@@ -32,6 +32,7 @@ import {
 import FileUpload from "components/FileUpload";
 import EventBudget from "./EventBudget";
 import ConfirmDialog from "components/ConfirmDialog";
+import MemberListItem from "components/members/MemberListItem";
 
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
@@ -178,6 +179,7 @@ export default function EventForm({
       population: parseInt(formData.population),
       additional: formData.additional,
       equipment: formData.equipment,
+      poc: formData.poc,
     };
 
     // set club ID for event based on user role
@@ -192,8 +194,8 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadFile(formData.poster[0], "image")
-          : null;
+        ? await uploadFile(formData.poster[0], "image")
+        : null;
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
@@ -234,14 +236,36 @@ export default function EventForm({
             <Grid container item spacing={2}>
               {user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <EventClubSelect control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
+                  <EventClubSelect
+                    control={control}
+                    disabled={
+                      user?.role != "cc" &&
+                      defaultValues?.status?.state != undefined &&
+                      defaultValues?.status?.state != "incomplete"
+                    }
+                  />
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <EventNameInput control={control} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
+                <EventNameInput
+                  control={control}
+                  disabled={
+                    user?.role != "cc" &&
+                    defaultValues?.status?.state != undefined &&
+                    defaultValues?.status?.state != "incomplete"
+                  }
+                />
               </Grid>
               <Grid item xs={12}>
-                <EventDatetimeInput control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
+                <EventDatetimeInput
+                  control={control}
+                  watch={watch}
+                  disabled={
+                    user?.role != "cc" &&
+                    defaultValues?.status?.state != undefined &&
+                    defaultValues?.status?.state != "incomplete"
+                  }
+                />
               </Grid>
               <Grid item xs={12}>
                 <EventAudienceSelect control={control} />
@@ -249,6 +273,11 @@ export default function EventForm({
               <Grid item xs={12}>
                 <EventDescriptionInput control={control} />
               </Grid>
+              {user?.role === "club" ? (
+                <Grid item xs={12}>
+                  <EventPOC control={control} cid={user?.uid} />
+                </Grid>
+              ) : null}
               {/*
               <Grid item xs={12}>
                 <EventLinkInput control={control} />
@@ -269,7 +298,15 @@ export default function EventForm({
             </Typography>
             <Grid container item spacing={2}>
               <Grid item xs={12}>
-                <EventBudgetTable control={control} watch={watch} disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"} />
+                <EventBudgetTable
+                  control={control}
+                  watch={watch}
+                  disabled={
+                    user?.role != "cc" &&
+                    defaultValues?.status?.state != undefined &&
+                    defaultValues?.status?.state != "incomplete"
+                  }
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -291,7 +328,11 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   resetField={resetField}
-                  disabled={user?.role != "cc" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete"}
+                  disabled={
+                    user?.role != "cc" &&
+                    defaultValues?.status?.state != undefined &&
+                    defaultValues?.status?.state != "incomplete"
+                  }
                 />
               </Grid>
             </Grid>
@@ -343,7 +384,10 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete" ?
+              {user?.role === "cc" ||
+              (user?.role === "club" &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete") ? (
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -354,7 +398,8 @@ export default function EventForm({
                 >
                   Save
                 </LoadingButton>
-                : <LoadingButton
+              ) : (
+                <LoadingButton
                   loading={loading}
                   type="submit"
                   size="large"
@@ -364,9 +409,12 @@ export default function EventForm({
                 >
                   Save as draft
                 </LoadingButton>
-              }
+              )}
             </Grid>
-            {user?.role === "cc" || user?.role === "club" && defaultValues?.status?.state != undefined && defaultValues?.status?.state != "incomplete" ? null :
+            {user?.role === "cc" ||
+            (user?.role === "club" &&
+              defaultValues?.status?.state != undefined &&
+              defaultValues?.status?.state != "incomplete") ? null : (
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
@@ -383,7 +431,7 @@ export default function EventForm({
                   Save & Submit
                 </LoadingButton>
               </Grid>
-            }
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -572,22 +620,24 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
 // event audience selector
 function EventAudienceSelect({ control }) {
   const { field } = useController({
-    name: 'audience',
+    name: "audience",
     control,
   });
 
   const handleChange = (event, newValue) => {
-    if (field.value.includes('internal')) {
-      const index = newValue.indexOf('internal');
-      if (index > -1)
-        newValue.splice(index, 1);
+    if (field.value.includes("internal")) {
+      const index = newValue.indexOf("internal");
+      if (index > -1) newValue.splice(index, 1);
       field.onChange(newValue);
-    } else if (!field.value.includes('internal') && newValue.includes('internal')) {
-      field.onChange(['internal']);
+    } else if (
+      !field.value.includes("internal") &&
+      newValue.includes("internal")
+    ) {
+      field.onChange(["internal"]);
     } else {
       field.onChange(newValue);
     }
-  }
+  };
   return (
     <Box>
       <InputLabel shrink>Audience</InputLabel>
@@ -679,7 +729,8 @@ function EventVenueInput({ control, watch, resetField, disabled = true }) {
           render={({ field }) => (
             <Box>
               <InputLabel shrink>Mode</InputLabel>
-              <ToggleButtonGroup {...field}
+              <ToggleButtonGroup
+                {...field}
                 exclusive
                 color="primary"
                 disabled={disabled}
@@ -796,7 +847,12 @@ function EventVenueInput({ control, watch, resetField, disabled = true }) {
 }
 
 // select location from available rooms
-function EventLocationInput({ control, startDateInput, endDateInput, disabled = true }) {
+function EventLocationInput({
+  control,
+  startDateInput,
+  endDateInput,
+  disabled = true,
+}) {
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
@@ -874,6 +930,56 @@ function EventBudgetTable({ control, watch, disabled = true }) {
       control={control}
       render={({ field: { value, onChange } }) => (
         <EventBudget editable={!disabled} rows={value} setRows={onChange} />
+      )}
+    />
+  );
+}
+
+// input event POC
+function EventPOC({ control, cid }) {
+  const { triggerToast } = useToast();
+
+  // fetch list of current members
+  const [members, setMembers] = useState([]);
+  useEffect(() => {
+    (async () => {
+      let res = await fetch("/actions/members/current", {
+        method: "POST",
+        body: JSON.stringify({ clubInput: { cid } }),
+      });
+      res = await res.json();
+      if (!res.ok) {
+        triggerToast({
+          title: "Unable to fetch members",
+          messages: res.error.messages,
+          severity: "error",
+        });
+      } else {
+        setMembers(res.data);
+      }
+    })();
+  }, []);
+
+  useEffect(() => console.log(members), [members]);
+
+  return (
+    <Controller
+      name="poc"
+      disabled={members.length !== 0}
+      control={control}
+      rules={{ required: "Select a member!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
+          <InputLabel id="poc">Point of Contact *</InputLabel>
+          <Select labelId="poc" label="Point of Contact *" fullWidth {...field}>
+            {members?.slice()?.map((member) => (
+              <MenuItem key={member._id} value={member.uid}>
+                <MemberListItem {...member} />
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
       )}
     />
   );

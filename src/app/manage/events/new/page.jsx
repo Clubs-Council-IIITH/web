@@ -22,6 +22,7 @@ export default function NewEvent() {
     population: 0,
     additional: "",
     equipment: "",
+    poc: "",
   };
 
   return (
