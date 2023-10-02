@@ -149,9 +149,12 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               Details
             </Typography>
             <Grid container item spacing={2}>
-              <Grid item xs={12}>
-                <ClubCodeInput control={control} />
-              </Grid>
+              {/* show club code input only when creating a new club */}
+              {!defaultValues.cid ? (
+                <Grid item xs={12}>
+                  <ClubCodeInput control={control} />
+                </Grid>
+              ) : null}
               <Grid item xs={12}>
                 <ClubNameInput control={control} />
               </Grid>
@@ -299,7 +302,8 @@ function ClubCodeInput({ control }) {
           autoComplete="off"
           error={invalid}
           helperText={
-            error?.message || "A custom, short code to identify this club."
+            error?.message ||
+            "A custom, short code to identify this club. NOTE: This can NOT be changed."
           }
           variant="outlined"
           fullWidth
