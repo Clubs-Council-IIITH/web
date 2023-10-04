@@ -16,7 +16,7 @@ const columns = [
   {
     field: "code",
     headerName: "",
-    flex: 2,
+    flex: 3,
     renderCell: ({ value }) => (
       <Typography variant="body2" color="text.disabled">
         {value}
