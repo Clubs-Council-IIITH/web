@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getClient } from "gql/client";
-import { GET_CURRENT_MEMBERS } from "gql/queries/members";
+import { GET_MEMBERS } from "gql/queries/members";
 
 export async function POST(request) {
   const response = { ok: false, data: null, error: null };
@@ -10,7 +10,7 @@ export async function POST(request) {
   const {
     error,
     data: { currentMembers },
-  } = await getClient().query(GET_CURRENT_MEMBERS, { clubInput });
+  } = await getClient().query(GET_MEMBERS, { clubInput });
   if (error) {
     response.error = {
       title: error.name,
