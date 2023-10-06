@@ -9,7 +9,7 @@ export async function POST(request) {
 
   const {
     error,
-    data: { currentMembers },
+    data: { members },
   } = await getClient().query(GET_MEMBERS, { clubInput });
   if (error) {
     response.error = {
@@ -18,7 +18,7 @@ export async function POST(request) {
     };
   } else {
     response.ok = true;
-    response.data = [...currentMembers];
+    response.data = [...members];
   }
 
   return NextResponse.json(response);
