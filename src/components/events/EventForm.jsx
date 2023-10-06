@@ -333,6 +333,7 @@ export default function EventForm({
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
+                  eventid={defaultValues?._id}
                 />
               </Grid>
             </Grid>
@@ -711,7 +712,7 @@ function EventLinkInput({ control }) {
 }
 
 // conditional event venue selector
-function EventVenueInput({ control, watch, resetField, disabled = true }) {
+function EventVenueInput({ control, watch, resetField, disabled = true, eventid=null }) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
   const startDateInput = watch("datetimeperiod.0");
@@ -760,6 +761,7 @@ function EventVenueInput({ control, watch, resetField, disabled = true }) {
               startDateInput={startDateInput}
               endDateInput={endDateInput}
               disabled={disabled}
+              eventid={eventid}
             />
           ) : (
             <FormHelperText>
@@ -852,6 +854,7 @@ function EventLocationInput({
   startDateInput,
   endDateInput,
   disabled = true,
+  eventid = null,
 }) {
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
@@ -863,6 +866,7 @@ function EventLocationInput({
         body: JSON.stringify({
           startDate: new Date(startDateInput).toISOString(),
           endDate: new Date(endDateInput).toISOString(),
+          eventid: eventid,
         }),
       });
       res = await res.json();
