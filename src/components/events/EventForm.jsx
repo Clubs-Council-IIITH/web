@@ -277,6 +277,10 @@ export default function EventForm({
                 <Grid item xs={12}>
                   <EventPOC control={control} cid={user?.uid} />
                 </Grid>
+              ) : user?.role === "cc" ? (
+                <Grid item xs={12}>
+                  <EventPOC control={control} cid={watch("clubid")} />
+                </Grid>
               ) : null}
               {/*
               <Grid item xs={12}>
@@ -962,7 +966,7 @@ function EventPOC({ control, cid }) {
         setMembers(res.data);
       }
     })();
-  }, []);
+  }, [cid]);
 
   useEffect(() => console.log(members), [members]);
 
