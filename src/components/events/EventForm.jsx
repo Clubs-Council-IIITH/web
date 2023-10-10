@@ -1,6 +1,6 @@
 "use client";
 
-import dayjs from "dayjs";
+import dayjs, { isDayjs } from "dayjs";
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,8 @@ import {
   Button,
   Chip,
   Grid,
+  Fade,
+  CircularProgress,
   TextField,
   Typography,
   ToggleButtonGroup,
@@ -194,8 +196,8 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-        ? await uploadFile(formData.poster[0], "image")
-        : null;
+          ? await uploadFile(formData.poster[0], "image")
+          : null;
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
@@ -390,9 +392,9 @@ export default function EventForm({
             </Grid>
             <Grid item xs={6}>
               {user?.role === "cc" ||
-              (user?.role === "club" &&
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete") ? (
+                (user?.role === "club" &&
+                  defaultValues?.status?.state != undefined &&
+                  defaultValues?.status?.state != "incomplete") ? (
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -417,9 +419,9 @@ export default function EventForm({
               )}
             </Grid>
             {user?.role === "cc" ||
-            (user?.role === "club" &&
-              defaultValues?.status?.state != undefined &&
-              defaultValues?.status?.state != "incomplete") ? null : (
+              (user?.role === "club" &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete") ? null : (
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
@@ -576,7 +578,7 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              value={value ? dayjs(value) : value}
+              value={value instanceof Date && !isDayjs(value) ? dayjs(value) : value}
               disabled={disabled}
               {...rest}
             />
@@ -596,8 +598,8 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
           }) => (
             <DateTimePicker
               label="Ends *"
-              disabled={!startDateInput}
-              minDate={startDateInput}
+              disabled={!startDateInput || disabled}
+              minDate={startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
@@ -611,8 +613,7 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              value={value ? dayjs(value) : value}
-              disabled={disabled}
+              value={value instanceof Date && !isDayjs(value) ? dayjs(value) : value}
               {...rest}
             />
           )}
@@ -716,7 +717,7 @@ function EventLinkInput({ control }) {
 }
 
 // conditional event venue selector
-function EventVenueInput({ control, watch, resetField, disabled = true, eventid=null }) {
+function EventVenueInput({ control, watch, resetField, disabled = true, eventid = null }) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
   const startDateInput = watch("datetimeperiod.0");
@@ -968,24 +969,32 @@ function EventPOC({ control, cid }) {
     })();
   }, [cid]);
 
-  useEffect(() => console.log(members), [members]);
+  // useEffect(() => console.log(members), [members]);
 
   return (
     <Controller
       name="poc"
-      disabled={members.length !== 0}
+      // disabled={members.length !== 0}
       control={control}
       rules={{ required: "Select a member!" }}
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
           <InputLabel id="poc">Point of Contact *</InputLabel>
-          <Select labelId="poc" label="Point of Contact *" fullWidth {...field}>
-            {members?.slice()?.map((member) => (
-              <MenuItem key={member._id} value={member.uid}>
-                <MemberListItem {...member} />
-              </MenuItem>
-            ))}
-          </Select>
+          {members.length === 0 ? (
+            <Box py={25} width="100%" display="flex" justifyContent="center">
+              <Fade in>
+                <CircularProgress color="primary" />
+              </Fade>
+            </Box>
+          ) : (
+            <Select labelId="poc" label="Point of Contact *" fullWidth {...field}>
+              {members?.slice()?.map((member) => (
+                <MenuItem key={member._id} value={member.uid}>
+                  <MemberListItem {...member} />
+                </MenuItem>
+              ))}
+            </Select>
+          )}
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
       )}
