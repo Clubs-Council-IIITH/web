@@ -11,7 +11,7 @@ export default function ImageModal({ images, id = null }) {
 
   return (
     <Modal
-      open={id}
+      open={id !== null}
       onClose={() => router.replace(pathname, undefined, { shallow: true })}
       sx={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
