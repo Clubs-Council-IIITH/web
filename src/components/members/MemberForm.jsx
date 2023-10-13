@@ -117,6 +117,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 
     // show error toast if uid is empty
     if (!data.uid) {
+      setLoading(false);
       return triggerToast({
         title: "Error!",
         messages: [
