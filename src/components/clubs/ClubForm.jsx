@@ -16,8 +16,11 @@ import {
   Typography,
   InputAdornment,
   FormControl,
+  FormGroup,
+  FormControlLabel,
   InputLabel,
   Select,
+  Switch,
   MenuItem,
 } from "@mui/material";
 
@@ -33,7 +36,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
 
-  const { control, handleSubmit } = useForm({ defaultValues });
+  const { control, handleSubmit, watch } = useForm({ defaultValues });
   const { triggerToast } = useToast();
 
   // different form submission handlers
@@ -102,6 +105,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       category: formData.category,
       tagline: formData.tagline === "" ? null : formData.tagline,
       description: formData.description,
+      studentBody: formData.studentBody,
       socials: {
         website: formData.socials.website,
         instagram: formData.socials.instagram,
@@ -121,14 +125,17 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       typeof formData.logo === "string"
         ? formData.logo
         : Array.isArray(formData.logo) && formData.logo.length > 0
-        ? await uploadFile(formData.logo[0], "image")
-        : null;
+          ? await uploadFile(formData.logo[0], "image")
+          : null;
     data.banner =
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-        ? await uploadFile(formData.banner[0], "image")
-        : null;
+          ? await uploadFile(formData.banner[0], "image")
+          : null;
+
+    if (data.category != "other")
+      data.studentBody = false;
 
     // mutate
     await submitHandlers[action](data);
@@ -164,6 +171,13 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               <Grid item xs={12}>
                 <ClubCategorySelect control={control} />
               </Grid>
+              {
+                watch("category") == "other" ?
+                  <Grid item xs={12}>
+                    <StudentBodySelect control={control} disabled={watch("category") != "other"} />
+                  </Grid>
+                  : null
+              }
               <Grid item xs={12}>
                 <ClubTaglineInput control={control} />
               </Grid>
@@ -383,6 +397,28 @@ function ClubCategorySelect({ control }) {
             <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>
+      )}
+    />
+  );
+}
+
+// student body select
+function StudentBodySelect({ control, disabled }) {
+  return (
+    <Controller
+      name="studentBody"
+      control={control}
+      render={({ field }) => (
+        <FormGroup row>
+          <FormControlLabel
+            value="left"
+            control={
+              <Switch color="primary" checked={field.value} {...field} disabled={disabled} />
+            }
+            label="Point of Contact"
+            labelPlacement="left"
+          />
+        </FormGroup>
       )}
     />
   );
