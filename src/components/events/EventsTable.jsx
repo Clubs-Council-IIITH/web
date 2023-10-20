@@ -56,18 +56,18 @@ const columns = [
     renderCell: ({ value }) => (
       <Icon
         sx={{
-          color: !value.approved
-            ? "warning.main"
-            : !value.requested
+          color: !value.requested
             ? "secondary.main"
-            : "success.main",
+            : !value.approved
+              ? "warning.main"
+              : "success.main",
         }}
         variant={
-          !value.approved
-            ? "refresh-rounded"
-            : !value.requested
+          !value.requested
             ? "remove-rounded"
-            : "check"
+            : !value.approved
+              ? "refresh-rounded"
+              : "check"
         }
       />
     ),
@@ -85,18 +85,18 @@ const columns = [
     renderCell: ({ value }) => (
       <Icon
         sx={{
-          color: !value.approved
-            ? "warning.main"
-            : !value.requested
+          color: !value.requested
             ? "secondary.main"
-            : "success.main",
+            : !value.approved
+              ? "warning.main"
+              : "success.main",
         }}
         variant={
-          !value.approved
-            ? "refresh-rounded"
-            : !value.requested
+          !value.requested
             ? "remove-rounded"
-            : "check"
+            : !value.approved
+              ? "refresh-rounded"
+              : "check"
         }
       />
     ),
