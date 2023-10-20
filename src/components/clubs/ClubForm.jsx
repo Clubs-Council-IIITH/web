@@ -27,11 +27,13 @@ import {
 import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
+import { useAuth } from "components/AuthProvider";
 
 import { uploadFile } from "utils/files";
 
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
@@ -163,18 +165,18 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <ClubNameInput control={control} />
+                <ClubNameInput control={control} disabled={user?.role != "cc"} />
               </Grid>
               <Grid item xs={12}>
-                <ClubEmailInput control={control} />
+                <ClubEmailInput control={control} disabled={user?.role != "cc"} />
               </Grid>
               <Grid item xs={12}>
-                <ClubCategorySelect control={control} />
+                <ClubCategorySelect control={control} disabled={user?.role != "cc"} />
               </Grid>
               {
                 watch("category") == "other" ?
                   <Grid item xs={12}>
-                    <StudentBodySelect control={control} disabled={watch("category") != "other"} />
+                    <StudentBodySelect control={control} disabled={user?.role != "cc" || watch("category") != "other"} />
                   </Grid>
                   : null
               }
@@ -329,7 +331,7 @@ function ClubCodeInput({ control }) {
 }
 
 // club name input
-function ClubNameInput({ control }) {
+function ClubNameInput({ control, disabled }) {
   return (
     <Controller
       name="name"
@@ -353,6 +355,7 @@ function ClubNameInput({ control }) {
           helperText={error?.message}
           variant="outlined"
           fullWidth
+          disabled={disabled}
           required
         />
       )}
@@ -361,7 +364,7 @@ function ClubNameInput({ control }) {
 }
 
 // club email input
-function ClubEmailInput({ control }) {
+function ClubEmailInput({ control, disabled }) {
   return (
     <Controller
       name="email"
@@ -374,6 +377,7 @@ function ClubEmailInput({ control }) {
           autoComplete="off"
           variant="outlined"
           fullWidth
+          disabled={disabled}
           required
         />
       )}
@@ -382,7 +386,7 @@ function ClubEmailInput({ control }) {
 }
 
 // club category dropdown
-function ClubCategorySelect({ control }) {
+function ClubCategorySelect({ control, disabled }) {
   return (
     <Controller
       name="category"
@@ -391,7 +395,13 @@ function ClubCategorySelect({ control }) {
       render={({ field }) => (
         <FormControl fullWidth>
           <InputLabel id="category">Category *</InputLabel>
-          <Select labelId="category" label="Category *" fullWidth {...field}>
+          <Select
+            labelId="category"
+            label="Category *"
+            fullWidth
+            disabled={disabled}
+            {...field}
+          >
             <MenuItem value="cultural">Cultural</MenuItem>
             <MenuItem value="technical">Technical</MenuItem>
             <MenuItem value="other">Other</MenuItem>
@@ -415,7 +425,7 @@ function StudentBodySelect({ control, disabled }) {
             control={
               <Switch color="primary" checked={field.value} {...field} disabled={disabled} />
             }
-            label="Point of Contact"
+            label="Student Body"
             labelPlacement="left"
           />
         </FormGroup>
