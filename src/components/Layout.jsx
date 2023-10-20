@@ -140,7 +140,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Typography variant="overline">Manage</Typography>
       </Box>
       <DrawerItem
-        title="club"
+        title="club/Student Body"
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
