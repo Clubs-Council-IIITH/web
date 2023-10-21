@@ -99,7 +99,7 @@ export default function EventForm({
         // else show success toast & redirect to manage page
         triggerToast({
           title: "Success!",
-          messages: ["Event created & saved as draft."],
+          messages: user?.role === "cc" ? ["Event created."] : ["Event created & saved as draft."],
           severity: "success",
         });
         router.push(`/manage/events/${res.data._id}`);
