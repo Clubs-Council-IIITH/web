@@ -7,9 +7,9 @@ export const metadata = {
 };
 
 export default async function Gallery({ searchParams, limit = undefined }) {
-  const response = await fetch(getStaticFile('gallery/'));
+  const response = await fetch(getStaticFile('gallery/list/'));
   const galleryJSON = await response.json();
-  const galleryItems = galleryJSON.map(item => `${getStaticFile('gallery/')}${item.name}`);
+  const galleryItems = galleryJSON.map(item => `${getStaticFile('gallery/')}${item}`);
   return (
     <>
       <ImageMasonry
