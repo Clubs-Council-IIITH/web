@@ -27,7 +27,7 @@ const columns = [
     {
         field: "date",
         headerName: "Date",
-        flex:5,
+        flex:6,
     },
     {
         field: "time",
