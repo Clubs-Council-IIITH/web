@@ -43,13 +43,13 @@ const columns = [
     },
 ];
 
-export default function ClubsTable({ clubs }) {
+export default function BuzzSchedule({ events }) {
     const router = useRouter();
-    if (!clubs) return null;
+    if (!events) return null;
 
     return (
         <DataGrid
-        rows={clubs}
+        rows={events}
         columns={columns}
         initialState={{
                 sorting: {

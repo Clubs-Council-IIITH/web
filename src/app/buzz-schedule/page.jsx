@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Typography } from "@mui/material";
-import ClubsTable from "components/buzz"; 
+import BuzzSchedule from "components/buzz"; 
 import { getStaticFile } from "utils/files";
 
 export const metadata = {
-  title: "Manage Clubs",
+  title: "Buzz Schedule",
 };
 
-export default async function ManageClubs() {
+export default async function Managebuzz() {
     // const event = await fetch(getStaticFile('json/buzz.json'));
     // const events = await event.json();
   const events = [
@@ -111,7 +111,7 @@ export default async function ManageClubs() {
       <Typography variant="h3" align="center" gutterBottom>
         Manage Clubs & Student Bodies
       </Typography>
-      <ClubsTable clubs={eventsWithIds}/>
+      <BuzzSchedule events={eventsWithIds}/>
     </Container>
   );
 }
