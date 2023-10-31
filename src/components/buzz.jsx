@@ -1,5 +1,6 @@
 "use client";
 
+import { use, useEffect } from "react";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 // import QuickSearchToolbar from "components/QuickSearchToolbar";
 import ClubBox from "./clubs/ClubBox";
@@ -9,12 +10,12 @@ const columns = [
         field: "eventName",
         headerName: "Event Name",
         // flex: 5,
-        minWidth: 210,
+        minWidth: 190,
     },
     {
-        field: "club",
+        field: "clubdata",
         headerName: "Club",
-        minWidth: 200,
+        minWidth: 300,
         // flex: 5,
         renderCell: ({ value }) => (
             <>
@@ -25,13 +26,13 @@ const columns = [
     {
         field: "date",
         headerName: "Date",
-        minWidth: 170,
+        minWidth: 150,
         // flex: 6,
     },
     {
         field: "time",
         headerName: "Time",
-        minWidth: 170,
+        minWidth: 150,
         // flex: 5,
     },
     {
@@ -46,10 +47,10 @@ const columns = [
 
 export default function BuzzSchedule({ events, allClubs }) {
     if (!events) return null;
-
+    
     const updatedEvents = events.map((event) => {
-        let newEvent = event;
-        newEvent.club = allClubs.find((club) => club.clubid === event.club);
+        let newEvent = { ...event, clubdata: null };
+        newEvent.clubdata = allClubs.find((club) => club.cid === event.club);
         return newEvent;
     });
 

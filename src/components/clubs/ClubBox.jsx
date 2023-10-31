@@ -6,7 +6,6 @@ import ClubLogo from "./ClubLogo";
 
 export default async function ClubBox({ club }) {
     if (!club) return null;
-    console.log(club)
 
   return (
     <Box>
