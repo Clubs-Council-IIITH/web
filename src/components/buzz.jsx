@@ -1,57 +1,63 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
-import ClubLogo from "./clubs/ClubLogo";
+// import QuickSearchToolbar from "components/QuickSearchToolbar";
+import ClubBox from "./clubs/ClubBox";
+
 const columns = [
     {
         field: "eventName",
         headerName: "Event Name",
-        flex:5,
+        // flex: 5,
+        minWidth: 210,
     },
     {
-        field: "img",
-        headerName: "",
-        flex: 1,
-        valueGetter: ({ row }) => ({ name: row.clubid, logo: row.clubid }),
-        renderCell: ({ value }) => (
-          <ClubLogo name={value.logo} logo={value.clubid} width={32} height={32} />
-        ),
-    },
-    {
-        field: "clubid",
+        field: "club",
         headerName: "Club",
-        flex: 6,
+        minWidth: 200,
+        // flex: 5,
+        renderCell: ({ value }) => (
+            <>
+                {value ? <ClubBox club={value} /> : null}
+            </>
+        ),
     },
     {
         field: "date",
         headerName: "Date",
-        flex:6,
+        minWidth: 170,
+        // flex: 6,
     },
     {
         field: "time",
         headerName: "Time",
-        flex:5,
+        minWidth: 170,
+        // flex: 5,
     },
     {
         field: "venue",
         headerName: "Venue",
         align: "center",
         headerAlign: "center",
-        flex:5,
+        minWidth: 210,
+        // flex: 5,
     },
 ];
 
-export default function BuzzSchedule({ events }) {
-    const router = useRouter();
+export default function BuzzSchedule({ events, allClubs }) {
     if (!events) return null;
+
+    const updatedEvents = events.map((event) => {
+        let newEvent = event;
+        newEvent.club = allClubs.find((club) => club.clubid === event.club);
+        return newEvent;
+    });
 
     return (
         <DataGrid
-        rows={events}
-        columns={columns}
-        initialState={{
+            rows={updatedEvents}
+            columns={columns}
+            initialState={{
                 sorting: {
                     sortModel: [{ field: "date", sort: "asc" }],
                 },
@@ -62,8 +68,9 @@ export default function BuzzSchedule({ events }) {
                     },
                 },
             }}
-            slots={{ toolbar: QuickSearchToolbar }}
+            // slots={{ toolbar: QuickSearchToolbar }}
             sx={{
+                mt: 5,
                 // disable cell selection style
                 ".MuiDataGrid-cell:focus": {
                     outline: "none",
@@ -77,6 +84,5 @@ export default function BuzzSchedule({ events }) {
                 }
             }}
         />
-        
     );
 }
