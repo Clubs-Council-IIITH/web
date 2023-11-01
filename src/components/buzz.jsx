@@ -10,16 +10,17 @@ const columns = [
         field: "eventName",
         headerName: "Event Name",
         // flex: 5,
-        minWidth: 190,
+        minWidth: 300,
     },
     {
         field: "clubdata",
         headerName: "Club",
-        minWidth: 300,
+        minWidth: 350,
         // flex: 5,
+        valueGetter: ({ row }) => ({ name: row.club, clubdata: row.clubdata }),
         renderCell: ({ value }) => (
             <>
-                {value ? <ClubBox club={value} /> : null}
+                {value.clubdata ? <ClubBox club={value.clubdata} /> : value.name}
             </>
         ),
     },
