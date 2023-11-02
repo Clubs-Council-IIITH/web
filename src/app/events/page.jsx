@@ -22,6 +22,9 @@ export default async function Events({ searchParams }) {
       </Box>
       <EventsGrid
         type="all"
+        paginationOn={true}
+        limit={20}
+        skip={0}
         filter={(event) => {
           let selectedClub = false,
             selectedState = false,
