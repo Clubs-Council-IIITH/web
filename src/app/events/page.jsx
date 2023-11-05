@@ -15,6 +15,8 @@ export default async function Events({ searchParams }) {
     ...(searchParams?.completed === "true" ? ["completed"] : []),
   ];
 
+  let paginationOn = false;
+
   return (
     <Box>
       <Box mt={2} mb={3}>
@@ -22,8 +24,8 @@ export default async function Events({ searchParams }) {
       </Box>
       <EventsGrid
         type="all"
-        paginationOn={true}
-        limit={20}
+        paginationOn={paginationOn}
+        limit={paginationOn ? 20 : undefined}
         skip={0}
         filter={(event) => {
           let selectedClub = false,

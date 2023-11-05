@@ -3,8 +3,6 @@ import {
   GET_RECENT_EVENTS,
   GET_CLUB_EVENTS,
   GET_ALL_EVENTS,
-  GET_ALL_EVENTS_PAGINATED,
-  GET_CLUB_EVENTS_PAGINATED,
 } from "gql/queries/events";
 
 import { Grid, Typography } from "@mui/material";
@@ -15,16 +13,22 @@ export default async function EventsGrid({
   type = "all", // must be one of: {recent, club, all}, by default it should fetch all the events
   clubid = null,
   paginationOn = false,
-  limit = 20,
+  limit = undefined,
   skip = 0,
   filter = () => true,
 }) {
+  if (paginationOn && limit === undefined) {
+    limit = 20;
+  }
   const data = await getClient().query(...constructQuery({ type, clubid, paginationOn, skip, limit }));
-  const events = extractEvents({ type, data, paginationOn });
 
   return (
     <Grid container spacing={2}>
-      {events ? events.map((event) => (
+      {extractEvents({ type, data })
+        ?.filter(filter).length ? extractEvents({ type, data })
+          ?.slice(0, limit)
+          ?.filter(filter)
+          ?.map((event) => (
             <Grid key={event._id} item xs={6} md={4} lg={3}>
               <EventCard
                 _id={event._id}
@@ -45,69 +49,45 @@ export default async function EventsGrid({
 
 // construct graphql query based on type
 function constructQuery({ type, clubid, paginationOn, skip, limit }) {
-  console.log("Pagination is set to :", paginationOn ? "On" : "Off")
+  // console.log("Pagination is set to :", paginationOn ? "On" : "Off")
   if (type === "recent") {
     return [GET_RECENT_EVENTS];
-  }
-  else if (type === "club") {
-    return paginationOn ? [
-      GET_CLUB_EVENTS_PAGINATED,
-      {
-        clubid,
-        clubInput: {
-          cid: clubid,
-        },
-        skip: skip,
-        limit: limit,
-      },
-    ] : [
+  } else if (type === "club") {
+    return [
       GET_CLUB_EVENTS,
       {
         clubid,
         clubInput: {
           cid: clubid,
         },
-      },
-    ];
-  } else if (type === "all") {
-    return paginationOn ? [
-      GET_ALL_EVENTS_PAGINATED,
-      {
-        clubid: null,
+        pagination: paginationOn,
         skip: skip,
         limit: limit,
       },
-    ] : [
+    ];
+  } else if (type === "all") {
+    return [
       GET_ALL_EVENTS,
       {
         clubid: null,
+        pagination: paginationOn,
+        skip: skip,
+        limit: limit,
       },
     ];
   }
 }
 
-function extractEvents({ type, data, paginationOn }) {
+function extractEvents({ type, data }) {
   if (type === "recent") {
     return data?.data?.recentEvents;
   } else if (type === "club") {
-    if(paginationOn) {
-      return data?.data?.paginatedEvents?.filter((event) =>
-        ["approved", "completed"].includes(event?.status?.state)
-      );
-    } else {
-      return data?.data?.events?.filter((event) =>
-        ["approved", "completed"].includes(event?.status?.state)
-      );
-    }
+    return data?.data?.events?.filter((event) =>
+      ["approved", "completed"].includes(event?.status?.state)
+    );
   } else if (type === "all") {
-    if(paginationOn) {
-      return data?.data?.paginatedEvents?.filter((event) =>
-        ["approved", "completed"].includes(event?.status?.state)
-      );
-    } else {
-      return data?.data?.events?.filter((event) =>
-        ["approved", "completed"].includes(event?.status?.state)
-      );
-    }
+    return data?.data?.events?.filter((event) =>
+      ["approved", "completed"].includes(event?.status?.state)
+    );
   }
 }
