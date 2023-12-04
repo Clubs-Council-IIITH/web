@@ -67,31 +67,33 @@ export default function MembersFilter({ name, club, state, cc = false }) {
   return (
     <Container>
       <Grid container spacing={2}>
-          {cc && (<Grid item xs={12} lg={8}>
+        {cc && (
+          <Grid item xs={12} lg={8}>
             <FormControl fullWidth>
-            <InputLabel id="clubid">Filter by club</InputLabel>
-            <Select
-              labelId="clubid"
-              label="Filter by club"
-              fullWidth
-              onChange={(e) =>
-                router.push(
-                  `${pathname}?${createQueryString("club", e.target.value)}`
-                )
-              }
-              value={club}
-            >
-              {clubs
-                ?.slice()
-                ?.sort((a, b) => a.name.localeCompare(b.name))
-                ?.map((club) => (
-                  <MenuItem key={club.cid} value={club.cid}>
-                    {club.name}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-        </Grid>)}
+              <InputLabel id="clubid">Filter by club</InputLabel>
+              <Select
+                labelId="clubid"
+                label="Filter by club"
+                fullWidth
+                onChange={(e) =>
+                  router.push(
+                    `${pathname}?${createQueryString("club", e.target.value)}`
+                  )
+                }
+                value={club}
+              >
+                {clubs
+                  ?.slice()
+                  ?.sort((a, b) => a.name.localeCompare(b.name))
+                  ?.map((club) => (
+                    <MenuItem key={club.cid} value={club.cid}>
+                      {club.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
         <Grid item xs lg>
           <ToggleButtonGroup
             fullWidth
