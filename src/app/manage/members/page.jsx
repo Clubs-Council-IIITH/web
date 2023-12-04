@@ -1,8 +1,5 @@
 import Link from "next/link";
 
-// import Members Filter from "components/members/MembersFilter";
-import MembersFilter from "components/members/MembersFilter";
-
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
@@ -18,6 +15,7 @@ import {
 
 import Icon from "components/Icon";
 import MembersTable from "components/members/MembersTable";
+import MembersFilter from "components/members/MembersFilter";
 
 export const metadata = {
   title: "Manage Members",
@@ -33,7 +31,6 @@ export default async function ManageMembers({ searchParams }) {
   ];
   const onlyCurrent = searchParams?.upcoming === "true" ? true : false;
   const onlyPast = searchParams?.completed === "true" ? true : false;
-  
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -70,38 +67,38 @@ export default async function ManageMembers({ searchParams }) {
 
       {/* all members */}
       <Box>
-      <Box>
-        {user?.role === "cc" ? (
-          <>
-            <Typography
-              color="text.secondary"
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-              mb={2}
-            >
-              All Members
-            </Typography>
-            <Box mt={2} mb={3}>
-            <MembersFilter name={targetName} club={targetClub} state={targetState} cc={true} />
-            </Box>
-          </>
-        ) : null}
-        {user?.role === "club" || club ? (
-          <>
-            {user?.role !== "cc" ?(
+        <Box>
+          {user?.role === "cc" ? (
             <>
-            <Box mt={2} mb={3}>
-            <MembersFilter name={targetName} club={targetClub} state={targetState} cc={false} />
-            </Box>
-            </>) : null}
-          <MembersDataGrid club={user?.role === "club" ? user?.uid : club} onlyCurrent={onlyCurrent} onlyPast={onlyPast} />
-          </>
-        ) : null}
+              <Typography
+                color="text.secondary"
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+                mb={2}
+              >
+                All Members
+              </Typography>
+              <Box mt={2} mb={3}>
+                <MembersFilter name={targetName} club={targetClub} state={targetState} cc={true} />
+              </Box>
+            </>
+          ) : null}
+          {user?.role === "club" || club ? (
+            <>
+              {user?.role !== "cc" ? (
+                <>
+                  <Box mt={2} mb={3}>
+                    <MembersFilter name={targetName} club={targetClub} state={targetState} cc={false} />
+                  </Box>
+                </>) : null}
+              <MembersDataGrid club={user?.role === "club" ? user?.uid : club} onlyCurrent={onlyCurrent} onlyPast={onlyPast} />
+            </>
+          ) : null}
+        </Box>
       </Box>
-    </Box>
     </Container>
-    
+
   );
 }
 
@@ -162,13 +159,13 @@ async function MembersDataGrid({ club, onlyCurrent = false, onlyPast = false }) 
 
   // filter only the required members (current | past | both)
   const targetMembers = members
-  ?.filter((member) => {
-    const latestYear = extractLatestYear(member).toString();
-    const isCurrent = onlyCurrent && latestYear === currentYear;
-    const isPast = onlyPast && latestYear !== currentYear;
-  
-    return (!onlyCurrent && !onlyPast) || isCurrent || isPast;
-  });
+    ?.filter((member) => {
+      const latestYear = extractLatestYear(member).toString();
+      const isCurrent = onlyCurrent && latestYear === currentYear;
+      const isPast = onlyPast && latestYear !== currentYear;
+
+      return (!onlyCurrent && !onlyPast) || isCurrent || isPast;
+    });
 
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
