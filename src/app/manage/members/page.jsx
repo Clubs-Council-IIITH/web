@@ -7,7 +7,6 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
 import {
   Box,
@@ -15,10 +14,6 @@ import {
   Typography,
   Button,
   Stack,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from "@mui/material";
 
 import Icon from "components/Icon";
@@ -107,35 +102,6 @@ export default async function ManageMembers({ searchParams }) {
     </Box>
     </Container>
     
-  );
-}
-
-async function MembersClubSelect({ club }) {
-  const { data: { allClubs } = {} } = await getClient().query(
-    GET_ALL_CLUB_IDS,
-    {},
-  );
-
-  return (
-    <FormControl fullWidth sx={{ mb: 2 }}>
-      <InputLabel id="club">Select a Club</InputLabel>
-      <Select value={club} labelId="club" label="Select a Club" fullWidth>
-        {allClubs
-          ?.slice()
-          ?.sort((a, b) => a.name.localeCompare(b.name))
-          ?.map((club) => (
-            <MenuItem
-              component={Link}
-              shallow
-              href={`/manage/members?club=${club.cid}`}
-              key={club.cid}
-              value={club.cid}
-            >
-              {club.name}
-            </MenuItem>
-          ))}
-      </Select>
-    </FormControl>
   );
 }
 
