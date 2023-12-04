@@ -22,7 +22,6 @@ export const metadata = {
 };
 
 export default async function ManageMembers({ searchParams }) {
-  const { club } = searchParams;
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
@@ -84,7 +83,7 @@ export default async function ManageMembers({ searchParams }) {
               </Box>
             </>
           ) : null}
-          {user?.role === "club" || club ? (
+          {user?.role === "club" || targetClub ? (
             <>
               {user?.role !== "cc" ? (
                 <>
@@ -92,7 +91,7 @@ export default async function ManageMembers({ searchParams }) {
                     <MembersFilter name={targetName} club={targetClub} state={targetState} cc={false} />
                   </Box>
                 </>) : null}
-              <MembersDataGrid club={user?.role === "club" ? user?.uid : club} onlyCurrent={onlyCurrent} onlyPast={onlyPast} />
+              <MembersDataGrid club={user?.role === "club" ? user?.uid : targetClub} onlyCurrent={onlyCurrent} onlyPast={onlyPast} />
             </>
           ) : null}
         </Box>

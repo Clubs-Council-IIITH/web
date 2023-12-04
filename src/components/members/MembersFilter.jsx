@@ -60,10 +60,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
       }
     })();
   }, []);
-
-  // track name field
-  const [targetName, setTargetName] = useState(name || "");
-
+  
   return (
     <Container>
       <Grid container spacing={2}>
