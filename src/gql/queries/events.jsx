@@ -20,8 +20,8 @@ export const GET_RECENT_EVENTS = gql`
 `;
 
 export const GET_CLUB_EVENTS = gql`
-  query ClubEvents($clubid: String, $clubInput: SimpleClubInput!, $pagination: Boolean, $skip: Int, $limit: Int) {
-    events(clubid: $clubid, pagination: $pagination, skip: $skip, limit: $limit) {
+  query ClubEvents($clubid: String, $clubInput: SimpleClubInput!, $paginationOn: Boolean, $skip: Int, $limit: Int) {
+    events(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit) {
       _id
       name
       code
@@ -77,8 +77,8 @@ export const GET_PENDING_EVENTS = gql`
 `;
 
 export const GET_ALL_EVENTS = gql`
-  query Events($clubid: String, $pagination: Boolean, $skip: Int, $limit: Int) {
-    events(clubid: $clubid, pagination: $pagination, skip: $skip, limit: $limit) {
+  query Events($clubid: String, $paginationOn: Boolean, $skip: Int, $limit: Int) {
+    events(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit) {
       _id
       name
       code

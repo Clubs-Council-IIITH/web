@@ -15,7 +15,7 @@ export default async function Events({ searchParams }) {
     ...(searchParams?.completed === "true" ? ["completed"] : []),
   ];
 
-  let paginationOn = false;
+  let paginationOn = true;
 
   return (
     <Box>

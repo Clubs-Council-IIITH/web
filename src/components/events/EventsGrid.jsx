@@ -21,6 +21,7 @@ export default async function EventsGrid({
     limit = 20;
   }
   const data = await getClient().query(...constructQuery({ type, clubid, paginationOn, skip, limit }));
+  console.log(data)
 
   return (
     <Grid container spacing={2}>
@@ -49,7 +50,6 @@ export default async function EventsGrid({
 
 // construct graphql query based on type
 function constructQuery({ type, clubid, paginationOn, skip, limit }) {
-  // console.log("Pagination is set to :", paginationOn ? "On" : "Off")
   if (type === "recent") {
     return [GET_RECENT_EVENTS];
   } else if (type === "club") {
