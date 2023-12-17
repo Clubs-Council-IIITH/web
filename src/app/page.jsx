@@ -46,7 +46,7 @@ export default function Home() {
           </Button>
         </Box>
       </Stack>
-      <EventsGrid type="recent" limit={4} />
+      <EventsGrid type="recent" limit={4} /> {/*TODO: Update this as events grid no longer fetches data*/}
 
       <Typography variant="h3" sx={{ mb: 2, mt: 4 }}>
         Clubs @ IIITH
