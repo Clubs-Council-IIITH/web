@@ -39,7 +39,7 @@ export default async function Events({ searchParams }) {
       <EventsGrid
         query={query}
         paginationOn={paginationOn}
-        limit={paginationOn ? 20 : undefined}
+        limit={paginationOn ? 30 : undefined}
         allclubs={allClubs}
         targets = {[targetName, targetClub, targetState]}
       />

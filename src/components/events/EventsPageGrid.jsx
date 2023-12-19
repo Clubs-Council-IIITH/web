@@ -28,7 +28,7 @@ export default function EventsGrid({
   const targetsRef = useRef(targets);
 
   if (paginationOn && limit === undefined) {
-    limit = 20;
+    limit = 30;
   }
 
   function filter(event) {
