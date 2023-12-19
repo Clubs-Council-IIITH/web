@@ -16,6 +16,7 @@ export default async function EventsGrid({
   if (paginationOn && limit === undefined) {
     limit = 20;
   }
+  
   const client = getClient();
   const data = await client.query(...constructEventsQuery({ type, clubid, paginationOn, skip, limit }));
   const { data: { allClubs } = {} } = await client.query(
@@ -48,36 +49,6 @@ export default async function EventsGrid({
       }
     </Grid>
   );
-}
-
-// construct graphql query based on type
-function constructQuery({ type, clubid, paginationOn, skip, limit }) {
-  if (type === "recent") {
-    return [GET_RECENT_EVENTS];
-  } else if (type === "club") {
-    return [
-      GET_CLUB_EVENTS,
-      {
-        clubid,
-        clubInput: {
-          cid: clubid,
-        },
-        pagination: paginationOn,
-        skip: skip,
-        limit: limit,
-      },
-    ];
-  } else if (type === "all") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid: null,
-        pagination: paginationOn,
-        skip: skip,
-        limit: limit,
-      },
-    ];
-  }
 }
 
 function extractEvents({ type, data }) {

@@ -10,7 +10,6 @@ import EventCard from "components/events/EventCard";
 
 export default function EventsGrid({
   type = "all", // must be one of: {recent, club, all}, by default it should fetch all the events
-  clubid = null,
   allclubs = null,
   paginationOn = false,
   limit = undefined,
