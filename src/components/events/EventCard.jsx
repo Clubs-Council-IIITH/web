@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import EventPoster from "components/events/EventPoster";
-import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
@@ -15,7 +14,6 @@ export default function EventCard({
   name,
   datetimeperiod,
   poster,
-  clubid,
 }) {
   return (
     <Card>
@@ -24,7 +22,7 @@ export default function EventCard({
           {poster ? (
             <EventPoster name={name} poster={poster} width={600} height={600} />
           ) : (
-            <EventFallbackPoster clubid={clubid} width={200} height={300} />
+            null
           )}
         </Box>
 
