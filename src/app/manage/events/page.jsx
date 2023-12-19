@@ -25,7 +25,10 @@ export default async function ManageEvents() {
 
   const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
     clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    paginationOn: false,
   });
+
+  // TODO: Paginate this also
 
   return (
     <Container>
