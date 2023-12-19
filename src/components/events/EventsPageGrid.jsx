@@ -8,7 +8,7 @@ import { constructEventsQuery } from "gql/queries/events";
 import { Grid, Typography } from "@mui/material";
 import EventCard from "components/events/EventCard";
 
-export default async function EventsGrid({
+export default function EventsGrid({
   type = "all", // must be one of: {recent, club, all}, by default it should fetch all the events
   clubid = null,
   allclubs = null,
@@ -70,7 +70,18 @@ export default async function EventsGrid({
     setLoading(true);
 
     try {
-      let data = await query(JSON.parse(JSON.stringify(constructEventsQuery({ type, targetClub, paginationOn, skip, limit }))));
+      let data;
+      if (targetClub)
+        data = await query(JSON.parse(JSON.stringify(constructEventsQuery({ type: "club", clubid: targetClub, paginationOn, skip, limit }))));
+      else
+        data = await query(JSON.parse(JSON.stringify(constructEventsQuery({ type: "all", clubid: targetClub, paginationOn, skip, limit }))));
+
+      // Fake sleep
+      for (let i = 0; i < 1000000; i += 1) {
+        i = i + 1;
+        i -= 1;
+      }
+
       let newEvents = data?.data?.events?.filter((event) =>
         ["approved", "completed"].includes(event?.status?.state)
       )?.filter(filter);
