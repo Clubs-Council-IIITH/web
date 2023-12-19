@@ -70,7 +70,7 @@ export default async function EventsGrid({
     setLoading(true);
 
     try {
-      let data = await query(constructEventsQuery({ type, clubid, paginationOn, skip, limit }));
+      let data = await query(JSON.parse(JSON.stringify(constructEventsQuery({ type, targetClub, paginationOn, skip, limit }))));
       let newEvents = data?.data?.events?.filter((event) =>
         ["approved", "completed"].includes(event?.status?.state)
       )?.filter(filter);
@@ -91,7 +91,7 @@ export default async function EventsGrid({
       setLoading(false);
     }
 
-  }, [loading, hasMore, skip, targets]); // Add all dependencies here
+  }, [loading, hasMore, skip, targets]);
 
   useEffect(() => {
     if (hasFetched.current) {
@@ -156,8 +156,6 @@ export default async function EventsGrid({
     <>
       <Grid container spacing={2}>
         {events && events.length ? events
-          // ?.filter(filter).length ? events
-          // ?.filter(filter)
           ?.map(async (event) => {
             let club = allclubs?.find((club) => club.cid === event.clubid);
 
@@ -167,7 +165,7 @@ export default async function EventsGrid({
                   _id={event._id}
                   name={event.name}
                   datetimeperiod={event.datetimeperiod}
-                  poster={event.poster ? event.poster : club.banner}
+                  poster={event.poster ? event.poster : club.banner ? club.banner : club.logo}
                 />
               </Grid>
             )

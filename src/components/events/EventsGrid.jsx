@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { constructEventsQuery } from "gql/queries/events";
-import { GET_CLUB } from "gql/queries/clubs";
+import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import { Grid, Typography } from "@mui/material";
 import EventCard from "components/events/EventCard";
@@ -18,6 +18,9 @@ export default async function EventsGrid({
   }
   const client = getClient();
   const data = await client.query(...constructEventsQuery({ type, clubid, paginationOn, skip, limit }));
+  const { data: { allClubs } = {} } = await client.query(
+    GET_ALL_CLUBS
+  );
 
   return (
     <Grid container spacing={2}>
@@ -26,9 +29,7 @@ export default async function EventsGrid({
           ?.slice(0, limit)
           ?.filter(filter)
           ?.map(async (event) => {
-            let { data: { club } = {} } = await getClient().query(GET_CLUB, {
-              clubInput: { cid: event.clubid },
-            });
+            let club = allClubs?.find((club) => club.cid === event.clubid);
 
             return (
               <Grid key={event._id} item xs={6} md={4} lg={3}>
@@ -36,7 +37,7 @@ export default async function EventsGrid({
                   _id={event._id}
                   name={event.name}
                   datetimeperiod={event.datetimeperiod}
-                  poster={event.poster ? event.poster : club.banner}
+                  poster={event.poster ? event.poster : club.banner ? club.banner : club.logo}
                 />
               </Grid>
             )
