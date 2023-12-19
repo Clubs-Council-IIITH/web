@@ -81,7 +81,7 @@ export default function EventsGrid({
         i -= 1;
       }
 
-      let newEvents = data?.data?.events?.filter((event) =>
+      let newEvents = data?.data?.approvedEvents?.filter((event) =>
         ["approved", "completed"].includes(event?.status?.state)
       )?.filter(filter);
 

@@ -39,17 +39,18 @@ export const GET_CLUB_EVENTS = gql`
 `;
 
 export const GET_APPROVED_EVENTS = gql`
-  query ApprovedEvents($clubid: String, $clubInput: SimpleClubInput!) {
-    approvedEvents(clubid: $clubid) {
+  query ApprovedEvents($clubid: String, $paginationOn: Boolean, $skip: Int, $limit: Int) {
+    approvedEvents(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit) {
       _id
       name
       code
       clubid
       datetimeperiod
+      status {
+        state
+      }
+      location
       poster
-    }
-    club(clubInput: $clubInput) {
-      banner
     }
   }
 `;
@@ -175,7 +176,7 @@ export function constructEventsQuery({ type, clubid, paginationOn, skip, limit }
     ];
   } else if (type === "all") {
     return [
-      GET_ALL_EVENTS,
+      GET_APPROVED_EVENTS,
       {
         clubid: null,
         pagination: paginationOn,

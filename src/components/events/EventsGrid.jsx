@@ -16,7 +16,7 @@ export default async function EventsGrid({
   if (paginationOn && limit === undefined) {
     limit = 20;
   }
-  
+
   const client = getClient();
   const data = await client.query(...constructEventsQuery({ type, clubid, paginationOn, skip, limit }));
   const { data: { allClubs } = {} } = await client.query(
@@ -54,11 +54,16 @@ export default async function EventsGrid({
 function extractEvents({ type, data }) {
   if (type === "recent") {
     return data?.data?.recentEvents;
-  } else if (type === "club" || type === "all") {
+  } else if (type === "club") {
     return data?.data?.events?.filter((event) =>
       ["approved", "completed"].includes(event?.status?.state)
     );
-  } else {
+  } else if (type === "all") {
+    return data?.data?.approvedEvents?.filter((event) =>
+      ["approved", "completed"].includes(event?.status?.state)
+    );
+  }
+  else {
     return [];
   }
 }
