@@ -20,8 +20,8 @@ export const GET_RECENT_EVENTS = gql`
 `;
 
 export const GET_CLUB_EVENTS = gql`
-  query ClubEvents($clubid: String, $clubInput: SimpleClubInput!) {
-    events(clubid: $clubid) {
+  query ClubEvents($clubid: String, $clubInput: SimpleClubInput!, $paginationOn: Boolean, $skip: Int, $limit: Int) {
+    events(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit) {
       _id
       name
       code
@@ -39,17 +39,18 @@ export const GET_CLUB_EVENTS = gql`
 `;
 
 export const GET_APPROVED_EVENTS = gql`
-  query ApprovedEvents($clubid: String, $clubInput: SimpleClubInput!) {
-    approvedEvents(clubid: $clubid) {
+  query ApprovedEvents($clubid: String, $paginationOn: Boolean, $skip: Int, $limit: Int) {
+    approvedEvents(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit) {
       _id
       name
       code
       clubid
       datetimeperiod
+      status {
+        state
+      }
+      location
       poster
-    }
-    club(clubInput: $clubInput) {
-      banner
     }
   }
 `;
@@ -77,8 +78,8 @@ export const GET_PENDING_EVENTS = gql`
 `;
 
 export const GET_ALL_EVENTS = gql`
-  query Events($clubid: String) {
-    events(clubid: $clubid) {
+  query Events($clubid: String, $paginationOn: Boolean, $skip: Int, $limit: Int) {
+    events(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit) {
       _id
       name
       code
@@ -155,3 +156,33 @@ export const GET_AVAILABLE_LOCATIONS = gql`
     }
   }
 `;
+
+// construct events graphql query based on type
+export function constructEventsQuery({ type, clubid, paginationOn, skip, limit }) {
+  if (type === "recent") {
+    return [GET_RECENT_EVENTS];
+  } else if (type === "club") {
+    return [
+      GET_CLUB_EVENTS,
+      {
+        clubid,
+        clubInput: {
+          cid: clubid,
+        },
+        pagination: paginationOn,
+        skip: skip,
+        limit: limit,
+      },
+    ];
+  } else if (type === "all") {
+    return [
+      GET_APPROVED_EVENTS,
+      {
+        clubid: null,
+        pagination: paginationOn,
+        skip: skip,
+        limit: limit,
+      },
+    ];
+  }
+}

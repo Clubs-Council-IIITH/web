@@ -29,6 +29,7 @@ export const GET_ALL_CLUBS = gql`
       name
       email
       tagline
+      banner
     }
   }
 `;

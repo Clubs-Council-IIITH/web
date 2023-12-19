@@ -10,7 +10,10 @@ export const metadata = {
 export default async function Calendar() {
   const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
     clubid: null,
+    paginationOn: false,
   });
+
+  // TODO: Paginate this also
 
   return <FullCalendar events={events} />;
 }

@@ -1,11 +1,21 @@
+import { getClient } from "gql/client";
+import { GET_ALL_CLUBS } from "gql/queries/clubs";
+
 import { Box } from "@mui/material";
 import EventsFilter from "components/events/EventsFilter";
-
-import EventsGrid from "components/events/EventsGrid";
+import EventsGrid from "components/events/EventsPageGrid";
 
 export const metadata = {
   title: "Events",
 };
+
+const client = getClient();
+
+async function query(queryString) {
+  "use server";
+
+  return client.query(...queryString);
+}
 
 export default async function Events({ searchParams }) {
   const targetName = searchParams?.name;
@@ -15,41 +25,23 @@ export default async function Events({ searchParams }) {
     ...(searchParams?.completed === "true" ? ["completed"] : []),
   ];
 
+  let paginationOn = true;
+
+  const { data: { allClubs } = {} } = await getClient().query(
+    GET_ALL_CLUBS
+  );
+
   return (
     <Box>
       <Box mt={2} mb={3}>
         <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
       <EventsGrid
-        type="all"
-        filter={(event) => {
-          let selectedClub = false,
-            selectedState = false,
-            selectedName = false;
-
-          // filter by club
-          if (!targetClub) selectedClub = true;
-          else selectedClub = event?.clubid === targetClub;
-
-          // filter by state
-          if (!targetState) selectedState = true;
-          else {
-            const isUpcoming = new Date(event?.datetimeperiod[1]) > new Date();
-            if (targetState?.includes("upcoming") && isUpcoming)
-              selectedState = true;
-            if (targetState?.includes("completed") && !isUpcoming)
-              selectedState = true;
-          }
-
-          // filter by name
-          if (!targetName) selectedName = true;
-          else
-            selectedName = event?.name
-              ?.toLowerCase()
-              ?.includes(targetName?.toLowerCase());
-
-          return selectedClub && selectedState && selectedName;
-        }}
+        query={query}
+        paginationOn={paginationOn}
+        limit={paginationOn ? 30 : undefined}
+        allclubs={allClubs}
+        targets = {[targetName, targetClub, targetState]}
       />
     </Box>
   );

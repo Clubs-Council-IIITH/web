@@ -1,4 +1,7 @@
 const nextConfig = {
+  experimental: {
+    serverActions: true,
+  },
   reactStrictMode: true,
   swcMinify: true,
   modularizeImports: {
