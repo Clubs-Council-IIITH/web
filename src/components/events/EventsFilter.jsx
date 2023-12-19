@@ -112,13 +112,20 @@ export default function EventsFilter({ name, club, state }) {
               labelId="clubid"
               label="Filter by club"
               fullWidth
-              onChange={(e) =>
-                router.push(
-                  `${pathname}?${createQueryString("club", e.target.value)}`
-                )
-              }
+              onChange={(e) => {
+                if (e.target.value === 0) {
+                  router.push(`${pathname}`);
+                } else {
+                  router.push(
+                    `${pathname}?${createQueryString("club", e.target.value)}`
+                  )
+                }
+              }}
               value={club}
             >
+              <MenuItem key={0} value={0}>
+                All Clubs
+              </MenuItem>
               {clubs
                 ?.slice()
                 ?.sort((a, b) => a.name.localeCompare(b.name))
