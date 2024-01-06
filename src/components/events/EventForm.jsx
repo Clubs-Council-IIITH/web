@@ -267,6 +267,7 @@ export default function EventForm({
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
+                  role={user?.role}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -533,7 +534,7 @@ function EventNameInput({ control, disabled = true }) {
 }
 
 // event datetime range input
-function EventDatetimeInput({ control, watch, disabled = true }) {
+function EventDatetimeInput({ control, watch, disabled = true, role = "public" }) {
   const startDateInput = watch("datetimeperiod.0");
   const [error, setError] = useState(null);
 
@@ -572,6 +573,7 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
                   helperText: error?.message,
                 },
               }}
+              disablePast={role !== "cc"}
               viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,
@@ -599,7 +601,8 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
             <DateTimePicker
               label="Ends *"
               disabled={!startDateInput || disabled}
-              minDate={startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput}
+              minDateTime={startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput}
+              disablePast={role !== "cc"}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
