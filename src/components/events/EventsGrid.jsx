@@ -53,6 +53,7 @@ function constructQuery({ type, clubid }) {
         clubInput: {
           cid: clubid,
         },
+        public: true,
       },
     ];
   } else if (type === "all") {

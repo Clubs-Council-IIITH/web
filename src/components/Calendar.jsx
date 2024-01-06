@@ -19,7 +19,7 @@ function eventDataTransform(event, role, uid) {
     };
   }
   else {
-    if (role == "cc" ||  uid == event.clubid)
+    if (role == "cc" || uid == event.clubid)
       return {
         id: event._id,
         title: event.name,
@@ -50,7 +50,7 @@ export default function Calendar({ events }) {
 
   return (
     <FullCalendar
-      events={events}
+      events={events?.filter((event) => event?.status?.state !== "deleted")}
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"
       eventDataTransform={eventDataTransform_withrole}
