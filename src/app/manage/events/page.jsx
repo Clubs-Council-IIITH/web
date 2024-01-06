@@ -25,6 +25,7 @@ export default async function ManageEvents() {
 
   const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
     clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    public: false
   });
 
   return (

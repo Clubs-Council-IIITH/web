@@ -60,6 +60,7 @@ function constructQuery({ type, clubid }) {
       GET_ALL_EVENTS,
       {
         clubid: null,
+        public: true,
       },
     ];
   }
