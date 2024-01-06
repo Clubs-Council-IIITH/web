@@ -404,6 +404,7 @@ function ClubCategorySelect({ control, disabled }) {
           >
             <MenuItem value="cultural">Cultural</MenuItem>
             <MenuItem value="technical">Technical</MenuItem>
+            <MenuItem value="affinity">Affinity Group</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>

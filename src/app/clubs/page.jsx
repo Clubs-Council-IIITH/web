@@ -25,6 +25,14 @@ export default async function Clubs() {
         </Typography>
       </Box>
       <ClubsGrid category="cultural" />
+
+      <Box mb={2} mt={4} display="flex" alignItems="center">
+        <Icon variant="psychology-rounded" mr={1} />
+        <Typography variant="subtitle2" textTransform="uppercase">
+          Affinity Groups
+        </Typography>
+      </Box>
+      <ClubsGrid category="affinity" />
     </Box>
   );
 }

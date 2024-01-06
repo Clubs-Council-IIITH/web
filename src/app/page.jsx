@@ -64,8 +64,8 @@ export default function Home() {
       </Typography>
 
       <Box my={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={4}>
             <Statistic
               color="info"
               icon="component-exchange"
@@ -74,12 +74,21 @@ export default function Home() {
               sx={{ height: 200, p: 3 }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <Statistic
               color="warning"
               icon="music-note-rounded"
               total={16}
               title="Cultural Clubs"
+              sx={{ height: 200, p: 3 }}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Statistic
+              color="secondary"
+              icon="psychology-rounded"
+              total={2}
+              title="Affinity Groups"
               sx={{ height: 200, p: 3 }}
             />
           </Grid>
@@ -97,7 +106,7 @@ export default function Home() {
       </Typography>
 
       <Box my={3}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
             <Statistic
               color="success"
