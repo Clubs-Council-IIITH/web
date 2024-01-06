@@ -20,7 +20,7 @@ export default async function StudentBodies() {
 
   return (
     <Box>
-      <ClubsGrid category="other" staticClubs={[cc]} />
+      <ClubsGrid category="other" studentBody={true} staticClubs={[cc]} />
     </Box>
   );
 }
