@@ -27,6 +27,7 @@ export default function MemberPositions({
   setPositionEditing = console.log,
 }) {
   const { user } = useAuth();
+  const minYear = 2010;
 
   // position item template
   const emptyPositionItem = {
@@ -40,6 +41,13 @@ export default function MemberPositions({
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
+    row.startYear = parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
+    row.startYear = row.startYear > new Date().getFullYear() ? new Date().getFullYear() : row.startYear;
+
+    row.endYear = parseInt(row.endYear) > minYear ? parseInt(row.endYear) : minYear;
+    row.endYear = row.endYear > new Date().getFullYear() ? '' : row.endYear;
+    row.endYear = row.endYear > row.startYear ? row.endYear : '';
+
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
       return r;

@@ -10,6 +10,7 @@ export default function EventBudget({
   editable = false,
   rows = [],
   setRows = console.log,
+  setBudgetEditing = console.log,
 }) {
   // budget item template
   const emptyBudgetItem = { description: null, amount: 0, advance: false };
@@ -19,6 +20,7 @@ export default function EventBudget({
     setRows([...rows, { id: rows?.length || 0, ...emptyBudgetItem }]);
   };
   const onUpdate = (row) => {
+    row.amount = row.amount > 0 ? row.amount : 0;
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
       return r;
@@ -73,22 +75,22 @@ export default function EventBudget({
     },
     ...(editable
       ? [
-          {
-            field: "action",
-            align: "center",
-            headerName: "",
-            width: 50,
-            renderCell: (p) => (
-              <IconButton onClick={() => onDelete(p)} size="small">
-                <Icon
-                  color="error.main"
-                  variant="delete-forever-outline"
-                  sx={{ height: 16, width: 16 }}
-                />
-              </IconButton>
-            ),
-          },
-        ]
+        {
+          field: "action",
+          align: "center",
+          headerName: "",
+          width: 50,
+          renderCell: (p) => (
+            <IconButton onClick={() => onDelete(p)} size="small">
+              <Icon
+                color="error.main"
+                variant="delete-forever-outline"
+                sx={{ height: 16, width: 16 }}
+              />
+            </IconButton>
+          ),
+        },
+      ]
       : []),
   ];
 
@@ -108,6 +110,8 @@ export default function EventBudget({
         editMode="row"
         processRowUpdate={onUpdate}
         disableRowSelectionOnClick
+        onRowEditStart={(p) => setBudgetEditing(true)}
+        onRowEditStop={(p) => setBudgetEditing(false)}
         experimentalFeatures={{ newEditingApi: true }}
         sx={{
           // disable cell selection style

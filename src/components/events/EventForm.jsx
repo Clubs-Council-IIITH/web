@@ -51,6 +51,7 @@ export default function EventForm({
 
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const [budgetEditing, setBudgetEditing] = useState(false);
 
   const { control, handleSubmit, watch, resetField } = useForm({
     defaultValues,
@@ -208,6 +209,7 @@ export default function EventForm({
     // remove budget items without a description (they're invalid)
     data.budget = formData.budget
       .filter((i) => i?.description)
+      .filter((i) => i?.amount > 0)
       .map((i) => ({
         description: i.description,
         amount: i.amount,
@@ -313,6 +315,7 @@ export default function EventForm({
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
+                  setBudgetEditing={setBudgetEditing}
                 />
               </Grid>
             </Grid>
@@ -403,6 +406,7 @@ export default function EventForm({
                   variant="contained"
                   color="primary"
                   fullWidth
+                  disabled={budgetEditing}
                 >
                   Save
                 </LoadingButton>
@@ -414,6 +418,7 @@ export default function EventForm({
                   variant="outlined"
                   color="primary"
                   fullWidth
+                  disabled={budgetEditing}
                 >
                   Save as draft
                 </LoadingButton>
@@ -435,6 +440,7 @@ export default function EventForm({
                       onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
+                  disabled={budgetEditing}
                 >
                   Save & Submit
                 </LoadingButton>
@@ -935,13 +941,13 @@ function EventLocationInput({
 }
 
 // input event budget as a table
-function EventBudgetTable({ control, watch, disabled = true }) {
+function EventBudgetTable({ control, watch, disabled = true, setBudgetEditing = null }) {
   return (
     <Controller
       name="budget"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <EventBudget editable={!disabled} rows={value} setRows={onChange} />
+        <EventBudget editable={!disabled} rows={value} setRows={onChange} setBudgetEditing={setBudgetEditing} />
       )}
     />
   );
