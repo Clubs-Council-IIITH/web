@@ -55,8 +55,8 @@ export default function Home() {
       <Typography variant="body">
         The clubs of IIIT-H conduct various captivating events throughout the
         year. Students across all UG/PG batches engage in the events, which
-        tells how lively the campus life is! The 23 clubs at IIITH are divided
-        into technical and cultural categories.
+        tells how lively the campus life is! There are 2 Affinity Groups & 23
+        Clubs at IIITH, divided into technical and cultural categories.
         <Box my={2} />
         Clubs on campus are run by students, for the students. Club activities
         help develop new hobbies and interests in students and thereby
