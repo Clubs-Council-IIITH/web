@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ListItem, ListItemText, ListItemAvatar } from "@mui/material";
-
+import { ListItem, ListItemText, ListItemAvatar, CardActionArea } from "@mui/material";
+import { Link } from 'next/link'
 import UserImage from "components/users/UserImage";
 
 import { useToast } from "components/Toast";
@@ -37,6 +37,10 @@ export default function MemberListItem({ uid }) {
   };
 
   return user ? (
+    <CardActionArea
+        component={Link}
+        href={`/profile/${uid}`}
+        sx={{ textDecoration: "none", maxWidth: "max-content" }}>
     <ListItem>
       <ListItemAvatar>
         <UserImage
@@ -52,5 +56,6 @@ export default function MemberListItem({ uid }) {
         secondary={user.email}
       />
     </ListItem>
+    </CardActionArea>
   ) : null;
 }
