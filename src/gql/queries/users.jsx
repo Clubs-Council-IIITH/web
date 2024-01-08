@@ -9,6 +9,7 @@ export const GET_USER_PROFILE = gql`
       gender
       batch
       stream
+      rollno
     }
     userMeta(userInput: $userInput) {
       uid

@@ -11,7 +11,7 @@ export default async function UserDetails({ user }) {
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   return (
-    <Stack direction="column" spacing={4} mx={2}>
+    <Stack direction="column" spacing={3} mx={2}>
       <Box>
         <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
           User ID
@@ -39,22 +39,39 @@ export default async function UserDetails({ user }) {
           ) : null}
 
           {["cc", "slo", "slc"].includes(currentUser?.role) ||
-          (currentUser?.uid === user?.uid && user?.role !== "club") ? (
-            <Box>
-              <Typography
-                variant="subtitle2"
-                textTransform="uppercase"
-                gutterBottom
-              >
-                Phone Number
-              </Typography>
-              <Typography fontWeight={400}>
-                {user.phone || "Unknown"}
-              </Typography>
-            </Box>
+            (currentUser?.uid === user?.uid && user?.role !== "club") ? (
+            <>
+              {user?.batch?.toLowerCase()?.includes("2k") ? (
+                < Box >
+                  <Typography
+                    variant="subtitle2"
+                    textTransform="uppercase"
+                    gutterBottom
+                  >
+                    Roll Number
+                  </Typography>
+                  <Typography fontWeight={400}>
+                    {user.rollno || "Unknown"}
+                  </Typography>
+                </Box>
+              ) : null}
+              <Box>
+                <Typography
+                  variant="subtitle2"
+                  textTransform="uppercase"
+                  gutterBottom
+                >
+                  Phone Number
+                </Typography>
+                <Typography fontWeight={400}>
+                  {user.phone || "Unknown"}
+                </Typography>
+              </Box>
+            </>
           ) : null}
         </>
-      ) : null}
-    </Stack>
+      ) : null
+      }
+    </Stack >
   );
 }
