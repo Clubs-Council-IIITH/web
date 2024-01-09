@@ -2,8 +2,8 @@ import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
 
-import { Box, Chip, Grid, Typography, Divider } from "@mui/material";
-
+import { Box, Chip, Grid, Typography, Divider, CardActionArea } from "@mui/material";
+import { Link } from 'next/link'
 import ActionPalette from "components/ActionPalette";
 
 import EventDetails from "components/events/EventDetails";
@@ -63,7 +63,12 @@ export default async function ManageEvent({ params }) {
       <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
         Point of Contact
       </Typography>
+      <CardActionArea
+        component={Link}
+        href={`/profile/${event?.poc}`}
+        sx={{ textDecoration: "none", maxWidth: "max-content" }}>
       <MemberListItem uid={event?.poc} />
+      </CardActionArea>
       <Box my={3} />
       <Grid container spacing={6}>
         <Grid item xs={12} lg={7}>
