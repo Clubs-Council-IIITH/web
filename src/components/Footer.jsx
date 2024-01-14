@@ -109,7 +109,7 @@ export default function Footer() {
 
       <Stack direction="row" spacing={1}>
         <Typography variant="body2" fontWeight={500}>
-          © 2023, IIIT Hyderabad
+            © {new Date().getFullYear()}, IIIT Hyderabad
         </Typography>
 
         <Box sx={{ flexGrow: 1 }} />
