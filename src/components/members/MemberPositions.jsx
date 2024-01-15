@@ -46,7 +46,7 @@ export default function MemberPositions({
 
     row.endYear = parseInt(row.endYear) > minYear ? parseInt(row.endYear) : minYear;
     row.endYear = row.endYear > new Date().getFullYear() ? '' : row.endYear;
-    row.endYear = row.endYear > row.startYear ? row.endYear : '';
+    row.endYear = row.endYear >= row.startYear ? row.endYear : '';
 
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
