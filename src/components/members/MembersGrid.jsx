@@ -16,16 +16,16 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
   const currentYear = (new Date().getFullYear() + 1).toString();
 
   // construct dict of { year: [members] } where each year is a key
-  const targetMembers = members.reduce((acc, member) => {
+  const targetMembers = members ? members.reduce((acc, member) => {
     const latestYear = extractLatestYear(member);
     if (!acc[latestYear]) {
       acc[latestYear] = [];
     }
     acc[latestYear].push(member);
     return acc;
-  }, {});
+  }, {}) : {};
 
-  return Object.keys(targetMembers)
+  return members?.length ? Object.keys(targetMembers)
     ?.filter((year) => (onlyCurrent ? year === currentYear : true))
     ?.sort((a, b) => parseInt(b) - parseInt(a))
     ?.map((year) => (
@@ -49,7 +49,8 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
           ))}
         </Grid>
       </>
-    ));
+    )) :
+    <center><h2>No Members Found!</h2></center>;
 }
 
 // get the last year a member was in the club
