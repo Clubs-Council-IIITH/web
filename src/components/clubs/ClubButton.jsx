@@ -5,7 +5,7 @@ import { GET_CLUB } from "gql/queries/clubs";
 
 import { Box, Button, Typography } from "@mui/material";
 
-import ClubLogo from "./ClubLogo";
+import ClubLogo from "components/clubs/ClubLogo";
 
 export default async function ClubButton({ clubid }) {
   const { data: { club } = {} } = await getClient().query(GET_CLUB, {

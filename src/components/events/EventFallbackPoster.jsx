@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 
-import EventPoster from "./EventPoster";
+import EventPoster from "components/events/EventPoster";
 
 export default async function EventFallbackPoster({ clubid, width, height }) {
   const { data: { club } = {} } = await getClient().query(GET_CLUB, {

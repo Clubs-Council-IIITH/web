@@ -30,7 +30,7 @@ import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
 import ConfirmDialog from "components/ConfirmDialog";
 
-import MemberPositions from "./MemberPositions";
+import MemberPositions from "components/members/MemberPositions";
 
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();

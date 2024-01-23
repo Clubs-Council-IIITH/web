@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Box, Button, Typography } from "@mui/material";
 
-import ClubLogo from "./ClubLogo";
+import ClubLogo from "components/clubs/ClubLogo";
 
 export default async function ClubBox({ club }) {
     if (!club) return null;

@@ -8,7 +8,7 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 import Tag from "components/Tag";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
-import ClubLogo from "./ClubLogo";
+import ClubLogo from "components/clubs/ClubLogo";
 
 const columns = [
   {

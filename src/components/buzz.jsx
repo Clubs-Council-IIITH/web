@@ -3,7 +3,7 @@
 import { use, useEffect } from "react";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 // import QuickSearchToolbar from "components/QuickSearchToolbar";
-import ClubBox from "./clubs/ClubBox";
+import ClubBox from "components/clubs/ClubBox";
 
 const columns = [
     {

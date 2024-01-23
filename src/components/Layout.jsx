@@ -22,8 +22,8 @@ import Icon from "components/Icon";
 import DrawerItem from "components/DrawerItem";
 import Footer from "components/Footer";
 import AccountPopover from "components/profile/AccountPopover";
-import ScrollbarWrapper from "./ScrollbarWrapper";
-import { useAuth } from "./AuthProvider";
+import ScrollbarWrapper from "components/ScrollbarWrapper";
+import { useAuth } from "components/AuthProvider";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;

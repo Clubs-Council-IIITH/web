@@ -32,7 +32,7 @@ import {
 } from "@mui/material";
 
 import FileUpload from "components/FileUpload";
-import EventBudget from "./EventBudget";
+import EventBudget from "components/events/EventBudget";
 import ConfirmDialog from "components/ConfirmDialog";
 import MemberListItem from "components/members/MemberListItem";
 

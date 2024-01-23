@@ -8,7 +8,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import ClubBanner from "components/clubs/ClubBanner";
-import ClubLogo from "./ClubLogo";
+import ClubLogo from "components/clubs/ClubLogo";
 
 export default function ClubCard({
   dim,
