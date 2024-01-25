@@ -71,6 +71,7 @@ export default function Footer() {
         >
           <IconButton
             component="a"
+            target="_blank"
             href={EMAIL_URL}
             sx={{ mx: 1, color: "text.primary" }}
           >
@@ -78,6 +79,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             component="a"
+            target="_blank"
             href={DISCORD_URL}
             sx={{ mx: 1, color: "text.primary" }}
           >
@@ -85,6 +87,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             component="a"
+            target="_blank"
             href={TWITTER_URL}
             sx={{ mx: 1, color: "text.primary" }}
           >
@@ -92,6 +95,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             component="a"
+            target="_blank"
             href={FACEBOOK_URL}
             sx={{ mx: 1, color: "text.primary" }}
           >
@@ -99,6 +103,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             component="a"
+            target="_blank"
             href={INSTAGRAM_URL}
             sx={{ mx: 1, color: "text.primary" }}
           >
