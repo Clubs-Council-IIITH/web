@@ -22,7 +22,7 @@ export default function DrawerItem({ title, path, icon }) {
   const pathname = usePathname();
 
   const active = getActive(path, pathname);
-  const external = isExternalLink(path);
+  const externalLink = isExternalLink(path);
 
   return (
     <ListItemButton
@@ -48,7 +48,7 @@ export default function DrawerItem({ title, path, icon }) {
           ),
         }),
       }}
-      {...(external
+      {...(externalLink
         ? {
             rel: "noopener noreferrer",
             target: "_blank",
@@ -77,7 +77,7 @@ export default function DrawerItem({ title, path, icon }) {
             justifyContent="space-between"
           >
             {title}
-            {external && <Icon variant="link" />}
+            {externalLink && <Icon variant="link" />}
           </Box>
         }
       />
