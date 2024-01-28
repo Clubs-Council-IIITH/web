@@ -7,7 +7,10 @@ export const metadata = {
 };
 
 export default async function Gallery({ searchParams, limit = undefined }) {
-  const response = await fetch(getStaticFile('gallery/list/'));
+  const response = await fetch(getStaticFile('gallery/list/'), {
+    next: { revalidate: 120 },
+  });
+
   const galleryJSON = await response.json();
   const galleryItems = galleryJSON.map(item => `${getStaticFile('gallery/')}${item}`);
   return (
