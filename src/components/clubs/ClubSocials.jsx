@@ -18,7 +18,7 @@ const sites = {
   youtube: { icon: "mdi:youtube", color: "#FF3333" },
 };
 
-export default function ClubSocials({ socials = {} }) {
+export default function ClubSocials({ socials = {}, email = null }) {
   const [processedSocials, setProcessedSocials] = useState({});
 
   useEffect(() => {
@@ -42,6 +42,21 @@ export default function ClubSocials({ socials = {} }) {
 
   return (
     <Box>
+      {email ? (
+        <Button
+          component={Link}
+          href={`mailto:${email}`}
+          target="_blank"
+          sx={{
+            mx: 0.2,
+            textTransform: "none",
+            color: 'grey',
+          }}
+        >
+          <Icon external variant={'mdi:email'} mr={1} />
+          {email}
+        </Button>
+      ) : null}
       {Object.keys(sites)
         ?.filter((k) => socials[k])
         ?.map((item, index) => (

@@ -50,7 +50,7 @@ export default async function Club({ params }) {
       <Box my={4}>
         <ClubInfo name={club.name} logo={club.logo} tagline={club.tagline} />
       </Box>
-      <ClubSocials socials={club.socials} />
+      <ClubSocials socials={club.socials} email={club.email} />
 
       <Divider sx={{ borderStyle: "dashed", mt: 3 }} />
 
