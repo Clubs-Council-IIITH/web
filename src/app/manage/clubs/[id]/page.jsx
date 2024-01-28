@@ -60,7 +60,7 @@ export default async function ManageClub({ params }) {
           description={club.description}
         />
       </Box>
-      <ClubSocials socials={club.socials} />
+      <ClubSocials socials={club.socials} email={club.email} />
     </Box>
   );
 }
