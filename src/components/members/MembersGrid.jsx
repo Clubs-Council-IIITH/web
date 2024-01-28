@@ -45,7 +45,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
 
 // get the last year a member was in the club
 // if member is still present, return current year + 1
-function extractLatestYear(member) {
+export function extractLatestYear(member) {
   return Math.max(
     ...member.roles.map((r) =>
       !r.endYear ? new Date().getFullYear() + 1 : r.endYear

@@ -1,34 +1,77 @@
+import { getClient } from "gql/client";
+import { GET_MEMBERS } from "gql/queries/members";
+
 import { Container } from "@mui/material";
 
 import Content from "./content.mdx";
+import LocalUsersGrid from "components/users/LocalUsersGrid";
 
-import { getStaticFile } from "utils/files";
+import { executiveBoardWords, techTeamWords } from "constants/ccMembersFilterWords";
 
 export const metadata = {
   title: "Clubs Council",
 };
 
 export default async function ClubsCouncil() {
-  const ccMembers = await fetch(getStaticFile("json/ccMembers.json"), {
-    next: { revalidate: 60 },
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: "cc",
+    },
   });
-  const techMembers = await fetch(getStaticFile("json/techMembers.json"), {
-    next: { revalidate: 60 },
+
+  const executiveMembers = members?.map((member) => {
+    const { roles } = member;
+    const executiveBoardRoles = filterRoles(roles, executiveBoardWords);
+    const newMember = { ...member, roles: executiveBoardRoles };
+    return newMember;
+  })?.filter((member) => {
+    return member.roles.length > 0;
   });
-  const extendedMembers = await fetch(
-    getStaticFile("json/extendedMembers.json"),
-    {
-      next: { revalidate: 60 },
-    }
-  );
+
+  const techMembers = members?.map((member) => {
+    const { roles } = member;
+    const techTeamRoles = filterRoles(roles, techTeamWords);
+    const newMember = { ...member, roles: techTeamRoles };
+    return newMember;
+  })?.filter((member) => {
+    return member.roles.length > 0;
+  });
+
+  const extendedMembers = members?.map((member) => {
+    const { roles } = member;
+    const extendedRoles = roles?.filter((role) => {
+      const { name, endYear } = role;
+      if (endYear !== null) return false;
+      return !executiveBoardWords.some((word) => name.toLowerCase().includes(word)) && !techTeamWords.some((word) => name.toLowerCase().includes(word));
+    });
+
+    const newMember = { ...member, roles: extendedRoles };
+    return newMember;
+  })?.filter((member) => {
+    return member.roles.length > 0;
+  });
 
   return (
     <Container>
       <Content
-        ccMembers={await ccMembers.json()}
-        techMembers={await techMembers.json()}
-        extendedMembers={await extendedMembers.json()}
+        ccMembers={executiveMembers?.length ? (
+          <LocalUsersGrid users={executiveMembers} />
+        ) : null}
+        techMembers={techMembers?.length ? (
+          <LocalUsersGrid users={techMembers} />
+        ) : null}
+        extendedMembers={extendedMembers?.length ? (
+          <LocalUsersGrid users={extendedMembers} />
+        ) : null}
       />
     </Container>
   );
 }
+
+const filterRoles = (roles, filterWords) => {
+  return roles?.filter((role) => {
+    const { name, endYear } = role;
+    const lowercaseName = name.toLowerCase();
+    return filterWords.some((word) => lowercaseName.includes(word) && endYear === null);
+  });
+};

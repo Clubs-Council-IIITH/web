@@ -1,6 +1,8 @@
-import { Card } from "@mui/material"
+import { Card, Box, Typography, Stack, Button } from "@mui/material";
+import Link from "next/link";
+import Icon from "components/Icon";
+
 import ClubBanner from "components/clubs/ClubBanner";
-import LocalUsersGrid from "components/users/LocalUsersGrid"
 import { getStaticFile } from "utils/files";
 
 
@@ -21,14 +23,56 @@ The Clubs Council works closely with the institute's Students' Life Office, Fina
 
 The primary aim of the Clubs Council is to ensure that all student-driven organizations on campus are successful in their aim to cultivate diverse campus life experiences throughout the year, and enrich the thriving campus community outside the classroom, while fostering inclusion.
 
-### Executive Board
-<LocalUsersGrid users={props.ccMembers} />
+<Stack direction="row" pt={2} mb={2} mt={3}>
+  ### Executive Board
+  <Box sx={{ flexGrow: 1 }} />
+  <Button
+    variant="none"
+    color="secondary"
+    component={Link}
+    href="/about/clubs-council/cc-members"
+  >
+    <Typography variant="button" color="text.primary">
+      View all
+    </Typography>
+    <Icon variant="chevron-right" />
+  </Button>
+</Stack>
+{props.ccMembers}
 
-### Tech Team
-<LocalUsersGrid users={props.techMembers} />
+<Stack direction="row" pt={2} mb={2} mt={3}>
+  ### Tech Team
+  <Box sx={{ flexGrow: 1 }} />
+  <Button
+    variant="none"
+    color="secondary"
+    component={Link}
+    href="/about/clubs-council/tech-members"
+  >
+    <Typography variant="button" color="text.primary">
+      View all
+    </Typography>
+    <Icon variant="chevron-right" />
+  </Button>
+</Stack>
+{props.techMembers}
 
-### Extended Team
-<LocalUsersGrid users={props.extendedMembers} />
+<Stack direction="row" pt={2} mb={2} mt={3}>
+  ### Extended Team
+  <Box sx={{ flexGrow: 1 }} />
+  <Button
+    variant="none"
+    color="secondary"
+    component={Link}
+    href="/about/clubs-council/cc-members"
+  >
+    <Typography variant="button" color="text.primary">
+      View all
+    </Typography>
+    <Icon variant="chevron-right" />
+  </Button>
+</Stack>
+{props.extendedMembers}
 
 ### The Clubs Council Team
 The Club Coordinators are an essential part of the Clubs Council, and they come together to collaboratively organise and provide an extraordinary range of opportunities through the form of various events, enabling students to pursue their hobbies and develop their extra-curricular skills.
