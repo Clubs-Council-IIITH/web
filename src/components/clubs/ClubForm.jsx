@@ -120,23 +120,24 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     };
 
     // set CID based on club email
-    data.cid = formData.email.split("@")[0];
+    // Special case for Clubs Council
+    data.cid = formData.email === "clubs@iiit.ac.in" ? "cc" : formData.email.split("@")[0];
 
     // upload media
     data.logo =
       typeof formData.logo === "string"
         ? formData.logo
         : Array.isArray(formData.logo) && formData.logo.length > 0
-          ? await uploadFile(formData.logo[0], "image")
-          : null;
+        ? await uploadFile(formData.logo[0], "image")
+        : null;
     data.banner =
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-          ? await uploadFile(formData.banner[0], "image")
-          : null;
+        ? await uploadFile(formData.banner[0], "image")
+        : null;
 
-    if (data.category != "other")
+    if (data.category !== "other")
       data.studentBody = false;
 
     // mutate
