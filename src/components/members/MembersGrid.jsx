@@ -1,8 +1,8 @@
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Divider, Grid, Typography } from "@mui/material";
-import MemberCard from "components/members/MemberCard";
+import { Divider, Typography } from "@mui/material";
+import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 export const dynamic = "force-dynamic";
 
@@ -37,17 +37,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
             </Typography>
           </Divider>
         ) : null}
-        <Grid container spacing={2} mb={3}>
-          {targetMembers[year]?.map((member) => (
-            <Grid key={member.uid} item xs={12} sm={6} md={4} lg={2.4}>
-              <MemberCard
-                uid={member.uid}
-                poc={member.poc}
-                roles={member.roles}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <LocalUsersGrid users={targetMembers[year]} />
       </>
     )) :
     <center><h2>No Members Found!</h2></center>;
