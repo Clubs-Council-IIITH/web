@@ -1,13 +1,16 @@
-import { MDXRemote } from "next-mdx-remote/rsc";
+import { getClient } from "gql/client";
+import { GET_MEMBERS } from "gql/queries/members";
+import { getStaticFile } from "utils/files";
 
-import { Container, Box, Typography, Stack, Button } from "@mui/material";
 import Link from "next/link";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { Container, Box, Typography, Stack, Button } from "@mui/material";
+
 import Icon from "components/Icon";
+import LocalUsersGrid from "components/users/LocalUsersGrid";
+import { techTeamWords } from "constants/ccMembersFilterWords";
 
 import Status from "./status.mdx";
-
-import LocalUsersGrid from "components/users/LocalUsersGrid";
-import { getStaticFile } from "utils/files";
 
 const limit = 20;
 
@@ -18,14 +21,26 @@ export const metadata = {
 export default async function Changelog({ searchParams }) {
   const show_all = searchParams?.all === "true" ? true : false;
 
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: "cc",
+    },
+  });
+
+  const techMembers = members?.map((member) => {
+    const { roles } = member;
+    const techTeamRoles = filterRoles(roles, techTeamWords);
+    const newMember = { ...member, roles: techTeamRoles };
+    return newMember;
+  })?.filter((member) => {
+    return member.roles.length > 0;
+  });
+
   const status = await fetch(getStaticFile("json/status.json"), {
     cache: "no-store",
   });
   const logs = await fetch(getStaticFile("mdx/logs.mdx"), {
     cache: "no-store",
-  });
-  const techMembers = await fetch(getStaticFile("json/techMembers.json"), {
-    next: { revalidate: 60 },
   });
 
   let logsText = await logs.text();
@@ -35,10 +50,26 @@ export default async function Changelog({ searchParams }) {
       <Typography variant="h3">Status</Typography>
       <Status status={await status.json()} />
 
-      <Typography variant="h3" mt={3}>
-        Maintainers
-      </Typography>
-      <LocalUsersGrid users={await techMembers.json()} />
+      <Stack direction="row" pt={2} mb={2} mt={3}>
+        <Typography variant="h3" mt={3}>
+          Maintainers
+        </Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <Button
+          variant="none"
+          color="secondary"
+          component={Link}
+          href="/about/clubs-council/tech-members"
+        >
+          <Typography variant="button" color="text.primary">
+            View all
+          </Typography>
+          <Icon variant="chevron-right" />
+        </Button>
+      </Stack>
+      {techMembers?.length ? (
+        <LocalUsersGrid users={techMembers} />
+      ) : null}
 
       <Stack direction="row" pt={2} mb={2} mt={3}>
         <Typography variant="h3">Changelog</Typography>
@@ -86,3 +117,18 @@ export default async function Changelog({ searchParams }) {
     </Container>
   );
 }
+
+const filterRoles = (roles, filterWords) => {
+  let filteredRoles = roles?.filter((role) => {
+    const { name, endYear } = role;
+    const lowercaseName = name.toLowerCase();
+    return filterWords.some((word) => lowercaseName.includes(word) && endYear === null);
+  });
+  if (filteredRoles?.length > 0)
+    return roles?.filter((role) => {
+      const { name, endYear } = role;
+      const lowercaseName = name.toLowerCase();
+      return filterWords.some((word) => lowercaseName.includes(word));
+    });
+  else return filteredRoles;
+};
