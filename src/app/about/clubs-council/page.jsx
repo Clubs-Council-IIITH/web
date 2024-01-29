@@ -69,9 +69,16 @@ export default async function ClubsCouncil() {
 }
 
 const filterRoles = (roles, filterWords) => {
-  return roles?.filter((role) => {
+  let filteredRoles = roles?.filter((role) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some((word) => lowercaseName.includes(word) && endYear === null);
   });
+  if (filteredRoles?.length > 0)
+    return roles?.filter((role) => {
+      const { name, endYear } = role;
+      const lowercaseName = name.toLowerCase();
+      return filterWords.some((word) => lowercaseName.includes(word));
+    });
+  else return filteredRoles;
 };
