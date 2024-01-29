@@ -52,3 +52,13 @@ export function extractLatestYear(member) {
     )
   );
 }
+
+// get the first year a member was in the club
+// if member is still present, return -1
+export function extractFirstYear(member) {
+  return Math.min(
+    ...member.roles.map((r) =>
+      !r.endYear ? -1 : r.startYear
+    )
+  );
+}

@@ -4,7 +4,7 @@ import { GET_MEMBERS } from "gql/queries/members";
 import { Container, Divider, Typography } from "@mui/material";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
-import { extractLatestYear } from "components/members/MembersGrid";
+import { extractFirstYear } from "components/members/MembersGrid";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -32,7 +32,7 @@ export default async function TechTeam() {
 
   // construct dict of { year: [members] } where each year is a key
   const targetMembers = techMembers ? techMembers.reduce((acc, member) => {
-    const latestYear = extractLatestYear(member);
+    const latestYear = extractFirstYear(member);
     if (!acc[latestYear]) {
       acc[latestYear] = [];
     }
@@ -47,9 +47,9 @@ export default async function TechTeam() {
       </center>
       {techMembers?.length ? Object.keys(targetMembers)
         ?.sort((a, b) => {
-          if (a === currentYear) {
+          if (a === -1) {
             return -1;
-          } else if (b === currentYear) {
+          } else if (b === -1) {
             return 1;
           } else {
             return parseInt(a) - parseInt(b);
@@ -59,7 +59,7 @@ export default async function TechTeam() {
           <>
             <Divider textAlign="left" sx={{ mb: 2 }}>
               <Typography variant="h5" textTransform="uppercase">
-                {year === currentYear ? "Current Members" : year}
+                {year == -1 ? "Current Members" : year}
               </Typography>
             </Divider>
             <LocalUsersGrid users={targetMembers[year]} />
