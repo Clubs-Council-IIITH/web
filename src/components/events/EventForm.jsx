@@ -238,7 +238,7 @@ export default function EventForm({
               Details
             </Typography>
             <Grid container item spacing={2}>
-              {user?.role === "cc" ? (
+              {["cc", "slo"].includes(user?.role) ? (
                 <Grid item xs={12}>
                   <EventClubSelect
                     control={control}
@@ -254,7 +254,7 @@ export default function EventForm({
                 <EventNameInput
                   control={control}
                   disabled={
-                    user?.role != "cc" &&
+                    !["cc", "slo"].includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -265,7 +265,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   disabled={
-                    user?.role != "cc" &&
+                    !["cc", "slo"].includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -339,7 +339,7 @@ export default function EventForm({
                   watch={watch}
                   resetField={resetField}
                   disabled={
-                    user?.role != "cc" &&
+                    !["cc", "slo"].includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -599,6 +599,9 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
           control={control}
           rules={{
             required: "End date is required!",
+            validate: (value) => {
+              return dayjs(value) >= dayjs(startDateInput) || "Event must end after it starts!";
+            }
           }}
           render={({
             field: { value, ...rest },
@@ -607,8 +610,8 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
             <DateTimePicker
               label="Ends *"
               disabled={!startDateInput || disabled}
-              minDateTime={startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput}
-              disablePast={role !== "cc"}
+              minDateTime={startDateInput ? (startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput).add(1, 'minute') : null}
+              disablePast={!["cc", "slo"].includes(role)}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
