@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
 import { GET_USER } from "gql/queries/auth";
+import { redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -16,25 +17,33 @@ export const metadata = {
 export default async function ManageMember({ params }) {
   const { id } = params;
 
-  const {
-    data: { member, userMeta, userProfile },
-  } = await getClient().query(GET_MEMBER, {
-    memberInput: {
-      cid: id?.split(encodeURIComponent(":"))[0],
-      uid: id?.split(encodeURIComponent(":"))[1],
-      rid: null,
-    },
-    userInput: {
-      uid: id?.split(encodeURIComponent(":"))[1],
-    },
-  });
+  try {
+    const {
+      data: { member, userMeta, userProfile },
+    } = await getClient().query(GET_MEMBER, {
+      memberInput: {
+        cid: id?.split(encodeURIComponent(":"))[0],
+        uid: id?.split(encodeURIComponent(":"))[1],
+        rid: null,
+      },
+      userInput: {
+        uid: id?.split(encodeURIComponent(":"))[1],
+      },
+    });
 
-  // fetch currently logged in user
-  const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null }
-  );
-  const user = { ...currentUserMeta, ...currentUserProfile };
+    // fetch currently logged in user
+    const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(
+      GET_USER,
+      { userInput: null }
+    );
+    const user = { ...currentUserMeta, ...currentUserProfile };
+    if (userProfile === null || userMeta === null) {
+      return redirect("/404");
+    }
+  } catch (error) {
+    redirect("/404");
+  }
+
 
   return (
     <Container>

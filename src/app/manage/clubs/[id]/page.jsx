@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
+import { redirect } from "next/navigation";
 
 import { Box, Card } from "@mui/material";
 
@@ -14,17 +15,21 @@ import { EditClub, DeleteClub } from "components/clubs/ClubActions";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
-    userInput: null,
-  });
+  try {
+    const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+      userInput: null,
+    });
 
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
-  });
+    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+      clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
+    });
 
-  return {
-    title: club.name,
-  };
+    return {
+      title: club.name,
+    };
+  } catch (error) {
+    redirect("/404");
+  }
 }
 
 export default async function ManageClub({ params }) {

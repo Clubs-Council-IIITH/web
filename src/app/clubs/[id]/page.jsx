@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
@@ -17,13 +18,17 @@ import MembersGrid from "components/members/MembersGrid";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id },
-  });
+  try {
+    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+      clubInput: { cid: id },
+    });
 
-  return {
-    title: club.name,
-  };
+    return {
+      title: club.name,
+    };
+  } catch (error) {
+    return redirect("/404");
+  }
 }
 
 export default async function Club({ params }) {

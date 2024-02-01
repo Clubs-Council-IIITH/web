@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
+import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
@@ -13,13 +14,17 @@ export const metadata = {
 export default async function EditClub({ params }) {
   const { id } = params;
 
-  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
-    userInput: null,
-  });
+  try {
+    const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+      userInput: null,
+    });
 
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
-  });
+    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+      clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
+    });
+  } catch (error) {
+    redirect("/404");
+  }
 
   return (
     <Container>

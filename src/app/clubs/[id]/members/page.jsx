@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
+import { redirect } from "next/navigation";
 
 import { Box } from "@mui/material";
 
@@ -8,13 +9,17 @@ import MembersGrid from "components/members/MembersGrid";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id },
-  });
+  try {
+    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+      clubInput: { cid: id },
+    });
 
-  return {
-    title: `Members | ${club.name}`,
-  };
+    return {
+      title: `Members | ${club.name}`,
+    };
+  } catch (error) {
+    redirect("/404");
+  }
 }
 
 export default function Members({ params }) {

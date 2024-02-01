@@ -14,17 +14,25 @@ export const metadata = {
 export default async function EditProfile({ params }) {
   const { id } = params;
 
-  // get target user
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput: {
-        uid: id,
-      },
+  try {
+    // get target user
+    const { data: { userProfile, userMeta } = {} } = await getClient().query(
+      GET_USER_PROFILE,
+      {
+        userInput: {
+          uid: id,
+        },
+      }
+    );
+    const user = { ...userMeta, ...userProfile };
+
+    if (userProfile === null || userMeta === null) {
+      return redirect("/404");
     }
-  );
-  const user = { ...userMeta, ...userProfile };
-  // console.log(user);
+    // console.log(user);
+  } catch (error) {
+    redirect("/404");
+  }
 
   // if user is a club, redirect to club edit page
   if (user.role === "club") {

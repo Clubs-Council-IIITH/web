@@ -3,7 +3,8 @@ import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
 
 import { Box, Chip, Grid, Typography, Divider, CardActionArea } from "@mui/material";
-import { Link } from 'next/link'
+import { Link } from 'next/link';
+import { redirect } from "next/navigation";
 import ActionPalette from "components/ActionPalette";
 
 import EventDetails from "components/events/EventDetails";
@@ -26,13 +27,17 @@ import MemberListItem from "components/members/MemberListItem";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-    eventid: id,
-  });
+  try {
+    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+      eventid: id,
+    });
 
-  return {
-    title: event.name,
-  };
+    return {
+      title: event.name,
+    };
+  } catch (error) {
+    redirect("/404");
+  }
 }
 
 export default async function ManageEvent({ params }) {

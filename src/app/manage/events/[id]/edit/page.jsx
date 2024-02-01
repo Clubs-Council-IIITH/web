@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
+import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
@@ -35,9 +36,13 @@ function transformEvent(event) {
 export default async function EditEvent({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-    eventid: id,
-  });
+  try {
+    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+      eventid: id,
+    });
+  } catch (error) {
+    redirect("/404");
+  }
 
   return (
     <Container>

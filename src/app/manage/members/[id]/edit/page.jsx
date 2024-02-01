@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
+import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
@@ -23,16 +24,21 @@ function transformMember(member) {
 export default async function EditMember({ params }) {
   const { id } = params;
 
-  const { data: { member } = {} } = await getClient().query(GET_MEMBER, {
-    memberInput: {
-      cid: id?.split(encodeURIComponent(":"))[0],
-      uid: id?.split(encodeURIComponent(":"))[1],
-      rid: null,
-    },
-    userInput: {
-      uid: id?.split(encodeURIComponent(":"))[1],
-    },
-  });
+  try {
+    const { data: { member } = {} } = await getClient().query(GET_MEMBER, {
+      memberInput: {
+        cid: id?.split(encodeURIComponent(":"))[0],
+        uid: id?.split(encodeURIComponent(":"))[1],
+        rid: null,
+      },
+      userInput: {
+        uid: id?.split(encodeURIComponent(":"))[1],
+      },
+    });
+  } catch (error) {
+    redirect("/404");
+  }
+
 
   return (
     <Container>
