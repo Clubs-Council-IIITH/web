@@ -40,82 +40,80 @@ export default async function ManageMember({ params }) {
     if (userProfile === null || userMeta === null) {
       return redirect("/404");
     }
+    return (
+      <Container>
+        <MemberActionsList member={member} user={user} />
+        <Grid container spacing={2} mt={4}>
+          <Grid item xs={12}>
+            <Stack direction="row" alignItems="center" spacing={4}>
+              <UserImage
+                image={userMeta.img}
+                name={userProfile.firstName}
+                gender={userProfile.gender}
+                width={150}
+                height={150}
+              />
+              <Stack direction="column" spacing={1}>
+                <Typography variant="h2" word-wrap="break-word">
+                  {userProfile.firstName} {userProfile.lastName}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  fontFamily="monospace"
+                >
+                  {userProfile.email}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Grid>
+          <Grid item container xs spacing={1} mt={5}>
+            <Grid item xs>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Point of Contact
+              </Typography>
+              <Typography variant="h5" fontWeight={300}>
+                {member.poc ? "Yes" : "No"}
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Club
+              </Typography>
+              <ClubButton clubid={id?.split(encodeURIComponent(":"))[0]} />
+            </Grid>
+          </Grid>
+          <Grid item container mt={3}>
+            <Grid item xs={12}>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Positions
+              </Typography>
+              <MemberPositions
+                rows={member?.roles?.map((r, key) => ({
+                  ...r,
+                  id: r?.mid || key,
+                }))} // add ID to each position item if it doesn't exist (MUI requirement)
+                editable={false}
+                member={member}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
+    );
   } catch (error) {
     redirect("/404");
   }
-
-
-  return (
-    <Container>
-      <MemberActionsList member={member} user={user} />
-      <Grid container spacing={2} mt={4}>
-        <Grid item xs={12}>
-          <Stack direction="row" alignItems="center" spacing={4}>
-            <UserImage
-              image={userMeta.img}
-              name={userProfile.firstName}
-              gender={userProfile.gender}
-              width={150}
-              height={150}
-            />
-            <Stack direction="column" spacing={1}>
-              <Typography variant="h2" word-wrap="break-word">
-                {userProfile.firstName} {userProfile.lastName}
-              </Typography>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                fontFamily="monospace"
-              >
-                {userProfile.email}
-              </Typography>
-            </Stack>
-          </Stack>
-        </Grid>
-        <Grid item container xs spacing={1} mt={5}>
-          <Grid item xs>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Point of Contact
-            </Typography>
-            <Typography variant="h5" fontWeight={300}>
-              {member.poc ? "Yes" : "No"}
-            </Typography>
-          </Grid>
-          <Grid item xs>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Club
-            </Typography>
-            <ClubButton clubid={id?.split(encodeURIComponent(":"))[0]} />
-          </Grid>
-        </Grid>
-        <Grid item container mt={3}>
-          <Grid item xs={12}>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Positions
-            </Typography>
-            <MemberPositions
-              rows={member?.roles?.map((r, key) => ({
-                ...r,
-                id: r?.mid || key,
-              }))} // add ID to each position item if it doesn't exist (MUI requirement)
-              editable={false}
-              member={member}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
-    </Container>
-  );
 }

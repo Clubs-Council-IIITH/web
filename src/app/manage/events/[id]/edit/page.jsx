@@ -40,17 +40,16 @@ export default async function EditEvent({ params }) {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
+    return (
+      <Container>
+        <Typography variant="h3" gutterBottom mb={3}>
+          Edit Event Details
+        </Typography>
+  
+        <EventForm id={id} defaultValues={transformEvent(event)} action="edit" />
+      </Container>
+    );
   } catch (error) {
     redirect("/404");
   }
-
-  return (
-    <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
-        Edit Event Details
-      </Typography>
-
-      <EventForm id={id} defaultValues={transformEvent(event)} action="edit" />
-    </Container>
-  );
 }

@@ -35,18 +35,16 @@ export default async function EditMember({ params }) {
         uid: id?.split(encodeURIComponent(":"))[1],
       },
     });
+    return (
+      <Container>
+        <Typography variant="h3" gutterBottom mb={3}>
+          Edit Member Details
+        </Typography>
+  
+        <MemberForm defaultValues={transformMember(member)} action="edit" />
+      </Container>
+    );
   } catch (error) {
     redirect("/404");
   }
-
-
-  return (
-    <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
-        Edit Member Details
-      </Typography>
-
-      <MemberForm defaultValues={transformMember(member)} action="edit" />
-    </Container>
-  );
 }

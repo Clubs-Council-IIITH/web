@@ -30,18 +30,18 @@ export default async function EditProfile({ params }) {
       return redirect("/404");
     }
     // console.log(user);
-  } catch (error) {
-    redirect("/404");
-  }
-
-  // if user is a club, redirect to club edit page
-  if (user.role === "club") {
-    redirect(`/manage/clubs/${user.uid}/edit`);
-  }
-
-  return (
-    <Container>
+    
+    // if user is a club, redirect to club edit page
+    if (user.role === "club") {
+      redirect(`/manage/clubs/${user.uid}/edit`);
+    }
+    
+    return (
+      <Container>
       <UserForm defaultValues={user} action="save" />
     </Container>
   );
+} catch (error) {
+  redirect("/404");
+}
 }

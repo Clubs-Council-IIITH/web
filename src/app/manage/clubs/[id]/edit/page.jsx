@@ -22,17 +22,16 @@ export default async function EditClub({ params }) {
     const { data: { club } = {} } = await getClient().query(GET_CLUB, {
       clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
     });
+    return (
+      <Container>
+        <Typography variant="h3" gutterBottom mb={3}>
+          Edit Club Details
+        </Typography>
+  
+        <ClubForm defaultValues={club} action="edit" />
+      </Container>
+    );
   } catch (error) {
     redirect("/404");
   }
-
-  return (
-    <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
-        Edit Club Details
-      </Typography>
-
-      <ClubForm defaultValues={club} action="edit" />
-    </Container>
-  );
 }
