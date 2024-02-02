@@ -3,6 +3,7 @@ import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
+import { redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -16,19 +17,27 @@ import UserMemberships from "components/profile/UserMemberships";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput: {
-        uid: id,
+  try {
+    const { data: { userProfile, userMeta } = {} } = await getClient().query(
+      GET_USER_PROFILE,
+      {
+        userInput: {
+          uid: id,
+        },
       },
-    },
-  );
-  const user = { ...userMeta, ...userProfile };
+    );
+    const user = { ...userMeta, ...userProfile };
 
-  return {
-    title: `${user.firstName} ${user.lastName}`,
-  };
+    if (userProfile === null || userMeta === null) {
+      return redirect("/404");
+    }
+
+    return {
+      title: `${user.firstName} ${user.lastName}`,
+    };
+  } catch (error) {
+    return redirect("/404");
+  }
 }
 
 export default async function Profile({ params }) {
@@ -85,7 +94,7 @@ export default async function Profile({ params }) {
         2. if current user is viewing their own profile and is not a club
       */}
       {currentUser?.role === "cc" ||
-      (currentUser?.uid === user.uid && user.role !== "club") ? (
+        (currentUser?.uid === user.uid && user.role !== "club") ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
