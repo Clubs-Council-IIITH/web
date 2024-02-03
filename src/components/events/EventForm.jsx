@@ -518,8 +518,8 @@ function EventNameInput({ control, disabled = true }) {
           message: "Event name must be at least 5 characters long!",
         },
         maxLength: {
-          value: 50,
-          message: "Event name must be at most 50 characters long!",
+          value: 150,
+          message: "Event name must be at most 150 characters long!",
         },
       }}
       render={({ field, fieldState: { error, invalid } }) => (
@@ -682,8 +682,8 @@ function EventDescriptionInput({ control }) {
       control={control}
       rules={{
         maxLength: {
-          value: 1000,
-          message: "Event description must be at most 1000 characters long!",
+          value: 4000,
+          message: "Event description must be at most 4000 characters long!",
         },
       }}
       render={({ field, fieldState: { error, invalid } }) => (
@@ -823,6 +823,12 @@ function EventVenueInput({ control, watch, resetField, disabled = true, eventid 
             <Controller
               name="equipment"
               control={control}
+              rules={{
+                maxLength: {
+                  value: 800,
+                  message: "Equipment field must be at most 800 characters long!",
+                },
+              }}
               render={({ field, fieldState: { error, invalid } }) => (
                 <TextField
                   {...field}
@@ -843,6 +849,12 @@ function EventVenueInput({ control, watch, resetField, disabled = true, eventid 
             <Controller
               name="additional"
               control={control}
+              rules={{
+                maxLength: {
+                  value: 800,
+                  message: "Additional field must be at most 800 characters long!",
+                },
+              }}
               render={({ field, fieldState: { error, invalid } }) => (
                 <TextField
                   {...field}
