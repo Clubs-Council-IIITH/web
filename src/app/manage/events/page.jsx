@@ -40,14 +40,14 @@ export default async function ManageEvents() {
           Manage Events
         </Typography>
 
-        <Button
+        {["cc", "club"].includes(userMeta?.role) ? <Button
           component={Link}
           href="/manage/events/new"
           variant="contained"
           startIcon={<Icon variant="add" />}
         >
           New Event
-        </Button>
+        </Button> : null}
       </Stack>
 
       {/* only pending events */}
