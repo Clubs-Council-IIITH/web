@@ -24,7 +24,7 @@
     "@mui/x-data-grid": "^6.15.1",
     "@mui/x-date-pickers": "^6.15.1",
     "@next/mdx": "^13.5.6",
-    "@urql/next": "^1.0.0",
+    "@urql/next": "^1.1.1",
     "cookies-next": "^4.0.0",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.16.4",
