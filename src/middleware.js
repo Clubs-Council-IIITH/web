@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { match } from "path-to-regexp";
-import jwt_decode from "jwt-decode";
+import { jwtDecode as jwt_decode } from "jwt-decode";
 
 import routes from "acl/routes";
 import clubRedirects from "acl/clubRedirects";
