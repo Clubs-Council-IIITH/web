@@ -33,7 +33,7 @@ const new_team = [
         "poc": false,
         "roles": [
             {
-                "name": "Joint Secretary - Logistics & Inventory Head",
+                "name": "Joint Secretary - Logistics & Inventory",
                 "startYear": 2024,
                 "endYear": null
             }
@@ -44,7 +44,7 @@ const new_team = [
         "poc": false,
         "roles": [
             {
-                "name": "Joint Secretary - Technical & Social Initiatives Head",
+                "name": "Joint Secretary - Technical & Social Initiatives",
                 "startYear": 2024,
                 "endYear": null
             }
@@ -55,7 +55,7 @@ const new_team = [
         "poc": false,
         "roles": [
             {
-                "name": "Joint Secretary - Finances Head",
+                "name": "Joint Secretary - Finances",
                 "startYear": 2024,
                 "endYear": null
             }
