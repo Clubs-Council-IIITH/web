@@ -1,11 +1,11 @@
 # cache dependencies
-FROM node:20-slim as node_cache
+FROM node:20-slim AS node_cache
 WORKDIR /cache/
 COPY package*.json .
 RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose --omit=dev
 
 # build and start
-FROM node:20-slim as build
+FROM node:20-slim AS build
 ARG ENV=production
 ENV NEXT_PUBLIC_ENV=$ENV
 WORKDIR /web
