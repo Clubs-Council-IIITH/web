@@ -1,8 +1,7 @@
 import { getClient } from "gql/client";
-import { GET_CLUB } from "gql/queries/clubs";
+import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
