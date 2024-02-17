@@ -52,6 +52,7 @@ export default function EventForm({
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
   const [budgetEditing, setBudgetEditing] = useState(false);
+  const [hasPhone, setHasPhone] = useState(true);
 
   const { control, handleSubmit, watch, resetField } = useForm({
     defaultValues,
@@ -167,6 +168,31 @@ export default function EventForm({
         setLoading(false);
       }
     },
+    phone: async (data) => {
+      let res = await fetch("/actions/users/save/phone", {
+        method: "POST",
+        body: JSON.stringify({ userDataInput: data }),
+      });
+      res = await res.json();
+
+      if (res.ok) {
+        // show success toast & redirect to manage page
+        triggerToast({
+          title: "Success!",
+          messages: ["Profile saved."],
+          severity: "success",
+        });
+        router.push(`/profile/${defaultValues.uid}`);
+        router.refresh();
+      } else {
+        // show error toast
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+        setLoading(false);
+      }
+    },
   };
 
   async function onSubmit(formData, opts) {
@@ -218,6 +244,16 @@ export default function EventForm({
 
     // TODO: fix event link field
     data.link = null;
+
+    // set POC phone number
+    if (!hasPhone && formData.poc_phone) {
+      const phoneData = {
+        uid: formData.poc,
+        phone: formData.poc_phone,
+        img: null,
+      };
+      submitHandlers["phone"](phoneData);
+    }
 
     // mutate
     submitHandlers[action](data, opts);
@@ -280,11 +316,11 @@ export default function EventForm({
               </Grid>
               {user?.role === "club" ? (
                 <Grid item xs={12}>
-                  <EventPOC control={control} cid={user?.uid} />
+                  <EventPOC control={control} watch={watch} cid={user?.uid} hasPhone={hasPhone} setHasPhone={setHasPhone} />
                 </Grid>
               ) : user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <EventPOC control={control} cid={watch("clubid")} />
+                  <EventPOC control={control} watch={watch} cid={watch("clubid")} hasPhone={hasPhone} setHasPhone={setHasPhone} />
                 </Grid>
               ) : null}
               {/*
@@ -969,8 +1005,10 @@ function EventBudgetTable({ control, watch, disabled = true, setBudgetEditing = 
 }
 
 // input event POC
-function EventPOC({ control, cid }) {
+function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
   const { triggerToast } = useToast();
+  const poc = watch("poc");
+
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
@@ -993,35 +1031,91 @@ function EventPOC({ control, cid }) {
     })();
   }, [cid]);
 
-  // useEffect(() => console.log(members), [members]);
+  // fetch phone number of selected member
+  useEffect(() => {
+    if (poc) {
+      (async () => {
+        let res = await fetch("/actions/users/get/full", {
+          method: "POST",
+          body: JSON.stringify({ uid: poc }),
+        });
+        res = await res.json();
+        if (!res.ok) {
+          triggerToast({
+            title: "Unable to fetch phone number",
+            messages: res.error.messages,
+            severity: "error",
+          });
+        } else {
+          console.log(res.data);
+          if (res.data?.phone)
+            setHasPhone(true);
+          else
+            setHasPhone(false);
+        }
+      })();
+    }
+  }, [poc]);
 
   return (
-    <Controller
-      name="poc"
-      // disabled={members.length !== 0}
-      control={control}
-      rules={{ required: "Select a member!" }}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <FormControl fullWidth error={invalid}>
-          <InputLabel id="poc">Point of Contact *</InputLabel>
-          {members.length === 0 ? (
-            <Box py={25} width="100%" display="flex" justifyContent="center">
-              <Fade in>
-                <CircularProgress color="primary" />
-              </Fade>
-            </Box>
-          ) : (
-            <Select labelId="poc" label="Point of Contact *" fullWidth {...field}>
-              {members?.slice()?.map((member) => (
-                <MenuItem key={member._id} value={member.uid}>
-                  <MemberListItem {...member} />
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-          <FormHelperText>{error?.message}</FormHelperText>
-        </FormControl>
-      )}
-    />
+    <>
+      <Controller
+        name="poc"
+        // disabled={members.length !== 0}
+        control={control}
+        rules={{ required: "Select a member!" }}
+        render={({ field, fieldState: { error, invalid } }) => (
+          <FormControl fullWidth error={invalid}>
+            <InputLabel id="poc">Point of Contact *</InputLabel>
+            {members.length === 0 ? (
+              <Box py={25} width="100%" display="flex" justifyContent="center">
+                <Fade in>
+                  <CircularProgress color="primary" />
+                </Fade>
+              </Box>
+            ) : (
+              <Select labelId="poc" label="Point of Contact *" fullWidth {...field} 
+              MenuProps={{
+                  style: { maxHeight: 400 }
+              }} >
+                {members?.slice()?.map((member) => (
+                  <MenuItem key={member._id} value={member.uid}>
+                    <MemberListItem uid={member.uid} />
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+            <FormHelperText>{error?.message}</FormHelperText>
+          </FormControl>
+        )}
+      />
+
+      {members.length === 0 || !poc || hasPhone ? null :
+        <Box mt={2}>
+          <Controller
+            name="poc_phone"
+            control={control}
+            rules={{
+              pattern: {
+                value:
+                  /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g,
+                message: "Invalid phone number!",
+              },
+              required: "POC Phone number is required!",
+            }}
+            render={({ field, fieldState: { error, invalid } }) => (
+              <TextField
+                {...field}
+                error={invalid}
+                helperText={error?.message}
+                label="Phone Number"
+                variant="outlined"
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+      }
+    </>
   );
 }
