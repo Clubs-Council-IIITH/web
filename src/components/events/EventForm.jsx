@@ -1074,7 +1074,10 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
                 </Fade>
               </Box>
             ) : (
-              <Select labelId="poc" label="Point of Contact *" fullWidth {...field}>
+              <Select labelId="poc" label="Point of Contact *" fullWidth {...field} 
+              MenuProps={{
+                  style: { maxHeight: 400 }
+              }} >
                 {members?.slice()?.map((member) => (
                   <MenuItem key={member._id} value={member.uid}>
                     <MemberListItem uid={member.uid} />
