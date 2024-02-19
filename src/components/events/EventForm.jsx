@@ -41,6 +41,8 @@ import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 import { useAuth } from "components/AuthProvider";
 
+const allowed_roles = ["cc", "slo"];
+
 export default function EventForm({
   id = null,
   defaultValues = {},
@@ -214,7 +216,7 @@ export default function EventForm({
     // set club ID for event based on user role
     if (user?.role === "club") {
       data.clubid = user?.uid;
-    } else if (user?.role === "cc") {
+    } else if (allowed_roles.includes(user?.role)) {
       data.clubid = formData.clubid;
     }
 
@@ -274,7 +276,7 @@ export default function EventForm({
               Details
             </Typography>
             <Grid container item spacing={2}>
-              {["cc", "slo"].includes(user?.role) ? (
+              {allowed_roles.includes(user?.role) ? (
                 <Grid item xs={12}>
                   <EventClubSelect
                     control={control}
@@ -290,7 +292,7 @@ export default function EventForm({
                 <EventNameInput
                   control={control}
                   disabled={
-                    !["cc", "slo"].includes(user?.role) &&
+                    !allowed_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -301,7 +303,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   disabled={
-                    !["cc", "slo"].includes(user?.role) &&
+                    !allowed_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -375,7 +377,7 @@ export default function EventForm({
                   watch={watch}
                   resetField={resetField}
                   disabled={
-                    !["cc", "slo"].includes(user?.role) &&
+                    !allowed_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -431,7 +433,7 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              {user?.role === "cc" ||
+              {allowed_roles.includes(user?.role) ||
                 (user?.role === "club" &&
                   defaultValues?.status?.state != undefined &&
                   defaultValues?.status?.state != "incomplete") ? (
@@ -460,7 +462,7 @@ export default function EventForm({
                 </LoadingButton>
               )}
             </Grid>
-            {user?.role === "cc" ||
+            {allowed_roles.includes(user?.role) ||
               (user?.role === "club" &&
                 defaultValues?.status?.state != undefined &&
                 defaultValues?.status?.state != "incomplete") ? null : (
@@ -615,7 +617,7 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
                   helperText: error?.message,
                 },
               }}
-              disablePast={role !== "cc"}
+              disablePast={!allowed_roles.includes(role)}
               viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,
@@ -647,7 +649,7 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
               label="Ends *"
               disabled={!startDateInput || disabled}
               minDateTime={startDateInput ? (startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput).add(1, 'minute') : null}
-              disablePast={!["cc", "slo"].includes(role)}
+              disablePast={!allowed_roles.includes(role)}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
@@ -739,30 +741,30 @@ function EventDescriptionInput({ control }) {
   );
 }
 
-// event link input
-function EventLinkInput({ control }) {
-  return (
-    <Controller
-      name="link"
-      control={control}
-      rules={{}}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <TextField
-          {...field}
-          label="Link"
-          autoComplete="off"
-          error={invalid}
-          helperText={
-            error?.message ||
-            "Link to event page or registration form (if applicable)"
-          }
-          variant="outlined"
-          fullWidth
-        />
-      )}
-    />
-  );
-}
+// // event link input
+// function EventLinkInput({ control }) {
+//   return (
+//     <Controller
+//       name="link"
+//       control={control}
+//       rules={{}}
+//       render={({ field, fieldState: { error, invalid } }) => (
+//         <TextField
+//           {...field}
+//           label="Link"
+//           autoComplete="off"
+//           error={invalid}
+//           helperText={
+//             error?.message ||
+//             "Link to event page or registration form (if applicable)"
+//           }
+//           variant="outlined"
+//           fullWidth
+//         />
+//       )}
+//     />
+//   );
+// }
 
 // conditional event venue selector
 function EventVenueInput({ control, watch, resetField, disabled = true, eventid = null }) {
