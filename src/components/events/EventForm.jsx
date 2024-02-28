@@ -349,7 +349,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   disabled={
-                    user?.role != "cc" &&
+                    !allowed_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
