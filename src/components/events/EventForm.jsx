@@ -637,8 +637,10 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
           control={control}
           rules={{
             required: "End date is required!",
-            validate: (value) => {
-              return dayjs(value) >= dayjs(startDateInput) || "Event must end after it starts!";
+            validate: {
+              checkDate: value => {
+                return dayjs(value) >= dayjs(startDateInput) || "Event must end after it starts!";
+              }
             }
           }}
           render={({
@@ -927,6 +929,11 @@ function EventLocationInput({
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
 
+    if (Date(startDateInput) >= Date(endDateInput)) {
+      setAvailableRooms([]);
+      return;
+    }
+
     (async () => {
       let res = await fetch("/actions/events/venues", {
         method: "POST",
@@ -961,7 +968,7 @@ function EventLocationInput({
             multiple
             id="location"
             labelId="locationSelect"
-            disabled={!(startDateInput && endDateInput) || disabled}
+            disabled={!(startDateInput && endDateInput) || disabled || !availableRooms?.locations?.length}
             input={<OutlinedInput label="Location" />}
             renderValue={(selected) => (
               <Box
@@ -1076,10 +1083,10 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
                 </Fade>
               </Box>
             ) : (
-              <Select labelId="poc" label="Point of Contact *" fullWidth {...field} 
-              MenuProps={{
+              <Select labelId="poc" label="Point of Contact *" fullWidth {...field}
+                MenuProps={{
                   style: { maxHeight: 400 }
-              }} >
+                }} >
                 {members?.slice()?.map((member) => (
                   <MenuItem key={member._id} value={member.uid}>
                     <MemberListItem uid={member.uid} />
