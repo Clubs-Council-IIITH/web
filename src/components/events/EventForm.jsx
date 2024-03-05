@@ -617,7 +617,7 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
                   helperText: error?.message,
                 },
               }}
-              // disablePast={!allowed_roles.includes(role)}
+              disablePast={!allowed_roles.includes(role)}
               viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,
@@ -651,7 +651,7 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
               label="Ends *"
               disabled={!startDateInput || disabled}
               minDateTime={startDateInput ? (startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput).add(1, 'minute') : null}
-              // disablePast={!allowed_roles.includes(role)}
+              disablePast={!allowed_roles.includes(role)}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
