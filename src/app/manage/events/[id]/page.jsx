@@ -204,8 +204,8 @@ function getActions(event, user) {
       event?.status?.budget &&
       !event?.status?.room
     )
-      return [ApproveEvent, EditEvent];
-    else return [];
+      return [ApproveEvent, EditEvent, DeleteEvent];
+    else return [DeleteEvent];
   }
 
   /*
