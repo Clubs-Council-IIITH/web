@@ -33,7 +33,7 @@ const BAR_HEIGHT_DESKTOP = 92;
 const DRAWER_WIDTH = 280;
 
 // bug report external link
-export const BUG_REPORT_URL = "https://forms.office.com/r/zBLuvbBPXZ";
+export const BUG_REPORT_URL = "https://help.iiit.ac.in/projects/web-administration/issues/new";
 
 function Bar({ onOpenDrawer }) {
   const theme = useTheme();
