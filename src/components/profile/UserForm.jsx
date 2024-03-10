@@ -64,6 +64,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       phone: formData.phone,
     };
 
+    if (formData.phone == "")
+      data.phone = null;
+
     // upload image
     data.img =
       typeof formData.img === "string"
