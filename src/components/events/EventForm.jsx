@@ -946,7 +946,7 @@ function EventLocationInput({
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
 
-    if (Date(startDateInput) >= Date(endDateInput)) {
+    if (new Date(startDateInput) > new Date(endDateInput)) {
       setAvailableRooms([]);
       return;
     }
