@@ -1087,7 +1087,7 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false
     <>
       <Controller
         name="poc"
-        // disabled={members.length !== 0}
+        disabled={disabled}
         control={control}
         rules={{ required: "Select a member!" }}
         render={({ field, fieldState: { error, invalid } }) => (
