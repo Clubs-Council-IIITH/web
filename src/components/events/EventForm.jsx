@@ -318,11 +318,28 @@ export default function EventForm({
               </Grid>
               {user?.role === "club" ? (
                 <Grid item xs={12}>
-                  <EventPOC control={control} watch={watch} cid={user?.uid} hasPhone={hasPhone} setHasPhone={setHasPhone} />
+                  <EventPOC
+                    control={control}
+                    watch={watch}
+                    cid={user?.uid}
+                    hasPhone={hasPhone}
+                    setHasPhone={setHasPhone}
+                    disabled={
+                      defaultValues?.status?.state == "approved" &&
+                      defaultValues?.datetimeperiod[0] &&
+                      new Date(defaultValues?.datetimeperiod[0]) < new Date()
+                    }
+                  />
                 </Grid>
               ) : user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <EventPOC control={control} watch={watch} cid={watch("clubid")} hasPhone={hasPhone} setHasPhone={setHasPhone} />
+                  <EventPOC
+                    control={control}
+                    watch={watch}
+                    cid={watch("clubid")}
+                    hasPhone={hasPhone}
+                    setHasPhone={setHasPhone}
+                  />
                 </Grid>
               ) : null}
               {/*
@@ -929,7 +946,7 @@ function EventLocationInput({
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
 
-    if (Date(startDateInput) >= Date(endDateInput)) {
+    if (new Date(startDateInput) > new Date(endDateInput)) {
       setAvailableRooms([]);
       return;
     }
@@ -1014,7 +1031,7 @@ function EventBudgetTable({ control, watch, disabled = true, setBudgetEditing = 
 }
 
 // input event POC
-function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
+function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false }) {
   const { triggerToast } = useToast();
   const poc = watch("poc");
 
@@ -1070,7 +1087,7 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
     <>
       <Controller
         name="poc"
-        // disabled={members.length !== 0}
+        disabled={disabled}
         control={control}
         rules={{ required: "Select a member!" }}
         render={({ field, fieldState: { error, invalid } }) => (
@@ -1083,10 +1100,14 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
                 </Fade>
               </Box>
             ) : (
-              <Select labelId="poc" label="Point of Contact *" fullWidth {...field}
+              <Select
+                labelId="poc"
+                label="Point of Contact *"
+                fullWidth {...field}
                 MenuProps={{
                   style: { maxHeight: 400 }
-                }} >
+                }}
+              >
                 {members?.slice()?.map((member) => (
                   <MenuItem key={member._id} value={member.uid}>
                     <MemberListItem uid={member.uid} />
@@ -1099,7 +1120,7 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone }) {
         )}
       />
 
-      {members.length === 0 || !poc || hasPhone ? null :
+      {disabled || members.length === 0 || !poc || hasPhone ? null :
         <Box mt={2}>
           <Controller
             name="poc_phone"
