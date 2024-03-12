@@ -8,15 +8,9 @@ import { Avatar } from "@mui/material";
 import { getFile } from "utils/files";
 import { getPlaceholder } from "utils/placeholder";
 
-export default function ClubLogo({
-  name,
-  logo,
-  width,
-  height,
-  ...rest
-}) {
+export default function ClubLogo({ name, logo, width, height, ...rest }) {
   const [img, setImg] = useState(
-    logo ? getFile(logo) : getPlaceholder({ seed: name, w: width, h: height })
+    logo ? getFile(logo) : getPlaceholder({ seed: name, w: width, h: height }),
   );
 
   return (

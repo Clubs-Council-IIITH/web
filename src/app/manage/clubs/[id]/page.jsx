@@ -21,7 +21,9 @@ export async function generateMetadata({ params }, parent) {
     });
 
     const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-      clubInput: { cid: id === encodeURIComponent("~mine") ? userMeta.uid : id },
+      clubInput: {
+        cid: id === encodeURIComponent("~mine") ? userMeta.uid : id,
+      },
     });
 
     return {
@@ -37,7 +39,7 @@ export default async function ManageClub({ params }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
 
   const { data: { club } = {} } = await getClient().query(GET_CLUB, {

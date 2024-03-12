@@ -113,27 +113,27 @@ export default function Footer() {
         </Grid>
       </Grid>
 
-      {
-        isDesktop ? (
-          <Stack direction="row" spacing={1}>
-            <Typography variant="body2" fontWeight={500}>
-              © {new Date().getFullYear()}, IIIT Hyderabad
-            </Typography>
+      {isDesktop ? (
+        <Stack direction="row" spacing={1}>
+          <Typography variant="body2" fontWeight={500}>
+            © {new Date().getFullYear()}, IIIT Hyderabad
+          </Typography>
 
-            <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ flexGrow: 1 }} />
 
-            <Typography
-              variant="body2"
-              sx={{
-                fontWeight: 500,
-                textDecoration: "none",
-                color: "black",
-                // "&:hover": {
-                //   textDecoration: "underline",
-                // },
-              }}
-            >
-              Developed & Maintained with ❤️ by SLC Tech Team {/*(powered by <Typography
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 500,
+              textDecoration: "none",
+              color: "black",
+              // "&:hover": {
+              //   textDecoration: "underline",
+              // },
+            }}
+          >
+            Developed & Maintained with ❤️ by SLC Tech Team{" "}
+            {/*(powered by <Typography
                 variant="body2"
                 component={Link}
                 href={"https://clubs.iiit.ac.in/"}
@@ -148,6 +148,83 @@ export default function Footer() {
               >
                 Clubs Council
               </Typography>)*/}
+          </Typography>
+
+          <Box sx={{ flexGrow: 1 }} />
+
+          <Typography
+            variant="body2"
+            component={Link}
+            href="/changelog"
+            sx={{
+              fontWeight: 600,
+              textDecoration: "none",
+              color: "black",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
+            Changelog
+          </Typography>
+          <Box mx={1}>·</Box>
+          <Typography
+            variant="body2"
+            component={Link}
+            href={PRIVACY_POLICY_URL}
+            sx={{
+              fontWeight: 600,
+              textDecoration: "none",
+              color: "black",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
+            Privacy Policy
+          </Typography>
+        </Stack>
+      ) : (
+        <>
+          <Grid
+            display="flex"
+            alignItems="center"
+            justifyContent={"center"}
+            mb={isTablet ? 2 : 0}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 500,
+                textDecoration: "none",
+                color: "black",
+                // "&:hover": {
+                //   textDecoration: "underline",
+                // },
+              }}
+            >
+              Developed & Maintained with ❤️ by SLC Tech Team{" "}
+              {/*(powered by <Typography
+                  variant="body2"
+                  component={Link}
+                  href={"https://clubs.iiit.ac.in/"}
+                  sx={{
+                    fontWeight: 500,
+                    textDecoration: "none",
+                    color: "black",
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Clubs Council
+                </Typography>) */}
+            </Typography>
+          </Grid>
+
+          <Stack direction="row" spacing={1}>
+            <Typography variant="body2" fontWeight={500}>
+              © {new Date().getFullYear()}, IIIT Hyderabad
             </Typography>
 
             <Box sx={{ flexGrow: 1 }} />
@@ -184,84 +261,8 @@ export default function Footer() {
               Privacy Policy
             </Typography>
           </Stack>
-        ) : (
-          <>
-            <Grid 
-              display="flex"
-              alignItems="center"
-                justifyContent={"center"}
-                mb={isTablet ? 2 : 0}
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 500,
-                  textDecoration: "none",
-                  color: "black",
-                  // "&:hover": {
-                  //   textDecoration: "underline",
-                  // },
-                }}
-              >
-                 Developed & Maintained with ❤️ by SLC Tech Team {/*(powered by <Typography
-                  variant="body2"
-                  component={Link}
-                  href={"https://clubs.iiit.ac.in/"}
-                  sx={{
-                    fontWeight: 500,
-                    textDecoration: "none",
-                    color: "black",
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
-                  }}
-                >
-                  Clubs Council
-                </Typography>) */}
-              </Typography>
-            </Grid>
-
-            <Stack direction="row" spacing={1}>
-              <Typography variant="body2" fontWeight={500}>
-                © {new Date().getFullYear()}, IIIT Hyderabad
-              </Typography>
-
-              <Box sx={{ flexGrow: 1 }} />
-
-              <Typography
-                variant="body2"
-                component={Link}
-                href="/changelog"
-                sx={{
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  color: "black",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Changelog
-              </Typography>
-              <Box mx={1}>·</Box>
-              <Typography
-                variant="body2"
-                component={Link}
-                href={PRIVACY_POLICY_URL}
-                sx={{
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  color: "black",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Privacy Policy
-              </Typography>
-            </Stack>
-          </>
-        )}
+        </>
+      )}
     </Box>
   );
 }

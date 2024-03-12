@@ -149,7 +149,11 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             <Grid container item spacing={2}>
               {user?.role === "cc" ? (
                 <Grid item xs={12}>
-                  <MemberClubSelect control={control} watch={watch} edit={action === "edit"} />
+                  <MemberClubSelect
+                    control={control}
+                    watch={watch}
+                    edit={action === "edit"}
+                  />
                 </Grid>
               ) : null}
             </Grid>
@@ -188,7 +192,12 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             </Typography>
             <Grid container item spacing={2}>
               <Grid item xs={12}>
-                <MemberPositionsTable control={control} watch={watch} positionEditing={positionEditing} setPositionEditing={setPositionEditing} />
+                <MemberPositionsTable
+                  control={control}
+                  watch={watch}
+                  positionEditing={positionEditing}
+                  setPositionEditing={setPositionEditing}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -374,7 +383,8 @@ function MemberClubSelect({ control, edit }) {
             label="Club *"
             fullWidth
             disabled={edit}
-            {...field}>
+            {...field}
+          >
             {clubs
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))
@@ -392,7 +402,12 @@ function MemberClubSelect({ control, edit }) {
 }
 
 // input event budget as a table
-function MemberPositionsTable({ control, watch, positionEditing, setPositionEditing }) {
+function MemberPositionsTable({
+  control,
+  watch,
+  positionEditing,
+  setPositionEditing,
+}) {
   // TODO: watch for uid & cid change, populate table with existing data
   // [AFTER create and edit member mutations have been merged into one]
 
@@ -401,7 +416,13 @@ function MemberPositionsTable({ control, watch, positionEditing, setPositionEdit
       name="roles"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <MemberPositions editable rows={value} setRows={onChange} positionEditing={positionEditing} setPositionEditing={setPositionEditing} />
+        <MemberPositions
+          editable
+          rows={value}
+          setRows={onChange}
+          positionEditing={positionEditing}
+          setPositionEditing={setPositionEditing}
+        />
       )}
     />
   );

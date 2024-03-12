@@ -2,8 +2,15 @@ import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
 
-import { Box, Chip, Grid, Typography, Divider, CardActionArea } from "@mui/material";
-import { Link } from 'next/link';
+import {
+  Box,
+  Chip,
+  Grid,
+  Typography,
+  Divider,
+  CardActionArea,
+} from "@mui/material";
+import { Link } from "next/link";
 import { redirect } from "next/navigation";
 import ActionPalette from "components/ActionPalette";
 
@@ -71,8 +78,9 @@ export default async function ManageEvent({ params }) {
       <CardActionArea
         component={Link}
         href={`/profile/${event?.poc}`}
-        sx={{ textDecoration: "none", maxWidth: "max-content" }}>
-      <MemberListItem uid={event?.poc} />
+        sx={{ textDecoration: "none", maxWidth: "max-content" }}
+      >
+        <MemberListItem uid={event?.poc} />
       </CardActionArea>
       <Box my={3} />
       <Grid container spacing={6}>

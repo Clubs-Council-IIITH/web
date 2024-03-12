@@ -5,7 +5,7 @@ import { Box, Button, Typography } from "@mui/material";
 import ClubLogo from "components/clubs/ClubLogo";
 
 export default async function ClubBox({ club }) {
-    if (!club) return null;
+  if (!club) return null;
 
   return (
     <Box>
@@ -24,7 +24,7 @@ export default async function ClubBox({ club }) {
           height={18}
           mr={1}
           style={{
-            border: '2px solid lightgray'
+            border: "2px solid lightgray",
           }}
         />
         <Typography variant="body2" color="text.primary">

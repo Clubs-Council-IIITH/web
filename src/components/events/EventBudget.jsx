@@ -75,22 +75,22 @@ export default function EventBudget({
     },
     ...(editable
       ? [
-        {
-          field: "action",
-          align: "center",
-          headerName: "",
-          width: 50,
-          renderCell: (p) => (
-            <IconButton onClick={() => onDelete(p)} size="small">
-              <Icon
-                color="error.main"
-                variant="delete-forever-outline"
-                sx={{ height: 16, width: 16 }}
-              />
-            </IconButton>
-          ),
-        },
-      ]
+          {
+            field: "action",
+            align: "center",
+            headerName: "",
+            width: 50,
+            renderCell: (p) => (
+              <IconButton onClick={() => onDelete(p)} size="small">
+                <Icon
+                  color="error.main"
+                  variant="delete-forever-outline"
+                  sx={{ height: 16, width: 16 }}
+                />
+              </IconButton>
+            ),
+          },
+        ]
       : []),
   ];
 

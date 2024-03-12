@@ -18,8 +18,8 @@ export default async function EventsGrid({
 
   return (
     <Grid container spacing={2}>
-      {extractEvents({ type, data })
-        ?.filter(filter).length ? extractEvents({ type, data })
+      {extractEvents({ type, data })?.filter(filter).length ? (
+        extractEvents({ type, data })
           ?.slice(0, limit)
           ?.filter(filter)
           ?.map((event) => (
@@ -32,11 +32,16 @@ export default async function EventsGrid({
                 clubid={event.clubid}
               />
             </Grid>
-          )) :
-          <Typography variant="h4" color="text.secondary" sx={{flexGrow: 1, textAlign: "center", mt: 5}}>
-            No events found.
-          </Typography>
-      }
+          ))
+      ) : (
+        <Typography
+          variant="h4"
+          color="text.secondary"
+          sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+        >
+          No events found.
+        </Typography>
+      )}
     </Grid>
   );
 }
@@ -72,11 +77,11 @@ function extractEvents({ type, data }) {
     return data?.data?.recentEvents;
   } else if (type === "club") {
     return data?.data?.events?.filter((event) =>
-      ["approved", "completed"].includes(event?.status?.state)
+      ["approved", "completed"].includes(event?.status?.state),
     );
   } else if (type === "all") {
     return data?.data?.events?.filter((event) =>
-      ["approved", "completed"].includes(event?.status?.state)
+      ["approved", "completed"].includes(event?.status?.state),
     );
   }
 }

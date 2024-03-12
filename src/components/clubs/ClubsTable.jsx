@@ -44,8 +44,15 @@ const columns = [
     field: "category",
     headerName: "Category",
     flex: 2,
-    valueGetter: ({ row }) => ({ category: row.category, studentBody: row.studentBody }),
-    renderCell: ({ value }) => <Box textTransform="capitalize">{value.studentBody ? "Student Body" : value.category}</Box>,
+    valueGetter: ({ row }) => ({
+      category: row.category,
+      studentBody: row.studentBody,
+    }),
+    renderCell: ({ value }) => (
+      <Box textTransform="capitalize">
+        {value.studentBody ? "Student Body" : value.category}
+      </Box>
+    ),
   },
   {
     field: "state",
@@ -82,7 +89,7 @@ export default function ClubsTable({ clubs }) {
           },
         },
         pagination: {
-          paginationModel: { pageSize: 25 }
+          paginationModel: { pageSize: 25 },
         },
       }}
       slots={{ toolbar: QuickSearchToolbar }}

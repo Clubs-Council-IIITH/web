@@ -31,8 +31,8 @@ export function BudgetStatus({ status, budget, sx }) {
         state === "empty"
           ? "info"
           : state === "approved"
-          ? "success"
-          : "warning"
+            ? "success"
+            : "warning"
       }
       icon={
         <Icon
@@ -41,8 +41,8 @@ export function BudgetStatus({ status, budget, sx }) {
             state === "empty"
               ? "ic:outline-minus"
               : state === "approved"
-              ? "eva:checkmark-outline"
-              : "eva:refresh-outline"
+                ? "eva:checkmark-outline"
+                : "eva:refresh-outline"
           }
         />
       }
@@ -65,8 +65,8 @@ export function VenueStatus({ status, location, sx }) {
         state === "empty"
           ? "info"
           : state === "approved"
-          ? "success"
-          : "warning"
+            ? "success"
+            : "warning"
       }
       icon={
         <Icon
@@ -75,8 +75,8 @@ export function VenueStatus({ status, location, sx }) {
             state === "empty"
               ? "ic:outline-minus"
               : state === "approved"
-              ? "eva:checkmark-outline"
-              : "eva:refresh-outline"
+                ? "eva:checkmark-outline"
+                : "eva:refresh-outline"
           }
         />
       }

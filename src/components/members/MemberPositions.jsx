@@ -41,12 +41,17 @@ export default function MemberPositions({
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
-    row.startYear = parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
-    row.startYear = row.startYear > new Date().getFullYear() ? new Date().getFullYear() : row.startYear;
+    row.startYear =
+      parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
+    row.startYear =
+      row.startYear > new Date().getFullYear()
+        ? new Date().getFullYear()
+        : row.startYear;
 
-    row.endYear = parseInt(row.endYear) > minYear ? parseInt(row.endYear) : minYear;
-    row.endYear = row.endYear > new Date().getFullYear() ? '' : row.endYear;
-    row.endYear = row.endYear >= row.startYear ? row.endYear : '';
+    row.endYear =
+      parseInt(row.endYear) > minYear ? parseInt(row.endYear) : minYear;
+    row.endYear = row.endYear > new Date().getFullYear() ? "" : row.endYear;
+    row.endYear = row.endYear >= row.startYear ? row.endYear : "";
 
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
@@ -100,85 +105,87 @@ export default function MemberPositions({
     // if editing, show delete button
     ...(editable
       ? [
-        {
-          field: "action",
-          align: "center",
-          headerName: "",
-          width: 50,
-          renderCell: (p) => (
-            <IconButton onClick={() => onDelete(p)} size="small">
-              <Icon
-                color="error.main"
-                variant="delete-forever-outline"
-                sx={{ height: 16, width: 16 }}
-              />
-            </IconButton>
-          ),
-        },
-      ]
+          {
+            field: "action",
+            align: "center",
+            headerName: "",
+            width: 50,
+            renderCell: (p) => (
+              <IconButton onClick={() => onDelete(p)} size="small">
+                <Icon
+                  color="error.main"
+                  variant="delete-forever-outline"
+                  sx={{ height: 16, width: 16 }}
+                />
+              </IconButton>
+            ),
+          },
+        ]
       : [
-        {
-          field: "approved",
-          headerName: "Status",
-          align: "center",
-          headerAlign: "center",
-          flex: 2,
-          valueGetter: ({ row }) => ({
-            approved: row.approved,
-            rejected: row.rejected,
-          }),
-          renderCell: ({ value: { approved, rejected } }) => (
-            <Tag
-              label={approved ? "Approved" : rejected ? "Rejected" : "Pending"}
-              color={approved ? "success" : rejected ? "error" : "warning"}
-            />
-          ),
-        },
+          {
+            field: "approved",
+            headerName: "Status",
+            align: "center",
+            headerAlign: "center",
+            flex: 2,
+            valueGetter: ({ row }) => ({
+              approved: row.approved,
+              rejected: row.rejected,
+            }),
+            renderCell: ({ value: { approved, rejected } }) => (
+              <Tag
+                label={
+                  approved ? "Approved" : rejected ? "Rejected" : "Pending"
+                }
+                color={approved ? "success" : rejected ? "error" : "warning"}
+              />
+            ),
+          },
 
-        // if not editing and if user is cc, show approve button
-        ...(user.role === "cc"
-          ? [
-            {
-              field: "actionApprove",
-              align: "center",
-              headerName: "",
-              width: 50,
-              valueGetter: ({ row }) => ({
-                approved: row.approved,
-                rejected: row.rejected,
-                rid: row.rid,
-              }),
-              renderCell: ({ value: { approved, rejected, rid } }) => (
-                <ApproveButton
-                  approved={approved}
-                  rejected={rejected}
-                  rid={rid}
-                  member={member}
-                />
-              ),
-            },
-            {
-              field: "actionReject",
-              align: "center",
-              headerName: "",
-              width: 50,
-              valueGetter: ({ row }) => ({
-                approved: row.approved,
-                rejected: row.rejected,
-                rid: row.rid,
-              }),
-              renderCell: ({ value: { approved, rejected, rid } }) => (
-                <RejectButton
-                  approved={approved}
-                  rejected={rejected}
-                  rid={rid}
-                  member={member}
-                />
-              ),
-            },
-          ]
-          : []),
-      ]),
+          // if not editing and if user is cc, show approve button
+          ...(user.role === "cc"
+            ? [
+                {
+                  field: "actionApprove",
+                  align: "center",
+                  headerName: "",
+                  width: 50,
+                  valueGetter: ({ row }) => ({
+                    approved: row.approved,
+                    rejected: row.rejected,
+                    rid: row.rid,
+                  }),
+                  renderCell: ({ value: { approved, rejected, rid } }) => (
+                    <ApproveButton
+                      approved={approved}
+                      rejected={rejected}
+                      rid={rid}
+                      member={member}
+                    />
+                  ),
+                },
+                {
+                  field: "actionReject",
+                  align: "center",
+                  headerName: "",
+                  width: 50,
+                  valueGetter: ({ row }) => ({
+                    approved: row.approved,
+                    rejected: row.rejected,
+                    rid: row.rid,
+                  }),
+                  renderCell: ({ value: { approved, rejected, rid } }) => (
+                    <RejectButton
+                      approved={approved}
+                      rejected={rejected}
+                      rid={rid}
+                      member={member}
+                    />
+                  ),
+                },
+              ]
+            : []),
+        ]),
   ];
 
   return (

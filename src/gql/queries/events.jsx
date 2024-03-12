@@ -20,7 +20,11 @@ export const GET_RECENT_EVENTS = gql`
 `;
 
 export const GET_CLUB_EVENTS = gql`
-  query ClubEvents($clubid: String, $clubInput: SimpleClubInput!, $public: Boolean) {
+  query ClubEvents(
+    $clubid: String
+    $clubInput: SimpleClubInput!
+    $public: Boolean
+  ) {
     events(clubid: $clubid, public: $public) {
       _id
       name

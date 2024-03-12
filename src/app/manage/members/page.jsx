@@ -5,13 +5,7 @@ import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Stack,
-} from "@mui/material";
+import { Box, Container, Typography, Button, Stack } from "@mui/material";
 
 import Icon from "components/Icon";
 import MembersTable from "components/members/MembersTable";
@@ -60,9 +54,7 @@ export default async function ManageMembers({ searchParams }) {
       </Stack>
 
       {/* only pending members */}
-      {user?.role === "cc" ? (
-        <PendingMembersDataGrid />
-      ) : null}
+      {user?.role === "cc" ? <PendingMembersDataGrid /> : null}
 
       {/* all members */}
       <Box>
@@ -79,7 +71,12 @@ export default async function ManageMembers({ searchParams }) {
                 All Members
               </Typography>
               <Box mt={2} mb={3}>
-                <MembersFilter name={targetName} club={targetClub} state={targetState} cc={true} />
+                <MembersFilter
+                  name={targetName}
+                  club={targetClub}
+                  state={targetState}
+                  cc={true}
+                />
               </Box>
             </>
           ) : null}
@@ -88,23 +85,31 @@ export default async function ManageMembers({ searchParams }) {
               {user?.role !== "cc" ? (
                 <>
                   <Box mt={2} mb={3}>
-                    <MembersFilter name={targetName} club={targetClub} state={targetState} cc={false} />
+                    <MembersFilter
+                      name={targetName}
+                      club={targetClub}
+                      state={targetState}
+                      cc={false}
+                    />
                   </Box>
-                </>) : null}
-              <MembersDataGrid club={user?.role === "club" ? user?.uid : targetClub} onlyCurrent={onlyCurrent} onlyPast={onlyPast} />
+                </>
+              ) : null}
+              <MembersDataGrid
+                club={user?.role === "club" ? user?.uid : targetClub}
+                onlyCurrent={onlyCurrent}
+                onlyPast={onlyPast}
+              />
             </>
           ) : null}
         </Box>
       </Box>
     </Container>
-
   );
 }
 
 async function PendingMembersDataGrid() {
-  const { data: { pendingMembers } = {} } = await getClient().query(
-    GET_PENDING_MEMBERS,
-  );
+  const { data: { pendingMembers } = {} } =
+    await getClient().query(GET_PENDING_MEMBERS);
 
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
@@ -130,26 +135,28 @@ async function PendingMembersDataGrid() {
 
   return (
     <>
-      {
-        processedMembers.length > 0 ?
-          <Box mb={3} >
-            <Typography
-              color="text.secondary"
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Pending Approval
-            </Typography>
-            <MembersTable members={processedMembers} showClub={true} />
-          </Box >
-          : null
-      }
+      {processedMembers.length > 0 ? (
+        <Box mb={3}>
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            textTransform="uppercase"
+            gutterBottom
+          >
+            Pending Approval
+          </Typography>
+          <MembersTable members={processedMembers} showClub={true} />
+        </Box>
+      ) : null}
     </>
   );
 }
 
-async function MembersDataGrid({ club, onlyCurrent = false, onlyPast = false }) {
+async function MembersDataGrid({
+  club,
+  onlyCurrent = false,
+  onlyPast = false,
+}) {
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: { cid: club },
   });
@@ -157,14 +164,13 @@ async function MembersDataGrid({ club, onlyCurrent = false, onlyPast = false }) 
   const currentYear = (new Date().getFullYear() + 1).toString();
 
   // filter only the required members (current | past | both)
-  const targetMembers = members
-    ?.filter((member) => {
-      const latestYear = extractLatestYear(member).toString();
-      const isCurrent = onlyCurrent && latestYear === currentYear;
-      const isPast = onlyPast && latestYear !== currentYear;
+  const targetMembers = members?.filter((member) => {
+    const latestYear = extractLatestYear(member).toString();
+    const isCurrent = onlyCurrent && latestYear === currentYear;
+    const isPast = onlyPast && latestYear !== currentYear;
 
-      return (!onlyCurrent && !onlyPast) || isCurrent || isPast;
-    });
+    return (!onlyCurrent && !onlyPast) || isCurrent || isPast;
+  });
 
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
@@ -196,7 +202,7 @@ async function MembersDataGrid({ club, onlyCurrent = false, onlyPast = false }) 
 function extractLatestYear(member) {
   return Math.max(
     ...member.roles.map((r) =>
-      !r.endYear ? new Date().getFullYear() + 1 : r.endYear
-    )
+      !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
+    ),
   );
 }

@@ -42,7 +42,7 @@ export function DeleteMember({ sx }) {
           cid: id?.split(encodeURIComponent(":"))[0],
           uid: id?.split(encodeURIComponent(":"))[1],
           rid: null,
-        }
+        },
       }),
     });
     res = await res.json();
@@ -104,7 +104,7 @@ export function ApproveAllMember({ sx }) {
           cid: id?.split(encodeURIComponent(":"))[0],
           uid: id?.split(encodeURIComponent(":"))[1],
           rid: null,
-        }
+        },
       }),
     });
     res = await res.json();

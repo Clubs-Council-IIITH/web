@@ -32,14 +32,14 @@ export default function MembersFilter({ name, club, state, cc = false }) {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   // show both upcoming and completed if no state is selected
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`
+        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`,
       );
   }, [state]);
 
@@ -60,7 +60,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
       }
     })();
   }, []);
-  
+
   return (
     <Container>
       <Grid container spacing={2}>
@@ -74,7 +74,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
                 fullWidth
                 onChange={(e) =>
                   router.push(
-                    `${pathname}?${createQueryString("club", e.target.value)}`
+                    `${pathname}?${createQueryString("club", e.target.value)}`,
                   )
                 }
                 value={club}
@@ -104,8 +104,8 @@ export default function MembersFilter({ name, club, state, cc = false }) {
               return router.push(
                 `${pathname}?${createQueryString(
                   e.target.value,
-                  !state.includes(e.target.value)
-                )}`
+                  !state.includes(e.target.value),
+                )}`,
               );
             }}
           >

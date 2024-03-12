@@ -64,16 +64,15 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       phone: formData.phone,
     };
 
-    if (formData.phone == "")
-      data.phone = null;
+    if (formData.phone == "") data.phone = null;
 
     // upload image
     data.img =
       typeof formData.img === "string"
         ? formData.img
         : Array.isArray(formData.img) && formData.img.length > 0
-        ? await uploadFile(formData.img[0], "image")
-        : null;
+          ? await uploadFile(formData.img[0], "image")
+          : null;
 
     // mutate
     await submitHandlers[action](data);

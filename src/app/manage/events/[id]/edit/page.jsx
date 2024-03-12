@@ -45,8 +45,12 @@ export default async function EditEvent({ params }) {
         <Typography variant="h3" gutterBottom mb={3}>
           Edit Event Details
         </Typography>
-  
-        <EventForm id={id} defaultValues={transformEvent(event)} action="edit" />
+
+        <EventForm
+          id={id}
+          defaultValues={transformEvent(event)}
+          action="edit"
+        />
       </Container>
     );
   } catch (error) {

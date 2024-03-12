@@ -17,8 +17,7 @@ function eventDataTransform(event, role, uid) {
       url: `/events/${event._id}`,
       display: "block",
     };
-  }
-  else {
+  } else {
     if (role == "cc" || uid == event.clubid)
       return {
         id: event._id,

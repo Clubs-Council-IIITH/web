@@ -39,10 +39,10 @@ export default async function UserDetails({ user }) {
           ) : null}
 
           {["cc", "slo", "slc"].includes(currentUser?.role) ||
-            (currentUser?.uid === user?.uid && user?.role !== "club") ? (
+          (currentUser?.uid === user?.uid && user?.role !== "club") ? (
             <>
               {user?.batch?.toLowerCase()?.includes("2k") ? (
-                < Box >
+                <Box>
                   <Typography
                     variant="subtitle2"
                     textTransform="uppercase"
@@ -70,8 +70,7 @@ export default async function UserDetails({ user }) {
             </>
           ) : null}
         </>
-      ) : null
-      }
-    </Stack >
+      ) : null}
+    </Stack>
   );
 }

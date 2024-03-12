@@ -13,9 +13,8 @@ export const metadata = {
 };
 
 export default async function ManageClubs() {
-  const { data: { allClubs: clubs } = {} } = await getClient().query(
-    GET_ALL_CLUBS
-  );
+  const { data: { allClubs: clubs } = {} } =
+    await getClient().query(GET_ALL_CLUBS);
 
   return (
     <Container>

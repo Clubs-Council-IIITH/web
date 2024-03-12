@@ -40,7 +40,7 @@ export default async function EditMember({ params }) {
         <Typography variant="h3" gutterBottom mb={3}>
           Edit Member Details
         </Typography>
-  
+
         <MemberForm defaultValues={transformMember(member)} action="edit" />
       </Container>
     );

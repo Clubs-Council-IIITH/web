@@ -31,7 +31,9 @@ export function middleware(req) {
 
   // if protected and current user is not logged in, redirect to login page
   if (!req.cookies.has("Authorization")) {
-    return NextResponse.redirect(new URL(`/login${req.nextUrl.pathname}`, req.url));
+    return NextResponse.redirect(
+      new URL(`/login${req.nextUrl.pathname}`, req.url),
+    );
   }
 
   // if logged in, extract user attributes
@@ -46,7 +48,7 @@ export function middleware(req) {
   // club account specific redirects
   if (clubRedirectRoute && user?.role === "club") {
     return NextResponse.redirect(
-      new URL(clubRedirects[req.nextUrl.pathname], req.url)
+      new URL(clubRedirects[req.nextUrl.pathname], req.url),
     );
   }
 

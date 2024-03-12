@@ -103,7 +103,10 @@ export default function EventForm({
         // else show success toast & redirect to manage page
         triggerToast({
           title: "Success!",
-          messages: user?.role === "cc" ? ["Event created."] : ["Event created & saved as draft."],
+          messages:
+            user?.role === "cc"
+              ? ["Event created."]
+              : ["Event created & saved as draft."],
           severity: "success",
         });
         router.push(`/manage/events/${res.data._id}`);
@@ -451,9 +454,9 @@ export default function EventForm({
             </Grid>
             <Grid item xs={6}>
               {allowed_roles.includes(user?.role) ||
-                (user?.role === "club" &&
-                  defaultValues?.status?.state != undefined &&
-                  defaultValues?.status?.state != "incomplete") ? (
+              (user?.role === "club" &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete") ? (
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -480,9 +483,9 @@ export default function EventForm({
               )}
             </Grid>
             {allowed_roles.includes(user?.role) ||
-              (user?.role === "club" &&
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete") ? null : (
+            (user?.role === "club" &&
+              defaultValues?.status?.state != undefined &&
+              defaultValues?.status?.state != "incomplete") ? null : (
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
@@ -595,7 +598,12 @@ function EventNameInput({ control, disabled = true }) {
 }
 
 // event datetime range input
-function EventDatetimeInput({ control, watch, disabled = true, role = "public" }) {
+function EventDatetimeInput({
+  control,
+  watch,
+  disabled = true,
+  role = "public",
+}) {
   const startDateInput = watch("datetimeperiod.0");
   const [error, setError] = useState(null);
 
@@ -641,7 +649,9 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              value={value instanceof Date && !isDayjs(value) ? dayjs(value) : value}
+              value={
+                value instanceof Date && !isDayjs(value) ? dayjs(value) : value
+              }
               disabled={disabled}
               {...rest}
             />
@@ -655,10 +665,13 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
           rules={{
             required: "End date is required!",
             validate: {
-              checkDate: value => {
-                return dayjs(value) >= dayjs(startDateInput) || "Event must end after it starts!";
-              }
-            }
+              checkDate: (value) => {
+                return (
+                  dayjs(value) >= dayjs(startDateInput) ||
+                  "Event must end after it starts!"
+                );
+              },
+            },
           }}
           render={({
             field: { value, ...rest },
@@ -667,7 +680,14 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
             <DateTimePicker
               label="Ends *"
               disabled={!startDateInput || disabled}
-              minDateTime={startDateInput ? (startDateInput instanceof Date && !isDayjs(startDateInput) ? dayjs(startDateInput) : startDateInput).add(1, 'minute') : null}
+              minDateTime={
+                startDateInput
+                  ? (startDateInput instanceof Date && !isDayjs(startDateInput)
+                      ? dayjs(startDateInput)
+                      : startDateInput
+                    ).add(1, "minute")
+                  : null
+              }
               disablePast={!allowed_roles.includes(role)}
               onError={(error) => setError(error)}
               slotProps={{
@@ -682,7 +702,9 @@ function EventDatetimeInput({ control, watch, disabled = true, role = "public" }
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              value={value instanceof Date && !isDayjs(value) ? dayjs(value) : value}
+              value={
+                value instanceof Date && !isDayjs(value) ? dayjs(value) : value
+              }
               {...rest}
             />
           )}
@@ -786,7 +808,13 @@ function EventDescriptionInput({ control }) {
 // }
 
 // conditional event venue selector
-function EventVenueInput({ control, watch, resetField, disabled = true, eventid = null }) {
+function EventVenueInput({
+  control,
+  watch,
+  resetField,
+  disabled = true,
+  eventid = null,
+}) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
   const startDateInput = watch("datetimeperiod.0");
@@ -883,7 +911,8 @@ function EventVenueInput({ control, watch, resetField, disabled = true, eventid 
               rules={{
                 maxLength: {
                   value: 800,
-                  message: "Equipment field must be at most 800 characters long!",
+                  message:
+                    "Equipment field must be at most 800 characters long!",
                 },
               }}
               render={({ field, fieldState: { error, invalid } }) => (
@@ -909,7 +938,8 @@ function EventVenueInput({ control, watch, resetField, disabled = true, eventid 
               rules={{
                 maxLength: {
                   value: 800,
-                  message: "Additional field must be at most 800 characters long!",
+                  message:
+                    "Additional field must be at most 800 characters long!",
                 },
               }}
               render={({ field, fieldState: { error, invalid } }) => (
@@ -985,7 +1015,11 @@ function EventLocationInput({
             multiple
             id="location"
             labelId="locationSelect"
-            disabled={!(startDateInput && endDateInput) || disabled || !availableRooms?.locations?.length}
+            disabled={
+              !(startDateInput && endDateInput) ||
+              disabled ||
+              !availableRooms?.locations?.length
+            }
             input={<OutlinedInput label="Location" />}
             renderValue={(selected) => (
               <Box
@@ -1018,23 +1052,39 @@ function EventLocationInput({
 }
 
 // input event budget as a table
-function EventBudgetTable({ control, watch, disabled = true, setBudgetEditing = null }) {
+function EventBudgetTable({
+  control,
+  watch,
+  disabled = true,
+  setBudgetEditing = null,
+}) {
   return (
     <Controller
       name="budget"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <EventBudget editable={!disabled} rows={value} setRows={onChange} setBudgetEditing={setBudgetEditing} />
+        <EventBudget
+          editable={!disabled}
+          rows={value}
+          setRows={onChange}
+          setBudgetEditing={setBudgetEditing}
+        />
       )}
     />
   );
 }
 
 // input event POC
-function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false }) {
+function EventPOC({
+  control,
+  watch,
+  cid,
+  hasPhone,
+  setHasPhone,
+  disabled = false,
+}) {
   const { triggerToast } = useToast();
   const poc = watch("poc");
-
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
@@ -1074,10 +1124,8 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false
           });
         } else {
           console.log(res.data);
-          if (res.data?.phone)
-            setHasPhone(true);
-          else
-            setHasPhone(false);
+          if (res.data?.phone) setHasPhone(true);
+          else setHasPhone(false);
         }
       })();
     }
@@ -1103,9 +1151,10 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false
               <Select
                 labelId="poc"
                 label="Point of Contact *"
-                fullWidth {...field}
+                fullWidth
+                {...field}
                 MenuProps={{
-                  style: { maxHeight: 400 }
+                  style: { maxHeight: 400 },
                 }}
               >
                 {members?.slice()?.map((member) => (
@@ -1120,7 +1169,7 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false
         )}
       />
 
-      {disabled || members.length === 0 || !poc || hasPhone ? null :
+      {disabled || members.length === 0 || !poc || hasPhone ? null : (
         <Box mt={2}>
           <Controller
             name="poc_phone"
@@ -1145,7 +1194,7 @@ function EventPOC({ control, watch, cid, hasPhone, setHasPhone, disabled = false
             )}
           />
         </Box>
-      }
+      )}
     </>
   );
 }

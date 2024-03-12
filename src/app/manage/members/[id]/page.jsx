@@ -32,10 +32,9 @@ export default async function ManageMember({ params }) {
     });
 
     // fetch currently logged in user
-    const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(
-      GET_USER,
-      { userInput: null }
-    );
+    const {
+      data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
+    } = await getClient().query(GET_USER, { userInput: null });
     const user = { ...currentUserMeta, ...currentUserProfile };
     if (userProfile === null || userMeta === null) {
       return redirect("/404");

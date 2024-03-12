@@ -40,7 +40,7 @@ export default function Statistic({
           backgroundImage: (theme) =>
             `linear-gradient(135deg, ${alpha(
               theme.palette[color].dark,
-              0
+              0,
             )} 0%, ${alpha(theme.palette[color].dark, 0.24)} 100%)`,
         }}
       >

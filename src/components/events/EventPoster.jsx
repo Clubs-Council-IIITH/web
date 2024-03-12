@@ -11,7 +11,7 @@ export default function EventPoster({ name, poster, width, height, style }) {
   const [img, setImg] = useState(
     poster
       ? getFile(poster)
-      : getPlaceholder({ seed: name, w: width, h: height })
+      : getPlaceholder({ seed: name, w: width, h: height }),
   );
 
   return (

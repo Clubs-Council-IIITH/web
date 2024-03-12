@@ -22,7 +22,7 @@ export default async function EditProfile({ params }) {
         userInput: {
           uid: id,
         },
-      }
+      },
     );
     const user = { ...userMeta, ...userProfile };
 
@@ -30,18 +30,18 @@ export default async function EditProfile({ params }) {
       return redirect("/404");
     }
     // console.log(user);
-    
+
     // if user is a club, redirect to club edit page
     if (user.role === "club") {
       redirect(`/manage/clubs/${user.uid}/edit`);
     }
-    
+
     return (
       <Container>
-      <UserForm defaultValues={user} action="save" />
-    </Container>
-  );
-} catch (error) {
-  redirect("/404");
-}
+        <UserForm defaultValues={user} action="save" />
+      </Container>
+    );
+  } catch (error) {
+    redirect("/404");
+  }
 }

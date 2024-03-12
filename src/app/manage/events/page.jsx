@@ -20,12 +20,12 @@ export default async function ManageEvents() {
 
   const { data: { pendingEvents } = {} } = await getClient().query(
     GET_PENDING_EVENTS,
-    { clubid: userMeta?.role === "club" ? userMeta.uid : null }
+    { clubid: userMeta?.role === "club" ? userMeta.uid : null },
   );
 
   const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
     clubid: userMeta?.role === "club" ? userMeta.uid : null,
-    public: false
+    public: false,
   });
 
   return (
@@ -40,36 +40,36 @@ export default async function ManageEvents() {
           Manage Events
         </Typography>
 
-        {["cc", "club"].includes(userMeta?.role) ? <Button
-          component={Link}
-          href="/manage/events/new"
-          variant="contained"
-          startIcon={<Icon variant="add" />}
-        >
-          New Event
-        </Button> : null}
+        {["cc", "club"].includes(userMeta?.role) ? (
+          <Button
+            component={Link}
+            href="/manage/events/new"
+            variant="contained"
+            startIcon={<Icon variant="add" />}
+          >
+            New Event
+          </Button>
+        ) : null}
       </Stack>
 
       {/* only pending events */}
-      {
-        pendingEvents.length ?
-          <Box mb={3}>
-            <Typography
-              color="text.secondary"
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Pending Events
-            </Typography>
-            <EventsTable
-              events={pendingEvents}
-              scheduleSort="asc"
-              hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
-            />
-          </Box>
-          : null
-      }
+      {pendingEvents.length ? (
+        <Box mb={3}>
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            textTransform="uppercase"
+            gutterBottom
+          >
+            Pending Events
+          </Typography>
+          <EventsTable
+            events={pendingEvents}
+            scheduleSort="asc"
+            hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+          />
+        </Box>
+      ) : null}
 
       {/* all events */}
       <Box>

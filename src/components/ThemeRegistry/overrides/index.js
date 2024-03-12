@@ -20,6 +20,6 @@ export default function ComponentsOverrides(theme) {
     Tooltip(theme),
     Backdrop(theme),
     Typography(theme),
-    Autocomplete(theme)
+    Autocomplete(theme),
   );
 }

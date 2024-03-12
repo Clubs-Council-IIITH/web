@@ -121,24 +121,26 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
 
     // set CID based on club email
     // Special case for Clubs Council
-    data.cid = formData.email === "clubs@iiit.ac.in" ? "cc" : formData.email.split("@")[0];
+    data.cid =
+      formData.email === "clubs@iiit.ac.in"
+        ? "cc"
+        : formData.email.split("@")[0];
 
     // upload media
     data.logo =
       typeof formData.logo === "string"
         ? formData.logo
         : Array.isArray(formData.logo) && formData.logo.length > 0
-        ? await uploadFile(formData.logo[0], "image")
-        : null;
+          ? await uploadFile(formData.logo[0], "image")
+          : null;
     data.banner =
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-        ? await uploadFile(formData.banner[0], "image")
-        : null;
+          ? await uploadFile(formData.banner[0], "image")
+          : null;
 
-    if (data.category !== "other")
-      data.studentBody = false;
+    if (data.category !== "other") data.studentBody = false;
 
     // mutate
     await submitHandlers[action](data);
@@ -166,21 +168,33 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <ClubNameInput control={control} disabled={user?.role != "cc"} />
+                <ClubNameInput
+                  control={control}
+                  disabled={user?.role != "cc"}
+                />
               </Grid>
               <Grid item xs={12}>
-                <ClubEmailInput control={control} disabled={user?.role != "cc"} />
+                <ClubEmailInput
+                  control={control}
+                  disabled={user?.role != "cc"}
+                />
               </Grid>
               <Grid item xs={12}>
-                <ClubCategorySelect control={control} disabled={user?.role != "cc"} />
+                <ClubCategorySelect
+                  control={control}
+                  disabled={user?.role != "cc"}
+                />
               </Grid>
-              {
-                watch("category") == "other" ?
-                  <Grid item xs={12}>
-                    <StudentBodySelect control={control} disabled={user?.role != "cc" || watch("category") != "other"} />
-                  </Grid>
-                  : null
-              }
+              {watch("category") == "other" ? (
+                <Grid item xs={12}>
+                  <StudentBodySelect
+                    control={control}
+                    disabled={
+                      user?.role != "cc" || watch("category") != "other"
+                    }
+                  />
+                </Grid>
+              ) : null}
               <Grid item xs={12}>
                 <ClubTaglineInput control={control} />
               </Grid>
@@ -425,7 +439,12 @@ function StudentBodySelect({ control, disabled }) {
           <FormControlLabel
             value="left"
             control={
-              <Switch color="primary" checked={field.value} {...field} disabled={disabled} />
+              <Switch
+                color="primary"
+                checked={field.value}
+                {...field}
+                disabled={disabled}
+              />
             }
             label="Student Body"
             labelPlacement="left"

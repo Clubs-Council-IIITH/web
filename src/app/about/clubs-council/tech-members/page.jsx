@@ -19,52 +19,64 @@ export default async function TechTeam() {
     },
   });
 
-  const techMembers = members?.map((member) => {
-    const { roles } = member;
-    const techTeamRoles = filterRoles(roles, techTeamWords);
-    const newMember = { ...member, roles: techTeamRoles };
-    return newMember;
-  })?.filter((member) => {
-    return member.roles.length > 0;
-  });
+  const techMembers = members
+    ?.map((member) => {
+      const { roles } = member;
+      const techTeamRoles = filterRoles(roles, techTeamWords);
+      const newMember = { ...member, roles: techTeamRoles };
+      return newMember;
+    })
+    ?.filter((member) => {
+      return member.roles.length > 0;
+    });
 
   const currentYear = (new Date().getFullYear() + 1).toString();
 
   // construct dict of { year: [members] } where each year is a key
-  const targetMembers = techMembers ? techMembers.reduce((acc, member) => {
-    const latestYear = extractFirstYear(member);
-    if (!acc[latestYear]) {
-      acc[latestYear] = [];
-    }
-    acc[latestYear].push(member);
-    return acc;
-  }, {}) : {};
+  const targetMembers = techMembers
+    ? techMembers.reduce((acc, member) => {
+        const latestYear = extractFirstYear(member);
+        if (!acc[latestYear]) {
+          acc[latestYear] = [];
+        }
+        acc[latestYear].push(member);
+        return acc;
+      }, {})
+    : {};
 
   return (
     <Container>
       <center>
-        <Typography variant="h3" mb={4}>Tech Team Members</Typography>
+        <Typography variant="h3" mb={4}>
+          Tech Team Members
+        </Typography>
       </center>
-      {techMembers?.length ? Object.keys(targetMembers)
-        ?.sort((a, b) => {
-          if (a === -1) {
-            return -1;
-          } else if (b === -1) {
-            return 1;
-          } else {
-            return parseInt(a) - parseInt(b);
-          }
-        })
-        ?.map((year) => (
-          <>
-            <Divider textAlign="left" sx={{ mb: 2 }}>
-              <Typography variant="h5" textTransform="uppercase">
-                {year == -1 ? "Current Members" : year}
-              </Typography>
-            </Divider>
-            <LocalUsersGrid users={targetMembers[year]} />
-          </>
-        )) : <center><h2>No Members Found!</h2></center>}
+      {techMembers?.length ? (
+        Object.keys(targetMembers)
+          ?.sort((a, b) => {
+            if (a === -1) {
+              return -1;
+            } else if (b === -1) {
+              return 1;
+            } else {
+              return parseInt(a) - parseInt(b);
+            }
+          })
+          ?.map((year) => (
+            <>
+              <Divider textAlign="left" sx={{ mb: 2 }}>
+                <Typography variant="h5" textTransform="uppercase">
+                  {year == -1 ? "Current Members" : year}
+                </Typography>
+              </Divider>
+              <LocalUsersGrid users={targetMembers[year]} />
+            </>
+          ))
+      ) : (
+        <center>
+          <h2>No Members Found!</h2>
+        </center>
+      )}
     </Container>
   );
 }

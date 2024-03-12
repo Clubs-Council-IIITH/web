@@ -38,14 +38,14 @@ export default function EventsFilter({ name, club, state }) {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   // show both upcoming and completed if no state is selected
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`
+        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`,
       );
   }, [state]);
 
@@ -81,7 +81,7 @@ export default function EventsFilter({ name, club, state }) {
             onSubmit={(e) => {
               e.preventDefault();
               router.push(
-                `${pathname}?${createQueryString("name", targetName)}`
+                `${pathname}?${createQueryString("name", targetName)}`,
               );
             }}
           >
@@ -114,7 +114,7 @@ export default function EventsFilter({ name, club, state }) {
               fullWidth
               onChange={(e) =>
                 router.push(
-                  `${pathname}?${createQueryString("club", e.target.value)}`
+                  `${pathname}?${createQueryString("club", e.target.value)}`,
                 )
               }
               value={club}
@@ -143,8 +143,8 @@ export default function EventsFilter({ name, club, state }) {
               return router.push(
                 `${pathname}?${createQueryString(
                   e.target.value,
-                  !state.includes(e.target.value)
-                )}`
+                  !state.includes(e.target.value),
+                )}`,
               );
             }}
           >

@@ -50,10 +50,10 @@ export default function ClubSocials({ socials = {}, email = null }) {
           sx={{
             mx: 0.2,
             textTransform: "none",
-            color: 'grey',
+            color: "grey",
           }}
         >
-          <Icon external variant={'mdi:email'} mr={1} />
+          <Icon external variant={"mdi:email"} mr={1} />
           {email}
         </Button>
       ) : null}

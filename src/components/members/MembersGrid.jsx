@@ -16,31 +16,38 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
   const currentYear = (new Date().getFullYear() + 1).toString();
 
   // construct dict of { year: [members] } where each year is a key
-  const targetMembers = members ? members.reduce((acc, member) => {
-    const latestYear = extractLatestYear(member);
-    if (!acc[latestYear]) {
-      acc[latestYear] = [];
-    }
-    acc[latestYear].push(member);
-    return acc;
-  }, {}) : {};
+  const targetMembers = members
+    ? members.reduce((acc, member) => {
+        const latestYear = extractLatestYear(member);
+        if (!acc[latestYear]) {
+          acc[latestYear] = [];
+        }
+        acc[latestYear].push(member);
+        return acc;
+      }, {})
+    : {};
 
-  return members?.length ? Object.keys(targetMembers)
-    ?.filter((year) => (onlyCurrent ? year === currentYear : true))
-    ?.sort((a, b) => parseInt(b) - parseInt(a))
-    ?.map((year) => (
-      <>
-        {!onlyCurrent ? (
-          <Divider textAlign="left" sx={{ mb: 2 }}>
-            <Typography variant="h5" textTransform="uppercase">
-              {year === currentYear ? "Current Members" : year}
-            </Typography>
-          </Divider>
-        ) : null}
-        <LocalUsersGrid users={targetMembers[year]} />
-      </>
-    )) :
-    <center><h2>No Members Found!</h2></center>;
+  return members?.length ? (
+    Object.keys(targetMembers)
+      ?.filter((year) => (onlyCurrent ? year === currentYear : true))
+      ?.sort((a, b) => parseInt(b) - parseInt(a))
+      ?.map((year) => (
+        <>
+          {!onlyCurrent ? (
+            <Divider textAlign="left" sx={{ mb: 2 }}>
+              <Typography variant="h5" textTransform="uppercase">
+                {year === currentYear ? "Current Members" : year}
+              </Typography>
+            </Divider>
+          ) : null}
+          <LocalUsersGrid users={targetMembers[year]} />
+        </>
+      ))
+  ) : (
+    <center>
+      <h2>No Members Found!</h2>
+    </center>
+  );
 }
 
 // get the last year a member was in the club
@@ -48,17 +55,13 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
 export function extractLatestYear(member) {
   return Math.max(
     ...member.roles.map((r) =>
-      !r.endYear ? new Date().getFullYear() + 1 : r.endYear
-    )
+      !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
+    ),
   );
 }
 
 // get the first year a member was in the club
 // if member is still present, return -1
 export function extractFirstYear(member) {
-  return Math.min(
-    ...member.roles.map((r) =>
-      !r.endYear ? -1 : r.startYear
-    )
-  );
+  return Math.min(...member.roles.map((r) => (!r.endYear ? -1 : r.startYear)));
 }

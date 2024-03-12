@@ -44,7 +44,7 @@ export default function DrawerItem({ title, path, icon }) {
           color: theme.palette.accent,
           backgroundColor: alpha(
             theme.palette.accent,
-            theme.palette.action.selectedOpacity
+            theme.palette.action.selectedOpacity,
           ),
         }),
       }}

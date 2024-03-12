@@ -4,16 +4,23 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { Grid } from "@mui/material";
 import ClubCard from "components/clubs/ClubCard";
 
-export default async function ClubsGrid({ category, studentBody=false, staticClubs = [] }) {
+export default async function ClubsGrid({
+  category,
+  studentBody = false,
+  staticClubs = [],
+}) {
   const { data: { activeClubs } = {} } = await getClient().query(
     GET_ACTIVE_CLUBS,
-    {}
+    {},
   );
 
   return (
     <Grid container spacing={2}>
       {[...staticClubs, ...activeClubs]
-        ?.filter((club) => club.category === category && club.studentBody === studentBody)
+        ?.filter(
+          (club) =>
+            club.category === category && club.studentBody === studentBody,
+        )
         ?.sort((a, b) => a.name.localeCompare(b.name))
         ?.map((club) => (
           <Grid key={club._id} item xs={12} md={6} lg={4} xl={3}>

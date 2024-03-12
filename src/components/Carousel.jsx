@@ -45,7 +45,10 @@ function CarouselItem({ item }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [size, setSize] = useState("40%");
-  useEffect(() => setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"), [isDesktop, isMobile]);
+  useEffect(
+    () => setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"),
+    [isDesktop, isMobile],
+  );
 
   return (
     <>

@@ -26,7 +26,7 @@ export default function ClubBanner({
   const [img, setImg] = useState(
     banner
       ? getFile(banner)
-      : getPlaceholder({ seed: name, w: width, h: height })
+      : getPlaceholder({ seed: name, w: width, h: height }),
   );
 
   return (

@@ -64,7 +64,7 @@ export default function UserMemberships({ rows = [] }) {
 
   return (
     <>
-      {rows?.length ?
+      {rows?.length ? (
         <DataGrid
           autoHeight
           rows={rows}
@@ -84,8 +84,10 @@ export default function UserMemberships({ rows = [] }) {
               outline: "none",
             },
           }}
-        /> : "No Memberships Found!"
-      }
+        />
+      ) : (
+        "No Memberships Found!"
+      )}
     </>
   );
 }

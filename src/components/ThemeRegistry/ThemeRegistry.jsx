@@ -25,7 +25,7 @@ export default function ThemeRegistry({ children }) {
       shadows: prefersDarkMode ? shadows.dark : shadows.light,
       customShadows: prefersDarkMode ? customShadows.dark : customShadows.light,
     }),
-    [prefersDarkMode] // TODO: add setting dependency
+    [prefersDarkMode], // TODO: add setting dependency
   );
 
   const theme = createTheme(themeOptions);
