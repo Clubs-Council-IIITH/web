@@ -38,7 +38,7 @@ export function CopyEvent({ sx }) {
       component={Link}
       href={`/manage/events/${id}/copy`}
       variant="contained"
-      color="info"
+      color="grey"
       startIcon={<Icon variant="content-copy-outline" />}
       sx={sx}
     >
