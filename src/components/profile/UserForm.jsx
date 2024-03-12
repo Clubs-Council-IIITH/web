@@ -10,6 +10,10 @@ import { useToast } from "components/Toast";
 
 import { LoadingButton } from "@mui/lab";
 import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+} from "libphonenumber-js";
 
 import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
@@ -150,10 +154,20 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   name="phone"
                   control={control}
                   rules={{
-                    pattern: {
-                      value:
-                        /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g,
-                      message: "Invalid phone number!",
+                    validate: {
+                      checkPhoneNumber: (value) => {
+                        if (!value || value === "") return true;
+                        try {
+                          const phoneNumber = parsePhoneNumberWithError(value, {
+                            defaultCountry: "IN",
+                          });
+                          return (
+                            isValidPhoneNumber(value, "IN") || "Invalid Phone Number!"
+                          );
+                        } catch (error) {
+                          return error.message;
+                        }
+                      },
                     },
                   }}
                   render={({ field, fieldState: { error, invalid } }) => (
