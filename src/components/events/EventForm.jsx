@@ -1123,7 +1123,7 @@ function EventPOC({
             severity: "error",
           });
         } else {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data?.phone) setHasPhone(true);
           else setHasPhone(false);
         }

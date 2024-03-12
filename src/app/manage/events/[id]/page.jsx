@@ -18,6 +18,7 @@ import EventDetails from "components/events/EventDetails";
 import EventBudget from "components/events/EventBudget";
 import {
   EditEvent,
+  CopyEvent,
   ApproveEvent,
   DeleteEvent,
   SubmitEvent,
@@ -165,7 +166,7 @@ function getActions(event, user) {
    * Deleted - nothing
    */
   if (event?.status?.state === "deleted") {
-    return [];
+    return [CopyEvent];
   }
 
   /*
@@ -176,8 +177,8 @@ function getActions(event, user) {
   if (user?.role === "club") {
     if (event?.status?.state === "incomplete")
       return [SubmitEvent, EditEvent, DeleteEvent];
-    else if (upcoming) return [EditEvent, DeleteEvent];
-    else return [EditEvent];
+    else if (upcoming) return [EditEvent, DeleteEvent, CopyEvent];
+    else return [EditEvent, CopyEvent];
   }
 
   /*
@@ -189,7 +190,7 @@ function getActions(event, user) {
     if (event?.status?.state === "pending_cc")
       return [ApproveEvent, EditEvent, DeleteEvent];
     else if (event?.status?.state !== "incomplete")
-      return [EditEvent, DeleteEvent];
+      return [EditEvent, DeleteEvent, CopyEvent];
     else return [EditEvent];
   }
 
