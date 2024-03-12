@@ -30,6 +30,23 @@ export function EditEvent({ sx }) {
   );
 }
 
+export function CopyEvent({ sx }) {
+  const { id } = useParams();
+
+  return (
+    <Button
+      component={Link}
+      href={`/manage/events/${id}/copy`}
+      variant="contained"
+      color="grey"
+      startIcon={<Icon variant="content-copy-outline" />}
+      sx={sx}
+    >
+      Copy Event
+    </Button>
+  );
+}
+
 export function DeleteEvent({ sx }) {
   const router = useRouter();
   const { id } = useParams();

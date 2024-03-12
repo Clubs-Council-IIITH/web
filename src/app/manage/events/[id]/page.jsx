@@ -18,6 +18,7 @@ import EventDetails from "components/events/EventDetails";
 import EventBudget from "components/events/EventBudget";
 import {
   EditEvent,
+  CopyEvent,
   ApproveEvent,
   DeleteEvent,
   SubmitEvent,
@@ -162,39 +163,42 @@ function getActions(event, user) {
   const upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
 
   /*
-   * Deleted - nothing
+   * Deleted Event
+   * CC/Club - copy
+   * else - nothing
    */
   if (event?.status?.state === "deleted") {
-    return [];
+    if (user?.role in ["club", "cc"]) return [CopyEvent];
+    else return [];
   }
 
   /*
    * Club - incomplete event - edit, submit, delete
-   * Club - upcoming event - edit, delete
-   * Club - past event - nothing
+   * Club - upcoming event - edit, delete, copy
+   * Club - past event - edit, copy
    */
   if (user?.role === "club") {
     if (event?.status?.state === "incomplete")
       return [SubmitEvent, EditEvent, DeleteEvent];
-    else if (upcoming) return [EditEvent, DeleteEvent];
-    else return [EditEvent];
+    else if (upcoming) return [EditEvent, DeleteEvent, CopyEvent];
+    else return [EditEvent, CopyEvent];
   }
 
   /*
    * CC - pending approval - approve, edit, delete
-   * CC - not incomplete event - delete, edit
+   * CC - not incomplete event - delete, edit, copy
    * CC - incomplete event - edit
    */
   if (user?.role === "cc") {
     if (event?.status?.state === "pending_cc")
       return [ApproveEvent, EditEvent, DeleteEvent];
     else if (event?.status?.state !== "incomplete")
-      return [EditEvent, DeleteEvent];
+      return [EditEvent, DeleteEvent, CopyEvent];
     else return [EditEvent];
   }
 
   /*
-   * SLC/SLO - upcoming event - approve
+   * SLC - upcoming event - approve
    */
   if (user?.role === "slc") {
     if (
@@ -205,6 +209,11 @@ function getActions(event, user) {
       return [ApproveEvent];
     else return [];
   }
+
+  /*
+   * SLO - upcoming event - approve, edit, delete
+   * SLO - approved event - delete
+   */
   if (user?.role === "slo") {
     if (
       upcoming &&
