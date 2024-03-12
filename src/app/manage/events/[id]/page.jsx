@@ -168,7 +168,7 @@ function getActions(event, user) {
    * else - nothing
    */
   if (event?.status?.state === "deleted") {
-    if (user?.role in ["club", "cc"]) return [CopyEvent];
+    if (["club", "cc"].includes(user?.role)) return [CopyEvent];
     else return [];
   }
 
