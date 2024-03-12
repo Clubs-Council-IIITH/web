@@ -163,16 +163,19 @@ function getActions(event, user) {
   const upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
 
   /*
-   * Deleted - nothing
+   * Deleted Event
+   * CC/Club - copy
+   * else - nothing
    */
   if (event?.status?.state === "deleted") {
-    return [CopyEvent];
+    if (user?.role in ["club", "cc"]) return [CopyEvent];
+    else return [];
   }
 
   /*
    * Club - incomplete event - edit, submit, delete
-   * Club - upcoming event - edit, delete
-   * Club - past event - nothing
+   * Club - upcoming event - edit, delete, copy
+   * Club - past event - edit, copy
    */
   if (user?.role === "club") {
     if (event?.status?.state === "incomplete")
@@ -183,7 +186,7 @@ function getActions(event, user) {
 
   /*
    * CC - pending approval - approve, edit, delete
-   * CC - not incomplete event - delete, edit
+   * CC - not incomplete event - delete, edit, copy
    * CC - incomplete event - edit
    */
   if (user?.role === "cc") {
@@ -195,7 +198,7 @@ function getActions(event, user) {
   }
 
   /*
-   * SLC/SLO - upcoming event - approve
+   * SLC - upcoming event - approve
    */
   if (user?.role === "slc") {
     if (
@@ -206,6 +209,11 @@ function getActions(event, user) {
       return [ApproveEvent];
     else return [];
   }
+
+  /*
+   * SLO - upcoming event - approve, edit, delete
+   * SLO - approved event - delete
+   */
   if (user?.role === "slo") {
     if (
       upcoming &&
