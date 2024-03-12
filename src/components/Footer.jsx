@@ -116,7 +116,7 @@ export default function Footer() {
       {isDesktop ? (
         <Stack direction="row" spacing={1}>
           <Typography variant="body2" fontWeight={500}>
-            © {new Date().getFullYear()}, IIIT Hyderabad
+            © 2021-{new Date().getFullYear()}, IIIT Hyderabad
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -224,7 +224,7 @@ export default function Footer() {
 
           <Stack direction="row" spacing={1}>
             <Typography variant="body2" fontWeight={500}>
-              © {new Date().getFullYear()}, IIIT Hyderabad
+              © 2021-{new Date().getFullYear()}, IIIT Hyderabad
             </Typography>
 
             <Box sx={{ flexGrow: 1 }} />
