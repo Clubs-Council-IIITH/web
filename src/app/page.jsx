@@ -69,7 +69,7 @@ export default function Home() {
             <Statistic
               color="info"
               icon="component-exchange"
-              total={7}
+              total={8}
               title="Technical Clubs"
               sx={{ height: 200, p: 3 }}
             />
