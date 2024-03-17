@@ -132,22 +132,23 @@ export default function Footer() {
               // },
             }}
           >
-            Developed & Maintained with ❤️ by SLC Tech Team{" "}
-            {/*(powered by <Typography
-                variant="body2"
-                component={Link}
-                href={"https://clubs.iiit.ac.in/"}
-                sx={{
-                  fontWeight: 500,
-                  textDecoration: "none",
-                  color: "black",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Clubs Council
-              </Typography>)*/}
+            Developed & Maintained with ❤️ by SLC Tech Team (powered by{" "}
+            <Typography
+              variant="body2"
+              component={Link}
+              href={"https://clubs.iiit.ac.in/"}
+              sx={{
+                fontWeight: 500,
+                textDecoration: "none",
+                color: "black",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              Clubs Council
+            </Typography>
+            )
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -190,7 +191,7 @@ export default function Footer() {
             display="flex"
             alignItems="center"
             justifyContent={"center"}
-            mb={isTablet ? 2 : 0}
+            mb={isTablet ? 3 : 2}
           >
             <Typography
               variant="body2"
@@ -203,22 +204,23 @@ export default function Footer() {
                 // },
               }}
             >
-              Developed & Maintained with ❤️ by SLC Tech Team{" "}
-              {/*(powered by <Typography
-                  variant="body2"
-                  component={Link}
-                  href={"https://clubs.iiit.ac.in/"}
-                  sx={{
-                    fontWeight: 500,
-                    textDecoration: "none",
-                    color: "black",
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
-                  }}
-                >
-                  Clubs Council
-                </Typography>) */}
+              Developed & Maintained with ❤️ by SLC Tech Team (powered by{" "}
+              <Typography
+                variant="body2"
+                component={Link}
+                href={"https://clubs.iiit.ac.in/"}
+                sx={{
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  color: "black",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Clubs Council
+              </Typography>
+              )
             </Typography>
           </Grid>
 
