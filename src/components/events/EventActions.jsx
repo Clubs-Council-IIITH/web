@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 
 import { useState } from "react";
 
-import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
@@ -152,38 +152,6 @@ export function ApproveEvent({ sx }) {
   const { triggerToast } = useToast();
   const [dialog, setDialog] = useState(false);
 
-  // approval checks
-  const [SLC, setSLC] = useState(false);
-  const [SLO, setSLO] = useState(false);
-
-  const approvalDialog =
-    user?.role === "cc" ? (
-      <Box>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={SLC}
-              onClick={(e) => setSLC(e.target.checked)}
-              color="success"
-            />
-          }
-          label="Request SLC approval"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={SLO}
-              onClick={(e) => setSLO(e.target.checked)}
-              color="success"
-            />
-          }
-          label="Request SLO approval"
-        />
-      </Box>
-    ) : (
-      "This action cannot be undone."
-    );
-
   const approveEvent = async () => {
     // console.log("requested approvals:", SLC, SLO);
     let res = await fetch("/actions/events/progress", {
@@ -192,6 +160,7 @@ export function ApproveEvent({ sx }) {
         eventid: id,
         cc_progress_budget: !SLC,
         cc_progress_room: !SLO,
+        cc_approver: null,
       }),
     });
     res = await res.json();
@@ -215,25 +184,41 @@ export function ApproveEvent({ sx }) {
 
   return (
     <>
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<Icon variant="done" />}
-        onClick={() => setDialog(true)}
-        sx={sx}
-      >
-        Approve
-      </Button>
+      {/* If user?.role === "cc", then redirect to /manage/events/id/approve_cc */}
+      {user && user.role === "cc" ? (
+        <Button
+          component={Link}
+          href={`/manage/events/${id}/approve_cc`}
+          variant="contained"
+          color="success"
+          startIcon={<Icon variant="done" />}
+          sx={sx}
+        >
+          Approve
+        </Button>
+      ) : (
+        <>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<Icon variant="done" />}
+            onClick={() => setDialog(true)}
+            sx={sx}
+          >
+            Approve
+          </Button>
 
-      <ConfirmDialog
-        open={dialog}
-        title="Are you sure you want to approve this event?"
-        description={approvalDialog}
-        onConfirm={approveEvent}
-        onClose={() => setDialog(false)}
-        confirmProps={{ color: "success" }}
-        confirmText="Yes, approve it"
-      />
+          <ConfirmDialog
+            open={dialog}
+            title="Are you sure you want to approve this event?"
+            description="This action cannot be undone."
+            onConfirm={approveEvent}
+            onClose={() => setDialog(false)}
+            confirmProps={{ color: "success" }}
+            confirmText="Yes, approve it"
+          />
+        </>
+      )}
     </>
   );
 }
