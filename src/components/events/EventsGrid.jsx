@@ -10,7 +10,9 @@ export default async function EventsGrid({
   limit = undefined,
   filter = () => true,
 }) {
-  const data = await getClient().query(...constructQuery({ type, clubid, limit }));
+  const data = await getClient().query(
+    ...constructQuery({ type, clubid, limit })
+  );
 
   return (
     <Grid container spacing={2}>
@@ -72,5 +74,7 @@ function constructQuery({ type, clubid, limit }) {
         public: true,
       },
     ];
+  } else {
+    throw new Error("Invalid event type");
   }
 }
