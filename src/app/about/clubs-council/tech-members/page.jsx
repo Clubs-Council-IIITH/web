@@ -30,7 +30,7 @@ export default async function TechTeam() {
       return member.roles.length > 0;
     });
 
-  const currentYear = (new Date().getFullYear() + 1).toString();
+  // const currentYear = (new Date().getFullYear() + 1).toString();
 
   // construct dict of { year: [members] } where each year is a key
   const targetMembers = techMembers
