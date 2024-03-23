@@ -5,11 +5,17 @@ export const GET_ALL_RECRUITMENTS = gql`
     ccApplications {
       _id
       uid
-      otherBodies
       teams
       whyCc
       whyThisPosition
       sentTime
+      designExperience
     }
+  }
+`;
+
+export const HAVE_APPLIED = gql`
+  query HaveAppliedForCC {
+    haveAppliedForCC
   }
 `;

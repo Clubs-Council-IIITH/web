@@ -4,43 +4,75 @@
 // At the top needs to be the title of the page
 // Then comes few instructions for the user
 // Add deadline for the form submission as some date, after which the form will be disabled - and show a message that the form is disabled
-// Add a form footer saying made with love by the tech team. For any queries contact us at mailto:clubs@iiit.ac.in
 
+import RecruitmentForm from "components/cc-recruitments/RecruitmentForm";
 
-// import { Container, Typography } from "@mui/material";
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { HAVE_APPLIED } from "gql/queries/recruitment";
+import { Container, Typography } from "@mui/material";
 
-// import EventForm from "components/events/EventForm";
+export const metadata = {
+  title: "New Application",
+};
 
-// export const metadata = {
-//   title: "New Event",
-// };
+const deadline = new Date("2024-04-10T11:59:00Z");
 
-// export default function NewEvent() {
-//   // default form values
-//   const defaultValues = {
-//     clubid: "",
-//     name: "",
-//     datetimeperiod: [null, null],
-//     description: "",
-//     audience: [],
-//     poster: "",
-//     budget: [],
-//     mode: "online",
-//     link: "",
-//     location: [],
-//     population: 0,
-//     additional: "",
-//     equipment: "",
-//     poc: "",
-//   };
+export default async function NewApplication() {
+  const {
+    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
+  } = await getClient().query(GET_USER, { userInput: null });
+  const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
-//   return (
-//     <Container>
-//       <Typography variant="h3" gutterBottom mb={3}>
-//         Create a New Event
-//       </Typography>
+  const { data: { haveAppliedForCC } = {} } = await getClient().query(
+    HAVE_APPLIED,
+    { userInput: null }
+  );
 
-//       <EventForm defaultValues={defaultValues} action="create" />
-//     </Container>
-//   );
-// }
+  return (
+    <Container>
+      {new Date() > deadline ? (
+        <Typography variant="h4" gutterBottom mt={3} align="center">
+          The form is disabled
+        </Typography>
+      ) : (
+        // ) : (
+        // haveAppliedForCC ? (
+        //   <>
+        //     <Typography variant="h5" gutterBottom mt={6} align="center">
+        //       You have already applied for Clubs Council Position. Thank you!
+        //     </Typography>
+        //     <Typography variant="h6" gutterBottom mt={3} align="center">
+        //       You will be notified about the further stages soon.
+        //     </Typography>
+        //   </>
+        // ) : (
+        <>
+          <Typography variant="h3" gutterBottom mb={3} align="center">
+            Apply for Clubs Council
+          </Typography>
+
+          <Typography variant="h5" gutterBottom mb={3}>
+            Instructions
+          </Typography>
+
+          <Typography variant="body1" gutterBottom mb={3}>
+            Add deadline for the form submission as some date, after which the
+            form will be disabled - and show a message that the form is disabled
+          </Typography>
+
+          <Typography variant="h5" gutterBottom mb={3}>
+            Application Form
+          </Typography>
+
+          {/* <RecruitmentForm user={currentUser} /> */}
+        </>
+      )}
+
+      <Typography variant="body2" gutterBottom mt={10} align="center">
+        Made with ❤️ by the SLC Tech Team. For any queries contact us at{" "}
+        <a href="mailto:clubs@iiit.ac.in"> clubs@iiit.ac.in </a>
+      </Typography>
+    </Container>
+  );
+}

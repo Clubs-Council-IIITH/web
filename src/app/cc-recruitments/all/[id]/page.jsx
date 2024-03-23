@@ -1,2 +1,190 @@
-// Specific page to display all recruitments details for a member
-// id here can be the recruitment id
+import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
+
+import { getClient } from "gql/client";
+import { GET_MEMBERSHIPS } from "gql/queries/clubs";
+import { GET_USER_PROFILE } from "gql/queries/users";
+import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
+
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
+
+import UserImage from "components/users/UserImage";
+import UserDetails from "components/profile/UserDetails";
+import UserMemberships from "components/profile/UserMemberships";
+
+const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
+
+export async function generateMetadata({ params }) {
+  const { id } = params;
+
+  try {
+    const { data: { userProfile, userMeta } = {} } = await getClient().query(
+      GET_USER_PROFILE,
+      {
+        userInput: {
+          uid: id,
+        },
+      }
+    );
+    const user = { ...userMeta, ...userProfile };
+
+    if (userProfile === null || userMeta === null) {
+      return redirect("/404");
+    }
+
+    return {
+      title: `${user.firstName} ${user.lastName}`,
+    };
+  } catch (error) {
+    return redirect("/404");
+  }
+}
+
+export default async function CCApplicantDetails({ params }) {
+  const { id } = params;
+
+  const { data: { ccApplications } = {} } = await getClient().query(
+    GET_ALL_RECRUITMENTS
+  );
+
+  let currentApplicant = ccApplications.find(
+    (applicant) => applicant.uid === id
+  );
+
+  // get target user
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(
+    GET_USER_PROFILE,
+    {
+      userInput: {
+        uid: id,
+      },
+    }
+  );
+  const user = { ...userMeta, ...userProfile };
+
+  // get memberships if user is a person
+  let memberships = [];
+  const {
+    data: { memberRoles },
+  } = await getClient().query(GET_MEMBERSHIPS, {
+    uid: user.uid,
+  });
+  // get list of memberRoles.roles along with member.cid
+  memberships = memberRoles.reduce(
+    (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
+    []
+  );
+
+  return (
+    <Container>
+      <Grid container spacing={2} mt={4}>
+        <Grid item xs={12}>
+          <Stack
+            direction={{ xs: "column", lg: "row" }}
+            alignItems="center"
+            spacing={4}
+          >
+            <UserImage
+              image={user.img}
+              name={user.firstName}
+              gender={user.gender}
+              width={150}
+              height={150}
+            />
+            <Stack direction="column" spacing={1}>
+              <Typography
+                variant="h2"
+                wordWrap="break-word"
+                textAlign={{ xs: "center", lg: "left" }}
+                sx={{
+                  fontSize: { xs: 25, lg: 38 },
+                }}
+              >
+                {user.firstName} {user.lastName}
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                fontFamily="monospace"
+                textAlign={{ xs: "center", lg: "left" }}
+                sx={{
+                  fontSize: { xs: 14, lg: 20 },
+                }}
+              >
+                {user.email}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Grid>
+
+        <Grid item container xs spacing={2} mt={5}>
+          <UserDetails user={user} />
+        </Grid>
+
+        <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
+          <Stack direction="column" spacing={2}>
+            <Typography variant="subtitle2" textTransform="uppercase">
+              Memberships
+            </Typography>
+            <UserMemberships rows={memberships} />
+          </Stack>
+        </Grid>
+      </Grid>
+
+      <Box mt={5}>
+        <Typography variant="h3" gutterBottom>
+          Application Details
+        </Typography>
+
+        {/* // Time of Submission of the form
+        <Stack direction="row" spacing={1}>
+          <Typography variant="body1" color="text.secondary">
+            Time of Submission:
+          </Typography>
+          <Typography variant="body1">
+            <DateTime dt={currentApplicant.sentTime} />
+          </Typography>
+        </Stack> */}
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            Teams:
+          </Typography>
+          <Typography variant="body1">
+            {currentApplicant?.teams?.map((team, index) => (
+              <span key={index}>
+                {team.charAt(0).toUpperCase() + team.slice(1)}
+                {index !== currentApplicant?.teams?.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            Why CC:
+          </Typography>
+          <Typography variant="body1">{currentApplicant?.whyCc}</Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            Why this position:
+          </Typography>
+          <Typography variant="body1">
+            {currentApplicant?.whyThisPosition}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1}>
+          <Typography variant="body1" color="text.secondary">
+            Design Experience:
+          </Typography>
+          <Typography variant="body1">
+            {currentApplicant?.designExperience || "N/A"}
+          </Typography>
+        </Stack>
+      </Box>
+    </Container>
+  );
+}

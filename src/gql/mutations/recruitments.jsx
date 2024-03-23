@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-export const CREATE_RECRUITMENT = gql`
-    mutation CcApply($ccRecruitmentInput: CCRecruitmentInput!) {
+export const APPLY_FOR_CC = gql`
+    mutation CCApply($ccRecruitmentInput: CCRecruitmentInput!) {
         ccApply(ccRecruitmentInput: $ccRecruitmentInput)
     }
 `;
