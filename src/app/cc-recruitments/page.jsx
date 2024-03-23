@@ -7,7 +7,6 @@
 // Add a form footer saying made with love by the tech team. For any queries contact us at mailto:clubs@iiit.ac.in
 
 
-
 // import { Container, Typography } from "@mui/material";
 
 // import EventForm from "components/events/EventForm";
