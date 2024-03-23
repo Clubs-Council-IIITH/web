@@ -162,7 +162,8 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                             defaultCountry: "IN",
                           });
                           return (
-                            isValidPhoneNumber(value, "IN") || "Invalid Phone Number!"
+                            isValidPhoneNumber(value, "IN") ||
+                            "Invalid Phone Number!"
                           );
                         } catch (error) {
                           return error.message;
