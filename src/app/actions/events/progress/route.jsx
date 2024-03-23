@@ -9,7 +9,7 @@ export async function POST(request) {
     eventid,
     cc_progress_budget = false,
     cc_progress_room = false,
-    cc_approver=null,
+    cc_approver = null,
   } = await request.json();
 
   const { error } = await getClient().mutation(PROGRESS_EVENT, {

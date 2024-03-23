@@ -21,7 +21,7 @@ export default async function ApproveEventCC({ params }) {
   });
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
