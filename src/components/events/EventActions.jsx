@@ -158,9 +158,6 @@ export function ApproveEvent({ sx }) {
       method: "POST",
       body: JSON.stringify({
         eventid: id,
-        cc_progress_budget: !SLC,
-        cc_progress_room: !SLO,
-        cc_approver: null,
       }),
     });
     res = await res.json();
