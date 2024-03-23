@@ -6,19 +6,6 @@ export const GET_EVENT_ID_FROM_CODE = gql`
   }
 `;
 
-export const GET_RECENT_EVENTS = gql`
-  query RecentEvents {
-    recentEvents {
-      _id
-      name
-      code
-      clubid
-      datetimeperiod
-      poster
-    }
-  }
-`;
-
 export const GET_CLUB_EVENTS = gql`
   query ClubEvents(
     $clubid: String
@@ -35,22 +22,6 @@ export const GET_CLUB_EVENTS = gql`
       status {
         state
       }
-    }
-    club(clubInput: $clubInput) {
-      banner
-    }
-  }
-`;
-
-export const GET_APPROVED_EVENTS = gql`
-  query ApprovedEvents($clubid: String, $clubInput: SimpleClubInput!) {
-    approvedEvents(clubid: $clubid) {
-      _id
-      name
-      code
-      clubid
-      datetimeperiod
-      poster
     }
     club(clubInput: $clubInput) {
       banner

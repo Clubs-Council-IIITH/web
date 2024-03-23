@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import EventsFilter from "components/events/EventsFilter";
 
 import EventsGrid from "components/events/EventsGrid";
@@ -17,40 +17,89 @@ export default async function Events({ searchParams }) {
 
   return (
     <Box>
-      <Box mt={2} mb={3}>
+      <Box mt={2}>
         <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
-      <EventsGrid
-        type="all"
-        filter={(event) => {
-          let selectedClub = false,
-            selectedState = false,
-            selectedName = false;
 
-          // filter by club
-          if (!targetClub) selectedClub = true;
-          else selectedClub = event?.clubid === targetClub;
+      {targetState?.includes("upcoming") ? (
+        <>
+          <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
+            <Typography variant="h5" color="grey">
+              Upcoming Events
+            </Typography>
+          </Divider>
 
-          // filter by state
-          if (!targetState) selectedState = true;
-          else {
-            const isUpcoming = new Date(event?.datetimeperiod[1]) > new Date();
-            if (targetState?.includes("upcoming") && isUpcoming)
-              selectedState = true;
-            if (targetState?.includes("completed") && !isUpcoming)
-              selectedState = true;
-          }
+          <EventsGrid
+            type="all"
+            filter={(event) => {
+              let selectedClub = false,
+                selectedState = false,
+                selectedName = false;
 
-          // filter by name
-          if (!targetName) selectedName = true;
-          else
-            selectedName = event?.name
-              ?.toLowerCase()
-              ?.includes(targetName?.toLowerCase());
+              // filter by club
+              if (!targetClub) selectedClub = true;
+              else selectedClub = event?.clubid === targetClub;
 
-          return selectedClub && selectedState && selectedName;
-        }}
-      />
+              // filter by state
+              if (!targetState) selectedState = true;
+              else {
+                const isUpcoming =
+                  new Date(event?.datetimeperiod[1]) > new Date();
+                selectedState = isUpcoming;
+              }
+
+              // filter by name
+              if (!targetName) selectedName = true;
+              else
+                selectedName = event?.name
+                  ?.toLowerCase()
+                  ?.includes(targetName?.toLowerCase());
+
+              return selectedClub && selectedState && selectedName;
+            }}
+          />
+        </>
+      ) : null}
+
+      {targetState?.includes("completed") ? (
+        <>
+          <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
+            <Typography variant="h5" color="grey">
+              Completed Events
+            </Typography>
+          </Divider>
+
+          <EventsGrid
+            type="all"
+            filter={(event) => {
+              let selectedClub = false,
+                selectedState = false,
+                selectedName = false;
+
+              // filter by club
+              if (!targetClub) selectedClub = true;
+              else selectedClub = event?.clubid === targetClub;
+
+              // filter by state
+              if (!targetState) selectedState = true;
+              else {
+                const isUpcoming =
+                  new Date(event?.datetimeperiod[1]) > new Date();
+                selectedState = !isUpcoming;
+              }
+
+              // filter by name
+              if (!targetName) selectedName = true;
+              else
+                selectedName = event?.name
+                  ?.toLowerCase()
+                  ?.includes(targetName?.toLowerCase());
+
+              return selectedClub && selectedState && selectedName;
+            }}
+          />
+        </>
+      ) : null}
     </Box>
   );
 }
