@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { Typography } from "@mui/material";
-import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 const columns = [
@@ -32,19 +32,21 @@ const columns = [
     field: "batch",
     headerName: "Batch",
     flex: 3,
+    valueGetter: ({ row }) => row.batch.toUpperCase(),
   },
   {
     field: "stream",
     headerName: "Stream",
     flex: 3,
+    valueGetter: ({ row }) => row.stream.toUpperCase(),
   },
 ];
 
 export default function CCRecruitmentsTable({ data }) {
   const router = useRouter();
 
-  const handleRowClick = (row) => {
-    router.push(`/cc-recruitments/all/${row.id}`);
+  const handleRowClick = (params) => {
+    router.push(`/cc-recruitments/all/${params.row.uid}`);
   };
 
   return (
@@ -52,7 +54,7 @@ export default function CCRecruitmentsTable({ data }) {
       autoHeight
       rows={data}
       columns={columns}
-      getRowId={(row) => row._id}
+      getRowId={(row) => row.uid}
       pageSize={10}
       disableRowSelectionOnClick
       onRowClick={handleRowClick}

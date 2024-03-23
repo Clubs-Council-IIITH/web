@@ -4,19 +4,12 @@ export const GET_ALL_RECRUITMENTS = gql`
   query CcApplications {
     ccApplications {
       _id
-      batch
-      designExperience
-      email
-      lastName
-      firstName
-      phone
+      uid
       otherBodies
-      rollno
-      sentTime
-      stream
-      whyCc
       teams
+      whyCc
       whyThisPosition
+      sentTime
     }
   }
 `;
