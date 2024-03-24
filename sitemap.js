@@ -58,7 +58,7 @@ const mapToSitemapFormat = (path) => ({
     .execSync(`git log -1 --pretty="format:%ci" ${path}`)
     .toString()
     .trim(),
-  });
+});
 /**
  * Returns a string representation of a date unit. e.g. dd, mm, yy
  *
@@ -80,20 +80,18 @@ const mapToSitemapFormat = (path) => ({
     const ROOT_SITEMAP_ENTRY = {
       url: SITEMAP_HOSTNAME,
       lastmod: makeDate(
-        fs
-          .statSync(APP_ROOT + "/" + PAGE_FILENAME)
-          .mtime.toLocaleString()
-          // .split("/")
+        fs.statSync(APP_ROOT + "/" + PAGE_FILENAME).mtime.toLocaleString(),
+        // .split("/")
       ),
     };
     const content = await streamToPromise(
       Readable.from([
         ROOT_SITEMAP_ENTRY,
         ...SITEMAP_PATHS.map((url) => mapToSitemapFormat(url)),
-      ]).pipe(stream)
+      ]).pipe(stream),
     ).then((data) => data.toString());
     console.info("Successfully generated sitemap...");
-    
+
     // Write our sitemap contents to [WRITE_FILE_PATH].
     fs.writeFileSync(WRITE_FILE_PATH, content);
   } catch (err) {
