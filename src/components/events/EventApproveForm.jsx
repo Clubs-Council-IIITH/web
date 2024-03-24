@@ -71,13 +71,19 @@ export default function EventApproveForm({ event, members }) {
         <Controller
           name="SLC"
           control={control}
+          disabled={true}
           render={({ field }) => (
-            <FormControlLabel
-              control={
-                <Checkbox {...field} checked={field.value} color="success" />
-              }
-              label="Request SLC approval"
-            />
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox {...field} checked={field.value} color="success" />
+                }
+                label="Request SLC approval"
+              />
+              <Typography variant="caption" color="textSecondary">
+                (Coming Soon)
+              </Typography>
+            </>
           )}
         />
         <p></p> {/* For New line */}
