@@ -184,22 +184,12 @@ export default function EventForm({
       });
       res = await res.json();
 
-      if (res.ok) {
-        // show success toast & redirect to manage page
-        triggerToast({
-          title: "Success!",
-          messages: ["Profile saved."],
-          severity: "success",
-        });
-        router.push(`/profile/${defaultValues.uid}`);
-        router.refresh();
-      } else {
+      if (!res.ok) {
         // show error toast
         triggerToast({
           ...res.error,
           severity: "error",
         });
-        setLoading(false);
       }
     },
   };
@@ -259,7 +249,6 @@ export default function EventForm({
       const phoneData = {
         uid: formData.poc,
         phone: formData.poc_phone,
-        img: null,
       };
       submitHandlers["phone"](phoneData);
     }
