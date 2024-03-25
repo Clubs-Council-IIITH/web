@@ -9,7 +9,6 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
-// import { APPLY_FOR_CC } from "gql/mutations/recruitment";
 
 import { LoadingButton } from "@mui/lab";
 import {
@@ -20,19 +19,18 @@ import {
   FormHelperText,
   OutlinedInput,
   FormControl,
-  FormGroup,
   Chip,
   Box,
-  FormControlLabel,
   InputLabel,
   Stack,
   Select,
   MenuItem,
 } from "@mui/material";
 
-import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
 import ConfirmDialog from "components/ConfirmDialog";
+
+const availableTeams = ["Design", "Finance", "Logistics", "Stratetgy"];
 
 function MemberUserInput({ user = {} }) {
   return user ? (
@@ -48,7 +46,11 @@ function MemberUserInput({ user = {} }) {
         <Typography variant="h4">
           {user.firstName} {user.lastName}
         </Typography>
-        <Typography variant="body2" color="text.secondary" fontFamily="monospace">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          fontFamily="monospace"
+        >
           {user.email}
         </Typography>
       </Stack>
@@ -75,14 +77,14 @@ export default function RecruitmentForm({ user = {} }) {
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
   const { triggerToast } = useToast();
-  
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleSend = async () => {
-    console.log(values);
     setLoading(true);
+
     const phoneData = {
       uid: user.uid,
       phone: phone,
@@ -91,26 +93,27 @@ export default function RecruitmentForm({ user = {} }) {
       method: "POST",
       body: JSON.stringify({ userDataInput: phoneData }),
     });
+
     res = await res.json();
-      try {
-        await mutate({
-          mutation: APPLY_FOR_CC,
-          variables: values,
-        });
-        setSent(true);
-        triggerToast({
-          title: "Success!",
-          messages: ["Form Sent."],
-          severity: "success",
-        });
-      } catch (error) {
-        triggerToast({
-          title: "Error!",
-          messages: ["Failed to send form."],
-          severity: "error",
-        });
-        console.error(error);
-      }
+    try {
+      await mutate({
+        mutation: APPLY_FOR_CC,
+        variables: values,
+      });
+      setSent(true);
+      triggerToast({
+        title: "Success!",
+        messages: ["Form Sent."],
+        severity: "success",
+      });
+    } catch (error) {
+      triggerToast({
+        title: "Error!",
+        messages: ["Failed to send form."],
+        severity: "error",
+      });
+      // console.error(error);
+    }
     setLoading(false);
   };
 
@@ -121,7 +124,6 @@ export default function RecruitmentForm({ user = {} }) {
       }, 1000);
     }
   }, [sent]);
-
 
   return (
     <form onSubmit={handleSubmit(handleSend)}>
@@ -191,11 +193,15 @@ export default function RecruitmentForm({ user = {} }) {
                         checkPhoneNumber: (value) => {
                           if (!value || value === "") return true;
                           try {
-                            const phoneNumber = parsePhoneNumberWithError(value, {
-                              defaultCountry: "IN",
-                            });
+                            const phoneNumber = parsePhoneNumberWithError(
+                              value,
+                              {
+                                defaultCountry: "IN",
+                              }
+                            );
                             return (
-                              isValidPhoneNumber(value, "IN") || "Invalid Phone Number!"
+                              isValidPhoneNumber(value, "IN") ||
+                              "Invalid Phone Number!"
                             );
                           } catch (error) {
                             return error.message;
@@ -203,7 +209,6 @@ export default function RecruitmentForm({ user = {} }) {
                         },
                       },
                       required: "Phone number is required!",
-
                     }}
                     render={({ field, fieldState: { error } }) => (
                       <TextField
@@ -212,7 +217,10 @@ export default function RecruitmentForm({ user = {} }) {
                         helperText={error?.message}
                         label="Phone Number"
                         variant="outlined"
-                        onChange={(e) => {setPhone(e.target.value); field.onChange(e);}}
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          field.onChange(e);
+                        }}
                         fullWidth
                       />
                     )}
@@ -220,17 +228,17 @@ export default function RecruitmentForm({ user = {} }) {
                 )}
               </Grid>
               <Grid item xs={12} md={12} xl={12}>
-              <FormControl fullWidth>
-                <InputLabel id="teams-label">Teams</InputLabel>
-                <Select
-                  labelId="teams-label"
-                  id="teams"
-                  multiple
-                  value={values.teams} // Ensure values.teams is always an array
-                  onChange={handleChange("teams")}
-                  fullWidth
-                  input={<OutlinedInput />}
-                  renderValue={(selected) => (
+                <FormControl fullWidth>
+                  <InputLabel id="teams-label">Teams</InputLabel>
+                  <Select
+                    labelId="teams-label"
+                    id="teams"
+                    multiple
+                    value={values.teams} // Ensure values.teams is always an array
+                    onChange={handleChange("teams")}
+                    fullWidth
+                    input={<OutlinedInput />}
+                    renderValue={(selected) => (
                       <Box
                         sx={{
                           display: "flex",
@@ -238,26 +246,26 @@ export default function RecruitmentForm({ user = {} }) {
                           gap: 0.5,
                         }}
                       >
-                      {Array.isArray(selected) ? (
-                        selected.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))
-                      ) : (
-                        <Chip key={selected} label={selected} />
-                      )}
-                    </Box>
-                  )}
-                >
-                  {["Design", "Frontend", "Backend", "DevOps", "Marketing"].map((team) => (
-                    <MenuItem key={team} value={team}>
-                      {team}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>
-                  Select the teams you are interested in joining.
-                </FormHelperText>
-              </FormControl>
+                        {Array.isArray(selected) ? (
+                          selected.map((value) => (
+                            <Chip key={value} label={value} />
+                          ))
+                        ) : (
+                          <Chip key={selected} label={selected} />
+                        )}
+                      </Box>
+                    )}
+                  >
+                    {availableTeams.map((team) => (
+                      <MenuItem key={team} value={team.toLowerCase()}>
+                        {team}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>
+                    Select the teams you are interested in joining.
+                  </FormHelperText>
+                </FormControl>
               </Grid>
               {/* Add form validation error handling for other fields here */}
               <Grid item xs={12} md={12} xl={12}>
@@ -331,10 +339,10 @@ export default function RecruitmentForm({ user = {} }) {
                 fullWidth
                 onClick={() =>
                   handleSubmit((data) =>
-                    handleSend(data, { shouldSubmit: true }),
+                    handleSend(data, { shouldSubmit: true })
                   )()
                 }
-                >
+              >
                 Submit
               </LoadingButton>
             </Grid>
@@ -344,4 +352,3 @@ export default function RecruitmentForm({ user = {} }) {
     </form>
   );
 }
-
