@@ -354,7 +354,7 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  {teams?.includes("design") && (
+                  {teams?.includes("Design") && (
                     <Grid item xs={12} md={12} xl={12}>
                       <Controller
                         name="designExperience"
