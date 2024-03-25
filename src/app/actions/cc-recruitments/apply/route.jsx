@@ -5,10 +5,10 @@ import { APPLY_FOR_CC } from "gql/mutations/recruitments";
 
 export async function POST(request) {
   const response = { ok: false, error: null };
-  const { recruitmentInput } = await request.json();
+  const { ccRecruitmentInput } = await request.json();
 
   const { error } = await getClient().mutation(APPLY_FOR_CC, {
-    recruitmentInput,
+    ccRecruitmentInput,
   });
   if (error) {
     response.error = {
