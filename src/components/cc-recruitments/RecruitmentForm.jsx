@@ -62,13 +62,6 @@ function MemberUserInput({ user = {} }) {
 
 export default function RecruitmentForm({ user = {} }) {
   const defaultValues = {};
-  const [values, setValues] = useState({
-    teams: [],
-    whyCc: "",
-    whyThisPosition: "",
-    designExperience: "",
-  });
-  const [phone, setPhone] = useState(user.phone || "");
   const { control, handleSubmit, watch } = useForm({ defaultValues });
   const [sent, setSent] = useState(false);
   const router = useRouter();
@@ -78,28 +71,33 @@ export default function RecruitmentForm({ user = {} }) {
   const [cancelDialog, setCancelDialog] = useState(false);
   const { triggerToast } = useToast();
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleSend = async () => {
+  async function onSubmit(formData, opts) {
     setLoading(true);
-
-    const phoneData = {
+    if (!user.phone && formData.phone) {
+      const phoneData = {
+        uid: user.uid,
+        phone: formData.phone,
+      };
+      let res = await fetch("/actions/users/save", {
+        method: "POST",
+        body: JSON.stringify({ userDataInput: phoneData }),
+      });
+      res = await res.json();
+    }
+    const data = {
       uid: user.uid,
-      phone: phone,
+      teams: formData.teams,
+      whyCc: formData.whyCc,
+      whyThisPosition: formData.whyThisPosition,
+      designExperience: formData.designExperience,
     };
-    let res = await fetch("/actions/users/save", {
-      method: "POST",
-      body: JSON.stringify({ userDataInput: phoneData }),
-    });
 
-    res = await res.json();
     try {
       await mutate({
         mutation: APPLY_FOR_CC,
-        variables: values,
+        variables: data,
       });
+
       setSent(true);
       triggerToast({
         title: "Success!",
@@ -115,7 +113,7 @@ export default function RecruitmentForm({ user = {} }) {
       // console.error(error);
     }
     setLoading(false);
-  };
+  }
 
   useEffect(() => {
     if (sent) {
@@ -126,7 +124,7 @@ export default function RecruitmentForm({ user = {} }) {
   }, [sent]);
 
   return (
-    <form onSubmit={handleSubmit(handleSend)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
         <Grid container item xs={12} md={12} xl={12} spacing={3}>
           <Grid container item>
@@ -174,15 +172,14 @@ export default function RecruitmentForm({ user = {} }) {
                 />
               </Grid>
               <Grid item xs={12} md={12} xl={12}>
-                {user.phone ? (
+                {user?.phone ? (
                   <TextField
                     label="Phone number"
                     variant="outlined"
-                    value={phone || "Unknown"}
+                    value={user.phone || "Unknown"}
                     fullWidth
                     required
                     disabled
-                    va
                   />
                 ) : (
                   <Controller
@@ -210,142 +207,191 @@ export default function RecruitmentForm({ user = {} }) {
                       },
                       required: "Phone number is required!",
                     }}
-                    render={({ field, fieldState: { error } }) => (
+                    render={({ field, fieldState: { error, invalid  } }) => (
                       <TextField
                         {...field}
-                        error={!!error} // Use !! to convert error to a boolean
+                        error={invalid}
                         helperText={error?.message}
                         label="Phone Number"
                         variant="outlined"
-                        onChange={(e) => {
-                          setPhone(e.target.value);
-                          field.onChange(e);
-                        }}
                         fullWidth
                       />
                     )}
                   />
                 )}
               </Grid>
+            </Grid>
+          </Grid>
+          <Grid container item>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              color="text.secondary"
+              gutterBottom
+              mb={2}
+            >
+              Team Specific Details
+            </Typography>
+            <Grid container item spacing={4}>
               <Grid item xs={12} md={12} xl={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="teams-label">Teams</InputLabel>
-                  <Select
-                    labelId="teams-label"
-                    id="teams"
-                    multiple
-                    value={values.teams} // Ensure values.teams is always an array
-                    onChange={handleChange("teams")}
-                    fullWidth
-                    input={<OutlinedInput />}
-                    renderValue={(selected) => (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 0.5,
-                        }}
-                      >
-                        {Array.isArray(selected) ? (
-                          selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))
-                        ) : (
-                          <Chip key={selected} label={selected} />
+                <Controller
+                  name="teams"
+                  control={control}
+                  defaultValue={[]}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel id="teams-label">Teams</InputLabel>
+                      <Select
+                        multiple
+                        id="teams"
+                        labelId="teams-label"
+                        input={<OutlinedInput label="teams" />}
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: 0.5,
+                            }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
                         )}
-                      </Box>
-                    )}
-                  >
-                    {availableTeams.map((team) => (
-                      <MenuItem key={team} value={team.toLowerCase()}>
-                        {team}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>
-                    Select the teams you are interested in joining.
-                  </FormHelperText>
-                </FormControl>
-              </Grid>
-              {/* Add form validation error handling for other fields here */}
-              <Grid item xs={12} md={12} xl={12}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  label="Why do you want to join CC?"
-                  value={values.whyCc}
-                  onChange={handleChange("whyCc")}
-                  // Add error handling here if needed using control.formState.errors.whyCc?.message
+                        {...field}
+                      >
+                        {availableTeams
+                          ?.slice()
+                          ?.sort()
+                          ?.map((team) => (
+                            <MenuItem key={team} value={team.toLowerCase()}>
+                              {team}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  )}
                 />
               </Grid>
               <Grid item xs={12} md={12} xl={12}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  label="Why do you want to join this position?"
-                  value={values.whyThisPosition}
-                  onChange={handleChange("whyThisPosition")}
-                  // Add error handling here if needed using control.formState.errors.whyThisPosition?.message
+                <Controller
+                  name="whyThisPosition"
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: 4000,
+                      message:
+                        "Event description must be at most 4000 characters long!",
+                    },
+                  }}
+                  render={({ field, fieldState: { error, invalid } }) => (
+                    <TextField
+                      {...field}
+                      label="Why do you want to join this position?"
+                      autoComplete="off"
+                      error={invalid}
+                      helperText={error?.message}
+                      variant="outlined"
+                      rows={8}
+                      fullWidth
+                      multiline
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} md={12} xl={12}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  label="Design experience"
-                  value={values.designExperience}
-                  onChange={handleChange("designExperience")}
-                  // Add error handling here if needed using control.formState.errors.designExperience?.message
+                <Controller
+                  name="whyCc"
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: 4000,
+                      message:
+                        "Event description must be at most 4000 characters long!",
+                    },
+                  }}
+                  render={({ field, fieldState: { error, invalid } }) => (
+                    <TextField
+                      {...field}
+                      label="Why do you want to join CC?"
+                      autoComplete="off"
+                      error={invalid}
+                      helperText={error?.message}
+                      variant="outlined"
+                      rows={8}
+                      fullWidth
+                      multiline
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} md={12} xl={12}>
+                <Controller
+                  name="designExperience"
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: 4000,
+                      message:
+                        "Event description must be at most 4000 characters long!",
+                    },
+                  }}
+                  render={({ field, fieldState: { error, invalid } }) => (
+                    <TextField
+                      {...field}
+                      label="Design experience"
+                      autoComplete="off"
+                      error={invalid}
+                      helperText={error?.message}
+                      variant="outlined"
+                      rows={8}
+                      fullWidth
+                      multiline
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
           </Grid>
-          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-            <Grid item xs={6}>
-              <Button
-                size="large"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                disabled={loading}
-                onClick={() => setCancelDialog(true)}
-              >
-                Cancel
-              </Button>
+        </Grid>
+        <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+          <Grid item xs={6}>
+            <Button
+              size="large"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              disabled={loading}
+              onClick={() => setCancelDialog(true)}
+            >
+              Cancel
+            </Button>
 
-              <ConfirmDialog
-                open={cancelDialog}
-                title="Confirm cancellation"
-                description="Are you sure you want to cancel? Any unsaved changes will be lost."
-                onConfirm={() => location.reload()}
-                onClose={() => setCancelDialog(false)}
-                confirmProps={{ color: "primary" }}
-                confirmText="Yes, discard my changes"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="large"
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={() =>
-                  handleSubmit((data) =>
-                    handleSend(data, { shouldSubmit: true })
-                  )()
-                }
-              >
-                Submit
-              </LoadingButton>
-            </Grid>
+            <ConfirmDialog
+              open={cancelDialog}
+              title="Confirm cancellation"
+              description="Are you sure you want to cancel? Any unsaved changes will be lost."
+              onConfirm={() => location.reload()}
+              onClose={() => setCancelDialog(false)}
+              confirmProps={{ color: "primary" }}
+              confirmText="Yes, discard my changes"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <LoadingButton
+              loading={loading}
+              type="submit"
+              size="large"
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={() =>
+                handleSubmit((data) => onSubmit(data, { shouldSubmit: true }))()
+              }
+            >
+              Submit
+            </LoadingButton>
           </Grid>
         </Grid>
       </Grid>
