@@ -36,6 +36,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
   const { user } = useAuth();
 
+  const [userMember, setUserMember] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
   const [positionEditing, setPositionEditing] = useState(false);
@@ -175,6 +176,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   watch={watch}
                   setValue={setValue}
+                  user={userMember}
+                  setUser={setUserMember}
                 />
               </Grid>
             </Grid>
@@ -250,7 +253,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  disabled={positionEditing}
+                  disabled={positionEditing || !userMember}
                 >
                   Save
                 </LoadingButton>
@@ -264,12 +267,11 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 }
 
 // find user by email
-function MemberUserInput({ control, watch, setValue }) {
+function MemberUserInput({ control, watch, setValue, user, setUser }) {
   const { triggerToast } = useToast();
 
   const uid = watch("uid");
   const emailInput = watch("userSelector");
-  const [user, setUser] = useState(null);
   useEffect(() => {
     (async () => {
       if (uid) await getUser();
