@@ -43,35 +43,35 @@ const columns = [
     valueGetter: ({ row }) => row.datetimeperiod[0],
     valueFormatter: ({ value }) => ISOtoHuman(value),
   },
-  // {
-  //   field: "budget",
-  //   headerName: "Budget/SLC",
-  //   flex: 2,
-  //   align: "center",
-  //   headerAlign: "center",
-  //   valueGetter: ({ row }) => ({
-  //     requested: row.budget.length > 0,
-  //     approved: row.status.budget,
-  //   }),
-  //   renderCell: ({ value }) => (
-  //     <Icon
-  //       sx={{
-  //         color: !value.requested
-  //           ? "secondary.main"
-  //           : !value.approved
-  //             ? "warning.main"
-  //             : "success.main",
-  //       }}
-  //       variant={
-  //         !value.requested
-  //           ? "remove-rounded"
-  //           : !value.approved
-  //             ? "refresh-rounded"
-  //             : "check"
-  //       }
-  //     />
-  //   ),
-  // },
+  {
+    field: "budget",
+    headerName: "Budget/SLC",
+    flex: 2,
+    align: "center",
+    headerAlign: "center",
+    valueGetter: ({ row }) => ({
+      requested: row.budget.length > 0,
+      approved: row.status.budget,
+    }),
+    renderCell: ({ value }) => (
+      <Icon
+        sx={{
+          color: !value.requested
+            ? "secondary.main"
+            : !value.approved
+              ? "warning.main"
+              : "success.main",
+        }}
+        variant={
+          !value.requested
+            ? "remove-rounded"
+            : !value.approved
+              ? "refresh-rounded"
+              : "check"
+        }
+      />
+    ),
+  },
   {
     field: "venue",
     headerName: "Venue/SLO",
