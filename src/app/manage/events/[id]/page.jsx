@@ -63,7 +63,7 @@ export default async function ManageEvent({ params }) {
   return (
     <Box>
       <ActionPalette
-        left={[EventStatus, BudgetStatus, VenueStatus]}
+        left={[EventStatus, VenueStatus]}
         leftProps={[
           { status: event?.status },
           { status: event?.status, budget: event?.budget },
