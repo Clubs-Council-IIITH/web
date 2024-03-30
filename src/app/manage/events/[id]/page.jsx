@@ -216,7 +216,7 @@ function getActions(event, user) {
    */
   if (user?.role === "slo") {
     if (
-      upcoming &&
+      // upcoming &&
       event?.status?.state !== "incomplete" &&
       event?.status?.budget &&
       !event?.status?.room
