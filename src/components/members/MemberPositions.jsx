@@ -11,6 +11,8 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Tag from "components/Tag";
 import Icon from "components/Icon";
@@ -23,7 +25,7 @@ const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
     const allApprovedRejected = rows.every(
-      (row) => row.approved || row.rejected,
+      (row) => row.approved || row.rejected
     );
     return !allApprovedRejected;
   } else return false;
@@ -38,6 +40,9 @@ export default function MemberPositions({
   setPositionEditing = console.log,
 }) {
   const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const minYear = 2010;
 
   // position item template
@@ -88,11 +93,25 @@ export default function MemberPositions({
     {
       field: "name",
       headerName: "Role",
-      flex: 4,
+      flex: isMobile ? null : 4,
       editable: editable,
       renderCell: (p) =>
         p.value ? (
-          p.value
+          <Typography
+            variant="body2"
+            style={{
+              overflowWrap: "break-word",
+              wordWrap: "break-word",
+              msWordBreak: "break-all",
+              wordBreak: "break-all",
+              msHyphens: "auto",
+              MozHyphens: "auto",
+              WebkitHyphens: "auto",
+              hyphens: "auto",
+            }}
+          >
+            {p.value}
+          </Typography>
         ) : (
           <Typography color="text.secondary">
             <i>Double click to edit</i>
@@ -102,14 +121,14 @@ export default function MemberPositions({
     {
       field: "startYear",
       headerName: "Start Year",
-      flex: 2,
+      flex: isMobile ? null : 2,
       editable: editable,
     },
     {
       field: "endYear",
       headerName: "End Year",
       valueGetter: ({ row }) => row.endYear || "-",
-      flex: 2,
+      flex: isMobile ? null : 2,
       editable: editable,
     },
     // if editing, show delete button
@@ -137,7 +156,7 @@ export default function MemberPositions({
             headerName: "Status",
             align: "center",
             headerAlign: "center",
-            flex: 2,
+            flex: isMobile ? null : 2,
             valueGetter: ({ row }) => ({
               approved: row.approved,
               rejected: row.rejected,
@@ -148,6 +167,7 @@ export default function MemberPositions({
                   approved ? "Approved" : rejected ? "Rejected" : "Pending"
                 }
                 color={approved ? "success" : rejected ? "error" : "warning"}
+                sx={{ my: 2 }}
               />
             ),
           },
@@ -193,6 +213,7 @@ export default function MemberPositions({
 
       <DataGrid
         autoHeight
+        getRowHeight={() => (isMobile ? "auto" : "none")}
         rows={rows}
         columns={columns}
         editMode="row"

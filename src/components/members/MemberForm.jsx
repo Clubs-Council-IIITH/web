@@ -382,7 +382,7 @@ function MemberClubSelect({ control, edit }) {
           <InputLabel id="cid">Club *</InputLabel>
           <Select
             labelId="cid"
-            label="Club *"
+            label="Club/Body *"
             fullWidth
             disabled={edit}
             {...field}

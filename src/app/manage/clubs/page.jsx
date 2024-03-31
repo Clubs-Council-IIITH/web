@@ -34,7 +34,7 @@ export default async function ManageClubs() {
           variant="contained"
           startIcon={<Icon variant="add" />}
         >
-          New Club
+          New Club/Body
         </Button>
       </Stack>
 
