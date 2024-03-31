@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
 import {
+  Box,
   Tooltip,
   Button,
   IconButton,
@@ -17,6 +18,16 @@ import Icon from "components/Icon";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 import { useRouter } from "next/navigation";
+
+const showActions = (rows, user) => {
+  if (user?.role !== "cc") return false;
+  if (rows.length > 0) {
+    const allApprovedRejected = rows.every(
+      (row) => row.approved || row.rejected
+    );
+    return !allApprovedRejected;
+  } else return false;
+};
 
 export default function MemberPositions({
   editable,
@@ -68,7 +79,6 @@ export default function MemberPositions({
   const onEdit = () => {
     setPositionEditing(true);
   };
-
   // if not editing, set position editing to false
   const onEditStop = () => {
     setPositionEditing(false);
@@ -143,44 +153,28 @@ export default function MemberPositions({
           },
 
           // if not editing and if user is cc, show approve button
-          ...(user.role === "cc"
+          ...(showActions(rows, user)
             ? [
                 {
-                  field: "actionApprove",
+                  field: "actions",
                   align: "center",
                   headerName: "",
-                  width: 50,
+                  width: 100,
                   valueGetter: ({ row }) => ({
                     approved: row.approved,
                     rejected: row.rejected,
                     rid: row.rid,
                   }),
                   renderCell: ({ value: { approved, rejected, rid } }) => (
-                    <ApproveButton
-                      approved={approved}
-                      rejected={rejected}
-                      rid={rid}
-                      member={member}
-                    />
-                  ),
-                },
-                {
-                  field: "actionReject",
-                  align: "center",
-                  headerName: "",
-                  width: 50,
-                  valueGetter: ({ row }) => ({
-                    approved: row.approved,
-                    rejected: row.rejected,
-                    rid: row.rid,
-                  }),
-                  renderCell: ({ value: { approved, rejected, rid } }) => (
-                    <RejectButton
-                      approved={approved}
-                      rejected={rejected}
-                      rid={rid}
-                      member={member}
-                    />
+                    <>
+                      {approved || rejected ? null : (
+                        <>
+                          <ApproveButton rid={rid} member={member} />
+                          <Box sx={{ mx: 1 }} />
+                          <RejectButton rid={rid} member={member} />
+                        </>
+                      )}
+                    </>
                   ),
                 },
               ]
@@ -216,13 +210,13 @@ export default function MemberPositions({
         initialState={{
           pagination: { paginationModel: { pageSize: 5 } },
         }}
-        pageSizeOptions={[5, 10, 25]}
+        pageSizeOptions={[5, 10, 15]}
       />
     </>
   );
 }
 
-function ApproveButton({ member, approved, rejected, rid }) {
+function ApproveButton({ member, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
 
@@ -259,7 +253,7 @@ function ApproveButton({ member, approved, rejected, rid }) {
     }
   };
 
-  return approved || rejected ? null : (
+  return (
     <Tooltip arrow title="Approve">
       <IconButton
         disabled={loading}
@@ -284,7 +278,7 @@ function ApproveButton({ member, approved, rejected, rid }) {
   );
 }
 
-function RejectButton({ member, approved, rejected, rid }) {
+function RejectButton({ member, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
 
@@ -321,7 +315,7 @@ function RejectButton({ member, approved, rejected, rid }) {
     }
   };
 
-  return approved || rejected ? null : (
+  return (
     <Tooltip arrow title="Reject">
       <IconButton
         disabled={loading}

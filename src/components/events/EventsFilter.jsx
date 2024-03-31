@@ -110,7 +110,7 @@ export default function EventsFilter({ name, club, state }) {
             <InputLabel id="clubid">Filter by club</InputLabel>
             <Select
               labelId="clubid"
-              label="Filter by club"
+              label="Filter by Club/Student Body"
               fullWidth
               onChange={(e) =>
                 router.push(
