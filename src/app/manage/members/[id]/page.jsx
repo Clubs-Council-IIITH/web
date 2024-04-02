@@ -44,7 +44,11 @@ export default async function ManageMember({ params }) {
         <MemberActionsList member={member} user={user} />
         <Grid container spacing={2} mt={4}>
           <Grid item xs={12}>
-            <Stack direction="row" alignItems="center" spacing={4}>
+            <Stack
+              direction={{ xs: "column", lg: "row" }}
+              alignItems="center"
+              spacing={4}
+            >
               <UserImage
                 image={userMeta.img}
                 name={userProfile.firstName}
@@ -85,7 +89,7 @@ export default async function ManageMember({ params }) {
                 textTransform="uppercase"
                 gutterBottom
               >
-                Club
+                Club/Body
               </Typography>
               <ClubButton clubid={id?.split(encodeURIComponent(":"))[0]} />
             </Grid>
