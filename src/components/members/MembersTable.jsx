@@ -97,8 +97,8 @@ export default function MembersTable({ members, showClub = false }) {
                         role?.approved
                           ? "Approved"
                           : role?.rejected
-                          ? "Rejected"
-                          : "Pending approval"
+                            ? "Rejected"
+                            : "Pending approval"
                       }
                     >
                       <Icon
@@ -107,15 +107,15 @@ export default function MembersTable({ members, showClub = false }) {
                           role?.approved
                             ? "success.main"
                             : role?.rejected
-                            ? "error.main"
-                            : "warning.main"
+                              ? "error.main"
+                              : "warning.main"
                         }
                         variant={
                           role?.approved
                             ? "eva:checkmark-outline"
                             : role?.rejected
-                            ? "eva:close-outline"
-                            : "eva:refresh-fill"
+                              ? "eva:close-outline"
+                              : "eva:refresh-fill"
                         }
                       />
                     </Tooltip>

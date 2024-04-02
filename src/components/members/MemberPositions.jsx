@@ -25,7 +25,7 @@ const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
     const allApprovedRejected = rows.every(
-      (row) => row.approved || row.rejected
+      (row) => row.approved || row.rejected,
     );
     return !allApprovedRejected;
   } else return false;

@@ -127,15 +127,15 @@ export default function EventsTable({
             color: !value.requested
               ? "secondary.main"
               : !value.approved
-              ? "warning.main"
-              : "success.main",
+                ? "warning.main"
+                : "success.main",
           }}
           variant={
             !value.requested
               ? "remove-rounded"
               : !value.approved
-              ? "refresh-rounded"
-              : "check"
+                ? "refresh-rounded"
+                : "check"
           }
         />
       ),
