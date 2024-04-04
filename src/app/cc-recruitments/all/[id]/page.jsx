@@ -162,6 +162,15 @@ export default async function CCApplicantDetails({ params }) {
 
         <Stack direction="row" spacing={1} mb={2}>
           <Typography variant="body1" color="text.secondary">
+            Why these teams:
+          </Typography>
+          <Typography variant="body1">
+            {currentApplicant?.whyThisPosition}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
             Why CC:
           </Typography>
           <Typography variant="body1">{currentApplicant?.whyCc}</Typography>
@@ -169,10 +178,26 @@ export default async function CCApplicantDetails({ params }) {
 
         <Stack direction="row" spacing={1} mb={2}>
           <Typography variant="body1" color="text.secondary">
-            Why this position:
+            New Ideas:
           </Typography>
           <Typography variant="body1">
-            {currentApplicant?.whyThisPosition}
+            {currentApplicant?.goodFit || "N/A"}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            New Ideas:
+          </Typography>
+          <Typography variant="body1">{currentApplicant?.ideas}</Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            Other Bodies:
+          </Typography>
+          <Typography variant="body1">
+            {currentApplicant?.otherBodies || "N/A"}
           </Typography>
         </Stack>
 

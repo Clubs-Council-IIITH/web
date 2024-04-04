@@ -24,15 +24,26 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import UserImage from "components/users/UserImage";
 import ConfirmDialog from "components/ConfirmDialog";
 
-const availableTeams = ["Design", "Finance", "Logistics", "Stratetgy"];
+const availableTeams = [
+  ["Design", "Design"],
+  ["Finance", "Finance"],
+  ["Logistics and Inventory", "Logistics"],
+  ["Stats and Registry", "Stats"],
+];
 
 function MemberUserInput({ user = {} }) {
   return user ? (
-    <Stack direction="row" alignItems="center" spacing={4}>
+    <Stack
+      direction={{ xs: "column", lg: "row" }}
+      alignItems="center"
+      spacing={4}
+    >
       <UserImage
         image={user.img}
         name={user.firstName}
@@ -59,6 +70,10 @@ function MemberUserInput({ user = {} }) {
 }
 
 export default function RecruitmentForm({ user = {} }) {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const defaultValues = {};
   const { control, handleSubmit, watch } = useForm({ defaultValues });
   const teams = watch("teams");
@@ -96,8 +111,16 @@ export default function RecruitmentForm({ user = {} }) {
       teams: formData.teams,
       whyCc: formData.whyCc,
       whyThisPosition: formData.whyThisPosition,
+      ideas: formData.ideas,
+      goodFit: formData.goodFit,
+      otherBodies: formData.otherBodies,
       designExperience: formData?.designExperience || null,
     };
+
+    // Map the team names to their respective IDs at position 1
+    data.teams = data.teams.map(
+      (team) => availableTeams.find((t) => t[0] === team)[1]
+    );
 
     let res = await fetch("/actions/cc-recruitments/apply", {
       method: "POST",
@@ -134,7 +157,7 @@ export default function RecruitmentForm({ user = {} }) {
             <Grid container item xs={12} md={12} xl={12} spacing={3}>
               <Grid container item>
                 <Typography
-                  variant="subtitle2"
+                  variant={isDesktop ? "subtitle2" : "subtitle1"}
                   textTransform="uppercase"
                   color="text.secondary"
                   gutterBottom
@@ -229,7 +252,7 @@ export default function RecruitmentForm({ user = {} }) {
               </Grid>
               <Grid container item>
                 <Typography
-                  variant="subtitle2"
+                  variant={isDesktop ? "subtitle2" : "subtitle1"}
                   textTransform="uppercase"
                   color="text.secondary"
                   gutterBottom
@@ -277,8 +300,8 @@ export default function RecruitmentForm({ user = {} }) {
                               ?.slice()
                               ?.sort()
                               ?.map((team) => (
-                                <MenuItem key={team} value={team}>
-                                  {team}
+                                <MenuItem key={team[0]} value={team[0]}>
+                                  {team[0]}
                                 </MenuItem>
                               ))}
                           </Select>
@@ -290,6 +313,17 @@ export default function RecruitmentForm({ user = {} }) {
                     />
                   </Grid>
                   <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
+                        Why did you choose the team(s) you have chosen?
+                      </Typography>
+                    )}
                     <Controller
                       name="whyThisPosition"
                       control={control}
@@ -303,12 +337,16 @@ export default function RecruitmentForm({ user = {} }) {
                       render={({ field, fieldState: { error, invalid } }) => (
                         <TextField
                           {...field}
-                          label="Why do you want to join this position?"
+                          label={
+                            isDesktop
+                              ? "Why did you choose the team(s) you have chosen?"
+                              : null
+                          }
                           autoComplete="off"
                           error={invalid}
                           helperText={error?.message}
                           variant="outlined"
-                          rows={8}
+                          rows={5}
                           fullWidth
                           multiline
                         />
@@ -319,7 +357,7 @@ export default function RecruitmentForm({ user = {} }) {
               </Grid>
               <Grid container item>
                 <Typography
-                  variant="subtitle2"
+                  variant={isDesktop ? "subtitle2" : "subtitle1"}
                   textTransform="uppercase"
                   color="text.secondary"
                   gutterBottom
@@ -329,20 +367,36 @@ export default function RecruitmentForm({ user = {} }) {
                 </Typography>
                 <Grid container item spacing={4}>
                   <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
+                        Why do you want to be a part of the Clubs Council? Tell
+                        us about your vision and improvements you wish to make.
+                      </Typography>
+                    )}
                     <Controller
                       name="whyCc"
                       control={control}
                       rules={{
                         required: "Need to provide a reason!",
                         maxLength: {
-                          value: 4000,
-                          message: "Must be at most 4000 characters long!",
+                          value: 6000,
+                          message: "Must be at most 6000 characters long!",
                         },
                       }}
                       render={({ field, fieldState: { error, invalid } }) => (
                         <TextField
                           {...field}
-                          label="Why do you want to join CC?"
+                          label={
+                            isDesktop
+                              ? "Why do you want to be a part of the Clubs Council? Tell us about your vision and improvements you wish to make."
+                              : null
+                          }
                           autoComplete="off"
                           error={invalid}
                           helperText={error?.message}
@@ -354,22 +408,160 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
+                  <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
+                        Why do you believe you are a good fit for the position
+                        you are applying to?
+                      </Typography>
+                    )}
+                    <Controller
+                      name="goodFit"
+                      control={control}
+                      rules={{
+                        required: "Need to provide a reason!",
+                        maxLength: {
+                          value: 6000,
+                          message: "Must be at most 6000 characters long!",
+                        },
+                      }}
+                      render={({ field, fieldState: { error, invalid } }) => (
+                        <TextField
+                          {...field}
+                          label={
+                            isDesktop
+                              ? "Why do you believe you are a good fit for the position you are applying to?"
+                              : null
+                          }
+                          autoComplete="off"
+                          error={invalid}
+                          helperText={error?.message}
+                          variant="outlined"
+                          rows={8}
+                          fullWidth
+                          multiline
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
+                        Share your insights on club activities and suggest
+                        improvements for campus life, focusing on our college.
+                      </Typography>
+                    )}
+                    <Controller
+                      name="ideas"
+                      control={control}
+                      rules={{
+                        required: "Compulsory Field!",
+                        maxLength: {
+                          value: 5000,
+                          message: "Must be at most 5000 characters long!",
+                        },
+                      }}
+                      render={({ field, fieldState: { error, invalid } }) => (
+                        <TextField
+                          {...field}
+                          label={
+                            isDesktop
+                              ? "Share your insights on club activities and suggest improvements for campus life, focusing on our college."
+                              : null
+                          }
+                          autoComplete="off"
+                          error={invalid}
+                          helperText={error?.message}
+                          variant="outlined"
+                          rows={8}
+                          fullWidth
+                          multiline
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
+                        Have you been a part of any student-run bodies or clubs
+                        in our campus? If yes, tell us about your experience.
+                      </Typography>
+                    )}
+                    <Controller
+                      name="otherBodies"
+                      control={control}
+                      rules={{
+                        maxLength: {
+                          value: 4000,
+                          message: "Must be at most 4000 characters long!",
+                        },
+                      }}
+                      render={({ field, fieldState: { error, invalid } }) => (
+                        <TextField
+                          {...field}
+                          label={
+                            isDesktop
+                              ? "Have you been a part of any student-run bodies or clubs in our campus? If yes, tell us about your experience."
+                              : null
+                          }
+                          autoComplete="off"
+                          error={invalid}
+                          helperText={error?.message}
+                          variant="outlined"
+                          rows={5}
+                          fullWidth
+                          multiline
+                        />
+                      )}
+                    />
+                  </Grid>
                   {teams?.includes("Design") && (
                     <Grid item xs={12} md={12} xl={12}>
+                      {isDesktop ? null : (
+                        <Typography
+                          variant="subtitle2"
+                          textTransform="uppercase"
+                          color="text.secondary"
+                          gutterBottom
+                          mb={2}
+                        >
+                          Share your design experience.
+                        </Typography>
+                      )}
                       <Controller
                         name="designExperience"
                         control={control}
                         rules={{
                           required: "This field is required for Design Team!",
                           maxLength: {
-                            value: 4000,
-                            message: "Must be at most 4000 characters long!",
+                            value: 2000,
+                            message: "Must be at most 2000 characters long!",
                           },
                         }}
                         render={({ field, fieldState: { error, invalid } }) => (
                           <TextField
                             {...field}
-                            label="Design experience"
+                            label={
+                              isDesktop ? "Share your design experience." : null
+                            }
                             autoComplete="off"
                             error={invalid}
                             helperText={error?.message}
