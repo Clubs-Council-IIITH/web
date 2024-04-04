@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import dynamic from "next/dynamic";
 
 import { getClient } from "gql/client";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
@@ -11,8 +10,6 @@ import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
-
-const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
 export async function generateMetadata({ params }) {
   const { id } = params;
@@ -136,16 +133,6 @@ export default async function CCApplicantDetails({ params }) {
           Application Details
         </Typography>
 
-        {/* // Time of Submission of the form
-        <Stack direction="row" spacing={1}>
-          <Typography variant="body1" color="text.secondary">
-            Time of Submission:
-          </Typography>
-          <Typography variant="body1">
-            <DateTime dt={currentApplicant.sentTime} />
-          </Typography>
-        </Stack> */}
-
         <Stack direction="row" spacing={1} mb={2}>
           <Typography variant="body1" color="text.secondary">
             Teams:
@@ -178,7 +165,7 @@ export default async function CCApplicantDetails({ params }) {
 
         <Stack direction="row" spacing={1} mb={2}>
           <Typography variant="body1" color="text.secondary">
-            New Ideas:
+            Good Fit:
           </Typography>
           <Typography variant="body1">
             {currentApplicant?.goodFit || "N/A"}
@@ -201,12 +188,23 @@ export default async function CCApplicantDetails({ params }) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} mb={2}>
           <Typography variant="body1" color="text.secondary">
             Design Experience:
           </Typography>
           <Typography variant="body1">
             {currentApplicant?.designExperience || "N/A"}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            Time of Submission:
+          </Typography>
+          <Typography variant="body1">
+            {new Date(currentApplicant.sentTime).toLocaleString("en-IN", {
+              timeZone: "Asia/Kolkata",
+            })}
           </Typography>
         </Stack>
       </Box>
