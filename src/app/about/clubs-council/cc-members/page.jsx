@@ -19,7 +19,7 @@ export default async function AllMembers() {
     },
   });
 
-  const techMembers = members
+  const ccMembers = members
     ?.map((member) => {
       const { roles } = member;
       const techTeamRoles = filterRoles(roles, techTeamWords);
@@ -30,11 +30,11 @@ export default async function AllMembers() {
       return member.roles.length > 0;
     });
 
-  const currentYear = (new Date().getFullYear() + 1).toString();
+  // const currentYear = (new Date().getFullYear() + 1).toString();
 
   // construct dict of { year: [members] } where each year is a key
-  const targetMembers = techMembers
-    ? techMembers.reduce((acc, member) => {
+  const targetMembers = ccMembers
+    ? ccMembers.reduce((acc, member) => {
         const latestYear = extractFirstYear(member);
         if (!acc[latestYear]) {
           acc[latestYear] = [];
@@ -52,7 +52,7 @@ export default async function AllMembers() {
         </Typography>
       </center>
 
-      {techMembers?.length ? (
+      {ccMembers?.length ? (
         Object.keys(targetMembers)
           ?.sort((a, b) => {
             if (a === -1) {

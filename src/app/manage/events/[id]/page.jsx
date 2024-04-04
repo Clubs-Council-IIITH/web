@@ -63,7 +63,7 @@ export default async function ManageEvent({ params }) {
   return (
     <Box>
       <ActionPalette
-        left={[EventStatus, BudgetStatus, VenueStatus]}
+        left={[EventStatus, VenueStatus]}
         leftProps={[
           { status: event?.status },
           { status: event?.status, budget: event?.budget },
@@ -216,7 +216,7 @@ function getActions(event, user) {
    */
   if (user?.role === "slo") {
     if (
-      upcoming &&
+      // upcoming &&
       event?.status?.state !== "incomplete" &&
       event?.status?.budget &&
       !event?.status?.room

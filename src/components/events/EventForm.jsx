@@ -30,6 +30,10 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+} from "libphonenumber-js";
 
 import FileUpload from "components/FileUpload";
 import EventBudget from "components/events/EventBudget";
@@ -180,22 +184,12 @@ export default function EventForm({
       });
       res = await res.json();
 
-      if (res.ok) {
-        // show success toast & redirect to manage page
-        triggerToast({
-          title: "Success!",
-          messages: ["Profile saved."],
-          severity: "success",
-        });
-        router.push(`/profile/${defaultValues.uid}`);
-        router.refresh();
-      } else {
+      if (!res.ok) {
         // show error toast
         triggerToast({
           ...res.error,
           severity: "error",
         });
-        setLoading(false);
       }
     },
   };
@@ -255,7 +249,6 @@ export default function EventForm({
       const phoneData = {
         uid: formData.poc,
         phone: formData.poc_phone,
-        img: null,
       };
       submitHandlers["phone"](phoneData);
     }
@@ -742,6 +735,7 @@ function EventAudienceSelect({ control }) {
         {...field}
         color="primary"
         onChange={(u, v) => handleChange(u, v)}
+        sx={{ display: "flex", flexWrap: "wrap" }}
       >
         {Object.keys(audienceMap).map((key) => (
           <ToggleButton disableRipple key={key} value={key}>
@@ -1175,10 +1169,20 @@ function EventPOC({
             name="poc_phone"
             control={control}
             rules={{
-              pattern: {
-                value:
-                  /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g,
-                message: "Invalid phone number!",
+              validate: {
+                checkPhoneNumber: (value) => {
+                  if (!value || value === "") return true;
+                  try {
+                    const phoneNumber = parsePhoneNumberWithError(value, {
+                      defaultCountry: "IN",
+                    });
+                    return (
+                      isValidPhoneNumber(value, "IN") || "Invalid Phone Number!"
+                    );
+                  } catch (error) {
+                    return error.message;
+                  }
+                },
               },
               required: "POC Phone number is required!",
             }}
