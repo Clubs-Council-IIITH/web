@@ -30,6 +30,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import UserImage from "components/users/UserImage";
 import ConfirmDialog from "components/ConfirmDialog";
 
+const allowedBatches = ["ug2k22", "ug2k23", "mtech2k23", "ms2k23"];
+
 const availableTeams = [
   ["Design", "Design"],
   ["Finance", "Finance"],
@@ -148,8 +150,15 @@ export default function RecruitmentForm({ user = {} }) {
     <>
       {submiited ? (
         <Typography variant="h5" gutterBottom mt={6} align="center">
-          Thanks for applying for Clubs Council Position. You will be notified
-          about the further stages soon.
+          Thank you for your interest in applying for a Clubs Council Position.
+          Your application has been successfully submitted. You will be notified
+          about the next stages of the process shortly.
+        </Typography>
+      ) : !allowedBatches.includes(user.batch) ? (
+        <Typography variant="h5" gutterBottom mt={6} align="center">
+          You are not eligible to apply for Clubs Council Position this year.
+          <br />
+          Please contact the Clubs Council for more information.
         </Typography>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -575,6 +584,38 @@ export default function RecruitmentForm({ user = {} }) {
                     </Grid>
                   )}
                 </Grid>
+              </Grid>
+              <Grid container item>
+                <Typography
+                  variant={isDesktop ? "subtitle2" : "subtitle1"}
+                  textTransform="uppercase"
+                  color="text.secondary"
+                  gutterBottom
+                  mb={2}
+                >
+                  Final Submission
+                </Typography>
+                <Typography variant="body2" gutterBottom mb={2}>
+                  "By pressing the submit button, I specify that I have filled
+                  the form by myself with utmost honesty, and I want to apply to
+                  the Clubs Council, as mentioned in my application. I am fine
+                  with sharing of my responses with any of the Clubs Council
+                  team member for the process itself."
+                </Typography>
+                <Typography variant="body2" gutterBottom mb={2}>
+                  <i>
+                    You won't be able to edit your response after submission, so
+                    have a look at it once more.
+                  </i>{" "}
+                  The form responses will remain anonymous, and won't be shared
+                  with anyone outside of Clubs Council.
+                </Typography>
+                <Typography variant="body2" gutterBottom mb={2}>
+                  <b>Selection:</b> Interested members who fill this form will
+                  be called for an interview with the incumbent Clubs Council
+                  team, and members will be selected in consultation with the
+                  SLC Chair and the SAC Chair.
+                </Typography>
               </Grid>
             </Grid>
             <Grid container item direction="row" xs={12} spacing={1} pt={3}>
