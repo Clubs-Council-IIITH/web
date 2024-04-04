@@ -121,7 +121,7 @@ export default function RecruitmentForm({ user = {} }) {
 
     // Map the team names to their respective IDs at position 1
     data.teams = data.teams.map(
-      (team) => availableTeams.find((t) => t[0] === team)[1]
+      (team) => availableTeams.find((t) => t[0] === team)[1],
     );
 
     let res = await fetch("/actions/cc-recruitments/apply", {
@@ -231,7 +231,7 @@ export default function RecruitmentForm({ user = {} }) {
                                   value,
                                   {
                                     defaultCountry: "IN",
-                                  }
+                                  },
                                 );
                                 return (
                                   isValidPhoneNumber(value, "IN") ||
@@ -651,7 +651,7 @@ export default function RecruitmentForm({ user = {} }) {
                   fullWidth
                   onClick={() =>
                     handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true })
+                      onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
                 >

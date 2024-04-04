@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
         userInput: {
           uid: id,
         },
-      }
+      },
     );
     const user = { ...userMeta, ...userProfile };
 
@@ -40,12 +40,11 @@ export async function generateMetadata({ params }) {
 export default async function CCApplicantDetails({ params }) {
   const { id } = params;
 
-  const { data: { ccApplications } = {} } = await getClient().query(
-    GET_ALL_RECRUITMENTS
-  );
+  const { data: { ccApplications } = {} } =
+    await getClient().query(GET_ALL_RECRUITMENTS);
 
   let currentApplicant = ccApplications.find(
-    (applicant) => applicant.uid === id
+    (applicant) => applicant.uid === id,
   );
 
   // get target user
@@ -55,7 +54,7 @@ export default async function CCApplicantDetails({ params }) {
       userInput: {
         uid: id,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -69,7 +68,7 @@ export default async function CCApplicantDetails({ params }) {
   // get list of memberRoles.roles along with member.cid
   memberships = memberRoles.reduce(
     (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-    []
+    [],
   );
 
   return (

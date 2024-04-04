@@ -11,9 +11,8 @@ export const metadata = {
 };
 
 export default async function AllRecruitmentsApplications() {
-  const { data: { ccApplications } = {} } = await getClient().query(
-    GET_ALL_RECRUITMENTS
-  );
+  const { data: { ccApplications } = {} } =
+    await getClient().query(GET_ALL_RECRUITMENTS);
 
   const userPromises = [];
   ccApplications?.forEach((applicant) => {

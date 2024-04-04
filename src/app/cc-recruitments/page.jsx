@@ -20,7 +20,7 @@ async function getUser(currentUser) {
       userInput: {
         uid: currentUser.uid,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
   return user;
@@ -34,7 +34,7 @@ export default async function NewApplication() {
 
   const { data: { haveAppliedForCC } = {} } = await getClient().query(
     HAVE_APPLIED,
-    { userInput: null }
+    { userInput: null },
   );
   const user = await getUser(await currentUser);
 
