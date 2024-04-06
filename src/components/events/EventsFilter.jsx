@@ -7,7 +7,6 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Button,
   Container,
-  Typography,
   TextField,
   Grid,
   FormControl,
@@ -34,18 +33,20 @@ export default function EventsFilter({ name, club, state }) {
   const createQueryString = useCallback(
     (name, value) => {
       const params = new URLSearchParams(searchParams);
-      params.set(name, value);
+
+      if (value != "") params.set(name, value);
+      else params.delete(name);
 
       return params.toString();
     },
-    [searchParams],
+    [searchParams]
   );
 
   // show both upcoming and completed if no state is selected
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`,
+        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`
       );
   }, [state]);
 
@@ -81,7 +82,7 @@ export default function EventsFilter({ name, club, state }) {
             onSubmit={(e) => {
               e.preventDefault();
               router.push(
-                `${pathname}?${createQueryString("name", targetName)}`,
+                `${pathname}?${createQueryString("name", targetName)}`
               );
             }}
           >
@@ -112,13 +113,16 @@ export default function EventsFilter({ name, club, state }) {
               labelId="clubid"
               label="Filter by Club/Student Body"
               fullWidth
-              onChange={(e) =>
+              onChange={(e) => {
                 router.push(
-                  `${pathname}?${createQueryString("club", e.target.value)}`,
-                )
-              }
+                  `${pathname}?${createQueryString("club", e.target.value)}`
+                );
+              }}
               value={club}
             >
+              <MenuItem key="all" value="">
+                All Clubs
+              </MenuItem>
               {clubs
                 ?.slice()
                 ?.sort((a, b) => a.name.localeCompare(b.name))
@@ -143,8 +147,8 @@ export default function EventsFilter({ name, club, state }) {
               return router.push(
                 `${pathname}?${createQueryString(
                   e.target.value,
-                  !state.includes(e.target.value),
-                )}`,
+                  !state.includes(e.target.value)
+                )}`
               );
             }}
           >

@@ -1,9 +1,5 @@
 import { getClient } from "gql/client";
-import {
-  GET_RECENT_EVENTS,
-  GET_CLUB_EVENTS,
-  GET_ALL_EVENTS,
-} from "gql/queries/events";
+import { GET_CLUB_EVENTS, GET_ALL_EVENTS } from "gql/queries/events";
 
 import { Grid, Typography } from "@mui/material";
 import EventCard from "components/events/EventCard";
@@ -14,12 +10,14 @@ export default async function EventsGrid({
   limit = undefined,
   filter = () => true,
 }) {
-  const data = await getClient().query(...constructQuery({ type, clubid }));
+  const data = await getClient().query(
+    ...constructQuery({ type, clubid, limit })
+  );
 
   return (
     <Grid container spacing={2}>
-      {extractEvents({ type, data })?.filter(filter).length ? (
-        extractEvents({ type, data })
+      {data?.data?.events?.filter(filter).length ? (
+        data?.data?.events
           ?.slice(0, limit)
           ?.filter(filter)
           ?.map((event) => (
@@ -47,9 +45,16 @@ export default async function EventsGrid({
 }
 
 // construct graphql query based on type
-function constructQuery({ type, clubid }) {
+function constructQuery({ type, clubid, limit }) {
   if (type === "recent") {
-    return [GET_RECENT_EVENTS];
+    return [
+      GET_ALL_EVENTS,
+      {
+        clubid: null,
+        limit: limit || 12,
+        public: true,
+      },
+    ];
   } else if (type === "club") {
     return [
       GET_CLUB_EVENTS,
@@ -69,19 +74,7 @@ function constructQuery({ type, clubid }) {
         public: true,
       },
     ];
-  }
-}
-
-function extractEvents({ type, data }) {
-  if (type === "recent") {
-    return data?.data?.recentEvents;
-  } else if (type === "club") {
-    return data?.data?.events?.filter((event) =>
-      ["approved", "completed"].includes(event?.status?.state),
-    );
-  } else if (type === "all") {
-    return data?.data?.events?.filter((event) =>
-      ["approved", "completed"].includes(event?.status?.state),
-    );
+  } else {
+    throw new Error("Invalid event type");
   }
 }
