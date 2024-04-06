@@ -11,7 +11,7 @@ export default async function EventsGrid({
   filter = () => true,
 }) {
   const data = await getClient().query(
-    ...constructQuery({ type, clubid, limit })
+    ...constructQuery({ type, clubid, limit }),
   );
 
   return (
