@@ -108,7 +108,7 @@ export default function EventsFilter({ name, club, state }) {
         </Grid>
         <Grid item xs={12} lg={8}>
           <FormControl fullWidth>
-            <InputLabel id="clubid">Filter by club</InputLabel>
+            <InputLabel id="clubid">Filter by Club/Student Body</InputLabel>
             <Select
               labelId="clubid"
               label="Filter by Club/Student Body"

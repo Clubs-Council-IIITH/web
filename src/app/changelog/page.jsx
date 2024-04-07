@@ -50,7 +50,11 @@ export default async function Changelog({ searchParams }) {
   return (
     <Container>
       <Typography variant="h3">Status</Typography>
-      <Status status={await status.json()} />
+      <Status
+        status={await status.json()}
+        version={2}
+        firstRelease={"April 2023"}
+      />
 
       <Stack direction="row" pt={2} mb={2} mt={3}>
         <Typography variant="h3" mt={3}>
@@ -128,7 +132,7 @@ const filterRoles = (roles, filterWords) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null,
+      (word) => lowercaseName.includes(word) && endYear === null
     );
   });
   if (filteredRoles?.length > 0)
