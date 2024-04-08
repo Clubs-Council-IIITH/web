@@ -16,6 +16,7 @@ const sites = {
   linkedin: { icon: "mdi:linkedin", color: "#027FB1" },
   discord: { icon: "ic:baseline-discord", color: "#5865F3" },
   youtube: { icon: "mdi:youtube", color: "#FF3333" },
+  whatsapp: { icon: "mdi:whatsapp", color: "#25D366" },
 };
 
 export default function ClubSocials({ socials = {}, email = null }) {
@@ -36,6 +37,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
         if (k == "website") processed[k] = "Website";
         if (k == "discord") processed[k] = "Discord";
         if (k == "youtube") processed[k] = "YouTube";
+        if (k == "whatsapp") processed[k] = "WhatsApp";
       });
     setProcessedSocials(processed);
   }, [socials]);

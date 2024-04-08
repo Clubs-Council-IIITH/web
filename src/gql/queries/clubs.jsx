@@ -64,6 +64,7 @@ export const GET_CLUB = gql`
         twitter
         linkedin
         discord
+        whatsapp
         otherLinks
       }
       state
