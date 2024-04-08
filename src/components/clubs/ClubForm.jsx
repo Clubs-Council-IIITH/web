@@ -109,13 +109,13 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       description: formData.description,
       studentBody: formData.studentBody,
       socials: {
-        website: formData.socials.website,
-        instagram: formData.socials.instagram,
-        facebook: formData.socials.facebook,
-        youtube: formData.socials.youtube,
-        twitter: formData.socials.twitter,
-        linkedin: formData.socials.linkedin,
-        discord: formData.socials.discord,
+        website: formData.socials.website === "" ? null : formData.socials.website,
+        instagram: formData.socials.instagram === "" ? null : formData.socials.instagram,
+        facebook: formData.socials.facebook === "" ? null : formData.socials.facebook,
+        youtube: formData.socials.youtube === "" ? null : formData.socials.youtube,
+        twitter: formData.socials.twitter === "" ? null : formData.socials.twitter,
+        linkedin: formData.socials.linkedin === "" ? null : formData.socials.linkedin,
+        discord: formData.socials.discord === "" ? null : formData.socials.discord,
       },
     };
 
@@ -522,7 +522,7 @@ function ClubSocialInput({ name, control }) {
     instagram: { label: "Instagram", icon: "mdi:instagram" },
     facebook: { label: "Facebook", icon: "ic:baseline-facebook" },
     youtube: { label: "YouTube", icon: "mdi:youtube" },
-    twitter: { label: "Twitter", icon: "mdi:twitter" },
+    twitter: { label: "Twitter/X", icon: "mdi:twitter" },
     linkedin: { label: "LinkedIn", icon: "mdi:linkedin" },
     discord: { label: "Discord", icon: "ic:baseline-discord" },
   };
