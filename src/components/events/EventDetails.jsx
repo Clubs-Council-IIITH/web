@@ -88,7 +88,7 @@ export default function EventDetails({ event, showCode = false }) {
 
           <Divider sx={{ borderStyle: "dashed", my: 3 }} />
 
-          <Typography variant="body" paragraph>
+          <Typography variant="body" sx={{ whiteSpace: "pre-wrap" }}>
             {event.description || "No description available."}
           </Typography>
         </Stack>
