@@ -556,8 +556,7 @@ function ClubSocialInput({ name, control }) {
     linkedin: {
       label: "LinkedIn",
       icon: "mdi:linkedin",
-      regex:
-        "http(s)?:\/\/([\w]+\.)?linkedin\.com\/(?:company\/|in\/)[A-z0-9_-]+\/?",
+      regex: "http(s)?://([w]+.)?linkedin.com/(?:company/|in/)[A-z0-9_-]+/?",
     },
     discord: {
       label: "Discord",
