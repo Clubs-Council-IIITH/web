@@ -11,7 +11,7 @@ export const metadata = {
   title: "New Application",
 };
 
-const deadline = new Date("2024-04-15T23:59:59Z");
+const deadline = new Date("2024-04-14T23:59:59+05:30");
 
 async function getUser(currentUser) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
@@ -53,7 +53,9 @@ export default async function NewApplication() {
         <Typography variant="h4" gutterBottom mt={3} align="center">
           This form is disabled now. <br /> <br />
           The deadline for the form submission was <br />
-          {deadline.toLocaleString("en-IN")}
+          {deadline.toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+          })}
         </Typography>
       ) : (
         <>
@@ -67,7 +69,10 @@ export default async function NewApplication() {
 
           <ul>
             <li>
-              The deadline for the form is {deadline.toLocaleString("en-IN")}
+              The deadline for the form is{" "}
+              {deadline.toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+              })}
             </li>
             <li>
               Only the following batches are allowed to apply for Clubs Council
