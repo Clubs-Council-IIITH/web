@@ -15,7 +15,7 @@ export default async function MemberCard({ uid, poc, roles }) {
       userInput: {
         uid: uid,
       },
-    },
+    }
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -68,26 +68,38 @@ export default async function MemberCard({ uid, poc, roles }) {
           </Box>
         ) : null}
 
-        {roles?.map((role, key) => (
-          <Box key={key} mt={0.5} textAlign="center">
-            <Typography
-              variant="body2"
-              sx={{ display: "inline-block", color: "text.secondary" }}
-            >
-              {role.name}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="grey.400"
-              sx={{
-                display: "inline-block",
-              }}
-              ml={0.5}
-            >
-              ({role.startYear} - {role.endYear || "present"})
-            </Typography>
-          </Box>
-        ))}
+        {roles
+          ?.sort((a, b) => {
+            // Place roles with endYear=null at the top
+            if (a.endYear === null && b.endYear !== null) {
+              return -1;
+            } else if (a.endYear !== null && b.endYear === null) {
+              return 1;
+            } else {
+              // Sort based on endYear in descending order
+              return b.endYear - a.endYear;
+            }
+          })
+          .map((role, key) => (
+            <Box key={key} mt={0.5} textAlign="center">
+              <Typography
+                variant="body2"
+                sx={{ display: "inline-block", color: "text.secondary" }}
+              >
+                {role.name}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="grey.400"
+                sx={{
+                  display: "inline-block",
+                }}
+                ml={0.5}
+              >
+                ({role.startYear} - {role.endYear || "present"})
+              </Typography>
+            </Box>
+          ))}
       </CardActionArea>
     </Card>
   );
