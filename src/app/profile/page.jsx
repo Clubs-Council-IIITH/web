@@ -6,9 +6,13 @@ import { GET_USER } from "gql/queries/auth";
 export default async function Profile() {
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
+
+  if (user.uid == null) {
+    return redirect("/404");
+  }
 
   // redirect to user's profile page
   redirect(`/profile/${user.uid}`);
