@@ -11,7 +11,7 @@ export const metadata = {
   title: "New Application",
 };
 
-const deadline = new Date("2024-04-14T23:59:59+05:30");
+const deadline = new Date("2024-04-17T06:00:00+05:30");
 
 async function getUser(currentUser) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
