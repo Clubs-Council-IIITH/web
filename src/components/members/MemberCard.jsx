@@ -15,7 +15,7 @@ export default async function MemberCard({ uid, poc, roles }) {
       userInput: {
         uid: uid,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 
