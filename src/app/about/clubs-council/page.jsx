@@ -31,6 +31,17 @@ export default async function ClubsCouncil() {
     })
     ?.filter((member) => {
       return member.roles.length > 0;
+    })
+    ?.sort((a, b) => {
+      const roleNameA = a.roles[0]?.name.toLowerCase();
+      const roleNameB = b.roles[0]?.name.toLowerCase();
+      if (roleNameA < roleNameB) {
+        return 1;
+      }
+      if (roleNameA > roleNameB) {
+        return -1;
+      }
+      return 0;
     });
 
   const techMembers = members
