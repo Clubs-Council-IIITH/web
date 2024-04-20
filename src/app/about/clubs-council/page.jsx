@@ -31,17 +31,6 @@ export default async function ClubsCouncil() {
     })
     ?.filter((member) => {
       return member.roles.length > 0;
-    })
-    ?.sort((a, b) => {
-      const roleNameA = a.roles[0]?.name.toLowerCase();
-      const roleNameB = b.roles[0]?.name.toLowerCase();
-      if (roleNameA < roleNameB) {
-        return 1;
-      }
-      if (roleNameA > roleNameB) {
-        return -1;
-      }
-      return 0;
     });
 
   const techMembers = members
@@ -63,7 +52,7 @@ export default async function ClubsCouncil() {
         if (endYear !== null) return false;
         return (
           !executiveBoardWords.some((word) =>
-            name.toLowerCase().includes(word),
+            name.toLowerCase().includes(word)
           ) && !techTeamWords.some((word) => name.toLowerCase().includes(word))
         );
       });
@@ -101,7 +90,7 @@ const filterRoles = (roles, filterWords) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null,
+      (word) => lowercaseName.includes(word) && endYear === null
     );
   });
   if (filteredRoles?.length > 0)
