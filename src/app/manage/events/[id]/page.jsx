@@ -59,102 +59,106 @@ export default async function ManageEvent({ params }) {
     GET_USER,
     { userInput: null },
   );
+  const user = { ...userMeta, ...userProfile };
 
   return (
-    <Box>
-      <ActionPalette
-        left={[EventStatus, VenueStatus]}
-        leftProps={[
-          { status: event?.status },
-          { status: event?.status, budget: event?.budget },
-          { status: event?.status, location: event?.location },
-        ]}
-        right={getActions(event, { ...userMeta, ...userProfile })}
-      />
-      <EventDetails showCode event={event} />
-      <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
-        Point of Contact
-      </Typography>
-      <CardActionArea
-        component={Link}
-        href={`/profile/${event?.poc}`}
-        sx={{ textDecoration: "none", maxWidth: "max-content" }}
-      >
-        <MemberListItem uid={event?.poc} />
-      </CardActionArea>
-      <Box my={3} />
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={7}>
-          <Typography
-            variant="subtitle2"
-            textTransform="uppercase"
-            gutterBottom
-          >
-            Budget
-          </Typography>
-          {event?.budget?.length ? (
-            <EventBudget
-              rows={event?.budget?.map((b, key) => ({
-                ...b,
-                id: b?.id || key,
-              }))} // add ID to each budget item if it doesn't exist (MUI requirement)
-              editable={false}
-            />
-          ) : (
-            <Box mt={2}>None requested</Box>
-          )}
+    user?.uid !== event.clubid && redirect("/404"),
+    (
+      <Box>
+        <ActionPalette
+          left={[EventStatus, VenueStatus]}
+          leftProps={[
+            { status: event?.status },
+            { status: event?.status, budget: event?.budget },
+            { status: event?.status, location: event?.location },
+          ]}
+          right={getActions(event, { ...userMeta, ...userProfile })}
+        />
+        <EventDetails showCode event={event} />
+        <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+        <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+          Point of Contact
+        </Typography>
+        <CardActionArea
+          component={Link}
+          href={`/profile/${event?.poc}`}
+          sx={{ textDecoration: "none", maxWidth: "max-content" }}
+        >
+          <MemberListItem uid={event?.poc} />
+        </CardActionArea>
+        <Box my={3} />
+        <Grid container spacing={6}>
+          <Grid item xs={12} lg={7}>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+            >
+              Budget
+            </Typography>
+            {event?.budget?.length ? (
+              <EventBudget
+                rows={event?.budget?.map((b, key) => ({
+                  ...b,
+                  id: b?.id || key,
+                }))} // add ID to each budget item if it doesn't exist (MUI requirement)
+                editable={false}
+              />
+            ) : (
+              <Box mt={2}>None requested</Box>
+            )}
+          </Grid>
+          <Grid item xs lg>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+            >
+              Venue
+            </Typography>
+            {/* show requested location details, if any */}
+            {event?.location?.length ? (
+              <>
+                <Box mt={2}>
+                  {event?.location?.map((venue, key) => (
+                    <Chip
+                      key={key}
+                      label={locationLabel(venue)?.name}
+                      sx={{ mr: 1, mb: 1, p: 1 }}
+                    />
+                  ))}
+                </Box>
+
+                <Box mt={2}>
+                  <Typography variant="overline">Population</Typography>
+                  <Typography variant="body2">
+                    {event?.population || 0}
+                  </Typography>
+                </Box>
+
+                <Box mt={2}>
+                  <Typography variant="overline">Equipment</Typography>
+                  <Typography variant="body2">
+                    {event?.equipment || "None"}
+                  </Typography>
+                </Box>
+
+                <Box mt={2}>
+                  <Typography variant="overline">
+                    Additional Information
+                  </Typography>
+                  <Typography variant="body2">
+                    {event?.additional || "None"}
+                  </Typography>
+                </Box>
+              </>
+            ) : (
+              <Box mt={2}>None requested</Box>
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs lg>
-          <Typography
-            variant="subtitle2"
-            textTransform="uppercase"
-            gutterBottom
-          >
-            Venue
-          </Typography>
-          {/* show requested location details, if any */}
-          {event?.location?.length ? (
-            <>
-              <Box mt={2}>
-                {event?.location?.map((venue, key) => (
-                  <Chip
-                    key={key}
-                    label={locationLabel(venue)?.name}
-                    sx={{ mr: 1, mb: 1, p: 1 }}
-                  />
-                ))}
-              </Box>
-
-              <Box mt={2}>
-                <Typography variant="overline">Population</Typography>
-                <Typography variant="body2">
-                  {event?.population || 0}
-                </Typography>
-              </Box>
-
-              <Box mt={2}>
-                <Typography variant="overline">Equipment</Typography>
-                <Typography variant="body2">
-                  {event?.equipment || "None"}
-                </Typography>
-              </Box>
-
-              <Box mt={2}>
-                <Typography variant="overline">
-                  Additional Information
-                </Typography>
-                <Typography variant="body2">
-                  {event?.additional || "None"}
-                </Typography>
-              </Box>
-            </>
-          ) : (
-            <Box mt={2}>None requested</Box>
-          )}
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    )
   );
 }
 
