@@ -43,9 +43,9 @@ function transformEvent(event) {
 export default async function CopyEvent({ params }) {
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
-		GET_USER,
-		{ userInput: null },
-	);
+    GET_USER,
+    { userInput: null },
+  );
   const user = { ...userMeta, ...userProfile };
 
   try {
@@ -55,7 +55,8 @@ export default async function CopyEvent({ params }) {
 
     // Delete the fields that we don't want to copy
     delete event._id;
-    delete event.code; delete event.budget;
+    delete event.code;
+    delete event.budget;
     delete event.location;
     delete event.status;
 
