@@ -48,45 +48,6 @@ export async function generateMetadata({ params }, parent) {
   }
 }
 
-function approvalStatus(status) {
-  return (
-    <>
-      <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
-        Approvals
-      </Typography>
-
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={3}>
-          <Box mt={2}> Clubs Council</Box>
-          <Box mt={1}> Students Life Council (Budget)</Box>
-          <Box mt={1}> Students Life Office (Venue)</Box>
-        </Grid>
-        <Grid item xs lg>
-          <Box mt={2}>
-            :
-            {status?.cc_approver_time
-              ? "Not Approved"
-              : "Approved on" + status?.cc_approver_time}
-          </Box>
-          <Box mt={1}>
-            :
-            {status?.slc_approver_time
-              ? "Not Approved"
-              : "Approved on" + status?.slc_approver_time}
-          </Box>
-          <Box mt={1}>
-            :
-            {status?.slo_approver_time
-              ? "Not Approved"
-              : "Approved on" + status?.slo_approver_time}
-          </Box>
-        </Grid>
-      </Grid>
-    </>
-  );
-}
-
 export default async function ManageEvent({ params }) {
   const { id } = params;
 
@@ -197,8 +158,6 @@ export default async function ManageEvent({ params }) {
             )}
           </Grid>
         </Grid>
-        {/* show Approval status */}
-        {approvalStatus(event?.status)}
       </Box>
     )
   );
