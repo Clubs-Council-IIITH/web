@@ -61,7 +61,7 @@ export default async function CopyEvent({ params }) {
     delete event.status;
 
     return (
-      user?.uid !== event.clubid && redirect("/404"),
+      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
       (
         <Container>
           <Typography variant="h3" gutterBottom mb={3}>
