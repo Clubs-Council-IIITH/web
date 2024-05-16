@@ -63,18 +63,24 @@ function approvalStatus(status) {
           <Box mt={1}> Students Life Office (Venue)</Box>
         </Grid>
         <Grid item xs lg>
-          <Box mt={2}>:
-	    {status?.cc_approver_time ? "Not Approved"
-                           :"Approved on" + status?.cc_approver_time }
-	  </Box>
-          <Box mt={1}>:
-	    {status?.slc_approver_time ? "Not Approved"
-                           :"Approved on" + status?.slc_approver_time }
-	  </Box>
-          <Box mt={1}>:
-	    {status?.slo_approver_time ? "Not Approved"
-                           :"Approved on" + status?.slo_approver_time }
-	  </Box>
+          <Box mt={2}>
+            :
+            {status?.cc_approver_time
+              ? "Not Approved"
+              : "Approved on" + status?.cc_approver_time}
+          </Box>
+          <Box mt={1}>
+            :
+            {status?.slc_approver_time
+              ? "Not Approved"
+              : "Approved on" + status?.slc_approver_time}
+          </Box>
+          <Box mt={1}>
+            :
+            {status?.slo_approver_time
+              ? "Not Approved"
+              : "Approved on" + status?.slo_approver_time}
+          </Box>
         </Grid>
       </Grid>
     </>
@@ -191,8 +197,8 @@ export default async function ManageEvent({ params }) {
             )}
           </Grid>
         </Grid>
-	{/* show Approval status */}
-	{approvalStatus(event?.status)}
+        {/* show Approval status */}
+        {approvalStatus(event?.status)}
       </Box>
     )
   );
