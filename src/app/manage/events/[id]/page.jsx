@@ -46,6 +46,56 @@ export async function generateMetadata({ params }, parent) {
   } catch (error) {
     redirect("/404");
   }
+
+}
+
+function approvalStatus(status, slc, slo) {
+  return (
+    <>
+      <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+        Approvals
+      </Typography>
+
+      <Grid container spacing={6}>
+        <Grid item xs={5} lg={3}>
+          <Box mt={2}> Clubs Council</Box>
+          <Box mt={1}> Students Life Council (Budget)</Box>
+          <Box mt={1}> Students Life Office (Venue)</Box>
+        </Grid>
+        <Grid item xs={1} lg={0.1}>
+          <Box mt={2}>-</Box>
+          <Box mt={1}>-</Box>
+          <Box mt={1}>-</Box>
+        </Grid>
+        <Grid item xs lg>
+          <Box mt={2}>
+            {status?.ccApproverTime == null
+              ? "Information not available"
+	      : status?.ccApproverTime == "notset"
+	      ? "Not Approved"
+              : "Approved on " + status?.ccApproverTime}
+          </Box>
+          <Box mt={1}>
+            { !slc ? "Not Applicable"
+	      : status?.slcApproverTime == null
+              ? "Information not available"
+	      : status?.slcApproverTime == "notset"
+	      ? "Not Approved"
+              : "Approved on " + status?.slcApproverTime}
+          </Box>
+          <Box mt={1}>
+            { !slo ? "Not Applicable"
+	      : status?.sloApproverTime == null
+              ? "Information not available"
+	      : status?.sloApproverTime == "notset"
+	      ? "Not Approved"
+              : "Approved on " + status?.sloApproverTime}
+          </Box>
+        </Grid>
+      </Grid>
+    </>
+  );
 }
 
 export default async function ManageEvent({ params }) {
@@ -158,6 +208,8 @@ export default async function ManageEvent({ params }) {
             )}
           </Grid>
         </Grid>
+        {/* show Approval status */}
+        {approvalStatus(event?.status, event?.budget?.length, event?.location?.length)}
       </Box>
     )
   );
@@ -166,7 +218,6 @@ export default async function ManageEvent({ params }) {
 // set conditional actions based on event datetime, current status and user role
 function getActions(event, user) {
   const upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
-
   /*
    * Deleted Event
    * CC/Club - copy
