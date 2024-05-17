@@ -46,10 +46,9 @@ export async function generateMetadata({ params }, parent) {
   } catch (error) {
     redirect("/404");
   }
-
 }
 
-function approvalStatus(status, slc, slo) {
+function approvalStatus(status) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
@@ -59,38 +58,33 @@ function approvalStatus(status, slc, slo) {
 
       <Grid container spacing={6}>
         <Grid item xs={5} lg={3}>
-          <Box mt={2}> Clubs Council</Box>
-          <Box mt={1}> Students Life Council (Budget)</Box>
-          <Box mt={1}> Students Life Office (Venue)</Box>
+          <Box mt={2}> Clubs Council </Box>
+          {/* <Box mt={1}> Students Life Council </Box> */}
+          <Box mt={1}> Students Life Office </Box>
         </Grid>
         <Grid item xs={1} lg={0.1}>
           <Box mt={2}>-</Box>
-          <Box mt={1}>-</Box>
+          {/* <Box mt={1}>-</Box> */}
           <Box mt={1}>-</Box>
         </Grid>
         <Grid item xs lg>
           <Box mt={2}>
             {status?.ccApproverTime == null
               ? "Information not available"
-	      : status?.ccApproverTime == "notset"
-	      ? "Not Approved"
-              : "Approved on " + status?.ccApproverTime}
+              : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
+                status?.ccApproverTime}
           </Box>
-          <Box mt={1}>
-            { !slc ? "Not Applicable"
-	      : status?.slcApproverTime == null
+          {/* <Box mt={1}>
+            {status?.slcApproverTime == null
               ? "Information not available"
-	      : status?.slcApproverTime == "notset"
-	      ? "Not Approved"
-              : "Approved on " + status?.slcApproverTime}
-          </Box>
+              : (status?.slcApproverTime.includes(":") ? "Approved on " : "") +
+                status?.slcApproverTime}
+          </Box> */}
           <Box mt={1}>
-            { !slo ? "Not Applicable"
-	      : status?.sloApproverTime == null
+            {status?.sloApproverTime == null
               ? "Information not available"
-	      : status?.sloApproverTime == "notset"
-	      ? "Not Approved"
-              : "Approved on " + status?.sloApproverTime}
+              : (status?.sloApproverTime.includes(":") ? "Approved on " : "") +
+                status?.sloApproverTime}
           </Box>
         </Grid>
       </Grid>
@@ -208,8 +202,9 @@ export default async function ManageEvent({ params }) {
             )}
           </Grid>
         </Grid>
+
         {/* show Approval status */}
-        {approvalStatus(event?.status, event?.budget?.length, event?.location?.length)}
+        {approvalStatus(event?.status)}
       </Box>
     )
   );
