@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { redirect } from "next/navigation";
+import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
@@ -41,6 +42,11 @@ function transformEvent(event) {
 
 export default async function CopyEvent({ params }) {
   const { id } = params;
+  const { data: { userMeta, userProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null },
+  );
+  const user = { ...userMeta, ...userProfile };
 
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
@@ -55,13 +61,16 @@ export default async function CopyEvent({ params }) {
     delete event.status;
 
     return (
-      <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
-          Create a New Event
-        </Typography>
+      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+      (
+        <Container>
+          <Typography variant="h3" gutterBottom mb={3}>
+            Create a New Event
+          </Typography>
 
-        <EventForm defaultValues={transformEvent(event)} action="create" />
-      </Container>
+          <EventForm defaultValues={transformEvent(event)} action="create" />
+        </Container>
+      )
     );
   } catch (error) {
     redirect("/404");

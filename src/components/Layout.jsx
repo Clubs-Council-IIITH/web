@@ -222,8 +222,8 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Typography variant="overline">Help</Typography>
       </Box>
       <DrawerItem
-        title="report bugs"
-        path={BUG_REPORT_URL}
+        title="Report Bugs & Features"
+        path="/bug-report"
         icon={<Icon variant="bug-report-outline-rounded" />}
       />
     </List>

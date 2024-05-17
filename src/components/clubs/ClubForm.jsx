@@ -58,7 +58,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           messages: ["Club created."],
           severity: "success",
         });
-        router.push("/manage/clubs");
+        router.push(`/manage/clubs/${data.cid}`);
         router.refresh();
       } else {
         // show error toast
@@ -83,7 +83,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           messages: ["Club edited."],
           severity: "success",
         });
-        router.push("/manage/clubs");
+        router.push(`/manage/clubs/${data.cid}`);
         router.refresh();
       } else {
         // show error toast
@@ -109,13 +109,22 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       description: formData.description,
       studentBody: formData.studentBody,
       socials: {
-        website: formData.socials.website,
-        instagram: formData.socials.instagram,
-        facebook: formData.socials.facebook,
-        youtube: formData.socials.youtube,
-        twitter: formData.socials.twitter,
-        linkedin: formData.socials.linkedin,
-        discord: formData.socials.discord,
+        website:
+          formData.socials.website === "" ? null : formData.socials.website,
+        instagram:
+          formData.socials.instagram === "" ? null : formData.socials.instagram,
+        facebook:
+          formData.socials.facebook === "" ? null : formData.socials.facebook,
+        youtube:
+          formData.socials.youtube === "" ? null : formData.socials.youtube,
+        twitter:
+          formData.socials.twitter === "" ? null : formData.socials.twitter,
+        linkedin:
+          formData.socials.linkedin === "" ? null : formData.socials.linkedin,
+        discord:
+          formData.socials.discord === "" ? null : formData.socials.discord,
+        whatsapp:
+          formData.socials.whatsapp === "" ? null : formData.socials.whatsapp,
       },
     };
 
@@ -225,16 +234,19 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 <ClubSocialInput name="facebook" control={control} />
               </Grid>
               <Grid item xs={12}>
-                <ClubSocialInput name="youtube" control={control} />
-              </Grid>
-              <Grid item xs={12}>
                 <ClubSocialInput name="twitter" control={control} />
               </Grid>
               <Grid item xs={12}>
                 <ClubSocialInput name="linkedin" control={control} />
               </Grid>
               <Grid item xs={12}>
+                <ClubSocialInput name="youtube" control={control} />
+              </Grid>
+              <Grid item xs={12}>
                 <ClubSocialInput name="discord" control={control} />
+              </Grid>
+              <Grid item xs={12}>
+                <ClubSocialInput name="whatsapp" control={control} />
               </Grid>
             </Grid>
           </Grid>
@@ -519,21 +531,75 @@ function ClubDescriptionInput({ control }) {
 function ClubSocialInput({ name, control }) {
   const attributeMap = {
     website: { label: "Website", icon: "mdi:web" },
-    instagram: { label: "Instagram", icon: "mdi:instagram" },
-    facebook: { label: "Facebook", icon: "ic:baseline-facebook" },
-    youtube: { label: "YouTube", icon: "mdi:youtube" },
-    twitter: { label: "Twitter", icon: "mdi:twitter" },
-    linkedin: { label: "LinkedIn", icon: "mdi:linkedin" },
-    discord: { label: "Discord", icon: "ic:baseline-discord" },
+    instagram: {
+      label: "Instagram",
+      icon: "mdi:instagram",
+      validation: "instagram.com",
+    },
+    facebook: {
+      label: "Facebook",
+      icon: "ic:baseline-facebook",
+      regex:
+        "(?:(?:http|https)://)?(?:www.)?facebook.com/(?:(?:w)*#!/)?(?:pages/)?(?:[?w-]*/)?(?:profile.php?id=(?=d.*))?([w-]*)?",
+    },
+    youtube: {
+      label: "YouTube",
+      icon: "mdi:youtube",
+      regex:
+        "^https?://(www.)?youtube.com/(channel/UC[w-]{21}[AQgw]|(c/|user/)?[w-]+)$",
+    },
+    twitter: {
+      label: "Twitter/X",
+      icon: "mdi:twitter",
+      validation: "twitter.com",
+    },
+    linkedin: {
+      label: "LinkedIn",
+      icon: "mdi:linkedin",
+      regex: "http(s)?://([w]+.)?linkedin.com/(?:company/|in/)[A-z0-9_-]+/?",
+    },
+    discord: {
+      label: "Discord",
+      icon: "ic:baseline-discord",
+      regex:
+        "^(https?://)?(www.)?(discord.(gg|io|me|li)|discordapp.com/invite|discord.com/invite)/[^s/]+$",
+    },
+    whatsapp: {
+      label: "WhatsApp Group/Community",
+      icon: "mdi:whatsapp",
+      regex: "^(https?://)?chat.whatsapp.com/(?:invite/)?([a-zA-Z0-9_-]{22})$",
+    },
   };
 
   return (
     <Controller
       name={`socials.${name}`}
       control={control}
-      render={({ field }) => (
+      rules={{
+        validate: (value) => {
+          if (!value) return true;
+
+          // Match regex
+          if (
+            attributeMap[name].regex &&
+            !new RegExp(attributeMap[name].regex).test(value)
+          )
+            return `Invalid ${attributeMap[name].label} URL`;
+
+          // Check if URL contains validation string
+          if (
+            attributeMap[name].validation &&
+            !value.includes(attributeMap[name].validation)
+          )
+            return `Invalid ${attributeMap[name].label} URL`;
+
+          return true;
+        },
+      }}
+      render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
+          type="url"
           label={attributeMap[name].label}
           autoComplete="off"
           variant="outlined"
@@ -545,6 +611,8 @@ function ClubSocialInput({ name, control }) {
               </InputAdornment>
             ),
           }}
+          error={invalid}
+          helperText={error?.message}
         />
       )}
     />

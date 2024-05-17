@@ -11,6 +11,10 @@ const routes = {
   // "/calendar": [],
   // "/student-bodies": [],
 
+  "/cc-recruitments": ["public"],
+  "/cc-recruitments/all": ["cc"],
+  "/cc-recruitments/all/:id": ["cc"],
+
   "/manage/members": ["cc", "club"],
   "/manage/members/new": ["cc", "club"], // has to be higher to not conflict with :id
   "/manage/members/:id": ["cc", "club"],

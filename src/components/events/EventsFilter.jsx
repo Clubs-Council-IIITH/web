@@ -7,7 +7,6 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Button,
   Container,
-  Typography,
   TextField,
   Grid,
   FormControl,
@@ -34,7 +33,9 @@ export default function EventsFilter({ name, club, state }) {
   const createQueryString = useCallback(
     (name, value) => {
       const params = new URLSearchParams(searchParams);
-      params.set(name, value);
+
+      if (value != "") params.set(name, value);
+      else params.delete(name);
 
       return params.toString();
     },
@@ -107,18 +108,21 @@ export default function EventsFilter({ name, club, state }) {
         </Grid>
         <Grid item xs={12} lg={8}>
           <FormControl fullWidth>
-            <InputLabel id="clubid">Filter by club</InputLabel>
+            <InputLabel id="clubid">Filter by Club/Student Body</InputLabel>
             <Select
               labelId="clubid"
-              label="Filter by club"
+              label="Filter by Club/Student Body"
               fullWidth
-              onChange={(e) =>
+              onChange={(e) => {
                 router.push(
                   `${pathname}?${createQueryString("club", e.target.value)}`,
-                )
-              }
+                );
+              }}
               value={club}
             >
+              <MenuItem key="all" value="">
+                All Clubs
+              </MenuItem>
               {clubs
                 ?.slice()
                 ?.sort((a, b) => a.name.localeCompare(b.name))

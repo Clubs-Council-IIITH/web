@@ -735,6 +735,7 @@ function EventAudienceSelect({ control }) {
         {...field}
         color="primary"
         onChange={(u, v) => handleChange(u, v)}
+        sx={{ display: "flex", flexWrap: "wrap" }}
       >
         {Object.keys(audienceMap).map((key) => (
           <ToggleButton disableRipple key={key} value={key}>

@@ -4,12 +4,15 @@ import { useState } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
 import {
+  Box,
   Tooltip,
   Button,
   IconButton,
   Typography,
   CircularProgress,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Tag from "components/Tag";
 import Icon from "components/Icon";
@@ -17,6 +20,16 @@ import Icon from "components/Icon";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 import { useRouter } from "next/navigation";
+
+const showActions = (rows, user) => {
+  if (user?.role !== "cc") return false;
+  if (rows.length > 0) {
+    const allApprovedRejected = rows.every(
+      (row) => row.approved || row.rejected,
+    );
+    return !allApprovedRejected;
+  } else return false;
+};
 
 export default function MemberPositions({
   editable,
@@ -27,6 +40,9 @@ export default function MemberPositions({
   setPositionEditing = console.log,
 }) {
   const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const minYear = 2010;
 
   // position item template
@@ -68,7 +84,6 @@ export default function MemberPositions({
   const onEdit = () => {
     setPositionEditing(true);
   };
-
   // if not editing, set position editing to false
   const onEditStop = () => {
     setPositionEditing(false);
@@ -78,11 +93,25 @@ export default function MemberPositions({
     {
       field: "name",
       headerName: "Role",
-      flex: 4,
+      flex: isMobile ? null : 4,
       editable: editable,
       renderCell: (p) =>
         p.value ? (
-          p.value
+          <Typography
+            variant="body2"
+            style={{
+              overflowWrap: "break-word",
+              wordWrap: "break-word",
+              msWordBreak: "break-all",
+              wordBreak: "break-all",
+              msHyphens: "auto",
+              MozHyphens: "auto",
+              WebkitHyphens: "auto",
+              hyphens: "auto",
+            }}
+          >
+            {p.value}
+          </Typography>
         ) : (
           <Typography color="text.secondary">
             <i>Double click to edit</i>
@@ -92,14 +121,14 @@ export default function MemberPositions({
     {
       field: "startYear",
       headerName: "Start Year",
-      flex: 2,
+      flex: isMobile ? null : 2,
       editable: editable,
     },
     {
       field: "endYear",
       headerName: "End Year",
       valueGetter: ({ row }) => row.endYear || "-",
-      flex: 2,
+      flex: isMobile ? null : 2,
       editable: editable,
     },
     // if editing, show delete button
@@ -127,7 +156,7 @@ export default function MemberPositions({
             headerName: "Status",
             align: "center",
             headerAlign: "center",
-            flex: 2,
+            flex: isMobile ? null : 2,
             valueGetter: ({ row }) => ({
               approved: row.approved,
               rejected: row.rejected,
@@ -138,49 +167,34 @@ export default function MemberPositions({
                   approved ? "Approved" : rejected ? "Rejected" : "Pending"
                 }
                 color={approved ? "success" : rejected ? "error" : "warning"}
+                sx={{ my: 2 }}
               />
             ),
           },
 
           // if not editing and if user is cc, show approve button
-          ...(user.role === "cc"
+          ...(showActions(rows, user)
             ? [
                 {
-                  field: "actionApprove",
+                  field: "actions",
                   align: "center",
                   headerName: "",
-                  width: 50,
+                  width: 100,
                   valueGetter: ({ row }) => ({
                     approved: row.approved,
                     rejected: row.rejected,
                     rid: row.rid,
                   }),
                   renderCell: ({ value: { approved, rejected, rid } }) => (
-                    <ApproveButton
-                      approved={approved}
-                      rejected={rejected}
-                      rid={rid}
-                      member={member}
-                    />
-                  ),
-                },
-                {
-                  field: "actionReject",
-                  align: "center",
-                  headerName: "",
-                  width: 50,
-                  valueGetter: ({ row }) => ({
-                    approved: row.approved,
-                    rejected: row.rejected,
-                    rid: row.rid,
-                  }),
-                  renderCell: ({ value: { approved, rejected, rid } }) => (
-                    <RejectButton
-                      approved={approved}
-                      rejected={rejected}
-                      rid={rid}
-                      member={member}
-                    />
+                    <>
+                      {approved || rejected ? null : (
+                        <>
+                          <ApproveButton rid={rid} member={member} />
+                          <Box sx={{ mx: 1 }} />
+                          <RejectButton rid={rid} member={member} />
+                        </>
+                      )}
+                    </>
                   ),
                 },
               ]
@@ -199,6 +213,7 @@ export default function MemberPositions({
 
       <DataGrid
         autoHeight
+        getRowHeight={() => (isMobile ? "auto" : "none")}
         rows={rows}
         columns={columns}
         editMode="row"
@@ -216,13 +231,13 @@ export default function MemberPositions({
         initialState={{
           pagination: { paginationModel: { pageSize: 5 } },
         }}
-        pageSizeOptions={[5, 10, 25]}
+        pageSizeOptions={[5, 10, 15]}
       />
     </>
   );
 }
 
-function ApproveButton({ member, approved, rejected, rid }) {
+function ApproveButton({ member, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
 
@@ -259,7 +274,7 @@ function ApproveButton({ member, approved, rejected, rid }) {
     }
   };
 
-  return approved || rejected ? null : (
+  return (
     <Tooltip arrow title="Approve">
       <IconButton
         disabled={loading}
@@ -284,7 +299,7 @@ function ApproveButton({ member, approved, rejected, rid }) {
   );
 }
 
-function RejectButton({ member, approved, rejected, rid }) {
+function RejectButton({ member, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
 
@@ -321,7 +336,7 @@ function RejectButton({ member, approved, rejected, rid }) {
     }
   };
 
-  return approved || rejected ? null : (
+  return (
     <Tooltip arrow title="Reject">
       <IconButton
         disabled={loading}

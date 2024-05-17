@@ -24,6 +24,7 @@ export default function NewClub() {
       twitter: null,
       linkedin: null,
       discord: null,
+      whatsapp: null,
     },
     logo: "",
     banner: "",

@@ -10,6 +10,10 @@ export default async function Profile() {
   );
   const user = { ...userMeta, ...userProfile };
 
+  if (user.uid == null) {
+    return redirect("/404");
+  }
+
   // redirect to user's profile page
   redirect(`/profile/${user.uid}`);
 }
