@@ -7,7 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import { ISOtoHuman } from "utils/formatTime";
+import { appendWeekday } from "utils/formatTime";
 import { stateLabel } from "utils/formatEvent";
 
 import Tag from "components/Tag";
@@ -78,8 +78,8 @@ export default function EventsTable({
             flex: 3,
             align: "center",
             headerAlign: "center",
-            valueGetter: ({ row }) => row.datetimeperiod[0],
-            valueFormatter: ({ value }) => ISOtoHuman(value),
+            valueGetter: ({ row }) => row.startTime,
+            valueFormatter: ({ value }) => appendWeekday(value),
           },
         ]),
     // {
@@ -148,7 +148,7 @@ export default function EventsTable({
       headerAlign: "center",
       valueGetter: ({ row }) => ({
         state: row.status.state,
-        start: row.datetimeperiod[0],
+        start: row.startTime,
       }),
       renderCell: ({ value }) => {
         // change state to 'completed' if it has been approved and is in the past

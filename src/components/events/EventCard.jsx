@@ -5,13 +5,13 @@ import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import EventPoster from "components/events/EventPoster";
 import EventFallbackPoster from "components/events/EventFallbackPoster";
-
-const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
+import {appendWeekday} from "utils/formatTime"
 
 export default function EventCard({
   _id,
   name,
-  datetimeperiod,
+  startTime,
+  endTime,
   poster,
   clubid,
 }) {
@@ -31,7 +31,7 @@ export default function EventCard({
             {name}
           </Typography>
           <Typography variant="caption" noWrap>
-            <DateTime dt={datetimeperiod?.[0]} showWeekDay={true} />
+	    {appendWeekday(startTime)}
           </Typography>
         </Stack>
       </CardActionArea>

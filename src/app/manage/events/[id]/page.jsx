@@ -32,6 +32,8 @@ import {
 import { locationLabel } from "utils/formatEvent";
 import MemberListItem from "components/members/MemberListItem";
 
+import {getDateObj} from "utils/formatTime"
+
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
@@ -165,7 +167,7 @@ export default async function ManageEvent({ params }) {
 
 // set conditional actions based on event datetime, current status and user role
 function getActions(event, user) {
-  const upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
+  const upcoming = getDateObj(event?.startTime) >= new Date();
 
   /*
    * Deleted Event

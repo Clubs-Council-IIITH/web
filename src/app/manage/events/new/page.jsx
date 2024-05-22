@@ -11,7 +11,8 @@ export default function NewEvent() {
   const defaultValues = {
     clubid: "",
     name: "",
-    datetimeperiod: [null, null],
+    startTime: "",
+    endTime: "",
     description: "",
     audience: [],
     poster: "",

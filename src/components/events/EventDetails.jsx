@@ -11,8 +11,6 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 import Icon from "components/Icon";
 
-const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
-
 export default function EventDetails({ event, showCode = false }) {
   return (
     <Grid container spacing={2}>
@@ -43,11 +41,11 @@ export default function EventDetails({ event, showCode = false }) {
           <Box display="flex" alignItems="center">
             <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
             <Typography variant="body2">
-              <DateTime dt={event.datetimeperiod[0]} />
+              {event.startTime}
             </Typography>
             <Box mx={1}>-</Box>
             <Typography variant="body2">
-              <DateTime dt={event.datetimeperiod[1]} />
+              {event.endTime}
             </Typography>
           </Box>
 

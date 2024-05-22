@@ -42,6 +42,7 @@ import MemberListItem from "components/members/MemberListItem";
 
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
+import { getDuration, getDateStr } from "utils/formatTime";
 import { locationLabel } from "utils/formatEvent";
 import { useAuth } from "components/AuthProvider";
 
@@ -230,9 +231,11 @@ export default function EventForm({
           : null;
 
     // convert dates to ISO strings
-    data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString(),
-    );
+    data.startTime = getDateStr(formData.startTime)
+    data.endTime = getDateStr(formData.endTime)
+
+    // get duration from startTime and endTime
+    data.duration = getDuration(formData.startTime, formData.endTime)
 
     // convert budget to array of objects with only required attributes
     // remove budget items without a description (they're invalid)
@@ -330,8 +333,8 @@ export default function EventForm({
                     setHasPhone={setHasPhone}
                     disabled={
                       defaultValues?.status?.state == "approved" &&
-                      defaultValues?.datetimeperiod[0] &&
-                      new Date(defaultValues?.datetimeperiod[0]) < new Date()
+                      defaultValues?.startTime &&
+                      new Date(defaultValues?.startTime) < new Date()
                     }
                   />
                 </Grid>
@@ -605,7 +608,7 @@ function EventDatetimeInput({
   disabled = true,
   role = "public",
 }) {
-  const startDateInput = watch("datetimeperiod.0");
+  const startDateInput = watch("startTime");
   const [error, setError] = useState(null);
 
   const errorMessage = useMemo(() => {
@@ -626,7 +629,7 @@ function EventDatetimeInput({
     <Grid container spacing={2}>
       <Grid item xs={6} xl={4}>
         <Controller
-          name="datetimeperiod.0"
+          name="startTime"
           control={control}
           rules={{
             required: "Start date is required!",
@@ -661,7 +664,7 @@ function EventDatetimeInput({
       </Grid>
       <Grid item xs xl={4}>
         <Controller
-          name="datetimeperiod.1"
+          name="endTime"
           control={control}
           rules={{
             required: "End date is required!",
@@ -819,8 +822,8 @@ function EventVenueInput({
 }) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
-  const startDateInput = watch("datetimeperiod.0");
-  const endDateInput = watch("datetimeperiod.1");
+  const startDateInput = watch("startTime");
+  const endDateInput = watch("endTime");
 
   // reset location if datetime changes
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);

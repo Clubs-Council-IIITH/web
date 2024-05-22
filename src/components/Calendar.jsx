@@ -11,8 +11,8 @@ function eventDataTransform(event, role, uid) {
     return {
       id: event._id,
       title: event.name,
-      start: new Date(event.datetimeperiod[0]),
-      end: new Date(event.datetimeperiod[1]),
+      start: event.startTime,
+      end: event.endTime,
       backgroundColor: stc(event.clubid),
       url: `/events/${event._id}`,
       display: "block",
@@ -22,8 +22,8 @@ function eventDataTransform(event, role, uid) {
       return {
         id: event._id,
         title: event.name,
-        start: new Date(event.datetimeperiod[0]),
-        end: new Date(event.datetimeperiod[1]),
+        start: event.startTime,
+        end: event.endTime,
         backgroundColor: stc(event.clubid),
         url: `/manage/events/${event._id}`,
         display: "block",
@@ -32,8 +32,8 @@ function eventDataTransform(event, role, uid) {
       return {
         id: event._id,
         title: event.name,
-        start: new Date(event.datetimeperiod[0]),
-        end: new Date(event.datetimeperiod[1]),
+        start: event.startTime,
+        end: event.endTime,
         backgroundColor: stc(event.clubid),
         display: "block",
       };

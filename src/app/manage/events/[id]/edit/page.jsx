@@ -14,11 +14,8 @@ export const metadata = {
 function transformEvent(event) {
   return {
     ...event,
-    // parse datetime strings to date objects
-    datetimeperiod: [
-      new Date(event?.datetimeperiod[0]),
-      new Date(event?.datetimeperiod[1]),
-    ],
+    startTime: event?.startTime,
+    endTime: event?.endTime,
     // add mandatory ID field for DataGrid
     budget:
       event?.budget?.map((budget, key) => ({

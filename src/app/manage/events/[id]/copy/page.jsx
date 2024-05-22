@@ -11,24 +11,11 @@ export const metadata = {
   title: "New Event",
 };
 
-function transformDateTime(datetimeperiod) {
-  let start = new Date(datetimeperiod[0]);
-  let end = new Date(datetimeperiod[1]);
-
-  let duration = end - start;
-
-  let newStart = new Date(datetimeperiod[0]);
-  newStart.setDate(new Date().getDate() + 7);
-  let newEnd = new Date(newStart.getTime() + duration);
-
-  return [newStart, newEnd];
-}
-
 function transformEvent(event) {
   return {
     ...event,
-    // parse datetime strings to date objects
-    datetimeperiod: transformDateTime(event?.datetimeperiod),
+    startTime: event?.startTime,
+    endTime: event?.endTime,
     budget: [],
     location: [],
     // parse population as int
