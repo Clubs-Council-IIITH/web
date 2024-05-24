@@ -7,6 +7,8 @@ import { Container, Typography } from "@mui/material";
 
 import EventForm from "components/events/EventForm";
 
+import {getDateObj} from "utils/formatTime";
+
 export const metadata = {
   title: "Edit Event",
 };
@@ -14,8 +16,8 @@ export const metadata = {
 function transformEvent(event) {
   return {
     ...event,
-    startTime: event?.startTime,
-    endTime: event?.endTime,
+    startTime: getDateObj(event?.startTime),
+    endTime: getDateObj(event?.endTime),
     // add mandatory ID field for DataGrid
     budget:
       event?.budget?.map((budget, key) => ({

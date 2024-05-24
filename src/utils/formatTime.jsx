@@ -1,11 +1,33 @@
 "do not use client! just fix IST for everything";
+import dayjs from "dayjs";
 
-export function appendWeekday(date) {
-  const dateObj = getDateObj(dateString)
-  const formatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
-  const weekday = formatter.format(dateObj);
+export function appendWeekday(dateString) {
+  const dateObj = getDateObj(dateString);
+  console.log(dateObj);
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  });
+  const formattedDate = formatter.format(dateObj);
+  return String(formattedDate);
+}
 
-  return `${weekday} ${date}`;
+export function shortDateStr(dateString) {
+  const dateObj = getDateObj(dateString);
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    month: 'short',
+    day: 'numeric',
+  });
+
+  const formattedDate = formatter.format(dateObj);
+  return String(formattedDate);
 }
 
 export function getDateObj(dateStr){
@@ -14,19 +36,17 @@ export function getDateObj(dateStr){
 }
 
 export function getDateStr(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  return `${day}-${month}-${year} ${hours}:${minutes}`;
+  const dayjsDate = dayjs(date);
+  return dayjsDate.format('DD-MM-YYYY HH:mm');
 }
 
 export function getDuration(startDate, endDate) {
-  const duration = endDate - startDate;
-  const hours = Math.floor(duration / (1000 * 60 * 60));
-  const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+
+  const diffInSeconds = end.diff(start, 'seconds');
+  const hours = Math.floor(diffInSeconds / 3600);
+  const minutes = Math.floor((diffInSeconds % 3600) / 60);
 
   const formattedHours = String(hours).padStart(2, '0');
   const formattedMinutes = String(minutes).padStart(2, '0');

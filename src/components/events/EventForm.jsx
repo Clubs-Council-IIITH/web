@@ -686,10 +686,7 @@ function EventDatetimeInput({
               disabled={!startDateInput || disabled}
               minDateTime={
                 startDateInput
-                  ? (startDateInput instanceof Date && !isDayjs(startDateInput)
-                      ? dayjs(startDateInput)
-                      : startDateInput
-                    ).add(1, "minute")
+                  ? dayjs(startDateInput).add(1,"minute")
                   : null
               }
               disablePast={!allowed_roles.includes(role)}

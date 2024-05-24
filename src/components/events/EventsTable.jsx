@@ -7,7 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import { appendWeekday } from "utils/formatTime";
+import { shortDateStr } from "utils/formatTime";
 import { stateLabel } from "utils/formatEvent";
 
 import Tag from "components/Tag";
@@ -79,7 +79,7 @@ export default function EventsTable({
             align: "center",
             headerAlign: "center",
             valueGetter: ({ row }) => row.startTime,
-            valueFormatter: ({ value }) => appendWeekday(value),
+            valueFormatter: ({ value }) => shortDateStr(value),
           },
         ]),
     // {
