@@ -25,7 +25,11 @@ export default async function ClubsCouncil() {
   const executiveMembers = members
     ?.map((member) => {
       const { roles } = member;
-      const executiveBoardRoles = filterRoles(roles, executiveBoardWords, techTeamWords);
+      const executiveBoardRoles = filterRoles(
+        roles,
+        executiveBoardWords,
+        techTeamWords,
+      );
       const newMember = { ...member, roles: executiveBoardRoles };
       return newMember;
     })
@@ -45,13 +49,13 @@ export default async function ClubsCouncil() {
     });
 
   const extendedMembers = members
-  ?.map((member) => {
-    const { roles } = member;
-    const newWords = executiveBoardWords.concat(techTeamWords);
-    const techTeamRoles = filterRoles(roles, [], newWords);
-    const newMember = { ...member, roles: techTeamRoles };
-    return newMember;
-  })
+    ?.map((member) => {
+      const { roles } = member;
+      const newWords = executiveBoardWords.concat(techTeamWords);
+      const techTeamRoles = filterRoles(roles, [], newWords);
+      const newMember = { ...member, roles: techTeamRoles };
+      return newMember;
+    })
     ?.filter((member) => {
       return member.roles.length > 0;
     });
@@ -82,8 +86,12 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
   let filteredRoles = roles?.filter((role) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
-    const matchesFilterWords = filterWords.some((word) => lowercaseName.includes(word));
-    const matchesUnfilterWords = unfilterWords.some((word) => lowercaseName.includes(word));
+    const matchesFilterWords = filterWords.some((word) =>
+      lowercaseName.includes(word),
+    );
+    const matchesUnfilterWords = unfilterWords.some((word) =>
+      lowercaseName.includes(word),
+    );
     return matchesFilterWords && !matchesUnfilterWords && endYear === null;
   });
 
@@ -92,12 +100,15 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
     return roles?.filter((role) => {
       const { name, endYear } = role;
       const lowercaseName = name.toLowerCase();
-      const matchesFilterWords = filterWords.some((word) => lowercaseName.includes(word));
-      const matchesUnfilterWords = unfilterWords.some((word) => lowercaseName.includes(word));
+      const matchesFilterWords = filterWords.some((word) =>
+        lowercaseName.includes(word),
+      );
+      const matchesUnfilterWords = unfilterWords.some((word) =>
+        lowercaseName.includes(word),
+      );
       return matchesFilterWords && !matchesUnfilterWords;
     });
   } else {
     return filteredRoles;
   }
 };
-
