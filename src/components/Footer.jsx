@@ -132,11 +132,11 @@ export default function Footer() {
               // },
             }}
           >
-            Developed & Maintained with ❤️ by SLC Tech Team (powered by{" "}
+            Developed & Maintained with ❤️ by{" "}
             <Typography
               variant="body2"
               component={Link}
-              href={"https://clubs.iiit.ac.in/"}
+              href={"https://clubs.iiit.ac.in/about/clubs-council/tech-members"}
               sx={{
                 fontWeight: 500,
                 textDecoration: "none",
@@ -146,9 +146,9 @@ export default function Footer() {
                 },
               }}
             >
-              Clubs Council
-            </Typography>
-            )
+              SLC Tech Team
+            </Typography>{" "}
+            (powered by Clubs Council)
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
