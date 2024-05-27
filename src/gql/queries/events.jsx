@@ -121,6 +121,7 @@ export const GET_FULL_EVENT = gql`
         ccApproverTime
         slcApproverTime
         sloApproverTime
+        submissionTime
       }
     }
   }
