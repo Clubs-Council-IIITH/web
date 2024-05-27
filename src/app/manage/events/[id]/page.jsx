@@ -70,11 +70,12 @@ function approvalStatus(status) {
           <Box mt={1}>-</Box>
         </Grid>
         <Grid item xs lg>
-        <Box mt={2}>
+          <Box mt={2}>
             {status?.submissionTime == null
               ? "Information not available"
-              : (status?.submissionTime.includes(":") ? "Submitted for approval on " : "") +
-                status?.submissionTime}
+              : (status?.submissionTime.includes(":")
+                  ? "Submitted for approval on "
+                  : "") + status?.submissionTime}
           </Box>
           <Box mt={1}>
             {status?.ccApproverTime == null
