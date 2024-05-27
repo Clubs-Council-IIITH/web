@@ -1,0 +1,32 @@
+name: Sitemap Generation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Sitemap package and run sitemap generation
+        run: |
+          npm install sitemap@^8.0.0
+          node sitemap.js
+
+      - name: Reset package and package-lock.json
+        run: |
+          git checkout package.json
+          git checkout package-lock.json
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Updated sitemap for ${{ github.sha }}
