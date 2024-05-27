@@ -19,11 +19,11 @@ export default async function ManageMembers({ searchParams }) {
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
-    ...(searchParams?.upcoming === "true" ? ["upcoming"] : []),
-    ...(searchParams?.completed === "true" ? ["completed"] : []),
+    ...(searchParams?.current === "true" ? ["current"] : []),
+    ...(searchParams?.past === "true" ? ["past"] : []),
   ];
-  const onlyCurrent = searchParams?.upcoming === "true" ? true : false;
-  const onlyPast = searchParams?.completed === "true" ? true : false;
+  const onlyCurrent = searchParams?.current === "true" ? true : false;
+  const onlyPast = searchParams?.past === "true" ? true : false;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,

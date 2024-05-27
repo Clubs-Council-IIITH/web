@@ -35,11 +35,11 @@ export default function MembersFilter({ name, club, state, cc = false }) {
     [searchParams],
   );
 
-  // show both upcoming and completed if no state is selected
+  // show both current and past if no state is selected
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`,
+        `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`,
       );
   }, [state]);
 
@@ -109,10 +109,10 @@ export default function MembersFilter({ name, club, state, cc = false }) {
               );
             }}
           >
-            <ToggleButton disableRipple key="upcoming" value="upcoming">
+            <ToggleButton disableRipple key="current" value="current">
               Current Members
             </ToggleButton>
-            <ToggleButton disableRipple key="completed" value="completed">
+            <ToggleButton disableRipple key="past" value="past">
               Past Members
             </ToggleButton>
           </ToggleButtonGroup>

@@ -123,6 +123,10 @@ export const GET_FULL_EVENT = gql`
         state
         room
         budget
+        ccApproverTime
+        slcApproverTime
+        sloApproverTime
+        submissionTime
       }
     }
   }
