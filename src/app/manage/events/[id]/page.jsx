@@ -58,17 +58,25 @@ function approvalStatus(status) {
 
       <Grid container spacing={6}>
         <Grid item xs={5} lg={3}>
-          <Box mt={2}> Clubs Council </Box>
+          <Box mt={2}> Event Submission </Box>
+          <Box mt={1}> Clubs Council </Box>
           {/* <Box mt={1}> Students Life Council </Box> */}
           <Box mt={1}> Students Life Office </Box>
         </Grid>
         <Grid item xs={1} lg={0.1}>
           <Box mt={2}>-</Box>
+          <Box mt={1}>-</Box>
           {/* <Box mt={1}>-</Box> */}
           <Box mt={1}>-</Box>
         </Grid>
         <Grid item xs lg>
-          <Box mt={2}>
+        <Box mt={2}>
+            {status?.submissionTime == null
+              ? "Information not available"
+              : (status?.submissionTime.includes(":") ? "Submitted for approval on " : "") +
+                status?.submissionTime}
+          </Box>
+          <Box mt={1}>
             {status?.ccApproverTime == null
               ? "Information not available"
               : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
