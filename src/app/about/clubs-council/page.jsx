@@ -8,7 +8,9 @@ import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 import {
   executiveBoardWords,
+  advisorWords,
   techTeamWords,
+  extendedMembersWords,
 } from "constants/ccMembersFilterWords";
 
 export const metadata = {
@@ -28,13 +30,46 @@ export default async function ClubsCouncil() {
       const executiveBoardRoles = filterRoles(
         roles,
         executiveBoardWords,
-        techTeamWords,
+        techTeamWords
       );
       const newMember = { ...member, roles: executiveBoardRoles };
       return newMember;
     })
     ?.filter((member) => {
       return member.roles.length > 0;
+    })
+    ?.sort((a, b) => {
+      const roleNameA = a.roles[0]?.name.toLowerCase();
+      const roleNameB = b.roles[0]?.name.toLowerCase();
+      if (roleNameA < roleNameB) {
+        return -1;
+      }
+      if (roleNameA > roleNameB) {
+        return 1;
+      }
+      return 0;
+    });
+
+  const advisoryMembers = members
+    ?.map((member) => {
+      const { roles } = member;
+      const advisorWordsCombined = advisorWords.concat(executiveBoardWords);
+      const advisorRoles = filterRoles(
+        roles,
+        advisorWordsCombined,
+        techTeamWords
+      );
+      const newMember = { ...member, roles: advisorRoles };
+      return newMember;
+    })
+    ?.filter((member) => {
+      if (member.roles.length <= 0) return false;
+
+      const role0 = member.roles[0]?.name.toLowerCase();
+      const matchesAdvisoryFilterWords = advisorWords.some((word) =>
+        role0.includes(word)
+      );
+      return matchesAdvisoryFilterWords;
     });
 
   const techMembers = members
@@ -46,14 +81,31 @@ export default async function ClubsCouncil() {
     })
     ?.filter((member) => {
       return member.roles.length > 0;
+    })
+    ?.sort((a, b) => {
+      const roleNameA = a.roles[0]?.name.toLowerCase();
+      const roleNameB = b.roles[0]?.name.toLowerCase();
+      if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
+        return -1;
+      }
+      if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
+        return 1;
+      }
+      if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
+        return 1;
+      }
+      if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
+        return -1;
+      }
+
+      return 0;
     });
 
   const extendedMembers = members
     ?.map((member) => {
       const { roles } = member;
-      const newWords = executiveBoardWords.concat(techTeamWords);
-      const techTeamRoles = filterRoles(roles, [], newWords);
-      const newMember = { ...member, roles: techTeamRoles };
+      const extendedMembersRoles = filterRoles(roles, extendedMembersWords);
+      const newMember = { ...member, roles: extendedMembersRoles };
       return newMember;
     })
     ?.filter((member) => {
@@ -66,6 +118,11 @@ export default async function ClubsCouncil() {
         ccMembers={
           executiveMembers?.length ? (
             <LocalUsersGrid users={executiveMembers} />
+          ) : null
+        }
+        advisoryMembers={
+          advisoryMembers?.length ? (
+            <LocalUsersGrid users={advisoryMembers} />
           ) : null
         }
         techMembers={
@@ -87,27 +144,39 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     const matchesFilterWords = filterWords.some((word) =>
-      lowercaseName.includes(word),
+      lowercaseName.includes(word)
     );
     const matchesUnfilterWords = unfilterWords.some((word) =>
-      lowercaseName.includes(word),
+      lowercaseName.includes(word)
     );
     return matchesFilterWords && !matchesUnfilterWords && endYear === null;
   });
 
   // If any roles are filtered, return those that match filterWords and not unfilterWords
   if (filteredRoles?.length > 0) {
-    return roles?.filter((role) => {
-      const { name, endYear } = role;
-      const lowercaseName = name.toLowerCase();
-      const matchesFilterWords = filterWords.some((word) =>
-        lowercaseName.includes(word),
-      );
-      const matchesUnfilterWords = unfilterWords.some((word) =>
-        lowercaseName.includes(word),
-      );
-      return matchesFilterWords && !matchesUnfilterWords;
-    });
+    return roles
+      ?.filter((role) => {
+        const { name } = role;
+        const lowercaseName = name.toLowerCase();
+        const matchesFilterWords = filterWords.some((word) =>
+          lowercaseName.includes(word)
+        );
+        const matchesUnfilterWords = unfilterWords.some((word) =>
+          lowercaseName.includes(word)
+        );
+        return matchesFilterWords && !matchesUnfilterWords;
+      })
+      ?.sort((a, b) => {
+        // Place roles with endYear=null at the top
+        if (a.endYear === null && b.endYear !== null) {
+          return -1;
+        } else if (a.endYear !== null && b.endYear === null) {
+          return 1;
+        } else {
+          // Sort based on endYear in descending order
+          return b.endYear - a.endYear;
+        }
+      });
   } else {
     return filteredRoles;
   }
