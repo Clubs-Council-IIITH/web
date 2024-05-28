@@ -609,6 +609,7 @@ function EventDatetimeInput({
   role = "public",
 }) {
   const startDateInput = watch("startTime");
+  const endDateInput = watch("endTime");
   const [error, setError] = useState(null);
 
   const errorMessage = useMemo(() => {
@@ -626,6 +627,13 @@ function EventDatetimeInput({
   }, [error]);
 
   return (
+  <>
+    <Typography
+      color="text.secondary"
+      sx={{fontSize: '1', textAlign: 'center', marginBottom: '20px', fontWeight: 100}}
+    >
+      (All times are in IST)
+    </Typography>
     <Grid container spacing={2}>
       <Grid item xs={6} xl={4}>
         <Controller
@@ -652,6 +660,11 @@ function EventDatetimeInput({
                 minutes: renderTimeViewClock,
                 seconds: renderTimeViewClock,
               }}
+              maxDateTime={
+                endDateInput
+                  ? dayjs(endDateInput).subtract(1,"minute")
+                  : null
+              }
               sx={{ width: "100%" }}
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
@@ -661,7 +674,7 @@ function EventDatetimeInput({
             />
           )}
         />
-      </Grid>
+	      </Grid>
       <Grid item xs xl={4}>
         <Controller
           name="endTime"
@@ -690,7 +703,6 @@ function EventDatetimeInput({
                   : null
               }
               disablePast={!allowed_roles.includes(role)}
-              onError={(error) => setError(error)}
               slotProps={{
                 textField: {
                   error: errorMessage || invalid,
@@ -712,6 +724,7 @@ function EventDatetimeInput({
         />
       </Grid>
     </Grid>
+  </>
   );
 }
 
