@@ -610,12 +610,13 @@ function EventDatetimeInput({
 }) {
   const startDateInput = watch("startTime");
   const endDateInput = watch("endTime");
-  const [error, setError] = useState(null);
+  const [startError, setStartError] = useState(null);
+  const [endError, setEndError] = useState(null);
 
-  const errorMessage = useMemo(() => {
-    switch (error) {
-      case "minDate": {
-        return "An event can not end before it starts!";
+  const startErrorMessage = useMemo(() => {
+    switch (startError) {
+      case "maxDate": {
+        return "Event cannot start after it end!";
       }
       case "invalidDate": {
         return "Invalid date!";
@@ -624,7 +625,22 @@ function EventDatetimeInput({
         return "";
       }
     }
-  }, [error]);
+  }, [startError]);
+
+  const endErrorMessage = useMemo(() => {
+    switch (endError) {
+      case "minDate": {
+        return "Event cannot end before it starts!";
+      }
+      case "invalidDate": {
+        return "Invalid date!";
+      }
+      default: {
+        return "";
+      }
+    }
+  }, [endError]);
+
 
   return (
   <>
@@ -632,7 +648,7 @@ function EventDatetimeInput({
       color="text.secondary"
       sx={{fontSize: '1', textAlign: 'center', marginBottom: '20px', fontWeight: 100}}
     >
-      (All times are in IST)
+      (Date-Time Fields are assumed to be in IST)
     </Typography>
     <Grid container spacing={2}>
       <Grid item xs={6} xl={4}>
@@ -641,17 +657,26 @@ function EventDatetimeInput({
           control={control}
           rules={{
             required: "Start date is required!",
-          }}
+            validate: {
+              checkDate: (value) => {
+                return (
+                  dayjs(value) <= dayjs(endDateInput) ||
+                  "Event must start before it ends!"
+                );
+              },
+	    }
+	  }}
           render={({
             field: { value, ...rest },
             fieldState: { error, invalid },
           }) => (
             <DateTimePicker
               label="Starts *"
+              onError={(error) => setStartError(error)}
               slotProps={{
                 textField: {
-                  error: invalid,
-                  helperText: error?.message,
+                  error: startErrorMessage || invalid,
+                  helperText: startErrorMessage || error?.message,
                 },
               }}
               disablePast={!allowed_roles.includes(role)}
@@ -666,9 +691,7 @@ function EventDatetimeInput({
                   : null
               }
               sx={{ width: "100%" }}
-              value={
-                value instanceof Date && !isDayjs(value) ? dayjs(value) : value
-              }
+              sx={{ width: "100%" }}
               disabled={disabled}
               {...rest}
             />
@@ -703,10 +726,11 @@ function EventDatetimeInput({
                   : null
               }
               disablePast={!allowed_roles.includes(role)}
+              onError={(error) => setEndError(error)}
               slotProps={{
                 textField: {
-                  error: errorMessage || invalid,
-                  helperText: errorMessage || error?.message,
+                  error: endErrorMessage || invalid,
+                  helperText: endErrorMessage || error?.message,
                 },
               }}
               viewRenderers={{
@@ -715,9 +739,6 @@ function EventDatetimeInput({
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              value={
-                value instanceof Date && !isDayjs(value) ? dayjs(value) : value
-              }
               {...rest}
             />
           )}
