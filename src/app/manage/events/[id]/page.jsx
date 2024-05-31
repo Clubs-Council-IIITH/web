@@ -57,40 +57,40 @@ function approvalStatus(status) {
       </Typography>
 
       <Grid container spacing={2}>
-      <Grid container item spacing={2}>
-        <Grid item xs={5} lg={3}>
-          <Box mt={2}>Event Submission</Box>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={2}>Event Submission</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={2}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={2}>
+              {status?.submissionTime == null
+                ? "Information not available"
+                : (status?.submissionTime.includes(":")
+                    ? "Submitted for approval on "
+                    : "") + status?.submissionTime}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={1} lg={0.1}>
-          <Box mt={2}>-</Box>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Clubs Council</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.ccApproverTime == null
+                ? "Information not available"
+                : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
+                  status?.ccApproverTime}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs>
-          <Box mt={2}>
-            {status?.submissionTime == null
-              ? "Information not available"
-              : (status?.submissionTime.includes(":")
-                  ? "Submitted for approval on "
-                  : "") + status?.submissionTime}
-          </Box>
-        </Grid>
-      </Grid>
-      <Grid container item spacing={2}>
-        <Grid item xs={5} lg={3}>
-          <Box mt={1}>Clubs Council</Box>
-        </Grid>
-        <Grid item xs={1} lg={0.1}>
-          <Box mt={1}>-</Box>
-        </Grid>
-        <Grid item xs>
-          <Box mt={1}>
-            {status?.ccApproverTime == null
-              ? "Information not available"
-              : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
-                status?.ccApproverTime}
-          </Box>
-        </Grid>
-      </Grid>
-      {/* 
+        {/* 
       <Grid container item spacing={2}>
         <Grid item xs={5} lg={3}>
           <Box mt={1}>Students Life Council</Box>
@@ -108,23 +108,24 @@ function approvalStatus(status) {
         </Grid>
       </Grid>
       */}
-      <Grid container item spacing={2}>
-        <Grid item xs={5} lg={3}>
-          <Box mt={1}>Students Life Office</Box>
-        </Grid>
-        <Grid item xs={1} lg={0.1}>
-          <Box mt={1}>-</Box>
-        </Grid>
-        <Grid item xs>
-          <Box mt={1}>
-            {status?.sloApproverTime == null
-              ? "Information not available"
-              : (status?.sloApproverTime.includes(":") ? "Approved on " : "") +
-                status?.sloApproverTime}
-          </Box>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Students Life Office</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.sloApproverTime == null
+                ? "Information not available"
+                : (status?.sloApproverTime.includes(":")
+                    ? "Approved on "
+                    : "") + status?.sloApproverTime}
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
     </>
   );
 }
