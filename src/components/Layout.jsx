@@ -111,11 +111,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
-      <DrawerItem
+      {/* <DrawerItem
         title="student bodies"
         path="/student-bodies"
         icon={<Icon variant="groups-3-outline-rounded" />}
-      />
+      /> */}
       <DrawerItem
         title="events"
         path="/events?upcoming=true&completed=true"
@@ -204,14 +204,20 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       </Box>
       <DrawerItem
         title="clubs council"
-        path="/about/clubs-council"
-        icon={<Icon variant="admin-panel-settings-outline-rounded" />}
+        path="/about"
+        icon={<Icon variant="info-outline-rounded" />}
+        // icon={<Icon variant="admin-panel-settings-outline-rounded" />}
       />
       <DrawerItem
+        title="Life @ IIIT-H"
+        path="/about/life"
+        icon={<Icon variant="celebration-outline-rounded" />}
+      />
+      {/* <DrawerItem
         title="supervisory bodies"
         path="/about/supervisory-bodies"
         icon={<Icon variant="info-outline-rounded" />}
-      />
+      /> */}
     </List>
   );
 
