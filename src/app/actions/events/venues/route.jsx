@@ -11,7 +11,8 @@ export async function POST(request) {
     data: { availableRooms },
     error,
   } = await getClient().query(GET_AVAILABLE_LOCATIONS, {
-    timeslot: [startDate, endDate],
+    startTime: startDate,
+    endTime: endDate,
     eventid: eventid,
   });
   if (error) {

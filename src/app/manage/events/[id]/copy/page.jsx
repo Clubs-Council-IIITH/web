@@ -25,10 +25,11 @@ function transformDateTime(datetimeperiod) {
 }
 
 function transformEvent(event) {
+  let newDatetime = transformDateTime([event?.startTime, event?.endTime]);
   return {
     ...event,
-    // parse datetime strings to date objects
-    datetimeperiod: transformDateTime(event?.datetimeperiod),
+    startTime: newDatetime[0],
+    endTime: newDatetime[1],
     budget: [],
     location: [],
     // parse population as int

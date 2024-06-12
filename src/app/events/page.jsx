@@ -2,6 +2,7 @@ import { Box, Divider, Typography } from "@mui/material";
 import EventsFilter from "components/events/EventsFilter";
 
 import EventsGrid from "components/events/EventsGrid";
+import {getDateObj} from "utils/formatTime";
 
 export const metadata = {
   title: "Events",
@@ -44,7 +45,7 @@ export default async function Events({ searchParams }) {
               if (!targetState) selectedState = true;
               else {
                 const isUpcoming =
-                  new Date(event?.datetimeperiod[1]) > new Date();
+                  new getDateObj(event?.endTime) > new Date();
                 selectedState = isUpcoming;
               }
 
@@ -84,7 +85,7 @@ export default async function Events({ searchParams }) {
               if (!targetState) selectedState = true;
               else {
                 const isUpcoming =
-                  new Date(event?.datetimeperiod[1]) > new Date();
+                  new getDateObj(event?.endTime) > new Date();
                 selectedState = !isUpcoming;
               }
 

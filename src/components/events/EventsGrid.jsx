@@ -25,7 +25,8 @@ export default async function EventsGrid({
               <EventCard
                 _id={event._id}
                 name={event.name}
-                datetimeperiod={event.datetimeperiod}
+		startTime={event.startTime}
+		endTime={event.endTime}
                 poster={event.poster}
                 clubid={event.clubid}
               />

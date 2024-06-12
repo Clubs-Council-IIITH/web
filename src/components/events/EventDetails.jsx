@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { Divider, Card, Stack, Box, Grid, Typography } from "@mui/material";
 
 import { locationLabel } from "utils/formatEvent";
+import { shortDateStr  } from "utils/formatTime";
 
 import ClubButton from "components/clubs/ClubButton";
 import EventPoster from "components/events/EventPoster";
@@ -10,8 +11,6 @@ import AudienceChips from "components/events/AudienceChips";
 import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 import Icon from "components/Icon";
-
-const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
 export default function EventDetails({ event, showCode = false }) {
   return (
@@ -43,11 +42,11 @@ export default function EventDetails({ event, showCode = false }) {
           <Box display="flex" alignItems="center">
             <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
             <Typography variant="body2">
-              <DateTime dt={event.datetimeperiod[0]} />
+              {shortDateStr(event?.startTime)}
             </Typography>
             <Box mx={1}>-</Box>
             <Typography variant="body2">
-              <DateTime dt={event.datetimeperiod[1]} />
+              {shortDateStr(event?.endTime)} (IST)
             </Typography>
           </Box>
 

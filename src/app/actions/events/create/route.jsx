@@ -6,7 +6,6 @@ import { CREATE_EVENT } from "gql/mutations/events";
 export async function POST(request) {
   const response = { ok: false, data: null, error: null };
   const { details } = await request.json();
-
   const {
     data: { createEvent },
     error,

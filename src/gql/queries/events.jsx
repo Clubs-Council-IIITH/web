@@ -17,7 +17,8 @@ export const GET_CLUB_EVENTS = gql`
       name
       code
       clubid
-      datetimeperiod
+      startTime
+      endTime
       poster
       status {
         state
@@ -36,7 +37,8 @@ export const GET_PENDING_EVENTS = gql`
       name
       code
       clubid
-      datetimeperiod
+      startTime
+      endTime
       status {
         state
         room
@@ -58,7 +60,8 @@ export const GET_ALL_EVENTS = gql`
       name
       code
       clubid
-      datetimeperiod
+      startTime
+      endTime
       status {
         state
         room
@@ -83,7 +86,8 @@ export const GET_EVENT = gql`
       location
       audience
       description
-      datetimeperiod
+      startTime
+      endTime
       link
       poster
       mode
@@ -105,7 +109,8 @@ export const GET_FULL_EVENT = gql`
         advance
       }
       clubid
-      datetimeperiod
+      startTime
+      endTime
       description
       equipment
       link
@@ -128,8 +133,8 @@ export const GET_FULL_EVENT = gql`
 `;
 
 export const GET_AVAILABLE_LOCATIONS = gql`
-  query AvailableRooms($timeslot: [DateTime!]!, $eventid: String) {
-    availableRooms(timeslot: $timeslot, eventid: $eventid) {
+  query AvailableRooms($startTime: String!, $endTime: String!, $eventid: String) {
+    availableRooms(inputStart: $startTime, inputEnd: $endTime, eventid: $eventid) {
       locations
     }
   }

@@ -42,6 +42,7 @@ import MemberListItem from "components/members/MemberListItem";
 
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
+import { getDuration, getDateStr } from "utils/formatTime";
 import { locationLabel } from "utils/formatEvent";
 import { useAuth } from "components/AuthProvider";
 
@@ -230,9 +231,11 @@ export default function EventForm({
           : null;
 
     // convert dates to ISO strings
-    data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString(),
-    );
+    data.startTime = getDateStr(formData.startTime)
+    data.endTime = getDateStr(formData.endTime)
+
+    // get duration from startTime and endTime
+    data.duration = getDuration(formData.startTime, formData.endTime)
 
     // convert budget to array of objects with only required attributes
     // remove budget items without a description (they're invalid)
@@ -330,8 +333,8 @@ export default function EventForm({
                     setHasPhone={setHasPhone}
                     disabled={
                       defaultValues?.status?.state == "approved" &&
-                      defaultValues?.datetimeperiod[0] &&
-                      new Date(defaultValues?.datetimeperiod[0]) < new Date()
+                      defaultValues?.startTime &&
+                      new Date(defaultValues?.startTime) < new Date()
                     }
                   />
                 </Grid>
@@ -605,13 +608,15 @@ function EventDatetimeInput({
   disabled = true,
   role = "public",
 }) {
-  const startDateInput = watch("datetimeperiod.0");
-  const [error, setError] = useState(null);
+  const startDateInput = watch("startTime");
+  const endDateInput = watch("endTime");
+  const [startError, setStartError] = useState(null);
+  const [endError, setEndError] = useState(null);
 
-  const errorMessage = useMemo(() => {
-    switch (error) {
-      case "minDate": {
-        return "An event can not end before it starts!";
+  const startErrorMessage = useMemo(() => {
+    switch (startError) {
+      case "maxDate": {
+        return "Event cannot start after it end!";
       }
       case "invalidDate": {
         return "Invalid date!";
@@ -620,27 +625,58 @@ function EventDatetimeInput({
         return "";
       }
     }
-  }, [error]);
+  }, [startError]);
+
+  const endErrorMessage = useMemo(() => {
+    switch (endError) {
+      case "minDate": {
+        return "Event cannot end before it starts!";
+      }
+      case "invalidDate": {
+        return "Invalid date!";
+      }
+      default: {
+        return "";
+      }
+    }
+  }, [endError]);
+
 
   return (
+  <>
+    <Typography
+      color="text.secondary"
+      sx={{fontSize: '1', textAlign: 'center', marginBottom: '20px', fontWeight: 100}}
+    >
+      (Date-Time Fields are assumed to be in IST)
+    </Typography>
     <Grid container spacing={2}>
       <Grid item xs={6} xl={4}>
         <Controller
-          name="datetimeperiod.0"
+          name="startTime"
           control={control}
           rules={{
             required: "Start date is required!",
-          }}
+            validate: {
+              checkDate: (value) => {
+                return (
+                  dayjs(value) <= dayjs(endDateInput) ||
+                  "Event must start before it ends!"
+                );
+              },
+	    }
+	  }}
           render={({
             field: { value, ...rest },
             fieldState: { error, invalid },
           }) => (
             <DateTimePicker
               label="Starts *"
+              onError={(error) => setStartError(error)}
               slotProps={{
                 textField: {
-                  error: invalid,
-                  helperText: error?.message,
+                  error: startErrorMessage || invalid,
+                  helperText: startErrorMessage || error?.message,
                 },
               }}
               disablePast={!allowed_roles.includes(role)}
@@ -649,10 +685,13 @@ function EventDatetimeInput({
                 minutes: renderTimeViewClock,
                 seconds: renderTimeViewClock,
               }}
-              sx={{ width: "100%" }}
-              value={
-                value instanceof Date && !isDayjs(value) ? dayjs(value) : value
+              maxDateTime={
+                endDateInput
+                  ? dayjs(endDateInput).subtract(1,"minute")
+                  : null
               }
+              sx={{ width: "100%" }}
+              sx={{ width: "100%" }}
               disabled={disabled}
               {...rest}
             />
@@ -661,7 +700,7 @@ function EventDatetimeInput({
       </Grid>
       <Grid item xs xl={4}>
         <Controller
-          name="datetimeperiod.1"
+          name="endTime"
           control={control}
           rules={{
             required: "End date is required!",
@@ -683,18 +722,15 @@ function EventDatetimeInput({
               disabled={!startDateInput || disabled}
               minDateTime={
                 startDateInput
-                  ? (startDateInput instanceof Date && !isDayjs(startDateInput)
-                      ? dayjs(startDateInput)
-                      : startDateInput
-                    ).add(1, "minute")
+                  ? dayjs(startDateInput).add(1,"minute")
                   : null
               }
               disablePast={!allowed_roles.includes(role)}
-              onError={(error) => setError(error)}
+              onError={(error) => setEndError(error)}
               slotProps={{
                 textField: {
-                  error: errorMessage || invalid,
-                  helperText: errorMessage || error?.message,
+                  error: endErrorMessage || invalid,
+                  helperText: endErrorMessage || error?.message,
                 },
               }}
               viewRenderers={{
@@ -703,15 +739,13 @@ function EventDatetimeInput({
                 seconds: renderTimeViewClock,
               }}
               sx={{ width: "100%" }}
-              value={
-                value instanceof Date && !isDayjs(value) ? dayjs(value) : value
-              }
               {...rest}
             />
           )}
         />
       </Grid>
     </Grid>
+  </>
   );
 }
 
@@ -819,8 +853,8 @@ function EventVenueInput({
 }) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
-  const startDateInput = watch("datetimeperiod.0");
-  const endDateInput = watch("datetimeperiod.1");
+  const startDateInput = watch("startTime");
+  const endDateInput = watch("endTime");
 
   // reset location if datetime changes
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);
