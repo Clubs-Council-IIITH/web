@@ -151,6 +151,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="local-activity-outline-rounded" />}
       />
       <DrawerItem
+        title="Events Data"
+        path="/manage/data-events"
+        icon={<Icon variant="book-outline-rounded" />}
+      />
+      <DrawerItem
         title="members"
         path="/manage/members"
         icon={<Icon variant="group-outline-rounded" />}
@@ -175,6 +180,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="local-activity-outline-rounded" />}
       />
       <DrawerItem
+        title="Events Data"
+        path="/manage/data-events"
+        icon={<Icon variant="book-outline-rounded" />}
+      />
+      <DrawerItem
         title="members"
         path="/manage/members"
         icon={<Icon variant="group-outline-rounded" />}
@@ -192,6 +202,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         title="events"
         path="/manage/events"
         icon={<Icon variant="local-activity-outline-rounded" />}
+      />
+      <DrawerItem
+        title="Events Data"
+        path="/manage/data-events"
+        icon={<Icon variant="book-outline-rounded" />}
       />
     </List>
   );
