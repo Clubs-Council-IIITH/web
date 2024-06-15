@@ -4,9 +4,8 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 import {
-  Box,
   Button,
   Grid,
   Typography,
@@ -55,17 +54,17 @@ function ReportClubSelect({ control, disabled = true }) {
     <Controller
       name="clubid"
       control={control}
-      rules={{ required: "Select a club!" }}
+      rules={{ required: "Select a club/body!" }}
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid} >
-          <InputLabel id="clubid">ClubId *</InputLabel>
+          <InputLabel id="clubid">Club/Body</InputLabel>
           <Select
             labelId="clubid"
             fullWidth
             disabled={disabled}
             {...field}
           >
-            <MenuItem value="allclubs">All Clubs</MenuItem>
+            <MenuItem value="allclubs">All Clubs/Bodies</MenuItem>
             {clubs
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))
@@ -95,15 +94,17 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
             field: { value, ...rest },
             fieldState: { error, invalid },
           }) => (
-            <DateTimePicker
-              label="From Date *"
-              views={["year", "month", "day"]}
+            <DatePicker
+              label="From Date"
               slotProps={{
                 textField: {
                   error: invalid,
                   helperText: error?.message,
                 },
               }}
+              maxDate={
+                dayjs(new Date()).subtract(1, "day")
+              }
               disableFuture
               sx={{ width: "100%" }}
               value={value instanceof Date ? dayjs(value) : value}
@@ -121,21 +122,20 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
             required: "End date is required!",
             validate: {
               checkDate: (value) =>
-                dayjs(value) >= dayjs(watch("datetimeperiod.0")) ||
-                "Last date must be after Start Date!",
+                dayjs(value) > dayjs(startDateInput) ||
+                "End Date must be after Start Date!",
             },
           }}
           render={({
             field: { value, ...rest },
             fieldState: { error, invalid },
           }) => (
-            <DateTimePicker
-              label="To Date *"
-              views={["year", "month", "day"]}
-              disabled={!watch("datetimeperiod.0") || disabled}
-              minDateTime={
-                watch("datetimeperiod.0") &&
-                dayjs(watch("datetimeperiod.0")).add(1, "minute")
+            <DatePicker
+              label="To Date"
+              disabled={!startDateInput || disabled}
+              minDate={
+                startDateInput &&
+                dayjs(startDateInput).add(1, "day")
               }
               disableFuture
               slotProps={{
@@ -159,7 +159,7 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
   const { user } = useAuth();
   const { triggerToast } = useToast();
-  const { control, handleSubmit, watch } = useForm({ defaultValues });
+  const { control, handleSubmit, watch, reset } = useForm({ defaultValues });
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
 
@@ -208,7 +208,7 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
     setLoading(true);
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
-      datetimeperiod: formData.datetimeperiod.map((date) => date.toISOString()),
+      dateperiod: formData.datetimeperiod.map((date) => dayjs(date).format("YYYY-MM-DD")),
       fields: formData.fields,
     };
     submitHandlers[action](data, opts);
@@ -227,8 +227,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
               gutterBottom
             >
               {admin_roles.includes(user?.role)
-                ? "Select Club"
-                : "Selected Club"}
+                ? "Select Club/Student Body"
+                : "Selected Club/Student Body"}
             </Typography>
             <Grid item xs={12}>
               {admin_roles.includes(user?.role)
@@ -464,14 +464,17 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
               disabled={loading}
               onClick={() => setCancelDialog(true)}
             >
-              Cancel
+              Reset
             </Button>
 
             <ConfirmDialog
               open={cancelDialog}
-              title="Confirm cancellation"
-              description="Are you sure you want to cancel? Any unsaved changes will be lost."
-              onConfirm={() => router.back()}
+              title="Confirm resetting"
+              description="Are you sure you want to reset? All the selections will be lost."
+              onConfirm={() => {
+                reset()
+                setCancelDialog(false)
+              }}
               onClose={() => setCancelDialog(false)}
               confirmProps={{ color: "primary" }}
               confirmText="Yes, discard my changes"
