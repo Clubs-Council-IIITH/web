@@ -20,16 +20,9 @@ jobs:
       - name: Install Prettier
         run: |
           npm install --global prettier
-
       - name: Format with Prettier
         run: prettier --write "**/*.{js,jsx,md,mdx,css,yaml}"
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Apply Prettier Formatting Fixes
-
-      # - name: Remove Formatting Branch
-      #   run: |
-      #     if git rev-parse --verify formatting >/dev/null 2>&1; then
-      #       git push origin --delete formatting
-      #     fi

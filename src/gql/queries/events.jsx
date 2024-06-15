@@ -134,3 +134,11 @@ export const GET_AVAILABLE_LOCATIONS = gql`
     }
   }
 `;
+
+export const DOWNLOAD_EVENTS_DATA = gql`
+  query DownloadEventsData($details: InputReportDetails!) {
+    downloadEventsData(details: $details) {
+      csvFile
+    }
+  }
+`;
