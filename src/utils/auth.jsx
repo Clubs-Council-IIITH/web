@@ -1,8 +1,7 @@
 "use client";
 
 export function login(pathname) {
-  if (pathname == "/")
-    pathname = "";
+  if (pathname == "/") pathname = "";
   // redirect to CAS login with current page as redirect URL
   window.location.replace(`/login${pathname}`);
 }
