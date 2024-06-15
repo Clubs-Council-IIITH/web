@@ -6,10 +6,9 @@ export async function POST(request) {
   const response = { ok: false, data: null, error: null };
   const { details } = await request.json();
 
-  const {
-    data,
-    error,
-  } = await getClient().query(DOWNLOAD_EVENTS_DATA, { details });
+  const { data, error } = await getClient().query(DOWNLOAD_EVENTS_DATA, {
+    details,
+  });
   if (error) {
     response.error = {
       title: error.name,
