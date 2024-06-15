@@ -45,7 +45,7 @@ export function DrawerItem({ title, path, icon }) {
           color: theme.palette.accent,
           backgroundColor: alpha(
             theme.palette.accent,
-            theme.palette.action.selectedOpacity
+            theme.palette.action.selectedOpacity,
           ),
         }),
       }}
@@ -91,7 +91,7 @@ export function DrawerDropdown({ title, icon, children }) {
   const pathname = usePathname();
 
   const active = children.some((child) =>
-    getActive(child.props.path, pathname)
+    getActive(child.props.path, pathname),
   );
   const [open, setOpen] = useState(active);
 
