@@ -10,7 +10,7 @@ export function middleware(req) {
   // if logout cookie is set, log the user out
   if (req.cookies.has("logout")) {
     // clear logout cookie
-    req.cookies.set("logout", "", { maxAge: 0 });
+    req.cookies.delete("logout");
 
     return NextResponse.redirect(new URL("/logoutCallback", req.url));
   }
