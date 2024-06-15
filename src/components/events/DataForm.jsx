@@ -199,7 +199,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD"
+              "YYYY-MM-DD",
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -230,7 +230,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD")
+        dayjs(date).format("YYYY-MM-DD"),
       ),
       fields: formData.fields,
     };
@@ -349,8 +349,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "datetimeperiod.1"
-                                  )
+                                    (value) => value !== "datetimeperiod.1",
+                                  ),
                                 );
                               }
                             }}
@@ -368,8 +368,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "description"
-                                  )
+                                    (value) => value !== "description",
+                                  ),
                                 );
                               }
                             }}
@@ -387,8 +387,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "audience"
-                                  )
+                                    (value) => value !== "audience",
+                                  ),
                                 );
                               }
                             }}
@@ -406,8 +406,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "population"
-                                  )
+                                    (value) => value !== "population",
+                                  ),
                                 );
                               }
                             }}
@@ -425,8 +425,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "mode"
-                                  )
+                                    (value) => value !== "mode",
+                                  ),
                                 );
                               }
                             }}
@@ -444,8 +444,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "location"
-                                  )
+                                    (value) => value !== "location",
+                                  ),
                                 );
                               }
                             }}
@@ -463,8 +463,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "budget"
-                                  )
+                                    (value) => value !== "budget",
+                                  ),
                                 );
                               }
                             }}
@@ -482,8 +482,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "poster"
-                                  )
+                                    (value) => value !== "poster",
+                                  ),
                                 );
                               }
                             }}
