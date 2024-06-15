@@ -139,6 +139,24 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
+  const manageEventItems = (
+    <DrawerDropdown
+      title="events"
+      icon={<Icon variant="local-activity-outline-rounded" />}
+    >
+      <DrawerItem
+        title="Events List/Status"
+        path="/manage/events"
+        icon={<Icon variant="beenhere-outline-rounded" />}
+      />
+      <DrawerItem
+        title="Data Download"
+        path="/manage/data-events"
+        icon={<Icon variant="book-outline-rounded" />}
+      />
+    </DrawerDropdown>
+  );
+
   // nav items that only club accounts can see
   const clubItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
@@ -150,16 +168,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
-      <DrawerItem
-        title="events"
-        path="/manage/events"
-        icon={<Icon variant="local-activity-outline-rounded" />}
-      />
-      <DrawerItem
-        title="Events Data"
-        path="/manage/data-events"
-        icon={<Icon variant="book-outline-rounded" />}
-      />
+      {manageEventItems}
       <DrawerItem
         title="members"
         path="/manage/members"
@@ -179,16 +188,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
-      <DrawerItem
-        title="events"
-        path="/manage/events"
-        icon={<Icon variant="local-activity-outline-rounded" />}
-      />
-      <DrawerItem
-        title="Events Data"
-        path="/manage/data-events"
-        icon={<Icon variant="book-outline-rounded" />}
-      />
+      {manageEventItems}
       <DrawerItem
         title="members"
         path="/manage/members"
@@ -203,16 +203,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
-      <DrawerItem
-        title="events"
-        path="/manage/events"
-        icon={<Icon variant="local-activity-outline-rounded" />}
-      />
-      <DrawerItem
-        title="Events Data"
-        path="/manage/data-events"
-        icon={<Icon variant="book-outline-rounded" />}
-      />
+      {manageEventItems}
     </List>
   );
 
