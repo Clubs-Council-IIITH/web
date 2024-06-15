@@ -5,7 +5,8 @@ import Progressbar from "components/Progressbar";
 import Toast, { ToastProvider } from "components/Toast";
 import { Navigation, Content } from "components/Layout";
 
-import { getClient } from "gql/client"; import { GET_CLUB } from "gql/queries/clubs";
+import { getClient } from "gql/client";
+import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { AuthProvider } from "components/AuthProvider";
 import { fontClass } from "components/ThemeRegistry/typography";
@@ -20,7 +21,7 @@ export default async function RootLayout({ children }) {
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
