@@ -19,7 +19,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
 import Icon from "components/Icon";
-import DrawerItem from "components/DrawerItem";
+import { DrawerItem, DrawerDropdown } from "components/DrawerItem";
 import Footer from "components/Footer";
 import AccountPopover from "components/profile/AccountPopover";
 import ScrollbarWrapper from "components/ScrollbarWrapper";
@@ -116,16 +116,21 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/student-bodies"
         icon={<Icon variant="groups-3-outline-rounded" />}
       />
-      <DrawerItem
+      <DrawerDropdown
         title="events"
-        path="/events?upcoming=true&completed=true"
         icon={<Icon variant="local-activity-outline-rounded" />}
-      />
-      <DrawerItem
-        title="calendar"
-        path="/calendar"
-        icon={<Icon variant="calendar-month-outline-rounded" />}
-      />
+      >
+        <DrawerItem
+          title="list of events"
+          path="/events?upcoming=true&completed=true"
+          icon={<Icon variant="list-alt-outline-rounded" />}
+        />
+        <DrawerItem
+          title="calendar"
+          path="/calendar"
+          icon={<Icon variant="calendar-month-outline-rounded" />}
+        />
+      </DrawerDropdown>
       <DrawerItem
         title="gallery"
         path="/gallery"
