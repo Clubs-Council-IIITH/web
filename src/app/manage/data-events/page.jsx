@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
-import ReportForm from "components/events/ReportForm";
+import DataForm from "components/events/DataForm";
 
 export const metadata = {
   title: "Download Events data",
@@ -31,7 +31,7 @@ export default function DownloadEventsData() {
         Download Events Data
       </Typography>
 
-      <ReportForm defaultValues={defaultValues} action="create" />
+      <DataForm defaultValues={defaultValues} action="create" />
     </Container>
   );
 }

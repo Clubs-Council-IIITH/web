@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
+  Box,
   Button,
   Grid,
   Typography,
@@ -16,9 +17,9 @@ import {
   FormControlLabel,
   FormGroup,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import ConfirmDialog from "components/ConfirmDialog";
-import { useRouter } from "next/navigation";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 import { LoadingButton } from "@mui/lab";
@@ -26,9 +27,10 @@ import { LoadingButton } from "@mui/lab";
 const allowed_roles = ["cc", "club", "slo"];
 const admin_roles = ["cc", "slo"];
 
-function ReportClubSelect({ control, disabled = true }) {
+function DataClubSelect({ control, disabled = true }) {
   const { triggerToast } = useToast();
   const [clubs, setClubs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -39,6 +41,7 @@ function ReportClubSelect({ control, disabled = true }) {
           throw new Error(data.error.messages);
         }
         setClubs(data.data);
+        setLoading(false);
       } catch (error) {
         triggerToast({
           title: "Unable to fetch clubs",
@@ -50,28 +53,55 @@ function ReportClubSelect({ control, disabled = true }) {
   }, [triggerToast]);
 
   return (
-    <Controller
-      name="clubid"
-      control={control}
-      rules={{ required: "Select a club/body!" }}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <FormControl fullWidth error={invalid}>
-          <InputLabel id="clubid">Club/Body</InputLabel>
-          <Select labelId="clubid" fullWidth disabled={disabled} {...field}>
-            <MenuItem value="allclubs">All Clubs/Bodies</MenuItem>
-            {clubs
-              ?.slice()
-              ?.sort((a, b) => a.name.localeCompare(b.name))
-              ?.map((club) => (
-                <MenuItem key={club.cid} value={club.cid}>
-                  {club.name}
-                </MenuItem>
-              ))}
-          </Select>
-          <FormHelperText>{error?.message}</FormHelperText>
-        </FormControl>
+    <>
+      {loading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
+          <CircularProgress />
+        </Box>
+      ) : clubs.length > 0 ? (
+        <Controller
+          name="clubid"
+          control={control}
+          rules={{ required: "Select a club/body!" }}
+          render={({ field, fieldState: { error, invalid } }) => (
+            <FormControl fullWidth error={invalid}>
+              <InputLabel id="clubid">Club/Body</InputLabel>
+              <Select labelId="clubid" fullWidth disabled={disabled} {...field}>
+                <MenuItem value="allclubs">All Clubs/Bodies</MenuItem>
+                {clubs
+                  ?.slice()
+                  ?.sort((a, b) => a.name.localeCompare(b.name))
+                  ?.map((club) => (
+                    <MenuItem key={club.cid} value={club.cid}>
+                      {club.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              <FormHelperText>{error?.message}</FormHelperText>
+            </FormControl>
+          )}
+        />
+      ) : (
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: 18,
+            padding: 1.7,
+            color: "#919EAB",
+            width: "100%",
+            border: "1px solid rgba(99, 115, 129, 0.5)",
+            borderRadius: "8px",
+          }}
+        >
+          No clubs available
+        </Typography>
       )}
-    />
+    </>
   );
 }
 
@@ -144,8 +174,7 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
   );
 }
 
-export default function ReportForm({ defaultValues = {}, action = "log" }) {
-  const router = useRouter();
+export default function DataForm({ defaultValues = {}, action = "log" }) {
   const { user } = useAuth();
   const { triggerToast } = useToast();
   const { control, handleSubmit, watch, reset } = useForm({ defaultValues });
@@ -154,7 +183,7 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
 
   const submitHandlers = {
     log: console.log,
-    create: async (data, opts) => {
+    create: async (data) => {
       let res = await fetch("/actions/events/data", {
         method: "POST",
         body: JSON.stringify({ details: data }),
@@ -169,7 +198,9 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
             const csvBlob = new Blob([csvContent], {
               type: "text/csv;charset=utf-8;",
             });
-            const csvFileName = "report.csv";
+            const csvFileName = `events_data_${dayjs(new Date()).format(
+              "YYYY-MM-DD"
+            )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
 
@@ -194,16 +225,16 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
     },
   };
 
-  async function onSubmit(formData, opts) {
+  async function onSubmit(formData) {
     setLoading(true);
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD"),
+        dayjs(date).format("YYYY-MM-DD")
       ),
       fields: formData.fields,
     };
-    submitHandlers[action](data, opts);
+    submitHandlers[action](data);
     setLoading(false);
   }
 
@@ -224,7 +255,7 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
             </Typography>
             <Grid item xs={12}>
               {admin_roles.includes(user?.role) ? (
-                <ReportClubSelect
+                <DataClubSelect
                   control={control}
                   disabled={!admin_roles.includes(user?.role)}
                 />
@@ -318,8 +349,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "datetimeperiod.1",
-                                  ),
+                                    (value) => value !== "datetimeperiod.1"
+                                  )
                                 );
                               }
                             }}
@@ -337,8 +368,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "description",
-                                  ),
+                                    (value) => value !== "description"
+                                  )
                                 );
                               }
                             }}
@@ -356,8 +387,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "audience",
-                                  ),
+                                    (value) => value !== "audience"
+                                  )
                                 );
                               }
                             }}
@@ -375,8 +406,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "population",
-                                  ),
+                                    (value) => value !== "population"
+                                  )
                                 );
                               }
                             }}
@@ -394,8 +425,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "mode",
-                                  ),
+                                    (value) => value !== "mode"
+                                  )
                                 );
                               }
                             }}
@@ -413,8 +444,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "location",
-                                  ),
+                                    (value) => value !== "location"
+                                  )
                                 );
                               }
                             }}
@@ -432,8 +463,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "budget",
-                                  ),
+                                    (value) => value !== "budget"
+                                  )
                                 );
                               }
                             }}
@@ -451,8 +482,8 @@ export default function ReportForm({ defaultValues = {}, action = "log" }) {
                               } else {
                                 field.onChange(
                                   field.value.filter(
-                                    (value) => value !== "poster",
-                                  ),
+                                    (value) => value !== "poster"
+                                  )
                                 );
                               }
                             }}
