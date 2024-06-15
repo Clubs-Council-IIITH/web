@@ -152,7 +152,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="Data Download"
         path="/manage/data-events"
-        icon={<Icon variant="book-outline-rounded" />}
+        icon={<Icon variant="sim-card-download-outline-rounded" />}
       />
     </DrawerDropdown>
   );
