@@ -65,15 +65,12 @@ export default function EventApproveForm({ event, members }) {
   }, [watchSLC]);
 
   async function handleApprove(formData) {
+    setLoading(true);
+
     let cc_progress_budget = !formData.SLC;
     let cc_progress_room = !formData.SLO;
     let approver = formData.approver;
-    let slcMembersForEmail = formData.slcMembersForEmail;
-
-    console.log(
-      formData.slcMembersForEmail
-    );
-    setLoading(true);
+    let slc_members_for_email = formData.slcMembersForEmail;
 
     let res = await fetch("/actions/events/progress", {
       method: "POST",
@@ -82,6 +79,7 @@ export default function EventApproveForm({ event, members }) {
         cc_progress_budget: cc_progress_budget,
         cc_progress_room: cc_progress_room,
         cc_approver: approver,
+        slc_members_for_email: slc_members_for_email,
       }),
     });
     if (res.ok) {
@@ -94,6 +92,8 @@ export default function EventApproveForm({ event, members }) {
         severity: "error",
       });
     }
+
+    setLoading(false);
   }
 
   return (
