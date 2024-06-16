@@ -21,6 +21,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Chip,
+  Divider,
 } from "@mui/material";
 
 export default function EventApproveForm({ event, members }) {
@@ -66,8 +68,11 @@ export default function EventApproveForm({ event, members }) {
     let cc_progress_budget = !formData.SLC;
     let cc_progress_room = !formData.SLO;
     let approver = formData.approver;
+    let slcMembersForEmail = formData.slcMembersForEmail;
 
-    console.log(cc_progress_budget, cc_progress_room, approver);
+    console.log(
+      formData.slcMembersForEmail
+    );
     setLoading(true);
 
     let res = await fetch("/actions/events/progress", {
@@ -106,6 +111,75 @@ export default function EventApproveForm({ event, members }) {
             />
           )}
         />
+        {watchSLC ? (
+          <>
+            <p></p>
+            <Controller
+              name="slcMembersForEmail"
+              control={control}
+              defaultValue={[]}
+              rules={{ required: "Select atleast one SLC Member!" }}
+              render={({ field, fieldState: { error, invalid } }) => (
+                <FormControl variant="outlined" fullWidth error={invalid}>
+                  <InputLabel id="approver-label">
+                    SLC Members to Send Email
+                  </InputLabel>
+                  {slcMembers.length === 0 ? (
+                    <Box
+                      py={25}
+                      width="100%"
+                      display="flex"
+                      justifyContent="center"
+                    >
+                      <Fade in>
+                        <CircularProgress color="primary" />
+                      </Fade>
+                    </Box>
+                  ) : (
+                    <Select
+                      multiple
+                      labelId="poc"
+                      label="Point of Contact *"
+                      fullWidth
+                      {...field}
+                      MenuProps={{
+                        style: { maxHeight: 400, marginBottom: 50 },
+                      }}
+                      renderValue={(selected) => (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 0.5,
+                          }}
+                        >
+                          {selected.map((value) => (
+                            <Chip
+                              key={value}
+                              label={
+                                <MemberListItem uid={value} showEmail={false} />
+                              }
+                              sx={{ marginBottom: 1 }}
+                            />
+                          ))}
+                        </Box>
+                      )}
+                    >
+                      {slcMembers?.slice()?.map((member) => (
+                        <MenuItem key={member.uid} value={member.uid}>
+                          <MemberListItem uid={member.uid} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                  <FormHelperText>{error?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
+          </>
+        ) : null}
+        <p></p> {/* For New line */}
+        <Divider />
         <p></p> {/* For New line */}
         <Controller
           name="SLO"
@@ -119,6 +193,8 @@ export default function EventApproveForm({ event, members }) {
             />
           )}
         />
+        <p></p> {/* For New line */}
+        <Divider />
         <p></p> {/* For New line */}
         <Controller
           name="approver"
