@@ -48,6 +48,88 @@ export async function generateMetadata({ params }, parent) {
   }
 }
 
+function approvalStatus(status) {
+  return (
+    <>
+      <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+        Approvals
+      </Typography>
+
+      <Grid container spacing={2}>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={2}>Event Submission</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={2}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={2}>
+              {status?.submissionTime == null
+                ? "Information not available"
+                : (status?.submissionTime.includes(":")
+                    ? "Submitted for approval on "
+                    : "") + status?.submissionTime}
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Clubs Council</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.ccApproverTime == null
+                ? "Information not available"
+                : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
+                  status?.ccApproverTime}
+            </Box>
+          </Grid>
+        </Grid>
+        {/* 
+      <Grid container item spacing={2}>
+        <Grid item xs={5} lg={3}>
+          <Box mt={1}>Students Life Council</Box>
+        </Grid>
+        <Grid item xs={1} lg={0.1}>
+          <Box mt={1}>-</Box>
+        </Grid>
+        <Grid item xs>
+          <Box mt={1}>
+            {status?.slcApproverTime == null
+              ? "Information not available"
+              : (status?.slcApproverTime.includes(":") ? "Approved on " : "") +
+                status?.slcApproverTime}
+          </Box>
+        </Grid>
+      </Grid>
+      */}
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Students Life Office</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.sloApproverTime == null
+                ? "Information not available"
+                : (status?.sloApproverTime.includes(":")
+                    ? "Approved on "
+                    : "") + status?.sloApproverTime}
+            </Box>
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
 export default async function ManageEvent({ params }) {
   const { id } = params;
 
@@ -158,6 +240,9 @@ export default async function ManageEvent({ params }) {
             )}
           </Grid>
         </Grid>
+
+        {/* show Approval status */}
+        {approvalStatus(event?.status)}
       </Box>
     )
   );
@@ -166,7 +251,6 @@ export default async function ManageEvent({ params }) {
 // set conditional actions based on event datetime, current status and user role
 function getActions(event, user) {
   const upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
-
   /*
    * Deleted Event
    * CC/Club - copy

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +18,7 @@ export function getActive(path, pathname) {
   return pathname.startsWith(path.split("?")[0]);
 }
 
-export default function DrawerItem({ title, path, icon }) {
+export function DrawerItem({ title, path, icon }) {
   const theme = useTheme();
   const pathname = usePathname();
 
@@ -82,5 +83,70 @@ export default function DrawerItem({ title, path, icon }) {
         }
       />
     </ListItemButton>
+  );
+}
+
+export function DrawerDropdown({ title, icon, children }) {
+  const theme = useTheme();
+  const pathname = usePathname();
+
+  const active = children.some((child) =>
+    getActive(child.props.path, pathname),
+  );
+  const [open, setOpen] = useState(active);
+
+  return (
+    <>
+      <ListItemButton
+        sx={{
+          ...theme.typography.body2,
+          position: "relative",
+          height: 44,
+          textTransform: "capitalize",
+          paddingLeft: theme.spacing(2),
+          paddingRight: theme.spacing(1.5),
+          marginBottom: theme.spacing(0.5),
+          color: theme.palette.text.secondary,
+          borderRadius: 1,
+          // active
+          ...(active && {
+            ...theme.typography.subtitle2,
+            color: theme.palette.accent,
+          }),
+        }}
+        onClick={() => setOpen(!open)}
+      >
+        <ListItemIcon
+          sx={{
+            width: 22,
+            height: 22,
+            color: "inherit",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {icon && icon}
+        </ListItemIcon>
+
+        <ListItemText disableTypography primary={title} />
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <ListItemIcon
+          sx={{
+            width: 22,
+            height: 22,
+            color: "inherit",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Icon variant={open ? "expand-less" : "expand-more"} />
+        </ListItemIcon>
+      </ListItemButton>
+
+      <Box sx={{ marginLeft: theme.spacing(1.5) }}>{open && children}</Box>
+    </>
   );
 }

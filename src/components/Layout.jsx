@@ -19,7 +19,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
 import Icon from "components/Icon";
-import DrawerItem from "components/DrawerItem";
+import { DrawerItem, DrawerDropdown } from "components/DrawerItem";
 import Footer from "components/Footer";
 import AccountPopover from "components/profile/AccountPopover";
 import ScrollbarWrapper from "components/ScrollbarWrapper";
@@ -116,22 +116,45 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/student-bodies"
         icon={<Icon variant="groups-3-outline-rounded" />}
       />
-      <DrawerItem
+      <DrawerDropdown
         title="events"
-        path="/events?upcoming=true&completed=true"
         icon={<Icon variant="local-activity-outline-rounded" />}
-      />
-      <DrawerItem
-        title="calendar"
-        path="/calendar"
-        icon={<Icon variant="calendar-month-outline-rounded" />}
-      />
+      >
+        <DrawerItem
+          title="list of events"
+          path="/events?upcoming=true&completed=true"
+          icon={<Icon variant="list-alt-outline-rounded" />}
+        />
+        <DrawerItem
+          title="calendar"
+          path="/calendar"
+          icon={<Icon variant="calendar-month-outline-rounded" />}
+        />
+      </DrawerDropdown>
       <DrawerItem
         title="gallery"
         path="/gallery"
         icon={<Icon variant="gallery-thumbnail-outline-rounded" />}
       />
     </List>
+  );
+
+  const manageEventItems = (
+    <DrawerDropdown
+      title="events"
+      icon={<Icon variant="local-activity-outline-rounded" />}
+    >
+      <DrawerItem
+        title="Events List/Status"
+        path="/manage/events"
+        icon={<Icon variant="beenhere-outline-rounded" />}
+      />
+      <DrawerItem
+        title="Data Download"
+        path="/manage/data-events"
+        icon={<Icon variant="sim-card-download-outline-rounded" />}
+      />
+    </DrawerDropdown>
   );
 
   // nav items that only club accounts can see
@@ -145,11 +168,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
-      <DrawerItem
-        title="events"
-        path="/manage/events"
-        icon={<Icon variant="local-activity-outline-rounded" />}
-      />
+      {manageEventItems}
       <DrawerItem
         title="members"
         path="/manage/members"
@@ -169,11 +188,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
-      <DrawerItem
-        title="events"
-        path="/manage/events"
-        icon={<Icon variant="local-activity-outline-rounded" />}
-      />
+      {manageEventItems}
       <DrawerItem
         title="members"
         path="/manage/members"
@@ -188,11 +203,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
-      <DrawerItem
-        title="events"
-        path="/manage/events"
-        icon={<Icon variant="local-activity-outline-rounded" />}
-      />
+      {manageEventItems}
     </List>
   );
 

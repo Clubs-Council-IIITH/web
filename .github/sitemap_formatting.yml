@@ -1,0 +1,65 @@
+# name: Sitemap Generation & Auto Formatting
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   sitemap_gen:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+
+#       - name: Install Sitemap package and run sitemap generation
+#         run: |
+#           npm install sitemap@^8.0.0
+#           node sitemap.js
+
+#       - name: Reset package and package-lock.json
+#         run: |
+#           git checkout package.json
+#           git checkout package-lock.json
+
+#       - name: Commit sitemap update
+#         id: commit_sitemap
+#         uses: stefanzweifel/git-auto-commit-action@v5
+#         with:
+#           commit_message: Updated sitemap for ${{ github.sha }}
+
+#       - name: Push changes
+#         run: git push origin HEAD:master
+        
+#   formatting:
+#     if: ${{ always() }} # Always run this job
+#     needs: sitemap_gen # Wait for the sitemap_gen job to finish
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository at specific commit
+#         uses: actions/checkout@v4
+
+#       - name: Pull the latest changes
+#         run: git pull origin master
+
+#       - name: Set up Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+
+#       - name: Install Prettier
+#         run: |
+#           npm install --global prettier
+
+#       - name: Format with Prettier
+#         run: prettier --write "**/*.{js,jsx,md,mdx,css,yaml}"
+
+#       - name: Commit Prettier fixes
+#         uses: stefanzweifel/git-auto-commit-action@v5
+#         with:
+#           commit_message: Apply Prettier Formatting Fixes

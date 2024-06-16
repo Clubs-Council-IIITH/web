@@ -118,6 +118,10 @@ export const GET_FULL_EVENT = gql`
         state
         room
         budget
+        ccApproverTime
+        slcApproverTime
+        sloApproverTime
+        submissionTime
       }
     }
   }
@@ -127,6 +131,14 @@ export const GET_AVAILABLE_LOCATIONS = gql`
   query AvailableRooms($timeslot: [DateTime!]!, $eventid: String) {
     availableRooms(timeslot: $timeslot, eventid: $eventid) {
       locations
+    }
+  }
+`;
+
+export const DOWNLOAD_EVENTS_DATA = gql`
+  query DownloadEventsData($details: InputReportDetails!) {
+    downloadEventsData(details: $details) {
+      csvFile
     }
   }
 `;

@@ -190,7 +190,11 @@ export default function EventForm({
           ...res.error,
           severity: "error",
         });
+
+        return false;
       }
+
+      return true;
     },
   };
 
@@ -250,7 +254,11 @@ export default function EventForm({
         uid: formData.poc,
         phone: formData.poc_phone,
       };
-      submitHandlers["phone"](phoneData);
+      let phoneReturn = submitHandlers["phone"](phoneData);
+      if (!phoneReturn) {
+        setLoading(false);
+        return;
+      }
     }
 
     // mutate
