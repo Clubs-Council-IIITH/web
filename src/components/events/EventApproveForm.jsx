@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 
@@ -26,15 +26,41 @@ import {
 export default function EventApproveForm({ event, members }) {
   const { triggerToast } = useToast();
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
-  const { control, handleSubmit } = useForm({
+  const { control, watch, handleSubmit } = useForm({
     defaultValues: {
       SLC: false,
       SLO: false,
     },
   });
+
+  const watchSLC = watch("SLC");
+  const [slcMembers, setSlcMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (watchSLC && slcMembers.length === 0) {
+        let res = await fetch("/actions/users/get/role", {
+          method: "POST",
+          body: JSON.stringify({
+            role: "slc",
+          }),
+        });
+        res = await res.json();
+
+        if (res.ok) {
+          setSlcMembers(res.data);
+        } else {
+          triggerToast({
+            ...res.error,
+            severity: "error",
+          });
+        }
+      }
+    };
+    fetchData();
+  }, [watchSLC]);
 
   async function handleApprove(formData) {
     let cc_progress_budget = !formData.SLC;
