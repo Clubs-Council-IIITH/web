@@ -3,6 +3,10 @@
 import stc from "string-to-color";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import listPlugin from "@fullcalendar/list";
+
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { useAuth } from "components/AuthProvider";
 
@@ -42,6 +46,8 @@ function eventDataTransform(event, role, uid) {
 
 export default function Calendar({ events }) {
   const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const eventDataTransform_withrole = (event) => {
     return eventDataTransform(event, user?.role, user?.uid);
@@ -50,8 +56,8 @@ export default function Calendar({ events }) {
   return (
     <FullCalendar
       events={events?.filter((event) => event?.status?.state !== "deleted")}
-      plugins={[dayGridPlugin]}
-      initialView="dayGridMonth"
+      plugins={[dayGridPlugin, listPlugin]}
+      initialView={isMobile ? "listWeek" : "dayGridMonth"}
       eventDataTransform={eventDataTransform_withrole}
     />
   );
