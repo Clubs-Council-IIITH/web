@@ -12,7 +12,7 @@ const sites = {
   website: { icon: "mdi:web", color: "#7F7F7F" },
   facebook: { icon: "ic:baseline-facebook", color: "#3C5999" },
   instagram: { icon: "mdi:instagram", color: "#E94475" },
-  twitter: { icon: "mdi:twitter", color: "#05ACED" },
+  twitter: { icon: "ri:twitter-x-fill", color: "#000" },
   linkedin: { icon: "mdi:linkedin", color: "#027FB1" },
   discord: { icon: "ic:baseline-discord", color: "#5865F3" },
   youtube: { icon: "mdi:youtube", color: "#FF3333" },
