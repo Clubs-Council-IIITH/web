@@ -12,6 +12,8 @@ import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
+import Link from "next/link";
+import { Button } from "@mui/material";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
@@ -93,7 +95,7 @@ export default async function Profile({ params }) {
         2. if current user is viewing their own profile and is not a club
       */}
       {currentUser?.role === "cc" ||
-      (currentUser?.uid === user.uid && user.role !== "club") ? (
+        (currentUser?.uid === user.uid && user.role !== "club") ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
@@ -141,6 +143,11 @@ export default async function Profile({ params }) {
               >
                 {user.email}
               </Typography>
+              <Link href={`/profile/${user.uid}/generate-certificate`} passHref>
+                <Button variant="contained" color="primary">
+                  Generate Certificate
+                </Button>
+              </Link>
             </Stack>
           </Stack>
         </Grid>
@@ -162,4 +169,5 @@ export default async function Profile({ params }) {
       </Grid>
     </Container>
   );
+
 }
