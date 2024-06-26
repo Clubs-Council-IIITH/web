@@ -240,6 +240,21 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
+  // nav items for the slo office to manage stuff like certificate generation approvals
+  const manageItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Manage</Typography>
+      </Box>
+      <DrawerItem
+        title="Certificate Requests"
+        path="/certificate-requests"
+        icon={<Icon variant="card-membership-outline-rounded" />}
+      />
+    </List>
+  );
+
+  // FIXME: manageItems should be visible only to slo
   const drawerContent = (
     <ScrollbarWrapper>
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
@@ -251,6 +266,8 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       {["slc", "slo"].includes(user.role) ? adminItems : null}
       {aboutItems}
       {helpItems}
+      {/* {["slo"].includes(user.role) ? manageItems : null} */}
+      {manageItems}
       <Box sx={{ flexGrow: 1 }} />
     </ScrollbarWrapper>
   );
