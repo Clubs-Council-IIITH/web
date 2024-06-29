@@ -30,7 +30,7 @@ export const socialsData = {
     label: "Discord",
     icon: "ic:baseline-discord",
     regex:
-      "^(https?://)?(www.)?(discord.(gg|io|me|li)|discordapp.com/invite|discord.com/invite)/[^s/]+$",
+      "^(https?://)?(www.)?((discord.(gg|io|me|li))|(discordapp.com/invite|discord.com/invite))/[A-z0-9_-]+$",
     color: "#5865F3",
   },
   youtube: {
