@@ -6,13 +6,15 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 
 import { LoadingButton } from "@mui/lab";
-import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import { Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
 
 import { useToast } from "components/Toast";
 import ConfirmDialog from "components/ConfirmDialog";
+import { set } from "nprogress";
 
 export default function HolidayForm({
   id = null,
@@ -24,6 +26,7 @@ export default function HolidayForm({
 
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   const { control, handleSubmit } = useForm({
     defaultValues,
@@ -36,7 +39,7 @@ export default function HolidayForm({
       let details = {
         name: data.name,
         date: dayjs(data.date).format("YYYY-MM-DD"),
-          // description: data.description,
+        // description: data.description,
         description: null,
       };
       let res = await fetch("/actions/holidays/create", {
@@ -67,7 +70,7 @@ export default function HolidayForm({
       let details = {
         name: data.name,
         date: dayjs(data.date).format("YYYY-MM-DD"),
-          // description: data.description,
+        // description: data.description,
         description: null,
       };
       console.log(data);
@@ -95,7 +98,7 @@ export default function HolidayForm({
         setLoading(false);
       }
     },
-    delete: async (data) => {
+    delete: async () => {
       let res = await fetch("/actions/holidays/delete", {
         method: "POST",
         body: JSON.stringify({ holidayId: id }),
@@ -118,6 +121,7 @@ export default function HolidayForm({
           severity: "error",
         });
         setLoading(false);
+        setDeleteDialog(false);
       }
     },
   };
@@ -125,64 +129,95 @@ export default function HolidayForm({
   const onSubmit = handleSubmit(submitHandlers[action]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Controller
-            name="name"
-            control={control}
-            rules={{
-              minLength: {
-                value: 5,
-                message: "Holiday name must be at least 5 characters long!",
-              },
-              maxLength: {
-                value: 500,
-                message: "Holiday name must be at most 500 characters long!",
-              },
-            }}
-            render={({ field, fieldState: { error, invalid } }) => (
-              <TextField
-                {...field}
-                label="Name"
-                autoComplete="off"
-                error={invalid}
-                helperText={error?.message}
-                variant="outlined"
-                fullWidth
-                required
-              />
-            )}
+    <Box>
+      {/* Add delete button on right side */}
+
+      {id ? (
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+          pb={2}
+        >
+          <Button
+            variant="contained"
+            color="error"
+            size="medium"
+            onClick={() => setDeleteDialog(true)}
+            startIcon={<DeleteIcon />}
+          >
+            Delete
+          </Button>
+
+          <ConfirmDialog
+            open={deleteDialog}
+            onClose={() => setDeleteDialog(false)}
+            onConfirm={submitHandlers.delete}
+            title="Confirm deletion"
+            description="Are you sure you want to delete this holiday?"
+            confirmProps={{ color: "error" }}
+            confirmText="Yes, delete"
           />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Controller
-            name="date"
-            control={control}
-            rules={{ required: "Date is required!" }}
-            render={({
-              field: { value, ...rest },
-              fieldState: { error, invalid },
-            }) => (
-              <DatePicker
-                slotProps={{
-                  textField: {
-                    error: invalid,
-                    helperText: error?.message,
-                  },
-                }}
-                format="DD/MM/YYYY"
-                label="Date *"
-                renderTimeView={renderTimeViewClock}
-                sx={{ width: "100%" }}
-                required
-                value={dayjs(value)}
-                {...rest}
-              />
-            )}
-          />
-        </Grid>
-        {/* <Grid item xs={12}>
+        </Box>
+      ) : null}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                minLength: {
+                  value: 5,
+                  message: "Holiday name must be at least 5 characters long!",
+                },
+                maxLength: {
+                  value: 500,
+                  message: "Holiday name must be at most 500 characters long!",
+                },
+              }}
+              render={({ field, fieldState: { error, invalid } }) => (
+                <TextField
+                  {...field}
+                  label="Name"
+                  autoComplete="off"
+                  error={invalid}
+                  helperText={error?.message}
+                  variant="outlined"
+                  fullWidth
+                  required
+                />
+              )}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Controller
+              name="date"
+              control={control}
+              rules={{ required: "Date is required!" }}
+              render={({
+                field: { value, ...rest },
+                fieldState: { error, invalid },
+              }) => (
+                <DatePicker
+                  slotProps={{
+                    textField: {
+                      error: invalid,
+                      helperText: error?.message,
+                    },
+                  }}
+                  format="DD/MM/YYYY"
+                  label="Date *"
+                  renderTimeView={renderTimeViewClock}
+                  sx={{ width: "100%" }}
+                  required
+                  value={dayjs(value)}
+                  {...rest}
+                />
+              )}
+            />
+          </Grid>
+          {/* <Grid item xs={12}>
           <Controller
             name="description"
             control={control}
@@ -208,43 +243,44 @@ export default function HolidayForm({
             )}
           />
         </Grid> */}
-        <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-          <Grid item xs={6}>
-            <Button
-              size="large"
-              variant="outlined"
-              color="secondary"
-              fullWidth
-              disabled={loading}
-              onClick={() => setCancelDialog(true)}
-            >
-              Cancel
-            </Button>
+          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+            <Grid item xs={6}>
+              <Button
+                size="large"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                disabled={loading}
+                onClick={() => setCancelDialog(true)}
+              >
+                Cancel
+              </Button>
 
-            <ConfirmDialog
-              open={cancelDialog}
-              onClose={() => setCancelDialog(false)}
-              onConfirm={() => router.back()}
-              title="Confirm cancellation"
-              description="Are you sure you want to cancel? All unsaved changes will be lost."
-              confirmProps={{ color: "primary" }}
-              confirmText="Yes, discard my changes"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <LoadingButton
-              type="submit"
-              size="large"
-              variant="contained"
-              color="primary"
-              fullWidth
-              loading={loading}
-            >
-              Submit
-            </LoadingButton>
+              <ConfirmDialog
+                open={cancelDialog}
+                onClose={() => setCancelDialog(false)}
+                onConfirm={() => router.back()}
+                title="Confirm cancellation"
+                description="Are you sure you want to cancel? All unsaved changes will be lost."
+                confirmProps={{ color: "primary" }}
+                confirmText="Yes, discard my changes"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <LoadingButton
+                type="submit"
+                size="large"
+                variant="contained"
+                color="primary"
+                fullWidth
+                loading={loading}
+              >
+                Submit
+              </LoadingButton>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </form>
+      </form>
+    </Box>
   );
 }
