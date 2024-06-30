@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 
 import { useForm, Controller, useController } from "react-hook-form";
 
-import { useToast } from "components/Toast";
-
 import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
@@ -35,6 +33,8 @@ import {
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
 
+import { useAuth } from "components/AuthProvider";
+import { useToast } from "components/Toast";
 import FileUpload from "components/FileUpload";
 import EventBudget from "components/events/EventBudget";
 import ConfirmDialog from "components/ConfirmDialog";
@@ -43,7 +43,6 @@ import MemberListItem from "components/members/MemberListItem";
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
-import { useAuth } from "components/AuthProvider";
 
 const allowed_roles = ["cc", "slo"];
 
@@ -226,12 +225,12 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadFile(formData.poster[0], "image")
-          : null;
+        ? await uploadFile(formData.poster[0], "image")
+        : null;
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString(),
+      new Date(d).toISOString()
     );
 
     // convert budget to array of objects with only required attributes
@@ -496,7 +495,7 @@ export default function EventForm({
                   fullWidth
                   onClick={() =>
                     handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true }),
+                      onSubmit(data, { shouldSubmit: true })
                     )()
                   }
                   disabled={budgetEditing}
@@ -654,6 +653,7 @@ function EventDatetimeInput({
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
               disabled={disabled}
+              format="DD/MM/YYYY hh:mm A"
               {...rest}
             />
           )}
@@ -680,7 +680,6 @@ function EventDatetimeInput({
           }) => (
             <DateTimePicker
               label="Ends *"
-              disabled={!startDateInput || disabled}
               minDateTime={
                 startDateInput
                   ? (startDateInput instanceof Date && !isDayjs(startDateInput)
@@ -706,6 +705,8 @@ function EventDatetimeInput({
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
+              disabled={!startDateInput || disabled}
+              format="DD/MM/YYYY hh:mm A"
               {...rest}
             />
           )}
