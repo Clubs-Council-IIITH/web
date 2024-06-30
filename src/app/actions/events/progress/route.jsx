@@ -10,6 +10,7 @@ export async function POST(request) {
     cc_progress_budget = false,
     cc_progress_room = false,
     cc_approver = null,
+    slc_members_for_email = null,
   } = await request.json();
 
   const { error } = await getClient().mutation(PROGRESS_EVENT, {
@@ -17,6 +18,7 @@ export async function POST(request) {
     ccProgressBudget: cc_progress_budget,
     ccProgressRoom: cc_progress_room,
     ccApprover: cc_approver,
+    slcMembersForEmail: slc_members_for_email,
   });
   if (error) {
     response.error = {

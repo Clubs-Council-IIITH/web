@@ -6,7 +6,7 @@ import UserImage from "components/users/UserImage";
 
 import { useToast } from "components/Toast";
 
-export default function MemberListItem({ uid }) {
+export default function MemberListItem({ uid, showEmail = true }) {
   const { triggerToast } = useToast();
   const [user, setUser] = useState(null);
 
@@ -48,7 +48,7 @@ export default function MemberListItem({ uid }) {
       </ListItemAvatar>
       <ListItemText
         primary={user.firstName + " " + user.lastName}
-        secondary={user.email}
+        secondary={showEmail ? user.email : null}
       />
     </ListItem>
   ) : null;

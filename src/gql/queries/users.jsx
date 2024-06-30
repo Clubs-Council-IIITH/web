@@ -19,3 +19,12 @@ export const GET_USER_PROFILE = gql`
     }
   }
 `;
+
+export const GET_USER_LIST_BY_ROLE = gql`
+  query GetUserListByRole($role: String!) {
+    usersByRole(role: $role) {
+      uid
+      role
+    }
+  }
+`;
