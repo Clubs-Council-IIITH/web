@@ -609,8 +609,8 @@ function filterEvents(events, startTime, endTime) {
     const eventEnd = new Date(event.datetimeperiod[1]);
 
     return (
-      (startTime >= eventStart && startTime <= eventEnd) ||
-      (endTime >= eventStart && endTime <= eventEnd) ||
+      (startTime >= eventStart && startTime < eventEnd) ||
+      (endTime > eventStart && endTime <= eventEnd) ||
       (startTime <= eventStart && endTime >= eventEnd)
     );
   });
