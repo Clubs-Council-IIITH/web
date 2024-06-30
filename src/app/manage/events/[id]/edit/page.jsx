@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
 import { redirect } from "next/navigation";
 import { GET_USER } from "gql/queries/auth";
 
@@ -38,9 +38,14 @@ export default async function EditEvent({ params }) {
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
+
+  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: null,
+    public: false,
+  });
 
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
@@ -57,6 +62,7 @@ export default async function EditEvent({ params }) {
           <EventForm
             id={id}
             defaultValues={transformEvent(event)}
+            existingEvents={events.filter((e) => e._id !== id)}
             action="edit"
           />
         </Container>

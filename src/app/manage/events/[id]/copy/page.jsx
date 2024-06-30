@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
 import { redirect } from "next/navigation";
 import { GET_USER } from "gql/queries/auth";
 
@@ -53,12 +53,19 @@ export default async function CopyEvent({ params }) {
       eventid: id,
     });
 
+    let oldEventId = event._id;
+
     // Delete the fields that we don't want to copy
     delete event._id;
     delete event.code;
     delete event.budget;
     delete event.location;
     delete event.status;
+
+    const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+      clubid: null,
+      public: false,
+    });
 
     return (
       user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
@@ -68,7 +75,11 @@ export default async function CopyEvent({ params }) {
             Create a New Event
           </Typography>
 
-          <EventForm defaultValues={transformEvent(event)} action="create" />
+          <EventForm
+            defaultValues={transformEvent(event)}
+            existingEvents={events.filter((e) => e._id !== oldEventId)}
+            action="create"
+          />
         </Container>
       )
     );
