@@ -197,13 +197,28 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
-  // nav items that only SLC + SLO can see
-  const adminItems = (
+  // nav items that only SLC can see
+  const SLCItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
       {manageEventItems}
+    </List>
+  );
+
+  // nav items that only SLO can see
+  const SLOItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Manage</Typography>
+      </Box>
+      {manageEventItems}
+      <DrawerItem
+        title="Holidays"
+        path="/manage/holidays"
+        icon={<Icon variant="event-busy-outline-rounded" />}
+      />
     </List>
   );
 
@@ -248,7 +263,8 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       {publicItems}
       {["club"].includes(user.role) ? clubItems : null}
       {["cc"].includes(user.role) ? ccItems : null}
-      {["slc", "slo"].includes(user.role) ? adminItems : null}
+      {["slc"].includes(user.role) ? SLCItems : null}
+      {["slo"].includes(user.role) ? SLOItems : null}
       {aboutItems}
       {helpItems}
       <Box sx={{ flexGrow: 1 }} />
