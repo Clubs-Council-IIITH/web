@@ -41,7 +41,6 @@ export default function EventApproveForm({ event, members }) {
     let cc_progress_room = !formData.SLO;
     let approver = formData.approver;
 
-    console.log(cc_progress_budget, cc_progress_room, approver);
     setLoading(true);
 
     let res = await fetch("/actions/events/progress", {
