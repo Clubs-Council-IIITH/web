@@ -39,3 +39,26 @@ export const REJECT_MEMBER = gql`
     }
   }
 `;
+
+export const REQUEST_CERTIFICATE = gql`
+  mutation RequestCertificate($certificateInput: CertificateInput!) {
+    requestCertificate(certificateInput: $certificateInput) {
+      id
+      certificateNumber
+      status
+      requestedAt
+    }
+  }
+`;
+
+export const APPROVE_CERTIFICATE = gql`
+  mutation ApproveCertificate($certificateNumber: String!) {
+    approveCertificate(certificateNumber: $certificateNumber) {
+      id
+      certificateNumber
+      status
+      approvedAt
+      approverId
+    }
+  }
+`;

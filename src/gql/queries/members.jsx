@@ -86,3 +86,41 @@ export const GET_MEMBER = gql`
     }
   }
 `;
+
+export const GET_USER_CERTIFICATES = gql`
+  query GetUserCertificates {
+    getUserCertificates {
+      id
+      certificateNumber
+      status
+      requestedAt
+      approvedAt
+    }
+  }
+`;
+
+export const GET_PENDING_CERTIFICATES = gql`
+  query GetPendingCertificates {
+    getPendingCertificates {
+      id
+      certificateNumber
+      userId
+      status
+      requestedAt
+    }
+  }
+`;
+
+export const VERIFY_CERTIFICATE = gql`
+  query VerifyCertificate($certificateNumber: String!, $key: String!) {
+    verifyCertificate(certificateNumber: $certificateNumber, key: $key) {
+      id
+      certificateNumber
+      userId
+      status
+      requestedAt
+      approvedAt
+      certificateData
+    }
+  }
+`;
