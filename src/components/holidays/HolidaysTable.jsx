@@ -12,41 +12,39 @@ import QuickSearchToolbar from "components/QuickSearchToolbar";
 export default function EventsTable({ holidays }) {
   const router = useRouter();
 
-const columns = [
+  const columns = [
     {
-        field: "name",
-        headerName: "Name",
-        flex: 5,
-        renderCell: (params) => (
-            <Typography
-                variant="body2"
-                style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                    msWordBreak: "break-all",
-                    wordBreak: "break-all",
-                    msHyphens: "auto",
-                    MozHyphens: "auto",
-                    WebkitHyphens: "auto",
-                    hyphens: "auto",
-                }}
-            >
-                {params.value}
-            </Typography>
-        ),
+      field: "name",
+      headerName: "Name",
+      flex: 5,
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          style={{
+            overflowWrap: "break-word",
+            wordWrap: "break-word",
+            msWordBreak: "break-all",
+            wordBreak: "break-all",
+            msHyphens: "auto",
+            MozHyphens: "auto",
+            WebkitHyphens: "auto",
+            hyphens: "auto",
+          }}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
-        field: "date",
-        headerName: "Date",
-        flex: 3,
-        valueGetter: (params) => ISOtoHuman(params.row.date, true, false),
-        renderCell: (params) => (
-            <Typography variant="body2">
-                {params.value}
-            </Typography>
-        ),
+      field: "date",
+      headerName: "Date",
+      flex: 3,
+      valueGetter: (params) => ISOtoHuman(params.row.date, true, false),
+      renderCell: (params) => (
+        <Typography variant="body2">{params.value}</Typography>
+      ),
     },
-];
+  ];
 
   if (!holidays) return null;
   return (

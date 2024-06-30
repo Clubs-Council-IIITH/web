@@ -7,13 +7,13 @@ export async function POST(request) {
   const response = { ok: false, data: null, error: null };
   const { details, holidayId } = await request.json();
 
-  const {
-    data: { editHoliday } = {},
-    error,
-  } = await getClient().mutation(EDIT_HOLIDAY, {
-    details,
-    holidayId,
-  });
+  const { data: { editHoliday } = {}, error } = await getClient().mutation(
+    EDIT_HOLIDAY,
+    {
+      details,
+      holidayId,
+    },
+  );
   if (error) {
     response.error = {
       title: error.name,

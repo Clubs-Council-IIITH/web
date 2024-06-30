@@ -11,7 +11,7 @@ export async function POST(request) {
     DELETE_HOLIDAY,
     {
       holidayId,
-    }
+    },
   );
   if (error) {
     response.error = {

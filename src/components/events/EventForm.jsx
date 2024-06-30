@@ -225,12 +225,12 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-        ? await uploadFile(formData.poster[0], "image")
-        : null;
+          ? await uploadFile(formData.poster[0], "image")
+          : null;
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString()
+      new Date(d).toISOString(),
     );
 
     // convert budget to array of objects with only required attributes
@@ -495,7 +495,7 @@ export default function EventForm({
                   fullWidth
                   onClick={() =>
                     handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true })
+                      onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
                   disabled={budgetEditing}

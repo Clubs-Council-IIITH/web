@@ -65,7 +65,7 @@ export default function Calendar({ events, holidays }) {
   };
 
   const allEvents = events?.filter(
-    (event) => event?.status?.state !== "deleted"
+    (event) => event?.status?.state !== "deleted",
   );
   const mergedEvents = [...allEvents, ...holidays];
 
