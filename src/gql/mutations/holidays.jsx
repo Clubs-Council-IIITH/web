@@ -21,8 +21,6 @@ export const EDIT_HOLIDAY = gql`
 
 export const DELETE_HOLIDAY = gql`
   mutation DeleteHoliday($holidayId: String!) {
-    deleteHoliday(id: $holidayId) {
-      _id
-    }
+    deleteHoliday(id: $holidayId)
   }
 `;

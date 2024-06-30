@@ -7,16 +7,19 @@ export async function POST(request) {
   const response = { ok: false, error: null };
   const { holidayId } = await request.json();
 
-  const { error } = await getClient().mutation(DELETE_HOLIDAY, {
-    holidayId,
-  });
+  const { error, data: { deleteHoliday } = {} } = await getClient().mutation(
+    DELETE_HOLIDAY,
+    {
+      holidayId,
+    }
+  );
   if (error) {
     response.error = {
       title: error.name,
       messages: error?.graphQLErrors?.map((ge) => ge?.message),
     };
   } else {
-    response.ok = true;
+    response.ok = deleteHoliday;
   }
 
   return NextResponse.json(response);

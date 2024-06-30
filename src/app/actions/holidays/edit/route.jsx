@@ -8,7 +8,7 @@ export async function POST(request) {
   const { details, holidayId } = await request.json();
 
   const {
-    data: { editHoliday },
+    data: { editHoliday } = {},
     error,
   } = await getClient().mutation(EDIT_HOLIDAY, {
     details,
