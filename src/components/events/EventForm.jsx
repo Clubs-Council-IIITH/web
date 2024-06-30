@@ -207,7 +207,7 @@ export default function EventForm({
       audience: formData.audience,
       mode: formData.mode,
       link: formData.link,
-      location: formData.location,
+      location: formData.mode === "online" ? null : formData.location,
       population: parseInt(formData.population),
       additional: formData.additional,
       equipment: formData.equipment,
@@ -875,37 +875,38 @@ function EventVenueInput({
         ) : null}
       </Grid>
 
+      <Grid item xs={12}>
+        <Controller
+          name="population"
+          control={control}
+          rules={{
+            min: {
+              value: 1,
+              message: "Expected participation count must be at least 1.",
+            }
+          }}
+          render={({ field, fieldState: { error, invalid } }) => (
+            <TextField
+              type="number"
+              label="Expected Participation*"
+              error={invalid}
+              helperText={error?.message}
+              autoComplete="off"
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                inputProps: { min: 1 },
+              }}
+              disabled={false}
+              {...field}
+            />
+          )}
+        />
+      </Grid>
+
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (
         <>
-          <Grid item xs={12}>
-            <Controller
-              name="population"
-              control={control}
-              rules={{
-                min: {
-                  value: 1,
-                  message: "Expected population count must be at least 1!",
-                },
-              }}
-              render={({ field, fieldState: { error, invalid } }) => (
-                <TextField
-                  type="number"
-                  label="Expected Population Count*"
-                  error={invalid}
-                  helperText={error?.message}
-                  autoComplete="off"
-                  variant="outlined"
-                  fullWidth
-                  InputProps={{
-                    inputProps: { min: 1 },
-                  }}
-                  disabled={false}
-                  {...field}
-                />
-              )}
-            />
-          </Grid>
           <Grid item xs={12}>
             <Controller
               name="equipment"
