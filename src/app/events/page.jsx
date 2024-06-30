@@ -67,9 +67,14 @@ export default async function Events({ searchParams }) {
       selectedName = event?.name
         ?.toLowerCase()
         ?.includes(targetName?.toLowerCase());
-    
+
     if (selectedName)
-      console.log(event?.name, event?.datetimeperiod[0], new Date(), selectedState);
+      console.log(
+        event?.name,
+        event?.datetimeperiod[0],
+        new Date(),
+        selectedState,
+      );
 
     return selectedClub && selectedState && selectedName;
   };
