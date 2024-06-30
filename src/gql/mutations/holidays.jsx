@@ -10,10 +10,10 @@ export const CREATE_HOLIDAY = gql`
 
 export const EDIT_HOLIDAY = gql`
   mutation EditHoliday(
-    $editHolidayId: String!
+    $holidayId: String!
     $details: InputHolidayDetails!
   ) {
-    editHoliday(id: $editHolidayId, details: $details) {
+    editHoliday(id: $holidayId, details: $details) {
       _id
     }
   }
