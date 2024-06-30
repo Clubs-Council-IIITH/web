@@ -883,7 +883,7 @@ function EventVenueInput({
             min: {
               value: 1,
               message: "Expected participation count must be at least 1.",
-            }
+            },
           }}
           render={({ field, fieldState: { error, invalid } }) => (
             <TextField
