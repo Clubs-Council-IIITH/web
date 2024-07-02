@@ -7,9 +7,11 @@ import { Button, Box } from "@mui/material";
 import Icon from "components/Icon";
 
 import { socialsData } from "utils/socialsData";
+import { useMode } from "contexts/ModeContext";
 
 export default function ClubSocials({ socials = {}, email = null }) {
   const [processedSocials, setProcessedSocials] = useState({});
+  const { isDark } = useMode();
 
   useEffect(() => {
     const processed = {};
@@ -59,7 +61,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
             sx={{
               mx: 0.5,
               textTransform: "none",
-              color: socialsData[item].color,
+              color: isDark ? socialsData[item].darkcolor : socialsData[item].color,
             }}
           >
             <Icon external variant={socialsData[item].icon} mr={1} />
