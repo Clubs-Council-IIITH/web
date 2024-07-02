@@ -1,8 +1,6 @@
 import Link from "next/link";
 
-import { Container, Typography } from "@mui/material";
-
-import Icon from "components/Icon";
+import { Container, Typography, Box } from "@mui/material";
 
 export const metadata = {
   title: "Bug Report | Feature Request",
@@ -10,7 +8,13 @@ export const metadata = {
 
 export default async function BugReport() {
   return (
-    <Container>
+    <Container
+      sx={{
+        "& a": {
+          color: "text.link",
+        },
+      }}
+    >
       <Typography variant="h3" gutterBottom mb={3} align="center">
         Bug Report & Feature Request
       </Typography>

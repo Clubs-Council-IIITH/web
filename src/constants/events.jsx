@@ -15,7 +15,7 @@ export const audienceColorMap = {
   ug2: "success",
   ug3: "warning",
   ug4: "error",
-  pg: "primary",
+  pg: "secondary",
   stf: "common.grey",
   fac: "common.grey",
   internal: "secondary",

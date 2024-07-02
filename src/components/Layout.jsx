@@ -337,6 +337,8 @@ export function Content({ children }) {
           overflow: "hidden",
           width: "100%",
         }}
+        bgcolor={theme.palette.background.default}
+        color={theme.palette.text.primary}
       >
         <Box
           component="main"

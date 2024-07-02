@@ -1,8 +1,11 @@
 "use client";
 
 import { Chip } from "@mui/material";
+import { useMode } from "contexts/ModeContext";
 
 export default function Tag({ label, color, icon, sx = {} }) {
+  const { isDark } = useMode();
+
   return (
     <Chip
       variant="outlined"
@@ -12,9 +15,9 @@ export default function Tag({ label, color, icon, sx = {} }) {
       sx={{
         textTransform: "capitalize",
         borderRadius: 1,
-        color: `${color}.dark`,
+        color: isDark ? `${color}.lighter` : `${color}.dark`,
         fontWeight: "bold",
-        backgroundColor: `${color}.lighter`,
+        backgroundColor: isDark ? `${color}.dark` : `${color}.lighter`,
         ...sx,
       }}
     />

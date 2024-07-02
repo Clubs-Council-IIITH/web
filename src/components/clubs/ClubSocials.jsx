@@ -41,7 +41,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
           sx={{
             mx: 0.2,
             textTransform: "none",
-            color: "grey",
+            color: "text.secondary",
           }}
         >
           <Icon external variant={"mdi:email"} mr={1} />

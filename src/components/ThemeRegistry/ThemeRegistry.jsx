@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-// import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 import NextAppDirEmotionCacheProvider from "./EmotionCache";
+import { useMode } from "contexts/ModeContext";
 
 import palette from "./palette";
 import typography from "./typography";
@@ -13,21 +13,22 @@ import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
 export default function ThemeRegistry({ children }) {
-  const prefersDarkMode = false; // useMediaQuery("(prefers-color-scheme: dark)");
+  const prefersDarkMode = useMode();
 
   const themeOptions = React.useMemo(
     () => ({
-      palette: prefersDarkMode ? palette.dark : palette.light,
+      palette: prefersDarkMode.isDark ? palette.dark : palette.light,
       typography,
       breakpoints,
       shape: { borderRadius: 8 },
       direction: "ltr",
-      shadows: prefersDarkMode ? shadows.dark : shadows.light,
-      customShadows: prefersDarkMode ? customShadows.dark : customShadows.light,
+      shadows: prefersDarkMode.isDark ? shadows.dark : shadows.light,
+      customShadows: prefersDarkMode.isDark
+        ? customShadows.dark
+        : customShadows.light,
     }),
     [prefersDarkMode], // TODO: add setting dependency
   );
-
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
 

@@ -10,9 +10,16 @@ function createGradient(color1, color2) {
 const PRIMARY_LIGHT = {
   lighter: "#b39ddb",
   light: "#7e57c2",
-  main: "#673ab7",
+  main: "#803DB2",
   dark: "#5e35b1",
-  darker: "#512da8",
+  darker: "#63358b",
+};
+const PRIMARY_DARK = {
+  lighter: "#25fff8",
+  light: "#53ece4",
+  main: "#1EC3BD",
+  dark: "#087f77",
+  darker: "#299383",
 };
 const SECONDARY = {
   lighter: "#C4CDD5",
@@ -72,7 +79,7 @@ const GREY = {
 };
 
 const GRADIENTS = {
-  primary: createGradient(PRIMARY_LIGHT.light, PRIMARY_LIGHT.main), // TODO: define PRIMARY_DARK palette
+  primary: createGradient(PRIMARY_LIGHT.light, PRIMARY_DARK.main), // TODO: define PRIMARY_DARK palette
   info: createGradient(INFO.light, INFO.main),
   success: createGradient(SUCCESS.light, SUCCESS.main),
   warning: createGradient(WARNING.light, WARNING.main),
@@ -101,7 +108,7 @@ const COMMON = {
   action: {
     hover: GREY[500_8],
     selected: GREY[500_16],
-    disabled: GREY[500_80],
+    disabled: GREY[600],
     disabledBackground: GREY[500_24],
     focus: GREY[500_24],
     hoverOpacity: 0.08,
@@ -114,23 +121,29 @@ const palette = {
     ...COMMON,
     primary: { ...PRIMARY_LIGHT, contrastText: "#fff" },
     mode: "light",
-    text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
-    background: { paper: "#fff", default: "#fdfdfd", neutral: GREY[200] },
+    text: {
+      primary: GREY[800],
+      secondary: GREY[600],
+      disabled: GREY[500],
+      link: "#0a12ab",
+    },
+    background: { paper: "#fff", default: "#fdfdfd", neutral: GREY[300] },
     action: { active: GREY[600], ...COMMON.action },
     accent: PRIMARY_LIGHT.main,
   },
   dark: {
     ...COMMON,
-    primary: { ...PRIMARY_LIGHT, contrastText: "#fff" }, // TODO: define PRIMARY_DARK palette
+    primary: { ...PRIMARY_DARK, contrastText: GREY[800] },
     mode: "dark",
     text: {
-      primary: "#e3e3e3",
+      primary: GREY[200],
       secondary: alpha(GREY[400], 0.82),
       disabled: GREY[600],
+      link: "#11a1fb",
     },
-    background: { paper: GREY[800], default: "#111111", neutral: GREY[500_16] },
+    background: { paper: "#101010", default: "#1e1e1e", neutral: GREY[600] },
     action: { active: GREY[500], ...COMMON.action },
-    accent: PRIMARY_LIGHT.main, // TODO: define PRIMARY_DARK palette
+    accent: PRIMARY_DARK.main,
   },
 };
 
