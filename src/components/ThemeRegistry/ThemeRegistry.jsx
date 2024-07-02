@@ -20,13 +20,13 @@ export default function ThemeRegistry({ children }) {
 
   const themeOptions = React.useMemo(
     () => ({
-      palette: prefersDarkMode.isLight ? palette.dark : palette.light,
+      palette: prefersDarkMode.isDark ? palette.dark : palette.light,
       typography,
       breakpoints,
       shape: { borderRadius: 8 },
       direction: "ltr",
-      shadows: prefersDarkMode.isLight ? shadows.dark : shadows.light,
-      customShadows: prefersDarkMode.isLight ? customShadows.dark : customShadows.light,
+      shadows: prefersDarkMode.isDark ? shadows.dark : shadows.light,
+      customShadows: prefersDarkMode.isDark ? customShadows.dark : customShadows.light,
     }),
     [prefersDarkMode], // TODO: add setting dependency
   );

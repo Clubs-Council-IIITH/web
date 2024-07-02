@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext } from "react";
 
 const ModeContext = createContext({
-  isLight: true,
+  isDark: true,
   setMode: () => {},
 });
 
@@ -11,21 +11,21 @@ export const useMode = () => useContext(ModeContext);
 
 export const ModeProvider = ({ children }) => {
   let theme_bool;
-  if(localStorage.getItem('theme')==='false')
+  if(localStorage.getItem('dark')==='false')
     {
       theme_bool=false;
     }
-    else if(localStorage.getItem('theme')==='true'){
+    else if(localStorage.getItem('dark')==='true'){
       theme_bool=true;
     }
-  const [isLight, setIsLight] = useState(theme_bool);
+  const [isDark, setisDark] = useState(theme_bool);
 
   const setMode = (mode) => {
-    setIsLight(mode);
+    setisDark(mode);
   };
 
   return (
-    <ModeContext.Provider value={{ isLight, setMode }}>
+    <ModeContext.Provider value={{ isDark, setMode }}>
       {children}
     </ModeContext.Provider>
   );

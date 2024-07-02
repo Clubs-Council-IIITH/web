@@ -15,18 +15,18 @@ import { usePathname } from "next/navigation";
 export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
-  const { isLight, setMode } = useMode(); // Accessing isLight and setMode from ModeContext
+  const { isDark, setMode } = useMode(); // Accessing isDark and setMode from ModeContext
   const [open, setOpen] = React.useState(null);
 
   const handleChange = () => {
     // handleupdate();
     
-    setMode(!isLight); // Toggle the mode
+    setMode(!isDark); // Toggle the mode
     
-    setThemeInStorage(!isLight);
+    setThemeInStorage(!isDark);
   };
   const setThemeInStorage = (theme) => {
-    localStorage.setItem('theme', theme)
+    localStorage.setItem('dark', theme)
  }
  
   const handleOpen = (event) => {
@@ -91,7 +91,7 @@ export default function AccountPopover() {
           },
         }}
       >
-        <ModeSwitch checked={!isLight} onChange={handleChange} sx={{ m: 1 }} /> {/* Pass current isLight value and handleChange function to ModeSwitch component */}
+        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} /> {/* Pass current isDark value and handleChange function to ModeSwitch component */}
 
         {isAuthenticated ? (
           <>
