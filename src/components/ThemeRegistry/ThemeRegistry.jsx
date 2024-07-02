@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-// import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 import NextAppDirEmotionCacheProvider from "./EmotionCache";
 import { useMode } from "contexts/ModeContext";
@@ -14,7 +13,6 @@ import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
 export default function ThemeRegistry({ children }) {
-  // const [prefersDarkMode,setPrefersDarkMode] = React.useState(useMode()); // useMediaQuery("(prefers-color-scheme: dark)");
   const prefersDarkMode = useMode();
 
   const themeOptions = React.useMemo(

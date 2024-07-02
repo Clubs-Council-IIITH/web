@@ -1,6 +1,7 @@
 // ModeContext.js
 "use client";
 import React, { createContext, useState, useContext } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ModeContext = createContext({
   isDark: true,
@@ -15,7 +16,11 @@ export const ModeProvider = ({ children }) => {
     theme_bool = false;
   } else if (window.localStorage.getItem("currentModeCC") === "true") {
     theme_bool = true;
+  } else {
+    theme_bool = useMediaQuery("(prefers-color-scheme: dark)");
+    console.log("theme_bool", theme_bool);
   }
+
   const [isDark, setisDark] = useState(theme_bool);
 
   const setMode = (mode) => {
