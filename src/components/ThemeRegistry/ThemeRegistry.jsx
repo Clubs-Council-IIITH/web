@@ -31,7 +31,6 @@ export default function ThemeRegistry({ children }) {
     [prefersDarkMode], // TODO: add setting dependency
   );
   const theme = createTheme(themeOptions);
-  
   theme.components = componentsOverride(theme);
 
   return (
