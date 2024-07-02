@@ -18,7 +18,7 @@ export const socialsData = {
     icon: "ri:twitter-x-fill",
     // validation: "twitter.com",
     redex: "\b(?:twitter.com|x.com)\b",
-    color: "#000",
+    color: "text.primary",
   },
   linkedin: {
     label: "LinkedIn",

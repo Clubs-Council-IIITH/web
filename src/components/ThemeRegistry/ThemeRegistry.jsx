@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 import NextAppDirEmotionCacheProvider from "./EmotionCache";
+import { useMode } from "contexts/ModeContext";
 
 import palette from "./palette";
 import typography from "./typography";
@@ -13,22 +14,24 @@ import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
 export default function ThemeRegistry({ children }) {
-  const prefersDarkMode = false; // useMediaQuery("(prefers-color-scheme: dark)");
+  // const [prefersDarkMode,setPrefersDarkMode] = React.useState(useMode()); // useMediaQuery("(prefers-color-scheme: dark)");
+  const prefersDarkMode =useMode();
+  console.log("prefersDarkMode is after refresh:",prefersDarkMode);
 
   const themeOptions = React.useMemo(
     () => ({
-      palette: prefersDarkMode ? palette.dark : palette.light,
+      palette: prefersDarkMode.isLight ? palette.dark : palette.light,
       typography,
       breakpoints,
       shape: { borderRadius: 8 },
       direction: "ltr",
-      shadows: prefersDarkMode ? shadows.dark : shadows.light,
-      customShadows: prefersDarkMode ? customShadows.dark : customShadows.light,
+      shadows: prefersDarkMode.isLight ? shadows.dark : shadows.light,
+      customShadows: prefersDarkMode.isLight ? customShadows.dark : customShadows.light,
     }),
     [prefersDarkMode], // TODO: add setting dependency
   );
-
   const theme = createTheme(themeOptions);
+  console.log("theme is:",themeOptions);
   theme.components = componentsOverride(theme);
 
   return (

@@ -1,34 +1,35 @@
-"use client";
+// AccountPopover.js
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-
+import React from "react";
+import { IconButton, Avatar, Popover, MenuItem, Divider, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-
-import { alpha } from "@mui/material/styles";
-import {
-  Box,
-  Divider,
-  Typography,
-  Stack,
-  MenuItem,
-  Avatar,
-  IconButton,
-  Popover,
-} from "@mui/material";
-
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { login, logout } from "utils/auth";
 import { useAuth } from "components/AuthProvider";
+import { useMode } from "contexts/ModeContext";
+import { ModeSwitch } from "components/ModeSwitch";
+import { usePathname } from "next/navigation";
 
 export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
+  const { isLight, setMode } = useMode(); // Accessing isLight and setMode from ModeContext
+  console.log("first isLight is:",isLight);
+  const [open, setOpen] = React.useState(null);
 
-  const [open, setOpen] = useState(null);
-
+  const handleChange = () => {
+    // handleupdate();
+    console.log("value of switch going to set is:",isLight);
+    setMode(!isLight); // Toggle the mode
+    console.log("setting theme in storage:",!isLight);
+    setThemeInStorage(!isLight);
+  };
+  const setThemeInStorage = (theme) => {
+    localStorage.setItem('theme', theme)
+ }
+ 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -37,57 +38,20 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  // options to show only when user is logged in
   const AUTHENTICATED_MENU_OPTIONS = [
     {
       label: "Profile",
       icon: "person",
       url: "/profile",
-      // onClick: () => router.push("/profile") && handleClose(),
     },
   ];
 
-  // options to show even when user is not logged in
-  const COMMON_MENU_OPTIONS = [
-    // {
-    //   label: "Settings",
-    //   icon: "settings",
-    //   url: "/settings"
-    //   onClick: () => router.push("/settings") && handleClose(),
-    // },
-  ];
+  const COMMON_MENU_OPTIONS = [];
 
   return (
     <>
-      <IconButton
-        onClick={handleOpen}
-        sx={{
-          p: 0,
-          ...(open && {
-            "&:before": {
-              zIndex: 1,
-              content: "''",
-              width: "100%",
-              height: "100%",
-              borderRadius: "50%",
-              position: "absolute",
-              bgcolor: (theme) => alpha(theme.palette.grey[700], 0.6),
-            },
-          }),
-        }}
-      >
-        <Avatar
-          width={40}
-          height={40}
-          {...(user?.firstName && {
-            children: `${user?.firstName?.[0]}${
-              user?.lastName == "" ? "" : user?.lastName?.[0]
-            }`,
-            sx: {
-              backgroundColor: "black",
-            },
-          })}
-        >
+      <IconButton onClick={handleOpen} sx={{ p: 0 }}>
+        <Avatar width={40} height={40} sx={{ backgroundColor: "black" }}>
           {user?.img ? (
             <Image
               alt={user?.firstName}
@@ -104,9 +68,7 @@ export default function AccountPopover() {
               }}
             />
           ) : user?.firstName ? (
-            `${user?.firstName?.[0]}${
-              user?.lastName === "" ? "" : user?.lastName?.[0]
-            }`
+            `${user?.firstName?.[0]}${user?.lastName === "" ? "" : user?.lastName?.[0]}`
           ) : null}
         </Avatar>
       </IconButton>
@@ -130,40 +92,30 @@ export default function AccountPopover() {
           },
         }}
       >
+        <ModeSwitch checked={!isLight} onChange={handleChange} sx={{ m: 1 }} /> {/* Pass current isLight value and handleChange function to ModeSwitch component */}
+
         {isAuthenticated ? (
-          // if authenticated, show user details and options
           <>
-            <Box sx={{ my: 1.5, px: 2.5 }}>
+            <Stack sx={{ my: 1.5, px: 2.5 }}>
               <Typography variant="subtitle2" noWrap>
                 {`${user?.firstName} ${user?.lastName}`}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "text.secondary" }}
-                noWrap
-              >
+              <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
                 {user?.email}
               </Typography>
-            </Box>
+            </Stack>
 
-            {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length >
-            0 ? (
+            {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length > 0 ? (
               <>
                 <Divider sx={{ borderStyle: "dashed" }} />
 
                 <Stack sx={{ p: 1 }}>
-                  {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map(
-                    (option) => (
-                      <MenuItem
-                        component={Link}
-                        key={option.label}
-                        href={option.url}
-                      >
-                        <Icon variant={option.icon} sx={{ mr: 2 }} />
-                        {option.label}
-                      </MenuItem>
-                    ),
-                  )}
+                  {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map((option) => (
+                    <MenuItem component={Link} key={option.label} href={option.url}>
+                      <Icon variant={option.icon} sx={{ mr: 2 }} />
+                      {option.label}
+                    </MenuItem>
+                  ))}
                 </Stack>
               </>
             ) : null}
@@ -175,13 +127,12 @@ export default function AccountPopover() {
             </MenuItem>
           </>
         ) : (
-          // else show login button
           <>
             {COMMON_MENU_OPTIONS.length > 0 ? (
               <>
                 <Stack sx={{ p: 1 }}>
                   {COMMON_MENU_OPTIONS.map((option) => (
-                    <MenuItem component={Link} key={option.label} href={url}>
+                    <MenuItem component={Link} key={option.label} href={option.url}>
                       <Icon variant={option.icon} sx={{ mr: 2 }} />
                       {option.label}
                     </MenuItem>
