@@ -38,7 +38,7 @@ export default async function EditEvent({ params }) {
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 

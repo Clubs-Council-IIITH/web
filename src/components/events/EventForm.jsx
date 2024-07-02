@@ -246,12 +246,12 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-        ? await uploadFile(formData.poster[0], "image")
-        : null;
+          ? await uploadFile(formData.poster[0], "image")
+          : null;
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString()
+      new Date(d).toISOString(),
     );
 
     // convert budget to array of objects with only required attributes
@@ -519,7 +519,7 @@ export default function EventForm({
                   fullWidth
                   onClick={() =>
                     handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true })
+                      onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
                   disabled={budgetEditing}
@@ -536,7 +536,7 @@ export default function EventForm({
 }
 
 // select club to which event belongs to
-function EventClubSelect({ control, disabled = true, clubs = []}) {
+function EventClubSelect({ control, disabled = true, clubs = [] }) {
   const { triggerToast } = useToast();
 
   return (
@@ -626,7 +626,7 @@ function EventDatetimeInput({
   disabled = true,
   role = "public",
   existingEvents = [],
-  clubs=[],
+  clubs = [],
 }) {
   const startDateInput = watch("datetimeperiod.0");
   const endDateInput = watch("datetimeperiod.1");
@@ -765,7 +765,7 @@ function EventDatetimeInput({
                   events={filterEvents(
                     existingEvents,
                     startDateInput,
-                    endDateInput
+                    endDateInput,
                   )}
                   clubs={clubs}
                 />
