@@ -11,17 +11,16 @@ export const useMode = () => useContext(ModeContext);
 
 export const ModeProvider = ({ children }) => {
   let theme_bool;
-  if(localStorage.getItem('dark')==='false')
-    {
-      theme_bool=false;
-    }
-    else if(localStorage.getItem('dark')==='true'){
-      theme_bool=true;
-    }
+  if (window.localStorage.getItem("currentModeCC") === "false") {
+    theme_bool = false;
+  } else if (window.localStorage.getItem("currentModeCC") === "true") {
+    theme_bool = true;
+  }
   const [isDark, setisDark] = useState(theme_bool);
 
   const setMode = (mode) => {
     setisDark(mode);
+    window.localStorage.setItem("currentModeCC", mode);
   };
 
   return (

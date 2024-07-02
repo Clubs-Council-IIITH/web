@@ -15,8 +15,7 @@ import shadows, { customShadows } from "./shadows";
 
 export default function ThemeRegistry({ children }) {
   // const [prefersDarkMode,setPrefersDarkMode] = React.useState(useMode()); // useMediaQuery("(prefers-color-scheme: dark)");
-  const prefersDarkMode =useMode();
- 
+  const prefersDarkMode = useMode();
 
   const themeOptions = React.useMemo(
     () => ({
@@ -26,7 +25,9 @@ export default function ThemeRegistry({ children }) {
       shape: { borderRadius: 8 },
       direction: "ltr",
       shadows: prefersDarkMode.isDark ? shadows.dark : shadows.light,
-      customShadows: prefersDarkMode.isDark ? customShadows.dark : customShadows.light,
+      customShadows: prefersDarkMode.isDark
+        ? customShadows.dark
+        : customShadows.light,
     }),
     [prefersDarkMode], // TODO: add setting dependency
   );

@@ -1,7 +1,17 @@
 // AccountPopover.js
 
 import React from "react";
-import { IconButton, Avatar, Popover, MenuItem, Divider, Stack, Typography } from "@mui/material";
+import {
+  IconButton,
+  Avatar,
+  Popover,
+  MenuItem,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+
 import Image from "next/image";
 import Link from "next/link";
 import Icon from "components/Icon";
@@ -20,15 +30,9 @@ export default function AccountPopover() {
 
   const handleChange = () => {
     // handleupdate();
-    
     setMode(!isDark); // Toggle the mode
-    
-    setThemeInStorage(!isDark);
   };
-  const setThemeInStorage = (theme) => {
-    localStorage.setItem('dark', theme)
- }
- 
+
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -49,8 +53,46 @@ export default function AccountPopover() {
 
   return (
     <>
-      <IconButton onClick={handleOpen} sx={{ p: 0 }}>
-        <Avatar width={40} height={40} sx={{ backgroundColor: "black" }}>
+      <IconButton
+        onClick={handleOpen}
+        sx={{
+          p: 0,
+          color: "white",
+          ...(open && {
+            "&:before": {
+              zIndex: 1,
+              content: "''",
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              position: "absolute",
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.5),
+            },
+          }),
+          ...(!open && {
+            // "&:after": {
+            "&:before": {
+              zIndex: 1,
+              content: "''",
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              position: "absolute",
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.1),
+            },
+            // },
+          }),
+        }}
+      >
+        <Avatar
+          width={40}
+          height={40}
+          {...(user?.firstName && {
+            children: `${user?.firstName?.[0]}${
+              user?.lastName == "" ? "" : user?.lastName?.[0]
+            }`,
+          })}
+        >
           {user?.img ? (
             <Image
               alt={user?.firstName}
@@ -67,7 +109,9 @@ export default function AccountPopover() {
               }}
             />
           ) : user?.firstName ? (
-            `${user?.firstName?.[0]}${user?.lastName === "" ? "" : user?.lastName?.[0]}`
+            `${user?.firstName?.[0]}${
+              user?.lastName === "" ? "" : user?.lastName?.[0]
+            }`
           ) : null}
         </Avatar>
       </IconButton>
@@ -91,30 +135,41 @@ export default function AccountPopover() {
           },
         }}
       >
-        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} /> {/* Pass current isDark value and handleChange function to ModeSwitch component */}
-
+        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "}
+        {/* Pass current isDark value and handleChange function to ModeSwitch component */}
         {isAuthenticated ? (
           <>
             <Stack sx={{ my: 1.5, px: 2.5 }}>
               <Typography variant="subtitle2" noWrap>
                 {`${user?.firstName} ${user?.lastName}`}
               </Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary" }}
+                noWrap
+              >
                 {user?.email}
               </Typography>
             </Stack>
 
-            {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length > 0 ? (
+            {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length >
+            0 ? (
               <>
                 <Divider sx={{ borderStyle: "dashed" }} />
 
                 <Stack sx={{ p: 1 }}>
-                  {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map((option) => (
-                    <MenuItem component={Link} key={option.label} href={option.url}>
-                      <Icon variant={option.icon} sx={{ mr: 2 }} />
-                      {option.label}
-                    </MenuItem>
-                  ))}
+                  {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].map(
+                    (option) => (
+                      <MenuItem
+                        component={Link}
+                        key={option.label}
+                        href={option.url}
+                      >
+                        <Icon variant={option.icon} sx={{ mr: 2 }} />
+                        {option.label}
+                      </MenuItem>
+                    )
+                  )}
                 </Stack>
               </>
             ) : null}
@@ -131,7 +186,11 @@ export default function AccountPopover() {
               <>
                 <Stack sx={{ p: 1 }}>
                   {COMMON_MENU_OPTIONS.map((option) => (
-                    <MenuItem component={Link} key={option.label} href={option.url}>
+                    <MenuItem
+                      component={Link}
+                      key={option.label}
+                      href={option.url}
+                    >
                       <Icon variant={option.icon} sx={{ mr: 2 }} />
                       {option.label}
                     </MenuItem>
