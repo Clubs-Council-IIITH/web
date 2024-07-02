@@ -90,7 +90,7 @@ export const GET_MEMBER = gql`
 export const GET_USER_CERTIFICATES = gql`
   query GetUserCertificates {
     getUserCertificates {
-      id
+      _id
       certificateNumber
       status
       requestedAt
@@ -102,7 +102,7 @@ export const GET_USER_CERTIFICATES = gql`
 export const GET_PENDING_CERTIFICATES = gql`
   query GetPendingCertificates {
     getPendingCertificates {
-      id
+      _id
       certificateNumber
       userId
       status
@@ -114,7 +114,7 @@ export const GET_PENDING_CERTIFICATES = gql`
 export const VERIFY_CERTIFICATE = gql`
   query VerifyCertificate($certificateNumber: String!, $key: String!) {
     verifyCertificate(certificateNumber: $certificateNumber, key: $key) {
-      id
+      _id
       certificateNumber
       userId
       status
