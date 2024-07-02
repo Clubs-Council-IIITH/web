@@ -1,7 +1,6 @@
 import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 import LocalizationWrapper from "components/LocalizationWrapper";
 import Progressbar from "components/Progressbar";
-import palette from "components/ThemeRegistry/palette";
 import Toast, { ToastProvider } from "components/Toast";
 import { Navigation, Content } from "components/Layout";
 import { ModeProvider } from "contexts/ModeContext";
@@ -37,20 +36,20 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={fontClass}>
         <ModeProvider>
-        <ThemeRegistry>
-          <Progressbar />
-          <LocalizationWrapper>
-            <AuthProvider user={user}>
-              <ToastProvider>
-                <Navigation />
-                <Content>
-                  <TransitionProvider>{children}</TransitionProvider>
-                </Content>
-                <Toast />
-              </ToastProvider>
-            </AuthProvider>
-          </LocalizationWrapper>
-        </ThemeRegistry>
+          <ThemeRegistry>
+            <Progressbar />
+            <LocalizationWrapper>
+              <AuthProvider user={user}>
+                <ToastProvider>
+                  <Navigation />
+                  <Content>
+                    <TransitionProvider>{children}</TransitionProvider>
+                  </Content>
+                  <Toast />
+                </ToastProvider>
+              </AuthProvider>
+            </LocalizationWrapper>
+          </ThemeRegistry>
         </ModeProvider>
       </body>
     </html>

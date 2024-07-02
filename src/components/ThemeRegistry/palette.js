@@ -114,8 +114,13 @@ const palette = {
     ...COMMON,
     primary: { ...PRIMARY_LIGHT, contrastText: "#fff" },
     mode: "light",
-    text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
-    background: { paper: "#fff", default: "#fdfdfd", neutral: GREY[200] },
+    text: {
+      primary: GREY[800],
+      secondary: GREY[600],
+      disabled: GREY[500],
+      link: "#0a12ab",
+    },
+    background: { paper: "#fff", default: "#fdfdfd", neutral: GREY[300] },
     action: { active: GREY[600], ...COMMON.action },
     accent: PRIMARY_LIGHT.main,
   },
@@ -124,9 +129,10 @@ const palette = {
     primary: { ...PRIMARY_LIGHT, contrastText: "#fff" }, // TODO: define PRIMARY_DARK palette
     mode: "dark",
     text: {
-      primary: "#e3e3e3",
+      primary: GREY[200],
       secondary: alpha(GREY[400], 0.82),
       disabled: GREY[600],
+      link: "#11a1fb",
     },
     background: { paper: GREY[800], default: "#111111", neutral: GREY[500_16] },
     action: { active: GREY[500], ...COMMON.action },
