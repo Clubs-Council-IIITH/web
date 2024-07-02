@@ -16,14 +16,13 @@ export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
   const { isLight, setMode } = useMode(); // Accessing isLight and setMode from ModeContext
-  console.log("first isLight is:",isLight);
   const [open, setOpen] = React.useState(null);
 
   const handleChange = () => {
     // handleupdate();
-    console.log("value of switch going to set is:",isLight);
+    
     setMode(!isLight); // Toggle the mode
-    console.log("setting theme in storage:",!isLight);
+    
     setThemeInStorage(!isLight);
   };
   const setThemeInStorage = (theme) => {

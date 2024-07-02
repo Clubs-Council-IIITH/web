@@ -11,8 +11,7 @@ import Typography from "./Typography";
 import Autocomplete from "./Autocomplete";
 
 export default function ComponentsOverrides(theme) {
-  console.log("hello hahaha");
-  console.log("the theme here is:", theme);
+
   return Object.assign(
     Card(theme),
     Table(theme),

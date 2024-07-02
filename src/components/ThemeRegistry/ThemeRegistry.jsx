@@ -16,7 +16,7 @@ import shadows, { customShadows } from "./shadows";
 export default function ThemeRegistry({ children }) {
   // const [prefersDarkMode,setPrefersDarkMode] = React.useState(useMode()); // useMediaQuery("(prefers-color-scheme: dark)");
   const prefersDarkMode =useMode();
-  console.log("prefersDarkMode is after refresh:",prefersDarkMode);
+ 
 
   const themeOptions = React.useMemo(
     () => ({
@@ -31,7 +31,7 @@ export default function ThemeRegistry({ children }) {
     [prefersDarkMode], // TODO: add setting dependency
   );
   const theme = createTheme(themeOptions);
-  console.log("theme is:",themeOptions);
+  
   theme.components = componentsOverride(theme);
 
   return (

@@ -30,7 +30,6 @@ export default function Footer() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-  console.log("hehehehehe the theme ISSS:",theme.palette.mode);
   return (
     <Box bgcolor={theme.palette.background.default} color={theme.palette.text.primary}>
       <Divider sx={{ py: 4 }} />
