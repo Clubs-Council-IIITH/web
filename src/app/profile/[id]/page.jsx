@@ -25,7 +25,7 @@ export async function generateMetadata({ params }, parent) {
         userInput: {
           uid: id,
         },
-      },
+      }
     );
     const user = { ...userMeta, ...userProfile };
 
@@ -57,7 +57,7 @@ export default async function Profile({ params }) {
       userInput: {
         uid: id,
       },
-    },
+    }
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -66,7 +66,7 @@ export default async function Profile({ params }) {
   if (user.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } },
+      { clubInput: { cid: user.uid } }
     );
     club = targetClub;
   }
@@ -83,7 +83,7 @@ export default async function Profile({ params }) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      [],
+      []
     );
   }
 
@@ -95,7 +95,7 @@ export default async function Profile({ params }) {
         2. if current user is viewing their own profile and is not a club
       */}
       {currentUser?.role === "cc" ||
-        (currentUser?.uid === user.uid && user.role !== "club") ? (
+      (currentUser?.uid === user.uid && user.role !== "club") ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
@@ -143,11 +143,16 @@ export default async function Profile({ params }) {
               >
                 {user.email}
               </Typography>
-              <Link href={`/profile/${user.uid}/generate-certificate`} passHref>
-                <Button variant="contained" color="primary">
-                  Generate Certificate
-                </Button>
-              </Link>
+              {currentUser?.role === "public" && (
+                <Link
+                  href={`/profile/${user.uid}/generate-certificate`}
+                  passHref
+                >
+                  <Button variant="contained" color="primary">
+                    Generate Certificate
+                  </Button>
+                </Link>
+              )}
             </Stack>
           </Stack>
         </Grid>
@@ -169,5 +174,4 @@ export default async function Profile({ params }) {
       </Grid>
     </Container>
   );
-
 }

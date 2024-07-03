@@ -32,6 +32,7 @@ const routes = {
   "/manage/clubs/~mine/edit": ["club"], // has to be higher to not conflict with :id
   "/manage/clubs/:id": ["cc"],
   "/manage/clubs/:id/edit": ["cc"],
+  "/certificate-requests": ["cc,slo"],
 };
 
 export default routes;

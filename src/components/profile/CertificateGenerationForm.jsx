@@ -216,7 +216,9 @@ export default function CertificateGenerationForm({ userProfile }) {
                 <TableCell>
                   {new Date(cert.requestedAt).toLocaleDateString()}
                 </TableCell>
-                <TableCell>{cert.status}</TableCell>
+                <TableCell>
+                  {cert.status === "APPROVED" ? "Approved" : "Pending"}
+                </TableCell>
                 <TableCell>
                   {cert.status === "APPROVED" ? (
                     <Button
