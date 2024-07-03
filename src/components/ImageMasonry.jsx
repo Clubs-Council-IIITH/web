@@ -34,6 +34,7 @@ export default function ImageMasonry({
                 height: 1,
                 backgroundSize: "cover !important",
               },
+              margin: "1%",
             }}
           >
             <CardActionArea
