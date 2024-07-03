@@ -28,7 +28,7 @@ export default function ImageMasonry({
               lineHeight: 0,
               display: "block",
               overflow: "hidden",
-              boxShadow: `0px 4px 6px ${theme.palette.accent}60`,
+              boxShadow: `0px 4px 6px ${theme.palette.primary.dark}80`,
               "& .wrapper": {
                 width: 1,
                 height: 1,
