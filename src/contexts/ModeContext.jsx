@@ -11,7 +11,7 @@ const ModeContext = createContext({
 export const useMode = () => useContext(ModeContext);
 
 export const ModeProvider = ({ children }) => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   let theme_bool;
   theme_bool = useMediaQuery("(prefers-color-scheme: dark)");
   useEffect(() => {
