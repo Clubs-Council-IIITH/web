@@ -21,12 +21,19 @@ const PRIMARY_DARK = {
   dark: "#087f77",
   darker: "#299383",
 };
-const SECONDARY = {
+const SECONDARY_LIGHT = {
   lighter: "#C4CDD5",
   light: "#919EAB",
   main: "#637381",
   dark: "#454F5B",
   darker: "#212B36",
+};
+const SECONDARY_DARK = {
+  darker: "#C4CDD5",
+  dark: "#919EAB",
+  main: "#637381",
+  light: "#454F5B",
+  lighter: "#212B36",
 };
 const INFO = {
   lighter: "#D0F2FF",
@@ -96,7 +103,6 @@ const CHART_COLORS = {
 
 const COMMON = {
   common: { black: "#000", white: "#fff" },
-  secondary: { ...SECONDARY, contrastText: "#fff" },
   info: { ...INFO, contrastText: "#fff" },
   success: { ...SUCCESS, contrastText: GREY[800] },
   warning: { ...WARNING, contrastText: GREY[800] },
@@ -120,6 +126,7 @@ const palette = {
   light: {
     ...COMMON,
     primary: { ...PRIMARY_LIGHT, contrastText: "#fff" },
+    secondary: { ...SECONDARY_LIGHT, contrastText: "#fff" },
     mode: "light",
     text: {
       primary: GREY[800],
@@ -134,6 +141,7 @@ const palette = {
   dark: {
     ...COMMON,
     primary: { ...PRIMARY_DARK, contrastText: GREY[800] },
+    secondary: { ...SECONDARY_DARK, contrastText: GREY[800] },
     mode: "dark",
     text: {
       primary: GREY[200],
@@ -142,7 +150,7 @@ const palette = {
       link: "#11a1fb",
     },
     background: { paper: "#101010", default: "#1e1e1e", neutral: GREY[600] },
-    action: { active: GREY[400], ...COMMON.action },
+    action: { active: GREY[400], hover:GREY[500_48], ...COMMON.action },
     accent: PRIMARY_DARK.main,
     divider: GREY[500_48],
   },
