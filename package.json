@@ -13,9 +13,9 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fullcalendar/core": "^6.1.11",
-    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/daygrid": "^6.1.14",
     "@fullcalendar/list": "^6.1.14",
-    "@fullcalendar/react": "^6.1.11",
+    "@fullcalendar/react": "^6.1.14",
     "@iconify/react": "^4.1.1",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
@@ -50,6 +50,7 @@
     "sharp": "^0.33.4",
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2",
+    "tippy.js": "^6.3.7",
     "urql": "^4.1.0"
   }
 }
