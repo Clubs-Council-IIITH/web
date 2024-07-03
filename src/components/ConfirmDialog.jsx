@@ -7,6 +7,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Typography,
 } from "@mui/material";
 
 export default function ConfirmDialog({
@@ -22,11 +23,11 @@ export default function ConfirmDialog({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{description}</DialogContentText>
+        <DialogContentText color="text.secondary">{description}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={onClose}>
-          Cancel
+        <Button onClick={onClose}>
+          <Typography variant="button" color="text.disabled">Cancel</Typography>
         </Button>
         <Button onClick={onConfirm} {...confirmProps}>
           {confirmText}

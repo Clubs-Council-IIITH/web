@@ -124,7 +124,7 @@ const palette = {
     text: {
       primary: GREY[800],
       secondary: GREY[600],
-      disabled: GREY[500],
+      disabled: alpha(GREY[600], 0.7),
       link: "#0a12ab",
     },
     background: { paper: "#fff", default: "#fdfdfd", neutral: GREY[300] },
@@ -137,13 +137,14 @@ const palette = {
     mode: "dark",
     text: {
       primary: GREY[200],
-      secondary: alpha(GREY[400], 0.82),
-      disabled: GREY[600],
+      secondary: GREY[400],
+      disabled: alpha(GREY[400], 0.85),
       link: "#11a1fb",
     },
     background: { paper: "#101010", default: "#1e1e1e", neutral: GREY[600] },
-    action: { active: GREY[500], ...COMMON.action },
+    action: { active: GREY[400], ...COMMON.action },
     accent: PRIMARY_DARK.main,
+    divider: GREY[500_48],
   },
 };
 

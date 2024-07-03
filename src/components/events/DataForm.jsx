@@ -503,7 +503,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             <Button
               size="large"
               variant="outlined"
-              color="secondary"
+              color="primary"
               fullWidth
               disabled={loading}
               onClick={() => setCancelDialog(true)}

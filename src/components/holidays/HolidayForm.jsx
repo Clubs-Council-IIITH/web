@@ -245,7 +245,7 @@ export default function HolidayForm({
               <Button
                 size="large"
                 variant="outlined"
-                color="secondary"
+                color="primary"
                 fullWidth
                 disabled={loading}
                 onClick={() => setCancelDialog(true)}
