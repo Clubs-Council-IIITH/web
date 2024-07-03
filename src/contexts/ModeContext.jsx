@@ -12,23 +12,19 @@ export const useMode = () => useContext(ModeContext);
 
 export const ModeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(true);
-
+  let theme_bool;
+  theme_bool = useMediaQuery("(prefers-color-scheme: dark)");
   useEffect(() => {
-    let theme_bool;
     if (typeof window !== "undefined") {
       const storedMode = window.localStorage.getItem("currentModeCC");
       if (storedMode === "false") {
         theme_bool = false;
       } else if (storedMode === "true") {
         theme_bool = true;
-      } else {
-        theme_bool = useMediaQuery("(prefers-color-scheme: dark)");
-        console.log("theme_bool", theme_bool);
-      }
-
+      } 
       setIsDark(theme_bool);
     }
-  }, []);
+  }, [theme_bool]);
 
   const setMode = (mode) => {
     setIsDark(mode);
