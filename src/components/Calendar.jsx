@@ -78,7 +78,7 @@ export default function Calendar({ events, holidays }) {
   const handleEventMouseEnter = (info) => {
     const { event, el } = info;
     tippy(el, {
-      content: `<strong>${event.title}</strong> by ${event.extendedProps.clubid}`,
+      content: `<strong>${event.title}</strong> ${event.extendedProps.clubid?"by":""} ${event.extendedProps.clubid?event.extendedProps.clubid:"Holiday"}`,
       allowHTML: true,
       placement: 'top',
     });
