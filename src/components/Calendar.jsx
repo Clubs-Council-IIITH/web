@@ -4,8 +4,8 @@ import stc from "string-to-color";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import listPlugin from "@fullcalendar/list";
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css'; // Optional for styling
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css"; // Optional for styling
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -61,7 +61,7 @@ function eventDataTransform(event, role, uid) {
   }
 }
 
-export default function Calendar({ events, holidays }) {
+export default function Calendar({ events, holidays, allClubs }) {
   const { user } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -77,10 +77,13 @@ export default function Calendar({ events, holidays }) {
 
   const handleEventMouseEnter = (info) => {
     const { event, el } = info;
+    const clubName = allClubs.find((club) => club.cid === event.extendedProps.clubid)?.name;
+    const content = `<strong>${event.title}</strong> ${event.extendedProps.clubid ? "by" : ""} ${event.extendedProps.clubid ? clubName : "Holiday"}`;
+
     tippy(el, {
-      content: `<strong>${event.title}</strong> ${event.extendedProps.clubid?"by":""} ${event.extendedProps.clubid?event.extendedProps.clubid:"Holiday"}`,
+      content,
       allowHTML: true,
-      placement: 'top',
+      placement: "top",
     });
   };
 
