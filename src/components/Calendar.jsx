@@ -88,6 +88,10 @@ export default function Calendar({ events, holidays }) {
       plugins={[dayGridPlugin, listPlugin]}
       initialView={"dayGridMonth"}
       eventDataTransform={eventDataTransform_withrole}
+      headerToolbar={{
+        left: "title",
+        right: "prev,next",
+      }}
     />
   );
 }
