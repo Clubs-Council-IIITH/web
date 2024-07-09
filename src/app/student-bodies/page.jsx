@@ -11,8 +11,8 @@ export default async function StudentBodies() {
   const cc = {
     cid: "clubs",
     name: "Clubs Council",
-    logo: getStaticFile("img/cc-logo.png"),
-    banner: getStaticFile("img/cc-banner.png"),
+    logo: getStaticFile("cc-logo.png"),
+    banner: getStaticFile("cc-banner.png"),
     tagline: "Let's make college life fun!",
     studentBody: true,
     category: "other",
