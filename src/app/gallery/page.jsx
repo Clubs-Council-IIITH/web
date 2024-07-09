@@ -13,7 +13,9 @@ export default async function Gallery({ searchParams, limit = undefined }) {
   });
 
   const galleryJSON = await response.json();
-  const galleryItems = galleryJSON["gallery"].map((item) => `${FILESERVER_URL}${item.url}`);
+  const galleryItems = galleryJSON["gallery"].map(
+    (item) => `${FILESERVER_URL}${item.url}`,
+  );
 
   return (
     <>
