@@ -9,28 +9,13 @@ export const metadata = {
 export default function DownloadEventsData() {
   // default form values
   const defaultValues = {
-    clubid: "",
-    name: "",
-    datetimeperiod: [null, null],
-    description: "",
-    audience: [],
-    poster: "",
-    budget: [],
-    mode: "online",
-    link: "",
-    location: [],
-    population: 0,
-    additional: "",
-    equipment: "",
-    poc: "",
+      clubid: "",
+      datetimeperiod: [null, null],
+      allEvents: false,
   };
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
-        Download Events Data
-      </Typography>
-
       <DataForm defaultValues={defaultValues} action="create" />
     </Container>
   );
