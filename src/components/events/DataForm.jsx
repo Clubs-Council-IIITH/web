@@ -57,7 +57,12 @@ function DataClubSelect({ control, disabled = true }) {
   return (
     <>
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100%"
+        >
           <CircularProgress />
         </Box>
       ) : clubs.length > 0 ? (
@@ -194,6 +199,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   });
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const allEvents = watch("allEvents");
 
   const submitHandlers = {
     log: console.log,
@@ -213,7 +219,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             const csvBlob = new Blob([csvContent], {
               type: "text/csv;charset=utf-8;",
             });
-            const csvFileName = `events_data_${dayjs(new Date()).format("YYYY-MM-DD")}.csv`;
+            const csvFileName = `events_data_${dayjs(new Date()).format(
+              "YYYY-MM-DD"
+            )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
 
@@ -242,7 +250,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     setLoading(true);
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
-      dateperiod: formData.datetimeperiod.map((date) => dayjs(date).format("YYYY-MM-DD")),
+      dateperiod: formData.datetimeperiod.map((date) =>
+        dayjs(date).format("YYYY-MM-DD")
+      ),
       fields: formData.fields,
       allEvents: formData.allEvents,
     };
@@ -252,29 +262,34 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container item sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Grid
+        container
+        item
+        sx={{ display: "flex", justifyContent: "space-between" }}
+      >
         <Typography variant="h3" gutterBottom mb={3}>
           Download Events Data
         </Typography>
         {admin_roles.includes(user?.role) ? (
-        <FormControlLabel
-          control={
-            <Controller
-              name="allEvents"
-              control={control}
-              defaultValue={false}
-              render={({ field }) => (
-                <Switch
-                  checked={field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
-                  inputProps={{ "aria-label": "controlled" }}
-                  sx={{ margin: "auto" }}
-                />
-              )}
-            />
-          }
-          label="All Events"
-        />): ""}
+          <FormControlLabel
+            control={
+              <Controller
+                name="allEvents"
+                control={control}
+                defaultValue={false}
+                render={({ field }) => (
+                  <Switch
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                    inputProps={{ "aria-label": "controlled" }}
+                    sx={{ margin: "auto" }}
+                  />
+                )}
+              />
+            }
+            label="All Events"
+          />
+        ) : null}
       </Grid>
       <Grid container spacing={4} alignItems="flex-start">
         <Grid container item>
@@ -341,13 +356,14 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
                   <Grid container item spacing={1} ml={1}>
-                    {
-                    [
+                    {[
                       { fieldValue: "code", fieldName: "Event Code" },
                       { fieldValue: "name", fieldName: "Event Name" },
                       { fieldValue: "clubid", fieldName: "Club" },
-                      { fieldValue: "datetimeperiod.0", fieldName: "Start Date" },
-                      { fieldValue: "status", fieldName: "Status" },
+                      {
+                        fieldValue: "datetimeperiod.0",
+                        fieldName: "Start Date",
+                      },
                       { fieldValue: "datetimeperiod.1", fieldName: "End Date" },
                       { fieldValue: "description", fieldName: "Description" },
                       { fieldValue: "audience", fieldName: "Audience" },
@@ -356,8 +372,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       { fieldValue: "location", fieldName: "Venue" },
                       { fieldValue: "budget", fieldName: "Budget" },
                       { fieldValue: "poster", fieldName: "Poster URL" },
+                      ...(allEvents
+                        ? [{ fieldValue: "status", fieldName: "Status" }]
+                        : []),
                     ].map(({ fieldValue, fieldName }) => (
-                      <Grid item md={3} sm={4} xs={6}  key={fieldValue}>
+                      <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
                         <FormControlLabel
                           control={
                             <Checkbox
