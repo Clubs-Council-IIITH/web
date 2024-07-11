@@ -56,29 +56,29 @@ export default function ClubBanner({
           height: "100%",
           objectFit: "cover",
           position: "absolute",
-          opacity: logo && theme.palette.mode !== 'dark' ? 0.1 : 1,
+          opacity: logo && theme.palette.mode !== "dark" ? 0.07 : 0.7,
+          backgroundColor: theme.palette.background.default,
         }}
         onError={() =>
           setImg(getPlaceholder({ seed: name, w: width, h: height }))
         }
         {...imageProps}
       />
-      {logo? (
+      {logo ? (
         <Image
           alt={name}
           src={logo}
-          width={200}
-          height={200}
+          layout="fill"
+          objectFit="contain"
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '200px', // Adjust width as needed
-            height: 'auto',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            padding: theme.spacing(3.5),
           }}
-        />):
-        null}
+        />
+      ) : null}
     </Box>
   );
 }
