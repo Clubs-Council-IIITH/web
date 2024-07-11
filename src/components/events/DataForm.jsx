@@ -18,6 +18,7 @@ import {
   FormGroup,
   MenuItem,
   CircularProgress,
+  Switch,
 } from "@mui/material";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
@@ -26,6 +27,7 @@ import { LoadingButton } from "@mui/lab";
 
 const allowed_roles = ["cc", "club", "slo"];
 const admin_roles = ["cc", "slo"];
+const disabledFields = ["code", "name", "clubid", "datetimeperiod.0", "status"]; // Fields that should be disabled and selected
 
 function DataClubSelect({ control, disabled = true }) {
   const { triggerToast } = useToast();
@@ -105,7 +107,7 @@ function DataClubSelect({ control, disabled = true }) {
   );
 }
 
-function EventDatetimeInput({ control, watch, disabled = true }) {
+function EventDatetimeInput({ control, watch }) {
   const startDateInput = watch("datetimeperiod.0");
   return (
     <Grid container item direction="row" xs={12} spacing={1} pt={1}>
@@ -113,7 +115,14 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
         <Controller
           name="datetimeperiod.0"
           control={control}
-          rules={{ required: "Start date is required!" }}
+          rules={{
+            required: "Start date is required!",
+            validate: {
+              maxDateCheck: (value) =>
+                dayjs(value) < dayjs(new Date()) ||
+                "Start Date must be before today!",
+            },
+          }}
           render={({
             field: { value, ...rest },
             fieldState: { error, invalid },
@@ -130,7 +139,6 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
               disableFuture
               sx={{ width: "100%" }}
               value={value instanceof Date ? dayjs(value) : value}
-              disabled={disabled}
               {...rest}
             />
           )}
@@ -146,6 +154,9 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
               checkDate: (value) =>
                 dayjs(value) > dayjs(startDateInput) ||
                 "End Date must be after Start Date!",
+              maxDateCheck: (value) =>
+                dayjs(value) <= dayjs(new Date()) ||
+                "End Date must be till today!",
             },
           }}
           render={({
@@ -154,7 +165,7 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
           }) => (
             <DatePicker
               label="To Date"
-              disabled={!startDateInput || disabled}
+              disabled={!startDateInput}
               minDate={startDateInput && dayjs(startDateInput).add(1, "day")}
               disableFuture
               slotProps={{
@@ -177,13 +188,23 @@ function EventDatetimeInput({ control, watch, disabled = true }) {
 export default function DataForm({ defaultValues = {}, action = "log" }) {
   const { user } = useAuth();
   const { triggerToast } = useToast();
-  const { control, handleSubmit, watch, reset } = useForm({ defaultValues });
+  const { control, handleSubmit, watch, reset } = useForm({
+    defaultValues: {
+      clubid: "",
+      datetimeperiod: [null, null],
+      fields: disabledFields, // Ensure disabled fields are selected by default
+      allEvents: false,
+      ...defaultValues,
+    },
+  });
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const allEvents = watch("allEvents");
 
   const submitHandlers = {
     log: console.log,
     create: async (data) => {
+      console.log(data);
       let res = await fetch("/actions/events/data", {
         method: "POST",
         body: JSON.stringify({ details: data }),
@@ -233,6 +254,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         dayjs(date).format("YYYY-MM-DD"),
       ),
       fields: formData.fields,
+      allEvents: formData.allEvents,
     };
     submitHandlers[action](data);
     setLoading(false);
@@ -240,6 +262,35 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid
+        container
+        item
+        sx={{ display: "flex", justifyContent: "space-between" }}
+      >
+        <Typography variant="h3" gutterBottom mb={3}>
+          Download Events Data
+        </Typography>
+        {admin_roles.includes(user?.role) ? (
+          <FormControlLabel
+            control={
+              <Controller
+                name="allEvents"
+                control={control}
+                defaultValue={false}
+                render={({ field }) => (
+                  <Switch
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                    inputProps={{ "aria-label": "controlled" }}
+                    sx={{ margin: "auto" }}
+                  />
+                )}
+              />
+            }
+            label="All Events"
+          />
+        ) : null}
+      </Grid>
       <Grid container spacing={4} alignItems="flex-start">
         <Grid container item>
           <Grid container item>
@@ -276,268 +327,130 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               )}
             </Grid>
           </Grid>
-          <Grid container item>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              gutterBottom
-              mt={3}
-            >
-              Range of the Data
-            </Typography>
-            <Grid item xs={12}>
-              <EventDatetimeInput
-                control={control}
-                watch={watch}
-                disabled={
-                  !admin_roles.includes(user?.role) &&
-                  defaultValues?.status?.state !== undefined &&
-                  defaultValues?.status?.state !== "incomplete"
-                }
-              />
-            </Grid>
-          </Grid>
-          <Grid container item>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              gutterBottom
-              mt={3}
-            >
-              Required Fields
-            </Typography>
-            <Grid item xs={12} ml={2}>
-              <Controller
-                name="fields"
-                control={control}
-                defaultValue={["code", "name", "clubid", "datetimeperiod.0"]}
-                render={({ field }) => (
-                  <FormControl component="fieldset">
-                    <FormGroup row>
-                      <FormControlLabel
-                        control={<Checkbox checked={true} disabled />}
-                        value="code"
-                        label="Event Code"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={true} disabled />}
-                        value="name"
-                        label="Event Name"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={true} disabled />}
-                        value="clubid"
-                        label="Club"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={true} disabled />}
-                        value="datetimeperiod.0"
-                        label="Start Date"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("datetimeperiod.1")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([
-                                  ...field.value,
-                                  "datetimeperiod.1",
-                                ]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "datetimeperiod.1",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="End Date"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("description")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "description"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "description",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Description"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("audience")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "audience"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "audience",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Audience"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("population")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "population"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "population",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Audience Count"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("mode")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "mode"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "mode",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Mode"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("location")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "location"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "location",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Venue"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("budget")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "budget"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "budget",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Budget"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={field.value.includes("poster")}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                field.onChange([...field.value, "poster"]);
-                              } else {
-                                field.onChange(
-                                  field.value.filter(
-                                    (value) => value !== "poster",
-                                  ),
-                                );
-                              }
-                            }}
-                          />
-                        }
-                        label="Poster URL"
-                      />
-                    </FormGroup>
-                  </FormControl>
-                )}
-              />
-            </Grid>
-          </Grid>
         </Grid>
-        <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-          <Grid item xs={6}>
-            <Button
+        <Grid container item>
+          <Typography
+            variant="subtitle2"
+            textTransform="uppercase"
+            color="text.secondary"
+            gutterBottom
+          >
+            Date Range
+          </Typography>
+          <EventDatetimeInput control={control} watch={watch} />
+        </Grid>
+        <Grid container item>
+          <Typography
+            variant="subtitle2"
+            textTransform="uppercase"
+            color="text.secondary"
+            gutterBottom
+          >
+            Fields to Include
+          </Typography>
+          <Controller
+            name="fields"
+            control={control}
+            rules={{ required: "Select at least one field!" }}
+            render={({ field, fieldState: { error } }) => (
+              <FormControl component="fieldset" fullWidth error={error}>
+                <FormGroup row>
+                  <Grid container item spacing={1} ml={1}>
+                    {[
+                      { fieldValue: "code", fieldName: "Event Code" },
+                      { fieldValue: "name", fieldName: "Event Name" },
+                      { fieldValue: "clubid", fieldName: "Club" },
+                      {
+                        fieldValue: "datetimeperiod.0",
+                        fieldName: "Start Date",
+                      },
+                      { fieldValue: "datetimeperiod.1", fieldName: "End Date" },
+                      { fieldValue: "description", fieldName: "Description" },
+                      { fieldValue: "audience", fieldName: "Audience" },
+                      { fieldValue: "population", fieldName: "Audience Count" },
+                      { fieldValue: "mode", fieldName: "Mode" },
+                      { fieldValue: "location", fieldName: "Venue" },
+                      { fieldValue: "budget", fieldName: "Budget" },
+                      { fieldValue: "poster", fieldName: "Poster URL" },
+                      ...(allEvents
+                        ? [{ fieldValue: "status", fieldName: "Status" }]
+                        : []),
+                    ].map(({ fieldValue, fieldName }) => (
+                      <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              {...field}
+                              value={fieldValue}
+                              checked={field.value.includes(fieldValue)}
+                              disabled={disabledFields.includes(fieldValue)}
+                              onChange={(event) => {
+                                const newValue = [...field.value];
+                                if (event.target.checked) {
+                                  newValue.push(event.target.value);
+                                } else {
+                                  const index = newValue.indexOf(
+                                    event.target.value,
+                                  );
+                                  if (index > -1) {
+                                    newValue.splice(index, 1);
+                                  }
+                                }
+                                field.onChange(newValue);
+                              }}
+                            />
+                          }
+                          label={fieldName}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </FormGroup>
+                <FormHelperText>{error?.message}</FormHelperText>
+              </FormControl>
+            )}
+          />
+        </Grid>
+      </Grid>
+      <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+        <Grid item xs={6}>
+          <Button
+            size="large"
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            disabled={loading}
+            onClick={() => setCancelDialog(true)}
+          >
+            Reset
+          </Button>
+
+          <ConfirmDialog
+            open={cancelDialog}
+            title="Confirm resetting"
+            description="Are you sure you want to reset? All the selections will be lost."
+            onConfirm={() => {
+              reset();
+              setCancelDialog(false);
+            }}
+            onClose={() => setCancelDialog(false)}
+            confirmProps={{ color: "primary" }}
+            confirmText="Yes, discard my changes"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          {allowed_roles.includes(user?.role) && (
+            <LoadingButton
+              loading={loading}
+              type="submit"
               size="large"
-              variant="outlined"
+              variant="contained"
               color="primary"
               fullWidth
-              disabled={loading}
-              onClick={() => setCancelDialog(true)}
             >
-              Reset
-            </Button>
-
-            <ConfirmDialog
-              open={cancelDialog}
-              title="Confirm resetting"
-              description="Are you sure you want to reset? All the selections will be lost."
-              onConfirm={() => {
-                reset();
-                setCancelDialog(false);
-              }}
-              onClose={() => setCancelDialog(false)}
-              confirmProps={{ color: "primary" }}
-              confirmText="Yes, discard my changes"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            {allowed_roles.includes(user?.role) && (
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="large"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Download CSV
-              </LoadingButton>
-            )}
-          </Grid>
+              Download CSV
+            </LoadingButton>
+          )}
         </Grid>
       </Grid>
     </form>
