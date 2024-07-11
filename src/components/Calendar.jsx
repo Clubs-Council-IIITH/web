@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import stc from "string-to-color";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -64,6 +65,7 @@ function eventDataTransform(event, role, uid) {
 export default function Calendar({ events, holidays, allClubs }) {
   const { user } = useAuth();
   const theme = useTheme();
+  const calendarRef = useRef(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const eventDataTransform_withrole = (event) => {
@@ -86,14 +88,29 @@ export default function Calendar({ events, holidays, allClubs }) {
       placement: "top",
     });
   };
+  
+  useEffect(() => {
+    if (calendarRef.current) {
+      if (isMobile) {
+        calendarRef.current.getApi().changeView("listWeek");
+      } else {
+        calendarRef.current.getApi().changeView("dayGridMonth");
+      }
+    }
+  }, [isMobile]);
 
   return (
     <FullCalendar
+      ref={calendarRef}
       events={mergedEvents}
       plugins={[dayGridPlugin, listPlugin]}
-      initialView={isMobile ? "listWeek" : "dayGridMonth"}
+      initialView={"dayGridMonth"}
       eventDataTransform={eventDataTransform_withrole}
       eventMouseEnter={handleEventMouseEnter}
+      headerToolbar={{
+        left: "title",
+        right: "prev,next",
+      }}
     />
   );
 }

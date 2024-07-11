@@ -14,14 +14,12 @@ import dayjs from "dayjs";
 
 import { useToast } from "components/Toast";
 import ConfirmDialog from "components/ConfirmDialog";
-import { set } from "nprogress";
 
 export default function HolidayForm({
   id = null,
   defaultValues = {},
   action = "log",
 }) {
-  console.log(defaultValues);
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -73,7 +71,6 @@ export default function HolidayForm({
         // description: data.description,
         description: null,
       };
-      console.log(data);
       let res = await fetch("/actions/holidays/edit", {
         method: "POST",
         body: JSON.stringify({ holidayId: id, details: details }),
