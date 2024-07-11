@@ -122,7 +122,7 @@ function EventDatetimeInput({ control, watch }) {
                 dayjs(value) < dayjs(new Date()) ||
                 "Start Date must be before today!",
             },
-           }}
+          }}
           render={({
             field: { value, ...rest },
             fieldState: { error, invalid },
@@ -220,7 +220,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD"
+              "YYYY-MM-DD",
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -251,7 +251,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD")
+        dayjs(date).format("YYYY-MM-DD"),
       ),
       fields: formData.fields,
       allEvents: formData.allEvents,
@@ -390,7 +390,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value
+                                    event.target.value,
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
@@ -413,46 +413,46 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         </Grid>
       </Grid>
       <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-           <Grid item xs={6}>
-             <Button
-              size="large"
-              variant="outlined"
-              color="secondary"
-              fullWidth
-              disabled={loading}
-              onClick={() => setCancelDialog(true)}
-            >
-              Reset
-            </Button>
+        <Grid item xs={6}>
+          <Button
+            size="large"
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            disabled={loading}
+            onClick={() => setCancelDialog(true)}
+          >
+            Reset
+          </Button>
 
-            <ConfirmDialog
-              open={cancelDialog}
-              title="Confirm resetting"
-              description="Are you sure you want to reset? All the selections will be lost."
-              onConfirm={() => {
-                reset();
-                setCancelDialog(false);
-              }}
-              onClose={() => setCancelDialog(false)}
-              confirmProps={{ color: "primary" }}
-              confirmText="Yes, discard my changes"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            {allowed_roles.includes(user?.role) && (
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="large"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Download CSV
-              </LoadingButton>
-            )}
-          </Grid>
+          <ConfirmDialog
+            open={cancelDialog}
+            title="Confirm resetting"
+            description="Are you sure you want to reset? All the selections will be lost."
+            onConfirm={() => {
+              reset();
+              setCancelDialog(false);
+            }}
+            onClose={() => setCancelDialog(false)}
+            confirmProps={{ color: "primary" }}
+            confirmText="Yes, discard my changes"
+          />
         </Grid>
+        <Grid item xs={6}>
+          {allowed_roles.includes(user?.role) && (
+            <LoadingButton
+              loading={loading}
+              type="submit"
+              size="large"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              Download CSV
+            </LoadingButton>
+          )}
+        </Grid>
+      </Grid>
     </form>
   );
 }

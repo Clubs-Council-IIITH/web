@@ -9,9 +9,9 @@ export const metadata = {
 export default function DownloadEventsData() {
   // default form values
   const defaultValues = {
-      clubid: "",
-      datetimeperiod: [null, null],
-      allEvents: false,
+    clubid: "",
+    datetimeperiod: [null, null],
+    allEvents: false,
   };
 
   return (
