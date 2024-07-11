@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
 import { useState } from "react";
-
 import { useForm, Controller } from "react-hook-form";
-
 import { useToast } from "components/Toast";
+import { useAuth } from "components/AuthProvider";
+import { useMode } from "contexts/ModeContext";
 
 import { LoadingButton } from "@mui/lab";
 import {
@@ -27,7 +26,6 @@ import {
 import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
-import { useAuth } from "components/AuthProvider";
 
 import { uploadFile } from "utils/files";
 import { socialsData } from "utils/socialsData";
@@ -289,7 +287,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 <Button
                   size="large"
                   variant="outlined"
-                  color="secondary"
+                  color="primary"
                   fullWidth
                   disabled={loading}
                   onClick={() => setCancelDialog(true)}
@@ -530,6 +528,8 @@ function ClubDescriptionInput({ control }) {
 
 // club social link input
 function ClubSocialInput({ name, control }) {
+  const { isDark } = useMode();
+
   return (
     <Controller
       name={`socials.${name}`}
@@ -569,7 +569,12 @@ function ClubSocialInput({ name, control }) {
                 <Icon
                   external
                   variant={socialsData[name].icon}
-                  sx={{ color: socialsData[name].color, marginRight: 1 }}
+                  sx={{
+                    color: isDark
+                      ? socialsData[name].darkcolor
+                      : socialsData[name].color,
+                    marginRight: 1,
+                  }}
                 />
               </InputAdornment>
             ),

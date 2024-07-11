@@ -39,9 +39,9 @@ export default function Statistic({
           color: (theme) => theme.palette[color].dark,
           backgroundImage: (theme) =>
             `linear-gradient(135deg, ${alpha(
-              theme.palette[color].dark,
+              theme.palette[color].darker,
               0,
-            )} 0%, ${alpha(theme.palette[color].dark, 0.24)} 100%)`,
+            )} 0%, ${alpha(theme.palette[color].darker, 0.35)} 100%)`,
         }}
       >
         <Icon variant={icon} width={24} height={24} />

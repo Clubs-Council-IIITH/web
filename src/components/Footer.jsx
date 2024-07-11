@@ -30,9 +30,11 @@ export default function Footer() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-
   return (
-    <Box>
+    <Box
+      bgcolor={theme.palette.background.default}
+      color={theme.palette.text.primary}
+    >
       <Divider sx={{ py: 4 }} />
       <Grid container py={5} spacing={2} justifyContent="space-between">
         <Grid
@@ -49,7 +51,9 @@ export default function Footer() {
               alt={"IIIT Hyderabad"}
               height={50}
               width={99}
-              style={{ filter: "invert(100%)" }}
+              style={{
+                filter: theme.palette.mode == "light" ? "invert(100%)" : "none",
+              }}
             />
           </Box>
           <Box>
@@ -58,7 +62,9 @@ export default function Footer() {
               alt={"Clubs Council"}
               height={50}
               width={97}
-              style={{ filter: "invert(100%)" }}
+              style={{
+                filter: theme.palette.mode == "light" ? "invert(100%)" : "none",
+              }}
             />
           </Box>
         </Grid>
@@ -92,7 +98,7 @@ export default function Footer() {
             href={TWITTER_URL}
             sx={{ mx: 1, color: "text.primary" }}
           >
-            <Icon external variant="akar-icons:twitter-fill" />
+            <Icon external variant="akar-icons:x-fill" />
           </IconButton>
           <IconButton
             component="a"
@@ -115,7 +121,11 @@ export default function Footer() {
 
       {isDesktop ? (
         <Stack direction="row" spacing={1}>
-          <Typography variant="body2" fontWeight={500}>
+          <Typography
+            variant="body2"
+            fontWeight={500}
+            color={theme.palette.text.primary}
+          >
             © 2021-{new Date().getFullYear()}, IIIT Hyderabad
           </Typography>
 
@@ -126,7 +136,7 @@ export default function Footer() {
             sx={{
               fontWeight: 500,
               textDecoration: "none",
-              color: "black",
+              color: theme.palette.text.primary,
               // "&:hover": {
               //   textDecoration: "underline",
               // },
@@ -140,7 +150,7 @@ export default function Footer() {
               sx={{
                 fontWeight: 500,
                 textDecoration: "none",
-                color: "black",
+                color: theme.palette.text.primary,
                 "&:hover": {
                   textDecoration: "underline",
                 },
@@ -160,7 +170,7 @@ export default function Footer() {
             sx={{
               fontWeight: 600,
               textDecoration: "none",
-              color: "black",
+              color: theme.palette.text.primary,
               "&:hover": {
                 textDecoration: "underline",
               },
@@ -176,7 +186,7 @@ export default function Footer() {
             sx={{
               fontWeight: 600,
               textDecoration: "none",
-              color: "black",
+              color: theme.palette.text.primary,
               "&:hover": {
                 textDecoration: "underline",
               },
@@ -198,7 +208,7 @@ export default function Footer() {
               sx={{
                 fontWeight: 500,
                 textDecoration: "none",
-                color: "black",
+                color: theme.palette.text.primary,
                 // "&:hover": {
                 //   textDecoration: "underline",
                 // },
@@ -214,7 +224,7 @@ export default function Footer() {
                 sx={{
                   fontWeight: 500,
                   textDecoration: "none",
-                  color: "black",
+                  color: theme.palette.text.primary,
                   "&:hover": {
                     textDecoration: "underline",
                   },
@@ -240,7 +250,7 @@ export default function Footer() {
               sx={{
                 fontWeight: 600,
                 textDecoration: "none",
-                color: "black",
+                color: theme.palette.text.primary,
                 "&:hover": {
                   textDecoration: "underline",
                 },
@@ -256,7 +266,7 @@ export default function Footer() {
               sx={{
                 fontWeight: 600,
                 textDecoration: "none",
-                color: "black",
+                color: theme.palette.text.primary,
                 "&:hover": {
                   textDecoration: "underline",
                 },
