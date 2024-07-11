@@ -117,7 +117,7 @@ export default function Calendar({ events, holidays, allClubs }) {
       />
       <style>{`
         .fc .fc-bg-event {
-          background-color: ${theme.palette.background.neutral}!important;
+          background-color: ${theme.palette.background.error}!important;
           opacity: 1 !important;
         }
       `}</style>
