@@ -110,8 +110,18 @@ function EventDatetimeInput({ control, watch }) {
         <Controller
           name="datetimeperiod.0"
           control={control}
-          rules={{ required: "Start date is required!" }}
-          render={({ field: { value, ...rest }, fieldState: { error, invalid } }) => (
+          rules={{
+            required: "Start date is required!",
+            validate: {
+              maxDateCheck: (value) =>
+                dayjs(value) < dayjs(new Date()) ||
+                "Start Date must be before today!",
+            },
+           }}
+          render={({
+            field: { value, ...rest },
+            fieldState: { error, invalid },
+          }) => (
             <DatePicker
               label="From Date"
               slotProps={{
@@ -137,10 +147,17 @@ function EventDatetimeInput({ control, watch }) {
             required: "End date is required!",
             validate: {
               checkDate: (value) =>
-                dayjs(value) > dayjs(startDateInput) || "End Date must be after Start Date!",
+                dayjs(value) > dayjs(startDateInput) ||
+                "End Date must be after Start Date!",
+              maxDateCheck: (value) =>
+                dayjs(value) <= dayjs(new Date()) ||
+                "End Date must be till today!",
             },
           }}
-          render={({ field: { value, ...rest }, fieldState: { error, invalid } }) => (
+          render={({
+            field: { value, ...rest },
+            fieldState: { error, invalid },
+          }) => (
             <DatePicker
               label="To Date"
               disabled={!startDateInput}
@@ -353,7 +370,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                 if (event.target.checked) {
                                   newValue.push(event.target.value);
                                 } else {
-                                  const index = newValue.indexOf(event.target.value);
+                                  const index = newValue.indexOf(
+                                    event.target.value
+                                  );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
                                   }

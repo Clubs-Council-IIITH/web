@@ -655,6 +655,12 @@ function EventDatetimeInput({
           control={control}
           rules={{
             required: "Start date is required!",
+            validate: {
+              minDateCheck: (value) =>
+                allowed_roles.includes(role) ||
+                dayjs(value) >= dayjs(new Date()) ||
+                "Start Date must not be in past!",
+            },
           }}
           render={({
             field: { value, ...rest },
