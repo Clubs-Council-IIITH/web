@@ -73,13 +73,15 @@ export default function Calendar({ events, holidays, allClubs }) {
   };
 
   const allEvents = events?.filter(
-    (event) => event?.status?.state !== "deleted"
+    (event) => event?.status?.state !== "deleted",
   );
   const mergedEvents = [...allEvents, ...holidays];
 
   const handleEventMouseEnter = (info) => {
     const { event, el } = info;
-    const clubName = allClubs.find((club) => club.cid === event.extendedProps.clubid)?.name;
+    const clubName = allClubs.find(
+      (club) => club.cid === event.extendedProps.clubid,
+    )?.name;
     const content = `<strong>${event.title}</strong> ${event.extendedProps.clubid ? "by" : ""} ${event.extendedProps.clubid ? clubName : "Holiday"}`;
 
     tippy(el, {
@@ -88,7 +90,7 @@ export default function Calendar({ events, holidays, allClubs }) {
       placement: "top",
     });
   };
-  
+
   useEffect(() => {
     if (calendarRef.current) {
       if (isMobile) {
