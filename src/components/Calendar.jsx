@@ -5,11 +5,10 @@ import stc from "string-to-color";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import listPlugin from "@fullcalendar/list";
-import tippy from "tippy.js";
-import "tippy.js/dist/tippy.css"; // Optional for styling
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Tooltip, Typography, Fade } from "@mui/material";
 
 import { useAuth } from "components/AuthProvider";
 
@@ -73,23 +72,9 @@ export default function Calendar({ events, holidays, allClubs }) {
   };
 
   const allEvents = events?.filter(
-    (event) => event?.status?.state !== "deleted",
+    (event) => event?.status?.state !== "deleted"
   );
   const mergedEvents = [...allEvents, ...holidays];
-
-  const handleEventMouseEnter = (info) => {
-    const { event, el } = info;
-    const clubName = allClubs.find(
-      (club) => club.cid === event.extendedProps.clubid,
-    )?.name;
-    const content = `<strong>${event.title}</strong> ${event.extendedProps.clubid ? "by" : ""} ${event.extendedProps.clubid ? clubName : "Holiday"}`;
-
-    tippy(el, {
-      content,
-      allowHTML: true,
-      placement: "top",
-    });
-  };
 
   useEffect(() => {
     if (calendarRef.current) {
@@ -101,6 +86,21 @@ export default function Calendar({ events, holidays, allClubs }) {
     }
   }, [isMobile]);
 
+  function renderInnerContent(innerProps) {
+    return (
+      <div className="fc-event-main-frame">
+        {innerProps.timeText && (
+          <div className="fc-event-time">{innerProps.timeText}</div>
+        )}
+        <div className="fc-event-title-container">
+          <div className="fc-event-title fc-sticky">
+            {innerProps.event.title || <Fragment>&nbsp;</Fragment>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <FullCalendar
@@ -109,10 +109,39 @@ export default function Calendar({ events, holidays, allClubs }) {
         plugins={[dayGridPlugin, listPlugin]}
         initialView={"dayGridMonth"}
         eventDataTransform={eventDataTransform_withrole}
-        eventMouseEnter={handleEventMouseEnter}
         headerToolbar={{
           left: "title",
           right: "prev,next",
+        }}
+        eventContent={(arg) => {
+          return (
+            <Tooltip
+              title={
+                <div style={{ userSelect: "none" }}>
+                  <Typography variant="body2">
+                    <strong>{arg.event.title}</strong>{" "}
+                    {arg.event.extendedProps.clubid ? "by" : ""}{" "}
+                    {arg.event.extendedProps.clubid
+                      ? allClubs.find(
+                          (club) => club.cid === arg.event.extendedProps.clubid
+                        )?.name
+                      : "Holiday"}
+                  </Typography>
+                </div>
+              }
+              TransitionComponent={Fade}
+              TransitionProps={{ timeout: 500 }}
+              arrow
+              placement="top"
+              enterDelay={300}
+              interactive
+              describeChild
+            >
+              <div style={{ userSelect: "none" }}>
+                {renderInnerContent(arg)}
+              </div>
+            </Tooltip>
+          );
         }}
       />
       <style>{`
