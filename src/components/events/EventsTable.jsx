@@ -21,7 +21,7 @@ export default function EventsTable({
 }) {
   const router = useRouter();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const columns = [
     ...(isMobile
