@@ -61,7 +61,9 @@ export default function ClubSocials({ socials = {}, email = null }) {
             sx={{
               mx: 0.5,
               textTransform: "none",
-              color: isDark ? socialsData[item].darkcolor : socialsData[item].color,
+              color: isDark
+                ? socialsData[item].darkcolor
+                : socialsData[item].color,
             }}
           >
             <Icon external variant={socialsData[item].icon} mr={1} />

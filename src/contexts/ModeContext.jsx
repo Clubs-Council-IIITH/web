@@ -20,12 +20,12 @@ function GradientCircularProgress() {
           </linearGradient>
         </defs>
       </svg>
-      <CircularProgress sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+      <CircularProgress
+        sx={{ "svg circle": { stroke: "url(#my_gradient)" } }}
+      />
     </React.Fragment>
   );
 }
-
-
 
 export const useMode = () => useContext(ModeContext);
 

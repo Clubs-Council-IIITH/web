@@ -1,5 +1,10 @@
 export const socialsData = {
-  website: { label: "Website", icon: "mdi:web", color: "#fc7a0a", darkcolor: "#fbaf41" },
+  website: {
+    label: "Website",
+    icon: "mdi:web",
+    color: "#fc7a0a",
+    darkcolor: "#fbaf41",
+  },
   facebook: {
     label: "Facebook",
     icon: "ic:baseline-facebook",
@@ -19,7 +24,7 @@ export const socialsData = {
     label: "Twitter/X",
     icon: "ri:twitter-x-fill",
     // validation: "twitter.com",
-    regex: "(?:twitter\.com|x\.com)",
+    regex: "(?:twitter.com|x.com)",
     color: "#000",
     darkcolor: "#fff",
   },

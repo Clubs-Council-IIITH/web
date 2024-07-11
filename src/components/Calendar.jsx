@@ -122,5 +122,5 @@ export default function Calendar({ events, holidays, allClubs }) {
         }
       `}</style>
     </>
-);
+  );
 }
