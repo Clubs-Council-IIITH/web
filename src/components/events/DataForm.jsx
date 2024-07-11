@@ -119,7 +119,8 @@ function EventDatetimeInput({ control, watch, user }) {
             required: "Start date is required!",
             validate: {
               maxDateCheck: (value) =>
-                dayjs(value) < dayjs(new Date()) || admin_roles.includes(user?.role)  ||
+                dayjs(value) < dayjs(new Date()) ||
+                admin_roles.includes(user?.role) ||
                 "Start Date must be before today!",
             },
           }}
@@ -135,8 +136,12 @@ function EventDatetimeInput({ control, watch, user }) {
                   helperText: error?.message,
                 },
               }}
-              maxDate={admin_roles.includes(user?.role) ? null : dayjs(new Date()).subtract(1, "day")}
-              disableFuture = {admin_roles.includes(user?.role) ? false : true}
+              maxDate={
+                admin_roles.includes(user?.role)
+                  ? null
+                  : dayjs(new Date()).subtract(1, "day")
+              }
+              disableFuture={admin_roles.includes(user?.role) ? false : true}
               sx={{ width: "100%" }}
               value={value instanceof Date ? dayjs(value) : value}
               {...rest}
@@ -152,10 +157,12 @@ function EventDatetimeInput({ control, watch, user }) {
             required: "End date is required!",
             validate: {
               checkDate: (value) =>
-                dayjs(value) > dayjs(startDateInput) || admin_roles.includes(user?.role)  ||
+                dayjs(value) > dayjs(startDateInput) ||
+                admin_roles.includes(user?.role) ||
                 "End Date must be after Start Date!",
               maxDateCheck: (value) =>
-                dayjs(value) <= dayjs(new Date()) || admin_roles.includes(user?.role)  ||
+                dayjs(value) <= dayjs(new Date()) ||
+                admin_roles.includes(user?.role) ||
                 "End Date must be till today!",
             },
           }}
@@ -167,7 +174,7 @@ function EventDatetimeInput({ control, watch, user }) {
               label="To Date"
               disabled={!startDateInput}
               minDate={startDateInput && dayjs(startDateInput).add(1, "day")}
-              disableFuture = {admin_roles.includes(user?.role) ? false : true}
+              disableFuture={admin_roles.includes(user?.role) ? false : true}
               slotProps={{
                 textField: {
                   error: error || invalid,
@@ -337,7 +344,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           >
             Date Range
           </Typography>
-          <EventDatetimeInput control={control} watch={watch} user={user}/>
+          <EventDatetimeInput control={control} watch={watch} user={user} />
         </Grid>
         <Grid container item>
           <Typography
