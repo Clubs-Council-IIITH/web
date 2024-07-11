@@ -17,9 +17,9 @@ export function ISOtoDateTime(iso) {
 }
 
 // get human readable date time from ISO string
-export function ISOtoHuman(iso, weekDay = false) {
+export function ISOtoHuman(iso, weekDay = false, showTime = true) {
   const dt = ISOtoDateTime(iso);
-  return `${weekDay ? `${dt.weekday} ` : ""}${dt.day} ${dt.month}${
+  return `${weekDay ? `${dt.weekday}, ` : ""}${dt.day} ${dt.month}${
     dt.year !== String(new Date().getFullYear()) ? ` ${dt.year}` : ""
-  }, ${dt.time.toUpperCase()}`;
+  }${showTime ? `, ${dt.time.toUpperCase()}` : ""}`;
 }

@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_HOLIDAYS } from "gql/queries/holidays";
 
 import FullCalendar from "components/Calendar";
 
@@ -13,5 +14,7 @@ export default async function Calendar() {
     public: false,
   });
 
-  return <FullCalendar events={events} />;
+  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
+
+  return <FullCalendar events={events} holidays={holidays} />;
 }

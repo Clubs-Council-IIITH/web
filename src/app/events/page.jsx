@@ -15,11 +15,101 @@ export default async function Events({ searchParams }) {
     ...(searchParams?.completed === "true" ? ["completed"] : []),
   ];
 
+  const ongoingEventsFilter = (event) => {
+    let selectedClub = false,
+      selectedState = false,
+      selectedName = false;
+
+    // filter by club
+    if (!targetClub) selectedClub = true;
+    else selectedClub = event?.clubid === targetClub;
+
+    // filter by state
+    if (!targetState) selectedState = true;
+    else {
+      const isOngoing =
+        new Date(event?.datetimeperiod[0]) <= new Date() &&
+        new Date(event?.datetimeperiod[1]) >= new Date();
+      selectedState = isOngoing;
+    }
+
+    // filter by name
+    if (!targetName) selectedName = true;
+    else
+      selectedName = event?.name
+        ?.toLowerCase()
+        ?.includes(targetName?.toLowerCase());
+
+    return selectedClub && selectedState && selectedName;
+  };
+
+  const upcomingEventsFilter = (event) => {
+    let selectedClub = false,
+      selectedState = false,
+      selectedName = false;
+
+    // filter by club
+    if (!targetClub) selectedClub = true;
+    else selectedClub = event?.clubid === targetClub;
+
+    // filter by state
+    if (!targetState) selectedState = true;
+    else {
+      const isUpcoming = new Date(event?.datetimeperiod[0]) > new Date();
+      selectedState = isUpcoming;
+    }
+
+    // filter by name
+    if (!targetName) selectedName = true;
+    else
+      selectedName = event?.name
+        ?.toLowerCase()
+        ?.includes(targetName?.toLowerCase());
+
+    return selectedClub && selectedState && selectedName;
+  };
+
+  const completedEventsFilter = (event) => {
+    let selectedClub = false,
+      selectedState = false,
+      selectedName = false;
+
+    // filter by club
+    if (!targetClub) selectedClub = true;
+    else selectedClub = event?.clubid === targetClub;
+
+    // filter by state
+    if (!targetState) selectedState = true;
+    else {
+      const isOngoing = new Date(event?.datetimeperiod[1]) < new Date();
+      selectedState = isOngoing;
+    }
+
+    // filter by name
+    if (!targetName) selectedName = true;
+    else
+      selectedName = event?.name
+        ?.toLowerCase()
+        ?.includes(targetName?.toLowerCase());
+
+    return selectedClub && selectedState && selectedName;
+  };
+
   return (
     <Box>
       <Box mt={2}>
         <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
+
+      <>
+        <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
+          <Typography variant="h5" color="grey">
+            Ongoing Events
+          </Typography>
+        </Divider>
+
+        <EventsGrid type="all" filter={ongoingEventsFilter} />
+      </>
 
       {targetState?.includes("upcoming") ? (
         <>
@@ -29,35 +119,7 @@ export default async function Events({ searchParams }) {
             </Typography>
           </Divider>
 
-          <EventsGrid
-            type="all"
-            filter={(event) => {
-              let selectedClub = false,
-                selectedState = false,
-                selectedName = false;
-
-              // filter by club
-              if (!targetClub) selectedClub = true;
-              else selectedClub = event?.clubid === targetClub;
-
-              // filter by state
-              if (!targetState) selectedState = true;
-              else {
-                const isUpcoming =
-                  new Date(event?.datetimeperiod[1]) > new Date();
-                selectedState = isUpcoming;
-              }
-
-              // filter by name
-              if (!targetName) selectedName = true;
-              else
-                selectedName = event?.name
-                  ?.toLowerCase()
-                  ?.includes(targetName?.toLowerCase());
-
-              return selectedClub && selectedState && selectedName;
-            }}
-          />
+          <EventsGrid type="all" filter={upcomingEventsFilter} />
         </>
       ) : null}
 
@@ -69,35 +131,7 @@ export default async function Events({ searchParams }) {
             </Typography>
           </Divider>
 
-          <EventsGrid
-            type="all"
-            filter={(event) => {
-              let selectedClub = false,
-                selectedState = false,
-                selectedName = false;
-
-              // filter by club
-              if (!targetClub) selectedClub = true;
-              else selectedClub = event?.clubid === targetClub;
-
-              // filter by state
-              if (!targetState) selectedState = true;
-              else {
-                const isUpcoming =
-                  new Date(event?.datetimeperiod[1]) > new Date();
-                selectedState = !isUpcoming;
-              }
-
-              // filter by name
-              if (!targetName) selectedName = true;
-              else
-                selectedName = event?.name
-                  ?.toLowerCase()
-                  ?.includes(targetName?.toLowerCase());
-
-              return selectedClub && selectedState && selectedName;
-            }}
-          />
+          <EventsGrid type="all" filter={completedEventsFilter} />
         </>
       ) : null}
     </Box>

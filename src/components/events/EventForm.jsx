@@ -7,11 +7,10 @@ import { useRouter } from "next/navigation";
 
 import { useForm, Controller, useController } from "react-hook-form";
 
-import { useToast } from "components/Toast";
-
 import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
+import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
   Button,
@@ -35,15 +34,17 @@ import {
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
 
+import { useAuth } from "components/AuthProvider";
+import { useToast } from "components/Toast";
 import FileUpload from "components/FileUpload";
 import EventBudget from "components/events/EventBudget";
 import ConfirmDialog from "components/ConfirmDialog";
+import EventsDialog from "components/events/EventsDialog";
 import MemberListItem from "components/members/MemberListItem";
 
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
-import { useAuth } from "components/AuthProvider";
 
 const allowed_roles = ["cc", "slo"];
 
@@ -51,6 +52,7 @@ export default function EventForm({
   id = null,
   defaultValues = {},
   action = "log",
+  existingEvents = [],
 }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -59,6 +61,24 @@ export default function EventForm({
   const [cancelDialog, setCancelDialog] = useState(false);
   const [budgetEditing, setBudgetEditing] = useState(false);
   const [hasPhone, setHasPhone] = useState(true);
+
+  // fetch list of clubs
+  const [clubs, setClubs] = useState([]);
+  useEffect(() => {
+    (async () => {
+      let res = await fetch("/actions/clubs/ids");
+      res = await res.json();
+      if (!res.ok) {
+        triggerToast({
+          title: "Unable to fetch clubs",
+          messages: res.error.messages,
+          severity: "error",
+        });
+      } else {
+        setClubs(res.data);
+      }
+    })();
+  }, []);
 
   const { control, handleSubmit, watch, resetField } = useForm({
     defaultValues,
@@ -207,7 +227,7 @@ export default function EventForm({
       audience: formData.audience,
       mode: formData.mode,
       link: formData.link,
-      location: formData.location,
+      location: formData.mode === "online" ? null : formData.location,
       population: parseInt(formData.population),
       additional: formData.additional,
       equipment: formData.equipment,
@@ -289,6 +309,7 @@ export default function EventForm({
                       defaultValues?.status?.state != undefined &&
                       defaultValues?.status?.state != "incomplete"
                     }
+                    clubs={clubs}
                   />
                 </Grid>
               ) : null}
@@ -312,6 +333,8 @@ export default function EventForm({
                     defaultValues?.status?.state != "incomplete"
                   }
                   role={user?.role}
+                  existingEvents={existingEvents}
+                  clubs={clubs}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -513,26 +536,8 @@ export default function EventForm({
 }
 
 // select club to which event belongs to
-function EventClubSelect({ control, disabled = true }) {
+function EventClubSelect({ control, disabled = true, clubs = [] }) {
   const { triggerToast } = useToast();
-
-  // fetch list of clubs
-  const [clubs, setClubs] = useState([]);
-  useEffect(() => {
-    (async () => {
-      let res = await fetch("/actions/clubs/ids");
-      res = await res.json();
-      if (!res.ok) {
-        triggerToast({
-          title: "Unable to fetch clubs",
-          messages: res.error.messages,
-          severity: "error",
-        });
-      } else {
-        setClubs(res.data);
-      }
-    })();
-  }, []);
 
   return (
     <Controller
@@ -598,15 +603,35 @@ function EventNameInput({ control, disabled = true }) {
   );
 }
 
+function filterEvents(events, startTime, endTime) {
+  let filteredEvents = events.filter((event) => {
+    const eventStart = new Date(event.datetimeperiod[0]);
+    const eventEnd = new Date(event.datetimeperiod[1]);
+
+    return (
+      (startTime >= eventStart && startTime < eventEnd) ||
+      (endTime > eventStart && endTime <= eventEnd) ||
+      (startTime <= eventStart && endTime >= eventEnd)
+    );
+  });
+
+  if (filteredEvents.length) return filteredEvents;
+  return null;
+}
+
 // event datetime range input
 function EventDatetimeInput({
   control,
   watch,
   disabled = true,
   role = "public",
+  existingEvents = [],
+  clubs = [],
 }) {
   const startDateInput = watch("datetimeperiod.0");
+  const endDateInput = watch("datetimeperiod.1");
   const [error, setError] = useState(null);
+  const [eventsDialogOpen, setEventsDialogOpen] = useState(false);
 
   const errorMessage = useMemo(() => {
     switch (error) {
@@ -624,12 +649,18 @@ function EventDatetimeInput({
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6} xl={4}>
+      <Grid item xs={12} md={6} xl={4}>
         <Controller
           name="datetimeperiod.0"
           control={control}
           rules={{
             required: "Start date is required!",
+            validate: {
+              minDateCheck: (value) =>
+                allowed_roles.includes(role) ||
+                dayjs(value) >= dayjs(new Date()) ||
+                "Start Date must not be in past!",
+            },
           }}
           render={({
             field: { value, ...rest },
@@ -654,12 +685,13 @@ function EventDatetimeInput({
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
               disabled={disabled}
+              format="DD/MM/YYYY hh:mm A"
               {...rest}
             />
           )}
         />
       </Grid>
-      <Grid item xs xl={4}>
+      <Grid item xs={12} md={6} xl={4}>
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -680,7 +712,6 @@ function EventDatetimeInput({
           }) => (
             <DateTimePicker
               label="Ends *"
-              disabled={!startDateInput || disabled}
               minDateTime={
                 startDateInput
                   ? (startDateInput instanceof Date && !isDayjs(startDateInput)
@@ -706,11 +737,49 @@ function EventDatetimeInput({
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
+              disabled={!startDateInput || disabled}
+              format="DD/MM/YYYY hh:mm A"
               {...rest}
             />
           )}
         />
       </Grid>
+      {startDateInput && endDateInput ? (
+        <>
+          {existingEvents?.length ? (
+            filterEvents(existingEvents, startDateInput, endDateInput) ? (
+              <Grid item xs={8} xl={4}>
+                <Box
+                  display="flex"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  height="100%"
+                >
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    startIcon={<InfoIcon />}
+                    onClick={() => setEventsDialogOpen(true)}
+                  >
+                    Clashing Events
+                  </Button>
+                </Box>
+
+                <EventsDialog
+                  open={eventsDialogOpen}
+                  onClose={() => setEventsDialogOpen(false)}
+                  events={filterEvents(
+                    existingEvents,
+                    startDateInput,
+                    endDateInput,
+                  )}
+                  clubs={clubs}
+                />
+              </Grid>
+            ) : null
+          ) : null}
+        </>
+      ) : null}
     </Grid>
   );
 }
@@ -875,37 +944,38 @@ function EventVenueInput({
         ) : null}
       </Grid>
 
+      <Grid item xs={12}>
+        <Controller
+          name="population"
+          control={control}
+          rules={{
+            min: {
+              value: 1,
+              message: "Expected participation count must be at least 1.",
+            },
+          }}
+          render={({ field, fieldState: { error, invalid } }) => (
+            <TextField
+              type="number"
+              label="Expected Participation*"
+              error={invalid}
+              helperText={error?.message}
+              autoComplete="off"
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                inputProps: { min: 1 },
+              }}
+              disabled={false}
+              {...field}
+            />
+          )}
+        />
+      </Grid>
+
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (
         <>
-          <Grid item xs={12}>
-            <Controller
-              name="population"
-              control={control}
-              rules={{
-                min: {
-                  value: 1,
-                  message: "Expected population count must be at least 1!",
-                },
-              }}
-              render={({ field, fieldState: { error, invalid } }) => (
-                <TextField
-                  type="number"
-                  label="Expected Population Count*"
-                  error={invalid}
-                  helperText={error?.message}
-                  autoComplete="off"
-                  variant="outlined"
-                  fullWidth
-                  InputProps={{
-                    inputProps: { min: 1 },
-                  }}
-                  disabled={false}
-                  {...field}
-                />
-              )}
-            />
-          </Grid>
           <Grid item xs={12}>
             <Controller
               name="equipment"

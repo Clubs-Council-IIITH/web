@@ -18,7 +18,7 @@ export const metadata = {
 
 export default async function RecruitmentSchedule() {
   const recruitmentSchedule = await fetch(
-    getStaticFile("json/recruitmentCalendar.json"),
+    getStaticFile("recruitmentCalendar.json"),
     {
       next: { revalidate: 120 },
     },
