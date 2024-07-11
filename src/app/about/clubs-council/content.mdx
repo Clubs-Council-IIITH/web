@@ -6,13 +6,14 @@ import ClubBanner from "components/clubs/ClubBanner";
 import { getStaticFile } from "utils/files";
 
 <Card variant="none" sx={{ boxShadow: 0 }}>
-  <ClubBanner
-    name="Clubs Council"
-    banner={getStaticFile("cc-banner-logo.png")}
-    width={1500}
-    height={500}
-    imageProps={{ priority: true }}
-  />
+    <ClubBanner
+      name="Clubs Council"
+      banner={getStaticFile("cc-banner.png")}
+      logo={"/assets/cc-logo-full-color.svg"}
+      width={1500}
+      height={500}
+      imageProps={{ priority: true }}
+    />
 </Card>
 
 ### What do we do?

@@ -102,17 +102,25 @@ export default function Calendar({ events, holidays, allClubs }) {
   }, [isMobile]);
 
   return (
-    <FullCalendar
-      ref={calendarRef}
-      events={mergedEvents}
-      plugins={[dayGridPlugin, listPlugin]}
-      initialView={"dayGridMonth"}
-      eventDataTransform={eventDataTransform_withrole}
-      eventMouseEnter={handleEventMouseEnter}
-      headerToolbar={{
-        left: "title",
-        right: "prev,next",
-      }}
-    />
-  );
+    <>
+      <FullCalendar
+        ref={calendarRef}
+        events={mergedEvents}
+        plugins={[dayGridPlugin, listPlugin]}
+        initialView={"dayGridMonth"}
+        eventDataTransform={eventDataTransform_withrole}
+        eventMouseEnter={handleEventMouseEnter}
+        headerToolbar={{
+          left: "title",
+          right: "prev,next",
+        }}
+      />
+      <style>{`
+        .fc .fc-bg-event {
+          background-color: ${theme.palette.background.neutral}!important;
+          opacity: 1 !important;
+        }
+      `}</style>
+    </>
+);
 }
