@@ -122,6 +122,7 @@ export const VERIFY_CERTIFICATE = gql`
       requestedAt
       approvedAt
       certificateData
+      requestReason
     }
   }
 `;
