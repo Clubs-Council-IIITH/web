@@ -107,6 +107,7 @@ export const GET_PENDING_CERTIFICATES = gql`
       userId
       status
       requestedAt
+      requestReason
     }
   }
 `;

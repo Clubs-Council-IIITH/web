@@ -13,6 +13,10 @@ import {
   CircularProgress,
   Typography,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { useToast } from "components/Toast";
 
@@ -22,6 +26,8 @@ export default function PendingCertificatesTable() {
   const [error, setError] = useState(null);
   const [approving, setApproving] = useState(null);
   const { triggerToast } = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCert, setSelectedCert] = useState(null);
 
   useEffect(() => {
     fetchPendingCertificates();
@@ -37,13 +43,13 @@ export default function PendingCertificatesTable() {
         setCertificates(data.data || []);
       } else {
         throw new Error(
-          data.error?.messages?.[0] || "Failed to fetch pending certificates"
+          data.error?.messages?.[0] || "Failed to fetch pending certificates",
         );
       }
     } catch (err) {
       console.error("Error fetching pending certificates:", err);
       setError(
-        "An error occurred while fetching pending certificates. Please try again later."
+        "An error occurred while fetching pending certificates. Please try again later.",
       );
       triggerToast({
         title: "Error",
@@ -75,7 +81,7 @@ export default function PendingCertificatesTable() {
         await fetchPendingCertificates(); // Refresh the list
       } else {
         throw new Error(
-          data.error?.messages?.[0] || "Failed to approve certificate"
+          data.error?.messages?.[0] || "Failed to approve certificate",
         );
       }
     } catch (err) {
@@ -88,6 +94,16 @@ export default function PendingCertificatesTable() {
     } finally {
       setApproving(null);
     }
+  };
+
+  const handleRowClick = (cert) => {
+    setSelectedCert(cert);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedCert(null);
   };
 
   if (loading) {
@@ -131,44 +147,124 @@ export default function PendingCertificatesTable() {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="pending certificates table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Certificate Number</TableCell>
-            <TableCell>User ID</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Request Date</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {certificates.map((cert) => (
-            <TableRow key={cert._id}>
-              <TableCell>{cert.certificateNumber}</TableCell>
-              <TableCell>{cert.userId}</TableCell>
-              <TableCell>{cert.status}</TableCell>
-              <TableCell>
-                {new Date(cert.requestedAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleApprove(cert.certificateNumber)}
-                  disabled={approving === cert.certificateNumber}
-                >
-                  {approving === cert.certificateNumber ? (
-                    <CircularProgress size={24} />
-                  ) : (
-                    "Approve"
-                  )}
-                </Button>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="pending certificates table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Certificate Number</TableCell>
+              <TableCell>User ID</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Request Date</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {certificates.map((cert) => (
+              <TableRow
+                key={cert._id}
+                onClick={() => handleRowClick(cert)}
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
+                }}
+              >
+                <TableCell>{cert.certificateNumber}</TableCell>
+                <TableCell>{cert.userId}</TableCell>
+                <TableCell>{cert.status}</TableCell>
+                <TableCell>
+                  {new Date(cert.requestedAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleApprove(cert.certificateNumber);
+                    }}
+                    disabled={approving === cert.certificateNumber}
+                  >
+                    {approving === cert.certificateNumber ? (
+                      <CircularProgress size={24} />
+                    ) : (
+                      "Approve"
+                    )}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ borderBottom: 1, borderColor: "divider", pb: 2 }}>
+          Certificate Request Details
+        </DialogTitle>
+        <DialogContent sx={{ pt: 3 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: 2,
+              alignItems: "baseline",
+            }}
+          >
+            <Typography variant="subtitle2" fontWeight="bold">
+              Certificate Number:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.certificateNumber}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              User ID:
+            </Typography>
+            <Typography variant="body1">{selectedCert?.userId}</Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Status:
+            </Typography>
+            <Typography variant="body1">{selectedCert?.status}</Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Request Date:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert &&
+                new Date(selectedCert.requestedAt).toLocaleDateString()}
+            </Typography>
+
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              sx={{ alignSelf: "start" }}
+            >
+              Request Reason:
+            </Typography>
+            <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+              {selectedCert?.requestReason || "No reason provided"}
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions
+          sx={{ borderTop: 1, borderColor: "divider", pt: 2, pb: 2 }}
+        >
+          <Button
+            onClick={handleCloseDialog}
+            color="primary"
+            variant="contained"
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
