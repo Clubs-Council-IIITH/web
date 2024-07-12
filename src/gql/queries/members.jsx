@@ -124,3 +124,17 @@ export const VERIFY_CERTIFICATE = gql`
     }
   }
 `;
+
+export const GET_MEMBERSHIPS = gql`
+  query MemberRoles($uid: String!) {
+    memberRoles(uid: $uid) {
+      cid
+      roles {
+        startYear
+        endYear
+        name
+        deleted
+      }
+    }
+  }
+`;

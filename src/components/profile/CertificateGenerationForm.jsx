@@ -22,7 +22,10 @@ import {
 } from "@mui/material";
 import { useToast } from "components/Toast";
 
-export default function CertificateGenerationForm({ userProfile }) {
+export default function CertificateGenerationForm({
+  userProfile,
+  memberships,
+}) {
   const [reason, setReason] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -44,7 +47,7 @@ export default function CertificateGenerationForm({ userProfile }) {
         setCertificates(data.data);
       } else {
         throw new Error(
-          data.error.messages[0] || "Failed to fetch certificates"
+          data.error.messages[0] || "Failed to fetch certificates",
         );
       }
     } catch (err) {
@@ -65,7 +68,10 @@ export default function CertificateGenerationForm({ userProfile }) {
         let res = await fetch("/actions/certificates/request", {
           method: "POST",
           body: JSON.stringify({
-            certificateInput: { requestReason: reason },
+            certificateInput: {
+              requestReason: reason,
+              memberships: memberships,
+            },
           }),
         });
         res = await res.json();
@@ -84,7 +90,7 @@ export default function CertificateGenerationForm({ userProfile }) {
           fetchUserCertificates();
         } else {
           throw new Error(
-            res.error.messages[0] || "Failed to request certificate"
+            res.error.messages[0] || "Failed to request certificate",
           );
         }
       } catch (err) {
