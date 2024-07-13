@@ -10,16 +10,30 @@ function createGradient(color1, color2) {
 const PRIMARY_LIGHT = {
   lighter: "#b39ddb",
   light: "#7e57c2",
-  main: "#673ab7",
+  main: "#803DB2",
   dark: "#5e35b1",
-  darker: "#512da8",
+  darker: "#63358b",
 };
-const SECONDARY = {
+const PRIMARY_DARK = {
+  lighter: "#25fff8",
+  light: "#53ece4",
+  main: "#1EC3BD",
+  dark: "#087f77",
+  darker: "#299383",
+};
+const SECONDARY_LIGHT = {
   lighter: "#C4CDD5",
   light: "#919EAB",
   main: "#637381",
   dark: "#454F5B",
   darker: "#212B36",
+};
+const SECONDARY_DARK = {
+  darker: "#C4CDD5",
+  dark: "#919EAB",
+  main: "#637381",
+  light: "#454F5B",
+  lighter: "#212B36",
 };
 const INFO = {
   lighter: "#D0F2FF",
@@ -72,7 +86,7 @@ const GREY = {
 };
 
 const GRADIENTS = {
-  primary: createGradient(PRIMARY_LIGHT.light, PRIMARY_LIGHT.main), // TODO: define PRIMARY_DARK palette
+  primary: createGradient(PRIMARY_LIGHT.light, PRIMARY_DARK.main), // TODO: define PRIMARY_DARK palette
   info: createGradient(INFO.light, INFO.main),
   success: createGradient(SUCCESS.light, SUCCESS.main),
   warning: createGradient(WARNING.light, WARNING.main),
@@ -89,7 +103,6 @@ const CHART_COLORS = {
 
 const COMMON = {
   common: { black: "#000", white: "#fff" },
-  secondary: { ...SECONDARY, contrastText: "#fff" },
   info: { ...INFO, contrastText: "#fff" },
   success: { ...SUCCESS, contrastText: GREY[800] },
   warning: { ...WARNING, contrastText: GREY[800] },
@@ -101,7 +114,7 @@ const COMMON = {
   action: {
     hover: GREY[500_8],
     selected: GREY[500_16],
-    disabled: GREY[500_80],
+    disabled: GREY[600],
     disabledBackground: GREY[500_24],
     focus: GREY[500_24],
     hoverOpacity: 0.08,
@@ -113,24 +126,43 @@ const palette = {
   light: {
     ...COMMON,
     primary: { ...PRIMARY_LIGHT, contrastText: "#fff" },
+    secondary: { ...SECONDARY_LIGHT, contrastText: "#fff" },
     mode: "light",
-    text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
-    background: { paper: "#fff", default: "#fdfdfd", neutral: GREY[200] },
+    text: {
+      primary: GREY[800],
+      secondary: GREY[600],
+      disabled: alpha(GREY[600], 0.7),
+      link: "#0a12ab",
+    },
+    background: {
+      paper: "#fff",
+      default: "#fdfdfd",
+      neutral: GREY[300],
+      error: "#ffd9d9",
+    },
     action: { active: GREY[600], ...COMMON.action },
     accent: PRIMARY_LIGHT.main,
   },
   dark: {
     ...COMMON,
-    primary: { ...PRIMARY_LIGHT, contrastText: "#fff" }, // TODO: define PRIMARY_DARK palette
+    primary: { ...PRIMARY_DARK, contrastText: GREY[800] },
+    secondary: { ...SECONDARY_DARK, contrastText: GREY[800] },
     mode: "dark",
     text: {
-      primary: "#e3e3e3",
-      secondary: alpha(GREY[400], 0.82),
-      disabled: GREY[600],
+      primary: GREY[200],
+      secondary: GREY[400],
+      disabled: alpha(GREY[400], 0.85),
+      link: "#11a1fb",
     },
-    background: { paper: GREY[800], default: "#111111", neutral: GREY[500_16] },
-    action: { active: GREY[500], ...COMMON.action },
-    accent: PRIMARY_LIGHT.main, // TODO: define PRIMARY_DARK palette
+    background: {
+      paper: "#101010",
+      default: "#1e1e1e",
+      neutral: GREY[600],
+      error: "#f66161",
+    },
+    action: { active: GREY[400], hover: GREY[500_48], ...COMMON.action },
+    accent: PRIMARY_DARK.main,
+    divider: GREY[500_48],
   },
 };
 

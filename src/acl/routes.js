@@ -32,6 +32,10 @@ const routes = {
   "/manage/clubs/~mine/edit": ["club"], // has to be higher to not conflict with :id
   "/manage/clubs/:id": ["cc"],
   "/manage/clubs/:id/edit": ["cc"],
+
+  "/manage/holidays": ["slo"],
+  "/manage/holidays/new": ["slo"], // has to be higher to not conflict with :id
+  "/manage/holidays/:id": ["slo"],
   // "/certificate-requests": ["cc,slo"],
 };
 

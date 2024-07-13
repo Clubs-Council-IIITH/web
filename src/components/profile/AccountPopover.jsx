@@ -1,33 +1,37 @@
-"use client";
+// AccountPopover.js
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import React from "react";
+import {
+  IconButton,
+  Avatar,
+  Popover,
+  MenuItem,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
 
 import Image from "next/image";
 import Link from "next/link";
-
-import { alpha } from "@mui/material/styles";
-import {
-  Box,
-  Divider,
-  Typography,
-  Stack,
-  MenuItem,
-  Avatar,
-  IconButton,
-  Popover,
-} from "@mui/material";
-
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { login, logout } from "utils/auth";
 import { useAuth } from "components/AuthProvider";
+import { useMode } from "contexts/ModeContext";
+import { ModeSwitch } from "components/ModeSwitch";
+import { usePathname } from "next/navigation";
 
 export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
+  const { isDark, setMode } = useMode(); // Accessing isDark and setMode from ModeContext
+  const [open, setOpen] = React.useState(null);
 
-  const [open, setOpen] = useState(null);
+  const handleChange = () => {
+    // handleupdate();
+    setMode(!isDark); // Toggle the mode
+  };
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -37,25 +41,15 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  // options to show only when user is logged in
   const AUTHENTICATED_MENU_OPTIONS = [
     {
       label: "Profile",
       icon: "person",
       url: "/profile",
-      // onClick: () => router.push("/profile") && handleClose(),
     },
   ];
 
-  // options to show even when user is not logged in
-  const COMMON_MENU_OPTIONS = [
-    // {
-    //   label: "Settings",
-    //   icon: "settings",
-    //   url: "/settings"
-    //   onClick: () => router.push("/settings") && handleClose(),
-    // },
-  ];
+  const COMMON_MENU_OPTIONS = [];
 
   return (
     <>
@@ -63,6 +57,7 @@ export default function AccountPopover() {
         onClick={handleOpen}
         sx={{
           p: 0,
+          color: "white",
           ...(open && {
             "&:before": {
               zIndex: 1,
@@ -71,8 +66,21 @@ export default function AccountPopover() {
               height: "100%",
               borderRadius: "50%",
               position: "absolute",
-              bgcolor: (theme) => alpha(theme.palette.grey[700], 0.6),
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.5),
             },
+          }),
+          ...(!open && {
+            // "&:after": {
+            "&:before": {
+              zIndex: 1,
+              content: "''",
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              position: "absolute",
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.1),
+            },
+            // },
           }),
         }}
       >
@@ -83,9 +91,6 @@ export default function AccountPopover() {
             children: `${user?.firstName?.[0]}${
               user?.lastName == "" ? "" : user?.lastName?.[0]
             }`,
-            sx: {
-              backgroundColor: "black",
-            },
           })}
         >
           {user?.img ? (
@@ -130,10 +135,11 @@ export default function AccountPopover() {
           },
         }}
       >
+        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "}
+        {/* Pass current isDark value and handleChange function to ModeSwitch component */}
         {isAuthenticated ? (
-          // if authenticated, show user details and options
           <>
-            <Box sx={{ my: 1.5, px: 2.5 }}>
+            <Stack sx={{ my: 1.5, px: 2.5 }}>
               <Typography variant="subtitle2" noWrap>
                 {`${user?.firstName} ${user?.lastName}`}
               </Typography>
@@ -144,7 +150,7 @@ export default function AccountPopover() {
               >
                 {user?.email}
               </Typography>
-            </Box>
+            </Stack>
 
             {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length >
             0 ? (
@@ -175,13 +181,16 @@ export default function AccountPopover() {
             </MenuItem>
           </>
         ) : (
-          // else show login button
           <>
             {COMMON_MENU_OPTIONS.length > 0 ? (
               <>
                 <Stack sx={{ p: 1 }}>
                   {COMMON_MENU_OPTIONS.map((option) => (
-                    <MenuItem component={Link} key={option.label} href={url}>
+                    <MenuItem
+                      component={Link}
+                      key={option.label}
+                      href={option.url}
+                    >
                       <Icon variant={option.icon} sx={{ mr: 2 }} />
                       {option.label}
                     </MenuItem>

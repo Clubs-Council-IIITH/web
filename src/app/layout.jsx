@@ -1,10 +1,9 @@
 import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 import LocalizationWrapper from "components/LocalizationWrapper";
 import Progressbar from "components/Progressbar";
-
 import Toast, { ToastProvider } from "components/Toast";
 import { Navigation, Content } from "components/Layout";
-
+import { ModeProvider } from "contexts/ModeContext";
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
@@ -36,20 +35,22 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={fontClass}>
-        <ThemeRegistry>
-          <Progressbar />
-          <LocalizationWrapper>
-            <AuthProvider user={user}>
-              <ToastProvider>
-                <Navigation />
-                <Content>
-                  <TransitionProvider>{children}</TransitionProvider>
-                </Content>
-                <Toast />
-              </ToastProvider>
-            </AuthProvider>
-          </LocalizationWrapper>
-        </ThemeRegistry>
+        <ModeProvider>
+          <ThemeRegistry>
+            <Progressbar />
+            <LocalizationWrapper>
+              <AuthProvider user={user}>
+                <ToastProvider>
+                  <Navigation />
+                  <Content>
+                    <TransitionProvider>{children}</TransitionProvider>
+                  </Content>
+                  <Toast />
+                </ToastProvider>
+              </AuthProvider>
+            </LocalizationWrapper>
+          </ThemeRegistry>
+        </ModeProvider>
       </body>
     </html>
   );

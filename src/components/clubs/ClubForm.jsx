@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
 import { useState } from "react";
-
 import { useForm, Controller } from "react-hook-form";
-
 import { useToast } from "components/Toast";
+import { useAuth } from "components/AuthProvider";
+import { useMode } from "contexts/ModeContext";
 
 import { LoadingButton } from "@mui/lab";
 import {
@@ -27,9 +26,9 @@ import {
 import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
-import { useAuth } from "components/AuthProvider";
 
 import { uploadFile } from "utils/files";
+import { socialsData } from "utils/socialsData";
 
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
@@ -288,7 +287,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 <Button
                   size="large"
                   variant="outlined"
-                  color="secondary"
+                  color="primary"
                   fullWidth
                   disabled={loading}
                   onClick={() => setCancelDialog(true)}
@@ -529,47 +528,7 @@ function ClubDescriptionInput({ control }) {
 
 // club social link input
 function ClubSocialInput({ name, control }) {
-  const attributeMap = {
-    website: { label: "Website", icon: "mdi:web" },
-    instagram: {
-      label: "Instagram",
-      icon: "mdi:instagram",
-      validation: "instagram.com",
-    },
-    facebook: {
-      label: "Facebook",
-      icon: "ic:baseline-facebook",
-      regex:
-        "(?:(?:http|https)://)?(?:www.)?facebook.com/(?:(?:w)*#!/)?(?:pages/)?(?:[?w-]*/)?(?:profile.php?id=(?=d.*))?([w-]*)?",
-    },
-    youtube: {
-      label: "YouTube",
-      icon: "mdi:youtube",
-      regex:
-        "^https?://(www.)?youtube.com/(channel/UC[w-]{21}[AQgw]|(c/|user/)?[w-]+)$",
-    },
-    twitter: {
-      label: "Twitter/X",
-      icon: "mdi:twitter",
-      validation: "twitter.com",
-    },
-    linkedin: {
-      label: "LinkedIn",
-      icon: "mdi:linkedin",
-      regex: "http(s)?://([w]+.)?linkedin.com/(?:company/|in/)[A-z0-9_-]+/?",
-    },
-    discord: {
-      label: "Discord",
-      icon: "ic:baseline-discord",
-      regex:
-        "^(https?://)?(www.)?(discord.(gg|io|me|li)|discordapp.com/invite|discord.com/invite)/[^s/]+$",
-    },
-    whatsapp: {
-      label: "WhatsApp Group/Community",
-      icon: "mdi:whatsapp",
-      regex: "^(https?://)?chat.whatsapp.com/(?:invite/)?([a-zA-Z0-9_-]{22})$",
-    },
-  };
+  const { isDark } = useMode();
 
   return (
     <Controller
@@ -581,17 +540,17 @@ function ClubSocialInput({ name, control }) {
 
           // Match regex
           if (
-            attributeMap[name].regex &&
-            !new RegExp(attributeMap[name].regex).test(value)
+            socialsData[name].regex &&
+            !new RegExp(socialsData[name].regex).test(value)
           )
-            return `Invalid ${attributeMap[name].label} URL`;
+            return `Invalid ${socialsData[name].label} URL`;
 
           // Check if URL contains validation string
           if (
-            attributeMap[name].validation &&
-            !value.includes(attributeMap[name].validation)
+            socialsData[name].validation &&
+            !value.includes(socialsData[name].validation)
           )
-            return `Invalid ${attributeMap[name].label} URL`;
+            return `Invalid ${socialsData[name].label} Ualdiation`;
 
           return true;
         },
@@ -600,14 +559,23 @@ function ClubSocialInput({ name, control }) {
         <TextField
           {...field}
           type="url"
-          label={attributeMap[name].label}
+          label={socialsData[name].label}
           autoComplete="off"
           variant="outlined"
           fullWidth
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Icon external variant={attributeMap[name].icon} />
+                <Icon
+                  external
+                  variant={socialsData[name].icon}
+                  sx={{
+                    color: isDark
+                      ? socialsData[name].darkcolor
+                      : socialsData[name].color,
+                    marginRight: 1,
+                  }}
+                />
               </InputAdornment>
             ),
           }}

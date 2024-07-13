@@ -1,30 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import Link from "next/link";
 
 import { Button, Box } from "@mui/material";
-
 import Icon from "components/Icon";
 
-const sites = {
-  website: { icon: "mdi:web", color: "#7F7F7F" },
-  facebook: { icon: "ic:baseline-facebook", color: "#3C5999" },
-  instagram: { icon: "mdi:instagram", color: "#E94475" },
-  twitter: { icon: "ri:twitter-x-fill", color: "#000" },
-  linkedin: { icon: "mdi:linkedin", color: "#027FB1" },
-  discord: { icon: "ic:baseline-discord", color: "#5865F3" },
-  youtube: { icon: "mdi:youtube", color: "#FF3333" },
-  whatsapp: { icon: "mdi:whatsapp", color: "#25D366" },
-};
+import { socialsData } from "utils/socialsData";
+import { useMode } from "contexts/ModeContext";
 
 export default function ClubSocials({ socials = {}, email = null }) {
   const [processedSocials, setProcessedSocials] = useState({});
+  const { isDark } = useMode();
 
   useEffect(() => {
     const processed = {};
-    Object.keys(sites)
+    Object.keys(socialsData)
       ?.filter((k) => socials[k])
       ?.forEach((k) => {
         var content = socials[k];
@@ -52,14 +43,14 @@ export default function ClubSocials({ socials = {}, email = null }) {
           sx={{
             mx: 0.2,
             textTransform: "none",
-            color: "grey",
+            color: "text.secondary",
           }}
         >
           <Icon external variant={"mdi:email"} mr={1} />
           {email}
         </Button>
       ) : null}
-      {Object.keys(sites)
+      {Object.keys(socialsData)
         ?.filter((k) => socials[k])
         ?.map((item, index) => (
           <Button
@@ -70,10 +61,12 @@ export default function ClubSocials({ socials = {}, email = null }) {
             sx={{
               mx: 0.5,
               textTransform: "none",
-              color: sites[item].color,
+              color: isDark
+                ? socialsData[item].darkcolor
+                : socialsData[item].color,
             }}
           >
-            <Icon external variant={sites[item].icon} mr={1} />
+            <Icon external variant={socialsData[item].icon} mr={1} />
             {processedSocials[item]}
           </Button>
         ))}

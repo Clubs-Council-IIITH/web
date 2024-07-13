@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
-import { getStaticFile } from "utils/files";
+import { getNginxFile } from "utils/files";
 
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -38,10 +38,10 @@ export default async function Changelog({ searchParams }) {
       return member.roles.length > 0;
     });
 
-  const status = await fetch(getStaticFile("json/status.json"), {
+  const status = await fetch(getNginxFile("json/status.json"), {
     cache: "no-store",
   });
-  const logs = await fetch(getStaticFile("mdx/logs.mdx"), {
+  const logs = await fetch(getNginxFile("mdx/logs.mdx"), {
     cache: "no-store",
   });
 
@@ -50,11 +50,19 @@ export default async function Changelog({ searchParams }) {
   return (
     <Container>
       <Typography variant="h3">Status</Typography>
-      <Status
-        status={await status.json()}
-        version={2}
-        firstRelease={"April 2023"}
-      />
+      <Box
+        sx={{
+          "& a": {
+            color: "text.link",
+          },
+        }}
+      >
+        <Status
+          status={await status.json()}
+          version={2}
+          firstRelease={"April 2023"}
+        />
+      </Box>
 
       <Stack direction="row" pt={2} mb={2} mt={3}>
         <Typography variant="h3" mt={3}>

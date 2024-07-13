@@ -14,6 +14,7 @@ import { getPlaceholder } from "utils/placeholder";
 export default function ClubBanner({
   name,
   banner,
+  logo = null,
   width,
   height,
   containerHeight = null,
@@ -55,12 +56,29 @@ export default function ClubBanner({
           height: "100%",
           objectFit: "cover",
           position: "absolute",
+          opacity: logo && theme.palette.mode !== "dark" ? 0.07 : 0.7,
+          backgroundColor: theme.palette.background.default,
         }}
         onError={() =>
           setImg(getPlaceholder({ seed: name, w: width, h: height }))
         }
         {...imageProps}
       />
+      {logo ? (
+        <Image
+          alt={name}
+          src={logo}
+          layout="fill"
+          objectFit="contain"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            padding: theme.spacing(3.5),
+          }}
+        />
+      ) : null}
     </Box>
   );
 }
