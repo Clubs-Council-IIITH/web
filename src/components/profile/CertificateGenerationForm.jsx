@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect } from "react";
 import {
   TextField,
   Checkbox,
@@ -161,12 +161,13 @@ export default function CertificateGenerationForm({
                   name="reason"
                   label="Reason for Certificate Generation"
                   multiline
-                  rows={4}
+                  rows={5}
                   fullWidth
                   required
                   sx={{ mb: 2 }}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
+                  inputProps={{ maxLength: 2000 }}
                 />
 
                 <FormControlLabel
@@ -223,7 +224,11 @@ export default function CertificateGenerationForm({
                   {new Date(cert.requestedAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  {cert.status === "approved" ? "Approved" : "Pending"}
+                  {cert.status === "approved"
+                    ? "Approved"
+                    : cert.status === "rejected"
+                    ? "Rejected"
+                    : "Pending"}
                 </TableCell>
                 <TableCell>
                   {cert.status === "approved" ? (
