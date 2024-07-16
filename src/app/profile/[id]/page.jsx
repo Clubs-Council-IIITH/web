@@ -143,7 +143,7 @@ export default async function Profile({ params }) {
               >
                 {user.email}
               </Typography>
-              {currentUser?.role === "public" && (
+              {currentUser?.role === "public" && memberships.length > 0 && (
                 <Link
                   href={`/profile/${user.uid}/generate-certificate`}
                   passHref
