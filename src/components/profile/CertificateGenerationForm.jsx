@@ -47,7 +47,7 @@ export default function CertificateGenerationForm({
         setCertificates(data.data);
       } else {
         throw new Error(
-          data.error.messages[0] || "Failed to fetch certificates",
+          data.error.messages[0] || "Failed to fetch certificates"
         );
       }
     } catch (err) {
@@ -61,38 +61,46 @@ export default function CertificateGenerationForm({
 
   const handleCertificateRequest = async (event) => {
     event.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      return;
+    }
 
     startTransition(async () => {
       try {
+        const payload = {
+          certificateInput: {
+            requestReason: reason,
+          },
+        };
+
         let res = await fetch("/actions/certificates/request", {
           method: "POST",
-          body: JSON.stringify({
-            certificateInput: {
-              requestReason: reason,
-              memberships: memberships,
-            },
-          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         });
-        res = await res.json();
 
-        if (res.ok) {
-          triggerToast({
-            title: "Success!",
-            messages: [
-              "Certificate request submitted successfully. Please wait for approval.",
-            ],
-            severity: "success",
-          });
-          setShowForm(false);
-          setReason("");
-          setAgreeToTerms(false);
-          fetchUserCertificates();
-        } else {
+        if (!res.ok) {
+          const errorData = await res.json();
           throw new Error(
-            res.error.messages[0] || "Failed to request certificate",
+            errorData.error?.messages[0] || "Failed to request certificate"
           );
         }
+
+        const data = await res.json();
+
+        triggerToast({
+          title: "Success!",
+          messages: [
+            "Certificate request submitted successfully. Please wait for approval.",
+          ],
+          severity: "success",
+        });
+        setShowForm(false);
+        setReason("");
+        setAgreeToTerms(false);
+        fetchUserCertificates();
       } catch (err) {
         triggerToast({
           title: "Error",

@@ -45,8 +45,15 @@ export const REQUEST_CERTIFICATE = gql`
     requestCertificate(certificateInput: $certificateInput) {
       _id
       certificateNumber
-      status
-      requestedAt
+      status {
+        requestedAt
+        ccApprovedAt
+        ccApprover
+        sloApprovedAt
+        sloApprover
+      }
+      state
+      requestReason
     }
   }
 `;
