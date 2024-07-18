@@ -229,7 +229,7 @@ export default function CertificateGenerationForm({
               <TableRow key={cert.certificateNumber}>
                 <TableCell>{cert.certificateNumber}</TableCell>
                 <TableCell>
-                  {new Date(cert.requestedAt).toLocaleDateString()}
+                  {new Date(cert.status.requestedAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
                   {cert.status === "approved"

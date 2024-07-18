@@ -43,13 +43,13 @@ export default function PendingCertificatesTable() {
         setCertificates(data.data || []);
       } else {
         throw new Error(
-          data.error?.messages?.[0] || "Failed to fetch pending certificates",
+          data.error?.messages?.[0] || "Failed to fetch pending certificates"
         );
       }
     } catch (err) {
       console.error("Error fetching pending certificates:", err);
       setError(
-        "An error occurred while fetching pending certificates. Please try again later.",
+        "An error occurred while fetching pending certificates. Please try again later."
       );
       triggerToast({
         title: "Error",
@@ -81,7 +81,7 @@ export default function PendingCertificatesTable() {
         await fetchPendingCertificates(); // Refresh the list
       } else {
         throw new Error(
-          data.error?.messages?.[0] || "Failed to approve certificate",
+          data.error?.messages?.[0] || "Failed to approve certificate"
         );
       }
     } catch (err) {
@@ -154,7 +154,6 @@ export default function PendingCertificatesTable() {
             <TableRow>
               <TableCell>Certificate Number</TableCell>
               <TableCell>User ID</TableCell>
-              <TableCell>Status</TableCell>
               <TableCell>Request Date</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -171,9 +170,8 @@ export default function PendingCertificatesTable() {
               >
                 <TableCell>{cert.certificateNumber}</TableCell>
                 <TableCell>{cert.userId}</TableCell>
-                <TableCell>{cert.status}</TableCell>
                 <TableCell>
-                  {new Date(cert.requestedAt).toLocaleDateString()}
+                  {new Date(cert.status.requestedAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
                   <Button
@@ -229,16 +227,11 @@ export default function PendingCertificatesTable() {
             <Typography variant="body1">{selectedCert?.userId}</Typography>
 
             <Typography variant="subtitle2" fontWeight="bold">
-              Status:
-            </Typography>
-            <Typography variant="body1">{selectedCert?.status}</Typography>
-
-            <Typography variant="subtitle2" fontWeight="bold">
               Request Date:
             </Typography>
             <Typography variant="body1">
               {selectedCert &&
-                new Date(selectedCert.requestedAt).toLocaleDateString()}
+                new Date(selectedCert.status.requestedAt).toLocaleDateString()}
             </Typography>
 
             <Typography

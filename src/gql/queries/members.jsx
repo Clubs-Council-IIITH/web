@@ -92,9 +92,9 @@ export const GET_USER_CERTIFICATES = gql`
     getUserCertificates {
       _id
       certificateNumber
-      status
-      requestedAt
-      approvedAt
+      status {
+        requestedAt
+      }
     }
   }
 `;
@@ -105,8 +105,9 @@ export const GET_PENDING_CERTIFICATES = gql`
       _id
       certificateNumber
       userId
-      status
-      requestedAt
+      status {
+        requestedAt
+      }
       requestReason
     }
   }
