@@ -63,9 +63,23 @@ export const APPROVE_CERTIFICATE = gql`
     approveCertificate(certificateNumber: $certificateNumber) {
       _id
       certificateNumber
-      status
-      approvedAt
-      approverId
+      state
+      status {
+        ccApprovedAt
+        ccApprover
+        sloApprovedAt
+        sloApprover
+      }
+    }
+  }
+`;
+
+export const REJECT_CERTIFICATE = gql`
+  mutation RejectCertificate($certificateNumber: String!) {
+    rejectCertificate(certificateNumber: $certificateNumber) {
+      _id
+      certificateNumber
+      state
     }
   }
 `;

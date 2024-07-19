@@ -24,7 +24,7 @@ export default function PendingCertificatesTable() {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [approving, setApproving] = useState(null);
+  const [processing, setProcessing] = useState(null);
   const { triggerToast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
@@ -61,10 +61,15 @@ export default function PendingCertificatesTable() {
     }
   };
 
-  const handleApprove = async (certificateNumber) => {
-    setApproving(certificateNumber);
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleString();
+  };
+
+  const handleAction = async (certificateNumber, action) => {
+    setProcessing(certificateNumber);
     try {
-      const res = await fetch("/actions/certificates/approve", {
+      const res = await fetch(`/actions/certificates/${action}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,24 +80,24 @@ export default function PendingCertificatesTable() {
       if (data.ok) {
         triggerToast({
           title: "Success",
-          messages: ["Certificate approved successfully"],
+          messages: [`Certificate ${action}d successfully`],
           severity: "success",
         });
         await fetchPendingCertificates(); // Refresh the list
       } else {
         throw new Error(
-          data.error?.messages?.[0] || "Failed to approve certificate"
+          data.error?.messages?.[0] || `Failed to ${action} certificate`
         );
       }
     } catch (err) {
-      console.error("Error approving certificate:", err);
+      console.error(`Error ${action}ing certificate:`, err);
       triggerToast({
         title: "Error",
         messages: [err.message],
         severity: "error",
       });
     } finally {
-      setApproving(null);
+      setProcessing(null);
     }
   };
 
@@ -155,7 +160,10 @@ export default function PendingCertificatesTable() {
               <TableCell>Certificate Number</TableCell>
               <TableCell>User ID</TableCell>
               <TableCell>Request Date</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell>State</TableCell>
+              <TableCell>CC Approved</TableCell>
+              <TableCell>SLO Approved</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -170,23 +178,46 @@ export default function PendingCertificatesTable() {
               >
                 <TableCell>{cert.certificateNumber}</TableCell>
                 <TableCell>{cert.userId}</TableCell>
-                <TableCell>
-                  {new Date(cert.status.requestedAt).toLocaleDateString()}
-                </TableCell>
+                <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
+                <TableCell>{cert.state}</TableCell>
+                <TableCell>{formatDate(cert.status.ccApprovedAt)}</TableCell>
+                <TableCell>{formatDate(cert.status.sloApprovedAt)}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleApprove(cert.certificateNumber);
+                      handleAction(cert.certificateNumber, "approve");
                     }}
-                    disabled={approving === cert.certificateNumber}
+                    disabled={
+                      processing === cert.certificateNumber ||
+                      cert.state === "approved"
+                    }
+                    sx={{ mr: 1 }}
                   >
-                    {approving === cert.certificateNumber ? (
+                    {processing === cert.certificateNumber ? (
                       <CircularProgress size={24} />
                     ) : (
                       "Approve"
+                    )}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAction(cert.certificateNumber, "reject");
+                    }}
+                    disabled={
+                      processing === cert.certificateNumber ||
+                      cert.state === "approved"
+                    }
+                  >
+                    {processing === cert.certificateNumber ? (
+                      <CircularProgress size={24} />
+                    ) : (
+                      "Reject"
                     )}
                   </Button>
                 </TableCell>
@@ -233,6 +264,11 @@ export default function PendingCertificatesTable() {
               {selectedCert &&
                 new Date(selectedCert.status.requestedAt).toLocaleDateString()}
             </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              State:
+            </Typography>
+            <Typography variant="body1">{selectedCert?.state}</Typography>
 
             <Typography
               variant="subtitle2"

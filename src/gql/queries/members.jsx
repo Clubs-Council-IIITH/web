@@ -108,6 +108,7 @@ export const GET_PENDING_CERTIFICATES = gql`
       status {
         requestedAt
       }
+      state
       requestReason
     }
   }
@@ -119,9 +120,14 @@ export const VERIFY_CERTIFICATE = gql`
       _id
       certificateNumber
       userId
-      status
-      requestedAt
-      approvedAt
+      state
+      status {
+        requestedAt
+        ccApprovedAt
+        ccApprover
+        sloApprovedAt
+        sloApprover
+      }
       certificateData
       requestReason
     }

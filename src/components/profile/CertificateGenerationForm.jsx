@@ -116,6 +116,17 @@ export default function CertificateGenerationForm({
     console.log(`Downloading certificate ${certificateNumber}`);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const getStatus = (cert) => {
+    if (cert.state === "rejected") return "Rejected";
+    if (cert.state === "approved") return "Approved";
+    return "Pending";
+  };
+
   return (
     <div className="container mx-auto p-4">
       <Typography variant="h4" gutterBottom>
@@ -228,18 +239,11 @@ export default function CertificateGenerationForm({
             {certificates.map((cert) => (
               <TableRow key={cert.certificateNumber}>
                 <TableCell>{cert.certificateNumber}</TableCell>
+                <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
+                <TableCell>{getStatus(cert)}</TableCell>
+                {JSON.stringify(cert)}
                 <TableCell>
-                  {new Date(cert.status.requestedAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  {cert.status === "approved"
-                    ? "Approved"
-                    : cert.status === "rejected"
-                    ? "Rejected"
-                    : "Pending"}
-                </TableCell>
-                <TableCell>
-                  {cert.status === "approved" ? (
+                  {getStatus(cert) === "Approved" ? (
                     <Button
                       variant="contained"
                       color="primary"

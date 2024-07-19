@@ -281,7 +281,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       {["slo"].includes(user.role) ? SLOItems : null}
       {aboutItems}
       {helpItems}
-      {["slo"].includes(user.role) ? approveItems : null}
+      {["slo", "cc"].includes(user.role) ? approveItems : null}
       <Box sx={{ flexGrow: 1 }} />
     </ScrollbarWrapper>
   );

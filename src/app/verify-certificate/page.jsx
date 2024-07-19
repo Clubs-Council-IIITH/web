@@ -123,7 +123,7 @@ export default function VerifyCertificatePage() {
               <Typography variant="subtitle2" fontWeight="bold">
                 Status:
               </Typography>
-              <Typography variant="body1">{certificate.status}</Typography>
+              <Typography variant="body1">{certificate.state}</Typography>
 
               <Typography variant="subtitle2" fontWeight="bold">
                 Request Date:
