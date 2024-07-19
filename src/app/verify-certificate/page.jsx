@@ -49,6 +49,11 @@ export default function VerifyCertificatePage() {
     }
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleString();
+  };
+
   return (
     <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
@@ -129,7 +134,7 @@ export default function VerifyCertificatePage() {
                 Request Date:
               </Typography>
               <Typography variant="body1">
-                {new Date(certificate.requestedAt).toLocaleDateString()}
+                {formatDate(certificate.status.requestedAt)}
               </Typography>
 
               <Typography

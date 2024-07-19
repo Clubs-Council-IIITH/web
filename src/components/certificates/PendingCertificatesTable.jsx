@@ -160,9 +160,6 @@ export default function PendingCertificatesTable() {
               <TableCell>Certificate Number</TableCell>
               <TableCell>User ID</TableCell>
               <TableCell>Request Date</TableCell>
-              <TableCell>State</TableCell>
-              <TableCell>CC Approved</TableCell>
-              <TableCell>SLO Approved</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -179,9 +176,6 @@ export default function PendingCertificatesTable() {
                 <TableCell>{cert.certificateNumber}</TableCell>
                 <TableCell>{cert.userId}</TableCell>
                 <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
-                <TableCell>{cert.state}</TableCell>
-                <TableCell>{formatDate(cert.status.ccApprovedAt)}</TableCell>
-                <TableCell>{formatDate(cert.status.sloApprovedAt)}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"

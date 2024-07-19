@@ -241,7 +241,6 @@ export default function CertificateGenerationForm({
                 <TableCell>{cert.certificateNumber}</TableCell>
                 <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
                 <TableCell>{getStatus(cert)}</TableCell>
-                {JSON.stringify(cert)}
                 <TableCell>
                   {getStatus(cert) === "Approved" ? (
                     <Button

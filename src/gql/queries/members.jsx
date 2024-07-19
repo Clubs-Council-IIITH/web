@@ -95,6 +95,7 @@ export const GET_USER_CERTIFICATES = gql`
       status {
         requestedAt
       }
+      state
     }
   }
 `;

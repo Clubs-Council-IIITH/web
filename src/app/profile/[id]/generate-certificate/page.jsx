@@ -14,31 +14,5 @@ export default async function GenerateCertificatePage({ params }) {
 
   const userProfile = { ...data.userProfile, ...data.userMeta };
 
-  let memberships = [];
-  const {
-    data: { memberRoles },
-  } = await getClient().query(GET_MEMBERSHIPS, {
-    uid: userProfile.uid,
-  });
-  memberships = memberRoles.reduce(
-    (cv, m) =>
-      cv.concat(
-        m.roles
-          .filter((r) => !r.deleted)
-          .map((r) => ({
-            startYear: r.startYear,
-            endYear: r.endYear,
-            name: r.name,
-            cid: m.cid,
-          })),
-      ),
-    [],
-  );
-
-  return (
-    <CertificateGenerationForm
-      userProfile={userProfile}
-      memberships={memberships}
-    />
-  );
+  return <CertificateGenerationForm userProfile={userProfile} />;
 }
