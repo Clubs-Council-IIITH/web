@@ -12,6 +12,8 @@ import {
   Alert,
 } from "@mui/material";
 
+import { ISOtoHuman } from "utils/formatTime";
+
 export default function VerifyCertificatePage() {
   const [certificateNumber, setCertificateNumber] = useState("");
   const [key, setKey] = useState("");
@@ -42,16 +44,11 @@ export default function VerifyCertificatePage() {
         setError(result.error?.messages?.[0] || "Failed to verify certificate");
       }
     } catch (err) {
-      console.error("Error verifying certificate:", err);
+      // console.error("Error verifying certificate:", err);
       setError("An error occurred while verifying the certificate");
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleString();
   };
 
   return (
@@ -134,7 +131,7 @@ export default function VerifyCertificatePage() {
                 Request Date:
               </Typography>
               <Typography variant="body1">
-                {formatDate(certificate.status.requestedAt)}
+                {ISOtoHuman(certificate.status.requestedAt)}
               </Typography>
 
               <Typography

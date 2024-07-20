@@ -18,6 +18,7 @@ import {
   Paper,
 } from "@mui/material";
 import { useToast } from "components/Toast";
+import { ISOtoHuman } from "utils/formatTime";
 
 export default function CertificateGenerationForm() {
   const [reason, setReason] = useState("");
@@ -108,11 +109,6 @@ export default function CertificateGenerationForm() {
   const handleDownload = (certificateNumber) => {
     // TODO: implement download certificate
     console.log(`Downloading certificate ${certificateNumber}`);
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString();
   };
 
   const getStatus = (cert) => {
@@ -212,7 +208,7 @@ export default function CertificateGenerationForm() {
               .map((cert) => (
                 <TableRow key={cert.certificateNumber}>
                   <TableCell>{cert.certificateNumber}</TableCell>
-                  <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
+                  <TableCell>{ISOtoHuman(cert.status.requestedAt)}</TableCell>
                   <TableCell>{getStatus(cert)}</TableCell>
                   <TableCell>
                     <Button

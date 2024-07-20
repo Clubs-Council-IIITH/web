@@ -11,7 +11,7 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import CertificateGenerationForm from "components/profile/CertificateGenerationForm";
+import CertificateGenerationForm from "components/certificates/CertificateGenerationForm";
 
 export async function generateMetadata({ params }) {
   const { id } = params;
