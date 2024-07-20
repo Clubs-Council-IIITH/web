@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Typography,
@@ -9,9 +9,9 @@ import {
   Box,
   Paper,
   CircularProgress,
-  Alert,
 } from "@mui/material";
 
+import { useToast } from "components/Toast";
 import { ISOtoHuman } from "utils/formatTime";
 
 export default function VerifyCertificatePage() {
@@ -20,6 +20,8 @@ export default function VerifyCertificatePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [certificate, setCertificate] = useState(null);
+  const [user, setUser] = useState(null);
+  const { triggerToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +42,22 @@ export default function VerifyCertificatePage() {
 
       if (result.ok && result.data) {
         setCertificate(result.data);
+
+        let res = await fetch("/actions/users/get/full", {
+          method: "POST",
+          body: JSON.stringify({ uid: result.data.userId }),
+        });
+        res = await res.json();
+        if (!res.ok) {
+          triggerToast({
+            title: "Unable to fetch user data",
+            messages: res.error.messages,
+            severity: "error",
+          });
+        } else {
+          console.log(res.data);
+          setUser(res.data);
+        }
       } else {
         setError(result.error?.messages?.[0] || "Failed to verify certificate");
       }
@@ -91,11 +109,15 @@ export default function VerifyCertificatePage() {
           </form>
         </Paper>
 
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
-          </Alert>
-        )}
+        {error ? (
+          <Typography
+            variant="body1"
+            color="error"
+            sx={{ mt: 2, textTransform: "capitalize" }}
+          >
+            <center>{error}</center>
+          </Typography>
+        ) : null}
 
         {certificate && (
           <Paper elevation={3} sx={{ mt: 3, p: 3 }}>
@@ -108,6 +130,7 @@ export default function VerifyCertificatePage() {
                 gridTemplateColumns: "auto 1fr",
                 gap: 2,
                 alignItems: "baseline",
+                mt: 3,
               }}
             >
               <Typography variant="subtitle2" fontWeight="bold">
@@ -118,31 +141,34 @@ export default function VerifyCertificatePage() {
               </Typography>
 
               <Typography variant="subtitle2" fontWeight="bold">
-                User ID:
+                Name:
               </Typography>
-              <Typography variant="body1">{certificate.userId}</Typography>
+              <Typography variant="body1">
+                {user?.firstName} {user?.lastName}
+              </Typography>
 
               <Typography variant="subtitle2" fontWeight="bold">
-                Status:
+                Email:
               </Typography>
-              <Typography variant="body1">{certificate.state}</Typography>
+              <Typography variant="body1">{user?.email}</Typography>
 
               <Typography variant="subtitle2" fontWeight="bold">
-                Request Date:
+                Roll Number:
+              </Typography>
+              <Typography variant="body1">{user?.rollno}</Typography>
+
+              <Typography variant="subtitle2" fontWeight="bold">
+                Batch:
+              </Typography>
+              <Typography variant="body1">
+                {user?.batch.toUpperCase()} · {user?.stream.toUpperCase()}
+              </Typography>
+
+              <Typography variant="subtitle2" fontWeight="bold">
+                Issued Date:
               </Typography>
               <Typography variant="body1">
                 {ISOtoHuman(certificate.status.requestedAt)}
-              </Typography>
-
-              <Typography
-                variant="subtitle2"
-                fontWeight="bold"
-                sx={{ alignSelf: "start" }}
-              >
-                Request Reason:
-              </Typography>
-              <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
-                {certificate.requestReason || "No reason provided"}
               </Typography>
             </Box>
           </Paper>
