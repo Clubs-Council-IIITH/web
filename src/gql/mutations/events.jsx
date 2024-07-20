@@ -30,7 +30,7 @@ export const PROGRESS_EVENT = gql`
     $ccProgressBudget: Boolean
     $ccProgressRoom: Boolean
     $ccApprover: String,
-    $slcMembersForEmail: [String]
+    $slcMembersForEmail: [String!]
   ) {
     progressEvent(
       eventid: $eventid
