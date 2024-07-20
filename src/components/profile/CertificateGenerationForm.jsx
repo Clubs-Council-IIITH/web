@@ -1,16 +1,13 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   TextField,
   Checkbox,
   FormControlLabel,
   Button,
   Box,
-  CircularProgress,
-  Typography,
   Card,
-  CardHeader,
   CardContent,
   Table,
   TableBody,
@@ -22,13 +19,9 @@ import {
 } from "@mui/material";
 import { useToast } from "components/Toast";
 
-export default function CertificateGenerationForm({
-  userProfile,
-  memberships,
-}) {
+export default function CertificateGenerationForm() {
   const [reason, setReason] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const [showForm, setShowForm] = useState(false);
   const [certificates, setCertificates] = useState([]);
   const { triggerToast } = useToast();
@@ -65,50 +58,51 @@ export default function CertificateGenerationForm({
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const payload = {
-          certificateInput: {
-            requestReason: reason,
-          },
-        };
+    try {
+      const payload = {
+        certificateInput: {
+          requestReason: reason,
+        },
+      };
 
-        let res = await fetch("/actions/certificates/request", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
+      let res = await fetch("/actions/certificates/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(
-            errorData.error?.messages[0] || "Failed to request certificate"
-          );
-        }
-
-        const data = await res.json();
-
-        triggerToast({
-          title: "Success!",
-          messages: [
-            "Certificate request submitted successfully. Please wait for approval.",
-          ],
-          severity: "success",
-        });
-        setShowForm(false);
-        setReason("");
-        setAgreeToTerms(false);
-        fetchUserCertificates();
-      } catch (err) {
-        triggerToast({
-          title: "Error",
-          messages: [err.message],
-          severity: "error",
-        });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(
+          errorData.error?.messages[0] || "Failed to request certificate"
+        );
       }
-    });
+
+      const data = await res.json();
+
+      triggerToast({
+        title: "Success!",
+        messages: [
+          "Certificate request submitted successfully. Please wait for approval.",
+        ],
+        severity: "success",
+      });
+
+      // setCertificates({ ...certificates, data.data });
+      setCertificates([...certificates, data.data]);
+
+      setShowForm(false);
+      setReason("");
+      setAgreeToTerms(false);
+    } catch (err) {
+      triggerToast({
+        title: "Error",
+        messages: [err.message],
+        severity: "error",
+      });
+    }
   };
 
   const handleDownload = (certificateNumber) => {
@@ -127,52 +121,30 @@ export default function CertificateGenerationForm({
     return "Pending";
   };
 
+  const hasPendingCertificates = (certs) => {
+    return (
+      certs &&
+      certs.some(
+        (cert) => cert.state !== "approved" && cert.state !== "rejected"
+      )
+    );
+  };
+
   return (
-    <div className="container mx-auto p-4">
-      <Typography variant="h4" gutterBottom>
-        Certificates
-      </Typography>
-      <Card>
-        <CardHeader
-          title="User Details"
-          titleTypographyProps={{ variant: "h5" }}
-        />
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <Typography>
-              <strong>Name:</strong> {userProfile.firstName}{" "}
-              {userProfile.lastName}
-            </Typography>
-            <Typography>
-              <strong>Email:</strong> {userProfile.email}
-            </Typography>
-            <Typography>
-              <strong>Roll Number:</strong> {userProfile.rollno}
-            </Typography>
-            <Typography>
-              <strong>Batch:</strong> {userProfile.batch}
-            </Typography>
-            <Typography>
-              <strong>Stream:</strong> {userProfile.stream}
-            </Typography>
-            <Typography>
-              <strong>Phone:</strong> {userProfile.phone}
-            </Typography>
-          </div>
-        </CardContent>
-      </Card>
-
+    <>
       <Box mt={4}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setShowForm(!showForm)}
-          sx={{ mb: 2 }}
-        >
-          {showForm ? "Cancel Request" : "Request New Certificate"}
-        </Button>
+        {hasPendingCertificates(certificates) ? null : (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setShowForm(!showForm)}
+            sx={{ mb: 2 }}
+          >
+            {showForm ? "Cancel Request" : "Request New Certificate"}
+          </Button>
+        )}
 
-        {showForm && (
+        {showForm && !hasPendingCertificates(certificates) && (
           <Card>
             <CardContent>
               <Box component="form" onSubmit={handleCertificateRequest}>
@@ -206,18 +178,13 @@ export default function CertificateGenerationForm({
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  disabled={!isFormValid || isPending}
+                  disabled={!isFormValid}
                   style={{
-                    opacity: isFormValid && !isPending ? 1 : 0.5,
-                    cursor:
-                      isFormValid && !isPending ? "pointer" : "not-allowed",
+                    opacity: isFormValid ? 1 : 0.5,
+                    cursor: isFormValid ? "pointer" : "not-allowed",
                   }}
                 >
-                  {isPending ? (
-                    <CircularProgress size={24} />
-                  ) : (
-                    "Submit Request"
-                  )}
+                  Submit Request
                 </Button>
               </Box>
             </CardContent>
@@ -236,31 +203,32 @@ export default function CertificateGenerationForm({
             </TableRow>
           </TableHead>
           <TableBody>
-            {certificates.map((cert) => (
-              <TableRow key={cert.certificateNumber}>
-                <TableCell>{cert.certificateNumber}</TableCell>
-                <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
-                <TableCell>{getStatus(cert)}</TableCell>
-                <TableCell>
-                  {getStatus(cert) === "Approved" ? (
+            {certificates
+              .sort((a, b) =>
+                b.certificateNumber
+                  .toString()
+                  .localeCompare(a.certificateNumber.toString())
+              )
+              .map((cert) => (
+                <TableRow key={cert.certificateNumber}>
+                  <TableCell>{cert.certificateNumber}</TableCell>
+                  <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
+                  <TableCell>{getStatus(cert)}</TableCell>
+                  <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
+                      disabled={cert.state !== "approved"}
                       onClick={() => handleDownload(cert.certificateNumber)}
                     >
                       Download
                     </Button>
-                  ) : (
-                    <Button disabled variant="contained">
-                      Download
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </>
   );
 }

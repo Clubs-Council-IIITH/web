@@ -1,10 +1,12 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
+import { Container, Grid, Stack, Typography, Button, Box } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { redirect } from "next/navigation";
-
-import { Container, Grid, Stack, Typography } from "@mui/material";
 
 import ActionPalette from "components/ActionPalette";
 import ClubLogo from "components/clubs/ClubLogo";
@@ -12,8 +14,6 @@ import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
-import Link from "next/link";
-import { Button } from "@mui/material";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
@@ -143,16 +143,6 @@ export default async function Profile({ params }) {
               >
                 {user.email}
               </Typography>
-              {currentUser?.role === "public" && memberships.length > 0 && (
-                <Link
-                  href={`/profile/${user.uid}/generate-certificate`}
-                  passHref
-                >
-                  <Button variant="contained" color="primary">
-                    Generate Certificate
-                  </Button>
-                </Link>
-              )}
             </Stack>
           </Stack>
         </Grid>
@@ -164,9 +154,24 @@ export default async function Profile({ params }) {
         <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
           {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff from rendering memberships
             <Stack direction="column" spacing={2}>
-              <Typography variant="subtitle2" textTransform="uppercase">
-                Memberships
-              </Typography>
+              <Stack direction="row" pt={2} mb={2}>
+                <Typography variant="subtitle2" textTransform="uppercase">
+                  Memberships
+                </Typography>
+                <Box sx={{ flexGrow: 1 }} />
+                {currentUser?.role === "public" && currentUser?.uid === user?.uid && memberships.length > 0 && (
+                  <Box display="flex" alignItems="center">
+                    <Link
+                      href={`/profile/${user.uid}/generate-certificate`}
+                      passHref
+                    >
+                      <Button variant="contained" color="primary">
+                        Generate Certificate
+                      </Button>
+                    </Link>
+                  </Box>
+                )}
+              </Stack>
               <UserMemberships rows={memberships} />
             </Stack>
           ) : null}
