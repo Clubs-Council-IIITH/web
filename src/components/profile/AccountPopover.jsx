@@ -18,7 +18,7 @@ import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { login, logout } from "utils/auth";
 import { useAuth } from "components/AuthProvider";
-import { useMode } from "contexts/ModeContext";
+import { useMode, useMode2 } from "contexts/ModeContext";
 import { ModeSwitch } from "components/ModeSwitch";
 import { usePathname } from "next/navigation";
 
@@ -26,6 +26,7 @@ export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
   const { isDark, setMode } = useMode(); // Accessing isDark and setMode from ModeContext
+  const {isiframe, setIsiframe}=useMode2();
   const [open, setOpen] = React.useState(null);
 
   const handleChange = () => {
@@ -115,8 +116,8 @@ export default function AccountPopover() {
           ) : null}
         </Avatar>
       </IconButton>
-
-      <Popover
+      
+      {!isiframe && (<Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleClose}
@@ -135,7 +136,10 @@ export default function AccountPopover() {
           },
         }}
       >
-        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "}
+      
+        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />
+      
+        {/* <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "} */}
         {/* Pass current isDark value and handleChange function to ModeSwitch component */}
         {isAuthenticated ? (
           <>
@@ -206,7 +210,7 @@ export default function AccountPopover() {
             </MenuItem>
           </>
         )}
-      </Popover>
+        </Popover>)}
     </>
   );
 }
