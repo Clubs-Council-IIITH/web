@@ -9,7 +9,7 @@ export async function POST(request) {
 
   const { error, data: { usersByRole } = {} } = await getClient().query(
     GET_USER_LIST_BY_ROLE,
-    { role: role }
+    { role: role },
   );
   if (error) {
     response.error = {
