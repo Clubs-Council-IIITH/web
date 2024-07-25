@@ -54,7 +54,7 @@ export default function AccountPopover() {
 
   return (
     <>
-      <IconButton
+      {!isiframe && (<IconButton
         onClick={handleOpen}
         sx={{
           p: 0,
@@ -115,46 +115,46 @@ export default function AccountPopover() {
             }`
           ) : null}
         </Avatar>
-      </IconButton>
-
-      {!isiframe && (
-        <Popover
-          open={Boolean(open)}
-          anchorEl={open}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-          PaperProps={{
-            sx: {
-              p: 0,
-              mt: 1.5,
-              ml: 0.75,
-              width: 180,
-              "& .MuiMenuItem-root": {
-                typography: "body2",
-                borderRadius: 0.75,
-              },
+      </IconButton>)}
+      
+      <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        PaperProps={{
+          sx: {
+            p: 0,
+            mt: 1.5,
+            ml: 0.75,
+            width: 180,
+            "& .MuiMenuItem-root": {
+              typography: "body2",
+              borderRadius: 0.75,
             },
-          }}
-        >
-          <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />
-
-          {/* <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "} */}
-          {/* Pass current isDark value and handleChange function to ModeSwitch component */}
-          {isAuthenticated ? (
-            <>
-              <Stack sx={{ my: 1.5, px: 2.5 }}>
-                <Typography variant="subtitle2" noWrap>
-                  {`${user?.firstName} ${user?.lastName}`}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary" }}
-                  noWrap
-                >
-                  {user?.email}
-                </Typography>
-              </Stack>
+          },
+        }}
+      >
+      
+        <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />
+      
+        {/* <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "} */}
+        {/* Pass current isDark value and handleChange function to ModeSwitch component */}
+        {isAuthenticated ? (
+          <>
+            <Stack sx={{ my: 1.5, px: 2.5 }}>
+              <Typography variant="subtitle2" noWrap>
+                {`${user?.firstName} ${user?.lastName}`}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary" }}
+                noWrap
+              >
+                {user?.email}
+              </Typography>
+            </Stack>
 
               {[...AUTHENTICATED_MENU_OPTIONS, ...COMMON_MENU_OPTIONS].length >
               0 ? (
@@ -206,13 +206,12 @@ export default function AccountPopover() {
                 </>
               ) : null}
 
-              <MenuItem onClick={() => login(pathname)} sx={{ m: 1 }}>
-                Login
-              </MenuItem>
-            </>
-          )}
+            <MenuItem onClick={() => login(pathname)} sx={{ m: 1 }}>
+              Login
+            </MenuItem>
+          </>
+        )}
         </Popover>
-      )}
     </>
   );
 }
