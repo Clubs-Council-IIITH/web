@@ -9,7 +9,7 @@ const ModeContext = createContext({
   setMode: () => {},
 });
 
-const iframeContext= createContext({
+const iframeContext = createContext({
   isiframe: false,
   setMode: () => {},
 });
@@ -33,13 +33,13 @@ function GradientCircularProgress() {
 }
 
 export const useMode = () => useContext(ModeContext);
-export const useMode2= () => useContext(iframeContext);
+export const useMode2 = () => useContext(iframeContext);
 
 export const ModeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(false);
-  const [isiframe,setIsiframe]=useState(false);
+  const [isiframe, setIsiframe] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   let theme_bool = useMediaQuery("(prefers-color-scheme: dark)");
 
   useEffect(() => {
@@ -54,15 +54,12 @@ export const ModeProvider = ({ children }) => {
       setIsLoading(false);
     }
 
-    if ( window.self!==window.top ) 
-      { 
-        setIsiframe(true);
-        setIsDark(false);
-      } 
-      else 
-      {     
-        setIsiframe(false); 
-      }
+    if (window.self !== window.top) {
+      setIsiframe(true);
+      setIsDark(false);
+    } else {
+      setIsiframe(false);
+    }
   }, [theme_bool]);
 
   const setMode = (mode) => {
@@ -73,7 +70,7 @@ export const ModeProvider = ({ children }) => {
   };
 
   return (
-    <iframeContext.Provider value={{isiframe,setMode}}>
+    <iframeContext.Provider value={{ isiframe, setMode }}>
       <ModeContext.Provider value={{ isDark, setMode }}>
         {isLoading ? (
           <div

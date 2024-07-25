@@ -90,24 +90,23 @@ function approvalStatus(status) {
             </Box>
           </Grid>
         </Grid>
-        {/* 
-      <Grid container item spacing={2}>
-        <Grid item xs={5} lg={3}>
-          <Box mt={1}>Students Life Council</Box>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Students Life Council</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.slcApproverTime == null
+                ? "Information not available"
+                : (status?.slcApproverTime.includes(":")
+                    ? "Approved on "
+                    : "") + status?.slcApproverTime}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={1} lg={0.1}>
-          <Box mt={1}>-</Box>
-        </Grid>
-        <Grid item xs>
-          <Box mt={1}>
-            {status?.slcApproverTime == null
-              ? "Information not available"
-              : (status?.slcApproverTime.includes(":") ? "Approved on " : "") +
-                status?.slcApproverTime}
-          </Box>
-        </Grid>
-      </Grid>
-      */}
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
             <Box mt={1}>Students Life Office</Box>
@@ -148,7 +147,7 @@ export default async function ManageEvent({ params }) {
     (
       <Box>
         <ActionPalette
-          left={[EventStatus, VenueStatus]}
+          left={[EventStatus, BudgetStatus, VenueStatus]}
           leftProps={[
             { status: event?.status },
             { status: event?.status, budget: event?.budget },
