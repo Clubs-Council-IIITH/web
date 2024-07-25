@@ -54,7 +54,7 @@ export default function AccountPopover() {
 
   return (
     <>
-      <IconButton
+      {!isiframe && (<IconButton
         onClick={handleOpen}
         sx={{
           p: 0,
@@ -115,9 +115,9 @@ export default function AccountPopover() {
             }`
           ) : null}
         </Avatar>
-      </IconButton>
+      </IconButton>)}
       
-      {!isiframe && (<Popover
+      <Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleClose}
@@ -210,7 +210,7 @@ export default function AccountPopover() {
             </MenuItem>
           </>
         )}
-        </Popover>)}
+        </Popover>
     </>
   );
 }
