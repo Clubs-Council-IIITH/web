@@ -53,7 +53,7 @@ function approvalStatus(status) {
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
       <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
-        Approvals
+        Timeline
       </Typography>
 
       <Grid container spacing={2}>
@@ -69,14 +69,14 @@ function approvalStatus(status) {
               {status?.submissionTime == null
                 ? "Information not available"
                 : (status?.submissionTime.includes(":")
-                    ? "Submitted for approval on "
-                    : "") + status?.submissionTime}
+                ? "Submitted on "
+                : "") + status?.submissionTime}
             </Box>
           </Grid>
         </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={1}>Clubs Council</Box>
+            <Box mt={1}>Clubs Council Approval</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
@@ -85,14 +85,15 @@ function approvalStatus(status) {
             <Box mt={1}>
               {status?.ccApproverTime == null
                 ? "Information not available"
-                : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
-                  status?.ccApproverTime}
+                : (status?.ccApproverTime.includes(":")
+                ? "Approved on "
+                : "") + status?.ccApproverTime}
             </Box>
           </Grid>
         </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={1}>Students Life Council</Box>
+            <Box mt={1}>Students Life Council Approval</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
@@ -102,14 +103,14 @@ function approvalStatus(status) {
               {status?.slcApproverTime == null
                 ? "Information not available"
                 : (status?.slcApproverTime.includes(":")
-                    ? "Approved on "
-                    : "") + status?.slcApproverTime}
+                ? "Approved on "
+                : "") + status?.slcApproverTime}
             </Box>
           </Grid>
         </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={1}>Students Life Office</Box>
+            <Box mt={1}>Students Life Office Approval</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
@@ -119,8 +120,48 @@ function approvalStatus(status) {
               {status?.sloApproverTime == null
                 ? "Information not available"
                 : (status?.sloApproverTime.includes(":")
-                    ? "Approved on "
-                    : "") + status?.sloApproverTime}
+                ? "Approved on "
+                : "") + status?.sloApproverTime}
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Last Edited Time</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.lastUpdatedTime == null
+                ? "Information not available"
+                : (status?.lastUpdatedTime.includes(":")
+                ? "Edited on "
+                : "") + status?.lastUpdatedTime}
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3} sx={{alignItems: "center", display: "flex"}}>
+            <Box mt={1}>Last Edited By</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1} sx={{alignItems: "center", display: "flex"}}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.lastUpdatedBy == null
+                ? "Information not available"
+                :
+                <CardActionArea
+                component={Link}
+                href={`/profile/${status?.lastUpdatedBy}`}
+                sx={{ textDecoration: "none", maxWidth: "max-content" }}
+              >
+                <MemberListItem uid={status?.lastUpdatedBy} />
+              </CardActionArea>
+            }
             </Box>
           </Grid>
         </Grid>

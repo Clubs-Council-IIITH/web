@@ -42,6 +42,9 @@ export default function EventsDialog({
                       {ISOtoHuman(event.datetimeperiod[0])} to{" "}
                       {ISOtoHuman(event.datetimeperiod[1])}
                     </div>
+                    <div>
+                      <b>Status:</b> {event.status.state}
+                    </div>
                   </div>
                 }
               />
