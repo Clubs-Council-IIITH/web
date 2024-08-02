@@ -48,15 +48,59 @@ export async function generateMetadata({ params }, parent) {
   }
 }
 
-function approvalStatus(status) {
+async function approvalStatus(status) {
+  let user = null;
+  if (status?.lastUpdatedBy) {
+    try {
+      const { data: { userProfile } = {} } = await getClient().query(GET_USER, {
+        userInput: {
+          uid: status?.lastUpdatedBy,
+        },
+      });
+      user = { ...userProfile };
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
       <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
-        Approvals
+        Timeline
       </Typography>
 
       <Grid container spacing={2}>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Last Edited Time</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.lastUpdatedTime == null
+                ? "Information not available"
+                : (status?.lastUpdatedTime.includes(":") ? "Edited on " : "") +
+                  status?.lastUpdatedTime}
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Last Edited By</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.lastUpdatedBy == null
+                ? "Information not available"
+                : user?.firstName + " " + user?.lastName}
+            </Box>
+          </Grid>
+        </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
             <Box mt={2}>Event Submission</Box>
@@ -69,14 +113,14 @@ function approvalStatus(status) {
               {status?.submissionTime == null
                 ? "Information not available"
                 : (status?.submissionTime.includes(":")
-                    ? "Submitted for approval on "
+                    ? "Submitted on "
                     : "") + status?.submissionTime}
             </Box>
           </Grid>
         </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={1}>Clubs Council</Box>
+            <Box mt={1}>Clubs Council Approval</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
@@ -92,7 +136,7 @@ function approvalStatus(status) {
         </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={1}>Students Life Council</Box>
+            <Box mt={1}>Students Life Council Approval</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
@@ -109,7 +153,7 @@ function approvalStatus(status) {
         </Grid>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={1}>Students Life Office</Box>
+            <Box mt={1}>Students Life Office Approval</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
