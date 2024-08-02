@@ -1,7 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
-import { GET_USER_PROFILE } from "gql/queries/users";
 
 import {
   Box,
@@ -54,7 +53,7 @@ async function approvalStatus(status) {
   if (status?.lastUpdatedBy) {
     try{
       const { data: { userProfile } = {} } = await getClient().query(
-        GET_USER_PROFILE,
+        GET_USER,
         {
           userInput: {
             uid: status?.lastUpdatedBy,
