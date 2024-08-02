@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
+import { GET_USER_PROFILE } from "gql/queries/users";
 
 import {
   Box,
@@ -48,7 +49,23 @@ export async function generateMetadata({ params }, parent) {
   }
 }
 
-function approvalStatus(status) {
+async function approvalStatus(status) {
+  let user = null;
+  if (status?.lastUpdatedBy) {
+    try{
+      const { data: { userProfile } = {} } = await getClient().query(
+        GET_USER_PROFILE,
+        {
+          userInput: {
+            uid: status?.lastUpdatedBy,
+          },
+        },
+      );
+      user = { ...userProfile };
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
@@ -143,24 +160,17 @@ function approvalStatus(status) {
           </Grid>
         </Grid>
         <Grid container item spacing={2}>
-          <Grid item xs={5} lg={3} sx={{alignItems: "center", display: "flex"}}>
+          <Grid item xs={5} lg={3}>
             <Box mt={1}>Last Edited By</Box>
           </Grid>
-          <Grid item xs={1} lg={0.1} sx={{alignItems: "center", display: "flex"}}>
+          <Grid item xs={1} lg={0.1}>
             <Box mt={1}>-</Box>
           </Grid>
           <Grid item xs>
             <Box mt={1}>
               {status?.lastUpdatedBy == null
                 ? "Information not available"
-                :
-                <CardActionArea
-                component={Link}
-                href={`/profile/${status?.lastUpdatedBy}`}
-                sx={{ textDecoration: "none", maxWidth: "max-content" }}
-              >
-                <MemberListItem uid={status?.lastUpdatedBy} />
-              </CardActionArea>
+                : user?.firstName + " " + user?.lastName
             }
             </Box>
           </Grid>

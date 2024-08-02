@@ -43,7 +43,11 @@ export default function EventsDialog({
                       {ISOtoHuman(event.datetimeperiod[1])}
                     </div>
                     <div>
-                      <b>Status:</b> {event.status.state}
+                      <b>Status:</b> {event.status.state === "approved" 
+                      ? "Approved" 
+                      : event.status.state === "incomplete" 
+                      ? "Draft" 
+                      : "Under review"}
                     </div>
                   </div>
                 }
