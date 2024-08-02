@@ -51,15 +51,12 @@ export async function generateMetadata({ params }, parent) {
 async function approvalStatus(status) {
   let user = null;
   if (status?.lastUpdatedBy) {
-    try{
-      const { data: { userProfile } = {} } = await getClient().query(
-        GET_USER,
-        {
-          userInput: {
-            uid: status?.lastUpdatedBy,
-          },
+    try {
+      const { data: { userProfile } = {} } = await getClient().query(GET_USER, {
+        userInput: {
+          uid: status?.lastUpdatedBy,
         },
-      );
+      });
       user = { ...userProfile };
     } catch (error) {
       console.error(error);
@@ -75,6 +72,37 @@ async function approvalStatus(status) {
       <Grid container spacing={2}>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
+            <Box mt={1}>Last Edited Time</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.lastUpdatedTime == null
+                ? "Information not available"
+                : (status?.lastUpdatedTime.includes(":") ? "Edited on " : "") +
+                  status?.lastUpdatedTime}
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
+            <Box mt={1}>Last Edited By</Box>
+          </Grid>
+          <Grid item xs={1} lg={0.1}>
+            <Box mt={1}>-</Box>
+          </Grid>
+          <Grid item xs>
+            <Box mt={1}>
+              {status?.lastUpdatedBy == null
+                ? "Information not available"
+                : user?.firstName + " " + user?.lastName}
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container item spacing={2}>
+          <Grid item xs={5} lg={3}>
             <Box mt={2}>Event Submission</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
@@ -85,8 +113,8 @@ async function approvalStatus(status) {
               {status?.submissionTime == null
                 ? "Information not available"
                 : (status?.submissionTime.includes(":")
-                ? "Submitted on "
-                : "") + status?.submissionTime}
+                    ? "Submitted on "
+                    : "") + status?.submissionTime}
             </Box>
           </Grid>
         </Grid>
@@ -101,9 +129,8 @@ async function approvalStatus(status) {
             <Box mt={1}>
               {status?.ccApproverTime == null
                 ? "Information not available"
-                : (status?.ccApproverTime.includes(":")
-                ? "Approved on "
-                : "") + status?.ccApproverTime}
+                : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
+                  status?.ccApproverTime}
             </Box>
           </Grid>
         </Grid>
@@ -119,8 +146,8 @@ async function approvalStatus(status) {
               {status?.slcApproverTime == null
                 ? "Information not available"
                 : (status?.slcApproverTime.includes(":")
-                ? "Approved on "
-                : "") + status?.slcApproverTime}
+                    ? "Approved on "
+                    : "") + status?.slcApproverTime}
             </Box>
           </Grid>
         </Grid>
@@ -136,41 +163,8 @@ async function approvalStatus(status) {
               {status?.sloApproverTime == null
                 ? "Information not available"
                 : (status?.sloApproverTime.includes(":")
-                ? "Approved on "
-                : "") + status?.sloApproverTime}
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid container item spacing={2}>
-          <Grid item xs={5} lg={3}>
-            <Box mt={1}>Last Edited Time</Box>
-          </Grid>
-          <Grid item xs={1} lg={0.1}>
-            <Box mt={1}>-</Box>
-          </Grid>
-          <Grid item xs>
-            <Box mt={1}>
-              {status?.lastUpdatedTime == null
-                ? "Information not available"
-                : (status?.lastUpdatedTime.includes(":")
-                ? "Edited on "
-                : "") + status?.lastUpdatedTime}
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid container item spacing={2}>
-          <Grid item xs={5} lg={3}>
-            <Box mt={1}>Last Edited By</Box>
-          </Grid>
-          <Grid item xs={1} lg={0.1}>
-            <Box mt={1}>-</Box>
-          </Grid>
-          <Grid item xs>
-            <Box mt={1}>
-              {status?.lastUpdatedBy == null
-                ? "Information not available"
-                : user?.firstName + " " + user?.lastName
-            }
+                    ? "Approved on "
+                    : "") + status?.sloApproverTime}
             </Box>
           </Grid>
         </Grid>
