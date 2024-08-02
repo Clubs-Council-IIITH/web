@@ -25,7 +25,7 @@ import {
   Divider,
 } from "@mui/material";
 
-export default function EventApproveForm({ event, members }) {
+export default function EventApproveForm({ eventid, members }) {
   const { triggerToast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ export default function EventApproveForm({ event, members }) {
     let res = await fetch("/actions/events/progress", {
       method: "POST",
       body: JSON.stringify({
-        eventid: event._id,
+        eventid: eventid,
         cc_progress_budget: cc_progress_budget,
         cc_progress_room: cc_progress_room,
         cc_approver: approver,
@@ -84,7 +84,7 @@ export default function EventApproveForm({ event, members }) {
     });
     if (res.ok) {
       triggerToast("Event approved", "success");
-      router.push(`/manage/events/${event._id}`);
+      router.push(`/manage/events/${eventid}`);
       router.refresh();
     } else {
       triggerToast({

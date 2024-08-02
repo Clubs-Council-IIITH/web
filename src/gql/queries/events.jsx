@@ -91,6 +91,22 @@ export const GET_EVENT = gql`
   }
 `;
 
+export const GET_EVENT_STATUS = gql`
+  query Event($eventid: String!) {
+    event(eventid: $eventid) {
+      _id
+      code
+      clubid
+      name
+      status {
+        state
+        room
+        budget
+      }
+    }
+  }
+`;
+
 export const GET_FULL_EVENT = gql`
   query Event($eventid: String!) {
     event(eventid: $eventid) {

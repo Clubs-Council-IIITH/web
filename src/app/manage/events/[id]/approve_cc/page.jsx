@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS } from "gql/queries/members";
-import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_EVENT_STATUS } from "gql/queries/events";
 import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
@@ -16,7 +16,7 @@ export const metadata = {
 
 export default async function ApproveEventCC({ params }) {
   const { id } = params;
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+  const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
     eventid: id,
   });
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -64,7 +64,7 @@ export default async function ApproveEventCC({ params }) {
           </Typography>
         </center>
 
-        <EventApproveForm event={event} members={currentccMembers} />
+        <EventApproveForm eventid={event._id} members={currentccMembers} />
       </Container>
     )
   );
