@@ -36,8 +36,9 @@ const routes = {
   "/manage/holidays": ["slo"],
   "/manage/holidays/new": ["slo"], // has to be higher to not conflict with :id
   "/manage/holidays/:id": ["slo"],
-  
+
   "/certificate-requests": ["cc", "slo"],
+  "/all-certificates": ["cc", "slo"],
   "/profile/[id]/generate-certificate": ["public"],
 };
 

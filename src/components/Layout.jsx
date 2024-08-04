@@ -259,12 +259,17 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   const approveItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
       <Box px={4}>
-        <Typography variant="overline">Approve</Typography>
+        <Typography variant="overline">Certificates</Typography>
       </Box>
       <DrawerItem
-        title="Certificate Requests"
+        title="Pending Requests"
         path="/certificate-requests"
         icon={<Icon variant="card-membership-outline-rounded" />}
+      />
+      <DrawerItem
+        title="All Certificates"
+        path="/all-certificates"
+        icon={<Icon variant="library-books-outline-rounded" />}
       />
     </List>
   );

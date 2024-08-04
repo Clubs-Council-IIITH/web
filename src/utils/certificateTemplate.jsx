@@ -1,27 +1,17 @@
 export function generateCertificateHTML(certificateData) {
-  console.log("1. generateCertificateHTML started");
-  console.log("2. Certificate data:", JSON.stringify(certificateData, null, 2));
-
   if (!certificateData || typeof certificateData !== "object") {
     console.error("3. Invalid certificate data:", certificateData);
     throw new Error("Invalid certificate data");
   }
 
   const user_id = certificateData.user_id || "Unknown User";
-  console.log("4. User ID:", user_id);
 
   const memberships = Array.isArray(certificateData.memberships)
     ? certificateData.memberships
     : [];
-  console.log("5. Memberships:", JSON.stringify(memberships, null, 2));
 
   const membershipList = memberships
     .map((membership, index) => {
-      console.log(
-        `6. Processing membership ${index}:`,
-        JSON.stringify(membership, null, 2)
-      );
-
       const name = membership.name || "Unknown Position";
       const cid = (membership.cid || "Unknown Club").toUpperCase();
       const startYear = membership.startYear || "Unknown";
@@ -36,7 +26,6 @@ export function generateCertificateHTML(certificateData) {
     })
     .join("");
 
-  console.log("7. Generating HTML");
   const html = `
       <!DOCTYPE html>
       <html lang="en">
@@ -82,7 +71,6 @@ export function generateCertificateHTML(certificateData) {
       </body>
       </html>
     `;
-  console.log("8. HTML generated");
 
   return html;
 }

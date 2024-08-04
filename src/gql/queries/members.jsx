@@ -168,3 +168,23 @@ export const GET_CERTIFICATE_BY_NUMBER = gql`
     }
   }
 `;
+
+export const GET_ALL_CERTIFICATES = gql`
+  query GetAllCertificates($page: Int!, $pageSize: Int!) {
+    getAllCertificates(page: $page, pageSize: $pageSize) {
+      certificates {
+        _id
+        certificateNumber
+        userId
+        state
+        status {
+          requestedAt
+          ccApprovedAt
+          sloApprovedAt
+        }
+      }
+      totalCount
+      totalPages
+    }
+  }
+`;
