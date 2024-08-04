@@ -284,7 +284,7 @@ export default function EventForm({
     // mutate
     submitHandlers[action](data, opts);
   }
-
+  const [selectedClub, setSelectedClub] = useState([]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4} alignItems="flex-start">
@@ -310,6 +310,7 @@ export default function EventForm({
                       defaultValues?.status?.state != "incomplete"
                     }
                     clubs={clubs}
+                    onSelect={(clubId) => setSelectedClub(clubId)}
                   />
                 </Grid>
               ) : null}
@@ -322,7 +323,7 @@ export default function EventForm({
                       defaultValues?.status?.state != undefined &&
                       defaultValues?.status?.state != "incomplete"
                     }
-                    clubs={clubs}
+                    clubs={clubs.filter(club => !selectedClub.includes(club.cid))}
                   />
                 </Grid>
               ) : null}
@@ -549,37 +550,40 @@ export default function EventForm({
 }
 
 // select club to which event belongs to
-function EventClubSelect({ control, disabled = true, clubs = [] }) {
-  const { triggerToast } = useToast();
-  
+function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
   return (
-      <Controller
-        name="clubid"
-        control={control}
-        rules={{ required: "Select a club!" }}
-        render={({ field, fieldState: { error, invalid } }) => (
-          <FormControl fullWidth error={invalid}>
-            <InputLabel id="clubid">Club *</InputLabel>
-            <Select
-              labelId="clubid"
-              label="clubid *"
-              fullWidth
-              disabled={disabled}
-              {...field}
-            >
-              {clubs
-                ?.slice()
-                ?.sort((a, b) => a.name.localeCompare(b.name))
-                ?.map((club) => (
-                  <MenuItem key={club.cid} value={club.cid}>
-                    {club.name}
-                  </MenuItem>
-                ))}
-            </Select>
-            <FormHelperText>{error?.message}</FormHelperText>
-          </FormControl>
-        )}
-      />
+    <Controller
+      name="clubid"
+      control={control}
+      rules={{ required: "Select a club!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
+          <InputLabel id="clubid">Club *</InputLabel>
+          <Select
+            labelId="clubid"
+            label="clubid *"
+            fullWidth
+            disabled={disabled}
+            {...field}
+            onChange={(event) => {
+              const value = event.target.value;
+              field.onChange(event);
+              onSelect(value); 
+            }}
+          >
+            {clubs
+              ?.slice()
+              ?.sort((a, b) => a.name.localeCompare(b.name))
+              ?.map((club) => (
+                <MenuItem key={club.cid} value={club.cid}>
+                  {club.name}
+                </MenuItem>
+              ))}
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )}
+    />
   );
 }
 
