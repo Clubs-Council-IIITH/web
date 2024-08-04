@@ -538,35 +538,84 @@ export default function EventForm({
 // select club to which event belongs to
 function EventClubSelect({ control, disabled = true, clubs = [] }) {
   const { triggerToast } = useToast();
-
+  const [open, setOpen] = useState(false);
+  const handleDone= ()=>{
+    setOpen(false);
+  };
   return (
-    <Controller
-      name="clubid"
-      control={control}
-      rules={{ required: "Select a club!" }}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <FormControl fullWidth error={invalid}>
-          <InputLabel id="clubid">Club *</InputLabel>
-          <Select
-            labelId="clubid"
-            label="clubid *"
-            fullWidth
-            disabled={disabled}
-            {...field}
-          >
-            {clubs
-              ?.slice()
-              ?.sort((a, b) => a.name.localeCompare(b.name))
-              ?.map((club) => (
-                <MenuItem key={club.cid} value={club.cid}>
-                  {club.name}
-                </MenuItem>
-              ))}
-          </Select>
-          <FormHelperText>{error?.message}</FormHelperText>
-        </FormControl>
-      )}
-    />
+    <>
+    <Box mb={2}> 
+      <Controller
+        name="clubid"
+        control={control}
+        rules={{ required: "Select a club!" }}
+        render={({ field, fieldState: { error, invalid } }) => (
+          <FormControl fullWidth error={invalid}>
+            <InputLabel id="clubid">Club *</InputLabel>
+            <Select
+              labelId="clubid"
+              label="clubid *"
+              fullWidth
+              disabled={disabled}
+              {...field}
+            >
+              {clubs
+                ?.slice()
+                ?.sort((a, b) => a.name.localeCompare(b.name))
+                ?.map((club) => (
+                  <MenuItem key={club.cid} value={club.cid}>
+                    {club.name}
+                  </MenuItem>
+                ))}
+            </Select>
+            <FormHelperText>{error?.message}</FormHelperText>
+          </FormControl>
+        )}
+      />
+      </Box>
+      <Box mb={2}> 
+      <Controller
+        name="collaboratingClubs"
+        control={control}
+        defaultValue={[]} // Ensure default value is an array
+        rules={{ required: "Select at least one collaborating club!" }}
+        render={({ field, fieldState: { error, invalid } }) => (
+          <FormControl fullWidth error={invalid}>
+            <InputLabel id="collaboratingClubs">Collaborating Clubs *</InputLabel>
+            <Select
+              labelId="collaboratingClubs"
+              label="Collaborating Clubs *"
+              fullWidth
+              multiple
+              disabled={disabled}
+              open={open}
+              onOpen={() => setOpen(true)}
+              onClose={() => setOpen(false)}
+              value={field.value || []} // Ensure the value is an array
+              {...field}
+            >
+              {clubs
+                ?.slice()
+                ?.sort((a, b) => a.name.localeCompare(b.name))
+                ?.map((club) => (
+                  <MenuItem key={club.cid} value={club.cid}>
+                    {club.name}
+                  </MenuItem>
+                ))}
+                {open && (<MenuItem>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                    <Button variant="contained" color="primary" onClick={handleDone}>
+                      Done
+                    </Button>
+                  </Box>
+                </MenuItem>)};
+            </Select>
+            <FormHelperText>{error?.message}</FormHelperText>
+          </FormControl>
+        )}
+      />
+      </Box>
+    </>
   );
 }
 
