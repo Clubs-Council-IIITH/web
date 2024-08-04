@@ -40,7 +40,27 @@ export default function PendingCertificatesTable() {
       const res = await fetch("/actions/certificates/pending");
       const data = await res.json();
       if (data.ok) {
-        setCertificates(data.data || []);
+        const certificatesWithUserInfo = await Promise.all(
+          data.data.map(async (cert) => {
+            const userRes = await fetch("/actions/users/get/full", {
+              method: "POST",
+              body: JSON.stringify({ uid: cert.userId }),
+            });
+            const userData = await userRes.json();
+            if (userData.ok) {
+              return {
+                ...cert,
+                userFullName: `${userData.data.firstName} ${userData.data.lastName}`,
+                userEmail: userData.data.email,
+                userRollno: userData.data.rollno,
+                userBatch: userData.data.batch,
+                userStream: userData.data.stream,
+              };
+            }
+            return cert;
+          })
+        );
+        setCertificates(certificatesWithUserInfo);
       } else {
         throw new Error(
           data.error?.messages?.[0] || "Failed to fetch pending certificates"
@@ -158,7 +178,7 @@ export default function PendingCertificatesTable() {
           <TableHead>
             <TableRow>
               <TableCell>Certificate Number</TableCell>
-              <TableCell>User ID</TableCell>
+              <TableCell>User Name</TableCell>
               <TableCell>Request Date</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -174,7 +194,7 @@ export default function PendingCertificatesTable() {
                 }}
               >
                 <TableCell>{cert.certificateNumber}</TableCell>
-                <TableCell>{cert.userId}</TableCell>
+                <TableCell>{cert.userFullName || "N/A"}</TableCell>
                 <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
                 <TableCell>
                   <Button
@@ -247,9 +267,33 @@ export default function PendingCertificatesTable() {
             </Typography>
 
             <Typography variant="subtitle2" fontWeight="bold">
-              User ID:
+              Name:
             </Typography>
-            <Typography variant="body1">{selectedCert?.userId}</Typography>
+            <Typography variant="body1">
+              {selectedCert?.userFullName || "N/A"}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Email:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userEmail || "N/A"}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Roll Number:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userRollno || "N/A"}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Batch:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userBatch?.toUpperCase()} ·{" "}
+              {selectedCert?.userStream?.toUpperCase()}
+            </Typography>
 
             <Typography variant="subtitle2" fontWeight="bold">
               Request Date:
@@ -258,11 +302,6 @@ export default function PendingCertificatesTable() {
               {selectedCert &&
                 new Date(selectedCert.status.requestedAt).toLocaleDateString()}
             </Typography>
-
-            <Typography variant="subtitle2" fontWeight="bold">
-              State:
-            </Typography>
-            <Typography variant="body1">{selectedCert?.state}</Typography>
 
             <Typography
               variant="subtitle2"
