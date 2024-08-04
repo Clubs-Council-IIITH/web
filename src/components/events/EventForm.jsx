@@ -313,6 +313,19 @@ export default function EventForm({
                   />
                 </Grid>
               ) : null}
+              {allowed_roles.includes(user?.role) ? (
+                <Grid item xs={12}>
+                  <EventCollabClubSelect
+                    control={control}
+                    disabled={
+                      user?.role != "cc" &&
+                      defaultValues?.status?.state != undefined &&
+                      defaultValues?.status?.state != "incomplete"
+                    }
+                    clubs={clubs}
+                  />
+                </Grid>
+              ) : null}
               <Grid item xs={12}>
                 <EventNameInput
                   control={control}
@@ -538,13 +551,8 @@ export default function EventForm({
 // select club to which event belongs to
 function EventClubSelect({ control, disabled = true, clubs = [] }) {
   const { triggerToast } = useToast();
-  const [open, setOpen] = useState(false);
-  const handleDone= ()=>{
-    setOpen(false);
-  };
+  
   return (
-    <>
-    <Box mb={2}> 
       <Controller
         name="clubid"
         control={control}
@@ -572,8 +580,16 @@ function EventClubSelect({ control, disabled = true, clubs = [] }) {
           </FormControl>
         )}
       />
-      </Box>
-      <Box mb={2}> 
+  );
+}
+
+function EventCollabClubSelect({ control, disabled = true, clubs = [] }) {
+  const { triggerToast } = useToast();
+  const [open, setOpen] = useState(false);
+  const handleDone= ()=>{
+    setOpen(false);
+  };
+  return (
       <Controller
         name="collaboratingClubs"
         control={control}
@@ -614,10 +630,9 @@ function EventClubSelect({ control, disabled = true, clubs = [] }) {
           </FormControl>
         )}
       />
-      </Box>
-    </>
   );
 }
+
 
 // event name input
 function EventNameInput({ control, disabled = true }) {
