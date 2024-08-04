@@ -106,9 +106,41 @@ export default function CertificateGenerationForm() {
     }
   };
 
-  const handleDownload = (certificateNumber) => {
-    // TODO: implement download certificate
-    console.log(`Downloading certificate ${certificateNumber}`);
+  const handleDownload = async (certificateNumber) => {
+    try {
+      const response = await fetch(
+        `/actions/certificates/download?certificateNumber=${certificateNumber}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = `certificate-${certificateNumber}.html`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        triggerToast({
+          title: "Success",
+          messages: ["Certificate downloaded successfully"],
+          severity: "success",
+        });
+      } else {
+        throw new Error("Failed to download certificate");
+      }
+    } catch (err) {
+      console.error("Error downloading certificate:", err);
+      triggerToast({
+        title: "Error",
+        messages: [err.message],
+        severity: "error",
+      });
+    }
   };
 
   const getStatus = (cert) => {

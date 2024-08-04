@@ -81,6 +81,43 @@ export default function PendingCertificatesTable() {
     }
   };
 
+  const handleDownload = async (certificateNumber) => {
+    try {
+      const response = await fetch(
+        `/actions/certificates/download?certificateNumber=${certificateNumber}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = `certificate-${certificateNumber}.html`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        triggerToast({
+          title: "Success",
+          messages: ["Certificate downloaded successfully"],
+          severity: "success",
+        });
+      } else {
+        throw new Error("Failed to download certificate");
+      }
+    } catch (err) {
+      console.error("Error downloading certificate:", err);
+      triggerToast({
+        title: "Error",
+        messages: [err.message],
+        severity: "error",
+      });
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleString();
@@ -181,6 +218,7 @@ export default function PendingCertificatesTable() {
               <TableCell>User Name</TableCell>
               <TableCell>Request Date</TableCell>
               <TableCell>Actions</TableCell>
+              <TableCell>Download</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -233,6 +271,18 @@ export default function PendingCertificatesTable() {
                     ) : (
                       "Reject"
                     )}
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDownload(cert.certificateNumber);
+                    }}
+                  >
+                    Download
                   </Button>
                 </TableCell>
               </TableRow>

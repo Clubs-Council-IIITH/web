@@ -148,3 +148,23 @@ export const GET_MEMBERSHIPS = gql`
     }
   }
 `;
+
+export const GET_CERTIFICATE_BY_NUMBER = gql`
+  query GetCertificateByNumber($certificateNumber: String!) {
+    getCertificateByNumber(certificateNumber: $certificateNumber) {
+      _id
+      certificateNumber
+      userId
+      state
+      status {
+        requestedAt
+        ccApprovedAt
+        ccApprover
+        sloApprovedAt
+        sloApprover
+      }
+      certificateData
+      requestReason
+    }
+  }
+`;
