@@ -215,7 +215,7 @@ export default function PendingCertificatesTable() {
           <TableHead>
             <TableRow>
               <TableCell>Certificate Number</TableCell>
-              <TableCell>User Name</TableCell>
+              <TableCell>Student Name</TableCell>
               <TableCell>Request Date</TableCell>
               <TableCell>Actions</TableCell>
               <TableCell>Download</TableCell>

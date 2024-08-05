@@ -15,7 +15,10 @@ import {
   Box,
   Pagination,
 } from "@mui/material";
+
+import Tag from "components/Tag";
 import { useToast } from "components/Toast";
+import { stateLabel } from "utils/formatCertificates";
 
 const PAGE_SIZE = 10;
 
@@ -40,7 +43,27 @@ export default function AllCertificatesTable() {
       );
       const data = await res.json();
       if (data.ok) {
-        setCertificates(data.data.certificates);
+        const certificatesWithUserInfo = await Promise.all(
+          data.data.certificates.map(async (cert) => {
+            const userRes = await fetch("/actions/users/get/full", {
+              method: "POST",
+              body: JSON.stringify({ uid: cert.userId }),
+            });
+            const userData = await userRes.json();
+            if (userData.ok) {
+              return {
+                ...cert,
+                userFullName: `${userData.data.firstName} ${userData.data.lastName}`,
+                userEmail: userData.data.email,
+                userRollno: userData.data.rollno,
+                userBatch: userData.data.batch,
+                userStream: userData.data.stream,
+              };
+            }
+            return cert;
+          })
+        );
+        setCertificates(certificatesWithUserInfo);
         setTotalPages(data.data.totalPages);
       } else {
         throw new Error(
@@ -111,31 +134,42 @@ export default function AllCertificatesTable() {
           <TableHead>
             <TableRow>
               <TableCell>Certificate Number</TableCell>
-              <TableCell>User ID</TableCell>
+              <TableCell>Student Name</TableCell>
               <TableCell>Request Date</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Download</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {certificates.map((cert) => (
-              <TableRow key={cert._id}>
-                <TableCell>{cert.certificateNumber}</TableCell>
-                <TableCell>{cert.userId}</TableCell>
-                <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
-                <TableCell>{cert.state}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={cert.state !== "approved"}
-                    onClick={() => handleDownload(cert.certificateNumber)}
-                  >
-                    Download
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {certificates
+              .map((cert) => ({
+                ...cert,
+                stateTag: stateLabel(cert.state),
+              }))
+              .sort((a, b) => b._id.localeCompare(a._id))
+              .map((cert) => (
+                <TableRow key={cert._id}>
+                  <TableCell>{cert.certificateNumber}</TableCell>
+                  <TableCell>{cert.userFullName}</TableCell>
+                  <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
+                  <TableCell>
+                    <Tag
+                      label={cert.stateTag.name}
+                      color={cert.stateTag.color}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      disabled={cert.state !== "approved"}
+                      onClick={() => handleDownload(cert.certificateNumber)}
+                    >
+                      Download
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

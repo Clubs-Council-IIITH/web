@@ -15,7 +15,7 @@ export default function AllCertificatesPage() {
           All Certificates
         </Typography>
         <Box mt={3} mb={4}>
-          <Button variant="contained" color="primary" href="/certificate-requests/all">
+          <Button variant="contained" color="primary" href="/certificate-requests">
             View Pending Certificate Requests
           </Button>
         </Box>
