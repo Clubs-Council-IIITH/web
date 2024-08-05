@@ -17,25 +17,26 @@ import {
 } from "@mui/material";
 import { useToast } from "components/Toast";
 
+const PAGE_SIZE = 10;
+
 export default function AllCertificatesTable() {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const { triggerToast } = useToast();
 
   useEffect(() => {
     fetchCertificates();
-  }, [page, pageSize]);
+  }, [page]);
 
   const fetchCertificates = async () => {
     try {
       setLoading(true);
       setError(null);
       const res = await fetch(
-        `/actions/certificates/all?page=${page}&pageSize=${pageSize}`
+        `/actions/certificates/all?page=${page}&PAGE_SIZE=${PAGE_SIZE}`
       );
       const data = await res.json();
       if (data.ok) {
