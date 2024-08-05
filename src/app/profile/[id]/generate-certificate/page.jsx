@@ -10,6 +10,7 @@ import {
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
+import { GET_USER_CERTIFICATES } from "gql/queries/members";
 
 import CertificateGenerationForm from "components/certificates/CertificateGenerationForm";
 
@@ -59,6 +60,11 @@ export default async function GenerateCertificatePage({ params }) {
   );
   const user = { ...userMeta, ...userProfile };
 
+  const { data: { getUserCertificates }, error } = await getClient().query(GET_USER_CERTIFICATES);
+  if (error) {
+    return redirect("/404");
+  }
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -88,7 +94,7 @@ export default async function GenerateCertificatePage({ params }) {
         </CardContent>
       </Card>
 
-      <CertificateGenerationForm />
+      <CertificateGenerationForm userCertificates={getUserCertificates} />
     </Container>
   );
 }

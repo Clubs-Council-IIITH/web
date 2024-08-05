@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   TextField,
   Checkbox,
@@ -20,38 +22,14 @@ import {
 import { useToast } from "components/Toast";
 import { ISOtoHuman } from "utils/formatTime";
 
-export default function CertificateGenerationForm() {
+export default function CertificateGenerationForm({ userCertificates = [] }) {
+  const router = useRouter();
   const [reason, setReason] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [certificates, setCertificates] = useState([]);
   const { triggerToast } = useToast();
 
   const isFormValid = reason.trim() !== "" && agreeToTerms;
-
-  useEffect(() => {
-    fetchUserCertificates();
-  }, []);
-
-  const fetchUserCertificates = async () => {
-    try {
-      const res = await fetch("/actions/certificates/user");
-      const data = await res.json();
-      if (data.ok) {
-        setCertificates(data.data);
-      } else {
-        throw new Error(
-          data.error.messages[0] || "Failed to fetch certificates"
-        );
-      }
-    } catch (err) {
-      triggerToast({
-        title: "Error",
-        messages: [err.message],
-        severity: "error",
-      });
-    }
-  };
 
   const handleCertificateRequest = async (event) => {
     event.preventDefault();
@@ -91,12 +69,7 @@ export default function CertificateGenerationForm() {
         severity: "success",
       });
 
-      // setCertificates({ ...certificates, data.data });
-      setCertificates([...certificates, data.data]);
-
-      setShowForm(false);
-      setReason("");
-      setAgreeToTerms(false);
+      router.refresh();
     } catch (err) {
       triggerToast({
         title: "Error",
@@ -161,7 +134,7 @@ export default function CertificateGenerationForm() {
   return (
     <>
       <Box mt={4}>
-        {hasPendingCertificates(certificates) ? null : (
+        {hasPendingCertificates(userCertificates) ? null : (
           <Button
             variant="contained"
             color="primary"
@@ -172,7 +145,7 @@ export default function CertificateGenerationForm() {
           </Button>
         )}
 
-        {showForm && !hasPendingCertificates(certificates) && (
+        {showForm && !hasPendingCertificates(userCertificates) && (
           <Card>
             <CardContent>
               <Box component="form" onSubmit={handleCertificateRequest}>
@@ -231,7 +204,7 @@ export default function CertificateGenerationForm() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {certificates
+            {userCertificates
               .sort((a, b) =>
                 b.certificateNumber
                   .toString()
