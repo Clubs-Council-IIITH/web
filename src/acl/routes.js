@@ -38,7 +38,7 @@ const routes = {
   "/manage/holidays/:id": ["slo"],
 
   "/certificate-requests": ["cc", "slo"],
-  "/all-certificates": ["cc", "slo"],
+  "/certificate-requests/all": ["cc", "slo"],
   "/profile/[id]/generate-certificate": ["public"],
 };
 
