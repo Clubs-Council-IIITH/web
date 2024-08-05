@@ -307,6 +307,7 @@ export default function PendingCertificatesTable() {
               gridTemplateColumns: "auto 1fr",
               gap: 2,
               alignItems: "baseline",
+              mt: 2,
             }}
           >
             <Typography variant="subtitle2" fontWeight="bold">
@@ -317,7 +318,7 @@ export default function PendingCertificatesTable() {
             </Typography>
 
             <Typography variant="subtitle2" fontWeight="bold">
-              Name:
+              Student Name:
             </Typography>
             <Typography variant="body1">
               {selectedCert?.userFullName || "N/A"}

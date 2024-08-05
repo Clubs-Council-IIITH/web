@@ -173,14 +173,16 @@ export default function AllCertificatesTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box display="flex" justifyContent="center" mt={3}>
-        <Pagination
-          count={totalPages}
-          page={page}
-          onChange={handlePageChange}
-          color="primary"
-        />
-      </Box>
+      {totalPages > 1 ? (
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Box>
+      ) : null}
     </Box>
   );
 }
