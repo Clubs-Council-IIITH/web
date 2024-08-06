@@ -255,6 +255,25 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
+  // nav items for the slo office to manage stuff like certificate generation approvals
+  const approveItems = (
+    <List disablePadding sx={{ p: 1, pt: 1 }}>
+      <Box px={4}>
+        <Typography variant="overline">Certificates</Typography>
+      </Box>
+      <DrawerItem
+        title="Pending Requests"
+        path="/certificate-requests"
+        icon={<Icon variant="card-membership-outline-rounded" />}
+      />
+      <DrawerItem
+        title="All Certificates"
+        path="/all-certificates"
+        icon={<Icon variant="library-books-outline-rounded" />}
+      />
+    </List>
+  );
+
   const drawerContent = (
     <ScrollbarWrapper>
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
@@ -267,6 +286,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       {["slo"].includes(user.role) ? SLOItems : null}
       {aboutItems}
       {helpItems}
+      {["slo", "cc"].includes(user.role) ? approveItems : null}
       <Box sx={{ flexGrow: 1 }} />
     </ScrollbarWrapper>
   );
