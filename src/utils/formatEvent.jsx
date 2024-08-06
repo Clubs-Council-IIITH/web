@@ -6,6 +6,9 @@ import {
   stateColorMap,
   locationMap,
   stateIconMap,
+  billsStateColorMap,
+  billsStateIconMap,
+  billsStateMap,
 } from "constants/events";
 
 export function audienceLabels(audience) {
@@ -21,6 +24,14 @@ export function stateLabel(state) {
     shortName: stateShortMap[state],
     color: stateColorMap[state],
     icon: stateIconMap[state],
+  };
+}
+
+export function billsStateLabel(state) {
+  return {
+    name: billsStateMap[state],
+    color: billsStateColorMap[state],
+    icon: billsStateIconMap[state],
   };
 }
 
