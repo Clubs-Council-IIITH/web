@@ -1,6 +1,9 @@
-import { Box, Divider, Typography } from "@mui/material";
-import EventsFilter from "components/events/EventsFilter";
+import { getClient } from "gql/client";
+import { GET_ALL_EVENTS } from "gql/queries/events";
 
+import { Box, Divider, Typography } from "@mui/material";
+
+import EventsFilter from "components/events/EventsFilter";
 import EventsGrid from "components/events/EventsGrid";
 
 export const metadata = {
@@ -95,6 +98,11 @@ export default async function Events({ searchParams }) {
     return selectedClub && selectedState && selectedName;
   };
 
+  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: null,
+    public: true,
+  });
+
   return (
     <Box>
       <Box mt={2}>
@@ -108,7 +116,7 @@ export default async function Events({ searchParams }) {
           </Typography>
         </Divider>
 
-        <EventsGrid type="all" filter={ongoingEventsFilter} />
+        <EventsGrid type="all" filter={ongoingEventsFilter} events={events} />
       </>
 
       {targetState?.includes("upcoming") ? (
@@ -119,7 +127,11 @@ export default async function Events({ searchParams }) {
             </Typography>
           </Divider>
 
-          <EventsGrid type="all" filter={upcomingEventsFilter} />
+          <EventsGrid
+            type="all"
+            filter={upcomingEventsFilter}
+            events={events}
+          />
         </>
       ) : null}
 
@@ -131,7 +143,11 @@ export default async function Events({ searchParams }) {
             </Typography>
           </Divider>
 
-          <EventsGrid type="all" filter={completedEventsFilter} />
+          <EventsGrid
+            type="all"
+            filter={completedEventsFilter}
+            events={events}
+          />
         </>
       ) : null}
     </Box>

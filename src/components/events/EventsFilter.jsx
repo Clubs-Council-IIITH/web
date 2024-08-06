@@ -46,7 +46,7 @@ export default function EventsFilter({ name, club, state }) {
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}`,
+        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}${name ? `&name=${name}` : ""}`,
       );
   }, [state]);
 

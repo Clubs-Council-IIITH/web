@@ -9,10 +9,14 @@ export default async function EventsGrid({
   clubid = null,
   limit = undefined,
   filter = () => true,
+  events = null,
 }) {
-  const data = await getClient().query(
-    ...constructQuery({ type, clubid, limit }),
-  );
+  let data;
+  if (events) {
+    data = { data: { events } };
+  } else {
+    data = await getClient().query(...constructQuery({ type, clubid, limit }));
+  }
 
   return (
     <Grid container spacing={2}>
