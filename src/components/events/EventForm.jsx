@@ -24,9 +24,11 @@ import {
   ToggleButton,
   FormHelperText,
   FormControl,
+  FormControlLabel,
   InputLabel,
   OutlinedInput,
   Select,
+  Switch,
   MenuItem,
 } from "@mui/material";
 import {
@@ -84,6 +86,7 @@ export default function EventForm({
     defaultValues,
   });
   const { triggerToast } = useToast();
+  const collabEvent = watch("collabEvent");
 
   // different form submission handlers
   const submitHandlers = {
@@ -234,12 +237,20 @@ export default function EventForm({
       poc: formData.poc,
     };
 
+    if(collabEvent){
+      data.collabclubs = formData.collaboratingClubs;
+    }
+    else{
+      data.collabclubs = [];
+    }
+
     // set club ID for event based on user role
     if (user?.role === "club") {
       data.clubid = user?.uid;
     } else if (allowed_roles.includes(user?.role)) {
       data.clubid = formData.clubid;
     }
+
 
     // upload poster
     data.poster =
@@ -280,7 +291,7 @@ export default function EventForm({
         return;
       }
     }
-
+    console.log(data);
     // mutate
     submitHandlers[action](data, opts);
   }
@@ -290,15 +301,44 @@ export default function EventForm({
       <Grid container spacing={4} alignItems="flex-start">
         <Grid container item xs={12} md={7} xl={8} spacing={3}>
           <Grid container item>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              gutterBottom
-              mb={2}
+            <Grid
+              container
+              item
+              sx={{ display: "flex", justifyContent: "space-between" }}
             >
-              Details
-            </Typography>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                color="text.secondary"
+                gutterBottom
+                mb={2}
+              >
+                Details
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="collabEvent"
+                    control={control}
+                    defaultValue={defaultValues?.collabclubs == []? false : true}
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value}
+                        disabled={
+                          user?.role != "cc" &&
+                          defaultValues?.status?.state != undefined &&
+                          defaultValues?.status?.state != "incomplete"
+                        }
+                        onChange={(e) => field.onChange(e.target.checked)}
+                        inputProps={{ "aria-label": "controlled" }}
+                        sx={{ margin: "auto" }}
+                      />
+                    )}
+                  />
+                }
+                label="Collaboration Event"
+              />
+            </Grid>
             <Grid container item spacing={2}>
               {allowed_roles.includes(user?.role) ? (
                 <Grid item xs={12}>
@@ -314,19 +354,18 @@ export default function EventForm({
                   />
                 </Grid>
               ) : null}
-              {allowed_roles.includes(user?.role) ? (
-                <Grid item xs={12}>
-                  <EventCollabClubSelect
-                    control={control}
-                    disabled={
-                      user?.role != "cc" &&
-                      defaultValues?.status?.state != undefined &&
-                      defaultValues?.status?.state != "incomplete"
-                    }
-                    clubs={clubs.filter(club => !selectedClub.includes(club.cid))}
-                  />
-                </Grid>
-              ) : null}
+              {collabEvent ? (
+              <Grid item xs={12}>
+                <EventCollabClubSelect
+                  control={control}
+                  disabled={
+                    user?.role != "cc" &&
+                    defaultValues?.status?.state != undefined &&
+                    defaultValues?.status?.state != "incomplete"
+                  }
+                  clubs={clubs.filter(club => !selectedClub.includes(club.cid))}
+                />
+              </Grid>) : null}
               <Grid item xs={12}>
                 <EventNameInput
                   control={control}
@@ -492,9 +531,9 @@ export default function EventForm({
             </Grid>
             <Grid item xs={6}>
               {allowed_roles.includes(user?.role) ||
-              (user?.role === "club" &&
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete") ? (
+                (user?.role === "club" &&
+                  defaultValues?.status?.state != undefined &&
+                  defaultValues?.status?.state != "incomplete") ? (
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -521,9 +560,9 @@ export default function EventForm({
               )}
             </Grid>
             {allowed_roles.includes(user?.role) ||
-            (user?.role === "club" &&
-              defaultValues?.status?.state != undefined &&
-              defaultValues?.status?.state != "incomplete") ? null : (
+              (user?.role === "club" &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete") ? null : (
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
@@ -568,7 +607,7 @@ function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
             onChange={(event) => {
               const value = event.target.value;
               field.onChange(event);
-              onSelect(value); 
+              onSelect(value);
             }}
           >
             {clubs
@@ -590,50 +629,50 @@ function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
 function EventCollabClubSelect({ control, disabled = true, clubs = [] }) {
   const { triggerToast } = useToast();
   const [open, setOpen] = useState(false);
-  const handleDone= ()=>{
+  const handleDone = () => {
     setOpen(false);
   };
   return (
-      <Controller
-        name="collaboratingClubs"
-        control={control}
-        defaultValue={[]} // Ensure default value is an array
-        rules={{ required: "Select at least one collaborating club!" }}
-        render={({ field, fieldState: { error, invalid } }) => (
-          <FormControl fullWidth error={invalid}>
-            <InputLabel id="collaboratingClubs">Collaborating Clubs *</InputLabel>
-            <Select
-              labelId="collaboratingClubs"
-              label="Collaborating Clubs *"
-              fullWidth
-              multiple
-              disabled={disabled}
-              open={open}
-              onOpen={() => setOpen(true)}
-              onClose={() => setOpen(false)}
-              value={field.value || []} // Ensure the value is an array
-              {...field}
-            >
-              {clubs
-                ?.slice()
-                ?.sort((a, b) => a.name.localeCompare(b.name))
-                ?.map((club) => (
-                  <MenuItem key={club.cid} value={club.cid}>
-                    {club.name}
-                  </MenuItem>
-                ))}
-                {open && (<MenuItem>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                    <Button variant="contained" color="primary" onClick={handleDone}>
-                      Done
-                    </Button>
-                  </Box>
-                </MenuItem>)};
-            </Select>
-            <FormHelperText>{error?.message}</FormHelperText>
-          </FormControl>
-        )}
-      />
+    <Controller
+      name="collaboratingClubs"
+      control={control}
+      defaultValue={[]} // Ensure default value is an array
+      rules={{ required: "Select at least one collaborating club!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
+          <InputLabel id="collaboratingClubs">Collaborating Clubs *</InputLabel>
+          <Select
+            labelId="collaboratingClubs"
+            label="Collaborating Clubs *"
+            fullWidth
+            multiple
+            disabled={disabled}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+            value={field.value || []} // Ensure the value is an array
+            {...field}
+          >
+            {clubs
+              ?.slice()
+              ?.sort((a, b) => a.name.localeCompare(b.name))
+              ?.map((club) => (
+                <MenuItem key={club.cid} value={club.cid}>
+                  {club.name}
+                </MenuItem>
+              ))}
+            {open && (<MenuItem>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                <Button variant="contained" color="primary" onClick={handleDone}>
+                  Done
+                </Button>
+              </Box>
+            </MenuItem>)};
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )}
+    />
   );
 }
 
@@ -783,9 +822,9 @@ function EventDatetimeInput({
               minDateTime={
                 startDateInput
                   ? (startDateInput instanceof Date && !isDayjs(startDateInput)
-                      ? dayjs(startDateInput)
-                      : startDateInput
-                    ).add(1, "minute")
+                    ? dayjs(startDateInput)
+                    : startDateInput
+                  ).add(1, "minute")
                   : null
               }
               disablePast={!allowed_roles.includes(role)}

@@ -52,7 +52,7 @@ export default async function EditEvent({ params }) {
       eventid: id,
     });
     return (
-      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+      user?.role === "club" && (user?.uid !== event.clubid && !event?.collabclubs.includes(user?.uid))  && redirect("/404"),
       (
         <Container>
           <Typography variant="h3" gutterBottom mb={3}>
