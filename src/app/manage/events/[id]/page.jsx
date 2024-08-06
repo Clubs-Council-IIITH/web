@@ -295,7 +295,7 @@ export default async function ManageEvent({ params }) {
   const user = { ...userMeta, ...userProfile };
 
   return (
-    user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+    user?.role === "club" && (user?.uid !== event.clubid && !event?.collabclubs.includes(user?.uid))  && redirect("/404"),
     (
       <Box>
         <ActionPalette
