@@ -105,7 +105,7 @@ export const billsStateMap = {
 }
 
 export const billsStateColorMap = {
-  not_submitted: "secondary",
+  not_submitted: "error",
   incomplete: "warning",
   submitted: "info",
   slo_processed: "success",
