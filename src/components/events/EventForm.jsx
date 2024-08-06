@@ -537,8 +537,6 @@ export default function EventForm({
 
 // select club to which event belongs to
 function EventClubSelect({ control, disabled = true, clubs = [] }) {
-  const { triggerToast } = useToast();
-
   return (
     <Controller
       name="clubid"

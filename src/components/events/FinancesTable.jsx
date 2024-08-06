@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import { ISOtoHuman } from "utils/formatTime";
-
+import Tag from "components/Tag";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
+import { billsStateLabel } from "utils/formatEvent";
 
-export default function HolidaysTable({ holidays }) {
+export default function FinancesTable({ events, role }) {
   const router = useRouter();
 
   const columns = [
@@ -17,7 +17,8 @@ export default function HolidaysTable({ holidays }) {
       field: "name",
       headerName: "Name",
       flex: 5,
-      renderCell: (params) => (
+      valueGetter: ({ row }) => row?.eventname,
+      renderCell: ({ value }) => (
         <Typography
           variant="body2"
           style={{
@@ -31,41 +32,49 @@ export default function HolidaysTable({ holidays }) {
             hyphens: "auto",
           }}
         >
-          {params.value}
+          {value}
         </Typography>
       ),
     },
     {
-      field: "date",
-      headerName: "Date",
+      field: "status",
+      headerName: "Status",
       flex: 3,
-      valueGetter: (params) => ISOtoHuman(params.row.date, true, false),
-      renderCell: (params) => (
-        <Typography variant="body2">{params.value}</Typography>
+      align: "center",
+      headerAlign: "center",
+      valueGetter: ({ row }) => ({
+        state: row?.billsStatus?.state,
+        status: billsStateLabel(row?.billsStatus?.state),
+      }),
+      renderCell: ({ value }) => (
+        <Tag label={value.status.name} color={value.status.color} />
       ),
     },
   ];
 
-  if (!holidays) return null;
+  if (!events) return null;
   return (
     <DataGrid
       autoHeight
-      rows={holidays}
+      rows={events}
       columns={columns}
-      getRowId={(r) => r._id}
-      onRowClick={(params) => router.push(`/manage/holidays/${params.row._id}`)}
+      getRowId={(r) => r.eventid}
+      onRowClick={(params) =>
+        router.push(
+          `/manage/${role === "slo" ? "finances" : "events"}/${
+            params.row.eventid
+          }`
+        )
+      }
       disableRowSelectionOnClick
       initialState={{
-        sorting: {
-          sortModel: [{ field: "date", sort: "asc" }],
-        },
         filter: {
           filterModel: {
             items: [],
             quickFilterLogicOperator: GridLogicOperator.Or,
           },
         },
-        pagination: { paginationModel: { pageSize: 25 } },
+        pagination: { paginationModel: { pageSize: 10 } },
       }}
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
