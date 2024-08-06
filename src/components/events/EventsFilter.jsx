@@ -34,7 +34,11 @@ export default function EventsFilter({ name, club, state }) {
     (name, value) => {
       const params = new URLSearchParams(searchParams);
 
-      if (!params.has("upcoming") && !params.has("completed") && ["upcoming", "completed"].includes(name)) {
+      if (
+        !params.has("upcoming") &&
+        !params.has("completed") &&
+        ["upcoming", "completed"].includes(name)
+      ) {
         params.set("upcoming", "true");
         params.set("completed", "true");
       }
