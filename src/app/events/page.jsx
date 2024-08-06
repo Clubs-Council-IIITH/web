@@ -13,10 +13,12 @@ export const metadata = {
 export default async function Events({ searchParams }) {
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
-  const targetState = [
+  let targetState = [
     ...(searchParams?.upcoming === "true" ? ["upcoming"] : []),
     ...(searchParams?.completed === "true" ? ["completed"] : []),
   ];
+
+  if (targetState.length === 0) targetState = ["upcoming", "completed"];
 
   const ongoingEventsFilter = (event) => {
     let selectedClub = false,

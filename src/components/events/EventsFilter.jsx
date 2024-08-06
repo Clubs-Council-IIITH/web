@@ -34,6 +34,11 @@ export default function EventsFilter({ name, club, state }) {
     (name, value) => {
       const params = new URLSearchParams(searchParams);
 
+      if (!params.has("upcoming") && !params.has("completed") && ["upcoming", "completed"].includes(name)) {
+        params.set("upcoming", "true");
+        params.set("completed", "true");
+      }
+
       if (value != "") params.set(name, value);
       else params.delete(name);
 
@@ -41,14 +46,6 @@ export default function EventsFilter({ name, club, state }) {
     },
     [searchParams],
   );
-
-  // show both upcoming and completed if no state is selected
-  useEffect(() => {
-    if (state.length === 0)
-      router.push(
-        `${pathname}?upcoming=true&completed=true${club ? `&club=${club}` : ""}${name ? `&name=${name}` : ""}`,
-      );
-  }, [state]);
 
   // fetch list of clubs
   const [clubs, setClubs] = useState([]);
