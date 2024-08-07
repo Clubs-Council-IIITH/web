@@ -13,6 +13,7 @@ export default async function NewEvent() {
   // default form values
   const defaultValues = {
     clubid: "",
+    collabclubs: [],
     name: "",
     datetimeperiod: [null, null],
     description: "",
