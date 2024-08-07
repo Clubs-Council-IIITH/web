@@ -418,7 +418,9 @@ function getActions(event, user) {
    * Club - past event - edit, copy
    */
   if (user?.role === "club") {
-    if (event?.status?.state === "incomplete")
+    if (user?.uid !== event?.clubid)
+      return [CopyEvent];
+    else if (event?.status?.state === "incomplete")
       return [SubmitEvent, EditEvent, DeleteEvent];
     else if (upcoming) return [EditEvent, DeleteEvent, CopyEvent];
     else return [EditEvent, CopyEvent];
