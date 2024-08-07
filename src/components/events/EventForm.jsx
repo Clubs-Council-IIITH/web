@@ -320,7 +320,13 @@ export default function EventForm({
                   <Controller
                     name="collabEvent"
                     control={control}
-                    defaultValue={defaultValues?.collabclubs == []? false : true}
+                    defaultValue={defaultValues.collabclubs==undefined
+                                    ? false:
+                                    defaultValues.collabclubs.length==0
+                                      ? false :
+                                      true
+                    }
+                    
                     render={({ field }) => (
                       <Switch
                         checked={field.value}
@@ -363,6 +369,7 @@ export default function EventForm({
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
+                  defaultValue={(defaultValues.collabclubs!=undefined && defaultValues?.collabclubs.length!=0)?defaultValues.collabclubs:[]}
                   clubs={clubs.filter(club => !selectedClub.includes(club.cid))}
                 />
               </Grid>) : null}
@@ -626,7 +633,7 @@ function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
   );
 }
 
-function EventCollabClubSelect({ control, disabled = true, clubs = [] }) {
+function EventCollabClubSelect({ control, disabled = true, clubs = [] ,defaultValue}) {
   const { triggerToast } = useToast();
   const [open, setOpen] = useState(false);
   const handleDone = () => {
@@ -636,7 +643,7 @@ function EventCollabClubSelect({ control, disabled = true, clubs = [] }) {
     <Controller
       name="collaboratingClubs"
       control={control}
-      defaultValue={[]} // Ensure default value is an array
+      defaultValue={defaultValue} // Ensure default value is an array
       rules={{ required: "Select at least one collaborating club!" }}
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>

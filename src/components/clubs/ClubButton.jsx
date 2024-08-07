@@ -13,7 +13,7 @@ export default async function ClubButton({ clubid }) {
   });
 
   return (
-    <Box>
+    <Box margin="0.2vw">
       <Button
         component={Link}
         href={`/clubs/${clubid}`}
