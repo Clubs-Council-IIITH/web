@@ -360,12 +360,7 @@ export default function EventForm({
                       defaultValues?.status?.state != undefined &&
                       defaultValues?.status?.state != "incomplete"
                     }
-                    defaultValue={
-                      defaultValues.collabclubs &&
-                      defaultValues?.collabclubs.length
-                        ? defaultValues.collabclubs
-                        : []
-                    }
+                    defaultValue={defaultValues.collabclubs}
                     clubs={clubs}
                     watch={watch}
                   />
@@ -665,7 +660,10 @@ function EventCollabClubSelect({
                 }}
               >
                 {selected.map((value) => (
-                  <Chip key={value} label={clubs.find(club => club.cid === value)?.name} />
+                  <Chip
+                    key={value}
+                    label={clubs.find((club) => club.cid === value)?.name}
+                  />
                 ))}
               </Box>
             )}
@@ -1219,7 +1217,7 @@ function EventLocationInput({
       control={control}
       defaultValue={[]}
       rules={{ required: "Select at least one location!" }}
-      render={({ field,  fieldState: { error, invalid } }) => (
+      render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
           <InputLabel id="locationSelect">Location</InputLabel>
           <Select
