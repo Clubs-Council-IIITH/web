@@ -237,12 +237,7 @@ export default function EventForm({
       poc: formData.poc,
     };
 
-    if(collabEvent){
-      data.collabclubs = formData.collaboratingClubs;
-    }
-    else{
-      data.collabclubs = [];
-    }
+    data.collabclubs = collabEvent ? formData.collabclubs : [];
 
     // set club ID for event based on user role
     if (user?.role === "club") {
@@ -250,7 +245,6 @@ export default function EventForm({
     } else if (allowed_roles.includes(user?.role)) {
       data.clubid = formData.clubid;
     }
-
 
     // upload poster
     data.poster =
@@ -291,11 +285,10 @@ export default function EventForm({
         return;
       }
     }
-    console.log(data);
     // mutate
     submitHandlers[action](data, opts);
   }
-  const [selectedClub, setSelectedClub] = useState([]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4} alignItems="flex-start">
@@ -320,18 +313,17 @@ export default function EventForm({
                   <Controller
                     name="collabEvent"
                     control={control}
-                    defaultValue={defaultValues.collabclubs==undefined
-                                    ? false:
-                                    defaultValues.collabclubs.length==0
-                                      ? false :
-                                      true
+                    defaultValue={
+                      defaultValues.collabclubs &&
+                      defaultValues.collabclubs.length
+                        ? true
+                        : false
                     }
-                    
                     render={({ field }) => (
                       <Switch
                         checked={field.value}
                         disabled={
-                          user?.role != "cc" &&
+                          !allowed_roles.includes(user?.role) &&
                           defaultValues?.status?.state != undefined &&
                           defaultValues?.status?.state != "incomplete"
                         }
@@ -356,23 +348,29 @@ export default function EventForm({
                       defaultValues?.status?.state != "incomplete"
                     }
                     clubs={clubs}
-                    onSelect={(clubId) => setSelectedClub(clubId)}
                   />
                 </Grid>
               ) : null}
               {collabEvent ? (
-              <Grid item xs={12}>
-                <EventCollabClubSelect
-                  control={control}
-                  disabled={
-                    user?.role != "cc" &&
-                    defaultValues?.status?.state != undefined &&
-                    defaultValues?.status?.state != "incomplete"
-                  }
-                  defaultValue={(defaultValues.collabclubs!=undefined && defaultValues?.collabclubs.length!=0)?defaultValues.collabclubs:[]}
-                  clubs={clubs.filter(club => !selectedClub.includes(club.cid))}
-                />
-              </Grid>) : null}
+                <Grid item xs={12}>
+                  <EventCollabClubSelect
+                    control={control}
+                    disabled={
+                      !allowed_roles.includes(user?.role) &&
+                      defaultValues?.status?.state != undefined &&
+                      defaultValues?.status?.state != "incomplete"
+                    }
+                    defaultValue={
+                      defaultValues.collabclubs &&
+                      defaultValues?.collabclubs.length
+                        ? defaultValues.collabclubs
+                        : []
+                    }
+                    clubs={clubs}
+                    watch={watch}
+                  />
+                </Grid>
+              ) : null}
               <Grid item xs={12}>
                 <EventNameInput
                   control={control}
@@ -596,7 +594,7 @@ export default function EventForm({
 }
 
 // select club to which event belongs to
-function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
+function EventClubSelect({ control, disabled = true, clubs = [] }) {
   return (
     <Controller
       name="clubid"
@@ -611,11 +609,6 @@ function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
             fullWidth
             disabled={disabled}
             {...field}
-            onChange={(event) => {
-              const value = event.target.value;
-              field.onChange(event);
-              onSelect(value);
-            }}
           >
             {clubs
               ?.slice()
@@ -633,23 +626,27 @@ function EventClubSelect({ control, disabled = true, clubs = [], onSelect }) {
   );
 }
 
-function EventCollabClubSelect({ control, disabled = true, clubs = [] ,defaultValue}) {
-  const { triggerToast } = useToast();
+function EventCollabClubSelect({
+  control,
+  watch,
+  defaultValue,
+  disabled = true,
+  clubs = [],
+}) {
+  const selectedClub = watch("clubid");
   const [open, setOpen] = useState(false);
-  const handleDone = () => {
-    setOpen(false);
-  };
+
   return (
     <Controller
-      name="collaboratingClubs"
+      name="collabclubs"
       control={control}
-      defaultValue={defaultValue} // Ensure default value is an array
+      defaultValue={defaultValue}
       rules={{ required: "Select at least one collaborating club!" }}
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
-          <InputLabel id="collaboratingClubs">Collaborating Clubs *</InputLabel>
+          <InputLabel id="collabclubs">Collaborating Clubs *</InputLabel>
           <Select
-            labelId="collaboratingClubs"
+            labelId="collabclubs"
             label="Collaborating Clubs *"
             fullWidth
             multiple
@@ -657,24 +654,52 @@ function EventCollabClubSelect({ control, disabled = true, clubs = [] ,defaultVa
             open={open}
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
+            input={<OutlinedInput label="Collaborating Clubs *" />}
             value={field.value || []} // Ensure the value is an array
+            renderValue={(selected) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 0.5,
+                }}
+              >
+                {selected.map((value) => (
+                  <Chip key={value} label={clubs.find(club => club.cid === value)?.name} />
+                ))}
+              </Box>
+            )}
             {...field}
           >
             {clubs
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))
+              ?.filter((club) => club.cid !== selectedClub)
               ?.map((club) => (
                 <MenuItem key={club.cid} value={club.cid}>
                   {club.name}
                 </MenuItem>
               ))}
-            {open && (<MenuItem>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                <Button variant="contained" color="primary" onClick={handleDone}>
-                  Done
-                </Button>
-              </Box>
-            </MenuItem>)};
+            {open && (
+              <MenuItem>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Done
+                  </Button>
+                </Box>
+              </MenuItem>
+            )}
+            ;
           </Select>
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
@@ -682,7 +707,6 @@ function EventCollabClubSelect({ control, disabled = true, clubs = [] ,defaultVa
     />
   );
 }
-
 
 // event name input
 function EventNameInput({ control, disabled = true }) {
@@ -1194,8 +1218,9 @@ function EventLocationInput({
       name="location"
       control={control}
       defaultValue={[]}
-      render={({ field }) => (
-        <FormControl fullWidth>
+      rules={{ required: "Select at least one location!" }}
+      render={({ field,  fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
           <InputLabel id="locationSelect">Location</InputLabel>
           <Select
             multiple
@@ -1231,6 +1256,7 @@ function EventLocationInput({
                 </MenuItem>
               ))}
           </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
       )}
     />
