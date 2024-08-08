@@ -58,6 +58,7 @@ export const GET_ALL_EVENTS = gql`
       name
       code
       clubid
+      collabclubs
       datetimeperiod
       status {
         state
@@ -80,6 +81,7 @@ export const GET_EVENT = gql`
       name
       code
       clubid
+      collabclubs
       location
       audience
       description
@@ -121,6 +123,7 @@ export const GET_FULL_EVENT = gql`
         advance
       }
       clubid
+      collabclubs
       datetimeperiod
       description
       equipment

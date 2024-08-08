@@ -60,7 +60,7 @@ export default function EventDetails({ event, showCode = false }) {
               variant="subtitle2"
               fontFamily="monospace"
               mt={0}
-              mb={3}
+              mb={1.5}
             >
               #{event.code}
             </Typography>
@@ -68,7 +68,21 @@ export default function EventDetails({ event, showCode = false }) {
 
           <Box my={1} />
 
-          <ClubButton clubid={event.clubid} />
+          {event.collabclubs && event.collabclubs.length > 0 ? (
+            <>
+              <Typography variant="body2">
+                <strong>Collaborating Clubs</strong>
+              </Typography>
+              <Box display="flex" flexWrap="wrap">
+                <ClubButton clubid={event.clubid} />
+                {event.collabclubs.map((clubid) => (
+                  <ClubButton clubid={clubid} />
+                ))}
+              </Box>
+            </>
+          ) : (
+            <ClubButton clubid={event.clubid} />
+          )}
 
           <Box display="flex" mt={4} alignItems="center">
             <Icon variant="location-on-outline-rounded" sx={{ mr: 2 }} />

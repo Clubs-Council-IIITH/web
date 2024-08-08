@@ -31,6 +31,7 @@ function transformEvent(event) {
     additional: event?.additional || "",
     equipment: event?.equipment || "",
     poc: event?.poc,
+    collabclubs: event?.collabclubs || [],
   };
 }
 

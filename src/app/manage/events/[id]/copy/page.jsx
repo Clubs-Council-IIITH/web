@@ -37,6 +37,7 @@ function transformEvent(event) {
     additional: event?.additional || "",
     equipment: event?.equipment || "",
     poc: event?.poc,
+    collabclubs: [],
   };
 }
 
@@ -68,7 +69,7 @@ export default async function CopyEvent({ params }) {
     });
 
     return (
-      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+      user?.role === "club" && (user?.uid !== event.clubid && !event?.collabclubs.includes(user?.uid))  && redirect("/404"),
       (
         <Container>
           <Typography variant="h3" gutterBottom mb={3}>
