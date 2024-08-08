@@ -4,7 +4,7 @@ import { CREATE_EVENT } from "gql/mutations/events";
 
 export async function POST(request) {
   const response = { ok: false, data: null, error: null };
-  
+
   try {
     const { details } = await request.json();
 
@@ -14,7 +14,9 @@ export async function POST(request) {
     if (result.error) {
       response.error = {
         title: result.error.name,
-        messages: result.error.graphQLErrors?.map((ge) => ge.message) || [result.error.message],
+        messages: result.error.graphQLErrors?.map((ge) => ge.message) || [
+          result.error.message,
+        ],
       };
     } else if (result.data) {
       response.ok = true;
