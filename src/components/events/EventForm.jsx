@@ -531,9 +531,9 @@ export default function EventForm({
             </Grid>
             <Grid item xs={6}>
               {allowed_roles.includes(user?.role) ||
-                (user?.role === "club" &&
-                  defaultValues?.status?.state != undefined &&
-                  defaultValues?.status?.state != "incomplete") ? (
+              (user?.role === "club" &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete") ? (
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -560,9 +560,9 @@ export default function EventForm({
               )}
             </Grid>
             {allowed_roles.includes(user?.role) ||
-              (user?.role === "club" &&
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete") ? null : (
+            (user?.role === "club" &&
+              defaultValues?.status?.state != undefined &&
+              defaultValues?.status?.state != "incomplete") ? null : (
               <Grid item xs={12}>
                 <LoadingButton
                   loading={loading}
@@ -851,9 +851,9 @@ function EventDatetimeInput({
               minDateTime={
                 startDateInput
                   ? (startDateInput instanceof Date && !isDayjs(startDateInput)
-                    ? dayjs(startDateInput)
-                    : startDateInput
-                  ).add(1, "minute")
+                      ? dayjs(startDateInput)
+                      : startDateInput
+                    ).add(1, "minute")
                   : null
               }
               disablePast={!allowed_roles.includes(role)}
