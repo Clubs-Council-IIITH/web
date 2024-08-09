@@ -794,6 +794,7 @@ function EventDatetimeInput({
             validate: {
               minDateCheck: (value) =>
                 allowed_roles.includes(role) ||
+                disabled ||
                 dayjs(value) >= dayjs(new Date()) ||
                 "Start Date must not be in past!",
             },

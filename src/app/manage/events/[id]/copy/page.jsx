@@ -17,7 +17,7 @@ function transformDateTime(datetimeperiod) {
 
   let duration = end - start;
 
-  let newStart = new Date(datetimeperiod[0]);
+  let newStart = new Date();
   newStart.setDate(new Date().getDate() + 7);
   let newEnd = new Date(newStart.getTime() + duration);
 
