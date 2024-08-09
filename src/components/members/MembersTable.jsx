@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import { Box, Avatar, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Avatar, Stack, Divider, Tooltip, Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -75,7 +75,9 @@ export default function MembersTable({ members, showClub = false }) {
             flex: 8,
             valueGetter: ({ row }) => row.roles,
             renderCell: ({ value }) => (
-              <Stack direction="column">
+              <Stack direction="column"
+		divider={<Divider orientation="horizontal" flexItem />}
+	      >
                 {value?.map((role, key) => (
                   <Typography
                     key={key}
@@ -134,7 +136,7 @@ export default function MembersTable({ members, showClub = false }) {
       rows={members}
       columns={columns}
       getRowId={(r) => r.mid}
-      getRowHeight={() => (isMobile ? "auto" : "none")}
+      getRowHeight={() => "auto"}
       onRowClick={(params) => router.push(`/manage/members/${params.row.mid}`)}
       disableRowSelectionOnClick
       initialState={{
