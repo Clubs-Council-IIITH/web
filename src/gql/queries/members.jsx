@@ -72,9 +72,9 @@ export const GET_MEMBER = gql`
         endYear
         deleted
         approved
-	approvalTime
+        approvalTime
         rejected
-	rejectionTime
+        rejectionTime
       }
       creationTime
       lastEditedTime

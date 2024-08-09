@@ -31,14 +31,16 @@ export default async function ManageMember({ params }) {
       },
     });
 
+    if (userProfile === null || userMeta === null) {
+      return redirect("/404");
+    }
+
     // fetch currently logged in user
     const {
       data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
     } = await getClient().query(GET_USER, { userInput: null });
     const user = { ...currentUserMeta, ...currentUserProfile };
-    if (userProfile === null || userMeta === null) {
-      return redirect("/404");
-    }
+
     return (
       <Container>
         <MemberActionsList member={member} user={user} />
@@ -113,38 +115,40 @@ export default async function ManageMember({ params }) {
               />
             </Grid>
           </Grid>
-          {user?.role == "cc" ? (
-            <Grid item container xs spacing={1} mt={5}>
-              <Grid item xs>
-                <Typography
-                  variant="subtitle2"
-                  textTransform="uppercase"
-                  gutterBottom
-                >
-                  Creation Time
-                </Typography>
-                <Typography variant="body" color="#777777" fontWeight="100">
-                  {member.creationTime ? member.creationTime : "Info Not Available"}
-                </Typography>
-              </Grid>
-              <Grid item xs>
-                <Typography
-                  variant="subtitle2"
-                  textTransform="uppercase"
-                  gutterBottom
-                >
-                  Last Edited
-                </Typography>
-                <Typography variant="body" color="#777777" fontWeight="100">
-                  {member.creationTime ? member.creationTime : "Info Not Available"}
-                </Typography>
-              </Grid>
-            </Grid>)
-          : null}
+          <Grid item container xs spacing={1} mt={5}>
+            <Grid item xs={12} md={6}>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Creation Time
+              </Typography>
+              <Typography variant="body" color="#777777" fontWeight="100">
+                {member.creationTime
+                  ? member.creationTime
+                  : "Information Not Available"}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Last Edited Time
+              </Typography>
+              <Typography variant="body" color="#777777" fontWeight="100">
+                {member.lastEditedTime
+                  ? member.lastEditedTime
+                  : "Information Not Available"}
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
       </Container>
     );
   } catch (error) {
-    redirect("/404");
+    return redirect("/404");
   }
 }
