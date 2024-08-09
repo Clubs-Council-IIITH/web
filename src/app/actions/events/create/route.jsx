@@ -1,24 +1,37 @@
 import { NextResponse } from "next/server";
-
 import { getClient } from "gql/client";
 import { CREATE_EVENT } from "gql/mutations/events";
 
 export async function POST(request) {
   const response = { ok: false, data: null, error: null };
-  const { details } = await request.json();
 
-  const {
-    data: { createEvent },
-    error,
-  } = await getClient().mutation(CREATE_EVENT, { details });
-  if (error) {
+  try {
+    const { details } = await request.json();
+
+    const client = getClient();
+    const result = await client.mutation(CREATE_EVENT, { details });
+
+    if (result.error) {
+      response.error = {
+        title: result.error.name,
+        messages: result.error.graphQLErrors?.map((ge) => ge.message) || [
+          result.error.message,
+        ],
+      };
+    } else if (result.data) {
+      response.ok = true;
+      response.data = result.data.createEvent;
+    } else {
+      response.error = {
+        title: "Unexpected Error",
+        messages: ["No data returned from GraphQL server."],
+      };
+    }
+  } catch (error) {
     response.error = {
-      title: error.name,
-      messages: error?.graphQLErrors?.map((ge) => ge?.message),
+      title: "Request Error",
+      messages: [error.message],
     };
-  } else {
-    response.ok = true;
-    response.data = createEvent;
   }
 
   return NextResponse.json(response);

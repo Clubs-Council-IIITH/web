@@ -373,7 +373,10 @@ export default async function ManageEvent({ params }) {
   const user = { ...userMeta, ...userProfile };
 
   return (
-    user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+    user?.role === "club" &&
+      user?.uid !== event.clubid &&
+      !event?.collabclubs.includes(user?.uid) &&
+      redirect("/404"),
     (
       <Box>
         <ActionPalette
@@ -497,7 +500,8 @@ function getActions(event, user) {
    * Club - past event - edit, copy
    */
   if (user?.role === "club") {
-    if (event?.status?.state === "incomplete")
+    if (user?.uid !== event?.clubid) return [CopyEvent];
+    else if (event?.status?.state === "incomplete")
       return [SubmitEvent, EditEvent, DeleteEvent];
     else if (upcoming) return [EditEvent, DeleteEvent, CopyEvent];
     else return [EditEvent, CopyEvent];

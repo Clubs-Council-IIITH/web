@@ -26,8 +26,12 @@ export default async function Events({ searchParams }) {
       selectedName = false;
 
     // filter by club
-    if (!targetClub) selectedClub = true;
-    else selectedClub = event?.clubid === targetClub;
+    if (!targetClub) {
+      selectedClub = true;
+    } else {
+      selectedClub =
+        event?.clubid === targetClub || event.collabclubs.includes(targetClub);
+    }
 
     // filter by state
     if (!targetState) selectedState = true;
@@ -54,9 +58,12 @@ export default async function Events({ searchParams }) {
       selectedName = false;
 
     // filter by club
-    if (!targetClub) selectedClub = true;
-    else selectedClub = event?.clubid === targetClub;
-
+    if (!targetClub) {
+      selectedClub = true;
+    } else {
+      selectedClub =
+        event?.clubid === targetClub || event.collabclubs.includes(targetClub);
+    }
     // filter by state
     if (!targetState) selectedState = true;
     else {
@@ -80,9 +87,12 @@ export default async function Events({ searchParams }) {
       selectedName = false;
 
     // filter by club
-    if (!targetClub) selectedClub = true;
-    else selectedClub = event?.clubid === targetClub;
-
+    if (!targetClub) {
+      selectedClub = true;
+    } else {
+      selectedClub =
+        event?.clubid === targetClub || event.collabclubs.includes(targetClub);
+    }
     // filter by state
     if (!targetState) selectedState = true;
     else {

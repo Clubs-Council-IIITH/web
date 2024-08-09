@@ -24,9 +24,11 @@ import {
   ToggleButton,
   FormHelperText,
   FormControl,
+  FormControlLabel,
   InputLabel,
   OutlinedInput,
   Select,
+  Switch,
   MenuItem,
 } from "@mui/material";
 import {
@@ -84,6 +86,7 @@ export default function EventForm({
     defaultValues,
   });
   const { triggerToast } = useToast();
+  const collabEvent = watch("collabEvent");
 
   // different form submission handlers
   const submitHandlers = {
@@ -234,6 +237,8 @@ export default function EventForm({
       poc: formData.poc,
     };
 
+    data.collabclubs = collabEvent ? formData.collabclubs : [];
+
     // set club ID for event based on user role
     if (user?.role === "club") {
       data.clubid = user?.uid;
@@ -280,7 +285,6 @@ export default function EventForm({
         return;
       }
     }
-
     // mutate
     submitHandlers[action](data, opts);
   }
@@ -290,15 +294,49 @@ export default function EventForm({
       <Grid container spacing={4} alignItems="flex-start">
         <Grid container item xs={12} md={7} xl={8} spacing={3}>
           <Grid container item>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              gutterBottom
-              mb={2}
+            <Grid
+              container
+              item
+              sx={{ display: "flex", justifyContent: "space-between" }}
             >
-              Details
-            </Typography>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                color="text.secondary"
+                gutterBottom
+                mb={2}
+              >
+                Details
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="collabEvent"
+                    control={control}
+                    defaultValue={
+                      defaultValues.collabclubs &&
+                      defaultValues.collabclubs.length
+                        ? true
+                        : false
+                    }
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value}
+                        disabled={
+                          !allowed_roles.includes(user?.role) &&
+                          defaultValues?.status?.state != undefined &&
+                          defaultValues?.status?.state != "incomplete"
+                        }
+                        onChange={(e) => field.onChange(e.target.checked)}
+                        inputProps={{ "aria-label": "controlled" }}
+                        sx={{ margin: "auto" }}
+                      />
+                    )}
+                  />
+                }
+                label="Collaboration Event"
+              />
+            </Grid>
             <Grid container item spacing={2}>
               {allowed_roles.includes(user?.role) ? (
                 <Grid item xs={12}>
@@ -310,6 +348,21 @@ export default function EventForm({
                       defaultValues?.status?.state != "incomplete"
                     }
                     clubs={clubs}
+                  />
+                </Grid>
+              ) : null}
+              {collabEvent ? (
+                <Grid item xs={12}>
+                  <EventCollabClubSelect
+                    control={control}
+                    disabled={
+                      !allowed_roles.includes(user?.role) &&
+                      defaultValues?.status?.state != undefined &&
+                      defaultValues?.status?.state != "incomplete"
+                    }
+                    defaultValue={defaultValues.collabclubs}
+                    clubs={clubs}
+                    watch={watch}
                   />
                 </Grid>
               ) : null}
@@ -560,6 +613,91 @@ function EventClubSelect({ control, disabled = true, clubs = [] }) {
                   {club.name}
                 </MenuItem>
               ))}
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )}
+    />
+  );
+}
+
+function EventCollabClubSelect({
+  control,
+  watch,
+  defaultValue,
+  disabled = true,
+  clubs = [],
+}) {
+  const selectedClub = watch("clubid");
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Controller
+      name="collabclubs"
+      control={control}
+      defaultValue={defaultValue}
+      rules={{ required: "Select at least one collaborating club!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
+          <InputLabel id="collabclubs">Collaborating Clubs *</InputLabel>
+          <Select
+            labelId="collabclubs"
+            label="Collaborating Clubs *"
+            fullWidth
+            multiple
+            disabled={disabled}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+            input={<OutlinedInput label="Collaborating Clubs *" />}
+            value={field.value || []} // Ensure the value is an array
+            renderValue={(selected) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 0.5,
+                }}
+              >
+                {selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={clubs.find((club) => club.cid === value)?.name}
+                  />
+                ))}
+              </Box>
+            )}
+            {...field}
+          >
+            {clubs
+              ?.slice()
+              ?.sort((a, b) => a.name.localeCompare(b.name))
+              ?.filter((club) => club.cid !== selectedClub)
+              ?.map((club) => (
+                <MenuItem key={club.cid} value={club.cid}>
+                  {club.name}
+                </MenuItem>
+              ))}
+            {open && (
+              <MenuItem>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "100%",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Done
+                  </Button>
+                </Box>
+              </MenuItem>
+            )}
+            ;
           </Select>
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
@@ -1078,8 +1216,9 @@ function EventLocationInput({
       name="location"
       control={control}
       defaultValue={[]}
-      render={({ field }) => (
-        <FormControl fullWidth>
+      rules={{ required: "Select at least one location!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
           <InputLabel id="locationSelect">Location</InputLabel>
           <Select
             multiple
@@ -1115,6 +1254,7 @@ function EventLocationInput({
                 </MenuItem>
               ))}
           </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
       )}
     />
