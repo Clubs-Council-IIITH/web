@@ -29,11 +29,13 @@ export default function ConfirmDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        {addCancel ? <Button onClick={onClose}>
-          <Typography variant="button" color="text.disabled">
-            Cancel
-          </Typography>
-        </Button> : null}
+        {addCancel ? (
+          <Button onClick={onClose}>
+            <Typography variant="button" color="text.disabled">
+              Cancel
+            </Typography>
+          </Button>
+        ) : null}
         <Button onClick={onConfirm} {...confirmProps}>
           {confirmText}
         </Button>
