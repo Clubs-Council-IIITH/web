@@ -95,6 +95,7 @@ export default function MemberPositions({
       headerName: "Role",
       flex: isMobile ? null : 4,
       editable: editable,
+
       renderCell: (p) =>
         p.value ? (
           <Typography
@@ -159,16 +160,35 @@ export default function MemberPositions({
             flex: isMobile ? null : 2,
             valueGetter: ({ row }) => ({
               approved: row.approved,
+              approvalTime: row.approvalTime,
               rejected: row.rejected,
+              rejectionTime: row.rejectionTime,
             }),
-            renderCell: ({ value: { approved, rejected } }) => (
-              <Tag
-                label={
-                  approved ? "Approved" : rejected ? "Rejected" : "Pending"
+            renderCell: ({
+              value: { approved, approvalTime, rejected, rejectionTime },
+            }) => (
+              <Tooltip
+                title={
+                  approved
+                    ? approvalTime || "No Information Available"
+                    : rejected
+                    ? rejectionTime || "No Information Available"
+                    : null
                 }
-                color={approved ? "success" : rejected ? "error" : "warning"}
-                sx={{ my: 2 }}
-              />
+                placement="left-start"
+              >
+                <span>
+                  <Tag
+                    label={
+                      approved ? "Approved" : rejected ? "Rejected" : "Pending"
+                    }
+                    color={
+                      approved ? "success" : rejected ? "error" : "warning"
+                    }
+                    sx={{ my: 2 }}
+                  />
+                </span>
+              </Tooltip>
             ),
           },
 
