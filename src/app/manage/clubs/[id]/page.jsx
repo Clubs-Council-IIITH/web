@@ -10,7 +10,7 @@ import ActionPalette from "components/ActionPalette";
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
-import { EditClub, DeleteClub } from "components/clubs/ClubActions";
+import { EditClub, DeleteClub, UnDeleteClub } from "components/clubs/ClubActions";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
@@ -78,7 +78,7 @@ function getActions(club, user) {
    * Deleted - nothing
    */
   if (club?.state === "deleted") {
-    return [];
+    return [UnDeleteClub];
   }
 
   /*

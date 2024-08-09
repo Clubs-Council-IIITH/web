@@ -37,7 +37,7 @@ function DataClubSelect({ control, disabled = true }) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/actions/clubs/ids");
+        const res = await fetch("/actions/clubs/all-ids");
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.error.messages);

@@ -84,3 +84,30 @@ export function DeleteClub({ sx }) {
     </>
   );
 }
+
+export function UnDeleteClub({ sx }) {
+  const [dialog, setDialog] = useState(false);
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<Icon variant="restore-page-outline" />}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Restore
+      </Button>
+
+      <ConfirmDialog
+        open={dialog}
+        title="Do you want to restore this club?"
+        description="Please contact Tech Team for this operation. This operation is not directly available."
+        onConfirm={() => setDialog(false)}
+        confirmText="Understood"
+        addCancel={false}
+      />
+    </>
+  );
+}
