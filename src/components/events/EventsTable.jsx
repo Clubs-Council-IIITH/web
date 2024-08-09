@@ -68,7 +68,7 @@ export default function EventsTable({
       : [
           {
             field: "club",
-            headerName: "Club",
+            headerName: "Club ID",
             flex: 3,
             valueGetter: ({ row }) => row.clubid,
           },

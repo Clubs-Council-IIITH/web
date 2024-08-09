@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 
 import { getClient } from "gql/client";
-import { GET_ACTIVE_CLUB_IDS } from "gql/queries/clubs";
+import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
 export async function GET() {
   const response = { ok: false, data: null, error: null };
 
   const {
-    data: { activeClubs },
+    data: { allClubs },
     error,
-  } = await getClient().query(GET_ACTIVE_CLUB_IDS, {});
+  } = await getClient().query(GET_ALL_CLUB_IDS, {});
   if (error) {
     response.error = {
       title: error.name,
@@ -17,7 +17,7 @@ export async function GET() {
     };
   } else {
     response.ok = true;
-    response.data = activeClubs;
+    response.data = allClubs;
   }
 
   return NextResponse.json(response);

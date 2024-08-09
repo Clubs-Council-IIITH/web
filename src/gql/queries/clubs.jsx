@@ -43,6 +43,16 @@ export const GET_ALL_CLUB_IDS = gql`
   }
 `;
 
+export const GET_ACTIVE_CLUB_IDS = gql`
+  query ActiveClubs {
+    activeClubs {
+      _id
+      cid
+      name
+    }
+  }
+`;
+
 export const GET_CLUB = gql`
   query Club($clubInput: SimpleClubInput!) {
     club(clubInput: $clubInput) {
