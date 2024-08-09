@@ -109,6 +109,30 @@ export const GET_EVENT_STATUS = gql`
   }
 `;
 
+export const GET_EVENT_BILLS_STATUS = gql`
+  query EventBillsStatus($eventid: String!) {
+    eventBills(eventid: $eventid) {
+      state
+      sloComment
+      updatedTime
+    }
+  }
+`;
+
+export const GET_ALL_EVENTS_BILLS_STATUS = gql`
+  query AllEventsBillsStatus {
+    allEventsBills {
+      eventid
+      eventname
+      billsStatus {
+        state
+        sloComment
+        updatedTime
+      }
+    }
+  }
+`;
+
 export const GET_FULL_EVENT = gql`
   query Event($eventid: String!) {
     event(eventid: $eventid) {

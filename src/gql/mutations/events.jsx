@@ -43,3 +43,12 @@ export const PROGRESS_EVENT = gql`
     }
   }
 `;
+
+export const UPDATE_BILLS_STATUS = gql`
+  mutation UpdateBillsStatus($details: InputBillsStatus!) {
+    updateBillsStatus(details: $details) {
+      state
+      sloComment
+    }
+  }
+`;
