@@ -72,8 +72,12 @@ export const GET_MEMBER = gql`
         endYear
         deleted
         approved
+	approvalTime
         rejected
+	rejectionTime
       }
+      creationTime
+      lastEditedTime
     }
     userProfile(userInput: $userInput) {
       firstName

@@ -113,6 +113,34 @@ export default async function ManageMember({ params }) {
               />
             </Grid>
           </Grid>
+          {user?.role == "cc" ? (
+            <Grid item container xs spacing={1} mt={5}>
+              <Grid item xs>
+                <Typography
+                  variant="subtitle2"
+                  textTransform="uppercase"
+                  gutterBottom
+                >
+                  Creation Time
+                </Typography>
+                <Typography variant="body" color="#777777" fontWeight="100">
+                  {member.creationTime ? member.creationTime : "Info Not Available"}
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  variant="subtitle2"
+                  textTransform="uppercase"
+                  gutterBottom
+                >
+                  Last Edited
+                </Typography>
+                <Typography variant="body" color="#777777" fontWeight="100">
+                  {member.creationTime ? member.creationTime : "Info Not Available"}
+                </Typography>
+              </Grid>
+            </Grid>)
+          : null}
         </Grid>
       </Container>
     );
