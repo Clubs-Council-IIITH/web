@@ -172,8 +172,8 @@ export default function MemberPositions({
                   approved
                     ? approvalTime || "No Information Available"
                     : rejected
-                    ? rejectionTime || "No Information Available"
-                    : null
+                      ? rejectionTime || "No Information Available"
+                      : null
                 }
                 placement="left-start"
               >
