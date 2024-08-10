@@ -36,6 +36,15 @@ export default function FinancesTable({ events, role }) {
         </Typography>
       ),
     },
+    ["cc", "slo"].includes( role) ? {
+      field: "club",
+      headerName: "Club",
+      flex: 3,
+      valueGetter: ({ row }) => row?.clubid,
+      renderCell: ({ value }) => (
+        <Typography variant="body2">{value}</Typography>
+      ),
+    }:{},
     {
       field: "status",
       headerName: "Status",

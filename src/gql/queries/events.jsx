@@ -124,6 +124,7 @@ export const GET_ALL_EVENTS_BILLS_STATUS = gql`
     allEventsBills {
       eventid
       eventname
+      clubid
       billsStatus {
         state
         sloComment
