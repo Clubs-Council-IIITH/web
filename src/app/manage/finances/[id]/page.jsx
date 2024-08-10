@@ -1,8 +1,9 @@
 import { getClient } from "gql/client";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
-import { Container, Typography } from "@mui/material";
+import { Button, Container, Stack, Typography } from "@mui/material";
 
 import BillsStatusForm from "components/events/EditBillsStatus";
 
@@ -24,10 +25,21 @@ export default async function EditHoliday({ params }) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
-          Edit Bill Status Details
-        </Typography>
-
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={3}>
+          <Typography variant="h3" gutterBottom>
+            Edit Bill Status Details
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            href={`/manage/events/${id}`}
+          >
+            <Typography variant="button" color="opposite">
+              View Event
+            </Typography>
+          </Button>
+        </Stack>
         <BillsStatusForm id={id} defaultValues={eventBills} />
       </Container>
     );

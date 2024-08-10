@@ -57,7 +57,7 @@ function Bar({ onOpenDrawer }) {
             padding: theme.spacing(0, 5),
           },
         }}
-      >
+      > 
         <IconButton
           onClick={onOpenDrawer}
           sx={{
@@ -154,6 +154,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/data-events"
         icon={<Icon variant="sim-card-download-outline-rounded" />}
       />
+      <DrawerItem
+        title="Finances"
+        path="/manage/finances"
+        icon={<Icon variant="receipt-long-outline-rounded" />}
+      />
     </DrawerDropdown>
   );
 
@@ -203,7 +208,21 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
-      {manageEventItems}
+      <DrawerDropdown
+        title="events"
+        icon={<Icon variant="local-activity-outline-rounded" />}
+      >
+        <DrawerItem
+          title="Events List/Status"
+          path="/manage/events"
+          icon={<Icon variant="beenhere-outline-rounded" />}
+        />
+        <DrawerItem
+          title="Data Download"
+          path="/manage/data-events"
+          icon={<Icon variant="sim-card-download-outline-rounded" />}
+        />
+      </DrawerDropdown>
     </List>
   );
 

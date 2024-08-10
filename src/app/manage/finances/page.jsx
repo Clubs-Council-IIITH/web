@@ -11,9 +11,8 @@ export const metadata = {
 };
 
 export default async function ManageBills() {
-  const { data: { allEventsBills } = {} } = await getClient().query(
-    GET_ALL_EVENTS_BILLS_STATUS
-  );
+  const response = await getClient().query(GET_ALL_EVENTS_BILLS_STATUS);
+  const allEventsBills = response?.data?.allEventsBills || [];
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
