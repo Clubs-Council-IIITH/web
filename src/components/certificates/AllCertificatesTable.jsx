@@ -14,6 +14,10 @@ import {
   Typography,
   Box,
   Pagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 
 import Tag from "components/Tag";
@@ -29,6 +33,8 @@ export default function AllCertificatesTable() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { triggerToast } = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCert, setSelectedCert] = useState(null);
 
   useEffect(() => {
     fetchCertificates();
@@ -89,7 +95,8 @@ export default function AllCertificatesTable() {
     setPage(value);
   };
 
-  const handleDownload = (certificateNumber) => {
+  const handleDownload = (e, certificateNumber) => {
+    e.stopPropagation();
     window.open(
       `/actions/certificates/download?certificateNumber=${certificateNumber}`,
       "_blank"
@@ -99,6 +106,16 @@ export default function AllCertificatesTable() {
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleString();
+  };
+
+  const handleRowClick = (cert) => {
+    setSelectedCert(cert);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedCert(null);
   };
 
   if (loading) {
@@ -148,7 +165,14 @@ export default function AllCertificatesTable() {
               }))
               .sort((a, b) => b._id.localeCompare(a._id))
               .map((cert) => (
-                <TableRow key={cert._id}>
+                <TableRow
+                  key={cert._id}
+                  onClick={() => handleRowClick(cert)}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
+                  }}
+                >
                   <TableCell>{cert.certificateNumber}</TableCell>
                   <TableCell>{cert.userFullName}</TableCell>
                   <TableCell>{formatDate(cert.status.requestedAt)}</TableCell>
@@ -163,7 +187,7 @@ export default function AllCertificatesTable() {
                       variant="contained"
                       color="primary"
                       disabled={cert.state !== "approved"}
-                      onClick={() => handleDownload(cert.certificateNumber)}
+                      onClick={(e) => handleDownload(e, cert.certificateNumber)}
                     >
                       Download
                     </Button>
@@ -183,6 +207,114 @@ export default function AllCertificatesTable() {
           />
         </Box>
       ) : null}
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ borderBottom: 1, borderColor: "divider", pb: 2 }}>
+          Certificate Details
+        </DialogTitle>
+        <DialogContent sx={{ pt: 3 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: 2,
+              alignItems: "baseline",
+              mt: 2,
+            }}
+          >
+            <Typography variant="subtitle2" fontWeight="bold">
+              Certificate Number:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.certificateNumber}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Student Name:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userFullName || "N/A"}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Email:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userEmail || "N/A"}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Roll Number:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userRollno || "N/A"}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Batch:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.userBatch?.toUpperCase()} ·{" "}
+              {selectedCert?.userStream?.toUpperCase()}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Request Date:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert && formatDate(selectedCert.status.requestedAt)}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Status:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert && (
+                <Tag
+                  label={stateLabel(selectedCert.state).name}
+                  color={stateLabel(selectedCert.state).color}
+                />
+              )}
+            </Typography>
+
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              sx={{ alignSelf: "start" }}
+            >
+              Request Reason:
+            </Typography>
+            <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+              {selectedCert?.requestReason || "No reason provided"}
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions
+          sx={{ borderTop: 1, borderColor: "divider", pt: 2, pb: 2 }}
+        >
+          <Button
+            onClick={handleCloseDialog}
+            color="primary"
+            variant="contained"
+          >
+            Close
+          </Button>
+          {selectedCert && selectedCert.state === "approved" && (
+            <Button
+              onClick={(e) => handleDownload(e, selectedCert.certificateNumber)}
+              color="primary"
+              variant="contained"
+            >
+              Download
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

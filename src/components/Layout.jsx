@@ -266,11 +266,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/certificate-requests"
         icon={<Icon variant="card-membership-outline-rounded" />}
       />
-      <DrawerItem
+      {/* <DrawerItem
         title="All Certificates"
-        path="/all-certificates"
+        path="/certificate-requests/all"
         icon={<Icon variant="library-books-outline-rounded" />}
-      />
+      /> */}
     </List>
   );
 

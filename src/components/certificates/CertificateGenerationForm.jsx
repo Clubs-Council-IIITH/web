@@ -18,9 +18,16 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
 } from "@mui/material";
 import { useToast } from "components/Toast";
 import { ISOtoHuman } from "utils/formatTime";
+import Tag from "components/Tag";
+import { stateLabel } from "utils/formatCertificates";
 
 export default function CertificateGenerationForm({ userCertificates = [] }) {
   const router = useRouter();
@@ -28,6 +35,8 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { triggerToast } = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCert, setSelectedCert] = useState(null);
 
   const isFormValid = reason.trim() !== "" && agreeToTerms;
 
@@ -116,12 +125,6 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
     }
   };
 
-  const getStatus = (cert) => {
-    if (cert.state === "rejected") return "Rejected";
-    if (cert.state === "approved") return "Approved";
-    return "Pending";
-  };
-
   const hasPendingCertificates = (certs) => {
     return (
       certs &&
@@ -129,6 +132,16 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
         (cert) => cert.state !== "approved" && cert.state !== "rejected"
       )
     );
+  };
+
+  const handleRowClick = (cert) => {
+    setSelectedCert(cert);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedCert(null);
   };
 
   return (
@@ -211,16 +224,31 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
                   .localeCompare(a.certificateNumber.toString())
               )
               .map((cert) => (
-                <TableRow key={cert.certificateNumber}>
+                <TableRow
+                  key={cert.certificateNumber}
+                  onClick={() => handleRowClick(cert)}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" },
+                  }}
+                >
                   <TableCell>{cert.certificateNumber}</TableCell>
                   <TableCell>{ISOtoHuman(cert.status.requestedAt)}</TableCell>
-                  <TableCell>{getStatus(cert)}</TableCell>
+                  <TableCell>
+                    <Tag
+                      label={stateLabel(cert.state).name}
+                      color={stateLabel(cert.state).color}
+                    />
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
                       disabled={cert.state !== "approved"}
-                      onClick={() => handleDownload(cert.certificateNumber)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDownload(cert.certificateNumber);
+                      }}
                     >
                       Download
                     </Button>
@@ -230,6 +258,85 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ borderBottom: 1, borderColor: "divider", pb: 2 }}>
+          Certificate Details
+        </DialogTitle>
+        <DialogContent sx={{ pt: 3 }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: 2,
+              alignItems: "baseline",
+              mt: 2,
+            }}
+          >
+            <Typography variant="subtitle2" fontWeight="bold">
+              Certificate Number:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert?.certificateNumber}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Request Date:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert && ISOtoHuman(selectedCert.status.requestedAt)}
+            </Typography>
+
+            <Typography variant="subtitle2" fontWeight="bold">
+              Status:
+            </Typography>
+            <Typography variant="body1">
+              {selectedCert && (
+                <Tag
+                  label={stateLabel(selectedCert.state).name}
+                  color={stateLabel(selectedCert.state).color}
+                />
+              )}
+            </Typography>
+
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              sx={{ alignSelf: "start" }}
+            >
+              Request Reason:
+            </Typography>
+            <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+              {selectedCert?.status?.requestReason || "No reason provided"}
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions
+          sx={{ borderTop: 1, borderColor: "divider", pt: 2, pb: 2 }}
+        >
+          <Button
+            onClick={handleCloseDialog}
+            color="primary"
+            variant="contained"
+          >
+            Close
+          </Button>
+          {selectedCert && selectedCert.state === "approved" && (
+            <Button
+              onClick={() => handleDownload(selectedCert.certificateNumber)}
+              color="primary"
+              variant="contained"
+            >
+              Download
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
