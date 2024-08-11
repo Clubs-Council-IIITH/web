@@ -25,7 +25,12 @@ export default async function EditHoliday({ params }) {
 
     return (
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={3}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={3}
+        >
           <Typography variant="h3" gutterBottom>
             Edit Bill Status Details
           </Typography>
