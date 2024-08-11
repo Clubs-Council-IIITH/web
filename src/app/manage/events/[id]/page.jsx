@@ -51,7 +51,8 @@ export async function generateMetadata({ params }, parent) {
 async function billsStatus(event) {
   if (
     event?.status?.state !== "approved" ||
-    new Date(event?.datetimeperiod[1]) > new Date()
+    new Date(event?.datetimeperiod[1]) > new Date() ||
+    event?.budget?.length === 0
   )
     return null;
 
