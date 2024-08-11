@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { generateCertificateHTML } from "utils/certificateTemplate";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import { LoadingButton } from "@mui/lab";
 
 import {
   TextField,
@@ -37,6 +41,7 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
   const { triggerToast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const isFormValid = reason.trim() !== "" && agreeToTerms;
 
@@ -90,38 +95,78 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
 
   const handleDownload = async (certificateNumber) => {
     try {
+      setLoading(true);
       const response = await fetch(
-        `/actions/certificates/download?certificateNumber=${certificateNumber}`,
-        {
-          method: "GET",
-        }
+        `/actions/certificates/fetch?certificateNumber=${certificateNumber}`
       );
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = `certificate-${certificateNumber}.html`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        triggerToast({
-          title: "Success",
-          messages: ["Certificate downloaded successfully"],
-          severity: "success",
-        });
-      } else {
-        throw new Error("Failed to download certificate");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch certificate data");
       }
-    } catch (err) {
-      console.error("Error downloading certificate:", err);
+      const certificate = await response.json();
+
+      let certificateData;
+      try {
+        certificateData = JSON.parse(
+          certificate.certificateData
+            .replace(/'/g, '"')
+            .replace(/None/g, "null")
+        );
+      } catch (error) {
+        console.error("Error parsing certificate data:", error);
+        throw new Error("Invalid certificate data");
+      }
+
+      const htmlContent = generateCertificateHTML(certificateData);
+
+      // creating an offscreen div
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = htmlContent;
+      tempDiv.style.position = "absolute";
+      tempDiv.style.left = "-9999px";
+      tempDiv.style.top = "-9999px";
+      tempDiv.style.width = "1123px"; // A4 width in pixels at 300 DPI
+      tempDiv.style.height = "794px"; // A4 height in pixels at 300 DPI
+      document.body.appendChild(tempDiv);
+
+      // Wait for fonts and images to load
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const canvas = await html2canvas(tempDiv, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff", // Ensure white background
+      });
+
+      document.body.removeChild(tempDiv);
+
+      // new jsPDF instance
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      pdf.addImage(imgData, "JPEG", 0, 0, 297, 210);
+
+      pdf.save(`certificate-${certificateNumber}.pdf`);
+
+      triggerToast({
+        title: "Success",
+        messages: ["Certificate downloaded successfully"],
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error downloading certificate:", error);
       triggerToast({
         title: "Error",
-        messages: [err.message],
+        messages: [error.message || "Failed to download certificate"],
         severity: "error",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -241,7 +286,8 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
                     />
                   </TableCell>
                   <TableCell>
-                    <Button
+                    <LoadingButton
+                      loading={loading}
                       variant="contained"
                       color="primary"
                       disabled={cert.state !== "approved"}
@@ -251,7 +297,7 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
                       }}
                     >
                       Download
-                    </Button>
+                    </LoadingButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -327,13 +373,14 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
             Close
           </Button>
           {selectedCert && selectedCert.state === "approved" && (
-            <Button
+            <LoadingButton
+              loading={loading}
               onClick={() => handleDownload(selectedCert.certificateNumber)}
               color="primary"
               variant="contained"
             >
               Download
-            </Button>
+            </LoadingButton>
           )}
         </DialogActions>
       </Dialog>

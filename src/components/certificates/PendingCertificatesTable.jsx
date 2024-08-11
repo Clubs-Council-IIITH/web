@@ -19,6 +19,9 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useToast } from "components/Toast";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+import { generateCertificateHTML } from "utils/certificateTemplate";
 
 export default function PendingCertificatesTable() {
   const [certificates, setCertificates] = useState([]);
@@ -81,40 +84,81 @@ export default function PendingCertificatesTable() {
     }
   };
 
-  const handleDownload = async (certificateNumber) => {
+  const handleDownload = async (e, certificateNumber) => {
+    e.stopPropagation();
     try {
+      setProcessing(certificateNumber);
       const response = await fetch(
-        `/actions/certificates/download?certificateNumber=${certificateNumber}`,
-        {
-          method: "GET",
-        }
+        `/actions/certificates/fetch?certificateNumber=${certificateNumber}`
       );
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.style.display = "none";
-        a.href = url;
-        a.download = `certificate-${certificateNumber}.html`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        triggerToast({
-          title: "Success",
-          messages: ["Certificate downloaded successfully"],
-          severity: "success",
-        });
-      } else {
-        throw new Error("Failed to download certificate");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch certificate data");
       }
-    } catch (err) {
-      console.error("Error downloading certificate:", err);
+      const certificate = await response.json();
+
+      let certificateData;
+      try {
+        certificateData = JSON.parse(
+          certificate.certificateData
+            .replace(/'/g, '"')
+            .replace(/None/g, "null")
+        );
+      } catch (error) {
+        console.error("Error parsing certificate data:", error);
+        throw new Error("Invalid certificate data");
+      }
+
+      const htmlContent = generateCertificateHTML(certificateData);
+
+      // Create an off-screen div
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = htmlContent;
+      tempDiv.style.position = "absolute";
+      tempDiv.style.left = "-9999px";
+      tempDiv.style.top = "-9999px";
+      tempDiv.style.width = "1123px"; // A4 width in pixels at 300 DPI
+      tempDiv.style.height = "794px"; // A4 height in pixels at 300 DPI
+      document.body.appendChild(tempDiv);
+
+      // Wait for fonts and images to load
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const canvas = await html2canvas(tempDiv, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff", // Ensure white background
+      });
+
+      document.body.removeChild(tempDiv);
+
+      // new jsPDF instance
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      pdf.addImage(imgData, "JPEG", 0, 0, 297, 210);
+
+      pdf.save(`certificate-${certificateNumber}.pdf`);
+
+      triggerToast({
+        title: "Success",
+        messages: ["Certificate downloaded successfully"],
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error downloading certificate:", error);
       triggerToast({
         title: "Error",
-        messages: [err.message],
+        messages: [error.message || "Failed to download certificate"],
         severity: "error",
       });
+    } finally {
+      setProcessing(null);
     }
   };
 
@@ -277,12 +321,14 @@ export default function PendingCertificatesTable() {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDownload(cert.certificateNumber);
-                    }}
+                    onClick={(e) => handleDownload(e, cert.certificateNumber)}
+                    disabled={processing === cert.certificateNumber}
                   >
-                    Download
+                    {processing === cert.certificateNumber ? (
+                      <CircularProgress size={24} />
+                    ) : (
+                      "Download"
+                    )}
                   </Button>
                 </TableCell>
               </TableRow>

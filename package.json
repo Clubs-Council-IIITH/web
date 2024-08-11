@@ -51,6 +51,8 @@
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2",
     "tippy.js": "^6.3.7",
-    "urql": "^4.1.0"
+    "urql": "^4.1.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1"
   }
 }
