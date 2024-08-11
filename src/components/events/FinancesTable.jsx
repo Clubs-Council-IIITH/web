@@ -36,15 +36,17 @@ export default function FinancesTable({ events, role }) {
         </Typography>
       ),
     },
-    ["cc", "slo"].includes( role) ? {
-      field: "club",
-      headerName: "Club",
-      flex: 3,
-      valueGetter: ({ row }) => row?.clubid,
-      renderCell: ({ value }) => (
-        <Typography variant="body2">{value}</Typography>
-      ),
-    }:{},
+    ["cc", "slo"].includes(role)
+      ? {
+          field: "club",
+          headerName: "Club",
+          flex: 3,
+          valueGetter: ({ row }) => row?.clubid,
+          renderCell: ({ value }) => (
+            <Typography variant="body2">{value}</Typography>
+          ),
+        }
+      : {},
     {
       field: "status",
       headerName: "Status",
@@ -72,7 +74,7 @@ export default function FinancesTable({ events, role }) {
         router.push(
           `/manage/${role === "slo" ? "finances" : "events"}/${
             params.row.eventid
-          }`
+          }`,
         )
       }
       disableRowSelectionOnClick
