@@ -96,3 +96,24 @@ export const stateIconMap = {
   completed: "eva:checkmark-circle-outline",
   deleted: "eva:close-outline",
 };
+
+export const billsStateMap = {
+  not_submitted: "Not Submitted",
+  incomplete: "Incomplete",
+  submitted: "Submitted",
+  slo_processed: "Processed by SLO",
+}
+
+export const billsStateColorMap = {
+  not_submitted: "error",
+  incomplete: "warning",
+  submitted: "info",
+  slo_processed: "success",
+}
+
+export const billsStateIconMap = {
+  not_submitted: "eva:alert-circle-outline",
+  incomplete: "eva:refresh-outline",
+  submitted: "eva:checkmark-outline",
+  slo_processed: "eva:checkmark-circle-outline",
+}
