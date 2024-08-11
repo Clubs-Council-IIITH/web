@@ -22,6 +22,7 @@ import {
   ApproveEvent,
   DeleteEvent,
   SubmitEvent,
+  EditFinances,
 } from "components/events/EventActions";
 import {
   EventStatus,
@@ -526,8 +527,8 @@ function getActions(event, user) {
    */
   if (user?.role === "slc") {
     if (
-      upcoming &&
-      event?.status?.state !== "incomplete" &&
+      // upcoming &&
+      event?.status?.state === "pending_budget" &&
       !event?.status?.budget
     )
       return [ApproveEvent];
@@ -541,11 +542,16 @@ function getActions(event, user) {
   if (user?.role === "slo") {
     if (
       // upcoming &&
-      event?.status?.state !== "incomplete" &&
+      event?.status?.state === "pending_room" &&
       event?.status?.budget &&
       !event?.status?.room
     )
       return [ApproveEvent, EditEvent, DeleteEvent];
+    else if (
+      event?.status?.state === "approved" &&
+      !upcoming &&
+      event?.budget?.length
+    ) return [EditFinances, DeleteEvent];
     else return [DeleteEvent];
   }
 
