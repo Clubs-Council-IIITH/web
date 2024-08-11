@@ -19,9 +19,15 @@ export default async function EditHoliday({ params }) {
       eventid: id,
     });
 
-    if (error || !data) return redirect("/404");
+    if ((error || !data) && !error?.message.includes("Bills status not found"))
+      return redirect("/404");
 
-    const eventBills = data?.eventBills;
+    const defaultValues = {
+      state: null,
+      sloComment: null,
+    };
+
+    const eventBills = data?.eventBills || defaultValues;
 
     return (
       <Container>
