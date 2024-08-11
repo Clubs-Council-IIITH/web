@@ -30,6 +30,23 @@ export function EditEvent({ sx }) {
   );
 }
 
+export function EditFinances({ sx }) {
+  const { id } = useParams();
+
+  return (
+    <Button
+      component={Link}
+      href={`/manage/finances/${id}`}
+      variant="contained"
+      color="warning"
+      startIcon={<Icon variant="edit-outline" />}
+      sx={sx}
+    >
+      Edit Bills Status
+    </Button>
+  );
+}
+
 export function CopyEvent({ sx }) {
   const { id } = useParams();
 
