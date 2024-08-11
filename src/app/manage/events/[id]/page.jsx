@@ -551,7 +551,8 @@ function getActions(event, user) {
       event?.status?.state === "approved" &&
       !upcoming &&
       event?.budget?.length
-    ) return [EditFinances, DeleteEvent];
+    )
+      return [EditFinances, DeleteEvent];
     else return [DeleteEvent];
   }
 
