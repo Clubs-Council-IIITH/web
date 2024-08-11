@@ -57,7 +57,7 @@ function Bar({ onOpenDrawer }) {
             padding: theme.spacing(0, 5),
           },
         }}
-      > 
+      >
         <IconButton
           onClick={onOpenDrawer}
           sx={{
