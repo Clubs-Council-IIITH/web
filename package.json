@@ -32,7 +32,9 @@
     "framer-motion": "^11.2.4",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "html2canvas": "^1.4.1",
     "jwt-decode": "^4.0.0",
+    "jspdf": "^2.5.1",
     "libphonenumber-js": "^1.11.1",
     "next": "^14.2.3",
     "next-mdx-remote": "^4.4.1",
@@ -51,8 +53,6 @@
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2",
     "tippy.js": "^6.3.7",
-    "urql": "^4.1.0",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^2.5.1"
+    "urql": "^4.1.0"
   }
 }

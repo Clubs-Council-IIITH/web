@@ -18,15 +18,27 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+
+import { getFullUser } from "app/actions/users/get/full/server_action";
+import { approveCertificate } from "app/actions/certificates/approve/server_action";
+import { rejectCertificate } from "app/actions/certificates/reject/server_action";
+import { getPendingCertificates } from "app/actions/certificates/pending/server_action";
+
 import { useToast } from "components/Toast";
 import { downloadCertificate } from "utils/certificateDownloader";
 
+const adminActions = {
+  approve: approveCertificate,
+  reject: rejectCertificate,
+}
+
 export default function PendingCertificatesTable() {
+  const { triggerToast } = useToast();
+
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(null);
-  const { triggerToast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
 
@@ -38,16 +50,12 @@ export default function PendingCertificatesTable() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch("/actions/certificates/pending");
-      const data = await res.json();
+
+      const data = await getPendingCertificates();
       if (data.ok) {
         const certificatesWithUserInfo = await Promise.all(
           data.data.map(async (cert) => {
-            const userRes = await fetch("/actions/users/get/full", {
-              method: "POST",
-              body: JSON.stringify({ uid: cert.userId }),
-            });
-            const userData = await userRes.json();
+            const userData = await getFullUser(cert.userId);
             if (userData.ok) {
               return {
                 ...cert,
@@ -95,14 +103,7 @@ export default function PendingCertificatesTable() {
   const handleAction = async (certificateNumber, action) => {
     setProcessing(certificateNumber);
     try {
-      const res = await fetch(`/actions/certificates/${action}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ certificateNumber }),
-      });
-      const data = await res.json();
+      const data = await adminActions[action](certificateNumber);
       if (data.ok) {
         triggerToast({
           title: "Success",

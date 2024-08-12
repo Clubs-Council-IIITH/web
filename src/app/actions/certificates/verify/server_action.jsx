@@ -1,17 +1,17 @@
-// handling certificate verification
-import { NextResponse } from "next/server";
+"use server";
+
 import { getClient } from "gql/client";
 import { VERIFY_CERTIFICATE } from "gql/queries/members";
 
-export async function POST(request) {
+export async function verifyCertificate(certificateNumber, key) {
   const response = { ok: false, data: null, error: null };
-  const { certificateNumber, key } = await request.json();
 
   try {
     const { error, data } = await getClient().query(VERIFY_CERTIFICATE, {
       certificateNumber,
       key,
     });
+
     if (error) {
       response.error = {
         title: error.name,
@@ -33,5 +33,5 @@ export async function POST(request) {
     };
   }
 
-  return NextResponse.json(response);
+  return response;
 }

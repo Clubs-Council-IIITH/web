@@ -19,6 +19,9 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+
+import { getFullUser } from "app/actions/users/get/full/server_action";
+import { getAllCertificates } from "app/actions/certificates/all/server_action";
 import { downloadCertificate } from "utils/certificateDownloader";
 
 import Tag from "components/Tag";
@@ -45,18 +48,13 @@ export default function AllCertificatesTable() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(
-        `/actions/certificates/all?page=${page}&PAGE_SIZE=${PAGE_SIZE}`
-      );
-      const data = await res.json();
+
+      const data = await getAllCertificates(page, PAGE_SIZE);
+
       if (data.ok) {
         const certificatesWithUserInfo = await Promise.all(
           data.data.certificates.map(async (cert) => {
-            const userRes = await fetch("/actions/users/get/full", {
-              method: "POST",
-              body: JSON.stringify({ uid: cert.userId }),
-            });
-            const userData = await userRes.json();
+            const userData = await getFullUser(cert.userId);
             if (userData.ok) {
               return {
                 ...cert,

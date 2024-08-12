@@ -1,11 +1,10 @@
-// handles approving a certificate
-import { NextResponse } from "next/server";
+"use server";
+
 import { getClient } from "gql/client";
 import { APPROVE_CERTIFICATE } from "gql/mutations/members";
 
-export async function POST(request) {
+export async function approveCertificate(certificateNumber) {
   const response = { ok: false, error: null };
-  const { certificateNumber } = await request.json();
 
   const { data, error } = await getClient().mutation(APPROVE_CERTIFICATE, {
     certificateNumber,
@@ -21,5 +20,5 @@ export async function POST(request) {
     response.data = data.approveCertificate;
   }
 
-  return NextResponse.json(response);
+  return response;
 }

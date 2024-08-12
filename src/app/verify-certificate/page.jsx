@@ -11,6 +11,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+import { getFullUser } from "app/actions/users/get/full/server_action";
+import { verifyCertificate } from "app/actions/certificates/verify/server_action";
 import { useToast } from "components/Toast";
 import { ISOtoHuman } from "utils/formatTime";
 
@@ -23,31 +25,19 @@ export default function VerifyCertificatePage() {
   const [user, setUser] = useState(null);
   const { triggerToast } = useToast();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setCertificate(null);
 
     try {
-      const response = await fetch("/actions/certificates/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ certificateNumber, key }),
-      });
-
-      const result = await response.json();
+      const result = await verifyCertificate(certificateNumber, key);
 
       if (result.ok && result.data) {
         setCertificate(result.data);
 
-        let res = await fetch("/actions/users/get/full", {
-          method: "POST",
-          body: JSON.stringify({ uid: result.data.userId }),
-        });
-        res = await res.json();
+        const res = await getFullUser(result.data.userId);
+
         if (!res.ok) {
           triggerToast({
             title: "Unable to fetch user data",
@@ -76,37 +66,35 @@ export default function VerifyCertificatePage() {
           Verify Certificate
         </Typography>
         <Paper elevation={3} sx={{ p: 3 }}>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Certificate Number"
-              variant="outlined"
-              value={certificateNumber}
-              onChange={(e) => setCertificateNumber(e.target.value)}
-              margin="normal"
-              required
-            />
-            <TextField
-              fullWidth
-              label="Verification Key"
-              variant="outlined"
-              value={key}
-              onChange={(e) => setKey(e.target.value)}
-              margin="normal"
-              required
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
-              fullWidth
-              sx={{ mt: 2 }}
-              disabled={loading}
-            >
-              {loading ? <CircularProgress size={24} /> : "Verify Certificate"}
-            </Button>
-          </form>
+          <TextField
+            fullWidth
+            label="Certificate Number"
+            variant="outlined"
+            value={certificateNumber}
+            onChange={(e) => setCertificateNumber(e.target.value)}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Verification Key"
+            variant="outlined"
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
+            margin="normal"
+            required
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={loading}
+            onClick={handleSubmit}
+          >
+            {loading ? <CircularProgress size={24} /> : "Verify Certificate"}
+          </Button>
         </Paper>
 
         {error ? (

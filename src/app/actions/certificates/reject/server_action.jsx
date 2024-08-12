@@ -1,11 +1,10 @@
-// handles rejecting the certificate
-import { NextResponse } from "next/server";
+"use server";
+
 import { getClient } from "gql/client";
 import { REJECT_CERTIFICATE } from "gql/mutations/members";
 
-export async function POST(request) {
+export async function rejectCertificate(certificateNumber) {
   const response = { ok: false, error: null };
-  const { certificateNumber } = await request.json();
 
   const { data, error } = await getClient().mutation(REJECT_CERTIFICATE, {
     certificateNumber,
@@ -21,5 +20,5 @@ export async function POST(request) {
     response.data = data.rejectCertificate;
   }
 
-  return NextResponse.json(response);
+  return response;
 }

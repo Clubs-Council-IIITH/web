@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { downloadCertificate } from "utils/certificateDownloader";
 import { LoadingButton } from "@mui/lab";
+import { requestCertificate } from "app/actions/certificates/request/server_action";
 
 import {
   TextField,
@@ -43,35 +44,16 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
 
   const isFormValid = reason.trim() !== "" && agreeToTerms;
 
-  const handleCertificateRequest = async (event) => {
-    event.preventDefault();
-    if (!isFormValid) {
-      return;
-    }
-
+  const handleCertificateRequest = async () => {
     try {
-      const payload = {
-        certificateInput: {
-          requestReason: reason,
-        },
-      };
-
-      let res = await fetch("/actions/certificates/request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await requestCertificate(reason);
 
       if (!res.ok) {
-        const errorData = await res.json();
+        const errorData = res.error;
         throw new Error(
           errorData.error?.messages[0] || "Failed to request certificate"
         );
       }
-
-      const data = await res.json();
 
       triggerToast({
         title: "Success!",
@@ -131,9 +113,9 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
         {showForm && !hasPendingCertificates(userCertificates) && (
           <Card>
             <CardContent>
-              <Box component="form" onSubmit={handleCertificateRequest}>
+              <Box component="form">
                 <TextField
-                  name="reason"
+                  name="requestReason"
                   label="Reason for Certificate Generation"
                   multiline
                   rows={5}
@@ -158,7 +140,6 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
                 />
 
                 <Button
-                  type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
@@ -167,6 +148,7 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
                     opacity: isFormValid ? 1 : 0.5,
                     cursor: isFormValid ? "pointer" : "not-allowed",
                   }}
+                  onClick={handleCertificateRequest}
                 >
                   Submit Request
                 </Button>

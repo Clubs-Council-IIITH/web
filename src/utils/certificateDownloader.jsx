@@ -2,6 +2,8 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { generateCertificateHTML } from "./certificateTemplate";
 
+import { fetchCertificate } from "app/actions/certificates/fetch/server_action";
+
 export async function downloadCertificate(
   certificateNumber,
   triggerToast,
@@ -9,14 +11,15 @@ export async function downloadCertificate(
 ) {
   try {
     setLoading(true);
-    const response = await fetch(
-      `/actions/certificates/fetch?certificateNumber=${certificateNumber}`
-    );
+
+    const response = await fetchCertificate(certificateNumber);
+
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = response.error || {};
       throw new Error(errorData.error || "Failed to fetch certificate data");
     }
-    const certificate = await response.json();
+
+    const certificate = response.data;
 
     let certificateData;
     try {
@@ -62,7 +65,7 @@ export async function downloadCertificate(
     const imgData = canvas.toDataURL("image/jpeg", 1.0);
     pdf.addImage(imgData, "JPEG", 0, 0, 297, 210);
 
-    pdf.save(`certificate-${certificateNumber}.pdf`);
+    pdf.save(`Certificate-${certificateNumber}.pdf`);
 
     triggerToast({
       title: "Success",
