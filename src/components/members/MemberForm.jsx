@@ -32,6 +32,11 @@ import ConfirmDialog from "components/ConfirmDialog";
 
 import MemberPositions from "components/members/MemberPositions";
 
+import { getActiveClubIds } from "actions/clubs/ids/server_action";
+import { getUsers } from "actions/users/get/server_action";
+import { createMemberAction } from "actions/members/create/server_action";
+import { editMemberAction } from "actions/members/edit/server_action";
+
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -48,11 +53,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const submitHandlers = {
     log: console.log,
     create: async (data) => {
-      let res = await fetch("/actions/members/create", {
-        method: "POST",
-        body: JSON.stringify({ memberInput: data }),
-      });
-      res = await res.json();
+      let res = await createMemberAction(data);
 
       if (res.ok) {
         // show success toast & redirect to manage page
@@ -73,11 +74,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
       }
     },
     edit: async (data) => {
-      let res = await fetch("/actions/members/edit", {
-        method: "POST",
-        body: JSON.stringify({ memberInput: data }),
-      });
-      res = await res.json();
+      let res = await editMemberAction(data);
 
       if (res.ok) {
         // show success toast & redirect to manage page
@@ -279,11 +276,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
   }, [uid]);
 
   const getUser = async () => {
-    let res = await fetch("/actions/users/get", {
-      method: "POST",
-      body: JSON.stringify({ uid }),
-    });
-    res = await res.json();
+    let res = await getUsers(uid);
 
     if (res.ok) {
       // set current user
@@ -358,8 +351,7 @@ function MemberClubSelect({ control, edit }) {
   const [clubs, setClubs] = useState([]);
   useEffect(() => {
     (async () => {
-      let res = await fetch("/actions/clubs/ids");
-      res = await res.json();
+      let res = await getActiveClubIds();
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch clubs",

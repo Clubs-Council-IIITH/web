@@ -14,6 +14,9 @@ import dayjs from "dayjs";
 
 import { useToast } from "components/Toast";
 import ConfirmDialog from "components/ConfirmDialog";
+import { createHolidays } from "actions/holidays/create/server_action";
+import { editHolidays } from "actions/holidays/edit/server_action";
+import { deleteHolidays } from "actions/holidays/delete/server_action";
 
 export default function HolidayForm({
   id = null,
@@ -40,11 +43,8 @@ export default function HolidayForm({
         // description: data.description,
         description: null,
       };
-      let res = await fetch("/actions/holidays/create", {
-        method: "POST",
-        body: JSON.stringify({ details: details }),
-      });
-      res = await res.json();
+
+      res = await createHolidays(details);
 
       if (res.ok) {
         // else show success toast & redirect to manage page
@@ -71,11 +71,7 @@ export default function HolidayForm({
         // description: data.description,
         description: null,
       };
-      let res = await fetch("/actions/holidays/edit", {
-        method: "POST",
-        body: JSON.stringify({ holidayId: id, details: details }),
-      });
-      res = await res.json();
+      const res = await editHolidays(id, details);
 
       if (res.ok) {
         // else show success toast & redirect to manage page
@@ -96,11 +92,7 @@ export default function HolidayForm({
       }
     },
     delete: async () => {
-      let res = await fetch("/actions/holidays/delete", {
-        method: "POST",
-        body: JSON.stringify({ holidayId: id }),
-      });
-      res = await res.json();
+      let res = await deleteHolidays(id);
 
       if (res.ok) {
         // else show success toast & redirect to manage page

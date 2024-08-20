@@ -44,6 +44,15 @@ import ConfirmDialog from "components/ConfirmDialog";
 import EventsDialog from "components/events/EventsDialog";
 import MemberListItem from "components/members/MemberListItem";
 
+import { getActiveClubIds } from "actions/clubs/ids/server_action";
+import { createEventAction } from "actions/events/create/server_action";
+import { editEventAction } from "actions/events/edit/server_action";
+import { eventProgress } from "actions/events/progress/server_action";
+import { eventsVenues } from "actions/events/venues/server_action";
+import { getFullUser } from "actions/users/get/full/server_action";
+import { saveUserPhone } from "actions/users/save/phone/server_action";
+import { currentMembersAction } from "actions/members/current/server_action";
+
 import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
@@ -68,8 +77,7 @@ export default function EventForm({
   const [clubs, setClubs] = useState([]);
   useEffect(() => {
     (async () => {
-      let res = await fetch("/actions/clubs/ids");
-      res = await res.json();
+      let res = await getActiveClubIds();
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch clubs",
@@ -92,20 +100,14 @@ export default function EventForm({
   const submitHandlers = {
     log: console.log,
     create: async (data, opts) => {
-      let res = await fetch("/actions/events/create", {
-        method: "POST",
-        body: JSON.stringify({ details: data }),
-      });
-      res = await res.json();
+      let res = await createEventAction(data);
 
       if (res.ok) {
         // also submit event if requested
         if (opts?.shouldSubmit) {
-          let submit_res = await fetch("/actions/events/progress", {
-            method: "POST",
-            body: JSON.stringify({ eventid: res.data._id }),
+          let submit_res = await eventProgress({
+            eventid: res.data._id,
           });
-          submit_res = await submit_res.json();
 
           if (submit_res.ok) {
             triggerToast({
@@ -148,20 +150,14 @@ export default function EventForm({
       }
     },
     edit: async (data, opts) => {
-      let res = await fetch("/actions/events/edit", {
-        method: "POST",
-        body: JSON.stringify({ details: data, eventid: id }),
-      });
-      res = await res.json();
+      let res = await editEventAction(data, id);
 
       if (res.ok) {
         // also submit event if requested
         if (opts?.shouldSubmit) {
-          let submit_res = await fetch("/actions/events/progress", {
-            method: "POST",
-            body: JSON.stringify({ eventid: res.data._id }),
+          let submit_res = await eventProgress({
+            eventid: res.data._id,
           });
-          submit_res = await submit_res.json();
 
           if (submit_res.ok) {
             triggerToast({
@@ -201,11 +197,7 @@ export default function EventForm({
       }
     },
     phone: async (data) => {
-      let res = await fetch("/actions/users/save/phone", {
-        method: "POST",
-        body: JSON.stringify({ userDataInput: data }),
-      });
-      res = await res.json();
+      let res = await saveUserPhone(data);
 
       if (!res.ok) {
         // show error toast
@@ -1180,6 +1172,8 @@ function EventLocationInput({
   disabled = true,
   eventid = null,
 }) {
+  const { triggerToast } = useToast();
+
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
@@ -1190,15 +1184,11 @@ function EventLocationInput({
     }
 
     (async () => {
-      let res = await fetch("/actions/events/venues", {
-        method: "POST",
-        body: JSON.stringify({
-          startDate: new Date(startDateInput).toISOString(),
-          endDate: new Date(endDateInput).toISOString(),
-          eventid: eventid,
-        }),
+      let res = await eventsVenues({
+        startDate: new Date(startDateInput).toISOString(),
+        endDate: new Date(endDateInput).toISOString(),
+        eventid: eventid,
       });
-      res = await res.json();
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch available rooms",
@@ -1300,11 +1290,7 @@ function EventPOC({
   const [members, setMembers] = useState([]);
   useEffect(() => {
     (async () => {
-      let res = await fetch("/actions/members/current", {
-        method: "POST",
-        body: JSON.stringify({ clubInput: { cid } }),
-      });
-      res = await res.json();
+      let res = await currentMembersAction({cid});
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch members",
@@ -1321,11 +1307,7 @@ function EventPOC({
   useEffect(() => {
     if (poc) {
       (async () => {
-        let res = await fetch("/actions/users/get/full", {
-          method: "POST",
-          body: JSON.stringify({ uid: poc }),
-        });
-        res = await res.json();
+        let res = await getFullUser(poc);
         if (!res.ok) {
           triggerToast({
             title: "Unable to fetch phone number",

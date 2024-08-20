@@ -20,6 +20,8 @@ import ConfirmDialog from "components/ConfirmDialog";
 
 import { uploadFile } from "utils/files";
 
+import { updateUserDataAction } from "actions/users/save/server_action";
+
 export default function UserForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
@@ -33,11 +35,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
   const submitHandlers = {
     log: console.log,
     save: async (data) => {
-      let res = await fetch("/actions/users/save", {
-        method: "POST",
-        body: JSON.stringify({ userDataInput: data }),
-      });
-      res = await res.json();
+      const res = await updateUserDataAction(data);
 
       if (res.ok) {
         // show success toast & redirect to manage page

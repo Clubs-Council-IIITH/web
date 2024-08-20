@@ -25,6 +25,9 @@ import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 import { LoadingButton } from "@mui/lab";
 
+import { getAllClubIds } from "app/actions/clubs/all-ids/server-action";
+import { eventsDataDownload } from "actions/events/data/server_action";
+
 const allowed_roles = ["cc", "club", "slo"];
 const admin_roles = ["cc", "slo"];
 const disabledFields = ["code", "name", "clubid", "datetimeperiod.0", "status"]; // Fields that should be disabled and selected
@@ -37,7 +40,7 @@ function DataClubSelect({ control, disabled = true }) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/actions/clubs/all-ids");
+        const res = await getAllClubIds();
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.error.messages);
@@ -211,11 +214,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   const submitHandlers = {
     log: console.log,
     create: async (data) => {
-      console.log(data);
-      let res = await fetch("/actions/events/data", {
-        method: "POST",
-        body: JSON.stringify({ details: data }),
-      });
+      let res = await eventsDataDownload(data);
 
       if (res.ok) {
         try {

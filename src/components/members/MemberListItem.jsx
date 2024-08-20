@@ -6,6 +6,8 @@ import UserImage from "components/users/UserImage";
 
 import { useToast } from "components/Toast";
 
+import { getUsers } from "actions/users/get/server_action";
+
 export default function MemberListItem({ uid, showEmail = true }) {
   const { triggerToast } = useToast();
   const [user, setUser] = useState(null);
@@ -17,11 +19,7 @@ export default function MemberListItem({ uid, showEmail = true }) {
   }, [uid]);
 
   const getUser = async () => {
-    let res = await fetch("/actions/users/get", {
-      method: "POST",
-      body: JSON.stringify({ uid }),
-    });
-    res = await res.json();
+    const res = await getUsers(uid);
 
     if (res.ok) {
       // set current user

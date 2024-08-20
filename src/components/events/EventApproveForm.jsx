@@ -25,6 +25,9 @@ import {
   Divider,
 } from "@mui/material";
 
+import { eventProgress } from "actions/events/progress/server_action";
+import { getUserByRole } from "actions/users/get/role/server_action";
+
 export default function EventApproveForm({ eventid, members }) {
   const { triggerToast } = useToast();
   const router = useRouter();
@@ -43,13 +46,7 @@ export default function EventApproveForm({ eventid, members }) {
   useEffect(() => {
     const fetchData = async () => {
       if (watchSLC && slcMembers.length === 0) {
-        let res = await fetch("/actions/users/get/role", {
-          method: "POST",
-          body: JSON.stringify({
-            role: "slc",
-          }),
-        });
-        res = await res.json();
+        let res = await getUserByRole("slc");
 
         if (res.ok) {
           setSlcMembers(res.data);
@@ -72,15 +69,12 @@ export default function EventApproveForm({ eventid, members }) {
     let approver = formData.approver;
     let slc_members_for_email = formData.slcMembersForEmail;
 
-    let res = await fetch("/actions/events/progress", {
-      method: "POST",
-      body: JSON.stringify({
-        eventid: eventid,
-        cc_progress_budget: cc_progress_budget,
-        cc_progress_room: cc_progress_room,
-        cc_approver: approver,
-        slc_members_for_email: slc_members_for_email,
-      }),
+    let res = await eventProgress({
+      eventid: eventid,
+      cc_progress_budget: cc_progress_budget,
+      cc_progress_room: cc_progress_room,
+      cc_approver: approver,
+      slc_members_for_email: slc_members_for_email,
     });
     if (res.ok) {
       triggerToast("Event approved", "success");

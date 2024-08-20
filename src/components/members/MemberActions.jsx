@@ -11,6 +11,9 @@ import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 
+import { approveMember } from "actions/members/approve/server_action";
+import { deleteMemberAction } from "actions/members/delete/server_action";
+
 export function EditMember({ sx }) {
   const { id } = useParams();
 
@@ -35,17 +38,11 @@ export function DeleteMember({ sx }) {
   const [dialog, setDialog] = useState(false);
 
   const deleteMember = async () => {
-    let res = await fetch("/actions/members/delete", {
-      method: "POST",
-      body: JSON.stringify({
-        memberInput: {
-          cid: id?.split(encodeURIComponent(":"))[0],
-          uid: id?.split(encodeURIComponent(":"))[1],
-          rid: null,
-        },
-      }),
+    let res = await deleteMemberAction({
+      cid: id?.split(encodeURIComponent(":"))[0],
+      uid: id?.split(encodeURIComponent(":"))[1],
+      rid: null,
     });
-    res = await res.json();
 
     if (res.ok) {
       // show success toast & redirect to manage page
@@ -97,17 +94,11 @@ export function ApproveAllMember({ sx }) {
   const [dialog, setDialog] = useState(false);
 
   const approveMember = async () => {
-    let res = await fetch("/actions/members/approve", {
-      method: "POST",
-      body: JSON.stringify({
-        memberInput: {
-          cid: id?.split(encodeURIComponent(":"))[0],
-          uid: id?.split(encodeURIComponent(":"))[1],
-          rid: null,
-        },
-      }),
+    let res = await approveMember({
+      cid: id?.split(encodeURIComponent(":"))[0],
+      uid: id?.split(encodeURIComponent(":"))[1],
+      rid: null,
     });
-    res = await res.json();
 
     if (res.ok) {
       // show success toast & redirect to manage page
