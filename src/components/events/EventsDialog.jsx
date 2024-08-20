@@ -18,7 +18,6 @@ export default function EventsDialog({
   events = [],
   clubs = [],
 }) {
-  console.log(clubs);
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Clashing Events</DialogTitle>

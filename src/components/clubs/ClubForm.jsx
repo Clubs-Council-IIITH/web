@@ -30,6 +30,9 @@ import ConfirmDialog from "components/ConfirmDialog";
 import { uploadFile } from "utils/files";
 import { socialsData } from "utils/socialsData";
 
+import { createClubAction } from "actions/clubs/create/server_action";
+import { editClubAction } from "actions/clubs/edit/server_action";
+
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -44,11 +47,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const submitHandlers = {
     log: console.log,
     create: async (data) => {
-      let res = await fetch("/actions/clubs/create", {
-        method: "POST",
-        body: JSON.stringify({ clubInput: data }),
-      });
-      res = await res.json();
+      let res = await createClubAction(data);
 
       if (res.ok) {
         // show success toast & redirect to manage page
@@ -69,11 +68,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       }
     },
     edit: async (data) => {
-      let res = await fetch("/actions/clubs/edit", {
-        method: "POST",
-        body: JSON.stringify({ clubInput: data, cid: data.cid }),
-      });
-      res = await res.json();
+      let res = await editClubAction(data);
 
       if (res.ok) {
         // show success toast & redirect to manage page

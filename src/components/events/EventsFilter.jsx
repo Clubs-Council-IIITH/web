@@ -22,6 +22,8 @@ import {
 import { useToast } from "components/Toast";
 import Icon from "components/Icon";
 
+import { getActiveClubIds } from "actions/clubs/ids/server_action";
+
 export default function EventsFilter({ name, club, state }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -55,8 +57,7 @@ export default function EventsFilter({ name, club, state }) {
   const [clubs, setClubs] = useState([]);
   useEffect(() => {
     (async () => {
-      let res = await fetch("/actions/clubs/ids");
-      res = await res.json();
+      let res = await getActiveClubIds();
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch clubs",

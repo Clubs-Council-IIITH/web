@@ -13,6 +13,9 @@ import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 
+import {  deleteEventAction } from "actions/events/delete/server_action";
+import { eventProgress } from "actions/events/progress/server_action";
+
 export function EditEvent({ sx }) {
   const { id } = useParams();
 
@@ -71,11 +74,7 @@ export function DeleteEvent({ sx }) {
   const [dialog, setDialog] = useState(false);
 
   const deleteEvent = async () => {
-    let res = await fetch("/actions/events/delete", {
-      method: "POST",
-      body: JSON.stringify({ eventid: id }),
-    });
-    res = await res.json();
+    let res = await deleteEventAction(id);
 
     if (res.ok) {
       // show success toast & redirect to manage page
@@ -126,11 +125,9 @@ export function SubmitEvent({ sx }) {
   const { triggerToast } = useToast();
 
   const submitEvent = async () => {
-    let res = await fetch("/actions/events/progress", {
-      method: "POST",
-      body: JSON.stringify({ eventid: id }),
+    let res = await eventProgress({
+      eventid: id,
     });
-    res = await res.json();
 
     if (res.ok) {
       // show success toast & redirect to manage page
@@ -171,14 +168,9 @@ export function ApproveEvent({ sx }) {
 
   const approveEvent = async () => {
     // console.log("requested approvals:", SLC, SLO);
-    let res = await fetch("/actions/events/progress", {
-      method: "POST",
-      body: JSON.stringify({
-        eventid: id,
-      }),
+    let res = await eventProgress({
+      eventid: id,
     });
-    res = await res.json();
-
     if (res.ok) {
       // show success toast & redirect to manage page
       triggerToast({
