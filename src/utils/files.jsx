@@ -1,3 +1,7 @@
+import { uploadFiles } from "actions/files/upload/server_action";
+
+export const dynamic = "force-dynamic";
+
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
 const STATIC_URL = process.env.STATIC_URL || "http://nginx/static";
 
@@ -30,10 +34,11 @@ export async function uploadFile(file, filetype = "image") {
   if (!file) return null;
 
   // get signed url
-  let res = await fetch("/actions/files/upload");
-  let {
-    data: { url },
-  } = await res.json();
+  let res = await uploadFiles();
+  if (!res.ok) {
+    throw res.error;
+  }
+  let { url } = res.data;
 
   // upload file to signed URL
   const body = new FormData();

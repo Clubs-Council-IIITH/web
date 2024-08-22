@@ -12,6 +12,8 @@ import ConfirmDialog from "components/ConfirmDialog";
 
 import { useToast } from "components/Toast";
 
+import { deleteClubAction } from "actions/clubs/delete/server_action";
+
 export function EditClub({ sx }) {
   const { id } = useParams();
 
@@ -36,11 +38,7 @@ export function DeleteClub({ sx }) {
   const [dialog, setDialog] = useState(false);
 
   const deleteClub = async () => {
-    let res = await fetch("/actions/clubs/delete", {
-      method: "POST",
-      body: JSON.stringify({ cid: id }),
-    });
-    res = await res.json();
+    let res = await deleteClubAction(id);
 
     if (res.ok) {
       // show success toast & redirect to manage page

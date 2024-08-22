@@ -21,6 +21,8 @@ import { useToast } from "components/Toast";
 import ConfirmDialog from "components/ConfirmDialog";
 import { billsStateLabel } from "utils/formatEvent";
 
+import { eventBillStatus } from "actions/events/edit/bill-status/server_action";
+
 const states = ["not_submitted", "incomplete", "submitted", "slo_processed"];
 
 export default function BillsStatusForm({ id = null, defaultValues = {} }) {
@@ -42,11 +44,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
       sloComment: data.sloComment,
     };
 
-    let res = await fetch("/actions/events/edit/bill-status", {
-      method: "POST",
-      body: JSON.stringify({ details: details }),
-    });
-    res = await res.json();
+    let res = await eventBillStatus(details);
 
     if (res.ok) {
       triggerToast({

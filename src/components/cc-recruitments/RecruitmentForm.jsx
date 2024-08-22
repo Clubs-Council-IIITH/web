@@ -30,6 +30,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import UserImage from "components/users/UserImage";
 import ConfirmDialog from "components/ConfirmDialog";
 
+import { ccRecruitmentsApply } from "actions/cc-recruitments/apply/server_action";
+import { saveUserPhone } from "actions/users/save/phone/server_action";
+
 const allowedBatches = ["ug2k22", "ug2k23", "mtech2k23", "ms2k23"];
 
 const availableTeams = [
@@ -92,11 +95,7 @@ export default function RecruitmentForm({ user = {} }) {
         uid: user.uid,
         phone: formData.phone,
       };
-      let res = await fetch("/actions/users/save/phone", {
-        method: "POST",
-        body: JSON.stringify({ userDataInput: phoneData }),
-      });
-      res = await res.json();
+      let res = await saveUserPhone(phoneData);
 
       if (!res.ok) {
         // show error toast
@@ -124,11 +123,7 @@ export default function RecruitmentForm({ user = {} }) {
       (team) => availableTeams.find((t) => t[0] === team)[1],
     );
 
-    let res = await fetch("/actions/cc-recruitments/apply", {
-      method: "POST",
-      body: JSON.stringify({ ccRecruitmentInput: data }),
-    });
-    res = await res.json();
+    let res = await ccRecruitmentsApply(data);
 
     if (res.ok) {
       triggerToast({

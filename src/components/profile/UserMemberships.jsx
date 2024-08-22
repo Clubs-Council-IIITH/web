@@ -9,6 +9,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { useToast } from "components/Toast";
 
+import { getActiveClubIds } from "actions/clubs/ids/server_action";
+
 export default function UserMemberships({ rows = [] }) {
   const { triggerToast } = useToast();
   const theme = useTheme();
@@ -18,8 +20,7 @@ export default function UserMemberships({ rows = [] }) {
   const [clubs, setClubs] = useState([]);
   useEffect(() => {
     (async () => {
-      let res = await fetch("/actions/clubs/ids");
-      res = await res.json();
+      let res = await getActiveClubIds();
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch clubs",

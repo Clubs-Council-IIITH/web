@@ -21,6 +21,9 @@ import Icon from "components/Icon";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 
+import { approveMemberAction } from "actions/members/approve/server_action";
+import { rejectMemberAction } from "actions/members/reject/server_action";
+
 const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
@@ -270,11 +273,7 @@ function ApproveButton({ member, rid }) {
       rid: rid,
     };
 
-    let res = await fetch("/actions/members/approve", {
-      method: "POST",
-      body: JSON.stringify({ memberInput: data }),
-    });
-    res = await res.json();
+    let res = await approveMemberAction(data);
 
     if (res.ok) {
       // show success toast & refresh server
@@ -332,11 +331,7 @@ function RejectButton({ member, rid }) {
       rid: rid,
     };
 
-    let res = await fetch("/actions/members/reject", {
-      method: "POST",
-      body: JSON.stringify({ memberInput: data }),
-    });
-    res = await res.json();
+    let res = await rejectMemberAction(data);
 
     if (res.ok) {
       // show success toast & refresh server
