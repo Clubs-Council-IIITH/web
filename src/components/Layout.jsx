@@ -122,7 +122,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       >
         <DrawerItem
           title="list of events"
-          path="/events?upcoming=true&completed=true"
+          path="/events"
           icon={<Icon variant="list-alt-outline-rounded" />}
         />
         <DrawerItem
