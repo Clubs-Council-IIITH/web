@@ -1,4 +1,3 @@
-
 "use server";
 
 import { getClient } from "gql/client";
