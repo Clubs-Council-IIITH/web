@@ -13,7 +13,7 @@ import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 
-import {  deleteEventAction } from "actions/events/delete/server_action";
+import { deleteEventAction } from "actions/events/delete/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
 
 export function EditEvent({ sx }) {

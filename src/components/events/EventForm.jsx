@@ -1291,7 +1291,7 @@ function EventPOC({
   const [members, setMembers] = useState([]);
   useEffect(() => {
     (async () => {
-      let res = await currentMembersAction({cid});
+      let res = await currentMembersAction({ cid });
       if (!res.ok) {
         triggerToast({
           title: "Unable to fetch members",

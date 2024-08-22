@@ -12,9 +12,7 @@ export async function deleteEventAction(eventid) {
   if (error) {
     response.error = {
       title: error.name,
-      messages:
-      
-      error?.graphQLErrors?.map((ge) => ge?.message),
+      messages: error?.graphQLErrors?.map((ge) => ge?.message),
     };
   } else {
     response.ok = true;

@@ -7,7 +7,6 @@ export async function createEventAction(details) {
   const response = { ok: false, data: null, error: null };
 
   try {
-
     const client = getClient();
     const result = await client.mutation(CREATE_EVENT, { details });
 
