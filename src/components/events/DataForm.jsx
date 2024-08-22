@@ -25,7 +25,7 @@ import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 import { LoadingButton } from "@mui/lab";
 
-import { getAllClubIds } from "app/actions/clubs/all-ids/server-action";
+import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { eventsDataDownload } from "actions/events/data/server_action";
 
 const allowed_roles = ["cc", "club", "slo"];
