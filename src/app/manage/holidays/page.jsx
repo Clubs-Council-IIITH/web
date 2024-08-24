@@ -33,7 +33,7 @@ export default async function ManageHolidays() {
           variant="contained"
           startIcon={<Icon variant="add" />}
         >
-          New Event
+          Add Holiday
         </Button>
       </Stack>
 
