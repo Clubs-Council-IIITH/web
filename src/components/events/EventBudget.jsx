@@ -55,7 +55,7 @@ export default function EventBudget({
       headerName: "Amount",
       flex: 1,
       editable: editable,
-      valueFormatter: (p) => fCurrency(p?.value),
+      valueFormatter: (value, row, column, apiRef) => fCurrency(value),
     },
     {
       field: "advance",

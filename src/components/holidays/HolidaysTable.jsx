@@ -39,7 +39,7 @@ export default function HolidaysTable({ holidays }) {
       field: "date",
       headerName: "Date",
       flex: 3,
-      valueGetter: (params) => ISOtoHuman(params.row.date, true, false),
+      valueGetter: (value, row, column, apiRef) => ISOtoHuman(row.date, true, false),
       renderCell: (params) => (
         <Typography variant="body2">{params.value}</Typography>
       ),

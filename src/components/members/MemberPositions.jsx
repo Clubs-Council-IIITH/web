@@ -28,7 +28,7 @@ const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
     const allApprovedRejected = rows.every(
-      (row) => row.approved || row.rejected,
+      (row) => row.approved || row.rejected
     );
     return !allApprovedRejected;
   } else return false;
@@ -131,7 +131,7 @@ export default function MemberPositions({
     {
       field: "endYear",
       headerName: "End Year",
-      valueGetter: ({ row }) => row.endYear || "-",
+      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
       flex: isMobile ? null : 2,
       editable: editable,
     },
@@ -161,7 +161,7 @@ export default function MemberPositions({
             align: "center",
             headerAlign: "center",
             flex: isMobile ? null : 2,
-            valueGetter: ({ row }) => ({
+            valueGetter: (value, row, column, apiRef) => ({
               approved: row.approved,
               approvalTime: row.approvalTime,
               rejected: row.rejected,
@@ -175,8 +175,8 @@ export default function MemberPositions({
                   approved
                     ? approvalTime || "No Information Available"
                     : rejected
-                      ? rejectionTime || "No Information Available"
-                      : null
+                    ? rejectionTime || "No Information Available"
+                    : null
                 }
                 placement="left-start"
               >
@@ -188,7 +188,6 @@ export default function MemberPositions({
                     color={
                       approved ? "success" : rejected ? "error" : "warning"
                     }
-                    sx={{ my: 2 }}
                   />
                 </span>
               </Tooltip>
@@ -203,7 +202,7 @@ export default function MemberPositions({
                   align: "center",
                   headerName: "",
                   width: 100,
-                  valueGetter: ({ row }) => ({
+                  valueGetter: (value, row, column, apiRef) => ({
                     approved: row.approved,
                     rejected: row.rejected,
                     rid: row.rid,

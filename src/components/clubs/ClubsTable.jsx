@@ -22,7 +22,10 @@ export default function ClubsTable({ clubs }) {
       field: "img",
       headerName: "",
       flex: 1,
-      valueGetter: ({ row }) => ({ name: row.name, logo: row.logo }),
+      valueGetter: (value, row, column, apiRef) => ({
+        name: row.name,
+        logo: row.logo,
+      }),
       renderCell: ({ value }) => (
         <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
       ),
@@ -83,7 +86,7 @@ export default function ClubsTable({ clubs }) {
       field: "category",
       headerName: "Category",
       flex: isMobile ? null : 2,
-      valueGetter: ({ row }) => ({
+      valueGetter: (value, row, column, apiRef) => ({
         category: row.category,
         studentBody: row.studentBody,
       }),
@@ -103,7 +106,6 @@ export default function ClubsTable({ clubs }) {
         <Tag
           label={value}
           color={value === "active" ? "success" : "error"}
-          sx={{ my: 2 }}
         />
       ),
     },

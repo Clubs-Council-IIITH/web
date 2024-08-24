@@ -32,7 +32,7 @@ export default function UserMemberships({ rows = [] }) {
           res.data.reduce((acc, { cid, name }) => {
             acc[cid] = name;
             return acc;
-          }, {}),
+          }, {})
         );
       }
     })();
@@ -99,7 +99,7 @@ export default function UserMemberships({ rows = [] }) {
       headerName: "End Year",
       headerAlign: "center",
       align: "center",
-      valueGetter: ({ row }) => row.endYear || "-",
+      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
       flex: isMobile ? null : 3,
     },
   ];

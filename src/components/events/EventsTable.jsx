@@ -70,7 +70,7 @@ export default function EventsTable({
             field: "club",
             headerName: "Club ID",
             flex: 3,
-            valueGetter: ({ row }) => row.clubid,
+            valueGetter: (value, row, column, apiRef) => row.clubid,
           },
           {
             field: "scheduled",
@@ -78,8 +78,8 @@ export default function EventsTable({
             flex: 3,
             align: "center",
             headerAlign: "center",
-            valueGetter: ({ row }) => row.datetimeperiod[0],
-            valueFormatter: ({ value }) => ISOtoHuman(value),
+            valueGetter: (value, row, column, apiRef) => row.datetimeperiod[0],
+            valueFormatter: (value, row, column, apiRef) => ISOtoHuman(value),
           },
         ]),
     // {
@@ -88,7 +88,7 @@ export default function EventsTable({
     //   flex: isMobile ? null : 2,
     //   align: "center",
     //   headerAlign: "center",
-    //   valueGetter: ({ row }) => ({
+    //   valueGetter: (value, row, column, apiRef) => ({
     //     requested: row.budget.length > 0,
     //     approved: row.status.budget,
     //   }),
@@ -117,7 +117,7 @@ export default function EventsTable({
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",
-      valueGetter: ({ row }) => ({
+      valueGetter: (value, row, column, apiRef) => ({
         requested: row.location.length > 0,
         approved: row.status.room,
       }),
@@ -127,15 +127,15 @@ export default function EventsTable({
             color: !value.requested
               ? "secondary.main"
               : !value.approved
-                ? "warning.main"
-                : "success.main",
+              ? "warning.main"
+              : "success.main",
           }}
           variant={
             !value.requested
               ? "remove-rounded"
               : !value.approved
-                ? "refresh-rounded"
-                : "check"
+              ? "refresh-rounded"
+              : "check"
           }
         />
       ),
@@ -146,7 +146,7 @@ export default function EventsTable({
       flex: isMobile ? null : 3,
       align: "center",
       headerAlign: "center",
-      valueGetter: ({ row }) => ({
+      valueGetter: (value, row, column, apiRef) => ({
         state: row.status.state,
         start: row.datetimeperiod[0],
       }),
@@ -159,7 +159,6 @@ export default function EventsTable({
           <Tag
             label={stateLabel(value.state).shortName}
             color={stateLabel(value.state).color}
-            sx={{ my: 2 }}
           />
         );
       },

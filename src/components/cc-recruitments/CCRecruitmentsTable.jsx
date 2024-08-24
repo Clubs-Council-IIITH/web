@@ -13,7 +13,7 @@ const columns = [
     flex: 5,
     headerAlign: "center",
     align: "center",
-    valueGetter: ({ row }) => ({
+    valueGetter: (value, row, column, apiRef) => ({
       firstName: row.firstName,
       lastName: row.lastName,
     }),
@@ -32,13 +32,13 @@ const columns = [
     field: "batch",
     headerName: "Batch",
     flex: 3,
-    valueGetter: ({ row }) => row.batch.toUpperCase(),
+    valueGetter: (value, row, column, apiRef) => row.batch.toUpperCase(),
   },
   {
     field: "stream",
     headerName: "Stream",
     flex: 3,
-    valueGetter: ({ row }) => row.stream.toUpperCase(),
+    valueGetter: (value, row, column, apiRef) => row.stream.toUpperCase(),
   },
 ];
 

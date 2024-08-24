@@ -31,7 +31,10 @@ export default function MembersTable({ members, showClub = false }) {
       field: "img",
       headerName: "",
       flex: 1,
-      valueGetter: ({ row }) => ({ name: row.firstName, img: row.img }),
+      valueGetter: (value, row, column, apiRef) => ({
+        name: row.firstName,
+        img: row.img,
+      }),
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
@@ -43,7 +46,8 @@ export default function MembersTable({ members, showClub = false }) {
     {
       field: "name",
       headerName: "Name",
-      valueGetter: ({ row }) => `${row.firstName} ${row.lastName}`,
+      valueGetter: (value, row, column, apiRef) =>
+        `${row.firstName} ${row.lastName}`,
       flex: 6,
     },
     ...(isDesktop
@@ -80,7 +84,7 @@ export default function MembersTable({ members, showClub = false }) {
             field: "positions",
             headerName: "Positions",
             flex: 8,
-            valueGetter: ({ row }) => row.roles,
+            valueGetter: (value, row, column, apiRef) => row.roles,
             renderCell: ({ value }) => (
               <Stack
                 direction="column"
@@ -107,8 +111,8 @@ export default function MembersTable({ members, showClub = false }) {
                         role?.approved
                           ? "Approved"
                           : role?.rejected
-                            ? "Rejected"
-                            : "Pending approval"
+                          ? "Rejected"
+                          : "Pending approval"
                       }
                     >
                       <Icon
@@ -117,15 +121,15 @@ export default function MembersTable({ members, showClub = false }) {
                           role?.approved
                             ? "success.main"
                             : role?.rejected
-                              ? "error.main"
-                              : "warning.main"
+                            ? "error.main"
+                            : "warning.main"
                         }
                         variant={
                           role?.approved
                             ? "eva:checkmark-outline"
                             : role?.rejected
-                              ? "eva:close-outline"
-                              : "eva:refresh-fill"
+                            ? "eva:close-outline"
+                            : "eva:refresh-fill"
                         }
                       />
                     </Tooltip>

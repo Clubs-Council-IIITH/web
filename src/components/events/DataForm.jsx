@@ -41,16 +41,15 @@ function DataClubSelect({ control, disabled = true }) {
     (async () => {
       try {
         const res = await getAllClubIds();
-        const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error.messages);
+          throw new Error(res.error.messages);
         }
-        setClubs(data.data);
+        setClubs(res.data);
         setLoading(false);
       } catch (error) {
         triggerToast({
           title: "Unable to fetch clubs",
-          messages: error.message,
+          messages: [error.message],
           severity: "error",
         });
       }
@@ -218,8 +217,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
       if (res.ok) {
         try {
-          const jsonResponse = await res.json();
-          const csvContent = jsonResponse.data.downloadEventsData.csvFile;
+          const csvContent = res.data.downloadEventsData.csvFile;
 
           if (csvContent) {
             const csvBlob = new Blob([csvContent], {

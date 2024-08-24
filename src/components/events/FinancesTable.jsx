@@ -17,7 +17,7 @@ export default function FinancesTable({ events, role }) {
       field: "name",
       headerName: "Name",
       flex: 5,
-      valueGetter: ({ row }) => row?.eventname,
+      valueGetter: (value, row, column, apiRef) => row?.eventname,
       renderCell: ({ value }) => (
         <Typography
           variant="body2"
@@ -41,7 +41,7 @@ export default function FinancesTable({ events, role }) {
           field: "club",
           headerName: "Club",
           flex: 3,
-          valueGetter: ({ row }) => row?.clubid,
+          valueGetter: (value, row, column, apiRef) => row?.clubid,
           renderCell: ({ value }) => (
             <Typography variant="body2">{value}</Typography>
           ),
@@ -53,7 +53,7 @@ export default function FinancesTable({ events, role }) {
       flex: 3,
       align: "center",
       headerAlign: "center",
-      valueGetter: ({ row }) => ({
+      valueGetter: (value, row, column, apiRef) => ({
         state: row?.billsStatus?.state,
         status: billsStateLabel(row?.billsStatus?.state),
       }),
@@ -74,7 +74,7 @@ export default function FinancesTable({ events, role }) {
         router.push(
           `/manage/${role === "slo" ? "finances" : "events"}/${
             params.row.eventid
-          }`,
+          }`
         )
       }
       disableRowSelectionOnClick
