@@ -66,6 +66,7 @@ export default function MembersTable({ members, showClub = false }) {
           },
         ]
       : []),
+
     ...(isMobile
       ? []
       : [
