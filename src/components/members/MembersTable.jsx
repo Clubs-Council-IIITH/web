@@ -42,12 +42,14 @@ export default function MembersTable({ members, showClub = false }) {
           ) : null}
         </Avatar>
       ),
+      display: "flex",
     },
     {
       field: "name",
       headerName: "Name",
       valueGetter: (value, row, column, apiRef) =>
         `${row.firstName} ${row.lastName}`,
+      display: "flex",
       flex: 6,
     },
     ...(isDesktop
@@ -65,6 +67,7 @@ export default function MembersTable({ members, showClub = false }) {
                 {value}
               </Box>
             ),
+            display: "flex",
           },
         ]
       : []),
@@ -74,6 +77,7 @@ export default function MembersTable({ members, showClub = false }) {
             field: "cid",
             headerName: "Club ID",
             flex: 4,
+            display: "flex",
           },
         ]
       : []),
@@ -137,6 +141,7 @@ export default function MembersTable({ members, showClub = false }) {
                 ))}
               </Stack>
             ),
+            display: "flex",
           },
         ]),
   ];

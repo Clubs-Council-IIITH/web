@@ -34,6 +34,7 @@ export default function HolidaysTable({ holidays }) {
           {params.value}
         </Typography>
       ),
+      display: "flex",
     },
     {
       field: "date",
@@ -43,6 +44,7 @@ export default function HolidaysTable({ holidays }) {
       renderCell: (params) => (
         <Typography variant="body2">{params.value}</Typography>
       ),
+      display: "flex",
     },
   ];
 

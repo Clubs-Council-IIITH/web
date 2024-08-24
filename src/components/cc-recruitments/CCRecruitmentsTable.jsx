@@ -22,6 +22,7 @@ const columns = [
         {value.firstName} {value.lastName}
       </Typography>
     ),
+    display: 'flex',
   },
   {
     field: "rollno",

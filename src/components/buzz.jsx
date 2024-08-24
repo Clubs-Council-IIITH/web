@@ -24,6 +24,7 @@ const columns = [
     renderCell: ({ value }) => (
       <>{value.clubdata ? <ClubBox club={value.clubdata} /> : value.name}</>
     ),
+    display: 'flex',
   },
   {
     field: "date",

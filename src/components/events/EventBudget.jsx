@@ -48,6 +48,7 @@ export default function EventBudget({
             <i>Double click to edit</i>
           </Typography>
         ),
+      display: "flex",
     },
     {
       field: "amount",
@@ -72,6 +73,7 @@ export default function EventBudget({
           variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
         />
       ),
+      display: "flex",
     },
     ...(editable
       ? [
@@ -89,6 +91,7 @@ export default function EventBudget({
                 />
               </IconButton>
             ),
+            display: "flex",
           },
         ]
       : []),

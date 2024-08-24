@@ -62,6 +62,7 @@ export default function UserMemberships({ rows = [] }) {
           </Typography>
         );
       },
+      display: "flex",
     },
     {
       field: "cid",
@@ -86,6 +87,7 @@ export default function UserMemberships({ rows = [] }) {
           </Typography>
         );
       },
+      display: "flex",
     },
     {
       field: "startYear",

@@ -121,6 +121,7 @@ export default function MemberPositions({
             <i>Double click to edit</i>
           </Typography>
         ),
+      display: "flex",
     },
     {
       field: "startYear",
@@ -152,6 +153,7 @@ export default function MemberPositions({
                 />
               </IconButton>
             ),
+            display: "flex",
           },
         ]
       : [
@@ -188,10 +190,12 @@ export default function MemberPositions({
                     color={
                       approved ? "success" : rejected ? "error" : "warning"
                     }
+                    sx={{ my: 2 }}
                   />
                 </span>
               </Tooltip>
             ),
+            display: "flex",
           },
 
           // if not editing and if user is cc, show approve button
@@ -218,6 +222,7 @@ export default function MemberPositions({
                       )}
                     </>
                   ),
+                  display: "flex",
                 },
               ]
             : []),

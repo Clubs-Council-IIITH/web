@@ -36,6 +36,7 @@ export default function EventsTable({
                 {value}
               </Typography>
             ),
+            display: "flex",
           },
         ]),
     {
@@ -62,6 +63,7 @@ export default function EventsTable({
         ) : (
           p.value
         ),
+      display: "flex",
     },
     ...(isMobile
       ? []
@@ -110,6 +112,7 @@ export default function EventsTable({
     //       }
     //     />
     //   ),
+    //   display: 'flex',
     // },
     {
       field: "venue",
@@ -139,6 +142,7 @@ export default function EventsTable({
           }
         />
       ),
+      display: "flex",
     },
     {
       field: "status",
@@ -159,6 +163,7 @@ export default function EventsTable({
           <Tag
             label={stateLabel(value.state).shortName}
             color={stateLabel(value.state).color}
+            sx={{ my: 2 }}
           />
         );
       },

@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 
 import { Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Tag from "components/Tag";
@@ -11,6 +13,8 @@ import { billsStateLabel } from "utils/formatEvent";
 
 export default function FinancesTable({ events, role }) {
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const columns = [
     {
@@ -35,18 +39,22 @@ export default function FinancesTable({ events, role }) {
           {value}
         </Typography>
       ),
+      display: "flex",
     },
-    ["cc", "slo"].includes(role)
-      ? {
-          field: "club",
-          headerName: "Club",
-          flex: 3,
-          valueGetter: (value, row, column, apiRef) => row?.clubid,
-          renderCell: ({ value }) => (
-            <Typography variant="body2">{value}</Typography>
-          ),
-        }
-      : {},
+    ...(isMobile || !["cc", "slo"].includes(role)
+      ? []
+      : [
+          {
+            field: "club",
+            headerName: "Club",
+            flex: 3,
+            valueGetter: (value, row, column, apiRef) => row?.clubid,
+            renderCell: ({ value }) => (
+              <Typography variant="body2">{value}</Typography>
+            ),
+            display: "flex",
+          },
+        ]),
     {
       field: "status",
       headerName: "Status",
@@ -58,8 +66,13 @@ export default function FinancesTable({ events, role }) {
         status: billsStateLabel(row?.billsStatus?.state),
       }),
       renderCell: ({ value }) => (
-        <Tag label={value.status.name} color={value.status.color} />
+        <Tag
+          label={value.status.name}
+          color={value.status.color}
+          sx={{ my: 2 }}
+        />
       ),
+      display: "flex",
     },
   ];
 
