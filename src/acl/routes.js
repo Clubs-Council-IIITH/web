@@ -35,9 +35,9 @@ const routes = {
   "/manage/clubs/:id": ["cc"],
   "/manage/clubs/:id/edit": ["cc"],
 
-  "/manage/holidays": ["slo"],
-  "/manage/holidays/new": ["slo"], // has to be higher to not conflict with :id
-  "/manage/holidays/:id": ["slo"],
+  "/manage/holidays": ["cc", "slo"],
+  "/manage/holidays/new": ["cc", "slo"], // has to be higher to not conflict with :id
+  "/manage/holidays/:id": ["cc", "slo"],
 };
 
 export default routes;

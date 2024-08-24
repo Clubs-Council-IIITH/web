@@ -195,6 +195,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       {manageEventItems}
       <DrawerItem
+        title="Holidays"
+        path="/manage/holidays"
+        icon={<Icon variant="event-busy-outline-rounded" />}
+      />
+      <DrawerItem
         title="members"
         path="/manage/members"
         icon={<Icon variant="group-outline-rounded" />}
