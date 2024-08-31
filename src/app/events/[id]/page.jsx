@@ -16,7 +16,7 @@ export async function generateMetadata({ params }, parent) {
     });
     const posterUrl = event.poster
       ? `${protocol}://${host}/files/download?filename=${encodeURIComponent(event.poster)}&w=1080&q=75`
-      : `https://clubs.iiit.ac.in/assets/cc-logo-full-color.svg`;
+      : `https://clubs.iiit.ac.in/assets/cc-logo-color.png`;
 
     return {
       title: event.name,
