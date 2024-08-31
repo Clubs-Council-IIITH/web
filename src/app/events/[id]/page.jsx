@@ -1,29 +1,28 @@
 import { getClient } from "gql/client";
 import { GET_EVENT } from "gql/queries/events";
 import { redirect } from "next/navigation";
-import { headers  } from 'next/headers';
 
+import { getFile } from "utils/files";
+import { getPlaceholder } from "utils/placeholder";
 import EventDetails from "components/events/EventDetails";
 
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
-  const headersList = headers();
-  const host = headersList.get('host') || '';
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+
   try {
     const { data: { event } = {} } = await getClient().query(GET_EVENT, {
       eventid: id,
     });
-    const posterUrl = event.poster
-      ? `${protocol}://${host}/files/download?filename=${encodeURIComponent(event.poster)}&w=1080&q=75`
-      : `https://clubs.iiit.ac.in/assets/cc-logo-color.png`;
+    const img = event.poster
+      ? getFile(event.poster)
+      : getPlaceholder({ seed: event.name, w: 2000, h: 2000 })
 
     return {
       title: event.name,
       openGraph: {
         images: [
           {
-            url: posterUrl,
+            url: img,
             width: 256,
             height: 256,
             alt: event.name,
