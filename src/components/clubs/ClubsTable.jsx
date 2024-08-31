@@ -16,16 +16,21 @@ export default function ClubsTable({ clubs }) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   const columns = [
     {
       field: "img",
       headerName: "",
-      flex: 1,
-      valueGetter: ({ row }) => ({ name: row.name, logo: row.logo }),
+      flex: isMobile ? null : 1,
+      valueGetter: (value, row, column, apiRef) => ({
+        name: row.name,
+        logo: row.logo,
+      }),
       renderCell: ({ value }) => (
         <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
       ),
+      display: "flex",
     },
     ...(isMobile
       ? []
@@ -60,10 +65,10 @@ export default function ClubsTable({ clubs }) {
         ) : (
           p.value
         ),
+      display: "flex",
     },
-    ...(isMobile
-      ? []
-      : [
+    ...(isDesktop
+      ? [
           {
             field: "email",
             headerName: "Email",
@@ -77,13 +82,15 @@ export default function ClubsTable({ clubs }) {
                 {value}
               </Box>
             ),
+            display: "flex",
           },
-        ]),
+        ]
+      : []),
     {
       field: "category",
       headerName: "Category",
       flex: isMobile ? null : 2,
-      valueGetter: ({ row }) => ({
+      valueGetter: (value, row, column, apiRef) => ({
         category: row.category,
         studentBody: row.studentBody,
       }),
@@ -92,6 +99,7 @@ export default function ClubsTable({ clubs }) {
           {value.studentBody ? "Student Body" : value.category}
         </Box>
       ),
+      display: "flex",
     },
     {
       field: "state",
@@ -106,6 +114,7 @@ export default function ClubsTable({ clubs }) {
           sx={{ my: 2 }}
         />
       ),
+      display: "flex",
     },
   ];
 
