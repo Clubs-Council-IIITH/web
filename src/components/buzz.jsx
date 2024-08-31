@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+// import { use, useEffect } from "react";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 // import QuickSearchToolbar from "components/QuickSearchToolbar";
 import ClubBox from "components/clubs/ClubBox";
@@ -17,10 +17,14 @@ const columns = [
     headerName: "Club",
     minWidth: 350,
     // flex: 5,
-    valueGetter: ({ row }) => ({ name: row.club, clubdata: row.clubdata }),
+    valueGetter: (value, row, column, apiRef) => ({
+      name: row.club,
+      clubdata: row.clubdata,
+    }),
     renderCell: ({ value }) => (
       <>{value.clubdata ? <ClubBox club={value.clubdata} /> : value.name}</>
     ),
+    display: 'flex',
   },
   {
     field: "date",
