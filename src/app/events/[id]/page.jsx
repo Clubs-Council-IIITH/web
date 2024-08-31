@@ -15,7 +15,7 @@ export async function generateMetadata({ params }, parent) {
     });
     const img = event.poster
       ? getFile(event.poster)
-      : getPlaceholder({ seed: event.name, w: 2000, h: 2000 })
+      : getPlaceholder({ seed: event.name, w: 2000, h: 2000 });
 
     return {
       title: event.name,
