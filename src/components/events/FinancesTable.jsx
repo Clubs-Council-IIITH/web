@@ -87,7 +87,7 @@ export default function FinancesTable({ events, role }) {
         router.push(
           `/manage/${role === "slo" ? "finances" : "events"}/${
             params.row.eventid
-          }`
+          }`,
         )
       }
       disableRowSelectionOnClick

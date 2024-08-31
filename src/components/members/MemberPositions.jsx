@@ -28,7 +28,7 @@ const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
     const allApprovedRejected = rows.every(
-      (row) => row.approved || row.rejected
+      (row) => row.approved || row.rejected,
     );
     return !allApprovedRejected;
   } else return false;
@@ -177,8 +177,8 @@ export default function MemberPositions({
                   approved
                     ? approvalTime || "No Information Available"
                     : rejected
-                    ? rejectionTime || "No Information Available"
-                    : null
+                      ? rejectionTime || "No Information Available"
+                      : null
                 }
                 placement="left-start"
               >

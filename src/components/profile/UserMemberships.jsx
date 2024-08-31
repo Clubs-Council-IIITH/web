@@ -32,7 +32,7 @@ export default function UserMemberships({ rows = [] }) {
           res.data.reduce((acc, { cid, name }) => {
             acc[cid] = name;
             return acc;
-          }, {})
+          }, {}),
         );
       }
     })();
