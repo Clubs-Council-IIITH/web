@@ -31,7 +31,7 @@ export default async function ManageMember({ params }) {
       },
     });
 
-    if (userProfile === null || userMeta === null) {
+    if (userMeta === null) {
       return redirect("/404");
     }
 
@@ -53,21 +53,21 @@ export default async function ManageMember({ params }) {
             >
               <UserImage
                 image={userMeta.img}
-                name={userProfile.firstName}
-                gender={userProfile.gender}
+                name={userProfile?.firstName}
+                gender={userProfile?.gender}
                 width={150}
                 height={150}
               />
               <Stack direction="column" spacing={1}>
                 <Typography variant="h2" word-wrap="break-word">
-                  {userProfile.firstName} {userProfile.lastName}
+                  {userProfile?.firstName} {userProfile?.lastName}
                 </Typography>
                 <Typography
                   variant="body1"
                   color="text.secondary"
                   fontFamily="monospace"
                 >
-                  {userProfile.email}
+                  {userProfile?.email}
                 </Typography>
               </Stack>
             </Stack>
