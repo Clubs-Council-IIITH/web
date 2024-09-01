@@ -121,6 +121,7 @@ export default function MemberPositions({
             <i>Double click to edit</i>
           </Typography>
         ),
+      display: "flex",
     },
     {
       field: "startYear",
@@ -131,7 +132,7 @@ export default function MemberPositions({
     {
       field: "endYear",
       headerName: "End Year",
-      valueGetter: ({ row }) => row.endYear || "-",
+      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
       flex: isMobile ? null : 2,
       editable: editable,
     },
@@ -152,6 +153,7 @@ export default function MemberPositions({
                 />
               </IconButton>
             ),
+            display: "flex",
           },
         ]
       : [
@@ -161,7 +163,7 @@ export default function MemberPositions({
             align: "center",
             headerAlign: "center",
             flex: isMobile ? null : 2,
-            valueGetter: ({ row }) => ({
+            valueGetter: (value, row, column, apiRef) => ({
               approved: row.approved,
               approvalTime: row.approvalTime,
               rejected: row.rejected,
@@ -193,6 +195,7 @@ export default function MemberPositions({
                 </span>
               </Tooltip>
             ),
+            display: "flex",
           },
 
           // if not editing and if user is cc, show approve button
@@ -203,7 +206,7 @@ export default function MemberPositions({
                   align: "center",
                   headerName: "",
                   width: 100,
-                  valueGetter: ({ row }) => ({
+                  valueGetter: (value, row, column, apiRef) => ({
                     approved: row.approved,
                     rejected: row.rejected,
                     rid: row.rid,
@@ -219,6 +222,7 @@ export default function MemberPositions({
                       )}
                     </>
                   ),
+                  display: "flex",
                 },
               ]
             : []),

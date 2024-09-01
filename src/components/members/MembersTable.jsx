@@ -31,7 +31,10 @@ export default function MembersTable({ members, showClub = false }) {
       field: "img",
       headerName: "",
       flex: 1,
-      valueGetter: ({ row }) => ({ name: row.firstName, img: row.img }),
+      valueGetter: (value, row, column, apiRef) => ({
+        name: row.firstName,
+        img: row.img,
+      }),
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
@@ -39,11 +42,14 @@ export default function MembersTable({ members, showClub = false }) {
           ) : null}
         </Avatar>
       ),
+      display: "flex",
     },
     {
       field: "name",
       headerName: "Name",
-      valueGetter: ({ row }) => `${row.firstName} ${row.lastName}`,
+      valueGetter: (value, row, column, apiRef) =>
+        `${row.firstName} ${row.lastName}`,
+      display: "flex",
       flex: 6,
     },
     ...(isDesktop
@@ -61,6 +67,7 @@ export default function MembersTable({ members, showClub = false }) {
                 {value}
               </Box>
             ),
+            display: "flex",
           },
         ]
       : []),
@@ -70,6 +77,7 @@ export default function MembersTable({ members, showClub = false }) {
             field: "cid",
             headerName: "Club ID",
             flex: 4,
+            display: "flex",
           },
         ]
       : []),
@@ -80,7 +88,7 @@ export default function MembersTable({ members, showClub = false }) {
             field: "positions",
             headerName: "Positions",
             flex: 8,
-            valueGetter: ({ row }) => row.roles,
+            valueGetter: (value, row, column, apiRef) => row.roles,
             renderCell: ({ value }) => (
               <Stack
                 direction="column"
@@ -133,6 +141,7 @@ export default function MembersTable({ members, showClub = false }) {
                 ))}
               </Stack>
             ),
+            display: "flex",
           },
         ]),
   ];
