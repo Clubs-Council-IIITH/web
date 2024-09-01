@@ -21,7 +21,7 @@ import carousel12 from "/public/assets/img/carousel/12.jpg";
 import Gallery from "./gallery/page";
 
 export const metadata = {
-  title: "Home",
+  title: "Home | Clubs Council @ IIIT-H",
 };
 
 export default function Home() {

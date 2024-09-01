@@ -4,7 +4,7 @@ import ClubsGrid from "components/clubs/ClubsGrid";
 import { getStaticFile } from "utils/files";
 
 export const metadata = {
-  title: "Student Bodies",
+  title: "Student Bodies @ IIIT-H",
 };
 
 export default async function StudentBodies() {

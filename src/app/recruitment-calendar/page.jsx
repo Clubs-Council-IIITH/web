@@ -13,7 +13,7 @@ import ClubButton from "components/clubs/ClubButton";
 import { getStaticFile } from "utils/files";
 
 export const metadata = {
-  title: "Recruitment Schedule",
+  title: "Recruitment Schedule | Clubs @ IIIT-H",
 };
 
 export default async function RecruitmentSchedule() {

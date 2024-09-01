@@ -4,7 +4,7 @@ import ImageModal from "components/ImageModal";
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
 
 export const metadata = {
-  title: "Gallery",
+  title: "Gallery | Clubs Council @ IIIT-H",
 };
 
 export default async function Gallery({ searchParams, limit = undefined }) {

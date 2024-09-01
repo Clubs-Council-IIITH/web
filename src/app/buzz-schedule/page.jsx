@@ -5,7 +5,7 @@ import { getClient } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 export const metadata = {
-  title: "Buzz Schedule",
+  title: "Buzz Schedule | Felicity @ IIIT-H",
 };
 
 export default async function Managebuzz() {

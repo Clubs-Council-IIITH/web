@@ -8,7 +8,7 @@ import RecruitmentForm from "components/cc-recruitments/RecruitmentForm";
 import { Container, Typography } from "@mui/material";
 
 export const metadata = {
-  title: "New Application",
+  title: "New Application | Clubs Council @ IIIT-H",
 };
 
 const deadline = new Date("2024-04-17T06:00:00+05:30");

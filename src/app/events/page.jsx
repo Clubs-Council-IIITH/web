@@ -7,7 +7,7 @@ import EventsFilter from "components/events/EventsFilter";
 import EventsGrid from "components/events/EventsGrid";
 
 export const metadata = {
-  title: "Events",
+  title: "Events | Clubs Council @ IIIT-H",
 };
 
 export default async function Events({ searchParams }) {

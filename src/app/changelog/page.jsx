@@ -15,7 +15,7 @@ import Status from "./status.mdx";
 const limit = 20;
 
 export const metadata = {
-  title: "Changelog",
+  title: "Changelog | Clubs Council @ IIIT-H",
 };
 
 export default async function Changelog({ searchParams }) {

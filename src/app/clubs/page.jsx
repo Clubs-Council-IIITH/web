@@ -4,7 +4,7 @@ import Icon from "components/Icon";
 import ClubsGrid from "components/clubs/ClubsGrid";
 
 export const metadata = {
-  title: "Clubs",
+  title: "Clubs @ IIIT-H",
 };
 
 export default async function Clubs() {

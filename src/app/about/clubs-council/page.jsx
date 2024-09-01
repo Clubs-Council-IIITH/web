@@ -14,7 +14,7 @@ import {
 } from "constants/ccMembersFilterWords";
 
 export const metadata = {
-  title: "Clubs Council",
+  title: "About | Clubs Council @ IIIT-H",
 };
 
 export default async function ClubsCouncil() {
