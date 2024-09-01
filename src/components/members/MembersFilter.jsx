@@ -92,32 +92,35 @@ export default function MembersFilter({ name, club, state, cc = false }) {
             </FormControl>
           </Grid>
         )}
-        {club ? <Grid item xs lg>
-          <ToggleButtonGroup
-            fullWidth
-            value={state}
-            color="primary"
-            sx={{ height: "100%" }}
-            onChange={(e) => {
-              // don't do anything if all states are being unselected
-              if (state.length === 1 && state.includes(e.target.value)) return;
+        {club ? (
+          <Grid item xs lg>
+            <ToggleButtonGroup
+              fullWidth
+              value={state}
+              color="primary"
+              sx={{ height: "100%" }}
+              onChange={(e) => {
+                // don't do anything if all states are being unselected
+                if (state.length === 1 && state.includes(e.target.value))
+                  return;
 
-              return router.push(
-                `${pathname}?${createQueryString(
-                  e.target.value,
-                  !state.includes(e.target.value),
-                )}`,
-              );
-            }}
-          >
-            <ToggleButton disableRipple key="current" value="current">
-              Current Members
-            </ToggleButton>
-            <ToggleButton disableRipple key="past" value="past">
-              Past Members
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Grid> : null}
+                return router.push(
+                  `${pathname}?${createQueryString(
+                    e.target.value,
+                    !state.includes(e.target.value),
+                  )}`,
+                );
+              }}
+            >
+              <ToggleButton disableRipple key="current" value="current">
+                Current Members
+              </ToggleButton>
+              <ToggleButton disableRipple key="past" value="past">
+                Past Members
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        ) : null}
       </Grid>
     </Container>
   );
