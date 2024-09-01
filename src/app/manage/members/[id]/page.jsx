@@ -9,6 +9,7 @@ import UserImage from "components/users/UserImage";
 import MemberPositions from "components/members/MemberPositions";
 import MemberActionsList from "components/members/MemberActionsList";
 import ClubButton from "components/clubs/ClubButton";
+import { getUserNameFromUID } from "utils/users";
 
 export const metadata = {
   title: "Viewing Member",
@@ -16,34 +17,51 @@ export const metadata = {
 
 export default async function ManageMember({ params }) {
   const { id } = params;
+  const [cid, uid] = id?.split(encodeURIComponent(":"));
 
   try {
     const {
       data: { member, userMeta, userProfile },
     } = await getClient().query(GET_MEMBER, {
       memberInput: {
-        cid: id?.split(encodeURIComponent(":"))[0],
-        uid: id?.split(encodeURIComponent(":"))[1],
+        cid: cid,
+        uid: uid,
         rid: null,
       },
       userInput: {
-        uid: id?.split(encodeURIComponent(":"))[1],
+        uid: uid,
       },
     });
 
-    if (userProfile === null || userMeta === null) {
+    if (userMeta === null) {
       return redirect("/404");
+    }
+
+    let user = { ...userMeta, ...userProfile };
+    if (userProfile === null) {
+      const name = getUserNameFromUID(uid);
+      const userProfile1 = {
+        firstName: name.firstName,
+        lastName: name.lastName,
+        email: null,
+        gender: null,
+      };
+      user = { ...userMeta, ...userProfile1 };
     }
 
     // fetch currently logged in user
     const {
       data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
     } = await getClient().query(GET_USER, { userInput: null });
-    const user = { ...currentUserMeta, ...currentUserProfile };
+    const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
     return (
       <Container>
-        <MemberActionsList member={member} user={user} />
+        <MemberActionsList
+          member={member}
+          user={currentUser}
+          allowEditing={userProfile != null}
+        />
         <Grid container spacing={2} mt={4}>
           <Grid item xs={12}>
             <Stack
@@ -52,22 +70,22 @@ export default async function ManageMember({ params }) {
               spacing={4}
             >
               <UserImage
-                image={userMeta.img}
-                name={userProfile.firstName}
-                gender={userProfile.gender}
+                image={user.img}
+                name={user?.firstName}
+                gender={user?.gender}
                 width={150}
                 height={150}
               />
               <Stack direction="column" spacing={1}>
                 <Typography variant="h2" word-wrap="break-word">
-                  {userProfile.firstName} {userProfile.lastName}
+                  {user?.firstName} {user?.lastName}
                 </Typography>
                 <Typography
                   variant="body1"
                   color="text.secondary"
                   fontFamily="monospace"
                 >
-                  {userProfile.email}
+                  {user?.email || "Email Not Available"}
                 </Typography>
               </Stack>
             </Stack>

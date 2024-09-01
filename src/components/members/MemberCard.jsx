@@ -7,6 +7,7 @@ import { Card, Box, Typography, CardActionArea } from "@mui/material";
 
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
+import { getUserNameFromUID } from "utils/users";
 
 export default async function MemberCard({ uid, poc, roles }) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
@@ -15,9 +16,24 @@ export default async function MemberCard({ uid, poc, roles }) {
       userInput: {
         uid: uid,
       },
-    },
+    }
   );
-  const user = { ...userMeta, ...userProfile };
+
+  if (userMeta === null) {
+    return null;
+  }
+
+  let user = { ...userMeta, ...userProfile };
+  if (userProfile === null) {
+    const name = getUserNameFromUID(uid);
+    const userProfile1 = {
+      firstName: name.firstName,
+      lastName: name.lastName,
+      email: null,
+      gender: null,
+    };
+    user = { ...userMeta, ...userProfile1 };
+  }
 
   return (
     <Card
@@ -26,9 +42,10 @@ export default async function MemberCard({ uid, poc, roles }) {
       sx={{ backgroundColor: "inherit", border: "none", boxShadow: 0 }}
     >
       <CardActionArea
-        // disabled // TODO: Link to public user profile
+        // TODO: Link to public user profile
         component={Link}
         href={`/profile/${uid}`}
+        disabled={userProfile === null}
         sx={{
           p: 2,
           width: "100%",

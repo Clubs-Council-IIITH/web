@@ -19,6 +19,7 @@ import Icon from "components/Icon";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import { getFile } from "utils/files";
+import { getUserNameFromUID } from "utils/users";
 
 export default function MembersTable({
   members,
@@ -51,8 +52,13 @@ export default function MembersTable({
     {
       field: "name",
       headerName: "Name",
-      valueGetter: (value, row, column, apiRef) =>
-        `${row.firstName} ${row.lastName}`,
+      valueGetter: (value, row, column, apiRef) => {
+        if (!row.firstName && !row.lastName) {
+          const { firstName, lastName } = getUserNameFromUID(row.uid);
+          return `${firstName} ${lastName}`;
+        }
+        return `${row.firstName} ${row.lastName}`;
+      },
       display: "flex",
       flex: 6,
     },
@@ -68,7 +74,7 @@ export default function MembersTable({
                 fontSize="0.9em"
                 fontFamily="monospace"
               >
-                {value}
+                {value || "Email Not Available"}
               </Box>
             ),
             display: "flex",
