@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import { Container, Typography, Box } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 export const metadata = {
-  title: "Bug Report | Feature Request",
+  title: "Bug Report/Feature Request | Clubs Council @ IIIT-H",
 };
 
 export default async function BugReport() {

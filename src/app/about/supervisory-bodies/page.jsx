@@ -5,7 +5,7 @@ import Content from "./content.mdx";
 import { getStaticFile } from "utils/files";
 
 export const metadata = {
-  title: "Supervisory Bodies",
+  title: "Supervisory Bodies @ IIIT-H",
 };
 
 export default async function SupervisoryBodies() {

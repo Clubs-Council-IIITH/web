@@ -6,7 +6,7 @@ import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import FullCalendar from "components/Calendar";
 
 export const metadata = {
-  title: "Calendar",
+  title: "Calendar | Clubs Council @ IIIT-H",
 };
 
 export default async function Calendar() {
