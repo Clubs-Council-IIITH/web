@@ -89,7 +89,7 @@ export default function MembersTable({ members, showClub = false, showIcon = tru
           headerName: "Positions",
           flex: 8,
           width: 300,
-	        valueGetter: (params) => params.row.roles,
+	        valueGetter: (value, row, column, apiRef) => row.roles,
           renderCell: ({ value }) => (
             <Box sx={{ width: '100%', height: '100%', p: 1 }}>
               <Stack
