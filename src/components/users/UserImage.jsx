@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { Box, Avatar } from "@mui/material";
+import { Avatar } from "@mui/material";
 
 import { getFile } from "utils/files";
 import { getPlaceholder } from "utils/placeholder";
