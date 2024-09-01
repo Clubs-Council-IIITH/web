@@ -16,7 +16,7 @@ export default async function MemberCard({ uid, poc, roles }) {
       userInput: {
         uid: uid,
       },
-    }
+    },
   );
 
   if (userMeta === null) {
