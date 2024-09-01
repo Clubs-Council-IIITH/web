@@ -20,7 +20,7 @@ import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import { getFile } from "utils/files";
 
-export default function MembersTable({ members, showClub = false }) {
+export default function MembersTable({ members, showClub = false, showIcon = true }) {
   const router = useRouter();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
@@ -81,69 +81,87 @@ export default function MembersTable({ members, showClub = false }) {
           },
         ]
       : []),
-    ...(isMobile
-      ? []
-      : [
-          {
-            field: "positions",
-            headerName: "Positions",
-            flex: 8,
-            valueGetter: (value, row, column, apiRef) => row.roles,
-            renderCell: ({ value }) => (
+  ...(isMobile
+    ? []
+    : [
+        {
+          field: "positions",
+          headerName: "Positions",
+          flex: 8,
+          width: 300,
+	        valueGetter: (value, row, column, apiRef) => row.roles,
+          renderCell: ({ value }) => (
+            <Box sx={{ width: '100%', height: '100%', p: 1 }}>
               <Stack
                 direction="column"
                 divider={<Divider orientation="horizontal" flexItem />}
+                spacing={1}
+                sx={{ width: '100%' }}
               >
                 {value?.map((role, key) => (
-                  <Typography
+                  <Box
                     key={key}
-                    variant="body2"
-                    my={1}
-                    sx={{
-                      color: "text.secondary",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    width="100%"
                   >
-                    {role?.name}
-                    <Box color="grey.400" display="inline-block" mx={0.5}>
-                      ({role?.startYear} - {role?.endYear || "present"})
-                    </Box>
-                    <Tooltip
-                      arrow
-                      title={
-                        role?.approved
-                          ? "Approved"
-                          : role?.rejected
-                            ? "Rejected"
-                            : "Pending approval"
-                      }
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "text.secondary",
+                        display: "flex",
+                        alignItems: "center",
+                        flexGrow: 1,
+                        minWidth: 0, // Allow text to shrink if necessary
+                      }}
                     >
-                      <Icon
-                        external
-                        color={
-                          role?.approved
-                            ? "success.main"
-                            : role?.rejected
-                              ? "error.main"
-                              : "warning.main"
-                        }
-                        variant={
-                          role?.approved
-                            ? "eva:checkmark-outline"
-                            : role?.rejected
-                              ? "eva:close-outline"
-                              : "eva:refresh-fill"
-                        }
-                      />
-                    </Tooltip>
-                  </Typography>
+                      <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {role?.name}
+                      </span>
+                      <Box color="grey.400" display="inline-block" mx={0.5} flexShrink={0}>
+                        ({role?.startYear} - {role?.endYear || "present"})
+                      </Box>
+                    </Typography>
+                    {showIcon && (
+                      <Box display="flex" justifyContent="flex-end" ml={1} flexShrink={0}>
+                        <Tooltip
+                          arrow
+                          title={
+                            role?.approved
+                              ? "Approved"
+                              : role?.rejected
+                              ? "Rejected"
+                              : "Pending approval"
+                          }
+                        >
+                          <Icon
+                            external
+                            color={
+                              role?.approved
+                                ? "success.main"
+                                : role?.rejected
+                                ? "error.main"
+                                : "warning.main"
+                            }
+                            variant={
+                              role?.approved
+                                ? "eva:checkmark-outline"
+                                : role?.rejected
+                                ? "eva:close-outline"
+                                : "eva:refresh-fill"
+                            }
+                          />
+                        </Tooltip>
+                      </Box>
+                    )}
+                  </Box>
                 ))}
               </Stack>
-            ),
-            display: "flex",
-          },
-        ]),
+            </Box>
+          ),
+        },
+      ]),
   ];
 
   if (!members) return null;
@@ -170,13 +188,17 @@ export default function MembersTable({ members, showClub = false }) {
       }}
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
-        // disable cell selection style
-        ".MuiDataGrid-cell:focus": {
-          outline: "none",
+        '.MuiDataGrid-cell:focus': {
+          outline: 'none',
         },
-        // pointer cursor on ALL rows
-        "& .MuiDataGrid-row:hover": {
-          cursor: "pointer",
+        '& .MuiDataGrid-row:hover': {
+          cursor: 'pointer',
+        },
+        '& .MuiDataGrid-cell': {
+          padding: '8px',
+        },
+        '& .MuiDataGrid-columnHeader': {
+          padding: '0 8px',
         },
       }}
     />

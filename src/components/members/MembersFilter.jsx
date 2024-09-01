@@ -66,7 +66,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
     <Container>
       <Grid container spacing={2}>
         {cc && (
-          <Grid item xs={12} lg={8}>
+          <Grid item xs={12} lg={club ? 8 : 12}>
             <FormControl fullWidth>
               <InputLabel id="clubid">Filter by club</InputLabel>
               <Select
@@ -92,7 +92,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
             </FormControl>
           </Grid>
         )}
-        <Grid item xs lg>
+        {club ? <Grid item xs lg>
           <ToggleButtonGroup
             fullWidth
             value={state}
@@ -117,7 +117,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
               Past Members
             </ToggleButton>
           </ToggleButtonGroup>
-        </Grid>
+        </Grid> : null}
       </Grid>
     </Container>
   );
