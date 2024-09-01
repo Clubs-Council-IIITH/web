@@ -25,16 +25,22 @@ export default async function EditMember({ params }) {
   const { id } = params;
 
   try {
-    const { data: { member } = {} } = await getClient().query(GET_MEMBER, {
-      memberInput: {
-        cid: id?.split(encodeURIComponent(":"))[0],
-        uid: id?.split(encodeURIComponent(":"))[1],
-        rid: null,
-      },
-      userInput: {
-        uid: id?.split(encodeURIComponent(":"))[1],
-      },
-    });
+    const { data: { member, userMeta, userProfile } = {} } =
+      await getClient().query(GET_MEMBER, {
+        memberInput: {
+          cid: id?.split(encodeURIComponent(":"))[0],
+          uid: id?.split(encodeURIComponent(":"))[1],
+          rid: null,
+        },
+        userInput: {
+          uid: id?.split(encodeURIComponent(":"))[1],
+        },
+      });
+
+    if (userMeta === null || userProfile === null) {
+      return redirect("/404");
+    }
+
     return (
       <Container>
         <Typography variant="h3" gutterBottom mb={3}>
