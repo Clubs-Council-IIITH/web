@@ -7,9 +7,10 @@ export async function createHolidays(details) {
   const response = { ok: false, data: null, error: null };
 
   const {
-    data: { createHoliday },
+    data,
     error,
   } = await getClient().mutation(CREATE_HOLIDAY, { details });
+
   if (error) {
     response.error = {
       title: error.name,
@@ -17,7 +18,7 @@ export async function createHolidays(details) {
     };
   } else {
     response.ok = true;
-    response.data = createHoliday;
+    response.data = data.createHoliday;
   }
 
   return response;

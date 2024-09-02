@@ -6,7 +6,7 @@ import { EDIT_HOLIDAY } from "gql/mutations/holidays";
 export async function editHolidays(holidayId, details) {
   const response = { ok: false, data: null, error: null };
 
-  const { data: { editHoliday } = {}, error } = await getClient().mutation(
+  const { data = {}, error } = await getClient().mutation(
     EDIT_HOLIDAY,
     {
       details,
@@ -20,7 +20,7 @@ export async function editHolidays(holidayId, details) {
     };
   } else {
     response.ok = true;
-    response.data = editHoliday;
+    response.data = data.editHoliday;
   }
 
   return response;

@@ -44,7 +44,7 @@ export default function HolidayForm({
         description: null,
       };
 
-      res = await createHolidays(details);
+      const res = await createHolidays(details);
 
       if (res.ok) {
         // else show success toast & redirect to manage page
