@@ -6,13 +6,10 @@ import { EDIT_HOLIDAY } from "gql/mutations/holidays";
 export async function editHolidays(holidayId, details) {
   const response = { ok: false, data: null, error: null };
 
-  const { data = {}, error } = await getClient().mutation(
-    EDIT_HOLIDAY,
-    {
-      details,
-      holidayId,
-    },
-  );
+  const { data = {}, error } = await getClient().mutation(EDIT_HOLIDAY, {
+    details,
+    holidayId,
+  });
   if (error) {
     response.error = {
       title: error.name,
