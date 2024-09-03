@@ -47,8 +47,8 @@ export const socialsData = {
     label: "YouTube",
     icon: "mdi:youtube",
     regex:
-      "^(?:https?://)?(?:(?:www|gaming).)?youtube.com/(?:channel/|(?:user/)?)([a-z-_0-9]+)/?(?:[?#]?.*)$",
-    color: "#FF3333",
+          "^(?:https?://)?(?:www.|gaming.|studio.)?youtube.com/(?:channel/|user/|@)([a-zA-Z0-9-_]+)/?(?:[?#]?.*)$",
+      color: "#FF3333",
     darkcolor: "#FF3333",
   },
   whatsapp: {
