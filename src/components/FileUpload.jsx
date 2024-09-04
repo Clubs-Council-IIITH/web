@@ -19,6 +19,7 @@ export default function FileUpload({
   type = "image",
   maxFiles = 0,
   maxSize = 50 * 1024 * 1024, // 50MB
+  shape = "banner",
 }) {
   return (
     <>
@@ -35,6 +36,7 @@ export default function FileUpload({
             type={type}
             maxFiles={maxFiles}
             maxSize={maxSize}
+	    square={square}
           />
         )}
       />
@@ -42,7 +44,7 @@ export default function FileUpload({
   );
 }
 
-function DropZone({ files, onDrop, type, maxFiles, maxSize }) {
+function DropZone({ files, onDrop, type, maxFiles, maxSize,square }) {
   const theme = useTheme();
 
   // accept only valid extensions
@@ -144,6 +146,19 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize }) {
       <FormHelperText error={fileRejections.length} sx={{ mt: 0 }}>
         Allowed file types: {[].concat(...Object.values(accept)).join(" | ")}
       </FormHelperText>
+      { shape == "square" ? (
+	<FormHelperText error={fileRejections.length} sx={{ mt: 0 }}>
+          Please upload a square image (1:1 aspect ratio) for optimal display.
+	</FormHelperText>
+      ) : share == "circle" ? (
+	<FormHelperText error={fileRejections.length} sx={{ mt: 0 }}>
+	  Please upload a circular image for optimal display.
+	</FormHelperText>
+      ) : share == "rectangle" ? (
+	<FormHelperText error={fileRejections.length} sx={{ mt: 0 }}>
+	  Please upload image with around 4:1 aspect ratio for optimal display.
+	</FormHelperText>
+      ) : null }
     </>
   );
 }
