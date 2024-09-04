@@ -143,7 +143,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-          ? await uploadFile(formData.banner[0], "image", banner_filename)
+          ? await uploadFile(formData.banner[0], "image", banner_filename, 3)
           : null;
 
     if (data.category !== "other") data.studentBody = false;

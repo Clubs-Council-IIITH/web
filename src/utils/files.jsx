@@ -30,7 +30,7 @@ export function getFile(filepath) {
   }
 }
 
-export async function uploadFile(file, filetype = "image", filename = null) {
+export async function uploadFile(file, filetype = "image", filename = null, maxSizeMB = 0.3) {
   // early return if no file
   if (!file) return null;
 
@@ -39,7 +39,7 @@ export async function uploadFile(file, filetype = "image", filename = null) {
   // Resize image if it's larger than 300KB
   const config = {
     quality: 0.7,
-    maxSizeMB: 0.3,
+    maxSizeMB: maxSizeMB,
   };
 
   let resizedBlob = null;
