@@ -34,7 +34,7 @@ export default function ClubBanner({
     <Box
       sx={{
         position: "relative",
-        pt: containerHeight ? containerHeight : isDesktop ? "20%" : "40%",
+        pt: containerHeight ? containerHeight : isDesktop ? "400px" : "200px",
         "&:after": {
           top: 0,
           content: "''",
@@ -54,7 +54,7 @@ export default function ClubBanner({
           top: 0,
           width: "100%",
           height: "100%",
-          objectFit: "cover",
+          objectFit: isDesktop ? "stretch" : "cover",
           position: "absolute",
           opacity: logo && theme.palette.mode !== "dark" ? 0.07 : 0.7,
           backgroundColor: theme.palette.background.default,
