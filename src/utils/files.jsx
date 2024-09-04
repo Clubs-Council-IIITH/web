@@ -1,4 +1,5 @@
 import { uploadFiles } from "actions/files/upload/server_action";
+import { readAndCompressImage  } from 'browser-image-resizer';
 
 export const dynamic = "force-dynamic";
 
@@ -29,9 +30,39 @@ export function getFile(filepath) {
   }
 }
 
-export async function uploadFile(file, filetype = "image") {
+export async function uploadFile(file, filetype = "image", filename = null) {
   // early return if no file
   if (!file) return null;
+
+  let fileToUpload = file;
+
+  // Resize image if it's larger than 300KB
+  const config = {
+    quality: 0.7,
+    maxSizeMB: 0.3,
+  };
+
+  let resizedBlob = null;
+  try {
+    resizedBlob = await readAndCompressImage(file, config);
+  } catch (error) {
+    fileToUpload = file;
+    throw error;
+  }
+
+  const ext = file.name.split('.').pop();
+  if (resizedBlob.size < file.size) {
+    // convert blob to file
+    fileToUpload = new File([resizedBlob], `resized_${filename ? filename : file.name}.${ext}`, {
+      type: resizedBlob.type,
+      lastModified: new Date().getTime()
+    });
+  } else {
+    fileToUpload = new File([file], `${filename ? filename : file.name}.${ext}`, {
+      type: file.type,
+      lastModified: new Date().getTime()
+    });
+  }
 
   // get signed url
   let res = await uploadFiles();
@@ -42,21 +73,22 @@ export async function uploadFile(file, filetype = "image") {
 
   // upload file to signed URL
   const body = new FormData();
-  body.append("file", file);
+  body.append("file", fileToUpload);
 
-  var filename = null;
+  let finalFilename = null;
   try {
-    filename = await fetch(`${url}?filetype=${filetype}`, {
+    const response = await fetch(`${url}?filetype=${filetype}`, {
       body: body,
       method: "POST",
     });
-    if (filename.status >= 200 && filename.status < 300)
-      filename = await filename.text();
-    else filename = null;
+    if (response.status >= 200 && response.status < 300) {
+      finalFilename = await response.text();
+    }
+    else finalFilename = null;
   } catch (e) {
-    filename = null;
+    finalFilename = null;
     throw e;
   }
 
-  return filename;
+  return finalFilename;
 }
