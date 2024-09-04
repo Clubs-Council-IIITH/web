@@ -19,7 +19,7 @@ export default function FileUpload({
   type = "image",
   maxFiles = 0,
   maxSize = 50 * 1024 * 1024, // 50MB
-  shape = "banner",
+  shape = null,
 }) {
   return (
     <>
@@ -36,7 +36,7 @@ export default function FileUpload({
             type={type}
             maxFiles={maxFiles}
             maxSize={maxSize}
-	    square={square}
+	    shape=null
           />
         )}
       />
@@ -44,7 +44,7 @@ export default function FileUpload({
   );
 }
 
-function DropZone({ files, onDrop, type, maxFiles, maxSize,square }) {
+function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
   const theme = useTheme();
 
   // accept only valid extensions
