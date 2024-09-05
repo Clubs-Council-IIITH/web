@@ -65,6 +65,7 @@ function Bar({ onOpenDrawer }) {
             color: "text.primary",
             display: { lg: "none" },
           }}
+          aria-label="Open Menu Drawer"
         >
           <Icon variant="menu-rounded" />
         </IconButton>

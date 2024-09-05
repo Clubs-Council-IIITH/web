@@ -81,6 +81,7 @@ export default function Footer() {
             target="_blank"
             href={EMAIL_URL}
             sx={{ mx: 1, color: "text.primary" }}
+            aria-label="Email Us"
           >
             <Icon external variant="akar-icons:envelope" />
           </IconButton>
@@ -89,6 +90,7 @@ export default function Footer() {
             target="_blank"
             href={DISCORD_URL}
             sx={{ mx: 1, color: "text.primary" }}
+            aria-label="Join Discord"
           >
             <Icon external variant="akar-icons:discord-fill" />
           </IconButton>
@@ -97,6 +99,7 @@ export default function Footer() {
             target="_blank"
             href={TWITTER_URL}
             sx={{ mx: 1, color: "text.primary" }}
+            aria-label="Follow on Twitter"
           >
             <Icon external variant="akar-icons:x-fill" />
           </IconButton>
@@ -105,6 +108,7 @@ export default function Footer() {
             target="_blank"
             href={FACEBOOK_URL}
             sx={{ mx: 1, color: "text.primary" }}
+            aria-label="Check our Facebook"
           >
             <Icon external variant="akar-icons:facebook-fill" />
           </IconButton>
@@ -113,6 +117,7 @@ export default function Footer() {
             target="_blank"
             href={INSTAGRAM_URL}
             sx={{ mx: 1, color: "text.primary" }}
+            aria-label="Follow on Instagram"
           >
             <Icon external variant="akar-icons:instagram-fill" />
           </IconButton>

@@ -12,12 +12,12 @@ import { Box } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { Typography, Card, CardContent, Link } from "@mui/material";
+import { Typography, Card, CardContent } from "@mui/material";
 
 export default function Carousel({ items, sx }) {
   const settings = {
     dots: false,
-    lazyLoad: false,
+    lazyLoad: true,
     infinite: true,
     autoplay: true,
     autoplaySpeed: 2000,
@@ -25,6 +25,7 @@ export default function Carousel({ items, sx }) {
     slidesToShow: 1,
     slidesToScroll: 1,
     swipeToSlide: true,
+    accessibility: true,
   };
 
   return (
@@ -91,21 +92,18 @@ function CarouselItem({ item }) {
           position: "absolute",
         }}
       >
-        <Link
-          color="inherit"
-          variant="subtitle2"
-          underline="none"
+        <Typography
+          variant={isDesktop ? "h3" : "h4"}
           sx={{
             overflow: "hidden",
             WebkitLineClamp: 2,
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
-            typography: isDesktop ? "h3" : "h4",
             color: "common.white",
           }}
         >
           {title}
-        </Link>
+        </Typography>
 
         <Typography
           gutterBottom
