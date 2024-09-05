@@ -9,7 +9,7 @@ export default function Logo() {
       <Image
         priority
         src={CCLogoColor}
-        alt="Clubs Council"
+        alt="Clubs Council Logo"
         width={128}
         height={64}
       />

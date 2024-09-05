@@ -47,6 +47,7 @@ export default function ImageMasonry({
                 width={0}
                 height={0}
                 sizes="100vw"
+                alt={`Gallery Image ${id}`}
                 style={{ width: "100%", height: "100%" }}
               />
             </CardActionArea>
