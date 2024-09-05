@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Box, Grid, Typography, Stack, Button } from "@mui/material";
-import Carousel from "components/Carousel";
+import Carousel from "components/carousel/Carousel";
 
 import EventsGrid from "components/events/EventsGrid";
 import Statistic from "components/Statistic";
