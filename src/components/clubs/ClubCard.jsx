@@ -36,6 +36,7 @@ export default function ClubCard({
             width={640}
             height={480}
             containerHeight="100%"
+            objectFit="fill"
           />
         </Box>
         <CardContent

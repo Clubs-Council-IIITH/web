@@ -18,6 +18,7 @@ export default function ClubBanner({
   width,
   height,
   containerHeight = null,
+  objectFit = null,
   dim = false,
   imageProps = {},
 }) {
@@ -34,7 +35,7 @@ export default function ClubBanner({
     <Box
       sx={{
         position: "relative",
-        pt: containerHeight ? containerHeight : isDesktop ? "400px" : "200px",
+        pt: containerHeight ? containerHeight : isDesktop ? "25%" : "50%",
         "&:after": {
           top: 0,
           content: "''",
@@ -48,13 +49,13 @@ export default function ClubBanner({
       <Image
         alt={name}
         src={img}
-        width={width + 300}
-        height={height + 300}
+        width={width}
+        height={height}
         style={{
           top: 0,
           width: "100%",
           height: "100%",
-          objectFit: isDesktop ? "stretch" : "cover",
+          objectFit: objectFit ? objectFit : isDesktop ? "fill" : "cover",
           position: "absolute",
           opacity: logo && theme.palette.mode !== "dark" ? 0.07 : 0.7,
           backgroundColor: theme.palette.background.default,
