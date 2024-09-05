@@ -3,7 +3,14 @@ export default function robots() {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/manage/",  "/*.json", "/*_middlewareManifest.js", "/*_ssgManifest.js", "/*.js"],
+      disallow: [
+        "/manage/",
+        "/*.json$",
+        "/*_buildManifest.js$",
+        "/*_middlewareManifest.js$",
+        "/*_ssgManifest.js$",
+        "/*.js$",
+      ],
     },
   };
 }
