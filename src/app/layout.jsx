@@ -56,7 +56,7 @@ export default async function RootLayout({ children }) {
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
