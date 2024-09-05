@@ -84,6 +84,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
     accept,
     maxFiles,
     maxSize,
+    multiple: maxFiles > 1,
   });
 
   return (
