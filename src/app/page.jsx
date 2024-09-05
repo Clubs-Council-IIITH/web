@@ -9,15 +9,17 @@ import Icon from "components/Icon";
 
 // carousel images
 import carousel1 from "/public/assets/img/carousel/1.jpg";
-import carousel2 from "/public/assets/img/carousel/2.jpg";
+// import carousel2 from "/public/assets/img/carousel/2.jpg";
 import carousel3 from "/public/assets/img/carousel/3.jpg";
 import carousel4 from "/public/assets/img/carousel/4.jpg";
 import carousel5 from "/public/assets/img/carousel/5.jpg";
 import carousel6 from "/public/assets/img/carousel/6.jpg";
 import carousel7 from "/public/assets/img/carousel/7.jpg";
 import carousel8 from "/public/assets/img/carousel/8.jpg";
-import carousel9 from "/public/assets/img/carousel/9.jpg";
+import carousel9 from "/public/assets/img/carousel/9.webp";
 import carousel10 from "/public/assets/img/carousel/10.jpg";
+// import carousel11 from "/public/assets/img/carousel/11.jpg";
+import carousel12 from "/public/assets/img/carousel/12.jpg";
 import Gallery from "./gallery/page";
 
 export const metadata = {
@@ -168,7 +170,7 @@ const carouselItems = [
     description: "Explore your student life beyond the classroom.",
   },
   {
-    image: carousel2,
+    image: carousel12,
     title: "Experience IIIT",
     description: "Expand your mind, explore your passion.",
   },
