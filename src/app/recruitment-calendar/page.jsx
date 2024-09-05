@@ -20,7 +20,7 @@ export default async function RecruitmentSchedule() {
   const recruitmentSchedule = await fetch(
     getStaticFile("recruitmentCalendar.json"),
     {
-      next: { revalidate: 120 },
+      next: { revalidate: 3600 }, // 1 hour
     },
   );
 
