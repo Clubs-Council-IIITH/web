@@ -17,7 +17,7 @@ import carousel6 from "/public/assets/img/carousel/6.jpg";
 import carousel7 from "/public/assets/img/carousel/7.jpg";
 import carousel8 from "/public/assets/img/carousel/8.jpg";
 import carousel9 from "/public/assets/img/carousel/9.jpg";
-import carousel12 from "/public/assets/img/carousel/12.jpg";
+import carousel10 from "/public/assets/img/carousel/10.jpg";
 import Gallery from "./gallery/page";
 
 export const metadata = {
@@ -164,52 +164,52 @@ export default function Home() {
 const carouselItems = [
   {
     image: carousel1,
-    title: "Life at IIIT",
-    description: "Eat. Sleep. Code? Not Quite.",
-  },
-  {
-    image: carousel2,
     title: "Clubs at IIIT",
     description: "Explore your student life beyond the classroom.",
   },
   {
+    image: carousel2,
+    title: "Experience IIIT",
+    description: "Expand your mind, explore your passion.",
+  },
+  {
     image: carousel3,
-    title: "Unrestricted Fun!",
-    description: "Join in on fun events!",
+    title: "Success Stories",
+    description: "Witness legends in the making.",
   },
   {
     image: carousel4,
+    title: "Perform Together",
+    description: "Let the beat take over.",
+  },
+  {
+    image: carousel6,
     title: "Connect IIIT",
     description: "Come together to learn, work, live and play.",
   },
   {
     image: carousel5,
-    title: "Success Stories",
-    description: "Witness legends in the making.",
-  },
-  {
-    image: carousel6,
-    title: "Experience IIIT",
-    description: "Expand your mind, explore your passion.",
+    title: "Campus Life",
+    description: "A vibrant residential community.",
   },
   {
     image: carousel7,
-    title: "Challengers",
-    description: "Up the potential for fun.",
-  },
-  {
-    image: carousel8,
-    title: "Perform Together",
-    description: "Let the beat take over.",
-  },
-  {
-    image: carousel9,
     title: "Artistry",
     description: "Unleash your creativity.",
   },
   {
-    image: carousel12,
-    title: "Campus Life",
-    description: "A vibrant residential community.",
+    image: carousel8,
+    title: "Challengers",
+    description: "Up the potential for fun.",
+  },
+  {
+    image: carousel9,
+    title: "Unrestricted Fun!",
+    description: "Join in on fun events!",
+  },
+  {
+    image: carousel10,
+    title: "Life at IIIT",
+    description: "Eat. Sleep. Code? Not Quite.",
   },
 ];
