@@ -39,10 +39,10 @@ export default async function Changelog({ searchParams }) {
     });
 
   const status = await fetch(getNginxFile("json/status.json"), {
-    next: { revalidate: 10*60 }, // 10 minutes
+    next: { revalidate: 10 * 60 }, // 10 minutes
   });
   const logs = await fetch(getNginxFile("mdx/logs.mdx"), {
-    next: { revalidate: 10*60 }, // 10 minutes
+    next: { revalidate: 10 * 60 }, // 10 minutes
   });
 
   let logsText = await logs.text();
@@ -140,7 +140,7 @@ const filterRoles = (roles, filterWords) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null
+      (word) => lowercaseName.includes(word) && endYear === null,
     );
   });
   if (filteredRoles?.length > 0)
