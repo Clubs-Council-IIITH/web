@@ -32,18 +32,18 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/student-bodies/clubs',
-        destination: '/about/clubs-council',
+        source: "/student-bodies/clubs",
+        destination: "/about/clubs-council",
         permanent: true,
       },
       {
-        source: '/clubs/clubs',
-        destination: '/about/clubs-council',
+        source: "/clubs/clubs",
+        destination: "/about/clubs-council",
         permanent: true,
       },
       {
-        source: '/about',
-        destination: '/about/clubs-council',
+        source: "/about",
+        destination: "/about/clubs-council",
         permanent: true,
       },
     ];
