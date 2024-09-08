@@ -47,11 +47,11 @@ export default function FileUpload({
 function getIsTypeofFileRejected(fileRejections, type) {
   console.log(
     fileRejections.some(({ errors }) =>
-      errors.some((error) => error.code == type)
-    )
+      errors.some((error) => error.code == type),
+    ),
   );
   return fileRejections.some(({ errors }) =>
-    errors.some((error) => error.code == type)
+    errors.some((error) => error.code == type),
   );
 }
 
@@ -163,7 +163,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
       <FormHelperText
         error={getIsTypeofFileRejected(
           fileRejections,
-          ErrorCode.FileInvalidType
+          ErrorCode.FileInvalidType,
         )}
         sx={{ mt: 0 }}
       >

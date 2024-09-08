@@ -69,7 +69,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
     if (formData.phone == "") data.phone = null;
 
     // upload image
-    const filename = data.uid.replace('.', '_')
+    const filename = data.uid.replace(".", "_");
     data.img =
       typeof formData.img === "string"
         ? formData.img
