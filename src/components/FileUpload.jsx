@@ -9,7 +9,7 @@ import { useTheme } from "@mui/material/styles";
 
 import { Controller } from "react-hook-form";
 
-import { useDropzone } from "react-dropzone";
+import { useDropzone, ErrorCode } from "react-dropzone";
 import { getFile } from "utils/files";
 
 export default function FileUpload({
@@ -18,7 +18,8 @@ export default function FileUpload({
   name,
   type = "image",
   maxFiles = 0,
-  maxSize = 50 * 1024 * 1024, // 50MB
+  maxSize = 20 * 1024 * 1024, // 20MB
+  shape = "",
 }) {
   return (
     <>
@@ -35,6 +36,7 @@ export default function FileUpload({
             type={type}
             maxFiles={maxFiles}
             maxSize={maxSize}
+            shape={shape}
           />
         )}
       />
@@ -42,7 +44,18 @@ export default function FileUpload({
   );
 }
 
-function DropZone({ files, onDrop, type, maxFiles, maxSize }) {
+function getIsTypeofFileRejected(fileRejections, type) {
+  console.log(
+    fileRejections.some(({ errors }) =>
+      errors.some((error) => error.code == type)
+    )
+  );
+  return fileRejections.some(({ errors }) =>
+    errors.some((error) => error.code == type)
+  );
+}
+
+function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
   const theme = useTheme();
 
   // accept only valid extensions
@@ -71,6 +84,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize }) {
     accept,
     maxFiles,
     maxSize,
+    multiple: maxFiles > 1,
   });
 
   return (
@@ -135,15 +149,39 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize }) {
           )
         ) : null}
       </Box>
-      <FormHelperText error={fileRejections.length}>
+      <FormHelperText
+        error={getIsTypeofFileRejected(fileRejections, ErrorCode.TooManyFiles)}
+      >
         Allowed file count: {maxFiles}
       </FormHelperText>
-      <FormHelperText error={fileRejections.length} sx={{ mt: 0 }}>
+      <FormHelperText
+        error={getIsTypeofFileRejected(fileRejections, ErrorCode.FileTooLarge)}
+        sx={{ mt: 0 }}
+      >
         Allowed file size: {maxSize / 1024 / 1024}MB
       </FormHelperText>
-      <FormHelperText error={fileRejections.length} sx={{ mt: 0 }}>
+      <FormHelperText
+        error={getIsTypeofFileRejected(
+          fileRejections,
+          ErrorCode.FileInvalidType
+        )}
+        sx={{ mt: 0 }}
+      >
         Allowed file types: {[].concat(...Object.values(accept)).join(" | ")}
       </FormHelperText>
+      {shape == "square" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload a square image (1:1 aspect ratio) for optimal display.
+        </FormHelperText>
+      ) : shape == "circle" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload a circular image for optimal display.
+        </FormHelperText>
+      ) : shape == "rectangle" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload image with around 4:1 aspect ratio for optimal display.
+        </FormHelperText>
+      ) : null}
     </>
   );
 }

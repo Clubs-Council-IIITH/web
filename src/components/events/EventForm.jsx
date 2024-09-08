@@ -493,6 +493,7 @@ export default function EventForm({
                   label="Poster"
                   control={control}
                   maxFiles={1}
+	          shape="square"
                 />
               </Grid>
             </Grid>
