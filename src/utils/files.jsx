@@ -1,10 +1,15 @@
 import { uploadFiles } from "actions/files/upload/server_action";
-import { readAndCompressImage  } from 'browser-image-resizer';
-
-export const dynamic = "force-dynamic";
+import dynamic from 'next/dynamic';
 
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
 const STATIC_URL = process.env.STATIC_URL || "http://nginx/static";
+
+
+// Dynamically import browser-image-resizer since it's only needed on the client side
+const readAndCompressImage = dynamic(() =>
+  import('browser-image-resizer').then((mod) => mod.readAndCompressImage),
+  { ssr: false }
+);
 
 export function getNginxFile(filepath) {
   return `${STATIC_URL}/${filepath}`;
