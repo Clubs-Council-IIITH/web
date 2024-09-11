@@ -7,7 +7,7 @@ import { CacheProvider as DefaultCacheProvider } from "@emotion/react";
 
 // This implementation is taken from https://github.com/garronej/tss-react/blob/main/src/next/appDir.tsx
 export default function NextAppDirEmotionCacheProvider(props) {
-  const { options, CacheProvider = DefaultCacheProvider, children } = props;
+  const { options, CacheProvider = DefaultCacheProvider, nonce, children } = props;
 
   const [{ cache, flush }] = React.useState(() => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -44,6 +44,7 @@ export default function NextAppDirEmotionCacheProvider(props) {
     return (
       <style
         key={cache.key}
+        nonce={nonce}
         data-emotion={`${cache.key} ${names.join(" ")}`}
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{

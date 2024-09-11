@@ -10,6 +10,7 @@ import { GET_USER } from "gql/queries/auth";
 import { AuthProvider } from "components/AuthProvider";
 import { fontClass } from "components/ThemeRegistry/typography";
 import TransitionProvider from "components/TransitionProvider";
+import { headers } from 'next/headers';
 
 const description =
   "Discover the vibrant campus life at IIIT Hyderabad through the Clubs Council. Explore diverse student-led clubs, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";
@@ -53,6 +54,9 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  // get the nonce and use it
+  const nonce = headers().get('x-nonce') || ' ';
+
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -72,7 +76,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={fontClass}>
         <ModeProvider>
-          <ThemeRegistry>
+          <ThemeRegistry nonce={nonce}>
             <Progressbar />
             <LocalizationWrapper>
               <AuthProvider user={user}>
