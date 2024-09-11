@@ -20,7 +20,7 @@ export function middleware(req) {
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-ancestors 'none';
+    frame-ancestors 'self' https://*.iiit.ac.in https://iiit.ac.in;
     upgrade-insecure-requests;
   `;
 
