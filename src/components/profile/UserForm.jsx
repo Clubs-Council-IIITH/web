@@ -69,11 +69,12 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
     if (formData.phone == "") data.phone = null;
 
     // upload image
+    const filename = data.uid.replace(".", "_");
     data.img =
       typeof formData.img === "string"
         ? formData.img
         : Array.isArray(formData.img) && formData.img.length > 0
-          ? await uploadFile(formData.img[0], "image")
+          ? await uploadFile(formData.img[0], "image", filename)
           : null;
 
     // mutate
@@ -203,6 +204,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   label="Profile Image"
                   control={control}
                   maxFiles={1}
+                  shape="circle"
                 />
               </Grid>
             </Grid>

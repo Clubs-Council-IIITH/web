@@ -130,17 +130,20 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         : formData.email.split("@")[0];
 
     // upload media
+    const logo_filename = "logo_" + data.cid.replace(".", "_");
     data.logo =
       typeof formData.logo === "string"
         ? formData.logo
         : Array.isArray(formData.logo) && formData.logo.length > 0
-          ? await uploadFile(formData.logo[0], "image")
+          ? await uploadFile(formData.logo[0], "image", logo_filename)
           : null;
+
+    const banner_filename = "banner_" + data.cid.replace(".", "_");
     data.banner =
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-          ? await uploadFile(formData.banner[0], "image")
+          ? await uploadFile(formData.banner[0], "image", banner_filename, 3)
           : null;
 
     if (data.category !== "other") data.studentBody = false;
@@ -264,6 +267,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   label="Logo"
                   control={control}
                   maxFiles={1}
+                  shape="circle"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -273,6 +277,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   label="Banner"
                   control={control}
                   maxFiles={1}
+                  shape="rectangle"
                 />
               </Grid>
             </Grid>

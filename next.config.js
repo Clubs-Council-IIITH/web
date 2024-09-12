@@ -1,11 +1,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  modularizeImports: {
-    "@mui/icons-material": {
-      transform: "@mui/icons-material/{{member}}",
-    },
-  },
   images: {
     remotePatterns: [
       {
@@ -33,6 +28,25 @@ const nextConfig = {
         hostname: "dev.clubs.iiit.ac.in",
       },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/student-bodies/clubs",
+        destination: "/about/clubs-council",
+        permanent: true,
+      },
+      {
+        source: "/clubs/clubs",
+        destination: "/about/clubs-council",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/about/clubs-council",
+        permanent: true,
+      },
+    ];
   },
 };
 

@@ -39,10 +39,10 @@ export default async function Changelog({ searchParams }) {
     });
 
   const status = await fetch(getNginxFile("json/status.json"), {
-    cache: "no-store",
+    next: { revalidate: 10 * 60 }, // 10 minutes
   });
   const logs = await fetch(getNginxFile("mdx/logs.mdx"), {
-    cache: "no-store",
+    next: { revalidate: 10 * 60 }, // 10 minutes
   });
 
   let logsText = await logs.text();

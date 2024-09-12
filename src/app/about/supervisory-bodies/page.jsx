@@ -10,13 +10,13 @@ export const metadata = {
 
 export default async function SupervisoryBodies() {
   const sacMembers = await fetch(getStaticFile("sacMembers.json"), {
-    next: { revalidate: 60 },
+    next: { revalidate: 40 * 60 }, // 40 minutes
   });
   const slcMembers = await fetch(getStaticFile("slcMembers.json"), {
-    next: { revalidate: 60 },
+    next: { revalidate: 40 * 60 }, // 40 minutes
   });
   const sloMembers = await fetch(getStaticFile("sloMembers.json"), {
-    next: { revalidate: 60 },
+    next: { revalidate: 40 * 60 }, // 40 minutes
   });
 
   return (

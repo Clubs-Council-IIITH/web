@@ -57,6 +57,7 @@ export default function AccountPopover() {
       {!isiframe && (
         <IconButton
           onClick={handleOpen}
+          aria-label="Account Popover"
           sx={{
             p: 0,
             color: "white",
