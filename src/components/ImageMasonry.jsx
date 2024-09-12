@@ -60,44 +60,28 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
 }
 
 function showImage(url, id, isDark = true) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   return (
     <>
-      <Image
-        src={url}
-        width={0}
-        height={0}
-        sizes="100vw"
-        alt={`Gallery Image ${id}`}
-        style={{
-          width: "100%",
-          height: "auto",
-          maxHeight: "100vh",
-          maxWidth: "100vw",
-        }}
-        placeholder={`data:image/svg+xml;base64,${toBase64(
-          shimmer(700, 475, isDark)
-        )}`}
-        onLoad={() => setIsLoaded(true)}
-      />
-      {isLoaded ? null : (
+      {hasError ? (
+        <Typography color="error">Image failed to load</Typography>
+      ) : (
         <Image
-          src={`data:image/svg+xml;base64,${toBase64(
-            shimmer(700, 475, isDark)
-          )}`}
-          alt={`Gallery Image ${id}`}
+          src={url}
           width={0}
           height={0}
           sizes="100vw"
+          alt={`Gallery Image ${id}`}
           style={{
             width: "100%",
             height: "auto",
             maxHeight: "100vh",
             maxWidth: "100vw",
           }}
-          priority
-          onLoad={() => setIsLoaded(true)}
+          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475, isDark))}`}
+          placeholder="blur"
+          onError={() => setHasError(true)}
         />
       )}
     </>
