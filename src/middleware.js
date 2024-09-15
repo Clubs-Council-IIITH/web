@@ -22,6 +22,7 @@ export function middleware(req) {
     form-action 'self';
     frame-ancestors 'self' https://*.iiit.ac.in https://iiit.ac.in;
     upgrade-insecure-requests;
+    connect-src 'self' https://api.iconify.design/ https://api.unisvg.com/ https://api.simplesvg.com/
   `;
 
   // Replace newline characters and spaces
