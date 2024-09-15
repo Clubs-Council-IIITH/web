@@ -16,7 +16,7 @@ export function middleware(req) {
     };
     style-src 'self' 'nonce-${nonce}';
     img-src 'self' blob: data:;
-    font-src 'self';
+    font-src 'self' data:;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
