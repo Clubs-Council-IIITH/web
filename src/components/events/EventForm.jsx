@@ -57,7 +57,7 @@ import { uploadFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 
-const allowed_roles = ["cc", "slo"];
+const admin_roles = ["cc", "slo"];
 
 export default function EventForm({
   id = null,
@@ -234,7 +234,7 @@ export default function EventForm({
     // set club ID for event based on user role
     if (user?.role === "club") {
       data.clubid = user?.uid;
-    } else if (allowed_roles.includes(user?.role)) {
+    } else if (admin_roles.includes(user?.role)) {
       data.clubid = formData.clubid;
     }
 
@@ -315,7 +315,7 @@ export default function EventForm({
                       <Switch
                         checked={field.value}
                         disabled={
-                          !allowed_roles.includes(user?.role) &&
+                          !admin_roles.includes(user?.role) &&
                           defaultValues?.status?.state != undefined &&
                           defaultValues?.status?.state != "incomplete"
                         }
@@ -330,7 +330,7 @@ export default function EventForm({
               />
             </Grid>
             <Grid container item spacing={2}>
-              {allowed_roles.includes(user?.role) ? (
+              {admin_roles.includes(user?.role) ? (
                 <Grid item xs={12}>
                   <EventClubSelect
                     control={control}
@@ -348,7 +348,7 @@ export default function EventForm({
                   <EventCollabClubSelect
                     control={control}
                     disabled={
-                      !allowed_roles.includes(user?.role) &&
+                      !admin_roles.includes(user?.role) &&
                       defaultValues?.status?.state != undefined &&
                       defaultValues?.status?.state != "incomplete"
                     }
@@ -362,7 +362,7 @@ export default function EventForm({
                 <EventNameInput
                   control={control}
                   disabled={
-                    !allowed_roles.includes(user?.role) &&
+                    !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -373,7 +373,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   disabled={
-                    !allowed_roles.includes(user?.role) &&
+                    !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -438,7 +438,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   disabled={
-                    !allowed_roles.includes(user?.role) &&
+                    !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -466,7 +466,7 @@ export default function EventForm({
                   watch={watch}
                   resetField={resetField}
                   disabled={
-                    !allowed_roles.includes(user?.role) &&
+                    !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
@@ -523,7 +523,7 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              {allowed_roles.includes(user?.role) ||
+              {admin_roles.includes(user?.role) ||
               (user?.role === "club" &&
                 defaultValues?.status?.state != undefined &&
                 defaultValues?.status?.state != "incomplete") ? (
@@ -552,7 +552,7 @@ export default function EventForm({
                 </LoadingButton>
               )}
             </Grid>
-            {allowed_roles.includes(user?.role) ||
+            {admin_roles.includes(user?.role) ||
             (user?.role === "club" &&
               defaultValues?.status?.state != undefined &&
               defaultValues?.status?.state != "incomplete") ? null : (
@@ -786,7 +786,7 @@ function EventDatetimeInput({
             required: "Start date is required!",
             validate: {
               minDateCheck: (value) =>
-                allowed_roles.includes(role) ||
+                admin_roles.includes(role) ||
                 disabled ||
                 dayjs(value) >= dayjs(new Date()) ||
                 "Start Date must not be in past!",
@@ -804,7 +804,7 @@ function EventDatetimeInput({
                   helperText: error?.message,
                 },
               }}
-              disablePast={!allowed_roles.includes(role)}
+              disablePast={!admin_roles.includes(role)}
               viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,
@@ -850,7 +850,7 @@ function EventDatetimeInput({
                     ).add(1, "minute")
                   : null
               }
-              disablePast={!allowed_roles.includes(role)}
+              disablePast={!admin_roles.includes(role)}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
