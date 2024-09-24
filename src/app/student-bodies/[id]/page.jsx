@@ -3,6 +3,7 @@
  */
 
 import Link from "next/link";
+import { permanentRedirect } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
@@ -24,6 +25,8 @@ export async function generateMetadata({ params }, parent) {
   const { data: { club } = {} } = await getClient().query(GET_CLUB, {
     clubInput: { cid: id },
   });
+
+  if (!club?.studentBody) return permanentRedirect(`/clubs/${id}`);
 
   return {
     title: club.name,
