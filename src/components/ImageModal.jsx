@@ -1,18 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
-
 import { Box, Modal } from "@mui/material";
 
-export default function ImageModal({ images, id = null }) {
-  const router = useRouter();
-  const pathname = usePathname();
-
+export default function ImageModal({ images, id = null, onClose = () => {} }) {
   return (
     <Modal
       open={id !== null}
-      onClose={() => router.replace(pathname, undefined, { shallow: true })}
+      onClose={() => onClose()}
       sx={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}
@@ -40,7 +35,12 @@ export default function ImageModal({ images, id = null }) {
           height={0}
           sizes="100vw"
           alt={`Gallery Image ${id}`}
-          style={{ width: "100%", height: "100%" }}
+          style={{
+            width: "100%",
+            height: "auto",
+            maxHeight: "100vh",
+            maxWidth: "100vw",
+          }}
         />
       </Box>
     </Modal>
