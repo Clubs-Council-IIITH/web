@@ -63,28 +63,28 @@ function showImage(url, id, isDark = true) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <>
-      <Image
-        src={isLoaded ? url : `data:image/svg+xml;base64,${toBase64(
-            shimmer(700, 475, isDark)
-          )}`}
-        width={0}
-        height={0}
-        sizes="100vw"
-        alt={`Gallery Image ${id}`}
-        style={{
-          width: "100%",
-          height: "auto",
-          maxHeight: "100vh",
-          maxWidth: "100vw",
-        }}
-        placeholder={`data:image/svg+xml;base64,${toBase64(
-          shimmer(700, 475, isDark)
-        )}`}
-        priority={!isLoaded ? true : false}
-        onLoad={() => setIsLoaded(true)}
-      />
-    </>
+    <Image
+      src={
+        isLoaded
+          ? url
+          : `data:image/svg+xml;base64,${toBase64(shimmer(700, 475, isDark))}`
+      }
+      width={0}
+      height={0}
+      sizes="100vw"
+      alt={`Gallery Image ${id}`}
+      style={{
+        width: "100%",
+        height: "auto",
+        maxHeight: "100vh",
+        maxWidth: "100vw",
+      }}
+      placeholder={`data:image/svg+xml;base64,${toBase64(
+        shimmer(700, 475, isDark)
+      )}`}
+      priority={!isLoaded}
+      onLoad={() => setIsLoaded(true)}
+    />
   );
 }
 
