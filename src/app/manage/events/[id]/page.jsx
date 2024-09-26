@@ -33,7 +33,7 @@ import {
 import { locationLabel, billsStateLabel } from "utils/formatEvent";
 import MemberListItem from "components/members/MemberListItem";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata({ params }) {
   const { id } = params;
 
   try {
@@ -128,7 +128,7 @@ async function billsStatus(event) {
   );
 }
 
-async function approvalStatus(status) {
+async function approvalStatus(status, isStudentBodyEvent = false) {
   let lastEditeduser = null;
   let ccApprover = null;
   let slcApprover = null;
@@ -189,8 +189,11 @@ async function approvalStatus(status) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
-        Timeline
+      <Typography variant="subtitle2" gutterBottom>
+        TIMELINE{" "}
+        <Typography variant="caption" gutterBottom sx={{ marginLeft: 1 }}>
+          (Times in IST)
+        </Typography>
       </Typography>
 
       <Grid container spacing={2}>
@@ -275,23 +278,26 @@ async function approvalStatus(status) {
               </Grid>
             </Grid>
 
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={1}>Clubs Council Approval</Box>
+            {!isStudentBodyEvent ? (
+              <Grid container item spacing={2}>
+                <Grid item xs={5} lg={3}>
+                  <Box mt={1}>Clubs Council Approval</Box>
+                </Grid>
+                <Grid item xs={1} lg={0.1}>
+                  <Box mt={1}>-</Box>
+                </Grid>
+                <Grid item xs>
+                  <Box mt={1}>
+                    {status?.ccApproverTime == null
+                      ? "Information not available"
+                      : (status?.ccApproverTime.includes(":")
+                          ? "Approved on "
+                          : "") + status?.ccApproverTime}
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={1}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box mt={1}>
-                  {status?.ccApproverTime == null
-                    ? "Information not available"
-                    : (status?.ccApproverTime.includes(":")
-                        ? "Approved on "
-                        : "") + status?.ccApproverTime}
-                </Box>
-              </Grid>
-            </Grid>
+            ) : null}
+
             {status?.ccApprover != null && status?.ccApproverTime != null ? (
               <Grid container item spacing={2}>
                 <Grid item xs={5} lg={3}>
@@ -306,23 +312,25 @@ async function approvalStatus(status) {
               </Grid>
             ) : null}
 
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={1}>Students Life Council Approval</Box>
+            {!isStudentBodyEvent ? (
+              <Grid container item spacing={2}>
+                <Grid item xs={5} lg={3}>
+                  <Box mt={1}>Students Life Council Approval</Box>
+                </Grid>
+                <Grid item xs={1} lg={0.1}>
+                  <Box mt={1}>-</Box>
+                </Grid>
+                <Grid item xs>
+                  <Box mt={1}>
+                    {status?.slcApproverTime == null
+                      ? "Information not available"
+                      : (status?.slcApproverTime.includes(":")
+                          ? "Approved on "
+                          : "") + status?.slcApproverTime}
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={1}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box mt={1}>
-                  {status?.slcApproverTime == null
-                    ? "Information not available"
-                    : (status?.slcApproverTime.includes(":")
-                        ? "Approved on "
-                        : "") + status?.slcApproverTime}
-                </Box>
-              </Grid>
-            </Grid>
+            ) : null}
             {status?.slcApprover != null && status?.slcApproverTime != null ? (
               <Grid container item spacing={2}>
                 <Grid item xs={5} lg={3}>
@@ -370,7 +378,7 @@ export default async function ManageEvent({ params }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -476,7 +484,7 @@ export default async function ManageEvent({ params }) {
         </Grid>
 
         {/* show Approval status */}
-        {approvalStatus(event?.status)}
+        {approvalStatus(event?.status, event?.studentBodyEvent)}
         {["cc", "club", "slo"].includes(user?.role) ? billsStatus(event) : null}
       </Box>
     )
@@ -543,7 +551,7 @@ function getActions(event, user) {
     if (
       // upcoming &&
       event?.status?.state === "pending_room" &&
-      event?.status?.budget &&
+      (event?.status?.budget || event?.studentBodyEvent) &&
       !event?.status?.room
     )
       return [ApproveEvent, EditEvent, DeleteEvent];
