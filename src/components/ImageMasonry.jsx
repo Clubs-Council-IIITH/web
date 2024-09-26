@@ -80,7 +80,7 @@ function showImage(url, id, isDark = true) {
         maxWidth: "100vw",
       }}
       placeholder={`data:image/svg+xml;base64,${toBase64(
-        shimmer(700, 475, isDark)
+        shimmer(700, 475, isDark),
       )}`}
       priority={!isLoaded}
       onLoad={() => setIsLoaded(true)}

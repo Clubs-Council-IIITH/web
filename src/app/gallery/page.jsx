@@ -18,10 +18,7 @@ export default async function Gallery({ limit = undefined }) {
 
   return (
     <>
-      <ImageMasonry
-        images={galleryItems}
-        limit={limit}
-      />
+      <ImageMasonry images={galleryItems} limit={limit} />
     </>
   );
 }
