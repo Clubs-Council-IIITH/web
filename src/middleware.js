@@ -59,6 +59,16 @@ export function middleware(req) {
     return redirectRes;
   }
 
+  // redirect to CC about page
+  if (pathname === "/student-bodies/clubs") {
+    const redirectRes =  NextResponse.redirect(new URL("/about/clubs-council", req.url));
+    redirectRes.headers.set(
+      "Content-Security-Policy",
+      contentSecurityPolicyHeaderValue,
+    );
+    return redirectRes;
+  }
+
   // check if current route is protected
   const protectedRoute =
     Object.keys(routes).find((r) => match(r)(pathname)) || false;

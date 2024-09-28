@@ -10,6 +10,7 @@ export default function robots() {
         "/*_middlewareManifest.js$",
         "/*_ssgManifest.js$",
         "/*.js$",
+        "/events?*club=*",
       ],
     },
   };
