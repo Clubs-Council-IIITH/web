@@ -40,10 +40,10 @@ export default function HolidaysTable({ holidays }) {
       field: "date",
       headerName: "Date",
       flex: 3,
-      valueGetter: (value, row, column, apiRef) =>
-        ISOtoHuman(row.date, true, false),
       renderCell: (params) => (
-        <Typography variant="body2">{params.value}</Typography>
+        <Typography variant="body2">
+          {ISOtoHuman(params.value, true, false)}
+        </Typography>
       ),
       display: "flex",
     },
