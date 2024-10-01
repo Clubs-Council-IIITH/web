@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { Typography } from "@mui/material";
+import { Typography, TextField, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
@@ -13,6 +13,33 @@ import { stateLabel } from "utils/formatEvent";
 import Tag from "components/Tag";
 import Icon from "components/Icon";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
+
+function FilterTextInputValue(props) {
+  const { item, applyValue } = props;
+
+  const handleFilterChange = (event) => {
+    applyValue({ ...item, value: event.target.value });
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "inline-flex",
+        flexDirection: "row",
+        alignItems: "center",
+        height: 48,
+        pl: "20px",
+      }}
+    >
+      <TextField
+        label="Enter text"
+        value={item.value || ""}
+        onChange={handleFilterChange}
+        variant="standard"
+      />
+    </Box>
+  );
+}
 
 export default function EventsTable({
   events,
@@ -29,7 +56,7 @@ export default function EventsTable({
       : [
           {
             field: "code",
-            headerName: "",
+            headerName: "Event Code",
             flex: 3,
             renderCell: ({ value }) => (
               <Typography variant="body2" color="text.disabled">
@@ -143,6 +170,10 @@ export default function EventsTable({
         />
       ),
       display: "flex",
+      sortComparator: (v1, v2) => {
+        return v1.requested - v2.requested || v1.approved - v2.approved;
+      },
+      filterable: false,
     },
     {
       field: "status",
@@ -167,6 +198,54 @@ export default function EventsTable({
           />
         );
       },
+      sortComparator: (v1, v2) => {
+        return v1.state.localeCompare(v2.state);
+      },
+      // Custom filter
+      filterOperators: [
+        {
+          label: "contains",
+          value: "contains",
+          InputComponent: FilterTextInputValue,
+          InputComponentProps: { type: "text" },
+          getApplyFilterFn: (filterItem) => {
+            if (!filterItem.value) {
+              return null;
+            }
+            return (value) => {
+              const curr_state =
+                value.state === "approved"
+                  ? new Date(value.start) < new Date()
+                    ? "completed approved"
+                    : "approved"
+                  : stateLabel(value.state).shortName.toLowerCase();
+
+              return curr_state.includes(filterItem.value.toLowerCase());
+            };
+          },
+        },
+        {
+          label: "does not contain",
+          value: "does not contain",
+          InputComponent: FilterTextInputValue,
+          InputComponentProps: { type: "number" },
+          getApplyFilterFn: (filterItem) => {
+            if (!filterItem.value) {
+              return null;
+            }
+            return (value) => {
+              const curr_state =
+                value.state === "approved"
+                  ? new Date(value.start) < new Date()
+                    ? "completed approved"
+                    : "approved"
+                  : stateLabel(value.state).shortName.toLowerCase();
+
+              return !curr_state.includes(filterItem.value.toLowerCase());
+            };
+          },
+        },
+      ],
     },
   ];
 
