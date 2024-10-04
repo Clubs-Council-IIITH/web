@@ -93,7 +93,7 @@ export default async function CCApplicantDetails({ params }) {
                 textAlign={{ xs: "center", lg: "left" }}
                 sx={{
                   fontSize: { xs: 25, lg: 38 },
-                  wordBreak: "break-word"
+                  wordBreak: "break-word",
                 }}
               >
                 {user.firstName} {user.lastName}
