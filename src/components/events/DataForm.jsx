@@ -32,30 +32,12 @@ const allowed_roles = ["cc", "club", "slo"];
 const admin_roles = ["cc", "slo"];
 const disabledFields = ["code", "name", "clubid", "datetimeperiod.0", "status"]; // Fields that should be disabled and selected
 
-function DataClubSelect({ control, disabled = true }) {
-  const { triggerToast } = useToast();
-  const [clubs, setClubs] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await getAllClubIds();
-        if (!res.ok) {
-          throw new Error(res.error.messages);
-        }
-        setClubs(res.data);
-        setLoading(false);
-      } catch (error) {
-        triggerToast({
-          title: "Unable to fetch clubs",
-          messages: [error.message],
-          severity: "error",
-        });
-      }
-    })();
-  }, [triggerToast]);
-
+function DataClubSelect({
+  control,
+  disabled = true,
+  loading = false,
+  clubs = [],
+}) {
   return (
     <>
       {loading ? (
@@ -74,8 +56,14 @@ function DataClubSelect({ control, disabled = true }) {
           rules={{ required: "Select a club/body!" }}
           render={({ field, fieldState: { error, invalid } }) => (
             <FormControl fullWidth error={invalid}>
-              <InputLabel id="clubid">Club/Body</InputLabel>
-              <Select labelId="clubid" fullWidth disabled={disabled} {...field}>
+              <InputLabel id="clubid-label">Club/Body</InputLabel>
+              <Select
+                labelId="clubid-label"
+                label="Club/Body"
+                fullWidth
+                disabled={disabled}
+                {...field}
+              >
                 <MenuItem value="allclubs">All Clubs/Bodies</MenuItem>
                 {clubs
                   ?.slice()
@@ -202,13 +190,34 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
       clubid: "",
       datetimeperiod: [null, null],
       fields: disabledFields, // Ensure disabled fields are selected by default
-      allEvents: false,
+      status: "approved",
       ...defaultValues,
     },
   });
   const [loading, setLoading] = useState(false);
+  const [clubsLoading, setClubsLoading] = useState(true);
+  const [clubs, setClubs] = useState([]);
   const [cancelDialog, setCancelDialog] = useState(false);
-  const allEvents = watch("allEvents");
+  const status = watch("status");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getAllClubIds();
+        if (!res.ok) {
+          throw new Error(res.error.messages);
+        }
+        setClubs(res.data);
+        setClubsLoading(false);
+      } catch (error) {
+        triggerToast({
+          title: "Unable to fetch clubs",
+          messages: [error.message],
+          severity: "error",
+        });
+      }
+    })();
+  }, []);
 
   const submitHandlers = {
     log: console.log,
@@ -224,7 +233,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD",
+              "YYYY-MM-DD"
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -245,7 +254,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         }
       } else {
         console.error("Failed to fetch CSV file");
-        triggerToast(error, "error");
+        triggerToast({
+          title: "Failed to fetch CSV file",
+          messages: [res.error?.messages || "Unknown error"],
+          severity: "error",
+        });
       }
     },
   };
@@ -255,10 +268,10 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD"),
+        dayjs(date).format("YYYY-MM-DD")
       ),
       fields: formData.fields,
-      allEvents: formData.allEvents,
+      status: formData.status || "approved",
     };
     submitHandlers[action](data);
     setLoading(false);
@@ -266,70 +279,45 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid
-        container
-        item
-        sx={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <Typography variant="h3" gutterBottom mb={3}>
-          Download Events Data
-        </Typography>
-        {admin_roles.includes(user?.role) ? (
-          <FormControlLabel
-            control={
-              <Controller
-                name="allEvents"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Switch
-                    checked={field.value}
-                    onChange={(e) => field.onChange(e.target.checked)}
-                    inputProps={{ "aria-label": "controlled" }}
-                    sx={{ margin: "auto" }}
-                  />
-                )}
-              />
-            }
-            label="All Events"
-          />
-        ) : null}
-      </Grid>
-      <Grid container spacing={4} alignItems="flex-start">
+      <Typography variant="h3" gutterBottom mb={3}>
+        Download Events Data
+      </Typography>
+      <Grid container spacing={3} alignItems="flex-start">
         <Grid container item>
-          <Grid container item>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              gutterBottom
-            >
-              {admin_roles.includes(user?.role)
-                ? "Select Club/Student Body"
-                : "Selected Club/Student Body"}
-            </Typography>
-            <Grid item xs={12}>
-              {admin_roles.includes(user?.role) ? (
-                <DataClubSelect
-                  control={control}
-                  disabled={!admin_roles.includes(user?.role)}
-                />
-              ) : (
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontSize: 18,
-                    padding: 1.7,
-                    color: "#919EAB",
-                    width: "100%",
-                    border: "1px solid rgba(99, 115, 129, 0.5)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  {user?.uid}
-                </Typography>
-              )}
-            </Grid>
+          <Typography
+            variant="subtitle2"
+            textTransform="uppercase"
+            color="text.secondary"
+            sx={{ mb: 1.5 }}
+          >
+            {admin_roles.includes(user?.role)
+              ? "Select Club/Student Body"
+              : "Selected Club/Student Body"}
+          </Typography>
+          <Grid item xs={12}>
+            {admin_roles.includes(user?.role) ? (
+              <DataClubSelect
+                control={control}
+                disabled={!admin_roles.includes(user?.role)}
+                loading={clubsLoading}
+                clubs={clubs}
+              />
+            ) : (
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: 18,
+                  padding: 1.7,
+                  color: "#919EAB",
+                  width: "100%",
+                  border: "1px solid rgba(99, 115, 129, 0.5)",
+                  borderRadius: "8px",
+                }}
+              >
+                {clubs.find((club) => club.cid === user?.uid)?.name ||
+                  user?.uid}
+              </Typography>
+            )}
           </Grid>
         </Grid>
         <Grid container item>
@@ -343,6 +331,32 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           </Typography>
           <EventDatetimeInput control={control} watch={watch} user={user} />
         </Grid>
+        {admin_roles.includes(user?.role) ? (
+          <Grid container item>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              color="text.secondary"
+              sx={{ mb: 1.5 }}
+            >
+              Events to Include
+            </Typography>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel id="status">Status</InputLabel>
+                  <Select labelId="status" label="Status" fullWidth {...field}>
+                    <MenuItem value="all">All Events</MenuItem>
+                    <MenuItem value="approved">Only Approved Events</MenuItem>
+                    <MenuItem value="pending">Only Pending Events</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+          </Grid>
+        ) : null}
         <Grid container item>
           <Typography
             variant="subtitle2"
@@ -376,7 +390,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       { fieldValue: "location", fieldName: "Venue" },
                       { fieldValue: "budget", fieldName: "Budget" },
                       { fieldValue: "poster", fieldName: "Poster URL" },
-                      ...(allEvents
+                      ...(status != "approved"
                         ? [{ fieldValue: "status", fieldName: "Status" }]
                         : []),
                     ].map(({ fieldValue, fieldName }) => (
@@ -394,7 +408,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value,
+                                    event.target.value
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
