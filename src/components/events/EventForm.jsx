@@ -90,7 +90,7 @@ export default function EventForm({
     })();
   }, []);
 
-  const { control, handleSubmit, watch, resetField } = useForm({
+  const { control, handleSubmit, watch, resetField, setValue } = useForm({
     defaultValues,
   });
   const { triggerToast } = useToast();
@@ -372,6 +372,7 @@ export default function EventForm({
                 <EventDatetimeInput
                   control={control}
                   watch={watch}
+                  setValue={setValue}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
@@ -752,6 +753,7 @@ function filterEvents(events, startTime, endTime) {
 function EventDatetimeInput({
   control,
   watch,
+  setValue,
   disabled = true,
   role = "public",
   existingEvents = [],
@@ -775,6 +777,15 @@ function EventDatetimeInput({
       }
     }
   }, [error]);
+
+  useEffect(() => {
+    if (
+      startDateInput &&
+      endDateInput &&
+      dayjs(startDateInput).isAfter(dayjs(endDateInput))
+    )
+      setValue("datetimeperiod.1", null);
+  }, [startDateInput]);
 
   return (
     <Grid container spacing={2}>

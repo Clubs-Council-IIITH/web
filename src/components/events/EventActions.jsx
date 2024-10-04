@@ -9,9 +9,7 @@ import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
-
 import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
 
 import { deleteEventAction } from "actions/events/delete/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
@@ -162,7 +160,6 @@ export function SubmitEvent({ sx }) {
 export function ApproveEvent({ sx }) {
   const router = useRouter();
   const { id } = useParams();
-  const { user } = useAuth();
   const { triggerToast } = useToast();
   const [dialog, setDialog] = useState(false);
 
@@ -190,41 +187,41 @@ export function ApproveEvent({ sx }) {
 
   return (
     <>
-      {/* If user?.role === "cc", then redirect to /manage/events/id/approve_cc */}
-      {user && user.role === "cc" ? (
-        <Button
-          component={Link}
-          href={`/manage/events/${id}/approve_cc`}
-          variant="contained"
-          color="success"
-          startIcon={<Icon variant="done" />}
-          sx={sx}
-        >
-          Approve
-        </Button>
-      ) : (
-        <>
-          <Button
-            variant="contained"
-            color="success"
-            startIcon={<Icon variant="done" />}
-            onClick={() => setDialog(true)}
-            sx={sx}
-          >
-            Approve
-          </Button>
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<Icon variant="done" />}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Approve
+      </Button>
 
-          <ConfirmDialog
-            open={dialog}
-            title="Are you sure you want to approve this event?"
-            description="This action cannot be undone."
-            onConfirm={approveEvent}
-            onClose={() => setDialog(false)}
-            confirmProps={{ color: "success" }}
-            confirmText="Yes, approve it"
-          />
-        </>
-      )}
+      <ConfirmDialog
+        open={dialog}
+        title="Are you sure you want to approve this event?"
+        description="This action cannot be undone."
+        onConfirm={approveEvent}
+        onClose={() => setDialog(false)}
+        confirmProps={{ color: "success" }}
+        confirmText="Yes, approve it"
+      />
     </>
+  );
+}
+
+export function ProgressEvent({ sx }) {
+  const { id } = useParams();
+  return (
+    <Button
+      component={Link}
+      href={`/manage/events/${id}/approve_cc`}
+      variant="contained"
+      color="secondary"
+      startIcon={<Icon variant="add" />}
+      sx={sx}
+    >
+      Progress
+    </Button>
   );
 }

@@ -7,7 +7,7 @@ export async function editEventAction(details, eventid) {
   const response = { ok: false, data: null, error: null };
 
   const {
-    data: { editEvent },
+    data,
     error,
   } = await getClient().mutation(EDIT_EVENT, {
     details: { ...details, eventid },
@@ -19,7 +19,7 @@ export async function editEventAction(details, eventid) {
     };
   } else {
     response.ok = true;
-    response.data = editEvent;
+    response.data = data.editEvent;
   }
 
   return response;

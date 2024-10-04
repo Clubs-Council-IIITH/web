@@ -8,11 +8,13 @@ import { Container, Typography } from "@mui/material";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 import { extractFirstYear } from "components/members/MembersGrid";
-import EventApproveForm from "components/events/EventApproveForm";
+import EventActionTabs from "components/events/EventActionTabs";
+
 
 export const metadata = {
-  title: "Approve Event | CC",
+  title: "Approve/Reject Event | CC",
 };
+
 
 export default async function ApproveEventCC({ params }) {
   const { id } = params;
@@ -60,11 +62,11 @@ export default async function ApproveEventCC({ params }) {
       <Container>
         <center>
           <Typography variant="h3" gutterBottom mb={3}>
-            Approve Event | Clubs Council
+            Approve or Reject Event | Clubs Council
           </Typography>
         </center>
 
-        <EventApproveForm eventid={event._id} members={currentccMembers} />
+	<EventActionTabs eventid={event._id} members={currentccMembers} />
       </Container>
     )
   );
