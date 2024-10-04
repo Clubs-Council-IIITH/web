@@ -10,11 +10,9 @@ import { techTeamWords } from "constants/ccMembersFilterWords";
 import { extractFirstYear } from "components/members/MembersGrid";
 import EventActionTabs from "components/events/EventActionTabs";
 
-
 export const metadata = {
   title: "Approve/Reject Event | CC",
 };
-
 
 export default async function ApproveEventCC({ params }) {
   const { id } = params;
@@ -66,7 +64,7 @@ export default async function ApproveEventCC({ params }) {
           </Typography>
         </center>
 
-	<EventActionTabs eventid={event._id} members={currentccMembers} />
+        <EventActionTabs eventid={event._id} members={currentccMembers} />
       </Container>
     )
   );

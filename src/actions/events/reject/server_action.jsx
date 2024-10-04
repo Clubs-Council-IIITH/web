@@ -4,7 +4,7 @@ import { getClient } from "gql/client";
 import { REJECT_EVENT } from "gql/mutations/events";
 
 export async function rejectEventAction(data) {
-  const {eventid, reason} = data;
+  const { eventid, reason } = data;
   const response = { ok: false, error: null };
 
   const { error } = await getClient().mutation(REJECT_EVENT, {

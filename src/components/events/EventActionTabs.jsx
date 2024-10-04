@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 
@@ -268,8 +268,8 @@ function EventRejectForm({ eventid }) {
     setLoading(true);
 
     let res = await rejectEventAction({
-	eventid: eventid,
-        reason: formData.reason,
+      eventid: eventid,
+      reason: formData.reason,
     });
 
     if (res.ok) {
@@ -296,8 +296,8 @@ function EventRejectForm({ eventid }) {
           required: "Rejection reason is required",
           minLength: {
             value: 10,
-            message: "Reason must be at least 10 characters long"
-          }
+            message: "Reason must be at least 10 characters long",
+          },
         }}
         render={({ field, fieldState: { error } }) => (
           <FormControl fullWidth error={!!error}>
@@ -341,7 +341,7 @@ export default function EventActionTabs({ eventid, members }) {
   };
 
   return (
-    <Box sx={{ width: '100%', mb: 3 }}>
+    <Box sx={{ width: "100%", mb: 3 }}>
       <Tabs
         value={selectedTab}
         onChange={handleTabChange}

@@ -45,14 +45,8 @@ export const PROGRESS_EVENT = gql`
 `;
 
 export const REJECT_EVENT = gql`
-  mutation REJECT_EVENT(
-    $eventid: String!
-    $reason: String!
-  ) {
-    rejectEvent(
-      eventid: $eventid
-      reason: $reason
-    ) {
+  mutation REJECT_EVENT($eventid: String!, $reason: String!) {
+    rejectEvent(eventid: $eventid, reason: $reason) {
       _id
     }
   }
