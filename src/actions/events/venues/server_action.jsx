@@ -8,7 +8,7 @@ export async function eventsVenues(data) {
   const { startDate, endDate, eventid } = data;
 
   const {
-    data: { availableRooms },
+    data: outputData,
     error,
   } = await getClient().query(GET_AVAILABLE_LOCATIONS, {
     timeslot: [startDate, endDate],
@@ -21,7 +21,7 @@ export async function eventsVenues(data) {
     };
   } else {
     response.ok = true;
-    response.data = availableRooms;
+    response.data = outputData.availableRooms;
   }
 
   return response;

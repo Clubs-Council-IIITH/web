@@ -9,9 +9,7 @@ import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
-
 import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
 
 import { deleteEventAction } from "actions/events/delete/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
@@ -213,7 +211,6 @@ export function ApproveEvent({ sx }) {
 }
 
 export function ProgressEvent({ sx }) {
-  const router = useRouter();
   const { id } = useParams();
   return (
     <Button

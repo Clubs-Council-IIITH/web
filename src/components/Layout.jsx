@@ -74,10 +74,12 @@ function Bar({ onOpenDrawer }) {
 
         <Stack
           direction="row"
-          alignItems="center"
           spacing={{
             xs: 0.5,
             sm: 1,
+          }}
+          sx={{
+            alignItems: "center",
           }}
         >
           <AccountPopover />

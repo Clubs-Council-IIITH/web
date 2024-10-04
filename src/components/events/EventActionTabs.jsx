@@ -260,7 +260,7 @@ function EventRejectForm({ eventid }) {
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      reason: "As requested by the Club to make more edits.",
+      reason: "Some logical & valid reason...",
     },
   });
 
