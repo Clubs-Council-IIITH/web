@@ -120,6 +120,10 @@ export default function Calendar({ events, holidays, allClubs }) {
           background-color: ${theme.palette.background.error}!important;
           opacity: 1 !important;
         }
+
+        .fc-cell-shaded{
+          background-color: ${theme.palette.background.neutral}!important;
+        }
       `}</style>
     </>
   );
