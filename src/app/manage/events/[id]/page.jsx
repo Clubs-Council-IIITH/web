@@ -20,6 +20,7 @@ import {
   EditEvent,
   CopyEvent,
   ApproveEvent,
+  ProgressEvent,
   DeleteEvent,
   SubmitEvent,
   EditFinances,
@@ -518,13 +519,13 @@ function getActions(event, user) {
   }
 
   /*
-   * CC - pending approval - approve, edit, delete
+   * CC - pending approval - progress, edit, delete
    * CC - not incomplete event - delete, edit, copy
    * CC - incomplete event - edit
    */
   if (user?.role === "cc") {
     if (event?.status?.state === "pending_cc")
-      return [ApproveEvent, EditEvent, DeleteEvent];
+      return [ProgressEvent, EditEvent, DeleteEvent];
     else if (event?.status?.state !== "incomplete")
       return [EditEvent, DeleteEvent, CopyEvent];
     else return [EditEvent];

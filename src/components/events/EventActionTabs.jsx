@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 
@@ -11,7 +11,10 @@ import MemberListItem from "components/members/MemberListItem";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
+  TextField,
   Checkbox,
+  Tabs,
+  Tab,
   Fade,
   CircularProgress,
   Typography,
@@ -26,9 +29,10 @@ import {
 } from "@mui/material";
 
 import { eventProgress } from "actions/events/progress/server_action";
+import { rejectEventAction } from "actions/events/reject/server_action";
 import { getUserByRole } from "actions/users/get/role/server_action";
 
-export default function EventApproveForm({ eventid, members }) {
+function EventApproveForm({ eventid, members }) {
   const { triggerToast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -246,5 +250,115 @@ export default function EventApproveForm({ eventid, members }) {
         </Typography>
       </form>
     </>
+  );
+}
+
+function EventRejectForm({ eventid }) {
+  const { triggerToast } = useToast();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      reason: "As requested by the Club to make more edits.",
+    },
+  });
+
+  async function handleReject(formData) {
+    setLoading(true);
+
+    let res = await rejectEventAction({
+	eventid: eventid,
+        reason: formData.reason,
+    });
+
+    if (res.ok) {
+      triggerToast("Event rejected", "success");
+      router.push(`/manage/events/${eventid}`);
+      router.refresh();
+    } else {
+      triggerToast({
+        ...res.error,
+
+        severity: "error",
+      });
+    }
+
+    setLoading(false);
+  }
+
+  return (
+    <form onSubmit={handleSubmit(handleReject)}>
+      <Controller
+        name="reason"
+        control={control}
+        rules={{
+          required: "Rejection reason is required",
+          minLength: {
+            value: 10,
+            message: "Reason must be at least 10 characters long"
+          }
+        }}
+        render={({ field, fieldState: { error } }) => (
+          <FormControl fullWidth error={!!error}>
+            <TextField
+              {...field}
+              label="Rejection Reason"
+              multiline
+              rows={4}
+              variant="outlined"
+              error={!!error}
+              helperText={error ? error.message : null}
+            />
+          </FormControl>
+        )}
+      />
+
+      <Box mt={2}>
+        <LoadingButton
+          loading={loading}
+          type="submit"
+          size="large"
+          variant="contained"
+          color="error"
+          startIcon={<Icon variant="close"></Icon>}
+        >
+          Reject
+        </LoadingButton>
+        <Typography variant="caption" color="textSecondary" ml={1}>
+          (This action cannot be undone.)
+        </Typography>
+      </Box>
+    </form>
+  );
+}
+
+export default function EventActionTabs({ eventid, members }) {
+  const [selectedTab, setSelectedTab] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%', mb: 3 }}>
+      <Tabs
+        value={selectedTab}
+        onChange={handleTabChange}
+        centered
+        textColor="primary"
+        indicatorColor="primary"
+      >
+        <Tab label="Approve Event" />
+        <Tab label="Reject Event" />
+      </Tabs>
+      <Box sx={{ mt: 2 }}>
+        {selectedTab === 0 ? (
+          <EventApproveForm eventid={eventid} members={members} />
+        ) : (
+          <EventRejectForm eventid={eventid} />
+        )}
+      </Box>
+    </Box>
   );
 }
