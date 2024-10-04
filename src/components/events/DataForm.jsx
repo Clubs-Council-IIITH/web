@@ -391,7 +391,17 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       { fieldValue: "budget", fieldName: "Budget" },
                       { fieldValue: "poster", fieldName: "Poster URL" },
                       ...(status != "approved"
-                        ? [{ fieldValue: "status", fieldName: "Status" }]
+                        ? [
+                            {
+                              fieldValue: "equipment",
+                              fieldName: "Equipment",
+                            },
+                            {
+                              fieldValue: "additional",
+                              fieldName: "Additional Requests",
+                            },
+                            { fieldValue: "status", fieldName: "Status" },
+                          ]
                         : []),
                     ].map(({ fieldValue, fieldName }) => (
                       <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
