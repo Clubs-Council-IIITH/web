@@ -90,10 +90,10 @@ export default async function CCApplicantDetails({ params }) {
             <Stack direction="column" spacing={1}>
               <Typography
                 variant="h2"
-                wordWrap="break-word"
                 textAlign={{ xs: "center", lg: "left" }}
                 sx={{
                   fontSize: { xs: 25, lg: 38 },
+                  wordBreak: "break-word"
                 }}
               >
                 {user.firstName} {user.lastName}

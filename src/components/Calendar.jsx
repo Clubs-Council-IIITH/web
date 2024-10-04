@@ -73,14 +73,14 @@ export default function Calendar({ events, holidays, allClubs }) {
   };
 
   const allEvents = events?.filter(
-    (event) => event?.status?.state !== "deleted"
+    (event) => event?.status?.state !== "deleted",
   );
   const mergedEvents = [...allEvents, ...holidays];
 
   const handleEventMouseEnter = (info) => {
     const { event, el } = info;
     const clubName = allClubs.find(
-      (club) => club.cid === event.extendedProps.clubid
+      (club) => club.cid === event.extendedProps.clubid,
     )?.name;
     const content = `<strong>${event.title}</strong> ${
       event.extendedProps.clubid ? "by" : ""
@@ -122,7 +122,7 @@ export default function Calendar({ events, holidays, allClubs }) {
           border: 1px solid ${theme.palette.background.neutral}!important;
         }
       `}</style>
-      
+
       <FullCalendar
         ref={calendarRef}
         events={mergedEvents}

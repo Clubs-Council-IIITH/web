@@ -44,6 +44,7 @@ export default async function Club({ params }) {
           banner={club.banner}
           width={640}
           height={480}
+          priority={true}
         />
       </Card>
       <Box my={4}>
