@@ -300,7 +300,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
         height={80}
       />
       <Stack direction="column" spacing={1}>
-        <Typography variant="h4" wordWrap="break-word">
+        <Typography variant="h4" sx={{ wordBreak: "break-word" }}>
           {user.firstName} {user.lastName}
         </Typography>
         <Typography

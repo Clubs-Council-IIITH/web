@@ -21,6 +21,7 @@ export default function ClubBanner({
   objectFit = null,
   dim = false,
   imageProps = {},
+  priority = false,
 }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
@@ -63,6 +64,7 @@ export default function ClubBanner({
         onError={() =>
           setImg(getPlaceholder({ seed: name, w: width, h: height }))
         }
+        priority={priority}
         {...imageProps}
       />
       {logo ? (
