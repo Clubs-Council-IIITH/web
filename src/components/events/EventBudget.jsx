@@ -40,14 +40,21 @@ export default function EventBudget({
       width: 250,
       flex: 2,
       editable: editable,
-      renderCell: (p) =>
-        p.value ? (
-          p.value
+      renderCell: (p) => {
+        return p.value ? (
+          <div style={{
+	    width: "100%",
+            lineHeight: 'normal',
+            wordWrap: 'break-word',
+          }}>
+            {p.value}
+          </div>
         ) : (
           <Typography color="text.secondary">
             <i>Double click to edit</i>
           </Typography>
-        ),
+        );
+      },
       display: "flex",
     },
     {
@@ -108,6 +115,7 @@ export default function EventBudget({
 
       <DataGrid
         autoHeight
+        getRowHeight={() => "auto"}
         columns={columns}
         rows={rows}
         editMode="row"
