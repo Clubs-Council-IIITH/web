@@ -53,7 +53,9 @@ export function middleware(req) {
   if (req.cookies.has("logout")) {
     // clear logout cookie
     req.cookies.delete("logout");
-    const redirectRes = NextResponse.redirect(new URL("/logoutCallback", req.url));
+    const redirectRes = NextResponse.redirect(
+      new URL("/logoutCallback", req.url),
+    );
     redirectRes.headers.set(
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
@@ -63,7 +65,9 @@ export function middleware(req) {
 
   // redirect to CC about page
   if (pathname === "/student-bodies/clubs") {
-    const redirectRes =  NextResponse.redirect(new URL("/about/clubs-council", req.url));
+    const redirectRes = NextResponse.redirect(
+      new URL("/about/clubs-council", req.url),
+    );
     redirectRes.headers.set(
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
@@ -98,8 +102,7 @@ export function middleware(req) {
 
   // check if current route is to be redirected for club accounts
   const clubRedirectRoute =
-    Object.keys(clubRedirects).find((r) => match(r)(pathname)) ||
-    false;
+    Object.keys(clubRedirects).find((r) => match(r)(pathname)) || false;
 
   // club account specific redirects
   if (clubRedirectRoute && user?.role === "club") {
@@ -138,11 +141,11 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     {
-      source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
       missing: [
-        { type: 'header', key: 'next-router-prefetch' },
-        { type: 'header', key: 'purpose', value: 'prefetch' },
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
       ],
     },
   ],
-}
+};
