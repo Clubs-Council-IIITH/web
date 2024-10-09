@@ -44,6 +44,7 @@ export default function NextAppDirEmotionCacheProvider(props) {
     return (
       <style
         key={cache.key}
+        nonce={options.nonce}
         data-emotion={`${cache.key} ${names.join(" ")}`}
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
@@ -53,5 +54,9 @@ export default function NextAppDirEmotionCacheProvider(props) {
     );
   });
 
-  return <CacheProvider value={cache}>{children}</CacheProvider>;
+  return (
+    <CacheProvider value={cache} prepend={true} nonce={options.nonce}>
+      {children}
+    </CacheProvider>
+  );
 }

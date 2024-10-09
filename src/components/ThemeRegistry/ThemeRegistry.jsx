@@ -12,7 +12,7 @@ import breakpoints from "./breakpoints";
 import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
-export default function ThemeRegistry({ children }) {
+export default function ThemeRegistry({ children, nonce }) {
   const prefersDarkMode = useMode();
 
   const themeOptions = React.useMemo(
@@ -33,7 +33,7 @@ export default function ThemeRegistry({ children }) {
   theme.components = componentsOverride(theme);
 
   return (
-    <NextAppDirEmotionCacheProvider options={{ key: "mui" }}>
+    <NextAppDirEmotionCacheProvider options={{ key: "mui", nonce: nonce }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
