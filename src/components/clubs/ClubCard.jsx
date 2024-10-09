@@ -32,7 +32,7 @@ export default function ClubCard({
           <ClubBanner
             dim={dim}
             name={name}
-            banner={banner}
+            banner={logo}
             width={640}
             height={480}
             containerHeight="100%"
@@ -44,7 +44,7 @@ export default function ClubCard({
         >
           <ClubLogo
             name={name}
-            logo={logo}
+            logo={banner}
             width={64}
             height={64}
             border={3}
