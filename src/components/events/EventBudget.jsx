@@ -42,8 +42,8 @@ export default function EventBudget({
     {
       field: "description",
       headerName: "Description",
-      width: 250,
-      flex: 4,
+      width: 200,
+      flex: isMobile ? null : 4,
       editable: editable,
       renderCell: (p) => {
         return p.value ? (
@@ -52,6 +52,10 @@ export default function EventBudget({
             sx={{
               wordBreak: "break-word",
               overflowWrap: "break-word",
+              msHyphens: "auto",
+              MozHyphens: "auto",
+              WebkitHyphens: "auto",
+              hyphens: "auto",
               px: "10px",
               py: "10px",
             }}
@@ -76,7 +80,7 @@ export default function EventBudget({
       field: "amount",
       type: "number",
       headerName: "Amount",
-      flex: 1,
+      flex: isMobile ? null : 1,
       editable: editable,
       renderCell: (p) => (
         <Typography

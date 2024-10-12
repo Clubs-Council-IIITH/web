@@ -96,31 +96,38 @@ export default function MemberPositions({
     {
       field: "name",
       headerName: "Role",
+      width: 150,
       flex: isMobile ? null : 4,
       editable: editable,
-
-      renderCell: (p) =>
-        p.value ? (
+      renderCell: (p) => {
+        return p.value ? (
           <Typography
             variant="body2"
-            style={{
+            sx={{
+              wordBreak: "break-word",
               overflowWrap: "break-word",
-              wordWrap: "break-word",
-              msWordBreak: "break-all",
-              wordBreak: "break-all",
               msHyphens: "auto",
               MozHyphens: "auto",
               WebkitHyphens: "auto",
               hyphens: "auto",
+              px: "10px",
+              py: "10px",
             }}
           >
             {p.value}
           </Typography>
         ) : (
-          <Typography color="text.secondary">
+          <Typography
+            color="text.secondary"
+            sx={{
+              px: "10px",
+              py: "10px",
+            }}
+          >
             <i>Double click to edit</i>
           </Typography>
-        ),
+        );
+      },
       display: "flex",
     },
     {
@@ -128,6 +135,23 @@ export default function MemberPositions({
       headerName: "Start Year",
       flex: isMobile ? null : 2,
       editable: editable,
+      renderCell: (p) => (
+        <Typography
+          variant="body2"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            px: "5px",
+            py: "10px",
+            justifyContent: "center",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
+          {p.value}
+        </Typography>
+      ),
+      display: "flex",
     },
     {
       field: "endYear",
@@ -135,6 +159,23 @@ export default function MemberPositions({
       valueGetter: (value, row, column, apiRef) => row.endYear || "-",
       flex: isMobile ? null : 2,
       editable: editable,
+      renderCell: (p) => (
+        <Typography
+          variant="body2"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            px: "5px",
+            py: "10px",
+            justifyContent: "center",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
+          {p.value}
+        </Typography>
+      ),
+      display: "flex",
     },
     // if editing, show delete button
     ...(editable
@@ -177,8 +218,8 @@ export default function MemberPositions({
                   approved
                     ? approvalTime || "No Information Available"
                     : rejected
-                      ? rejectionTime || "No Information Available"
-                      : null
+                    ? rejectionTime || "No Information Available"
+                    : null
                 }
                 placement="left-start"
               >
@@ -240,7 +281,7 @@ export default function MemberPositions({
 
       <DataGrid
         autoHeight
-        getRowHeight={() => (isMobile ? "auto" : "none")}
+        getRowHeight={() => "auto"}
         rows={rows}
         columns={columns}
         editMode="row"

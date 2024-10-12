@@ -140,6 +140,18 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
         endYear: i.endYear === "-" ? null : parseInt(i.endYear),
       }));
 
+    // // Check if roles increases the character limit of 99
+    if (data.roles.some((role) => role.name.length > 99)) {
+      setLoading(false);
+      return triggerToast({
+        title: "Error!",
+        messages: [
+          "One or more roles have a name that exceeds the character limit of 99.",
+        ],
+        severity: "error",
+      });
+    }
+
     // mutate
     await submitHandlers[action](data);
   }
