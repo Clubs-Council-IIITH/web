@@ -28,6 +28,7 @@ export default function NewClub() {
     },
     logo: "",
     banner: "",
+    bannerSquare: "",
   };
 
   return (

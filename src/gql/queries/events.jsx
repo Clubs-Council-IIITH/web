@@ -6,29 +6,6 @@ export const GET_EVENT_ID_FROM_CODE = gql`
   }
 `;
 
-export const GET_CLUB_EVENTS = gql`
-  query ClubEvents(
-    $clubid: String
-    $clubInput: SimpleClubInput!
-    $public: Boolean
-  ) {
-    events(clubid: $clubid, public: $public) {
-      _id
-      name
-      code
-      clubid
-      datetimeperiod
-      poster
-      status {
-        state
-      }
-    }
-    club(clubInput: $clubInput) {
-      banner
-    }
-  }
-`;
-
 export const GET_PENDING_EVENTS = gql`
   query PendingEvents($clubid: String) {
     pendingEvents(clubid: $clubid) {
@@ -69,6 +46,22 @@ export const GET_ALL_EVENTS = gql`
       poster
       budget {
         amount
+      }
+    }
+  }
+`;
+
+export const GET_ALL_PUBLIC_EVENTS = gql`
+  query Events($clubid: String, $limit: Int) {
+    events(clubid: $clubid, public: true, limit: $limit) {
+      _id
+      name
+      code
+      clubid
+      datetimeperiod
+      poster
+      status {
+        state
       }
     }
   }
