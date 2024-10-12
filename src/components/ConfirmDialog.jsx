@@ -18,6 +18,7 @@ export default function ConfirmDialog({
   onClose,
   confirmProps = {},
   confirmText = "Confirm",
+  cancelText = "Cancel",
   addCancel = true,
 }) {
   return (
@@ -32,7 +33,7 @@ export default function ConfirmDialog({
         {addCancel ? (
           <Button onClick={onClose}>
             <Typography variant="button" color="text.disabled">
-              Cancel
+              {cancelText}
             </Typography>
           </Button>
         ) : null}
