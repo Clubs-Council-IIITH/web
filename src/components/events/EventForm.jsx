@@ -1,16 +1,10 @@
 "use client";
 
-import dayjs, { isDayjs } from "dayjs";
-
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 import { useForm, Controller, useController } from "react-hook-form";
 
-import { LoadingButton } from "@mui/lab";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
   Button,
@@ -31,10 +25,18 @@ import {
   Switch,
   MenuItem,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
+import InfoIcon from "@mui/icons-material/Info";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
+import dayjs, { isDayjs } from "dayjs";
 
 import { useAuth } from "components/AuthProvider";
 import { useToast } from "components/Toast";
@@ -67,9 +69,12 @@ export default function EventForm({
 }) {
   const router = useRouter();
   const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [budgetEditing, setBudgetEditing] = useState(false);
   const [hasPhone, setHasPhone] = useState(true);
 
@@ -261,6 +266,17 @@ export default function EventForm({
         amount: i.amount,
         advance: i.advance,
       }));
+
+    // Check if description increases the character limit
+    if (data.budget.some((i) => i.description.length > 250) ){
+        triggerToast({
+          title: "Character Limit Exceeded!",
+          messages: ["Please keep budget description below 250 characters"],
+          severity: "error",
+        });
+        setLoading(false);
+        return;
+    }
 
     // TODO: fix event link field
     data.link = null;
@@ -578,6 +594,16 @@ export default function EventForm({
           </Grid>
         </Grid>
       </Grid>
+      <ConfirmDialog
+        open={mobileDialog}
+        title="Mobile View"
+        description="This form is not optimized for mobile view. Please use a desktop device for better experience."
+        onConfirm={() => router.back()}
+        onClose={() => setMobileDialog(false)}
+        confirmProps={{ color: "primary" }}
+        confirmText="Go Back"
+        cancelText="Continue"
+      />
     </form>
   );
 }

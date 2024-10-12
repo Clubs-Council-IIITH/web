@@ -51,14 +51,18 @@ export default function UserImage({
       />
     </Avatar>
   ) : (
-    <GenAvatar
-      style={{
-        width: width,
-        height: height,
-      }}
-      {...genConfig({
-        sex: gender?.toLowerCase() === "male" ? "man" : "woman",
-      })}
-    />
+      <div style={{
+      minWidth: width,
+    }}>
+      <GenAvatar
+        style={{
+          width: width,
+          height: height,
+        }}
+        {...genConfig({
+          sex: gender?.toLowerCase() === "male" ? "man" : "woman",
+        })}
+      />
+    </div>
   );
 }

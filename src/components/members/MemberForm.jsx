@@ -9,7 +9,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 
-import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Switch,
@@ -25,6 +24,9 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
@@ -40,10 +42,13 @@ import { editMemberAction } from "actions/members/edit/server_action";
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
   const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [userMember, setUserMember] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [positionEditing, setPositionEditing] = useState(false);
 
   const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
@@ -134,6 +139,18 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
         startYear: parseInt(i.startYear),
         endYear: i.endYear === "-" ? null : parseInt(i.endYear),
       }));
+
+    // // Check if roles increases the character limit of 99
+    if (data.roles.some((role) => role.name.length > 99)) {
+      setLoading(false);
+      return triggerToast({
+        title: "Error!",
+        messages: [
+          "One or more roles have a name that exceeds the character limit of 99.",
+        ],
+        severity: "error",
+      });
+    }
 
     // mutate
     await submitHandlers[action](data);
@@ -259,6 +276,16 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
       </Grid>
+      <ConfirmDialog
+        open={mobileDialog}
+        title="Mobile View"
+        description="This form is not optimized for mobile view. Please use a desktop device for better experience."
+        onConfirm={() => router.back()}
+        onClose={() => setMobileDialog(false)}
+        confirmProps={{ color: "primary" }}
+        confirmText="Go Back"
+        cancelText="Continue"
+      />
     </form>
   );
 }
@@ -266,6 +293,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 // find user by email
 function MemberUserInput({ control, watch, setValue, user, setUser }) {
   const { triggerToast } = useToast();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const uid = watch("uid");
   const emailInput = watch("userSelector");
@@ -291,13 +320,13 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
   };
 
   return user ? (
-    <Stack direction="row" alignItems="center" spacing={4}>
+    <Stack direction="row" alignItems="center" spacing={isMobile ? 2 : 4}>
       <UserImage
         image={user.img}
         name={user.firstName}
         gender={user.gender}
-        width={80}
-        height={80}
+        width={isMobile ? 50 : 80}
+        height={isMobile ? 50 : 80}
       />
       <Stack direction="column" spacing={1}>
         <Typography variant="h4" sx={{ wordBreak: "break-word" }}>
@@ -307,6 +336,10 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
           variant="body2"
           color="text.secondary"
           fontFamily="monospace"
+          sx={{
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+          }}
         >
           {user.email}
         </Typography>

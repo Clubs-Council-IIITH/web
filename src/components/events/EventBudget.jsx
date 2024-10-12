@@ -2,6 +2,8 @@
 
 import { DataGrid } from "@mui/x-data-grid";
 import { Button, IconButton, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { fCurrency } from "utils/formatCurrency";
@@ -12,6 +14,9 @@ export default function EventBudget({
   setRows = console.log,
   setBudgetEditing = console.log,
 }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   // budget item template
   const emptyBudgetItem = { description: null, amount: 0, advance: false };
 
@@ -37,32 +42,69 @@ export default function EventBudget({
     {
       field: "description",
       headerName: "Description",
-      width: 250,
-      flex: 2,
+      width: 200,
+      flex: isMobile ? null : 4,
       editable: editable,
-      renderCell: (p) =>
-        p.value ? (
-          p.value
+      renderCell: (p) => {
+        return p.value ? (
+          <Typography
+            variant="body2"
+            sx={{
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              msHyphens: "auto",
+              MozHyphens: "auto",
+              WebkitHyphens: "auto",
+              hyphens: "auto",
+              px: "10px",
+              py: "10px",
+            }}
+          >
+            {p.value}
+          </Typography>
         ) : (
-          <Typography color="text.secondary">
+          <Typography
+            color="text.secondary"
+            sx={{
+              px: "10px",
+              py: "10px",
+            }}
+          >
             <i>Double click to edit</i>
           </Typography>
-        ),
+        );
+      },
       display: "flex",
     },
     {
       field: "amount",
       type: "number",
       headerName: "Amount",
-      flex: 1,
+      flex: isMobile ? null : 1,
       editable: editable,
-      valueFormatter: (value, row, column, apiRef) => fCurrency(value),
+      renderCell: (p) => (
+        <Typography
+          variant="body2"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            px: "5px",
+            py: "10px",
+            justifyContent: "center",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+          }}
+        >
+          {fCurrency(p.value)}
+        </Typography>
+      ),
+      display: "flex",
     },
     {
       field: "advance",
       type: "boolean",
       headerName: "Advance",
-      width: 130,
+      width: isMobile ? 20 : 100,
       editable: editable,
       headerAlign: "center",
       align: "center",
@@ -81,7 +123,7 @@ export default function EventBudget({
             field: "action",
             align: "center",
             headerName: "",
-            width: 50,
+            width: isMobile ? 20 : 50,
             renderCell: (p) => (
               <IconButton onClick={() => onDelete(p)} size="small">
                 <Icon
@@ -108,6 +150,7 @@ export default function EventBudget({
 
       <DataGrid
         autoHeight
+        getRowHeight={() => "auto"}
         columns={columns}
         rows={rows}
         editMode="row"
