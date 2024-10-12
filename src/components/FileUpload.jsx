@@ -45,11 +45,11 @@ export default function FileUpload({
 }
 
 function getIsTypeofFileRejected(fileRejections, type) {
-  console.log(
-    fileRejections.some(({ errors }) =>
-      errors.some((error) => error.code == type),
-    ),
-  );
+  // console.log(
+  //   fileRejections.some(({ errors }) =>
+  //     errors.some((error) => error.code == type),
+  //   ),
+  // );
   return fileRejections.some(({ errors }) =>
     errors.some((error) => error.code == type),
   );
