@@ -88,7 +88,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
   });
 
   return (
-    <>
+    <Box sx={{ maxWidth: { xs: "100%", sm: "50%", md: "100%" } }}>
       <Box
         {...getRootProps()}
         sx={{
@@ -106,19 +106,25 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
             borderColor: "error.light",
             bgcolor: "error.lighter",
           }),
+          ...(shape === "square" &&
+            files?.length && {
+              width: "70%",
+              aspectRatio: "1 / 1",
+            }),
+          ...(shape === "circle" &&
+            files?.length && {
+              width: "50%",
+              aspectRatio: "1 / 1",
+              borderRadius: "50%",
+            }),
+          ...(shape === "rectangle" &&
+            files?.length && {
+              width: "100%",
+              aspectRatio: "4 / 1",
+            }),
         }}
       >
         <input {...getInputProps()} />
-
-        <Box p={3}>
-          <Typography gutterBottom variant="h5">
-            Select (or drop) file
-          </Typography>
-
-          <Typography variant="body2" color="text.secondary">
-            Drag-and-drop file here or click to browse local files.
-          </Typography>
-        </Box>
 
         {files?.length ? (
           type === "image" && maxFiles === 1 ? (
@@ -140,14 +146,24 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
                 left: 0,
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
+                objectFit: "fill",
                 position: "absolute",
               }}
             />
           ) : (
             files.map((file) => <Chip label={file.name} sx={{ m: 0.5 }} />)
           )
-        ) : null}
+        ) : (
+          <Box p={3}>
+            <Typography gutterBottom variant="h5">
+              Select (or drop) file
+            </Typography>
+
+            <Typography variant="body2" color="text.secondary">
+              Drag-and-drop file here or click to browse local files.
+            </Typography>
+          </Box>
+        )}
       </Box>
       <FormHelperText
         error={getIsTypeofFileRejected(fileRejections, ErrorCode.TooManyFiles)}
@@ -182,6 +198,6 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
           Please upload image with around 4:1 aspect ratio for optimal display.
         </FormHelperText>
       ) : null}
-    </>
+    </Box>
   );
 }

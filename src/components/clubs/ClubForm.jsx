@@ -268,6 +268,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="circle"
+                  maxSize={8 * 1024 * 1024}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -278,6 +279,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="rectangle"
+                  maxSize={20 * 1024 * 1024}
                 />
               </Grid>
             </Grid>
