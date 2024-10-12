@@ -51,9 +51,11 @@ export default function UserImage({
       />
     </Avatar>
   ) : (
-      <div style={{
-      minWidth: width,
-    }}>
+    <div
+      style={{
+        minWidth: width,
+      }}
+    >
       <GenAvatar
         style={{
           width: width,

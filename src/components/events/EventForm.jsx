@@ -268,14 +268,14 @@ export default function EventForm({
       }));
 
     // Check if description increases the character limit
-    if (data.budget.some((i) => i.description.length > 250) ){
-        triggerToast({
-          title: "Character Limit Exceeded!",
-          messages: ["Please keep budget description below 250 characters"],
-          severity: "error",
-        });
-        setLoading(false);
-        return;
+    if (data.budget.some((i) => i.description.length > 250)) {
+      triggerToast({
+        title: "Character Limit Exceeded!",
+        messages: ["Please keep budget description below 250 characters"],
+        severity: "error",
+      });
+      setLoading(false);
+      return;
     }
 
     // TODO: fix event link field
