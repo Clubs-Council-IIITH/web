@@ -29,7 +29,7 @@ export default async function ClubsGrid({
               cid={club.cid}
               name={club.name}
               logo={club.logo}
-              banner={club.banner}
+              banner={club?.bannerSquare || club?.banner}
               tagline={club.tagline}
               studentBody={club.studentBody}
             />

@@ -8,8 +8,9 @@ export const GET_ACTIVE_CLUBS = gql`
       state
       category
       studentBody
-      banner
       logo
+      banner
+      bannerSquare
       name
       tagline
     }
@@ -59,12 +60,13 @@ export const GET_CLUB = gql`
       _id
       cid
       code
+      logo
       banner
+      bannerSquare
       category
       studentBody
       description
       email
-      logo
       name
       socials {
         website

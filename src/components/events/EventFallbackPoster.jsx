@@ -11,7 +11,7 @@ export default async function EventFallbackPoster({ clubid, width, height }) {
   return (
     <EventPoster
       name={club.name}
-      poster={club.banner}
+      poster={club?.bannerSquare || club?.logo}
       width={width}
       height={height}
       style={{

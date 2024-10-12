@@ -135,16 +135,30 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       typeof formData.logo === "string"
         ? formData.logo
         : Array.isArray(formData.logo) && formData.logo.length > 0
-          ? await uploadFile(formData.logo[0], "image", logo_filename)
-          : null;
+        ? await uploadFile(formData.logo[0], "image", logo_filename)
+        : null;
 
     const banner_filename = "banner_" + data.cid.replace(".", "_");
     data.banner =
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-          ? await uploadFile(formData.banner[0], "image", banner_filename, 3)
-          : null;
+        ? await uploadFile(formData.banner[0], "image", banner_filename, 3)
+        : null;
+
+    const bannerSquare_filename = "bannerSquare_" + data.cid.replace(".", "_");
+    data.bannerSquare =
+      typeof formData.bannerSquare === "string"
+        ? formData.bannerSquare
+        : Array.isArray(formData.bannerSquare) &&
+          formData.bannerSquare.length > 0
+        ? await uploadFile(
+            formData.bannerSquare[0],
+            "image",
+            bannerSquare_filename,
+            3
+          )
+        : null;
 
     if (data.category !== "other") data.studentBody = false;
 
@@ -280,6 +294,17 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   maxFiles={1}
                   shape="rectangle"
                   maxSize={20 * 1024 * 1024}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FileUpload
+                  type="image"
+                  name="bannerSquare"
+                  label="Banner Square"
+                  control={control}
+                  maxFiles={1}
+                  shape="square"
+                  maxSize={15 * 1024 * 1024}
                 />
               </Grid>
             </Grid>

@@ -25,6 +25,7 @@ export const GET_CLUB_EVENTS = gql`
     }
     club(clubInput: $clubInput) {
       banner
+      bannerSquare
     }
   }
 `;

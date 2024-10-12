@@ -41,7 +41,7 @@ export default async function Club({ params }) {
       <Card variant="none" sx={{ boxShadow: 0 }}>
         <ClubBanner
           name={club.name}
-          banner={club.banner}
+          banner={club?.banner}
           width={640}
           height={480}
           priority={true}
