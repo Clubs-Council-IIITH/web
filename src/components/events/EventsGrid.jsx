@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_CLUB_EVENTS, GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_ALL_PUBLIC_EVENTS } from "gql/queries/events";
 
 import { Grid, Typography } from "@mui/material";
 import EventCard from "components/events/EventCard";
@@ -52,32 +52,21 @@ export default async function EventsGrid({
 function constructQuery({ type, clubid, limit }) {
   if (type === "recent") {
     return [
-      GET_ALL_EVENTS,
+      GET_ALL_PUBLIC_EVENTS,
       {
         clubid: null,
         limit: limit || 12,
-        public: true,
       },
     ];
   } else if (type === "club") {
     return [
-      GET_CLUB_EVENTS,
+      GET_ALL_PUBLIC_EVENTS,
       {
         clubid,
-        clubInput: {
-          cid: clubid,
-        },
-        public: true,
       },
     ];
   } else if (type === "all") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid: null,
-        public: true,
-      },
-    ];
+    return [GET_ALL_PUBLIC_EVENTS];
   } else {
     throw new Error("Invalid event type");
   }
