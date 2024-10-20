@@ -11,7 +11,7 @@ import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 
-import { approveMember } from "actions/members/approve/server_action";
+import { approveMemberAction } from "actions/members/approve/server_action";
 import { deleteMemberAction } from "actions/members/delete/server_action";
 
 export function EditMember({ sx }) {
@@ -94,7 +94,7 @@ export function ApproveAllMember({ sx }) {
   const [dialog, setDialog] = useState(false);
 
   const approveMember = async () => {
-    let res = await approveMember({
+    let res = await approveMemberAction({
       cid: id?.split(encodeURIComponent(":"))[0],
       uid: id?.split(encodeURIComponent(":"))[1],
       rid: null,
