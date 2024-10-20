@@ -28,8 +28,8 @@ import { LoadingButton } from "@mui/lab";
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { eventsDataDownload } from "actions/events/data/server_action";
 
-const allowed_roles = ["cc", "club", "slo"];
-const admin_roles = ["cc", "slo"];
+const allowed_roles = ["cc", "club", "slo", "slc"];
+const admin_roles = ["cc", "slo", "slc"];
 const disabledFields = ["code", "name", "clubid", "datetimeperiod.0", "status"]; // Fields that should be disabled and selected
 
 function DataClubSelect({
