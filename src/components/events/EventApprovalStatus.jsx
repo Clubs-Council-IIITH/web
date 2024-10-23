@@ -5,7 +5,7 @@ import { Box, Grid, Typography, Divider } from "@mui/material";
 
 export default async function EventApprovalStatus(
   status,
-  isStudentBodyEvent = false,
+  isStudentBodyEvent = false
 ) {
   let lastEditeduser = null;
   let ccApprover = null;
@@ -83,7 +83,12 @@ export default async function EventApprovalStatus(
             <Box mt={2}>-</Box>
           </Grid>
           <Grid item xs>
-            <Box mt={2}>
+            <Box
+              mt={2}
+              sx={{
+                color: status?.lastUpdatedTime == null ? "#5a5a5a" : "inherit",
+              }}
+            >
               {status?.lastUpdatedTime == null
                 ? "Information not available"
                 : (status?.lastUpdatedTime.includes(":") ? "Edited on " : "") +
@@ -114,7 +119,12 @@ export default async function EventApprovalStatus(
                 <Box mt={1}>-</Box>
               </Grid>
               <Grid item xs>
-                <Box mt={1}>
+                <Box
+                  mt={1}
+                  sx={{
+                    color: status?.deletedTime == null ? "#5a5a5a" : "inherit",
+                  }}
+                >
                   {status?.deletedTime == null
                     ? "Information not available"
                     : (status?.deletedTime.includes(":") ? "Deleted on " : "") +
@@ -146,7 +156,12 @@ export default async function EventApprovalStatus(
                 <Box mt={1}>-</Box>
               </Grid>
               <Grid item xs>
-                <Box mt={1}>
+                <Box
+                  mt={1}
+                  sx={{
+                    color: status?.submissionTime == null ? "#5a5a5a" : "inherit",
+                  }}
+                >
                   {status?.submissionTime == null
                     ? "Information not available"
                     : (status?.submissionTime.includes(":")
@@ -165,7 +180,13 @@ export default async function EventApprovalStatus(
                   <Box mt={1}>-</Box>
                 </Grid>
                 <Grid item xs>
-                  <Box mt={1}>
+                  <Box
+                    mt={1}
+                    sx={{
+                      color:
+                        status?.ccApproverTime == null ? "#5a5a5a" : "inherit",
+                    }}
+                  >
                     {status?.ccApproverTime == null
                       ? "Information not available"
                       : (status?.ccApproverTime.includes(":")
@@ -199,7 +220,13 @@ export default async function EventApprovalStatus(
                   <Box mt={1}>-</Box>
                 </Grid>
                 <Grid item xs>
-                  <Box mt={1}>
+                  <Box
+                    mt={1}
+                    sx={{
+                      color:
+                        status?.slcApproverTime == null ? "#5a5a5a" : "inherit",
+                    }}
+                  >
                     {status?.slcApproverTime == null
                       ? "Information not available"
                       : (status?.slcApproverTime.includes(":")
@@ -231,7 +258,12 @@ export default async function EventApprovalStatus(
                 <Box mt={1}>-</Box>
               </Grid>
               <Grid item xs>
-                <Box mt={1}>
+                <Box
+                  mt={1}
+                  sx={{
+                    color: status?.sloApproverTime == null ? "#5a5a5a" : "inherit",
+                  }}
+                >
                   {status?.sloApproverTime == null
                     ? "Information not available"
                     : (status?.sloApproverTime.includes(":")
