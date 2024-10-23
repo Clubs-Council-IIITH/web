@@ -184,11 +184,14 @@ export default function EventsTable({
       valueGetter: (value, row, column, apiRef) => ({
         state: row.status.state,
         start: row.datetimeperiod[0],
+        end: row.datetimeperiod[1],
       }),
       renderCell: ({ value }) => {
         // change state to 'completed' if it has been approved and is in the past
-        if (value.state === "approved" && new Date(value.start) < new Date())
-          value.state = "completed";
+        if (value.state === "approved" && new Date(value.start) < new Date()) {
+          if (new Date(value.end) < new Date()) value.state = "completed";
+          else value.state = "ongoing";
+        }
 
         return (
           <Tag
@@ -216,7 +219,9 @@ export default function EventsTable({
               const curr_state =
                 value.state === "approved"
                   ? new Date(value.start) < new Date()
-                    ? "completed approved"
+                    ? new Date(value.end) < new Date()
+                      ? "completed approved"
+                      : "ongoing approved"
                     : "approved"
                   : stateLabel(value.state).shortName.toLowerCase();
 
@@ -237,7 +242,9 @@ export default function EventsTable({
               const curr_state =
                 value.state === "approved"
                   ? new Date(value.start) < new Date()
-                    ? "completed approved"
+                    ? new Date(value.end) < new Date()
+                      ? "completed approved"
+                      : "ongoing approved"
                     : "approved"
                   : stateLabel(value.state).shortName.toLowerCase();
 

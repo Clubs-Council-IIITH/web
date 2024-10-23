@@ -63,8 +63,9 @@ export const stateMap = {
   pending_budget: "Pending SLC Approval",
   pending_room: "Pending SLO Approval",
   approved: "Approved",
-  completed: "Completed",
   deleted: "Deleted",
+  completed: "Completed",
+  ongoing: "Ongoing",
 };
 
 export const stateShortMap = {
@@ -73,8 +74,9 @@ export const stateShortMap = {
   pending_budget: "SLC Pending",
   pending_room: "SLO Pending",
   approved: "Approved",
-  completed: "Completed",
   deleted: "Deleted",
+  completed: "Completed",
+  ongoing: "Ongoing",
 };
 
 export const stateColorMap = {
@@ -83,8 +85,9 @@ export const stateColorMap = {
   pending_budget: "warning",
   pending_room: "warning",
   approved: "success",
-  completed: "info",
   deleted: "error",
+  completed: "info",
+  ongoing: "info",
 };
 
 export const stateIconMap = {
@@ -93,8 +96,9 @@ export const stateIconMap = {
   pending_budget: "eva:refresh-outline",
   pending_room: "eva:refresh-outline",
   approved: "eva:checkmark-outline",
-  completed: "eva:checkmark-circle-outline",
   deleted: "eva:close-outline",
+  completed: "eva:checkmark-circle-outline",
+  ongoing: "eva:checkmark-circle-outline",
 };
 
 export const billsStateMap = {
