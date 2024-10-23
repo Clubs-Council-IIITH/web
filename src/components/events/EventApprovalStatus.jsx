@@ -5,7 +5,7 @@ import { Box, Grid, Typography, Divider } from "@mui/material";
 
 export default async function EventApprovalStatus(
   status,
-  isStudentBodyEvent = false
+  isStudentBodyEvent = false,
 ) {
   let lastEditeduser = null;
   let ccApprover = null;

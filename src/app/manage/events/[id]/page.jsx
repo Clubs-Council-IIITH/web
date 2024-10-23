@@ -61,7 +61,7 @@ export default async function ManageEventID({ params }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
