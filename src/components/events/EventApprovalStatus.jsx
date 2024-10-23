@@ -5,7 +5,7 @@ import { Box, Grid, Typography, Divider } from "@mui/material";
 
 export default async function EventApprovalStatus(
   status,
-  isStudentBodyEvent = false
+  isStudentBodyEvent = false,
 ) {
   let lastEditeduser = null;
   let ccApprover = null;
@@ -159,7 +159,8 @@ export default async function EventApprovalStatus(
                 <Box
                   mt={1}
                   sx={{
-                    color: status?.submissionTime == null ? "#5a5a5a" : "inherit",
+                    color:
+                      status?.submissionTime == null ? "#5a5a5a" : "inherit",
                   }}
                 >
                   {status?.submissionTime == null
@@ -261,7 +262,8 @@ export default async function EventApprovalStatus(
                 <Box
                   mt={1}
                   sx={{
-                    color: status?.sloApproverTime == null ? "#5a5a5a" : "inherit",
+                    color:
+                      status?.sloApproverTime == null ? "#5a5a5a" : "inherit",
                   }}
                 >
                   {status?.sloApproverTime == null
