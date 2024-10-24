@@ -2,11 +2,10 @@ import { getClient } from "gql/client";
 import { GET_EVENT } from "gql/queries/events";
 import { redirect } from "next/navigation";
 
-import { getFile } from "utils/files";
-import { getPlaceholder } from "utils/placeholder";
+import { getFile, PUBLIC_URL } from "utils/files";
 import EventDetails from "components/events/EventDetails";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata({ params }) {
   const { id } = params;
 
   try {
@@ -14,8 +13,8 @@ export async function generateMetadata({ params }, parent) {
       eventid: id,
     });
     const img = event.poster
-      ? getFile(event.poster)
-      : getPlaceholder({ seed: event.name, w: 2000, h: 2000 });
+      ? getFile(event.poster, true)
+      : `${PUBLIC_URL}/og-image.png`;
 
     return {
       title: event.name,

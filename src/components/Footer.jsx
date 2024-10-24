@@ -151,7 +151,7 @@ export default function Footer() {
             <Typography
               variant="body2"
               component={Link}
-              href={"https://clubs.iiit.ac.in/about/clubs-council/tech-members"}
+              href={"/about/clubs-council/tech-members"}
               sx={{
                 fontWeight: 500,
                 textDecoration: "none",
@@ -224,7 +224,7 @@ export default function Footer() {
                 variant="body2"
                 component={Link}
                 href={
-                  "https://clubs.iiit.ac.in/about/clubs-council/tech-members"
+                  "/about/clubs-council/tech-members"
                 }
                 sx={{
                   fontWeight: 500,

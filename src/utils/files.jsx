@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 
 const FILESERVER_URL = process.env.NEXT_PUBLIC_FILESERVER_URL || "http://files";
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL || "http://nginx/static";
+export const PUBLIC_URL = process.env.NEXT_PUBLIC_HOST || "http://localhost";
 
 // Dynamically import browser-image-resizer since it's only needed on the client side
 const readAndCompressImage = dynamic(
@@ -14,23 +15,31 @@ export function getNginxFile(filepath) {
   return `${STATIC_URL}/${filepath}`;
 }
 
-export function getStaticFile(filepath, filetype = "image") {
+export function getStaticFile(
+  filepath,
+  filetype = "image",
+  public_url = false,
+) {
   if (filepath?.toLowerCase()?.endsWith("pdf")) {
     filetype = "pdf";
   } else if (filepath?.toLowerCase()?.endsWith("json")) {
     filetype = "json";
   }
 
-  return `${FILESERVER_URL}/files/static?filename=${filepath}&filetype=${filetype}`;
+  if (public_url)
+    return `${PUBLIC_URL}/files/static?filename=${filepath}&filetype=${filetype}`;
+  else
+    return `${FILESERVER_URL}/files/static?filename=${filepath}&filetype=${filetype}`;
 }
 
-export function getFile(filepath) {
+export function getFile(filepath, public_url = false) {
   if (filepath?.toLowerCase()?.startsWith("http")) {
     // return the full URL if global URL
     return filepath;
   } else if (filepath) {
     // call files service if local URL
-    return `${FILESERVER_URL}/files/download?filename=${filepath}`;
+    if (public_url) return `${PUBLIC_URL}/files/download?filename=${filepath}`;
+    else return `${FILESERVER_URL}/files/download?filename=${filepath}`;
   }
 }
 

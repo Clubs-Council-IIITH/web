@@ -11,6 +11,7 @@ import { AuthProvider } from "components/AuthProvider";
 import { fontClass } from "components/ThemeRegistry/typography";
 import TransitionProvider from "components/TransitionProvider";
 import { headers } from "next/headers";
+import { PUBLIC_URL } from "utils/files";
 
 const description =
   "Discover the vibrant campus life at IIIT Hyderabad through the Clubs Council. Explore diverse student-led clubs, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";
@@ -44,7 +45,7 @@ export const metadata = {
     description: shortDescription,
     images: [
       {
-        url: "https://clubs.iiit.ac.in/og-image.png",
+        url: `${PUBLIC_URL}/og-image.png`,
         width: 1200,
         height: 630,
         alt: "Clubs Council",
