@@ -8,9 +8,15 @@ RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose -
 FROM node:20-slim AS build
 ARG ENV=production
 ENV NEXT_PUBLIC_ENV=$ENV
+
 WORKDIR /web
-COPY --from=node_cache /cache/ .
+
+COPY --from=node_cache /cache/ /cache/
+COPY entrypoint.sh /cache/
 COPY . .
-RUN printf "NEXT_PUBLIC_ENV=${ENV}" >> .env
+
+RUN chmod +x /cache/entrypoint.sh
 RUN npm run build
-ENTRYPOINT [ "npm", "start" ]
+
+ENTRYPOINT [ "/cache/entrypoint.sh" ]
+CMD [ "npm", "start" ]
