@@ -10,7 +10,7 @@ export function middleware(req) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const { pathname } = req.nextUrl;
   const cspHeader = `
-    default-src 'self';
+    default-src 'none';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http: 'unsafe-inline' ${
       process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
     };
@@ -38,6 +38,8 @@ export function middleware(req) {
     "Content-Security-Policy",
     contentSecurityPolicyHeaderValue,
   );
+  requestHeaders.set("X-Content-Type-Options", "nosniff");
+  requestHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
 
   const response = NextResponse.next({
     request: {
@@ -48,6 +50,9 @@ export function middleware(req) {
     "Content-Security-Policy",
     contentSecurityPolicyHeaderValue,
   );
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
 
   // if logout cookie is set, log the user out
   if (req.cookies.has("logout")) {
@@ -60,6 +65,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
+    responseRes.headers.set("X-Content-Type-Options", "nosniff");
+    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     return redirectRes;
   }
 
@@ -72,6 +79,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
+    responseRes.headers.set("X-Content-Type-Options", "nosniff");
+    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     return redirectRes;
   }
 
@@ -93,6 +102,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
+    responseRes.headers.set("X-Content-Type-Options", "nosniff");
+    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     return redirectRes;
   }
 
@@ -113,6 +124,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
+    responseRes.headers.set("X-Content-Type-Options", "nosniff");
+    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     return redirectRes;
   }
 
@@ -124,6 +137,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
+    responseRes.headers.set("X-Content-Type-Options", "nosniff");
+    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     return redirectRes;
   }
 
