@@ -53,7 +53,6 @@ export function middleware(req) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
 
-
   // if logout cookie is set, log the user out
   if (req.cookies.has("logout")) {
     // clear logout cookie
@@ -66,7 +65,10 @@ export function middleware(req) {
       contentSecurityPolicyHeaderValue,
     );
     responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    responseRes.headers.set(
+      "Referrer-Policy",
+      "strict-origin-when-cross-origin",
+    );
     return redirectRes;
   }
 
@@ -80,7 +82,10 @@ export function middleware(req) {
       contentSecurityPolicyHeaderValue,
     );
     responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    responseRes.headers.set(
+      "Referrer-Policy",
+      "strict-origin-when-cross-origin",
+    );
     return redirectRes;
   }
 
@@ -103,7 +108,10 @@ export function middleware(req) {
       contentSecurityPolicyHeaderValue,
     );
     responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    responseRes.headers.set(
+      "Referrer-Policy",
+      "strict-origin-when-cross-origin",
+    );
     return redirectRes;
   }
 
@@ -125,7 +133,10 @@ export function middleware(req) {
       contentSecurityPolicyHeaderValue,
     );
     responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    responseRes.headers.set(
+      "Referrer-Policy",
+      "strict-origin-when-cross-origin",
+    );
     return redirectRes;
   }
 
@@ -138,7 +149,10 @@ export function middleware(req) {
       contentSecurityPolicyHeaderValue,
     );
     responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    responseRes.headers.set(
+      "Referrer-Policy",
+      "strict-origin-when-cross-origin",
+    );
     return redirectRes;
   }
 
