@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import EventPoster from "components/events/EventPoster";
-// import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 

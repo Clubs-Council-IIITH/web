@@ -29,8 +29,22 @@ export const GET_PENDING_EVENTS = gql`
 `;
 
 export const GET_ALL_EVENTS = gql`
-  query Events($clubid: String, $name: String, $paginationOn: Boolean, $skip: Int, $limit: Int, $public: Boolean) {
-    events(clubid: $clubid, name: $name, paginationOn: $paginationOn, skip: $skip, limit: $limit,  public: $public) {
+  query Events(
+    $clubid: String
+    $name: String
+    $paginationOn: Boolean
+    $skip: Int
+    $limit: Int
+    $public: Boolean
+  ) {
+    events(
+      clubid: $clubid
+      name: $name
+      paginationOn: $paginationOn
+      skip: $skip
+      limit: $limit
+      public: $public
+    ) {
       _id
       name
       code
@@ -186,41 +200,3 @@ export const DOWNLOAD_EVENTS_DATA = gql`
     }
   }
 `;
-
-
-
-// construct graphql query based on type
-export function constructQuery({ type, clubid, paginationOn=false,skip, limit }) {
-  if (type === "recent") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid: null,
-        limit: limit || 12,
-        skip: skip || 0,
-        public: true,
-      },
-    ];
-  } else if (type === "club") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid,
-        public: true,
-      },
-    ];
-  } else if (type === "all") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid: null,
-        pagination: paginationOn,
-        limit: limit || 12,
-        skip: skip || 0,
-        public: true,
-      },
-    ];
-  } else {
-    throw new Error("Invalid event type");
-  }
-}
