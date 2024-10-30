@@ -15,28 +15,30 @@ const client = getClient();
 
 async function query(querystring) {
   "use server";
-  const { data: { events } = {} } = await client.query(GET_ALL_EVENTS, {
-    clubid: querystring['targetClub'],
-    name: querystring['targetName'],
+  const { data = {}, error } = await client.query(GET_ALL_EVENTS, {
+    clubid: querystring["targetClub"],
+    name: querystring["targetName"],
     public: true,
-    type: querystring['type'],
-    paginationOn: querystring['paginationOn'],
-    skip: querystring['skip'],
-    limit: querystring['limit'],
+    paginationOn: querystring["paginationOn"],
+    skip: querystring["skip"],
+    limit: querystring["limit"],
   });
 
-  return events;
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data?.events || [];
 }
 
-
-
-async function clubquery(clubid){
+async function clubBannerQuery(clubid) {
   "use server";
   const { data: { club } = {} } = await client.query(GET_CLUB, {
     clubInput: { cid: clubid },
   });
 
-  return club.banner;
+  return club?.bannerSquare || club?.logo;
 }
 
 export default async function Events({ searchParams }) {
@@ -56,9 +58,8 @@ export default async function Events({ searchParams }) {
       </Box>
       <PaginatedEventsGrid
         query={query}
-        clubquery={clubquery}
-        targets={[targetName, targetClub, targetState]}  // Pass updated targets here
-        type="all"
+        clubBannerQuery={clubBannerQuery}
+        targets={[targetName, targetClub, targetState]} // Pass updated targets here
       />
     </Box>
   );
