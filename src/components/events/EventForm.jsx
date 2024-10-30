@@ -1019,7 +1019,7 @@ function EventDescriptionInput({ control }) {
           multiline
           onBlur={(e) => {
             field.onChange(
-              e.target.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, "")
+              e.target.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
             );
           }}
         />
