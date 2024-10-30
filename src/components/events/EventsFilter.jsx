@@ -50,7 +50,7 @@ export default function EventsFilter({ name, club, state }) {
 
       return params.toString();
     },
-    [searchParams],
+    [searchParams]
   );
 
   // fetch list of clubs
@@ -84,7 +84,7 @@ export default function EventsFilter({ name, club, state }) {
             onSubmit={(e) => {
               e.preventDefault();
               router.push(
-                `${pathname}?${createQueryString("name", targetName)}`,
+                `${pathname}?${createQueryString("name", targetName)}`
               );
             }}
           >
@@ -117,7 +117,7 @@ export default function EventsFilter({ name, club, state }) {
               fullWidth
               onChange={(e) => {
                 router.push(
-                  `${pathname}?${createQueryString("club", e.target.value)}`,
+                  `${pathname}?${createQueryString("club", e.target.value)}`
                 );
               }}
               value={club || ""}
@@ -138,6 +138,7 @@ export default function EventsFilter({ name, club, state }) {
         </Grid>
         <Grid item xs lg>
           <ToggleButtonGroup
+            id="eventStatus"
             fullWidth
             value={state}
             color="primary"
@@ -149,8 +150,8 @@ export default function EventsFilter({ name, club, state }) {
               return router.push(
                 `${pathname}?${createQueryString(
                   e.target.value,
-                  !state.includes(e.target.value),
-                )}`,
+                  !state.includes(e.target.value)
+                )}`
               );
             }}
           >

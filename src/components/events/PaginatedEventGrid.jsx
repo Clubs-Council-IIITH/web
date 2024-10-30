@@ -1,243 +1,305 @@
-  "use client";
+"use client";
 
-  import { useEffect, useState, useCallback, useRef } from "react";
-  import { Box, Grid, Typography, Divider, CircularProgress } from "@mui/material";
-  import EventCard from "components/events/EventCard";
+import { useEffect, useState, useCallback, useRef } from "react";
+import {
+  Box,
+  Grid,
+  Typography,
+  Divider,
+  CircularProgress,
+} from "@mui/material";
+import EventCard from "components/events/EventCard";
 
+export default function PaginatedEventGrid({
+  limit = 24, // Default limit if pagination is enabled
+  targets = [null, null, null],
+  query = async () => {},
+  clubBannerQuery = async () => {},
+}) {
+  const [completedevents, setCompletedEvents] = useState([]);
+  const [futureEvents, setFutureEvents] = useState([]);
 
-  export default function PaginatedEventGrid({
-    type = "all",
-    limit = 30, // Default limit if pagination is enabled
-    targets = [null, null, null],
-    query = () => {},
-    clubquery = () => {}
-  }) {
-    const [completedevents, setCompletedEvents] = useState([]);
-    const [ongoingevents, setOngoingEvents] = useState([]);
-    const [upcomingevents, setUpcomingEvents] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
-    const [skip, setSkip] = useState(0);
-    const [targetName, targetClub, targetState] = targets;
+  const [loadingPast, setLoadingPast] = useState(false);
+  const [loadingFuture, setLoadingFuture] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [skip, setSkip] = useState(0);
 
-    // Reference to the "load more" trigger element
-    const loadMoreRef = useRef(null);
+  const [targetName, targetClub, targetState] = targets;
 
-    const loadEvents = useCallback(async () => {
-      if (loading || !hasMore) {
-        return;
-      }
+  // Reference to the "load more" trigger element
+  const loadMoreRef = useRef(null);
 
-      setLoading(true);
-      try {
-        const queryData = {
-          type,
-          targetClub,
-          targetName,
-          paginationOn: true,
-          skip,
-          limit,
-        };
-        const eventsResponse = await query(queryData);
-        await Promise.all(eventsResponse.map(async (event) => {
+  const loadFutureEvents = async () => {
+    if (loadingFuture || !targetState?.includes("upcoming")) {
+      return;
+    }
+
+    setLoadingFuture(true);
+    try {
+      const queryData = {
+        targetClub,
+        targetName,
+        paginationOn: true,
+        skip: -1,
+        limit: 10,
+      };
+      const eventsResponse = await query(queryData);
+      // console.log(eventsResponse);
+      await Promise.all(
+        eventsResponse.map(async (event) => {
           if (!event.poster) {
-            event.clubbanner = await clubquery(event.clubid);
+            event.clubbanner = await clubBannerQuery(event.clubid);
           }
-        }));
+        })
+      );
 
-        const ongoingEvents = eventsResponse.filter(ongoingEventsFilter);
-        const upcomingEvents = eventsResponse.filter(upcomingEventsFilter);
-        const completedEvents = eventsResponse.filter(completedEventsFilter);
-        console.log(completedEvents);
-        setOngoingEvents((prevEvents) => {
-          const combinedEvents = [...prevEvents, ...ongoingEvents];
-          return Array.from(new Set(combinedEvents.map(event => event._id))).map(id => combinedEvents.find(event => event._id === id));
-        });
+      setFutureEvents(eventsResponse);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoadingFuture(false);
+    }
+  };
 
-        setUpcomingEvents((prevEvents) => {
-          const combinedEvents = [...prevEvents, ...upcomingEvents];
-          return Array.from(new Set(combinedEvents.map(event => event._id))).map(id => combinedEvents.find(event => event._id === id));
-        });
+  const loadPastEvents = useCallback(async () => {
+    if (loadingPast || !hasMore || !targetState?.includes("completed")) {
+      return;
+    }
 
-        setCompletedEvents((prevEvents) => {
-          const combinedEvents = [...prevEvents, ...completedEvents];
-          return Array.from(new Set(combinedEvents.map(event => event._id))).map(id => combinedEvents.find(event => event._id === id));
-        });
+    setLoadingPast(true);
+    try {
+      const queryData = {
+        targetClub,
+        targetName,
+        paginationOn: true,
+        skip,
+        limit,
+      };
+      const eventsResponse = await query(queryData);
+      // console.log(eventsResponse);
+      await Promise.all(
+        eventsResponse.map(async (event) => {
+          if (!event.poster) {
+            event.clubbanner = await clubBannerQuery(event.clubid);
+          }
+        })
+      );
 
-        const totalLength = ongoingEvents.length + upcomingEvents.length + completedEvents.length;
-        setSkip((prevSkip) => prevSkip + totalLength); // Increment skip by number of new events
-        setHasMore(totalLength === limit); // Check if we still have more events to load
-        if(!targetState?.includes("completed") && (ongoingEvents.length + upcomingEvents.length == 0)){
-            setHasMore(false);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
-      }
-    }, [loading, hasMore, skip, limit, query]);
+      const completedEvents = eventsResponse.filter(completedEventsFilter);
+      const newEventsLength = completedEvents.length;
 
-    useEffect(() => {
-      setSkip(0);  // Reset pagination when targets change
-      setHasMore(true);  // Allow loading more events with new filters
-      setOngoingEvents([]);
-      setUpcomingEvents([]);
-      setCompletedEvents([]);
-      loadEvents();  // Fetch events with new targets
-    }, [targetClub, targetName, targetState]);  // Re-run whenever these change
-    
-
-    const completedEventsFilter = (event) => {
-      const selectedClub =
-        !targetClub || event?.clubid === targetClub || event?.collabclubs.includes(targetClub);
-      const selectedState = !targetState || new Date(event?.datetimeperiod[1]) < new Date();
-      const selectedName = !targetName || event?.name?.toLowerCase()?.includes(targetName?.toLowerCase());
-
-      return selectedClub && selectedState && selectedName;
-    };
-
-    const upcomingEventsFilter = (event) => {
-      const selectedClub =
-        !targetClub || event?.clubid === targetClub || event?.collabclubs.includes(targetClub);
-      const selectedState = !targetState || new Date(event?.datetimeperiod[0]) > new Date();
-      const selectedName = !targetName || event?.name?.toLowerCase()?.includes(targetName?.toLowerCase());
-
-      return selectedClub && selectedState && selectedName;
-    };
-
-    const ongoingEventsFilter = (event) => {
-      const selectedClub =
-        !targetClub || event?.clubid === targetClub || event?.collabclubs.includes(targetClub);
-      const selectedState = !targetState || new Date(event?.datetimeperiod[0]) <= new Date() && new Date(event?.datetimeperiod[1]) >= new Date();
-      const selectedName = !targetName || event?.name?.toLowerCase()?.includes(targetName?.toLowerCase());
-
-      return selectedClub && selectedState && selectedName;
-    };
-
-    // Initialize IntersectionObserver to detect when "load more" is visible
-    useEffect(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          loadEvents(); // Load more events when the user reaches the bottom
-        }
-      }, {
-        threshold: 1.0
+      setCompletedEvents((prevEvents) => {
+        const combinedEvents = [...prevEvents, ...completedEvents];
+        return Array.from(
+          new Set(combinedEvents.map((event) => event._id))
+        ).map((id) => combinedEvents.find((event) => event._id === id));
       });
 
-      if (loadMoreRef.current) {
-        observer.observe(loadMoreRef.current);
-      }
+      setSkip((prevSkip) => prevSkip + newEventsLength);
+      setHasMore(newEventsLength === limit); // Check if we still have more events to load
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoadingPast(false);
+    }
+  }, [loadingPast, hasMore, skip, limit, query]);
 
-      return () => {
-        if (loadMoreRef.current) {
-          observer.unobserve(loadMoreRef.current);
+  // Load future events on component mount
+  useEffect(() => {
+    loadFutureEvents();
+  }, []);
+
+  // When targetClub or targetName changes, reset skip, hasMore, and completedEvents
+  useEffect(() => {
+    setSkip(0);
+    setHasMore(true);
+    setCompletedEvents([]);
+  }, [targetClub, targetName]);
+  useEffect(() => {
+    if (skip === 0) {
+      loadPastEvents();
+    }
+  }, [skip]);
+
+  const completedEventsFilter = (event) => {
+    const selectedClub =
+      !targetClub ||
+      event?.clubid === targetClub ||
+      event?.collabclubs.includes(targetClub);
+    const selectedName =
+      !targetName ||
+      event?.name?.toLowerCase()?.includes(targetName?.toLowerCase());
+
+    const selectedState = new Date(event?.datetimeperiod[1]) < new Date();
+
+    return selectedClub && selectedState && selectedName;
+  };
+
+  const upcomingEventsFilter = (event) => {
+    const selectedClub =
+      !targetClub ||
+      event?.clubid === targetClub ||
+      event?.collabclubs.includes(targetClub);
+    const selectedName =
+      !targetName ||
+      event?.name?.toLowerCase()?.includes(targetName?.toLowerCase());
+
+    const selectedState = new Date(event?.datetimeperiod[0]) > new Date();
+
+    return selectedClub && selectedState && selectedName;
+  };
+
+  const ongoingEventsFilter = (event) => {
+    const selectedClub =
+      !targetClub ||
+      event?.clubid === targetClub ||
+      event?.collabclubs.includes(targetClub);
+    const selectedName =
+      !targetName ||
+      event?.name?.toLowerCase()?.includes(targetName?.toLowerCase());
+
+    const selectedState =
+      new Date(event?.datetimeperiod[0]) <= new Date() &&
+      new Date(event?.datetimeperiod[1]) >= new Date();
+
+    return selectedClub && selectedState && selectedName;
+  };
+
+  // Initialize IntersectionObserver to detect when "load more" is visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadPastEvents(); // Load more events when the user reaches the bottom
         }
-      };
-    }, [loadEvents, hasMore]);
+      },
+      {
+        threshold: 1.0,
+      }
+    );
 
-    return (
-      <>
-        <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
-          <Typography variant="h5" color="grey">
-            Ongoing Events
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
+      }
+    };
+  }, [loadPastEvents, hasMore]);
+
+  return (
+    <>
+      <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
+        <Typography variant="h5" color="grey">
+          Ongoing Events
+        </Typography>
+      </Divider>
+      <Grid container spacing={2}>
+        {futureEvents?.filter(ongoingEventsFilter)?.length ? (
+          futureEvents?.filter(ongoingEventsFilter)?.map((event) => (
+            <Grid key={event._id} item xs={6} md={4} lg={3}>
+              <EventCard
+                _id={event._id}
+                name={event.name}
+                datetimeperiod={event.datetimeperiod}
+                poster={event.poster || event.clubbanner}
+                clubid={event.clubid}
+                blur={event.poster ? 0 : 0.3}
+              />
+            </Grid>
+          ))
+        ) : (
+          <Typography
+            variant="h4"
+            color="text.secondary"
+            sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+          >
+            {loadingFuture ? <CircularProgress /> : "No events found."}
           </Typography>
-        </Divider>
-        <Grid container spacing={2}>
-              {ongoingevents?.length ? (
-                ongoingevents?.map((event) => (
-                    <Grid key={event._id} item xs={6} md={4} lg={3}>
-                      <EventCard
-                        _id={event._id}
-                        name={event.name}
-                        datetimeperiod={event.datetimeperiod}
-                        poster={event.poster || event.clubbanner}
-                        clubid={event.clubid}
-                        blur={event.poster ? 0 : 0.3}
-                      />
-                    </Grid>
-                  ))
-              ) : (
-                <Typography
-                  variant="h4"
-                  color="text.secondary"
-                  sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-                >
-                  {loading ? <CircularProgress /> : "No events found."}
-                </Typography>
-              )}
-            </Grid>
+        )}
+      </Grid>
 
-        {targetState?.includes("upcoming") ? (
-          <>
-            <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
-              <Typography variant="h5" color="grey">
-                Upcoming Events
+      {targetState?.includes("upcoming") ? (
+        <>
+          <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
+            <Typography variant="h5" color="grey">
+              Upcoming Events
+            </Typography>
+          </Divider>
+          <Grid container spacing={2}>
+            {futureEvents?.filter(upcomingEventsFilter)?.length ? (
+              futureEvents?.filter(upcomingEventsFilter)?.map((event) => (
+                <Grid key={event._id} item xs={6} md={4} lg={3}>
+                  <EventCard
+                    _id={event._id}
+                    name={event.name}
+                    datetimeperiod={event.datetimeperiod}
+                    poster={event.poster || event.clubbanner}
+                    clubid={event.clubid}
+                    blur={event.poster ? 0 : 0.3}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Typography
+                variant="h4"
+                color="text.secondary"
+                sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+              >
+                {loadingFuture ? (
+                  targetState?.includes("completed") ? (
+                    <CircularProgress />
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  "No events found."
+                )}
               </Typography>
-            </Divider>
-            <Grid container spacing={2}>
-              {upcomingevents?.length ? (
-                upcomingevents?.map((event) => (
-                    <Grid key={event._id} item xs={6} md={4} lg={3}>
-                      <EventCard
-                        _id={event._id}
-                        name={event.name}
-                        datetimeperiod={event.datetimeperiod}
-                        poster={event.poster || event.clubbanner}
-                        clubid={event.clubid}
-                        blur={event.poster ? 0 : 0.3}
-                      />
-                    </Grid>
-                  ))
-              ) : (
-                <Typography
-                  variant="h4"
-                  color="text.secondary"
-                  sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-                >
-                  {loading ? targetState?.includes("completed")? <CircularProgress /> : "" : "No events found."}
-                </Typography>
-              )}
-            </Grid>
-          </>
-        ) : null}
+            )}
+          </Grid>
+        </>
+      ) : null}
 
-        {targetState?.includes("completed") ? (
-          <>
-            <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
-              <Typography variant="h5" color="grey">
-                Completed Events
+      {targetState?.includes("completed") ? (
+        <>
+          <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
+            <Typography variant="h5" color="grey">
+              Completed Events
+            </Typography>
+          </Divider>
+          <Grid container spacing={2}>
+            {completedevents?.length ? (
+              completedevents?.map((event) => (
+                <Grid key={event._id} item xs={6} md={4} lg={3}>
+                  <EventCard
+                    _id={event._id}
+                    name={event.name}
+                    datetimeperiod={event.datetimeperiod}
+                    poster={event.poster || event.clubbanner}
+                    clubid={event.clubid}
+                    blur={event.poster ? 0 : 0.3}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Typography
+                variant="h4"
+                color="text.secondary"
+                sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+              >
+                {loadingPast ? "" : "No events found."}
               </Typography>
-            </Divider>
-            <Grid container spacing={2}>
-              {completedevents?.length ? (
-                completedevents?.map((event) => (
-                    <Grid key={event._id} item xs={6} md={4} lg={3}>
-                      <EventCard
-                        _id={event._id}
-                        name={event.name}
-                        datetimeperiod={event.datetimeperiod}
-                        poster={event.poster || event.clubbanner}
-                        clubid={event.clubid}
-                        blur={event.poster ? 0 : 0.3}
-                      />
-                    </Grid>
-                  ))
-              ) : (
-                <Typography
-                  variant="h4"
-                  color="text.secondary"
-                  sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-                >
-                  {loading ? "": "No events found."}
-                </Typography>
-              )}
-            </Grid>
-          </>
-        ) : null}
+            )}
+          </Grid>
+        </>
+      ) : null}
 
-        {/* "Load more" trigger */}
-        <div ref={loadMoreRef} style={{ height: "50px", marginBottom: "10px" }}>
-          {loading &&
+      {/* "Load more" trigger */}
+      <div ref={loadMoreRef} style={{ height: "50px", marginBottom: "10px" }}>
+        {loadingPast && (
           // center the circular progress
           <Box
             display="flex"
@@ -246,10 +308,10 @@
             height="100%"
             mt={3}
           >
-          <CircularProgress />
+            <CircularProgress />
           </Box>
-          }
-        </div>
-      </>
-    );
-  }
+        )}
+      </div>
+    </>
+  );
+}
