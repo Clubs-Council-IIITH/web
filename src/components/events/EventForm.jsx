@@ -753,6 +753,9 @@ function EventNameInput({ control, disabled = true }) {
           fullWidth
           required
           disabled={disabled}
+          onBlur={(e) => {
+            field.onChange(e.target.value.trim());
+          }}
         />
       )}
     />
@@ -1014,6 +1017,11 @@ function EventDescriptionInput({ control }) {
           rows={8}
           fullWidth
           multiline
+          onBlur={(e) => {
+            field.onChange(
+              e.target.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, "")
+            );
+          }}
         />
       )}
     />
