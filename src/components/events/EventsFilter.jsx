@@ -120,7 +120,7 @@ export default function EventsFilter({ name, club, state }) {
                   `${pathname}?${createQueryString("club", e.target.value)}`,
                 );
               }}
-              value={clubs.length ? club : ""}
+              value={club || ""}
             >
               <MenuItem key="all" value="">
                 All Clubs

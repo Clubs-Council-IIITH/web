@@ -1,8 +1,8 @@
   "use client";
 
   import { useEffect, useState, useCallback, useRef } from "react";
-  import { Grid, Typography, Divider, CircularProgress } from "@mui/material";
-  import EventsGrid from "./EventsGridPage";
+  import { Box, Grid, Typography, Divider, CircularProgress } from "@mui/material";
+  import EventCard from "components/events/EventCard";
 
 
   export default function PaginatedEventGrid({
@@ -33,21 +33,22 @@
         const queryData = {
           type,
           targetClub,
+          targetName,
           paginationOn: true,
           skip,
           limit,
         };
         const eventsResponse = await query(queryData);
-        eventsResponse.forEach(async (event) => {
+        await Promise.all(eventsResponse.map(async (event) => {
           if (!event.poster) {
             event.clubbanner = await clubquery(event.clubid);
           }
-        });
+        }));
 
         const ongoingEvents = eventsResponse.filter(ongoingEventsFilter);
         const upcomingEvents = eventsResponse.filter(upcomingEventsFilter);
         const completedEvents = eventsResponse.filter(completedEventsFilter);
-
+        console.log(completedEvents);
         setOngoingEvents((prevEvents) => {
           const combinedEvents = [...prevEvents, ...ongoingEvents];
           return Array.from(new Set(combinedEvents.map(event => event._id))).map(id => combinedEvents.find(event => event._id === id));
@@ -66,6 +67,9 @@
         const totalLength = ongoingEvents.length + upcomingEvents.length + completedEvents.length;
         setSkip((prevSkip) => prevSkip + totalLength); // Increment skip by number of new events
         setHasMore(totalLength === limit); // Check if we still have more events to load
+        if(!targetState?.includes("completed") && (ongoingEvents.length + upcomingEvents.length == 0)){
+            setHasMore(false);
+        }
       } catch (error) {
         console.error("Error fetching events:", error);
       } finally {
@@ -138,13 +142,30 @@
             Ongoing Events
           </Typography>
         </Divider>
-
-        <EventsGrid
-          type="all"
-          limit={30}
-          events={ongoingevents}
-          loading={loading}
-        />
+        <Grid container spacing={2}>
+              {ongoingevents?.length ? (
+                ongoingevents?.map((event) => (
+                    <Grid key={event._id} item xs={6} md={4} lg={3}>
+                      <EventCard
+                        _id={event._id}
+                        name={event.name}
+                        datetimeperiod={event.datetimeperiod}
+                        poster={event.poster || event.clubbanner}
+                        clubid={event.clubid}
+                        blur={event.poster ? 0 : 0.3}
+                      />
+                    </Grid>
+                  ))
+              ) : (
+                <Typography
+                  variant="h4"
+                  color="text.secondary"
+                  sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+                >
+                  {loading ? <CircularProgress /> : "No events found."}
+                </Typography>
+              )}
+            </Grid>
 
         {targetState?.includes("upcoming") ? (
           <>
@@ -153,13 +174,30 @@
                 Upcoming Events
               </Typography>
             </Divider>
-
-            <EventsGrid
-              type="all"
-              limit={30}
-              events={upcomingevents}
-              loading={loading}
-            />
+            <Grid container spacing={2}>
+              {upcomingevents?.length ? (
+                upcomingevents?.map((event) => (
+                    <Grid key={event._id} item xs={6} md={4} lg={3}>
+                      <EventCard
+                        _id={event._id}
+                        name={event.name}
+                        datetimeperiod={event.datetimeperiod}
+                        poster={event.poster || event.clubbanner}
+                        clubid={event.clubid}
+                        blur={event.poster ? 0 : 0.3}
+                      />
+                    </Grid>
+                  ))
+              ) : (
+                <Typography
+                  variant="h4"
+                  color="text.secondary"
+                  sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+                >
+                  {loading ? targetState?.includes("completed")? <CircularProgress /> : "" : "No events found."}
+                </Typography>
+              )}
+            </Grid>
           </>
         ) : null}
 
@@ -170,19 +208,47 @@
                 Completed Events
               </Typography>
             </Divider>
-
-            <EventsGrid
-              type="all"
-              limit={30}
-              events={completedevents}
-              loading={loading}
-            />
+            <Grid container spacing={2}>
+              {completedevents?.length ? (
+                completedevents?.map((event) => (
+                    <Grid key={event._id} item xs={6} md={4} lg={3}>
+                      <EventCard
+                        _id={event._id}
+                        name={event.name}
+                        datetimeperiod={event.datetimeperiod}
+                        poster={event.poster || event.clubbanner}
+                        clubid={event.clubid}
+                        blur={event.poster ? 0 : 0.3}
+                      />
+                    </Grid>
+                  ))
+              ) : (
+                <Typography
+                  variant="h4"
+                  color="text.secondary"
+                  sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+                >
+                  {loading ? "": "No events found."}
+                </Typography>
+              )}
+            </Grid>
           </>
         ) : null}
 
         {/* "Load more" trigger */}
         <div ref={loadMoreRef} style={{ height: "50px", marginBottom: "10px" }}>
-          {loading && <CircularProgress />}
+          {loading &&
+          // center the circular progress
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+            mt={3}
+          >
+          <CircularProgress />
+          </Box>
+          }
         </div>
       </>
     );

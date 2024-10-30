@@ -17,6 +17,7 @@ async function query(querystring) {
   "use server";
   const { data: { events } = {} } = await client.query(GET_ALL_EVENTS, {
     clubid: querystring['targetClub'],
+    name: querystring['targetName'],
     public: true,
     type: querystring['type'],
     paginationOn: querystring['paginationOn'],

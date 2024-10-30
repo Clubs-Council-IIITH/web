@@ -29,8 +29,8 @@ export const GET_PENDING_EVENTS = gql`
 `;
 
 export const GET_ALL_EVENTS = gql`
-  query Events($clubid: String, $paginationOn: Boolean, $skip: Int, $limit: Int, $public: Boolean) {
-    events(clubid: $clubid, paginationOn: $paginationOn, skip: $skip, limit: $limit,  public: $public) {
+  query Events($clubid: String, $name: String, $paginationOn: Boolean, $skip: Int, $limit: Int, $public: Boolean) {
+    events(clubid: $clubid, name: $name, paginationOn: $paginationOn, skip: $skip, limit: $limit,  public: $public) {
       _id
       name
       code
@@ -203,12 +203,9 @@ export function constructQuery({ type, clubid, paginationOn=false,skip, limit })
     ];
   } else if (type === "club") {
     return [
-      GET_CLUB_EVENTS,
+      GET_ALL_EVENTS,
       {
         clubid,
-        clubInput: {
-          cid: clubid,
-        },
         public: true,
       },
     ];
