@@ -80,6 +80,17 @@ export default async function EventBillStatus(event) {
           </>
         ) : null}
       </Grid>
+
+      <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+        Event Report
+      </Typography>
+
+      {!event.eventReportSubmitted ? (
+        <Box mt={2}>No event report submitted.</Box>
+      ) : (
+        <Box mt={2}>Report submitted</Box>
+      )}
     </>
   );
 }
