@@ -37,8 +37,8 @@ export default function PaginatedEventGrid({
     setLoadingFuture(true);
     try {
       const queryData = {
-        targetClub,
-        targetName,
+        targetClub: null,
+        targetName: null,
         paginationOn: true,
         skip: -1,
         limit: 10,
@@ -221,7 +221,7 @@ export default function PaginatedEventGrid({
         )}
       </Grid>
 
-      {targetState?.includes("upcoming") ? (
+      {targetState?.includes("upcoming") && (
         <>
           <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
             <Typography variant="h5" color="grey">
@@ -261,9 +261,9 @@ export default function PaginatedEventGrid({
             )}
           </Grid>
         </>
-      ) : null}
+      )}
 
-      {targetState?.includes("completed") ? (
+      {targetState?.includes("completed") && (
         <>
           <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
             <Typography variant="h5" color="grey">
@@ -295,7 +295,7 @@ export default function PaginatedEventGrid({
             )}
           </Grid>
         </>
-      ) : null}
+      )}
 
       {/* "Load more" trigger */}
       <div ref={loadMoreRef} style={{ height: "50px", marginBottom: "10px" }}>

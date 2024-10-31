@@ -44,12 +44,11 @@ async function clubBannerQuery(clubid) {
 export default async function Events({ searchParams }) {
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
-  let targetState = [
-    ...(searchParams?.upcoming === "true" ? ["upcoming"] : []),
-    ...(searchParams?.completed === "true" ? ["completed"] : []),
-  ];
 
-  if (targetState.length === 0) targetState = ["upcoming", "completed"];
+  let targetState = ["upcoming", "completed"];
+  targetState = targetState.filter(
+    (state) => searchParams?.[state] !== "false"
+  );
 
   return (
     <Box>
@@ -59,7 +58,7 @@ export default async function Events({ searchParams }) {
       <PaginatedEventsGrid
         query={query}
         clubBannerQuery={clubBannerQuery}
-        targets={[targetName, targetClub, targetState]} // Pass updated targets here
+        targets={[targetName, targetClub, targetState]}
       />
     </Box>
   );
