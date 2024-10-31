@@ -5,7 +5,6 @@ export function EventCards({
   events,
   loading,
   noEventsMessage,
-  loadingIndicator = true,
 }) {
   if (loading) {
     return (
@@ -16,7 +15,7 @@ export function EventCards({
         height="100%"
         mt={3}
       >
-        {loadingIndicator ? <CircularProgress /> : null}
+        <CircularProgress />
       </Box>
     );
   }

@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import {
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Typography, Divider } from "@mui/material";
 import { EventCards, LoadingIndicator } from "./EventCards";
 
 export default function PaginatedEventGrid({
@@ -221,12 +218,21 @@ export default function PaginatedEventGrid({
               Completed Events
             </Typography>
           </Divider>
-          <EventCards
-            events={completedevents}
-            loading={loadingPast}
-            loadingIndicator={false}
-            noEventsMessage="No events found."
-          />
+          {!loadingPast && !completedevents.length ? (
+            <Typography
+              variant="h4"
+              color="text.secondary"
+              sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
+            >
+              No events found.
+            </Typography>
+          ) : (
+            <EventCards
+              events={completedevents}
+              loading={false}
+              noEventsMessage=""
+            />
+          )}
         </>
       )}
 
