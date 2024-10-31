@@ -2,13 +2,10 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import {
-  Box,
-  Grid,
   Typography,
   Divider,
-  CircularProgress,
 } from "@mui/material";
-import EventCard from "components/events/EventCard";
+import { EventCards, LoadingIndicator } from "./EventCards";
 
 export default function PaginatedEventGrid({
   limit = 24, // Default limit if pagination is enabled
@@ -196,30 +193,11 @@ export default function PaginatedEventGrid({
           Ongoing Events
         </Typography>
       </Divider>
-      <Grid container spacing={2}>
-        {futureEvents?.filter(ongoingEventsFilter)?.length ? (
-          futureEvents?.filter(ongoingEventsFilter)?.map((event) => (
-            <Grid key={event._id} item xs={6} md={4} lg={3}>
-              <EventCard
-                _id={event._id}
-                name={event.name}
-                datetimeperiod={event.datetimeperiod}
-                poster={event.poster || event.clubbanner}
-                clubid={event.clubid}
-                blur={event.poster ? 0 : 0.3}
-              />
-            </Grid>
-          ))
-        ) : (
-          <Typography
-            variant="h4"
-            color="text.secondary"
-            sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-          >
-            {loadingFuture ? <CircularProgress /> : "No events found."}
-          </Typography>
-        )}
-      </Grid>
+      <EventCards
+        events={futureEvents.filter(ongoingEventsFilter)}
+        loading={loadingFuture}
+        noEventsMessage="No events found."
+      />
 
       {targetState?.includes("upcoming") && (
         <>
@@ -228,38 +206,11 @@ export default function PaginatedEventGrid({
               Upcoming Events
             </Typography>
           </Divider>
-          <Grid container spacing={2}>
-            {futureEvents?.filter(upcomingEventsFilter)?.length ? (
-              futureEvents?.filter(upcomingEventsFilter)?.map((event) => (
-                <Grid key={event._id} item xs={6} md={4} lg={3}>
-                  <EventCard
-                    _id={event._id}
-                    name={event.name}
-                    datetimeperiod={event.datetimeperiod}
-                    poster={event.poster || event.clubbanner}
-                    clubid={event.clubid}
-                    blur={event.poster ? 0 : 0.3}
-                  />
-                </Grid>
-              ))
-            ) : (
-              <Typography
-                variant="h4"
-                color="text.secondary"
-                sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-              >
-                {loadingFuture ? (
-                  targetState?.includes("completed") ? (
-                    <CircularProgress />
-                  ) : (
-                    ""
-                  )
-                ) : (
-                  "No events found."
-                )}
-              </Typography>
-            )}
-          </Grid>
+          <EventCards
+            events={futureEvents.filter(upcomingEventsFilter)}
+            loading={loadingFuture}
+            noEventsMessage="No events found."
+          />
         </>
       )}
 
@@ -270,47 +221,18 @@ export default function PaginatedEventGrid({
               Completed Events
             </Typography>
           </Divider>
-          <Grid container spacing={2}>
-            {completedevents?.length ? (
-              completedevents?.map((event) => (
-                <Grid key={event._id} item xs={6} md={4} lg={3}>
-                  <EventCard
-                    _id={event._id}
-                    name={event.name}
-                    datetimeperiod={event.datetimeperiod}
-                    poster={event.poster || event.clubbanner}
-                    clubid={event.clubid}
-                    blur={event.poster ? 0 : 0.3}
-                  />
-                </Grid>
-              ))
-            ) : (
-              <Typography
-                variant="h4"
-                color="text.secondary"
-                sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-              >
-                {loadingPast ? "" : "No events found."}
-              </Typography>
-            )}
-          </Grid>
+          <EventCards
+            events={completedevents}
+            loading={loadingPast}
+            loadingIndicator={false}
+            noEventsMessage="No events found."
+          />
         </>
       )}
 
       {/* "Load more" trigger */}
       <div ref={loadMoreRef} style={{ height: "50px", marginBottom: "10px" }}>
-        {loadingPast && (
-          // center the circular progress
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100%"
-            mt={3}
-          >
-            <CircularProgress />
-          </Box>
-        )}
+        {loadingPast && <LoadingIndicator />}
       </div>
     </>
   );
