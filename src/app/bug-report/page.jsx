@@ -35,6 +35,7 @@ export default async function BugReport() {
           <Link
             href="https://help.iiit.ac.in/projects/web-administration/issues/new"
             target="_blank"
+            rel="noreferrer"
           >
             help.iiit.ac.in
           </Link>{" "}
@@ -44,13 +45,18 @@ export default async function BugReport() {
           <Link
             href="https://github.com/Clubs-Council-IIITH/web/issues/new"
             target="_blank"
+            rel="noreferrer"
           >
             GitHub Issues
           </Link>{" "}
           (Requires a GitHub account)
         </li>
         <li>
-          <Link href="https://forms.office.com/r/xs3v1sV7gX" target="_blank">
+          <Link
+            href="https://forms.office.com/r/xs3v1sV7gX"
+            target="_blank"
+            rel="noreferrer"
+          >
             Microsoft Form
           </Link>{" "}
           (Public)
@@ -69,24 +75,33 @@ export default async function BugReport() {
           <Link
             href="https://github.com/Clubs-Council-IIITH/services/issues/new"
             target="_blank"
+            rel="noreferrer"
           >
             GitHub Issues
           </Link>
         </li>
         <li>
-          <Link href="https://forms.office.com/r/MTVxxp69Qr" target="_blank">
+          <Link
+            href="https://forms.office.com/r/MTVxxp69Qr"
+            target="_blank"
+            rel="noreferrer"
+          >
             Microsoft Form
           </Link>
         </li>
         <li>
           Email:{" "}
-          <Link href="mailto:clubs@iiit.ac.in" target="_blank">
+          <Link href="mailto:clubs@iiit.ac.in" target="_blank" rel="noreferrer">
             clubs@iiit.ac.in
           </Link>
         </li>
         <li>
           Email:{" "}
-          <Link href="mailto:webadmin@students.iiit.ac.in" target="_blank">
+          <Link
+            href="mailto:webadmin@students.iiit.ac.in"
+            target="_blank"
+            rel="noreferrer"
+          >
             webadmin@students.iiit.ac.in
           </Link>
         </li>

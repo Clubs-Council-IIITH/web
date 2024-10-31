@@ -40,6 +40,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
           component={Link}
           href={`mailto:${email}`}
           target="_blank"
+          rel="noreferrer"
           sx={{
             mx: 0.2,
             textTransform: "none",
@@ -57,6 +58,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
             component={Link}
             href={socials[item]}
             target="_blank"
+            rel="noreferrer"
             key={index}
             sx={{
               mx: 0.5,
