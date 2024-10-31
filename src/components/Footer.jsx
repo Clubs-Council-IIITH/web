@@ -15,6 +15,8 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
+const IIITLogo = "/assets/iiit-logo-white.png";
+const CCLogo = "/assets/cc-logo-full-black.svg";
 
 const PRIVACY_POLICY_URL = "https://www.iiit.ac.in/privacy-policy/";
 const TWITTER_URL = "https://twitter.com/iiit_hyderabad";
@@ -23,8 +25,33 @@ const INSTAGRAM_URL = "https://www.instagram.com/iiit.hyderabad/";
 const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
 const EMAIL_URL = "mailto:clubs@iiit.ac.in";
 
-const IIITLogo = "/assets/iiit-logo-white.png";
-const CCLogo = "/assets/cc-logo-full-black.svg";
+const socialsData = [
+  {
+    href: EMAIL_URL,
+    icon: "akar-icons:envelope",
+    ariaLabel: "Email Us",
+  },
+  {
+    href: DISCORD_URL,
+    icon: "akar-icons:discord-fill",
+    ariaLabel: "Join Discord",
+  },
+  {
+    href: TWITTER_URL,
+    icon: "akar-icons:x-fill",
+    ariaLabel: "Follow on Twitter",
+  },
+  {
+    href: FACEBOOK_URL,
+    icon: "akar-icons:facebook-fill",
+    ariaLabel: "Check our Facebook",
+  },
+  {
+    href: INSTAGRAM_URL,
+    icon: "akar-icons:instagram-fill",
+    ariaLabel: "Follow on Instagram",
+  },
+];
 
 export default function Footer() {
   const theme = useTheme();
@@ -76,51 +103,19 @@ export default function Footer() {
           alignItems="center"
           justifyContent={isDesktop ? "flex-end" : "center"}
         >
-          <IconButton
-            component="a"
-            target="_blank"
-            href={EMAIL_URL}
-            sx={{ mx: 1, color: "text.primary" }}
-            aria-label="Email Us"
-          >
-            <Icon external variant="akar-icons:envelope" />
-          </IconButton>
-          <IconButton
-            component="a"
-            target="_blank"
-            href={DISCORD_URL}
-            sx={{ mx: 1, color: "text.primary" }}
-            aria-label="Join Discord"
-          >
-            <Icon external variant="akar-icons:discord-fill" />
-          </IconButton>
-          <IconButton
-            component="a"
-            target="_blank"
-            href={TWITTER_URL}
-            sx={{ mx: 1, color: "text.primary" }}
-            aria-label="Follow on Twitter"
-          >
-            <Icon external variant="akar-icons:x-fill" />
-          </IconButton>
-          <IconButton
-            component="a"
-            target="_blank"
-            href={FACEBOOK_URL}
-            sx={{ mx: 1, color: "text.primary" }}
-            aria-label="Check our Facebook"
-          >
-            <Icon external variant="akar-icons:facebook-fill" />
-          </IconButton>
-          <IconButton
-            component="a"
-            target="_blank"
-            href={INSTAGRAM_URL}
-            sx={{ mx: 1, color: "text.primary" }}
-            aria-label="Follow on Instagram"
-          >
-            <Icon external variant="akar-icons:instagram-fill" />
-          </IconButton>
+          {socialsData.map((social, index) => (
+            <IconButton
+              key={index}
+              component="a"
+              target="_blank"
+              rel="noreferrer"
+              href={social.href}
+              sx={{ mx: 1, color: "text.primary" }}
+              aria-label={social.ariaLabel}
+            >
+              <Icon external variant={social.icon} />
+            </IconButton>
+          ))}
         </Grid>
       </Grid>
 
@@ -188,6 +183,8 @@ export default function Footer() {
             variant="body2"
             component={Link}
             href={PRIVACY_POLICY_URL}
+            target="_blank"
+            rel="noreferrer"
             sx={{
               fontWeight: 600,
               textDecoration: "none",
@@ -266,6 +263,8 @@ export default function Footer() {
               variant="body2"
               component={Link}
               href={PRIVACY_POLICY_URL}
+              target="_blank"
+              rel="noreferrer"
               sx={{
                 fontWeight: 600,
                 textDecoration: "none",
