@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
-import { GET_CLUB } from "gql/queries/clubs";
+import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import { Box } from "@mui/material";
 
@@ -32,13 +32,10 @@ async function query(querystring) {
   return data?.events || [];
 }
 
-async function clubBannerQuery(clubid) {
+async function clubBannerQuery() {
   "use server";
-  const { data: { club } = {} } = await client.query(GET_CLUB, {
-    clubInput: { cid: clubid },
-  });
-
-  return club?.bannerSquare || club?.logo;
+  const { data: { allClubs } = {} } = await client.query(GET_ALL_CLUBS);
+  return allClubs || [];
 }
 
 export default async function Events({ searchParams }) {

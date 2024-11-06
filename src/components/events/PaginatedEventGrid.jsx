@@ -7,12 +7,12 @@ import { EventCards, LoadingIndicator } from "./EventCards";
 export default function PaginatedEventGrid({
   limit = 24, // Default limit if pagination is enabled
   targets = [null, null, null],
-  query = async () => {},
-  clubBannerQuery = async () => {},
+  query = async () => { },
+  clubBannerQuery = async () => { },
 }) {
   const [completedevents, setCompletedEvents] = useState([]);
   const [futureEvents, setFutureEvents] = useState([]);
-
+  const [clubBanners, setClubBanners] = useState({});
   const [loadingPast, setLoadingPast] = useState(false);
   const [loadingFuture, setLoadingFuture] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -22,6 +22,21 @@ export default function PaginatedEventGrid({
 
   // Reference to the "load more" trigger element
   const loadMoreRef = useRef(null);
+  const loadAllClubBanners = useCallback(async () => {
+    if (Object.keys(clubBanners).length > 0) {
+      return;
+    }
+    try {
+      const clubs = await clubBannerQuery();
+      const banners = {};
+      clubs.forEach((club) => {
+        banners[club.cid] = club?.bannerSquare || club?.logo;
+      });
+      setClubBanners(banners);
+    } catch (error) {
+      console.error("Error fetching all clubs:", error);
+    }
+  }, [clubBannerQuery]);
 
   const loadFutureEvents = async () => {
     if (loadingFuture || !targetState?.includes("upcoming")) {
@@ -39,13 +54,14 @@ export default function PaginatedEventGrid({
       };
       const eventsResponse = await query(queryData);
       // console.log(eventsResponse);
-      await Promise.all(
-        eventsResponse.map(async (event) => {
-          if (!event.poster) {
-            event.clubbanner = await clubBannerQuery(event.clubid);
-          }
-        })
-      );
+      if (Object.keys(clubBanners).length === 0) {
+        await loadAllClubBanners();
+      }
+      eventsResponse.map((event) => {
+        if (!event.poster) {
+          event.clubbanner = clubBanners[event?.clubid];
+        }
+      });
 
       setFutureEvents(eventsResponse);
     } catch (error) {
@@ -71,13 +87,14 @@ export default function PaginatedEventGrid({
       };
       const eventsResponse = await query(queryData);
       // console.log(eventsResponse);
-      await Promise.all(
-        eventsResponse.map(async (event) => {
-          if (!event.poster) {
-            event.clubbanner = await clubBannerQuery(event.clubid);
-          }
-        })
-      );
+      if (Object.keys(clubBanners).length === 0) {
+        await loadAllClubBanners();
+      }
+      eventsResponse.map((event) => {
+        if (!event.poster) {
+          event.clubbanner = clubBanners[event.clubid];
+        }
+      });
 
       const completedEvents = eventsResponse.filter(completedEventsFilter);
       const newEventsLength = completedEvents.length;
@@ -96,19 +113,25 @@ export default function PaginatedEventGrid({
     } finally {
       setLoadingPast(false);
     }
-  }, [loadingPast, hasMore, skip, limit, query]);
+  }, [hasMore, skip, limit, query]);
+
+  // Load all club banners on component mount
+  useEffect(() => {
+    loadAllClubBanners();
+  }, []);
 
   // Load future events on component mount
   useEffect(() => {
     loadFutureEvents();
-  }, []);
+  }, [clubBanners]);
 
   // When targetClub or targetName changes, reset skip, hasMore, and completedEvents
   useEffect(() => {
     setSkip(0);
     setHasMore(true);
     setCompletedEvents([]);
-  }, [targetClub, targetName]);
+  }, [clubBanners, targetClub, targetName]);
+
   useEffect(() => {
     if (skip === 0) {
       loadPastEvents();
@@ -163,7 +186,7 @@ export default function PaginatedEventGrid({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
+        if (!loadingPast && !loadingFuture && entries[0].isIntersecting && hasMore) {
           loadPastEvents(); // Load more events when the user reaches the bottom
         }
       },
