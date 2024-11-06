@@ -169,7 +169,7 @@ export default function Footer() {
             >
               SLC Tech Team
             </Typography>{" "}
-            (powered by Clubs Council)
+            (An initiative by Clubs Council)
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -243,7 +243,7 @@ export default function Footer() {
               >
                 SLC Tech Team
               </Typography>{" "}
-              (powered by Clubs Council)
+              (Initiative by Clubs Council)
             </Typography>
           </Grid>
 

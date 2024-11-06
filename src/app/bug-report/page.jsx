@@ -89,12 +89,12 @@ export default async function BugReport() {
             Microsoft Form
           </Link>
         </li>
-        <li>
+        {/* <li>
           Email:{" "}
           <Link href="mailto:clubs@iiit.ac.in" target="_blank" rel="noreferrer">
             clubs@iiit.ac.in
           </Link>
-        </li>
+        </li> */}
         <li>
           Email:{" "}
           <Link
