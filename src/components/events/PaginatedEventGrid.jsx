@@ -7,12 +7,11 @@ import { EventCards, LoadingIndicator } from "./EventCards";
 export default function PaginatedEventGrid({
   limit = 24, // Default limit if pagination is enabled
   targets = [null, null, null],
-  query = async () => { },
-  clubBannerQuery = async () => { },
+  clubs = [],
+  query = async () => {},
 }) {
   const [completedevents, setCompletedEvents] = useState([]);
   const [futureEvents, setFutureEvents] = useState([]);
-  const [clubBanners, setClubBanners] = useState({});
   const [loadingPast, setLoadingPast] = useState(false);
   const [loadingFuture, setLoadingFuture] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -22,21 +21,15 @@ export default function PaginatedEventGrid({
 
   // Reference to the "load more" trigger element
   const loadMoreRef = useRef(null);
-  const loadAllClubBanners = useCallback(async () => {
-    if (Object.keys(clubBanners).length > 0) {
-      return;
+
+  const getClubBanner = (clubid) => {
+    if (!clubid) {
+      return null;
     }
-    try {
-      const clubs = await clubBannerQuery();
-      const banners = {};
-      clubs.forEach((club) => {
-        banners[club.cid] = club?.bannerSquare || club?.logo;
-      });
-      setClubBanners(banners);
-    } catch (error) {
-      console.error("Error fetching all clubs:", error);
-    }
-  }, [clubBannerQuery]);
+
+    const club = clubs.find((club) => club.cid === clubid);
+    return club?.bannerSquare || club?.logo;
+  };
 
   const loadFutureEvents = async () => {
     if (loadingFuture || !targetState?.includes("upcoming")) {
@@ -54,12 +47,9 @@ export default function PaginatedEventGrid({
       };
       const eventsResponse = await query(queryData);
       // console.log(eventsResponse);
-      if (Object.keys(clubBanners).length === 0) {
-        await loadAllClubBanners();
-      }
       eventsResponse.map((event) => {
         if (!event.poster) {
-          event.clubbanner = clubBanners[event?.clubid];
+          event.clubbanner = getClubBanner(event?.clubid);
         }
       });
 
@@ -71,72 +61,65 @@ export default function PaginatedEventGrid({
     }
   };
 
-  const loadPastEvents = useCallback(async () => {
-    if (loadingPast || !hasMore || !targetState?.includes("completed")) {
-      return;
-    }
-
-    setLoadingPast(true);
-    try {
-      const queryData = {
-        targetClub,
-        targetName,
-        paginationOn: true,
-        skip,
-        limit,
-      };
-      const eventsResponse = await query(queryData);
-      // console.log(eventsResponse);
-      if (Object.keys(clubBanners).length === 0) {
-        await loadAllClubBanners();
-      }
-      eventsResponse.map((event) => {
-        if (!event.poster) {
-          event.clubbanner = clubBanners[event.clubid];
-        }
-      });
-
-      const completedEvents = eventsResponse.filter(completedEventsFilter);
-      const newEventsLength = completedEvents.length;
-
-      setCompletedEvents((prevEvents) => {
-        const combinedEvents = [...prevEvents, ...completedEvents];
-        return Array.from(
-          new Set(combinedEvents.map((event) => event._id))
-        ).map((id) => combinedEvents.find((event) => event._id === id));
-      });
-
-      setSkip((prevSkip) => prevSkip + newEventsLength);
-      setHasMore(newEventsLength === limit); // Check if we still have more events to load
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    } finally {
-      setLoadingPast(false);
-    }
-  }, [hasMore, skip, limit, query]);
-
-  // Load all club banners on component mount
-  useEffect(() => {
-    loadAllClubBanners();
-  }, []);
-
   // Load future events on component mount
   useEffect(() => {
     loadFutureEvents();
-  }, [clubBanners]);
+  }, []);
+
+  const loadPastEvents = useCallback(
+    async (reset = false, newClub = null, newName = null) => {
+      if (loadingPast || (!reset && !hasMore) || !targetState?.includes("completed")) {
+        return;
+      }
+
+      setLoadingPast(true);
+      try {
+        const queryData = {
+          targetClub: newClub || targetClub || null,
+          targetName: newName || targetName || null,
+          paginationOn: true,
+          skip: reset ? 0 : skip,
+          limit,
+        };
+        const eventsResponse = await query(queryData);
+        // console.log(eventsResponse);
+        eventsResponse.map((event) => {
+          if (!event.poster) {
+            event.clubbanner = getClubBanner(event?.clubid);
+          }
+        });
+
+        const completedEvents = eventsResponse.filter(completedEventsFilter);
+        const newEventsLength = completedEvents.length;
+
+        if (reset) {
+          setSkip(newEventsLength);
+          setCompletedEvents(completedEvents);
+        } else {
+          setSkip((prevSkip) => prevSkip + newEventsLength);
+          setCompletedEvents((prevEvents) => {
+            const combinedEvents = [...prevEvents, ...completedEvents];
+            return Array.from(
+              new Set(combinedEvents.map((event) => event._id))
+            ).map((id) => combinedEvents.find((event) => event._id === id));
+          });
+        }
+
+        setHasMore(newEventsLength === limit); // Check if we still have more events to load
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoadingPast(false);
+      }
+    },
+    [loadingPast, hasMore, skip, limit, query]
+  );
 
   // When targetClub or targetName changes, reset skip, hasMore, and completedEvents
   useEffect(() => {
-    setSkip(0);
-    setHasMore(true);
     setCompletedEvents([]);
-  }, [clubBanners, targetClub, targetName]);
-
-  useEffect(() => {
-    if (skip === 0) {
-      loadPastEvents();
-    }
-  }, [skip]);
+    loadPastEvents(true, targetClub, targetName);
+  }, [targetClub, targetName]);
 
   const completedEventsFilter = (event) => {
     const selectedClub =
@@ -186,7 +169,7 @@ export default function PaginatedEventGrid({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (!loadingPast && !loadingFuture && entries[0].isIntersecting && hasMore) {
+        if (!loadingPast && entries[0].isIntersecting && hasMore) {
           loadPastEvents(); // Load more events when the user reaches the bottom
         }
       },

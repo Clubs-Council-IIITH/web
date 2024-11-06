@@ -32,12 +32,6 @@ async function query(querystring) {
   return data?.events || [];
 }
 
-async function clubBannerQuery() {
-  "use server";
-  const { data: { allClubs } = {} } = await client.query(GET_ALL_CLUBS);
-  return allClubs || [];
-}
-
 export default async function Events({ searchParams }) {
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
@@ -47,6 +41,8 @@ export default async function Events({ searchParams }) {
     (state) => searchParams?.[state] !== "false"
   );
 
+  const { data: { allClubs } = {} } = await client.query(GET_ALL_CLUBS);
+
   return (
     <Box>
       <Box mt={2}>
@@ -54,7 +50,7 @@ export default async function Events({ searchParams }) {
       </Box>
       <PaginatedEventsGrid
         query={query}
-        clubBannerQuery={clubBannerQuery}
+        clubs={allClubs}
         targets={[targetName, targetClub, targetState]}
       />
     </Box>
