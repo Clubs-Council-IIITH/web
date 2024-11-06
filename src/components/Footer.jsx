@@ -15,6 +15,8 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
+import LifeLogo from "components/life-logo-full-color-light.svg";
+
 const IIITLogo = "/assets/iiit-logo-white.png";
 const CCLogo = "/assets/cc-logo-full-black.svg";
 
@@ -22,7 +24,7 @@ const PRIVACY_POLICY_URL = "https://www.iiit.ac.in/privacy-policy/";
 const TWITTER_URL = "https://twitter.com/iiit_hyderabad";
 const FACEBOOK_URL = "https://www.facebook.com/IIITH";
 const INSTAGRAM_URL = "https://www.instagram.com/iiit.hyderabad/";
-const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
+// const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
 const EMAIL_URL = "mailto:clubs@iiit.ac.in";
 
 const socialsData = [
@@ -31,11 +33,11 @@ const socialsData = [
     icon: "akar-icons:envelope",
     ariaLabel: "Email Us",
   },
-  {
-    href: DISCORD_URL,
-    icon: "akar-icons:discord-fill",
-    ariaLabel: "Join Discord",
-  },
+  // {
+  //   href: DISCORD_URL,
+  //   icon: "akar-icons:discord-fill",
+  //   ariaLabel: "Join Discord",
+  // },
   {
     href: TWITTER_URL,
     icon: "akar-icons:x-fill",
@@ -84,11 +86,20 @@ export default function Footer() {
             />
           </Box>
           <Box>
+            <div
+              style={{
+                color: theme.palette.mode === "light" ? "#000" : "#fff",
+              }}
+            >
+              <LifeLogo alt="Life Logo" height={50} width={90} />
+            </div>
+          </Box>
+          <Box>
             <Image
               src={CCLogo}
               alt={"Clubs Council"}
               height={50}
-              width={97}
+              width={120}
               style={{
                 filter: theme.palette.mode == "light" ? "invert(100%)" : "none",
               }}

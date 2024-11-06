@@ -25,6 +25,7 @@
     "@mui/x-data-grid": "^7.21.0",
     "@mui/x-date-pickers": "^7.21.0",
     "@next/mdx": "^14.2.15",
+    "@svgr/webpack": "^8.1.0",
     "@urql/next": "^1.1.2",
     "add-dependencies": "^1.1.0",
     "browser-image-resizer": "^2.4.1",
