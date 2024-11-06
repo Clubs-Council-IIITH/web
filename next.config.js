@@ -33,17 +33,17 @@ const nextConfig = {
     return [
       {
         source: "/student-bodies/clubs",
-        destination: "/about/clubs-council",
+        destination: "/clubs-council",
         permanent: true,
       },
       {
         source: "/clubs/clubs",
-        destination: "/about/clubs-council",
+        destination: "/clubs-council",
         permanent: true,
       },
       {
         source: "/about",
-        destination: "/about/clubs-council",
+        destination: "/clubs-council",
         permanent: true,
       },
     ];

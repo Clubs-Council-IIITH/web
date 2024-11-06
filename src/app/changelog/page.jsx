@@ -73,7 +73,7 @@ export default async function Changelog({ searchParams }) {
           variant="none"
           color="secondary"
           component={Link}
-          href="/about/clubs-council/tech-members"
+          href="/clubs-council/tech-members"
         >
           <Typography variant="button" color="text.primary">
             View all

@@ -257,12 +257,12 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       </Box>
       <DrawerItem
         title="clubs council"
-        path="/about/clubs-council"
+        path="/clubs-council"
         icon={<Icon variant="admin-panel-settings-outline-rounded" />}
       />
       <DrawerItem
         title="supervisory bodies"
-        path="/about/supervisory-bodies"
+        path="/supervisory-bodies"
         icon={<Icon variant="info-outline-rounded" />}
       />
     </List>
