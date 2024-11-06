@@ -4,7 +4,20 @@ import { getNginxFile } from "utils/files";
 
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { Container, Box, Typography, Stack, Button } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Stack,
+  Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import Icon from "components/Icon";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
@@ -13,6 +26,30 @@ import { techTeamWords } from "constants/ccMembersFilterWords";
 import Status from "./status.mdx";
 
 const limit = 20;
+const releases = [
+  {
+    version: "2.2",
+    date: "November 2024",
+    description: "Changed from Clubs Council website to Life @ IIIT-H.",
+  },
+  {
+    version: "2.1",
+    date: "May 2023",
+    description: "Moved to Next.js server components.",
+  },
+  {
+    version: "2.0",
+    date: "April 2023",
+    description:
+      "Complete UI overhaul with Material Design and Next.js. Complete change of backend to Microservices and GraphQL.",
+  },
+  {
+    version: "1.0",
+    date: "15 August, 2023",
+    description:
+      "The very first version of the website using React and Monolithic backend using Django.",
+  },
+];
 
 export const metadata = {
   title: "Changelog | Life @ IIIT-H",
@@ -57,14 +94,11 @@ export default async function Changelog({ searchParams }) {
           },
         }}
       >
-        <Status
-          status={await status.json()}
-          version={2}
-          firstRelease={"April 2023"}
-        />
+        <Status status={await status.json()} version={2.2} />
+        <VersionHistory />
       </Box>
 
-      <Stack direction="row" pt={2} mb={2} mt={3}>
+      <Stack direction="row" pt={2} mb={2}>
         <Typography variant="h3" mt={3}>
           Maintainers
         </Typography>
@@ -140,7 +174,7 @@ const filterRoles = (roles, filterWords) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null,
+      (word) => lowercaseName.includes(word) && endYear === null
     );
   });
   if (filteredRoles?.length > 0)
@@ -150,4 +184,45 @@ const filterRoles = (roles, filterWords) => {
       return filterWords.some((word) => lowercaseName.includes(word));
     });
   else return filteredRoles;
+};
+
+const VersionHistory = () => {
+  return (
+    <Accordion>
+      <AccordionSummary
+        aria-controls="panel1-content"
+        id="panel1-header"
+        style={{ marginLeft: "5px", cursor: "pointer", color: "#444" }}
+      >
+        <Box display="flex" alignItems="center">
+          <Typography>View releases/version history</Typography>
+          <ArrowDropDownIcon
+            style={{
+              marginLeft: "8px",
+            }}
+          />
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails
+        style={{
+          marginLeft: "5px",
+          borderLeft: "2px solid #eaeaea",
+        }}
+      >
+        <List style={{ padding: 0, margin: 0 }}>
+          {releases.map((release, index) => (
+            <ListItem
+              key={index}
+              style={{ marginBottom: index === releases.length - 1 ? 0 : "8px" }}
+            >
+              <ListItemText
+                primary={<strong>{release.version}</strong>}
+                secondary={`(${release.date}) - ${release.description}`}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </AccordionDetails>
+    </Accordion>
+  );
 };
