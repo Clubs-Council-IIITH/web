@@ -17,14 +17,14 @@ export function middleware(req) {
     style-src 'self' 'nonce-${nonce}';
     style-src-attr 'self' 'unsafe-inline';
     style-src-elem 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
+    img-src 'self' blob: data: https://uptime.betterstack.com;;
     font-src 'self' data:;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'self' https://*.iiit.ac.in https://iiit.ac.in;
+    connect-src 'self' https://api.iconify.design/ https://api.unisvg.com/ https://api.simplesvg.com/;
     upgrade-insecure-requests;
-    connect-src 'self' https://api.iconify.design/ https://api.unisvg.com/ https://api.simplesvg.com/
   `;
 
   // Replace newline characters and spaces
