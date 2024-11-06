@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Container, Typography } from "@mui/material";
 
 export const metadata = {
-  title: "Bug Report/Feature Request | Clubs Council @ IIIT-H",
+  title: "Bug Report/Feature Request | Life @ IIIT-H",
 };
 
 export default async function BugReport() {

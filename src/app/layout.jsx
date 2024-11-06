@@ -14,12 +14,12 @@ import { headers } from "next/headers";
 import { PUBLIC_URL } from "utils/files";
 
 const description =
-  "Discover the vibrant campus life at IIIT Hyderabad through the Clubs Council. Explore diverse student-led clubs, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";
+  "Discover the vibrant campus life at IIIT Hyderabad. Explore diverse student-led clubs and bodies, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";
 const shortDescription =
-  "Explore with the Clubs Council at IIIT Hyderabad for diverse student-led clubs & events that enrich campus life and foster community.";
+  "Explore with the Life @ IIIT Hyderabad for diverse student-led clubs and bodies & events that enrich campus life and foster community.";
 
 export const metadata = {
-  title: "Clubs Council IIITH",
+  title: "Life @ IIITH",
   authors: [
     { name: "Clubs Council" },
     { name: "IIITH" },
@@ -30,6 +30,7 @@ export const metadata = {
   generator: "Next.js",
   keywords: [
     "IIIT Hyderabad",
+    "Life",
     "Clubs Council",
     "Student Clubs",
     "Student Bodies",
@@ -41,14 +42,14 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    title: "Clubs Council @ IIIT Hyderabad",
+    title: "Life @ IIIT Hyderabad",
     description: shortDescription,
     images: [
       {
         url: `${PUBLIC_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Clubs Council",
+        alt: "Life @ IIIT Hyderabad",
       },
     ],
   },
