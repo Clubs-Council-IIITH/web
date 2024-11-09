@@ -107,7 +107,7 @@ export default async function Changelog({ searchParams }) {
           variant="none"
           color="secondary"
           component={Link}
-          href="/clubs-council/tech-members"
+          href="/tech-team/members"
         >
           <Typography variant="button" color="text.primary">
             View all
@@ -213,7 +213,9 @@ const VersionHistory = () => {
           {releases.map((release, index) => (
             <ListItem
               key={index}
-              style={{ marginBottom: index === releases.length - 1 ? 0 : "8px" }}
+              style={{
+                marginBottom: index === releases.length - 1 ? 0 : "8px",
+              }}
             >
               <ListItemText
                 primary={<strong>{release.version}</strong>}

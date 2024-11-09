@@ -157,7 +157,7 @@ export default function Footer() {
             <Typography
               variant="body2"
               component={Link}
-              href={"/clubs-council/tech-members"}
+              href={"/tech-team/members"}
               sx={{
                 fontWeight: 500,
                 textDecoration: "none",
@@ -231,7 +231,7 @@ export default function Footer() {
               <Typography
                 variant="body2"
                 component={Link}
-                href={"/clubs-council/tech-members"}
+                href={"/tech-team/members"}
                 sx={{
                   fontWeight: 500,
                   textDecoration: "none",

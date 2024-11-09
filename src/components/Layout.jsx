@@ -270,6 +270,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/supervisory-bodies"
         icon={<Icon variant="info-outline-rounded" />}
       />
+      <DrawerItem
+        title="SLC Tech Team"
+        path="/tech-team"
+        icon={<Icon variant="cloud-outline" />}
+      />
     </List>
   );
 
