@@ -36,6 +36,24 @@ export default async function Changelog({ searchParams }) {
     })
     ?.filter((member) => {
       return member.roles.length > 0;
+    })
+    ?.sort((a, b) => {
+      const roleNameA = a.roles[0]?.name.toLowerCase();
+      const roleNameB = b.roles[0]?.name.toLowerCase();
+      if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
+        return -1;
+      }
+      if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
+        return 1;
+      }
+      if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
+        return 1;
+      }
+      if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
+        return -1;
+      }
+
+      return 0;
     });
 
   const status = await fetch(getNginxFile("json/status.json"), {
@@ -140,7 +158,7 @@ const filterRoles = (roles, filterWords) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null,
+      (word) => lowercaseName.includes(word) && endYear === null
     );
   });
   if (filteredRoles?.length > 0)
