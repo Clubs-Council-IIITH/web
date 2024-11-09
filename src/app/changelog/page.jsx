@@ -158,7 +158,7 @@ const filterRoles = (roles, filterWords) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null
+      (word) => lowercaseName.includes(word) && endYear === null,
     );
   });
   if (filteredRoles?.length > 0)
