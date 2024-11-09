@@ -111,17 +111,17 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       <DrawerDropdown
         title="clubs council"
-        icon={<Icon variant="nightlife-outline-rounded" />}
+        icon={<Icon variant="diversity-2-outline-rounded" />}
       >
-        <DrawerItem
-          title="About CC"
-          path="/clubs-council"
-          icon={<Icon variant="admin-panel-settings-outline-rounded" />}
-        />
         <DrawerItem
           title="clubs"
           path="/clubs"
           icon={<Icon variant="explore-outline-rounded" />}
+        />
+        <DrawerItem
+          title="About CC"
+          path="/clubs-council"
+          icon={<Icon variant="admin-panel-settings-outline-rounded" />}
         />
       </DrawerDropdown>
       <DrawerItem

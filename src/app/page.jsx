@@ -67,22 +67,26 @@ export default function Home() {
       <Box my={3}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Statistic
-              color="warning"
-              icon="diversity-3-rounded"
-              total={13}
-              title="Student Bodies"
-              sx={{ height: 200, p: 3 }}
-            />
+            <Link href="/student-bodies" style={{ textDecoration: "none" }}>
+              <Statistic
+                color="warning"
+                icon="diversity-3-rounded"
+                total={13}
+                title="Student Bodies"
+                sx={{ height: 200, p: 3 }}
+              />
+            </Link>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Statistic
-              color="info"
-              icon="nightlife-rounded"
-              total={25}
-              title="Clubs & Affinity Groups"
-              sx={{ height: 200, p: 3 }}
-            />
+            <Link href="/clubs" style={{ textDecoration: "none" }}>
+              <Statistic
+                color="info"
+                icon="nightlife-rounded"
+                total={"25+"}
+                title="Clubs & Affinity Groups"
+                sx={{ height: 200, p: 3 }}
+              />
+            </Link>
           </Grid>
         </Grid>
       </Box>
