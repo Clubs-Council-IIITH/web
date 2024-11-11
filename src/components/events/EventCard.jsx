@@ -14,16 +14,22 @@ export default function EventCard({
   name,
   datetimeperiod,
   poster,
-  blur = 0
+  blur = 0,
 }) {
   return (
     <Card>
       <CardActionArea component={Link} href={`/events/${_id}`}>
         <Box sx={{ pt: "100%", position: "relative" }}>
           {poster ? (
-            <EventPoster name={name} poster={poster} width={600} height={600} style={{
-              filter: `blur(${blur}em)`,
-            }}/>
+            <EventPoster
+              name={name}
+              poster={poster}
+              width={600}
+              height={600}
+              style={{
+                filter: `blur(${blur}em)`,
+              }}
+            />
           ) : null}
         </Box>
 

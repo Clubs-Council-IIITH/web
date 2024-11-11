@@ -38,7 +38,7 @@ export default async function Events({ searchParams }) {
 
   let targetState = ["upcoming", "completed"];
   targetState = targetState.filter(
-    (state) => searchParams?.[state] !== "false"
+    (state) => searchParams?.[state] !== "false",
   );
 
   const { data: { allClubs } = {} } = await client.query(GET_ALL_CLUBS);

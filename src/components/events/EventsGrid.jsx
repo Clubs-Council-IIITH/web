@@ -17,7 +17,9 @@ export default async function EventsGrid({
   } else {
     data = await getClient().query(...constructQuery({ type, clubid, limit }));
   }
-  const uniqueClubIds = Array.from(new Set(data?.data?.events?.map(event => event?.clubid)));
+  const uniqueClubIds = Array.from(
+    new Set(data?.data?.events?.map((event) => event?.clubid)),
+  );
   const clubDataMap = {};
   await Promise.all(
     uniqueClubIds.map(async (clubid) => {
@@ -25,7 +27,7 @@ export default async function EventsGrid({
         clubInput: { cid: clubid },
       });
       clubDataMap[clubid] = club;
-    })
+    }),
   );
 
   const updatedEvents = await Promise.all(
@@ -35,7 +37,7 @@ export default async function EventsGrid({
         event.clubbanner = club?.banner || club?.logo;
       }
       return event;
-    })
+    }),
   );
 
   return (

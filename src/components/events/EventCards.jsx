@@ -1,11 +1,7 @@
 import { Grid, Typography, CircularProgress, Box } from "@mui/material";
 import EventCard from "components/events/EventCard";
 
-export function EventCards({
-  events,
-  loading,
-  noEventsMessage,
-}) {
+export function EventCards({ events, loading, noEventsMessage }) {
   if (loading) {
     return (
       <Box

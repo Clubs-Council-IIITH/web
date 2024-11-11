@@ -68,7 +68,11 @@ export default function PaginatedEventGrid({
 
   const loadPastEvents = useCallback(
     async (reset = false, newClub = null, newName = null) => {
-      if (loadingPast || (!reset && !hasMore) || !targetState?.includes("completed")) {
+      if (
+        loadingPast ||
+        (!reset && !hasMore) ||
+        !targetState?.includes("completed")
+      ) {
         return;
       }
 
@@ -100,7 +104,7 @@ export default function PaginatedEventGrid({
           setCompletedEvents((prevEvents) => {
             const combinedEvents = [...prevEvents, ...completedEvents];
             return Array.from(
-              new Set(combinedEvents.map((event) => event._id))
+              new Set(combinedEvents.map((event) => event._id)),
             ).map((id) => combinedEvents.find((event) => event._id === id));
           });
         }
@@ -112,7 +116,7 @@ export default function PaginatedEventGrid({
         setLoadingPast(false);
       }
     },
-    [loadingPast, hasMore, skip, limit, query]
+    [loadingPast, hasMore, skip, limit, query],
   );
 
   // When targetClub or targetName changes, reset skip, hasMore, and completedEvents
@@ -175,7 +179,7 @@ export default function PaginatedEventGrid({
       },
       {
         threshold: 1.0,
-      }
+      },
     );
 
     if (loadMoreRef.current) {
