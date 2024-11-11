@@ -1,8 +1,8 @@
 import { getClient } from "gql/client";
-import { GET_ALL_PUBLIC_EVENTS } from "gql/queries/events";
+import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_CLUB } from "gql/queries/clubs";
 
-import { Grid, Typography } from "@mui/material";
-import EventCard from "components/events/EventCard";
+import { EventCards } from "./EventCards";
 
 export default async function EventsGrid({
   type = "all", // must be one of: {recent, club, all}
@@ -17,34 +17,33 @@ export default async function EventsGrid({
   } else {
     data = await getClient().query(...constructQuery({ type, clubid, limit }));
   }
+  const uniqueClubIds = Array.from(new Set(data?.data?.events?.map(event => event?.clubid)));
+  const clubDataMap = {};
+  await Promise.all(
+    uniqueClubIds.map(async (clubid) => {
+      const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+        clubInput: { cid: clubid },
+      });
+      clubDataMap[clubid] = club;
+    })
+  );
+
+  const updatedEvents = await Promise.all(
+    data?.data?.events?.map(async (event) => {
+      if (!event.poster || event.poster == null) {
+        const club = clubDataMap[event?.clubid];
+        event.clubbanner = club?.banner || club?.logo;
+      }
+      return event;
+    })
+  );
 
   return (
-    <Grid container spacing={2}>
-      {data?.data?.events?.filter(filter).length ? (
-        data?.data?.events
-          ?.slice(0, limit)
-          ?.filter(filter)
-          ?.map((event) => (
-            <Grid key={event._id} item xs={6} md={4} lg={3}>
-              <EventCard
-                _id={event._id}
-                name={event.name}
-                datetimeperiod={event.datetimeperiod}
-                poster={event.poster}
-                clubid={event.clubid}
-              />
-            </Grid>
-          ))
-      ) : (
-        <Typography
-          variant="h4"
-          color="text.secondary"
-          sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-        >
-          No events found.
-        </Typography>
-      )}
-    </Grid>
+    <EventCards
+      events={updatedEvents?.filter(filter)?.slice(0, limit)}
+      loading={false}
+      noEventsMessage="No events found."
+    />
   );
 }
 
@@ -52,21 +51,21 @@ export default async function EventsGrid({
 function constructQuery({ type, clubid, limit }) {
   if (type === "recent") {
     return [
-      GET_ALL_PUBLIC_EVENTS,
+      GET_ALL_EVENTS,
       {
         clubid: null,
         limit: limit || 12,
+        public: true,
       },
     ];
   } else if (type === "club") {
     return [
-      GET_ALL_PUBLIC_EVENTS,
+      GET_ALL_EVENTS,
       {
         clubid,
+        public: true,
       },
     ];
-  } else if (type === "all") {
-    return [GET_ALL_PUBLIC_EVENTS];
   } else {
     throw new Error("Invalid event type");
   }

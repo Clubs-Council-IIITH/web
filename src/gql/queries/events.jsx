@@ -29,8 +29,22 @@ export const GET_PENDING_EVENTS = gql`
 `;
 
 export const GET_ALL_EVENTS = gql`
-  query Events($clubid: String, $public: Boolean) {
-    events(clubid: $clubid, public: $public) {
+  query Events(
+    $clubid: String
+    $name: String
+    $paginationOn: Boolean
+    $skip: Int
+    $limit: Int
+    $public: Boolean
+  ) {
+    events(
+      clubid: $clubid
+      name: $name
+      paginationOn: $paginationOn
+      skip: $skip
+      limit: $limit
+      public: $public
+    ) {
       _id
       name
       code
