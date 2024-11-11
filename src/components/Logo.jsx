@@ -13,7 +13,6 @@ export default function Logo() {
         width={140}
         height={60}
         alt="Life Logo"
-        priority={isDesktop}
       />
     </div>
   );
