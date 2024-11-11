@@ -26,6 +26,7 @@ const FACEBOOK_URL = "https://www.facebook.com/IIITH";
 const INSTAGRAM_URL = "https://www.instagram.com/iiit.hyderabad/";
 // const DISCORD_URL = "https://discord.gg/V8C7QSRtat";
 const EMAIL_URL = "mailto:clubs@iiit.ac.in";
+const IIIT_MAIN_URL = "https://www.iiit.ac.in/";
 
 const socialsData = [
   {
@@ -75,15 +76,18 @@ export default function Footer() {
           justifyContent={isDesktop ? "flex-start" : "center"}
         >
           <Box mr={3}>
-            <Image
-              src={IIITLogo}
-              alt={"IIIT Hyderabad"}
-              height={50}
-              width={99}
-              style={{
-                filter: theme.palette.mode == "light" ? "invert(100%)" : "none",
-              }}
-            />
+            <Link href={IIIT_MAIN_URL} target="_blank" rel="noreferrer">
+              <Image
+                src={IIITLogo}
+                alt={"IIIT Hyderabad"}
+                height={50}
+                width={99}
+                style={{
+                  filter:
+                    theme.palette.mode == "light" ? "invert(100%)" : "none",
+                }}
+              />
+            </Link>
           </Box>
           <Box mr={3}>
             <div
@@ -157,7 +161,7 @@ export default function Footer() {
             <Typography
               variant="body2"
               component={Link}
-              href={"/tech-team/members"}
+              href={"/tech-team"}
               sx={{
                 fontWeight: 500,
                 textDecoration: "none",
@@ -231,7 +235,7 @@ export default function Footer() {
               <Typography
                 variant="body2"
                 component={Link}
-                href={"/tech-team/members"}
+                href={"/tech-team"}
                 sx={{
                   fontWeight: 500,
                   textDecoration: "none",
