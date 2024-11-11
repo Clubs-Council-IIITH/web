@@ -17,13 +17,21 @@ export default async function EventsGrid({
   } else {
     data = await getClient().query(...constructQuery({ type, clubid, limit }));
   }
+  const uniqueClubIds = Array.from(new Set(data?.data?.events?.map(event => event?.clubid)));
+  const clubDataMap = {};
+  await Promise.all(
+    uniqueClubIds.map(async (clubid) => {
+      const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+        clubInput: { cid: clubid },
+      });
+      clubDataMap[clubid] = club;
+    })
+  );
 
   const updatedEvents = await Promise.all(
     data?.data?.events?.map(async (event) => {
       if (!event.poster || event.poster == null) {
-        const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-          clubInput: { cid: event?.clubid },
-        });
+        const club = clubDataMap[event?.clubid];
         event.clubbanner = club?.banner || club?.logo;
       }
       return event;
