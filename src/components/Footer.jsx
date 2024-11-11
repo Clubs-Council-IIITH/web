@@ -18,7 +18,6 @@ import Icon from "components/Icon";
 import LifeLogo from "components/life-logo-full-color-light.svg";
 
 const IIITLogo = "/assets/iiit-logo-white.png";
-const CCLogo = "/assets/cc-logo-full-black.svg";
 const SLCTechLogo = "/assets/slc-tech-logo-black.svg";
 
 const PRIVACY_POLICY_URL = "https://www.iiit.ac.in/privacy-policy/";
@@ -86,7 +85,7 @@ export default function Footer() {
               }}
             />
           </Box>
-          <Box>
+          <Box mr={3}>
             <div
               style={{
                 color: theme.palette.mode === "light" ? "#000" : "#fff",
@@ -100,9 +99,9 @@ export default function Footer() {
               src={SLCTechLogo}
               alt={"SLC-Tech Logo"}
               height={50}
-              width={120}
+              width={130}
               style={{
-                filter: theme.palette.mode == "light" ? "invert(100%)" : "none",
+                filter: theme.palette.mode == "light" ? "none" : "invert(100%)",
               }}
             />
           </Box>
