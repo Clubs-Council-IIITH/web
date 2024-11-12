@@ -5,7 +5,7 @@ COPY package*.json .
 RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose
 
 # build and start
-FROM node:20-slim as build
+FROM node:20-slim AS build
 ARG ENV=development
 ENV NEXT_PUBLIC_ENV=$ENV
 
