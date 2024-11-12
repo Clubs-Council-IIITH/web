@@ -1,4 +1,4 @@
-import { uploadFiles } from "actions/files/upload/server_action";
+import { getSignedUploadURL } from "actions/files/signed-url/server_action";
 import dynamic from "next/dynamic";
 
 const FILESERVER_URL = process.env.NEXT_PUBLIC_FILESERVER_URL || "http://files";
@@ -91,7 +91,7 @@ export async function uploadFile(
   }
 
   // get signed url
-  let res = await uploadFiles();
+  let res = await getSignedUploadURL();
   if (!res.ok) {
     throw res.error;
   }
