@@ -55,7 +55,7 @@ import { getFullUser } from "actions/users/get/full/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 
-import { uploadFile } from "utils/files";
+import { uploadImageFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 
@@ -248,7 +248,7 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadFile(formData.poster[0], "image")
+          ? await uploadImageFile(formData.poster[0], "image")
           : null;
 
     // convert dates to ISO strings

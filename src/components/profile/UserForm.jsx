@@ -18,7 +18,7 @@ import {
 import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
 
-import { uploadFile } from "utils/files";
+import { uploadImageFile } from "utils/files";
 
 import { updateUserDataAction } from "actions/users/save/server_action";
 
@@ -74,7 +74,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       typeof formData.img === "string"
         ? formData.img
         : Array.isArray(formData.img) && formData.img.length > 0
-          ? await uploadFile(formData.img[0], "image", filename)
+          ? await uploadImageFile(formData.img[0], "image", filename)
           : null;
 
     // mutate

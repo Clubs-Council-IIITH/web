@@ -43,9 +43,8 @@ export function getFile(filepath, public_url = false) {
   }
 }
 
-export async function uploadFile(
+export async function uploadImageFile(
   file,
-  filetype = "image",
   filename = null,
   maxSizeMB = 0.3,
 ) {
@@ -60,60 +59,80 @@ export async function uploadFile(
     maxSizeMB: maxSizeMB,
   };
 
-  let resizedBlob = null;
   try {
-    resizedBlob = await readAndCompressImage(file, config);
+    const resizedBlob = await readAndCompressImage(file, config);
+    const ext = file.name.split(".").pop();
+
+    if (resizedBlob.size < file.size) {
+      // convert blob to file
+      fileToUpload = new File(
+        [resizedBlob],
+        `resized_${filename ? filename : file.name}.${ext}`,
+        {
+          type: resizedBlob.type,
+          lastModified: new Date().getTime(),
+        },
+      );
+    } else {
+      fileToUpload = new File(
+        [file],
+        `${filename ? filename : file.name}.${ext}`,
+        {
+          type: file.type,
+          lastModified: new Date().getTime(),
+        },
+      );
+    }
+    return uploadFileCommon(fileToUpload, false, "", "image");
   } catch (error) {
-    fileToUpload = file;
     throw error;
   }
+}
 
-  const ext = file.name.split(".").pop();
-  if (resizedBlob.size < file.size) {
-    // convert blob to file
-    fileToUpload = new File(
-      [resizedBlob],
-      `resized_${filename ? filename : file.name}.${ext}`,
-      {
-        type: resizedBlob.type,
-        lastModified: new Date().getTime(),
-      },
-    );
-  } else {
-    fileToUpload = new File(
-      [file],
-      `${filename ? filename : file.name}.${ext}`,
-      {
-        type: file.type,
-        lastModified: new Date().getTime(),
-      },
-    );
+export async function uploadPDFFile(file, title, maxSizeMB = 5) {
+  if (!file || !title) return null;
+
+  // check file size limits
+  const sizeLimit = maxSizeMB * (1024 * 1024);
+  if (file.size > sizeLimit) {
+    throw Error(`File size exceeded ${maxSizeMB}mb, Please compress and reupload.`);
   }
 
-  // get signed url
-  let res = await getSignedUploadURL();
-  if (!res.ok) {
-    throw res.error;
-  }
-  let { url } = res.data;
+  // construct filename
+  const filename = title.toLowerCase().replace(/\s+/g, '_') + '.pdf';
+  return uploadFileCommon(file, true, filename, "pdf");
+}
 
-  // upload file to signed URL
-  const body = new FormData();
-  body.append("file", fileToUpload);
-
-  let finalFilename = null;
+export async function uploadFileCommon(file, static_file, filename, filetype) {
   try {
+    // get signed url
+    const details = {
+      static_file: static_file,
+      filename: filename,
+    };
+
+    const res = await getSignedUploadURL(details);
+    if (!res.ok) {
+      throw res.err;
+    }
+
+    const { url } = res.data;
+
+    // upload file to signed URL
+    const body = new FormData();
+    body.append("file", file);
+
     const response = await fetch(`${url}?filetype=${filetype}`, {
       body: body,
       method: "POST",
     });
-    if (response.status >= 200 && response.status < 300) {
-      finalFilename = await response.text();
-    } else finalFilename = null;
-  } catch (e) {
-    finalFilename = null;
-    throw e;
-  }
 
-  return finalFilename;
+    if (response.status >= 200 && response.status < 300) {
+      const finalFilename = await response.text();
+      return finalFilename;
+    }
+    throw response.err;
+  } catch (error) {
+    throw error;
+  }
 }
