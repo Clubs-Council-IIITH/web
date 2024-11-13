@@ -1379,29 +1379,38 @@ function EventPOC({
         rules={{ required: "Select a member!" }}
         render={({ field, fieldState: { error, invalid } }) => (
           <FormControl fullWidth error={invalid}>
-            <InputLabel id="poc">Point of Contact *</InputLabel>
-            {members.length === 0 ? (
+            {!cid || cid == "" ? (
+              <TextField
+                disabled
+                value="Select a club to choose POC"
+                variant="outlined"
+                fullWidth
+              />
+            ) : members.length === 0 ? (
               <Box py={25} width="100%" display="flex" justifyContent="center">
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
               </Box>
             ) : (
-              <Select
-                labelId="poc"
-                label="Point of Contact *"
-                fullWidth
-                {...field}
-                MenuProps={{
-                  style: { maxHeight: 400 },
-                }}
-              >
-                {members?.slice()?.map((member) => (
-                  <MenuItem key={member._id} value={member.uid}>
-                    <MemberListItem uid={member.uid} />
-                  </MenuItem>
-                ))}
-              </Select>
+              <>
+                <InputLabel id="poc">Point of Contact *</InputLabel>
+                <Select
+                  labelId="poc"
+                  label="Point of Contact *"
+                  fullWidth
+                  {...field}
+                  MenuProps={{
+                    style: { maxHeight: 400 },
+                  }}
+                >
+                  {members?.slice()?.map((member) => (
+                    <MenuItem key={member._id} value={member.uid}>
+                      <MemberListItem uid={member.uid} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </>
             )}
             <FormHelperText>{error?.message}</FormHelperText>
           </FormControl>
