@@ -8,7 +8,7 @@ export const PUBLIC_URL = process.env.NEXT_PUBLIC_HOST || "http://localhost";
 // Dynamically import browser-image-resizer since it's only needed on the client side
 const readAndCompressImage = dynamic(
   () => import("browser-image-resizer").then((mod) => mod.readAndCompressImage),
-  { ssr: false },
+  { ssr: false }
 );
 
 export function getNginxFile(filepath) {
@@ -18,7 +18,7 @@ export function getNginxFile(filepath) {
 export function getStaticFile(
   filepath,
   filetype = "image",
-  public_url = false,
+  public_url = false
 ) {
   if (filepath?.toLowerCase()?.endsWith("pdf")) {
     filetype = "pdf";
@@ -43,11 +43,7 @@ export function getFile(filepath, public_url = false) {
   }
 }
 
-export async function uploadImageFile(
-  file,
-  filename = null,
-  maxSizeMB = 0.3,
-) {
+export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   // early return if no file
   if (!file) return null;
 
@@ -71,7 +67,7 @@ export async function uploadImageFile(
         {
           type: resizedBlob.type,
           lastModified: new Date().getTime(),
-        },
+        }
       );
     } else {
       fileToUpload = new File(
@@ -80,30 +76,46 @@ export async function uploadImageFile(
         {
           type: file.type,
           lastModified: new Date().getTime(),
-        },
+        }
       );
     }
-    return uploadFileCommon(fileToUpload, false, "", "image");
+    return uploadFileCommon(fileToUpload, "image");
   } catch (error) {
     throw error;
   }
 }
 
-export async function uploadPDFFile(file, title, maxSizeMB = 5) {
+export async function uploadPDFFile(
+  file,
+  maxSizeMB = 5,
+  static_file = false,
+  title = null
+) {
   if (!file || !title) return null;
 
   // check file size limits
   const sizeLimit = maxSizeMB * (1024 * 1024);
   if (file.size > sizeLimit) {
-    throw Error(`File size exceeded ${maxSizeMB}mb, Please compress and reupload.`);
+    throw Error(
+      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
+    );
   }
 
-  // construct filename
-  const filename = title.toLowerCase().replace(/\s+/g, '_') + '.pdf';
-  return uploadFileCommon(file, true, filename, "pdf");
+  if (!static_file) return uploadFileCommon(file, "document");
+  else if (static_file && (!title || title === "")) {
+    throw Error("Title is required for static files.");
+  } else {
+    const filename = title.toLowerCase().replace(/\s+/g, "_") + ".pdf";
+    return uploadFileCommon(file, "document", static_file, filename);
+  }
 }
 
-export async function uploadFileCommon(file, static_file, filename, filetype) {
+export async function uploadFileCommon(
+  file,
+  filetype,
+  static_file = false,
+  filename = null
+) {
   try {
     // get signed url
     const details = {
