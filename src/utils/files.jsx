@@ -45,7 +45,7 @@ export function getFile(filepath, public_url = false) {
 
 export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   // early return if no file
-  if (!file) return null;
+  if (!file) return "";
 
   let fileToUpload = file;
 
@@ -55,15 +55,18 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
     maxSizeMB: maxSizeMB,
   };
 
+  const ext = file.name.split(".").pop();
+  let finalFilename = `${filename ? filename : file.name}.${ext}`;
+
   try {
     const resizedBlob = await readAndCompressImage(file, config);
-    const ext = file.name.split(".").pop();
 
     if (resizedBlob.size < file.size) {
       // convert blob to file
+      finalFilename = "resized_" + finalFilename;
       fileToUpload = new File(
         [resizedBlob],
-        `resized_${filename ? filename : file.name}.${ext}`,
+        file.name,
         {
           type: resizedBlob.type,
           lastModified: new Date().getTime(),
@@ -94,7 +97,6 @@ export async function uploadPDFFile(
   title = null
 ) {
   if (!file || !title) return null;
-
   // check file size limits
   const sizeLimit = maxSizeMB * (1024 * 1024);
   if (file.size > sizeLimit) {
