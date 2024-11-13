@@ -79,7 +79,9 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
         }
       );
     }
-    return uploadFileCommon(fileToUpload, "image");
+
+    const finalFilename = await uploadFileCommon(fileToUpload, "image");
+    return finalFilename;
   } catch (error) {
     throw error;
   }
@@ -101,16 +103,22 @@ export async function uploadPDFFile(
     );
   }
 
-  if (!static_file) return uploadFileCommon(file, "document");
-  else if (static_file && (!title || title === "")) {
+  let filename = null;
+
+  if (static_file && (!title || title === ""))
     throw Error("Title is required for static files.");
-  } else {
-    const filename = title.toLowerCase().replace(/\s+/g, "_") + ".pdf";
-    return uploadFileCommon(file, "document", static_file, filename);
-  }
+  else filename = title.toLowerCase().replace(/\s+/g, "_") + ".pdf";
+
+  const finalFilename = await uploadFileCommon(
+    file,
+    "document",
+    static_file,
+    filename
+  );
+  return finalFilename;
 }
 
-export async function uploadFileCommon(
+async function uploadFileCommon(
   file,
   filetype,
   static_file = false,
@@ -119,7 +127,7 @@ export async function uploadFileCommon(
   try {
     // get signed url
     const details = {
-      static_file: static_file,
+      staticFile: static_file,
       filename: filename,
     };
 
