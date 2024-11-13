@@ -135,7 +135,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       typeof formData.logo === "string"
         ? formData.logo
         : Array.isArray(formData.logo) && formData.logo.length > 0
-          ? await uploadImageFile(formData.logo[0], "image", logo_filename)
+          ? await uploadImageFile(formData.logo[0], logo_filename)
           : null;
 
     const banner_filename = "banner_" + data.cid.replace(".", "_");
@@ -143,7 +143,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       typeof formData.banner === "string"
         ? formData.banner
         : Array.isArray(formData.banner) && formData.banner.length > 0
-          ? await uploadImageFile(formData.banner[0], "image", banner_filename, 3)
+          ? await uploadImageFile(formData.banner[0], banner_filename, 3)
           : null;
 
     const bannerSquare_filename = "bannerSquare_" + data.cid.replace(".", "_");
@@ -154,7 +154,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
             formData.bannerSquare.length > 0
           ? await uploadImageFile(
               formData.bannerSquare[0],
-              "image",
               bannerSquare_filename,
               3,
             )

@@ -74,7 +74,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       typeof formData.img === "string"
         ? formData.img
         : Array.isArray(formData.img) && formData.img.length > 0
-          ? await uploadImageFile(formData.img[0], "image", filename)
+          ? await uploadImageFile(formData.img[0], filename)
           : null;
 
     // mutate

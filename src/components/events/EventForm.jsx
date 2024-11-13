@@ -248,7 +248,7 @@ export default function EventForm({
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadImageFile(formData.poster[0], "image")
+          ? await uploadImageFile(formData.poster[0])
           : null;
 
     // convert dates to ISO strings
