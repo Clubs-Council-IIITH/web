@@ -22,6 +22,7 @@ export async function generateMetadata({ params }) {
         images: [
           {
             url: img,
+            secure_url: img,
             width: 256,
             height: 256,
             alt: event.name,

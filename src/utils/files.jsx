@@ -83,7 +83,7 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
       );
     }
 
-    const finalFilename = await uploadFileCommon(fileToUpload, "image");
+    finalFilename = await uploadFileCommon(fileToUpload, "image");
     return finalFilename;
   } catch (error) {
     throw error;
@@ -92,9 +92,9 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
 
 export async function uploadPDFFile(
   file,
-  maxSizeMB = 5,
   static_file = false,
-  title = null
+  title = null,
+  maxSizeMB = 20,
 ) {
   if (!file || !title) return null;
   // check file size limits
