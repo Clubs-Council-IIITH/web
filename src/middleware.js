@@ -64,8 +64,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -81,8 +81,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -107,8 +107,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -132,8 +132,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -148,8 +148,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
