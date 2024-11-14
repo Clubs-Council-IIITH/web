@@ -11,11 +11,9 @@ export const metadata = {
   title: "Events | Clubs Council @ IIIT-H",
 };
 
-const client = getClient();
-
 async function query(querystring) {
   "use server";
-  const { data = {}, error } = await client.query(GET_ALL_EVENTS, {
+  const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
     clubid: querystring["targetClub"],
     name: querystring["targetName"],
     public: true,
@@ -41,7 +39,7 @@ export default async function Events({ searchParams }) {
     (state) => searchParams?.[state] !== "false",
   );
 
-  const { data: { allClubs } = {} } = await client.query(GET_ALL_CLUBS);
+  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUBS);
 
   return (
     <Box>
