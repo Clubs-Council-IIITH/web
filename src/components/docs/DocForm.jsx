@@ -70,7 +70,7 @@ export default function DocForm({
     } catch (error) {
       triggerToast({
         title: 'Error',
-        messages: [error.message],
+        messages: [error?.message || "Failed to save document" ],
         severity: 'error',
       });
     } finally {
