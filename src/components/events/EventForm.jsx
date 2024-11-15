@@ -244,11 +244,12 @@ export default function EventForm({
     }
 
     // upload poster
+    const poster_filename = ("poster_" + data.name + '_' + data.clubid).replace(".", "_");
     data.poster =
       typeof formData.poster === "string"
         ? formData.poster
         : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadImageFile(formData.poster[0])
+          ? await uploadImageFile(formData.poster[0], poster_filename)
           : null;
 
     // convert dates to ISO strings
