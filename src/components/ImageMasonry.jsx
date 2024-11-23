@@ -31,7 +31,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
 
   return (
     <>
-      {(loadedImages !== totalImages) && (
+      {loadedImages !== totalImages && (
         <Box py={25} width="100%" display="flex" justifyContent="center">
           <Fade in>
             <CircularProgress color="primary" />
