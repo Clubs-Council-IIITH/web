@@ -17,7 +17,7 @@ export function middleware(req) {
     style-src 'self' 'nonce-${nonce}';
     style-src-attr 'self' 'unsafe-inline';
     style-src-elem 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://uptime.betterstack.com;;
+    img-src 'self' blob: data: https://uptime.betterstack.com;
     font-src 'self' data:;
     object-src 'none';
     base-uri 'self';
