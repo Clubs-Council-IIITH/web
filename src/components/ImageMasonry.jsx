@@ -5,15 +5,15 @@ import Image from "next/image";
 
 import {
   Box,
-  Fade,
+  Grid,
+  Skeleton,
   Card,
   CardActionArea,
   ImageList,
   ImageListItem,
-  CircularProgress,
+  useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import ImageModal from "components/ImageModal";
 
@@ -32,10 +32,23 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   return (
     <>
       {loadedImages !== totalImages && (
-        <Box py={25} width="100%" display="flex" justifyContent="center">
-          <Fade in>
-            <CircularProgress color="primary" />
-          </Fade>
+        <Box width="100%" display="flex" justifyContent="center">
+          <Grid container spacing={5}>
+            {Array.from({ length: 12 }, (_, i) => (
+              <Grid item key={i} xs={6} lg={3}>
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={0}
+                  animation="wave"
+                  sx={{
+                    paddingTop: "75%",
+                    borderRadius: 2,
+                  }}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Box>
       )}
 
