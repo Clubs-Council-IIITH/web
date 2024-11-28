@@ -14,6 +14,7 @@ export function middleware(req) {
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http: 'unsafe-inline' ${
       process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
     };
+    manifest-src 'self';
     style-src 'self' 'nonce-${nonce}';
     style-src-attr 'self' 'unsafe-inline';
     style-src-elem 'self' 'unsafe-inline';
