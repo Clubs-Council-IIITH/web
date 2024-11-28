@@ -15,10 +15,10 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
+import SLCTechLogo from "./SLCTechLogo";
 import LifeLogo from "components/life-logo-full-color-light.svg";
 
 const IIITLogo = "/assets/iiit-logo-white.png";
-const SLCTechLogo = "/assets/slc-tech-logo-black.svg";
 
 const PRIVACY_POLICY_URL = "https://www.iiit.ac.in/privacy-policy/";
 const TWITTER_URL = "https://twitter.com/iiit_hyderabad";
@@ -99,15 +99,7 @@ export default function Footer() {
             </div>
           </Box>
           <Box>
-            <Image
-              src={SLCTechLogo}
-              alt={"SLC-Tech Logo"}
-              height={50}
-              width={130}
-              style={{
-                filter: theme.palette.mode == "light" ? "none" : "invert(100%)",
-              }}
-            />
+            <SLCTechLogo height={50} width={130} />
           </Box>
         </Grid>
         <Grid
