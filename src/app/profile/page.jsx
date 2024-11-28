@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
@@ -11,7 +11,7 @@ export default async function Profile() {
   const user = { ...userMeta, ...userProfile };
 
   if (user.uid == null) {
-    return redirect("/404");
+    notFound();
   }
 
   // redirect to user's profile page

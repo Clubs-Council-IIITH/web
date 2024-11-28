@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
@@ -26,14 +26,14 @@ export async function generateMetadata({ params }) {
     const user = { ...userMeta, ...userProfile };
 
     if (userProfile === null || userMeta === null) {
-      return redirect("/404");
+      notFound();
     }
 
     return {
       title: `${user.firstName} ${user.lastName}`,
     };
   } catch (error) {
-    return redirect("/404");
+    redirect("/404");
   }
 }
 

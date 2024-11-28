@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Box } from "@mui/material";
 
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }, parent) {
       title: `Members | ${club.name}`,
     };
   } catch (error) {
-    redirect("/404");
+    notFound();
   }
 }
 
