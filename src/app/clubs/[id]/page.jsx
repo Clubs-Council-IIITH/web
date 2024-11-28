@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
@@ -15,18 +15,22 @@ import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
 import MembersGrid from "components/members/MembersGrid";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata({ params }) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id },
-  });
+  try {
+    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+      clubInput: { cid: id },
+    });
 
-  if (club?.studentBody) return permanentRedirect(`/student-bodies/${id}`);
+    if (club?.studentBody) return permanentRedirect(`/student-bodies/${id}`);
 
-  return {
-    title: club.name,
-  };
+    return {
+      title: club.name,
+    };
+  } catch (error) {
+    notFound();
+  }
 }
 
 export default async function Club({ params }) {
