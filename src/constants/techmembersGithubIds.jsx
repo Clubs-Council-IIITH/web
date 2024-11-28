@@ -30,5 +30,9 @@ export const techMembersGithubIds = [
     {
         "uid": "evan.bijoy",
         "github": "EvanBijoy",
+    },
+    {
+        "uid": "shreyansh.bhanu",
+        "github": "The-Broken-Keyboard",
     }
 ];

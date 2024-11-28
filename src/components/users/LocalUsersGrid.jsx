@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Grid } from "@mui/material";
 import MemberCard from "components/members/MemberCard";
 import TechMemberCard from "components/members/TechMemberCard";
@@ -6,9 +8,9 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
   return (
     <Grid container spacing={techMembers ? 4 : 2} mb={3}>
       {users?.map((member) => (
-        <>
+        <React.Fragment key={member.uid}>
           {techMembers ? (
-            <Grid key={member.uid} item xs={12} md={6} lg={6}>
+            <Grid item xs={12} md={6} lg={6}>
               <TechMemberCard
                 uid={member.uid}
                 poc={member.poc}
@@ -16,7 +18,7 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
               />
             </Grid>
           ) : (
-            <Grid key={member.uid} item xs={12} sm={6} md={4} lg={2.4}>
+            <Grid item xs={12} sm={6} md={4} lg={2.4}>
               <MemberCard
                 uid={member.uid}
                 poc={member.poc}
@@ -24,7 +26,7 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
               />
             </Grid>
           )}
-        </>
+        </React.Fragment>
       ))}
     </Grid>
   );
