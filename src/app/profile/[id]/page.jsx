@@ -2,7 +2,7 @@ import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -28,14 +28,14 @@ export async function generateMetadata({ params }, parent) {
     const user = { ...userMeta, ...userProfile };
 
     if (userProfile === null || userMeta === null) {
-      return redirect("/404");
+      notFound();
     }
 
     return {
       title: `${user.firstName} ${user.lastName}`,
     };
   } catch (error) {
-    return redirect("/404");
+    notFound();
   }
 }
 

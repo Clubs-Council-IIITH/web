@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
 import { GET_USER } from "gql/queries/auth";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -34,7 +34,7 @@ export default async function ManageMember({ params }) {
     });
 
     if (userMeta === null) {
-      return redirect("/404");
+      notFound();
     }
 
     let user = { ...userMeta, ...userProfile };

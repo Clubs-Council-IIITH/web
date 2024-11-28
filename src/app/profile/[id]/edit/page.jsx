@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -27,7 +27,7 @@ export default async function EditProfile({ params }) {
     const user = { ...userMeta, ...userProfile };
 
     if (userProfile === null || userMeta === null) {
-      return redirect("/404");
+      notFound();
     }
     // console.log(user);
 

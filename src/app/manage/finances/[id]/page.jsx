@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 
 import { Button, Container, Stack, Typography } from "@mui/material";
@@ -20,7 +20,7 @@ export default async function EditHoliday({ params }) {
     });
 
     if ((error || !data) && !error?.message.includes("Bills status not found"))
-      return redirect("/404");
+      notFound();
 
     const defaultValues = {
       state: null,
