@@ -3,7 +3,7 @@
 import { getClient } from "gql/client";
 import { GET_SIGNED_UPLOAD_URL } from "gql/queries/misc";
 
-export async function uploadFiles() {
+export async function getSignedUploadURL() {
   const response = { ok: false, error: null, data: null };
 
   try {

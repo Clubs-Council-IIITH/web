@@ -27,6 +27,7 @@ export const GET_ALL_CLUBS = gql`
       category
       studentBody
       logo
+      bannerSquare
       name
       email
       tagline

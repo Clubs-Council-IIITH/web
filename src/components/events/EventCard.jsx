@@ -1,10 +1,11 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import EventPoster from "components/events/EventPoster";
-import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
@@ -13,17 +14,23 @@ export default function EventCard({
   name,
   datetimeperiod,
   poster,
-  clubid,
+  blur = 0,
 }) {
   return (
     <Card>
       <CardActionArea component={Link} href={`/events/${_id}`}>
         <Box sx={{ pt: "100%", position: "relative" }}>
           {poster ? (
-            <EventPoster name={name} poster={poster} width={600} height={600} />
-          ) : (
-            <EventFallbackPoster clubid={clubid} width={200} height={300} />
-          )}
+            <EventPoster
+              name={name}
+              poster={poster}
+              width={600}
+              height={600}
+              style={{
+                filter: `blur(${blur}em)`,
+              }}
+            />
+          ) : null}
         </Box>
 
         <Stack spacing={1} sx={{ p: 3 }}>

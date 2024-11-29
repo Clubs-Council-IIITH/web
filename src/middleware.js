@@ -18,7 +18,7 @@ export function middleware(req) {
     style-src 'self' 'nonce-${nonce}';
     style-src-attr 'self' 'unsafe-inline';
     style-src-elem 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://uptime.betterstack.com;;
+    img-src 'self' blob: data: https://uptime.betterstack.com;
     font-src 'self' data:;
     object-src 'none';
     base-uri 'self';
@@ -65,8 +65,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -82,8 +82,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -108,8 +108,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -133,8 +133,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
@@ -149,8 +149,8 @@ export function middleware(req) {
       "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    responseRes.headers.set("X-Content-Type-Options", "nosniff");
-    responseRes.headers.set(
+    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+    redirectRes.headers.set(
       "Referrer-Policy",
       "strict-origin-when-cross-origin",
     );
