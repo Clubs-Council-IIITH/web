@@ -8,7 +8,7 @@ import EventsFilter from "components/events/EventsFilter";
 import PaginatedEventsGrid from "components/events/PaginatedEventGrid";
 
 export const metadata = {
-  title: "Events | Clubs Council @ IIIT-H",
+  title: "Events | Life @ IIIT-H",
 };
 
 async function query(querystring) {
