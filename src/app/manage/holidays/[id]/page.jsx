@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_HOLIDAY } from "gql/queries/holidays";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import HolidayForm from "components/holidays/HolidayForm";
 
@@ -28,6 +28,6 @@ export default async function EditHoliday({ params }) {
       </Container>
     );
   } catch (error) {
-    return redirect("/404");
+    notFound();
   }
 }

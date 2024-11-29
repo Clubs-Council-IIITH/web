@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
@@ -88,6 +88,6 @@ export default async function CopyEvent({ params }) {
       )
     );
   } catch (error) {
-    redirect("/404");
+    notFound();
   }
 }

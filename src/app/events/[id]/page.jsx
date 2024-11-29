@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_EVENT } from "gql/queries/events";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { getFile, PUBLIC_URL } from "utils/files";
 import EventDetails from "components/events/EventDetails";
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch (error) {
-    return redirect("/404");
+    notFound();
   }
 }
 

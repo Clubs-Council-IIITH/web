@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
@@ -34,6 +34,6 @@ export default async function EditClub({ params }) {
       </Container>
     );
   } catch (error) {
-    redirect("/404");
+    notFound();
   }
 }
