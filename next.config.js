@@ -46,6 +46,11 @@ const nextConfig = {
         destination: "/clubs-council",
         permanent: true,
       },
+      {
+        source: "/about/clubs-council",
+        destination: "/clubs-council",
+        permanent: true,
+      },
     ];
   },
   compiler: {
