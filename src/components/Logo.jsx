@@ -9,11 +9,7 @@ export default function Logo() {
 
   return (
     <div style={{ color }}>
-      <LifeLogo
-        width={140}
-        height={60}
-        alt="Life Logo"
-      />
+      <LifeLogo width={140} height={60} alt="Life Logo" />
     </div>
   );
 }
