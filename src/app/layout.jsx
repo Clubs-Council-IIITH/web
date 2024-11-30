@@ -11,7 +11,6 @@ import { AuthProvider } from "components/AuthProvider";
 import { fontClass } from "components/ThemeRegistry/typography";
 import TransitionProvider from "components/TransitionProvider";
 import { headers } from "next/headers";
-import Head from "next/head";
 import { PUBLIC_URL } from "utils/files";
 
 const description =
