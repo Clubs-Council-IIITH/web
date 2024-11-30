@@ -17,7 +17,7 @@ export default async function TechMemberCard({ uid, poc, roles }) {
       userInput: {
         uid: uid,
       },
-    }
+    },
   );
 
   if (userMeta === null) {
