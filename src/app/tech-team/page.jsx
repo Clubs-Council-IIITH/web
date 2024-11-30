@@ -47,6 +47,8 @@ export default async function TechTeam() {
     <Container>
       <Grid
         container
+        display="flex"
+        direction="column"
         alignItems="center"
         justifyContent="center"
         spacing={2}
@@ -55,34 +57,7 @@ export default async function TechTeam() {
           padding: 2.5,
         }}
       >
-        <Grid
-          item
-          xs={12}
-          md={4}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <SLCTechLogo height={100} width={260} />
-        </Grid>
-
-        <Grid
-          item
-          xs={12}
-          md={8}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Typography
-            variant="h1"
-            sx={{
-              textAlign: "center",
-            }}
-          >
-            SLC-CC Tech Team
-          </Typography>
-        </Grid>
+        <SLCTechLogo height={120} width={300} />
       </Grid>
 
       <Typography variant="h3" mb={2}>
