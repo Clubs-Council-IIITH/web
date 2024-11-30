@@ -21,7 +21,7 @@ jobs:
         run: |
           npm install --global prettier
       - name: Format with Prettier
-        run: prettier --write "**/*.{js,jsx,md,mdx,css,yaml}"
+        run: prettier --write "**/*.{js,jsx,md,css,yaml}"
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
