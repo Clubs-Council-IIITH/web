@@ -23,7 +23,7 @@ import carousel12 from "/public/assets/img/carousel/12.jpg";
 import Gallery from "./gallery/page";
 
 export const metadata = {
-  title: "Home | Clubs Council @ IIIT-H",
+  title: "Home | Life @ IIIT-H",
 };
 
 export default function Home() {
@@ -51,90 +51,42 @@ export default function Home() {
       <EventsGrid type="recent" limit={4} />
 
       <Typography variant="h3" sx={{ mb: 2, mt: 4 }}>
-        Clubs @ IIITH
+        Life @ IIITH
       </Typography>
 
       <Typography variant="body">
-        The clubs of IIIT-H conduct various captivating events throughout the
-        year. Students across all UG/PG batches engage in the events, which
-        tells how lively the campus life is! There are 2 Affinity Groups & 23
-        Clubs at IIITH, divided into technical and cultural categories.
-        <Box my={2} />
-        Clubs on campus are run by students, for the students. Club activities
-        help develop new hobbies and interests in students and thereby
-        contributing to the all around development of the students.
+        IIIT H is where bright, committed, innovative people congregate to
+        learn, live, play and work. Diverse in every sense of the word, our
+        community is a fertile breeding ground for opportunity in the heart of
+        one of the leading tech hubs of the country. "Work hard and play harder"
+        is our unofficial motto and students choose their own extracurricular
+        pursuits, from a jaw dropping cauldron of ways to participate in music,
+        dance, sports, quizzes, etc.
       </Typography>
 
       <Box my={3}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4}>
-            <Statistic
-              color="info"
-              icon="component-exchange"
-              total={8}
-              title="Technical Clubs"
-              sx={{ height: 200, p: 3 }}
-            />
+          <Grid item xs={12} md={6}>
+            <Link href="/student-bodies" style={{ textDecoration: "none" }}>
+              <Statistic
+                color="warning"
+                icon="diversity-3-rounded"
+                total={13}
+                title="Student Bodies"
+                sx={{ height: 200, p: 3 }}
+              />
+            </Link>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Statistic
-              color="warning"
-              icon="music-note-rounded"
-              total={16}
-              title="Cultural Clubs"
-              sx={{ height: 200, p: 3 }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Statistic
-              color="secondary"
-              icon="psychology-rounded"
-              total={2}
-              title="Affinity Groups"
-              sx={{ height: 200, p: 3 }}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        Clubs Council @ IIITH
-      </Typography>
-
-      <Typography variant="body">
-        The Clubs Council is the largest Student Administrative Organization at
-        IIIT Hyderabad, and acts as an umbrella body of all the institute
-        affiliated and associate student-led Clubs, Groups & Societies.
-      </Typography>
-
-      <Box my={3}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={4}>
-            <Statistic
-              color="success"
-              icon="groups-3-outline-rounded"
-              total={23 + "+"}
-              title="Student Constituent Groups"
-              sx={{ height: 200, p: 3 }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Statistic
-              color="error"
-              icon="school-outline-rounded"
-              total={70 + "+"}
-              title="Student Coordinators"
-              sx={{ height: 200, p: 3 }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Statistic
-              color="primary"
-              icon="map-outline-rounded"
-              total={350 + "+"}
-              title="Organizing Team Members"
-              sx={{ height: 200, p: 3 }}
-            />
+          <Grid item xs={12} md={6}>
+            <Link href="/clubs" style={{ textDecoration: "none" }}>
+              <Statistic
+                color="info"
+                icon="nightlife-rounded"
+                total={"25+"}
+                title="Clubs & Affinity Groups"
+                sx={{ height: 200, p: 3 }}
+              />
+            </Link>
           </Grid>
         </Grid>
       </Box>

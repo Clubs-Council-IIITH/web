@@ -15,7 +15,8 @@ export function isExternalLink(path) {
 
 export function getActive(path, pathname) {
   if (path === "/") return pathname === path;
-  return pathname.startsWith(path.split("?")[0]);
+  path = path.split("?")[0];
+  return pathname === path || pathname.startsWith(path + "/");
 }
 
 export function DrawerItem({ title, path, icon }) {

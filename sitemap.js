@@ -1,4 +1,4 @@
-const SITEMAP_HOSTNAME = "https://clubs.iiit.ac.in";
+const SITEMAP_HOSTNAME = "https://life.iiit.ac.in";
 
 const fs = require("node:fs");
 const { SitemapStream, streamToPromise } = require("sitemap");

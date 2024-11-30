@@ -14,6 +14,7 @@ export function middleware(req) {
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http: 'unsafe-inline' ${
       process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
     };
+    manifest-src 'self';
     style-src 'self' 'nonce-${nonce}';
     style-src-attr 'self' 'unsafe-inline';
     style-src-elem 'self' 'unsafe-inline';
@@ -75,7 +76,7 @@ export function middleware(req) {
   // redirect to CC about page
   if (pathname === "/student-bodies/clubs") {
     const redirectRes = NextResponse.redirect(
-      new URL("/about/clubs-council", req.url),
+      new URL("/clubs-council", req.url),
     );
     redirectRes.headers.set(
       "Content-Security-Policy",

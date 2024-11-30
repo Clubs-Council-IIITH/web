@@ -109,11 +109,21 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/"
         icon={<Icon variant="home-outline-rounded" />}
       />
-      <DrawerItem
-        title="clubs"
-        path="/clubs"
-        icon={<Icon variant="explore-outline-rounded" />}
-      />
+      <DrawerDropdown
+        title="clubs council"
+        icon={<Icon variant="diversity-2-outline-rounded" />}
+      >
+        <DrawerItem
+          title="clubs"
+          path="/clubs"
+          icon={<Icon variant="explore-outline-rounded" />}
+        />
+        <DrawerItem
+          title="About CC"
+          path="/clubs-council"
+          icon={<Icon variant="admin-panel-settings-outline-rounded" />}
+        />
+      </DrawerDropdown>
       <DrawerItem
         title="student bodies"
         path="/student-bodies"
@@ -256,14 +266,14 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Typography variant="overline">About</Typography>
       </Box>
       <DrawerItem
-        title="clubs council"
-        path="/about/clubs-council"
-        icon={<Icon variant="admin-panel-settings-outline-rounded" />}
+        title="supervisory bodies"
+        path="/supervisory-bodies"
+        icon={<Icon variant="info-outline-rounded" />}
       />
       <DrawerItem
-        title="supervisory bodies"
-        path="/about/supervisory-bodies"
-        icon={<Icon variant="info-outline-rounded" />}
+        title="SLC Tech Team"
+        path="/tech-team"
+        icon={<Icon variant="cloud-outline" />}
       />
     </List>
   );

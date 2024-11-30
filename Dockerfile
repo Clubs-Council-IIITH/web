@@ -16,6 +16,7 @@ COPY entrypoint.sh /cache/
 COPY . .
 
 RUN chmod +x /cache/entrypoint.sh
+RUN npm run sitemap
 RUN npm run build
 
 ENTRYPOINT [ "/cache/entrypoint.sh" ]
