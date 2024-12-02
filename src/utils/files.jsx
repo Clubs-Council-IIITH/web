@@ -8,7 +8,7 @@ export const PUBLIC_URL = process.env.NEXT_PUBLIC_HOST || "http://localhost";
 // Dynamically import browser-image-resizer since it's only needed on the client side
 const readAndCompressImage = dynamic(
   () => import("browser-image-resizer").then((mod) => mod.readAndCompressImage),
-  { ssr: false },
+  { ssr: false }
 );
 
 export function getNginxFile(filepath) {
@@ -18,7 +18,7 @@ export function getNginxFile(filepath) {
 export function getStaticFile(
   filepath,
   filetype = "image",
-  public_url = false,
+  public_url = false
 ) {
   if (filepath?.toLowerCase()?.endsWith("pdf")) {
     filetype = "pdf";
@@ -43,14 +43,9 @@ export function getFile(filepath, public_url = false) {
   }
 }
 
-export async function uploadFile(
-  file,
-  filetype = "image",
-  filename = null,
-  maxSizeMB = 0.3,
-) {
+export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   // early return if no file
-  if (!file) return null;
+  if (!file) return "";
 
   let fileToUpload = file;
 
@@ -60,60 +55,106 @@ export async function uploadFile(
     maxSizeMB: maxSizeMB,
   };
 
-  let resizedBlob = null;
+  const ext = file.name.split(".").pop();
+  let finalFilename = `${filename ? filename : file.name}.${ext}`;
+
   try {
-    resizedBlob = await readAndCompressImage(file, config);
+    const resizedBlob = await readAndCompressImage(file, config);
+
+    if (resizedBlob.size < file.size) {
+      // convert blob to file
+      finalFilename = "resized_" + finalFilename;
+      fileToUpload = new File(
+        [resizedBlob],
+        file.name,
+        {
+          type: resizedBlob.type,
+          lastModified: new Date().getTime(),
+        }
+      );
+    } else {
+      fileToUpload = new File(
+        [file],
+        `${filename ? filename : file.name}.${ext}`,
+        {
+          type: file.type,
+          lastModified: new Date().getTime(),
+        }
+      );
+    }
+
+    finalFilename = await uploadFileCommon(fileToUpload, "image");
+    return finalFilename;
   } catch (error) {
-    fileToUpload = file;
     throw error;
   }
+}
 
-  const ext = file.name.split(".").pop();
-  if (resizedBlob.size < file.size) {
-    // convert blob to file
-    fileToUpload = new File(
-      [resizedBlob],
-      `resized_${filename ? filename : file.name}.${ext}`,
-      {
-        type: resizedBlob.type,
-        lastModified: new Date().getTime(),
-      },
-    );
-  } else {
-    fileToUpload = new File(
-      [file],
-      `${filename ? filename : file.name}.${ext}`,
-      {
-        type: file.type,
-        lastModified: new Date().getTime(),
-      },
+export async function uploadPDFFile(
+  file,
+  static_file = false,
+  title = null,
+  maxSizeMB = 20,
+) {
+  if (!file || !title) return null;
+  // check file size limits
+  const sizeLimit = maxSizeMB * (1024 * 1024);
+  if (file.size > sizeLimit) {
+    throw Error(
+      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
     );
   }
 
-  // get signed url
-  let res = await getSignedUploadURL();
-  if (!res.ok) {
-    throw res.error;
-  }
-  let { url } = res.data;
+  let filename = null;
 
-  // upload file to signed URL
-  const body = new FormData();
-  body.append("file", fileToUpload);
+  if (static_file && (!title || title === ""))
+    throw Error("Title is required for static files.");
+  else filename = title.toLowerCase().replace(/\s+/g, "_") + ".pdf";
 
-  let finalFilename = null;
+  const finalFilename = await uploadFileCommon(
+    file,
+    "document",
+    static_file,
+    filename
+  );
+  return finalFilename;
+}
+
+async function uploadFileCommon(
+  file,
+  filetype,
+  static_file = false,
+  filename = null
+) {
   try {
+    // get signed url
+    const details = {
+      staticFile: static_file,
+      filename: filename,
+    };
+
+    const res = await getSignedUploadURL(details);
+    if (!res.ok) {
+      throw res.err;
+    }
+
+    const { url } = res.data;
+
+    // upload file to signed URL
+    const body = new FormData();
+    body.append("file", file);
+
     const response = await fetch(`${url}?filetype=${filetype}`, {
       body: body,
       method: "POST",
     });
-    if (response.status >= 200 && response.status < 300) {
-      finalFilename = await response.text();
-    } else finalFilename = null;
-  } catch (e) {
-    finalFilename = null;
-    throw e;
-  }
 
-  return finalFilename;
+    if (response.status >= 200 && response.status < 300) {
+      const finalFilename = await response.text();
+      return finalFilename;
+    }
+    throw response.err;
+  } catch (error) {
+    throw error;
+  }
 }
