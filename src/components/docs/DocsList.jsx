@@ -122,8 +122,8 @@ export default function DocsList({ allFiles, priviliged = false }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allFiles?.map((file) => (
-              <TableRow key={file._id}>
+            {allFiles?.map((file, index) => (
+              <TableRow key={index}>
                 <TableCell>{file.title}</TableCell>
                 <TableCell>
                   {formatDate(file.modifiedTime)}

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Error } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import React, { useState, Error } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 import {
   Box,
@@ -12,25 +12,26 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
-} from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
-import FileUpload from 'components/FileUpload';
-import Icon from 'components/Icon';
-import { useToast } from 'components/Toast';
+import FileUpload from "components/FileUpload";
+import Icon from "components/Icon";
+import { useToast } from "components/Toast";
 
-import { uploadPDFFile } from 'utils/files';
+import { uploadPDFFile } from "utils/files";
 
 import { createStorageFile } from "actions/storagefiles/create/server_action";
 import { updateStorageFile } from "actions/storagefiles/update/server_action";
 
-export default function DocForm({
-  editFile,
-  onClose,
-  open,
-}) {
+export default function DocForm({ editFile, onClose, open }) {
   const [loading, setLoading] = useState(false);
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      title: editFile?.title || "",
+      file: null,
+    },
+  });
   const { triggerToast } = useToast();
   const router = useRouter();
 
@@ -38,7 +39,7 @@ export default function DocForm({
     setLoading(true);
 
     try {
-      const filename = await uploadPDFFile(data.file, true, data.title);
+      const filename = await uploadPDFFile(data.file[0], true, data.title);
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
       }
@@ -62,16 +63,16 @@ export default function DocForm({
       }
 
       triggerToast({
-        title: 'Success!',
-        messages: ['Document saved.'],
-        severity: 'success',
+        title: "Success!",
+        messages: ["Document saved."],
+        severity: "success",
       });
       router.refresh();
     } catch (error) {
       triggerToast({
-        title: 'Error',
-        messages: [error?.message || "Failed to save document" ],
-        severity: 'error',
+        title: "Error",
+        messages: [error?.message || "Failed to save document"],
+        severity: "error",
       });
     } finally {
       setLoading(false);
@@ -79,23 +80,20 @@ export default function DocForm({
   }
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="sm"
-    >
-      <DialogTitle sx={{
-        m: 0,
-        p: 2,
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between'
-      }}>
-        <Typography variant="b2" sx={{pl: 2}}>Upload File</Typography>
-        <IconButton
-          onClick={onClose}
-          size="small"
-        >
+    <Dialog open={open} onClose={onClose} maxWidth="sm">
+      <DialogTitle
+        sx={{
+          m: 0,
+          p: 2,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="b2" sx={{ pl: 2 }}>
+          Upload File
+        </Typography>
+        <IconButton onClick={onClose} size="small">
           <Icon variant="close" />
         </IconButton>
       </DialogTitle>
@@ -107,7 +105,7 @@ export default function DocForm({
                 name="title"
                 control={control}
                 rules={{
-                  required: 'Title is required',
+                  required: "Title is required",
                 }}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
@@ -116,14 +114,14 @@ export default function DocForm({
                     variant="outlined"
                     fullWidth
                     error={invalid}
-                    defaultValue= {editFile?.title}
                     helperText={error?.message}
                     disabled={Boolean(editFile)}
+                    required
                   />
                 )}
               />
             </Grid>
-            <Grid item xs={12} alignItems="center">
+            <Grid item xs={12} alignItems="center" m={1}>
               <FileUpload
                 name="file"
                 label="File Upload"
