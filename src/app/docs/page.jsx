@@ -4,22 +4,23 @@ import { GET_USER } from "gql/queries/auth";
 import DocsList from "components/docs/DocsList";
 
 export const metadata = {
-  title: "Important Documents | Clubs Council @ IIIT-H",
+  title: "Important Documents | Life @ IIIT-H",
 };
 
 export default async function Docs() {
-  const { data: { storagefiles } = {} } = await getClient().query(GET_ALL_FILES, {
-    filetype: "pdf"
-  });
+  const { data: { storagefiles } = {} } = await getClient().query(
+    GET_ALL_FILES,
+    {
+      filetype: "pdf",
+    }
+  );
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
-  const isPriviliged = user?.role == "cc" ? true : false
+  const isPriviliged = user?.role == "cc" ? true : false;
 
-  return (
-    <DocsList allFiles={storagefiles} priviliged={isPriviliged} />
-  );
+  return <DocsList allFiles={storagefiles} priviliged={isPriviliged} />;
 }

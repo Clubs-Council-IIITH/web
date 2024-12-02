@@ -10,3 +10,15 @@ export const GET_ALL_FILES = gql`
     }
   }
 `;
+
+export const GET_FILE = gql`
+  query GetFile($fileId: String!) {
+    storagefile(fileId: $fileId) {
+      _id
+      title
+      url
+      modifiedTime
+      creationTime
+    }
+  }
+`;

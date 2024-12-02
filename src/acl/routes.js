@@ -15,7 +15,8 @@ const routes = {
   "/cc-recruitments/all": ["cc"],
   "/cc-recruitments/all/:id": ["cc"],
   "/cc-recruitments/all/:id": ["cc"],
-  "/docs": ["cc", "slo"],
+  "/docs": ["cc", "slo", "club", "slc"],
+  "/docs/:id": ["cc"],
 
   "/manage/members": ["cc", "club"],
   "/manage/members/new": ["cc", "club"], // has to be higher to not conflict with :id

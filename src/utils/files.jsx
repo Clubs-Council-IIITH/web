@@ -32,14 +32,20 @@ export function getStaticFile(
     return `${FILESERVER_URL}/files/static?filename=${filepath}&filetype=${filetype}`;
 }
 
-export function getFile(filepath, public_url = false) {
+export function getFile(filepath, public_url = false, static_file = false) {
   if (filepath?.toLowerCase()?.startsWith("http")) {
     // return the full URL if global URL
     return filepath;
   } else if (filepath) {
     // call files service if local URL
-    if (public_url) return `${PUBLIC_URL}/files/download?filename=${filepath}`;
-    else return `${FILESERVER_URL}/files/download?filename=${filepath}`;
+    if (public_url)
+      return `${PUBLIC_URL}/files/download?filename=${filepath}${
+        static_file ? "&static_file=true" : ""
+      }`;
+    else
+      return `${FILESERVER_URL}/files/download?filename=${filepath}${
+        static_file ? "&static_file=true" : ""
+      }`;
   }
 }
 
@@ -64,14 +70,10 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
     if (resizedBlob.size < file.size) {
       // convert blob to file
       finalFilename = "resized_" + finalFilename;
-      fileToUpload = new File(
-        [resizedBlob],
-        file.name,
-        {
-          type: resizedBlob.type,
-          lastModified: new Date().getTime(),
-        }
-      );
+      fileToUpload = new File([resizedBlob], file.name, {
+        type: resizedBlob.type,
+        lastModified: new Date().getTime(),
+      });
     } else {
       fileToUpload = new File(
         [file],
