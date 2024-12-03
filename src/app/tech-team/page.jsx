@@ -43,6 +43,32 @@ export default async function TechTeam() {
       }, {})
     : {};
 
+  const finaltargetMembers = targetMembers[-1]
+    ? targetMembers[-1]?.sort((a, b) => {
+        const roleNameA = a.roles
+          .find((role) => role.endYear === null)
+          ?.name?.toLowerCase();
+        const roleNameB = b.roles
+          .find((role) => role.endYear === null)
+          ?.name?.toLowerCase();
+
+        if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
+          return -1;
+        }
+        if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
+          return 1;
+        }
+        if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
+          return 1;
+        }
+        if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
+          return -1;
+        }
+
+        return 0;
+      })
+    : [];
+
   return (
     <Container>
       <Grid
@@ -130,8 +156,8 @@ export default async function TechTeam() {
       <Typography variant="h3" mb={4} mt={5}>
         Our Perfect Visionary Crew
       </Typography>
-      {techMembers?.length ? (
-        <LocalUsersGrid users={targetMembers[-1]} techMembers={true} />
+      {finaltargetMembers?.length ? (
+        <LocalUsersGrid users={finaltargetMembers} techMembers={true} />
       ) : (
         <center>
           <h2>No Members Found!</h2>
