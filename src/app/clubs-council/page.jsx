@@ -30,7 +30,7 @@ export default async function ClubsCouncil() {
       const executiveBoardRoles = filterRoles(
         roles,
         executiveBoardWords,
-        techTeamWords
+        techTeamWords,
       );
       const newMember = { ...member, roles: executiveBoardRoles };
       return newMember;
@@ -57,7 +57,7 @@ export default async function ClubsCouncil() {
       const advisorRoles = filterRoles(
         roles,
         advisorWordsCombined,
-        techTeamWords
+        techTeamWords,
       );
       const newMember = { ...member, roles: advisorRoles };
       return newMember;
@@ -67,7 +67,7 @@ export default async function ClubsCouncil() {
 
       const role0 = member.roles[0]?.name.toLowerCase();
       const matchesAdvisoryFilterWords = advisorWords.some((word) =>
-        role0.includes(word)
+        role0.includes(word),
       );
       return matchesAdvisoryFilterWords;
     });
@@ -112,10 +112,10 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     const matchesFilterWords = filterWords.some((word) =>
-      lowercaseName.includes(word)
+      lowercaseName.includes(word),
     );
     const matchesUnfilterWords = unfilterWords.some((word) =>
-      lowercaseName.includes(word)
+      lowercaseName.includes(word),
     );
     return matchesFilterWords && !matchesUnfilterWords && endYear === null;
   });
@@ -127,10 +127,10 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
         const { name } = role;
         const lowercaseName = name.toLowerCase();
         const matchesFilterWords = filterWords.some((word) =>
-          lowercaseName.includes(word)
+          lowercaseName.includes(word),
         );
         const matchesUnfilterWords = unfilterWords.some((word) =>
-          lowercaseName.includes(word)
+          lowercaseName.includes(word),
         );
         return matchesFilterWords && !matchesUnfilterWords;
       })
