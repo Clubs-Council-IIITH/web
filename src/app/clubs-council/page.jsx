@@ -30,7 +30,7 @@ export default async function ClubsCouncil() {
       const executiveBoardRoles = filterRoles(
         roles,
         executiveBoardWords,
-        techTeamWords,
+        techTeamWords
       );
       const newMember = { ...member, roles: executiveBoardRoles };
       return newMember;
@@ -57,7 +57,7 @@ export default async function ClubsCouncil() {
       const advisorRoles = filterRoles(
         roles,
         advisorWordsCombined,
-        techTeamWords,
+        techTeamWords
       );
       const newMember = { ...member, roles: advisorRoles };
       return newMember;
@@ -67,38 +67,9 @@ export default async function ClubsCouncil() {
 
       const role0 = member.roles[0]?.name.toLowerCase();
       const matchesAdvisoryFilterWords = advisorWords.some((word) =>
-        role0.includes(word),
+        role0.includes(word)
       );
       return matchesAdvisoryFilterWords;
-    });
-
-  const techMembers = members
-    ?.map((member) => {
-      const { roles } = member;
-      const techTeamRoles = filterRoles(roles, techTeamWords);
-      const newMember = { ...member, roles: techTeamRoles };
-      return newMember;
-    })
-    ?.filter((member) => {
-      return member.roles.length > 0;
-    })
-    ?.sort((a, b) => {
-      const roleNameA = a.roles[0]?.name.toLowerCase();
-      const roleNameB = b.roles[0]?.name.toLowerCase();
-      if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
-        return -1;
-      }
-      if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
-        return 1;
-      }
-      if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
-        return 1;
-      }
-      if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
-        return -1;
-      }
-
-      return 0;
     });
 
   const extendedMembers = members
@@ -125,9 +96,6 @@ export default async function ClubsCouncil() {
             <LocalUsersGrid users={advisoryMembers} />
           ) : null
         }
-        techMembers={
-          techMembers?.length ? <LocalUsersGrid users={techMembers} /> : null
-        }
         extendedMembers={
           extendedMembers?.length ? (
             <LocalUsersGrid users={extendedMembers} />
@@ -144,10 +112,10 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
     const { name, endYear } = role;
     const lowercaseName = name.toLowerCase();
     const matchesFilterWords = filterWords.some((word) =>
-      lowercaseName.includes(word),
+      lowercaseName.includes(word)
     );
     const matchesUnfilterWords = unfilterWords.some((word) =>
-      lowercaseName.includes(word),
+      lowercaseName.includes(word)
     );
     return matchesFilterWords && !matchesUnfilterWords && endYear === null;
   });
@@ -159,10 +127,10 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
         const { name } = role;
         const lowercaseName = name.toLowerCase();
         const matchesFilterWords = filterWords.some((word) =>
-          lowercaseName.includes(word),
+          lowercaseName.includes(word)
         );
         const matchesUnfilterWords = unfilterWords.some((word) =>
-          lowercaseName.includes(word),
+          lowercaseName.includes(word)
         );
         return matchesFilterWords && !matchesUnfilterWords;
       })
