@@ -102,7 +102,7 @@ export async function uploadPDFFile(
   // check file size limits
   const sizeLimit = maxSizeMB * (1024 * 1024);
   if (file.size > sizeLimit) {
-    throw Error(
+    throw new Error(
       `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
     );
   }
@@ -110,7 +110,7 @@ export async function uploadPDFFile(
   let filename = null;
 
   if (static_file && (!title || title === ""))
-    throw Error("Title is required for static files.");
+    throw new Error("Title is required for static files.");
   else filename = title.toLowerCase().replace(/\s+/g, "_") + ".pdf";
 
   const finalFilename = await uploadFileCommon(

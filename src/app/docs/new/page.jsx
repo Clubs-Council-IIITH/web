@@ -1,5 +1,4 @@
 import { getClient } from "gql/client";
-import { GET_FILE } from "gql/queries/storagefiles";
 import { GET_USER } from "gql/queries/auth";
 
 import { redirect } from "next/navigation";
@@ -21,9 +20,5 @@ export default async function Docs({ params }) {
 
   if (user?.role !== "cc") redirect("/404");
 
-  const { data: { storagefile } = {} } = await getClient().query(GET_FILE, {
-    fileId: id,
-  });
-
-  return <DocForm editFile={storagefile} newFile={false} />;
+  return <DocForm/>;
 }

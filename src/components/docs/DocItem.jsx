@@ -10,6 +10,9 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useTheme  } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 
@@ -18,9 +21,12 @@ export default function DocItem({ file, onClose, open }) {
     const fileUrl = getFile(file.url, true, true);
     window.open(fileUrl, "_blank");
   };
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
+    <Dialog open={open} fullScreen={fullScreen} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle
         sx={{
           m: 0,
@@ -28,10 +34,23 @@ export default function DocItem({ file, onClose, open }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          position: "relative",
         }}
       >
-        <div>{file.title}</div>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box
+          component="div"
+          sx={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            textAlign: "center",
+          }}
+        >
+          {file.title}
+        </Box>
+
+        {/* Buttons on the right */}
+        <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
           <Button
             variant="contained"
             startIcon={<Icon variant="download" />}
@@ -45,6 +64,7 @@ export default function DocItem({ file, onClose, open }) {
           </IconButton>
         </Box>
       </DialogTitle>
+
       <DialogContent>
         <iframe
           src={getFile(file.url, true, true)}

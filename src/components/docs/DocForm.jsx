@@ -1,12 +1,8 @@
-<<<<<<< HEAD
-import React, { useState, Error } from "react";
+"use client"
+
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
-=======
-import React, { useState, useEffect, Error } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
->>>>>>> f9d59e7 (storagefiles: initial working commit, add required components)
 
 import {
   Box,
@@ -14,10 +10,11 @@ import {
   Button,
   Typography,
   Grid,
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
-  IconButton,
+  DialogActions,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
@@ -29,9 +26,11 @@ import { uploadPDFFile } from "utils/files";
 
 import { createStorageFile } from "actions/storagefiles/create/server_action";
 import { updateStorageFile } from "actions/storagefiles/update/server_action";
+import { deleteStorageFile } from "actions/storagefiles/delete/server_action";
 
-export default function DocForm({ editFile, onClose, open }) {
+export default function DocForm({ editFile = null, newFile = true }) {
   const [loading, setLoading] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       title: editFile?.title || "",
@@ -40,6 +39,35 @@ export default function DocForm({ editFile, onClose, open }) {
   });
   const { triggerToast } = useToast();
   const router = useRouter();
+
+  const openDeleteDialog = () => setDeleteDialogOpen(true);
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
+
+  async function handleDeleteConfirm() {
+    try {
+      if (!editFile) {
+        throw new Error("File not found to delete");
+      }
+      const res = await deleteStorageFile(editFile._id);
+      if (!res.ok) {
+        throw res.error;
+      }
+      triggerToast({
+        title: "Success!",
+        messages: ["Document deleted."],
+        severity: "success",
+      });
+      router.push(`/docs`);
+    } catch (error) {
+      triggerToast({
+        title: "Error",
+        messages: error.message ? [error.message] : error?.messages || ["Failed to delete document"],
+        severity: "error",
+      });
+    } finally {
+      closeDeleteDialog();
+    }
+  }
 
   async function onSubmit(data) {
     setLoading(true);
@@ -50,18 +78,18 @@ export default function DocForm({ editFile, onClose, open }) {
         throw new Error("File upload failed, check Title and File validity");
       }
 
-      if (!editFile) {
-        // create event
+      if (newFile) {
+        // create doc
         const res = await createStorageFile({
           title: data.title,
           url: filename,
           filetype: "pdf",
         });
         if (!res.ok) {
-          throw new Error("Adding file to database failed!");
+          throw res.error;
         }
       } else {
-        // update existing event
+        // update existing doc
         const res = await updateStorageFile(editFile._id);
         if (!res.ok) {
           throw new Error("Updating file to database failed!");
@@ -73,11 +101,11 @@ export default function DocForm({ editFile, onClose, open }) {
         messages: ["Document saved."],
         severity: "success",
       });
-      router.refresh();
+      router.push(`/docs`);
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: [error?.message || "Failed to save document"],
+        messages: error.message ? [error.message] : error?.messages || ["Failed to save document"],
         severity: "error",
       });
     } finally {
@@ -86,78 +114,91 @@ export default function DocForm({ editFile, onClose, open }) {
   }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm">
-      <DialogTitle
-        sx={{
-          m: 0,
-          p: 2,
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography variant="b2" sx={{ pl: 2 }}>
+    <>
+      <Grid container alignItems="center" justifyContent="space-between">
+        <Typography variant="h5" sx={{ p: 2 }}>
           Upload File
         </Typography>
-        <IconButton onClick={onClose} size="small">
-          <Icon variant="close" />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} m={1}>
-              <Controller
-                name="title"
-                control={control}
-                rules={{
-                  required: "Title is required",
-                }}
-                render={({ field, fieldState: { error, invalid } }) => (
-                  <TextField
-                    {...field}
-                    label="Title"
-                    variant="outlined"
-                    fullWidth
-                    error={invalid}
-                    helperText={error?.message}
-                    disabled={Boolean(editFile)}
-                    required
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} alignItems="center" m={1}>
-              <FileUpload
-                name="file"
-                label="File Upload"
-                type="document"
-                control={control}
-                maxFiles={1}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="flex-end" gap={2}>
-                <Button
+        { !newFile ? (
+          <Button
+            variant="contained"
+            align="right"
+            sx={{ minWidth: 100, minHeight: 50, m: 3 }}
+            color="error"
+            onClick={openDeleteDialog}
+            startIcon={<Icon variant="delete" />}
+          >
+           Delete
+          </Button>
+        ) : null }
+      </Grid>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} m={1}>
+            <Controller
+              name="title"
+              control={control}
+              rules={{
+                required: "Title is required",
+              }}
+              render={({ field, fieldState: { error, invalid } }) => (
+                <TextField
+                  {...field}
+                  label="Title"
                   variant="outlined"
-                  color="primary"
-                  onClick={() => router.back()}
-                >
-                  Cancel
-                </Button>
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                >
-                  Save
-                </LoadingButton>
-              </Box>
-            </Grid>
+                  fullWidth
+                  error={invalid}
+                  helperText={error?.message}
+                  disabled={!newFile}
+                  required
+                />
+              )}
+            />
           </Grid>
-        </form>
-      </DialogContent>
-    </Dialog>
+          <Grid item xs={12} alignItems="center" m={1}>
+            <FileUpload
+              name="file"
+              label="File Upload"
+              type="document"
+              control={control}
+              maxFiles={1}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="flex-end" gap={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => router.back()}
+              >
+                Cancel
+              </Button>
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Save
+              </LoadingButton>
+            </Box>
+          </Grid>
+        </Grid>
+      </form>
+      <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this file? This action cannot be undone.
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

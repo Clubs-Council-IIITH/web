@@ -11,10 +11,13 @@ import {
   TableRow,
   Typography,
   Button,
+  Grid,
 } from "@mui/material";
 import DocItem from "./DocItem";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+
+import Icon from "components/Icon";
 
 import { useRouter } from "next/navigation";
 
@@ -30,6 +33,10 @@ export default function DocsList({ allFiles, priviliged = false }) {
   };
   const handleViewClose = () => {
     setSelectedFile(null);
+  };
+
+  const handleAddClick = () => {
+    setShowForm(true);
   };
 
   const formatDate = (dateString) => {
@@ -52,9 +59,22 @@ export default function DocsList({ allFiles, priviliged = false }) {
 
   return (
     <>
-      <Typography variant="h3" sx={{ mb: 2, ml: 1 }}>
-        Important Documents
-      </Typography>
+      <Grid container alignItems="center" justifyContent="space-between">
+        <Typography variant="h3" sx={{ mb: 2, ml: 1 }}>
+          Important Documents
+        </Typography>
+        { priviliged ? (
+          <Button
+            variant="contained"
+            align="right"
+            sx={{ minWidth: 100, minHeight: 50, m: 3 }}
+            onClick={() => router.push(`/docs/new`)}
+            startIcon={<Icon variant="add" />}
+          >
+            Add New File
+          </Button>
+        ) : null }
+      </Grid>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
