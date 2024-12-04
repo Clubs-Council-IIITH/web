@@ -16,7 +16,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import SLCTechLogo from "components/SLCTechLogo";
-import LifeLogo from "components/LifeLogo";
+import LifeLogo from "components/svg/life-logo-full-color.svg";
 
 const IIITLogo = "/assets/iiit-logo-white.png";
 
@@ -99,7 +99,7 @@ export default function Footer() {
             </div>
           </Box>
           <Box>
-            <SLCTechLogo height={50} width={130} />
+            <SLCTechLogo height={40} width={150} />
           </Box>
         </Grid>
         <Grid
