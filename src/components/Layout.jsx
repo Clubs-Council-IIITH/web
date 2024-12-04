@@ -233,7 +233,6 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
-
   // nav items that only SLC can see
   const SLCItems = (
     <List disablePadding sx={{ p: 1 }}>
