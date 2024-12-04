@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import LifeLogo from "components/LifeLogo";
+import LifeLogo from "components/svg/life-logo-full-color.svg";
 
 export default function Logo() {
   const theme = useTheme();
