@@ -15,8 +15,8 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
-import SLCTechLogo from "./SLCTechLogo";
-import LifeLogo from "components/life-logo-full-color-light.svg";
+import SLCTechLogo from "components/SLCTechLogo";
+import LifeLogo from "components/LifeLogo";
 
 const IIITLogo = "/assets/iiit-logo-white.png";
 
