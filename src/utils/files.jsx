@@ -5,12 +5,6 @@ const FILESERVER_URL = process.env.NEXT_PUBLIC_FILESERVER_URL || "http://files";
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL || "http://nginx/static";
 export const PUBLIC_URL = process.env.NEXT_PUBLIC_HOST || "http://localhost";
 
-// Dynamically import browser-image-resizer since it's only needed on the client side
-const readAndCompressImage = dynamic(
-  () => import("browser-image-resizer").then((mod) => mod.readAndCompressImage),
-  { ssr: false }
-);
-
 export function getNginxFile(filepath) {
   return `${STATIC_URL}/${filepath}`;
 }
@@ -53,43 +47,19 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   // early return if no file
   if (!file) return "";
 
-  let fileToUpload = file;
-
-  // Resize image if it's larger than 300KB
-  const config = {
-    quality: 0.7,
-    maxSizeMB: maxSizeMB,
-  };
-
+  // construct filename
   const ext = file.name.split(".").pop();
-  let finalFilename = `${filename ? filename : file.name}.${ext}`;
+  filename = filename ? `${filename}.${ext}` : file.name;
 
-  try {
-    const resizedBlob = await readAndCompressImage(file, config);
-
-    if (resizedBlob.size < file.size) {
-      // convert blob to file
-      finalFilename = "resized_" + finalFilename;
-      fileToUpload = new File([resizedBlob], file.name, {
-        type: resizedBlob.type,
-        lastModified: new Date().getTime(),
-      });
-    } else {
-      fileToUpload = new File(
-        [file],
-        `${filename ? filename : file.name}.${ext}`,
-        {
-          type: file.type,
-          lastModified: new Date().getTime(),
-        }
-      );
-    }
-
-    finalFilename = await uploadFileCommon(fileToUpload, "image");
-    return finalFilename;
-  } catch (error) {
-    throw error;
+  // TODO: pass maxSize to backend and let it know how much to compress instead of erroring out
+  const sizeLimit = maxSizeMB * (1024 * 1024);
+  if (file.size > sizeLimit) {
+    throw new Error(
+      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
+    );
   }
+
+  return await uploadFileCommon(file, "image", false, filename);
 }
 
 export async function uploadPDFFile(
