@@ -12,6 +12,7 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
+const AddToCalendarBtn = dynamic(() => import("components/events/AddToCalendarBtn"), { ssr: false });
 
 export default function EventDetails({ event, showCode = false }) {
   return (
@@ -40,17 +41,19 @@ export default function EventDetails({ event, showCode = false }) {
 
       <Grid item xs md>
         <Stack direction="column" p={1}>
-          <Box display="flex" alignItems="center">
-            <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
-            <Typography variant="body2">
-              <DateTime dt={event.datetimeperiod[0]} />
-            </Typography>
-            <Box mx={1}>-</Box>
-            <Typography variant="body2">
-              <DateTime dt={event.datetimeperiod[1]} />
-            </Typography>
+          <Box display="flex" alignItems="center" justifyContent={"space-between"}>
+            <Box display="flex" alignItems="center">
+              <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
+              <Typography variant="body2">
+                <DateTime dt={event.datetimeperiod[0]} />
+              </Typography>
+              <Box mx={1}>-</Box>
+              <Typography variant="body2">
+                <DateTime dt={event.datetimeperiod[1]} />
+              </Typography>
+            </Box>
+            <AddToCalendarBtn event={event} />
           </Box>
-
           <Typography variant="h3" paragraph mt={1} mb={0}>
             {event.name}
           </Typography>
