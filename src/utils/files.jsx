@@ -51,6 +51,14 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   const ext = file.name.split(".").pop();
   filename = filename ? `${filename}.${ext}` : file.name;
 
+  // TODO: pass maxSize to backend and let it know how much to compress instead of erroring out
+  const sizeLimit = maxSizeMB * (1024 * 1024);
+  if (file.size > sizeLimit) {
+    throw new Error(
+      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
+    );
+  }
+
   return await uploadFileCommon(file, "image", false, filename);
 }
 
