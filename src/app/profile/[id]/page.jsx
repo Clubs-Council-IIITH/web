@@ -83,11 +83,16 @@ export default async function Profile({ params }) {
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
       [],
     );
+
+    console.log(memberships);
+    if (memberships?.length === 0) {
+      notFound();
+    }
   }
 
   return (
     <Container>
-      {/* 
+      {/*
         show action palette only
         1. if current user is CC, or
         2. if current user is viewing their own profile and is not a club
@@ -143,10 +148,6 @@ export default async function Profile({ params }) {
               </Typography>
             </Stack>
           </Stack>
-        </Grid>
-
-        <Grid item container xs spacing={2} mt={5}>
-          <UserDetails user={user} />
         </Grid>
 
         <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
