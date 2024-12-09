@@ -81,7 +81,7 @@ export function middleware(req) {
   // redirect to CC about page
   if (pathname === "/student-bodies/clubs") {
     const redirectRes = NextResponse.redirect(
-      new URL("/about/clubs-council", req.url)
+      new URL("/clubs-council", req.url),
     );
     redirectRes.headers.set(
       "Content-Security-Policy",
