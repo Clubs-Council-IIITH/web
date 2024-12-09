@@ -41,19 +41,17 @@ export default function EventDetails({ event, showCode = false }) {
 
       <Grid item xs md>
         <Stack direction="column" p={1}>
-          <Box display="flex" alignItems="center" justifyContent={"space-between"}>
-            <Box display="flex" alignItems="center">
-              <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
-              <Typography variant="body2">
-                <DateTime dt={event.datetimeperiod[0]} />
-              </Typography>
-              <Box mx={1}>-</Box>
-              <Typography variant="body2">
-                <DateTime dt={event.datetimeperiod[1]} />
-              </Typography>
-            </Box>
-            <AddToCalendarBtn event={event} />
+          <Box display="flex">
+            <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
+            <Typography variant="body2">
+              <DateTime dt={event.datetimeperiod[0]} />
+            </Typography>
+            <Box mx={1}>-</Box>
+            <Typography variant="body2">
+              <DateTime dt={event.datetimeperiod[1]} />
+            </Typography>
           </Box>
+
           <Typography variant="h3" paragraph mt={1} mb={0}>
             {event.name}
           </Typography>
@@ -101,6 +99,10 @@ export default function EventDetails({ event, showCode = false }) {
           <Box display="flex" mt={3} alignItems="center">
             <Icon variant="group-outline-rounded" sx={{ mr: 2 }} />
             <AudienceChips audience={event.audience} />
+          </Box>
+
+          <Box display="flex" mt={2} alignItems="center" ml={-0.5}>
+            <AddToCalendarBtn event={event} />
           </Box>
 
           <Divider sx={{ borderStyle: "dashed", my: 3 }} />
