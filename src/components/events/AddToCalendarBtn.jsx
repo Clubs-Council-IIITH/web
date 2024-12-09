@@ -3,15 +3,10 @@
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import { useMode } from "contexts/ModeContext";
 import { locationLabel } from "utils/formatEvent";
+import { formatDateTime } from "utils/formatTime";
 
 export default function AddToCalendarBtn({ event }) {
   const { isDark } = useMode();
-  const formatDateTime = (dateTimeString) => {
-    const date = new Date(dateTimeString);
-    const dateString = date.toISOString().substring(0, 10); // YYYY-MM-DD
-    const timeString = date.toTimeString().substring(0, 5); // HH:MM
-    return { dateString, timeString };
-  };
 
   const startDateTime = formatDateTime(event.datetimeperiod[0]);
   const endDateTime = formatDateTime(event.datetimeperiod[1]);
