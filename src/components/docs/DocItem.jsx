@@ -18,7 +18,7 @@ import { getFile } from "utils/files";
 
 export default function DocItem({ file, onClose, open }) {
   const handleDownload = () => {
-    const fileUrl = getFile(file.url, true, true);
+    const fileUrl = getFile(file.filename, true, true);
     window.open(fileUrl, "_blank");
   };
   const theme = useTheme();
@@ -67,7 +67,7 @@ export default function DocItem({ file, onClose, open }) {
 
       <DialogContent>
         <iframe
-          src={getFile(file.url, true, true)}
+          src={getFile(file.filename, true, true)}
           style={{
             width: "100%",
             height: "80vh",

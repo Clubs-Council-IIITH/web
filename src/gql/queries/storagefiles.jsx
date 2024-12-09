@@ -5,7 +5,7 @@ export const GET_ALL_FILES = gql`
     storagefiles(filetype: $filetype) {
       _id
       title
-      url
+      filename
       modifiedTime
     }
   }
@@ -16,7 +16,7 @@ export const GET_FILE = gql`
     storagefile(fileId: $fileId) {
       _id
       title
-      url
+      filename
       modifiedTime
       creationTime
     }

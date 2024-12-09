@@ -82,7 +82,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
         // create doc
         const res = await createStorageFile({
           title: data.title,
-          url: filename,
+          filename: filename,
           filetype: "pdf",
         });
         if (!res.ok) {
