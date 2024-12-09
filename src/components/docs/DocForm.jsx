@@ -105,7 +105,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to save document"],
+        messages: error?.message ? [error.message] : error?.messages || ["Failed to save document"],
         severity: "error",
       });
     } finally {

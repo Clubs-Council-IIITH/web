@@ -1,5 +1,4 @@
 import { getSignedUploadURL } from "actions/files/signed-url/server_action";
-import dynamic from "next/dynamic";
 
 const FILESERVER_URL = process.env.NEXT_PUBLIC_FILESERVER_URL || "http://files";
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL || "http://nginx/static";
@@ -51,24 +50,17 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   const ext = file.name.split(".").pop();
   filename = filename ? `${filename}.${ext}` : file.name;
 
-  // TODO: pass maxSize to backend and let it know how much to compress instead of erroring out
-  const sizeLimit = maxSizeMB * (1024 * 1024);
-  if (file.size > sizeLimit) {
-    throw new Error(
-      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
-    );
-  }
-
-  return await uploadFileCommon(file, "image", false, filename);
+  return await uploadFileCommon(file, "image", false, filename, maxSizeMB);
 }
 
 export async function uploadPDFFile(
   file,
   static_file = false,
   title = null,
-  maxSizeMB = 20,
+  maxSizeMB = 20
 ) {
   if (!file || !title) return null;
+
   // check file size limits
   const sizeLimit = maxSizeMB * (1024 * 1024);
   if (file.size > sizeLimit) {
@@ -87,7 +79,8 @@ export async function uploadPDFFile(
     file,
     "document",
     static_file,
-    filename
+    filename,
+    maxSizeMB
   );
   return finalFilename;
 }
@@ -96,13 +89,15 @@ async function uploadFileCommon(
   file,
   filetype,
   static_file = false,
-  filename = null
+  filename = null,
+  maxSizeMB = 0.3
 ) {
   try {
     // get signed url
     const details = {
       staticFile: static_file,
       filename: filename,
+      maxSizeMb: maxSizeMB,
     };
 
     const res = await getSignedUploadURL(details);
