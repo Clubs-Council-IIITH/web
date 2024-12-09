@@ -35,6 +35,9 @@ export default async function MemberCard({ uid, poc, roles }) {
     user = { ...userMeta, ...userProfile1 };
   }
 
+  // Edge case for profile redirecting 404 for faculty/staff in supervisory-bodies section
+  const clickable = user?.role !== "public" || user?.email.includes("student") || user?.email.includes("research");
+
   return (
     <Card
       variant="outlined"
@@ -42,8 +45,7 @@ export default async function MemberCard({ uid, poc, roles }) {
       sx={{ backgroundColor: "inherit", border: "none", boxShadow: 0 }}
     >
       <CardActionArea
-        // TODO: Link to public user profile
-        component={Link}
+        component={clickable ? Link : "div"}
         href={`/profile/${uid}`}
         disabled={userProfile === null}
         sx={{
