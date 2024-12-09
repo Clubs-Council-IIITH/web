@@ -103,7 +103,10 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   // nav items that everybody can see
   const publicItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List
+      disablePadding
+      sx={{ p: 1, pb: ["slo", "cc", "club"].includes(user.role) ? 0 : 1 }}
+    >
       <DrawerItem
         title="home"
         path="/"
@@ -177,7 +180,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   // nav items that only club accounts can see
   const clubItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List disablePadding sx={{ p: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
@@ -197,7 +200,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   // nav items that only CC can see
   const ccItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List disablePadding sx={{ p: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
@@ -220,9 +223,19 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
+  const privilegedItems = (
+    <List disablePadding sx={{ p: 1, pt: 0 }}>
+      <DrawerItem
+        title="Important Docs"
+        path="/docs"
+        icon={<Icon variant="article-outline-rounded" />}
+      />
+    </List>
+  );
+
   // nav items that only SLC can see
   const SLCItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List disablePadding sx={{ p: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
@@ -298,6 +311,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Logo />
       </Box>
       {publicItems}
+      {["slo", "cc", "club"].includes(user.role) ? privilegedItems : null}
       {["club"].includes(user.role) ? clubItems : null}
       {["cc"].includes(user.role) ? ccItems : null}
       {["slc"].includes(user.role) ? SLCItems : null}

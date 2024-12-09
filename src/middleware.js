@@ -23,6 +23,11 @@ export function middleware(req) {
     object-src 'none';
     base-uri 'self';
     form-action 'self';
+    frame-src ${
+      pathname.includes("/docs") || process.env.NODE_ENV !== "production"
+        ? "http://localhost https://clubs.iiit.ac.in https://life.iiit.ac.in"
+        : "https://clubs.iiit.ac.in https://life.iiit.ac.in"
+    };
     frame-ancestors 'self' https://*.iiit.ac.in https://iiit.ac.in;
     connect-src 'self' https://api.iconify.design/ https://api.unisvg.com/ https://api.simplesvg.com/;
     upgrade-insecure-requests;
@@ -37,7 +42,7 @@ export function middleware(req) {
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set(
     "Content-Security-Policy",
-    contentSecurityPolicyHeaderValue,
+    contentSecurityPolicyHeaderValue
   );
   requestHeaders.set("X-Content-Type-Options", "nosniff");
   requestHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -49,7 +54,7 @@ export function middleware(req) {
   });
   response.headers.set(
     "Content-Security-Policy",
-    contentSecurityPolicyHeaderValue,
+    contentSecurityPolicyHeaderValue
   );
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -59,16 +64,16 @@ export function middleware(req) {
     // clear logout cookie
     req.cookies.delete("logout");
     const redirectRes = NextResponse.redirect(
-      new URL("/logoutCallback", req.url),
+      new URL("/logoutCallback", req.url)
     );
     redirectRes.headers.set(
       "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue,
+      contentSecurityPolicyHeaderValue
     );
     redirectRes.headers.set("X-Content-Type-Options", "nosniff");
     redirectRes.headers.set(
       "Referrer-Policy",
-      "strict-origin-when-cross-origin",
+      "strict-origin-when-cross-origin"
     );
     return redirectRes;
   }
@@ -80,12 +85,12 @@ export function middleware(req) {
     );
     redirectRes.headers.set(
       "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue,
+      contentSecurityPolicyHeaderValue
     );
     redirectRes.headers.set("X-Content-Type-Options", "nosniff");
     redirectRes.headers.set(
       "Referrer-Policy",
-      "strict-origin-when-cross-origin",
+      "strict-origin-when-cross-origin"
     );
     return redirectRes;
   }
@@ -102,16 +107,16 @@ export function middleware(req) {
   // if protected and current user is not logged in, redirect to login page
   if (!req.cookies.has("Authorization")) {
     const redirectRes = NextResponse.redirect(
-      new URL(`/login${pathname}`, req.url),
+      new URL(`/login${pathname}`, req.url)
     );
     redirectRes.headers.set(
       "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue,
+      contentSecurityPolicyHeaderValue
     );
     redirectRes.headers.set("X-Content-Type-Options", "nosniff");
     redirectRes.headers.set(
       "Referrer-Policy",
-      "strict-origin-when-cross-origin",
+      "strict-origin-when-cross-origin"
     );
     return redirectRes;
   }
@@ -127,16 +132,16 @@ export function middleware(req) {
   // club account specific redirects
   if (clubRedirectRoute && user?.role === "club") {
     const redirectRes = NextResponse.redirect(
-      new URL(clubRedirects[pathname], req.url),
+      new URL(clubRedirects[pathname], req.url)
     );
     redirectRes.headers.set(
       "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue,
+      contentSecurityPolicyHeaderValue
     );
     redirectRes.headers.set("X-Content-Type-Options", "nosniff");
     redirectRes.headers.set(
       "Referrer-Policy",
-      "strict-origin-when-cross-origin",
+      "strict-origin-when-cross-origin"
     );
     return redirectRes;
   }
@@ -147,12 +152,12 @@ export function middleware(req) {
     const redirectRes = NextResponse.redirect(new URL("/", req.url));
     redirectRes.headers.set(
       "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue,
+      contentSecurityPolicyHeaderValue
     );
     redirectRes.headers.set("X-Content-Type-Options", "nosniff");
     redirectRes.headers.set(
       "Referrer-Policy",
-      "strict-origin-when-cross-origin",
+      "strict-origin-when-cross-origin"
     );
     return redirectRes;
   }

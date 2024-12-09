@@ -51,7 +51,7 @@ function getIsTypeofFileRejected(fileRejections, type) {
   //   ),
   // );
   return fileRejections.some(({ errors }) =>
-    errors.some((error) => error.code == type),
+    errors.some((error) => error.code == type)
   );
 }
 
@@ -134,10 +134,10 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
                 typeof files === "string"
                   ? getFile(files)
                   : Array.isArray(files)
-                    ? typeof files[0] === "string"
-                      ? getFile(files[0])
-                      : URL.createObjectURL(files[0])
-                    : null
+                  ? typeof files[0] === "string"
+                    ? getFile(files[0])
+                    : URL.createObjectURL(files[0])
+                  : null
               }
               width={800}
               height={800}
@@ -151,7 +151,9 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
               }}
             />
           ) : (
-            files.map((file) => <Chip label={file.name} sx={{ m: 0.5 }} />)
+            files.map((file, index) => (
+              <Chip label={file.name} sx={{ m: 0.5 }} key={index} />
+            ))
           )
         ) : (
           <Box p={3}>
@@ -179,7 +181,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
       <FormHelperText
         error={getIsTypeofFileRejected(
           fileRejections,
-          ErrorCode.FileInvalidType,
+          ErrorCode.FileInvalidType
         )}
         sx={{ mt: 0 }}
       >
