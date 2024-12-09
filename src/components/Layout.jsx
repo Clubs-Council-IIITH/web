@@ -111,7 +111,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       <DrawerDropdown
         title="clubs council"
-        icon={<Icon variant="diversity-2-outline-rounded" />}
+        icon={<Icon variant="sports-baseball-outline" />}
       >
         <DrawerItem
           title="clubs"
@@ -273,7 +273,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="SLC Tech Team"
         path="/tech-team"
-        icon={<Icon variant="cloud-outline" />}
+        icon={<Icon variant="laptop-chromebook-outline-rounded" />}
       />
     </List>
   );

@@ -83,7 +83,7 @@ export default async function TechTeam() {
           padding: 2.5,
         }}
       >
-        <SLCTechLogo height={120} width={300} />
+        <SLCTechLogo height={120} width={500} />
       </Grid>
 
       <Typography variant="h3" mb={2}>
