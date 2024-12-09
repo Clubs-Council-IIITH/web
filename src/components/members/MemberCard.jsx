@@ -35,8 +35,8 @@ export default async function MemberCard({ uid, poc, roles }) {
     user = { ...userMeta, ...userProfile1 };
   }
 
-  // Edge case for profile redirecting 404 for faculty in supervisory-bodies section
-  const clickable = user.role !== "public" || user.email.includes("student") || user.email.includes("research");
+  // Edge case for profile redirecting 404 for faculty/staff in supervisory-bodies section
+  const clickable = user?.role !== "public" || user?.email.includes("student") || user?.email.includes("research");
 
   return (
     <Card

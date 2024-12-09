@@ -84,8 +84,7 @@ export default async function Profile({ params }) {
       [],
     );
 
-    console.log(memberships);
-    if (memberships?.length === 0) {
+    if (memberships?.length === 0 && currentUser?.uid !== user.uid) {
       notFound();
     }
   }
@@ -98,7 +97,9 @@ export default async function Profile({ params }) {
         2. if current user is viewing their own profile and is not a club
       */}
       {currentUser?.role === "cc" ||
-      (currentUser?.uid === user.uid && user.role !== "club") ? (
+      (memberships?.length !== 0 &&
+        currentUser?.uid === user.uid &&
+        user.role !== "club") ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
@@ -150,16 +151,23 @@ export default async function Profile({ params }) {
           </Stack>
         </Grid>
 
-        <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
-          {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff from rendering memberships
-            <Stack direction="column" spacing={2}>
-              <Typography variant="subtitle2" textTransform="uppercase">
-                Memberships
-              </Typography>
-              <UserMemberships rows={memberships} />
-            </Stack>
-          ) : null}
-        </Grid>
+        {/* Show user details only for students */}
+        {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
+          <>
+            <Grid item container xs spacing={2} mt={5}>
+              <UserDetails user={user} />
+            </Grid>
+
+            <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
+              <Stack direction="column" spacing={2}>
+                <Typography variant="subtitle2" textTransform="uppercase">
+                  Memberships
+                </Typography>
+                <UserMemberships rows={memberships} />
+              </Stack>
+            </Grid>
+          </>
+        ) : null}
       </Grid>
     </Container>
   );
