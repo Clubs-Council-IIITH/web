@@ -12,7 +12,10 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
-const AddToCalendarBtn = dynamic(() => import("components/events/AddToCalendarBtn"), { ssr: false });
+const AddToCalendarBtn = dynamic(
+  () => import("components/events/AddToCalendarBtn"),
+  { ssr: false }
+);
 
 export default function EventDetails({ event, showCode = false }) {
   return (
