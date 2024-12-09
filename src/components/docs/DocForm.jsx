@@ -73,6 +73,12 @@ export default function DocForm({ editFile = null, newFile = true }) {
     setLoading(true);
 
     try {
+
+      // check all fields
+      if (!data.title || !data.file) {
+        throw new Error("Please fill all the required Fields before submitting.");
+      }
+
       const filename = await uploadPDFFile(data.file[0], true, data.title);
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
