@@ -23,3 +23,10 @@ export function ISOtoHuman(iso, weekDay = false, showTime = true) {
     dt.year !== String(new Date().getFullYear()) ? ` ${dt.year}` : ""
   }${showTime ? `, ${dt.time.toUpperCase()}` : ""}`;
 }
+
+export const formatDateTime = (dateTimeString) => {
+  const date = new Date(dateTimeString);
+  const dateString = date.toISOString().substring(0, 10); // YYYY-MM-DD
+  const timeString = date.toTimeString().substring(0, 5); // HH:MM
+  return { dateString, timeString };
+};
