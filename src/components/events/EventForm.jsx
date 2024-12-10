@@ -244,16 +244,24 @@ export default function EventForm({
     }
 
     // upload poster
-    const poster_filename = ("poster_" + data.name + '_' + data.clubid).replace(".", "_");
-    try{
+    const poster_filename = ("poster_" + data.name + "_" + data.clubid).replace(
+      ".",
+      "_",
+    );
+    try {
       if (typeof formData.poster === "string") {
         data.poster = formData.poster;
       } else if (Array.isArray(formData.poster) && formData.poster.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(formData.poster[0], poster_filename);
+        const { filename, underlimit } = await uploadImageFile(
+          formData.poster[0],
+          poster_filename,
+        );
         if (!underlimit) {
           triggerToast({
             title: "Warning",
-            messages: ["Poster FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression."],
+            messages: [
+              "Poster FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
+            ],
             severity: "warning",
           });
         }
@@ -264,7 +272,9 @@ export default function EventForm({
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to upload poster"],
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload poster"],
         severity: "error",
       });
     }

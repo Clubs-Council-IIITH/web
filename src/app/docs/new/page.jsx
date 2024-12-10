@@ -14,11 +14,11 @@ export default async function Docs({ params }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
   if (user?.role !== "cc") redirect("/404");
 
-  return <DocForm/>;
+  return <DocForm />;
 }

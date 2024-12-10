@@ -12,12 +12,12 @@ export default async function Docs() {
     GET_ALL_FILES,
     {
       filetype: "pdf",
-    }
+    },
   );
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
   const isPriviliged = user?.role == "cc" ? true : false;

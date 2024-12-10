@@ -7,12 +7,9 @@ export async function updateStorageFile(fileId) {
   const response = { ok: false, error: null };
 
   try {
-    const result = await getClient().mutation(
-      UPDATE_STORAGEFILE,
-      {
-        fileId,
-      },
-    );
+    const result = await getClient().mutation(UPDATE_STORAGEFILE, {
+      fileId,
+    });
 
     // Handle case where result is null or undefined
     if (!result) {
@@ -29,7 +26,9 @@ export async function updateStorageFile(fileId) {
     if (error) {
       response.error = {
         title: error.name || "GraphQL Error",
-        messages: error?.graphQLErrors?.map((ge) => ge?.message) || ["Unknown error occurred"],
+        messages: error?.graphQLErrors?.map((ge) => ge?.message) || [
+          "Unknown error occurred",
+        ],
       };
     } else {
       // Safely access updateStorageFile from data

@@ -40,7 +40,7 @@ export default function DocsList({ allFiles, priviliged = false }) {
       const date = dayjs(
         dateString.replace(" IST", ""),
         "DD-MM-YYYY hh:mm A",
-        true
+        true,
       );
       if (!date.isValid()) {
         console.error("Invalid date parsing for:", dateString);

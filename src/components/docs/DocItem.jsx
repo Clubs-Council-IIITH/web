@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useTheme  } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
@@ -22,11 +22,16 @@ export default function DocItem({ file, onClose, open }) {
     window.open(fileUrl, "_blank");
   };
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Dialog open={open} fullScreen={fullScreen} onClose={onClose} maxWidth="xl" fullWidth>
+    <Dialog
+      open={open}
+      fullScreen={fullScreen}
+      onClose={onClose}
+      maxWidth="xl"
+      fullWidth
+    >
       <DialogTitle
         sx={{
           m: 0,

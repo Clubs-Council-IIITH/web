@@ -7,12 +7,9 @@ export async function deleteStorageFile(fileId) {
   const response = { ok: false, error: null };
 
   try {
-    const result = await getClient().mutation(
-      DELETE_STORAGEFILE,
-      {
-        fileId,
-      },
-    );
+    const result = await getClient().mutation(DELETE_STORAGEFILE, {
+      fileId,
+    });
 
     // Handle case where result is null or undefined
     if (!result) {
@@ -29,7 +26,9 @@ export async function deleteStorageFile(fileId) {
     if (error) {
       response.error = {
         title: error.name || "GraphQL Error",
-        messages: error?.graphQLErrors?.map((ge) => ge?.message) || ["Unknown error occurred"],
+        messages: error?.graphQLErrors?.map((ge) => ge?.message) || [
+          "Unknown error occurred",
+        ],
       };
     } else {
       // Safely access deleteStorageFile from data
