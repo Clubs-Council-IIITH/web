@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 
 import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
@@ -112,7 +112,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       <DrawerDropdown
         title="clubs council"
-        icon={<EmojiEventsOutlinedIcon/>}
+        icon={<EmojiEventsOutlinedIcon sx={{ width: 20, height: 20 }} />}
       >
         <DrawerItem
           title="clubs"
