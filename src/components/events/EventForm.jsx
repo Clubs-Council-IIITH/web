@@ -55,7 +55,7 @@ import { getFullUser } from "actions/users/get/full/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 
-import { uploadFile } from "utils/files";
+import { uploadImageFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 
@@ -244,12 +244,30 @@ export default function EventForm({
     }
 
     // upload poster
-    data.poster =
-      typeof formData.poster === "string"
-        ? formData.poster
-        : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadFile(formData.poster[0], "image")
-          : null;
+    const poster_filename = ("poster_" + data.name + '_' + data.clubid).replace(".", "_");
+    try{
+      if (typeof formData.poster === "string") {
+        data.poster = formData.poster;
+      } else if (Array.isArray(formData.poster) && formData.poster.length > 0) {
+        const { filename, underlimit } = await uploadImageFile(formData.poster[0], poster_filename);
+        if (!underlimit) {
+          triggerToast({
+            title: "Warning",
+            messages: ["Poster FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression."],
+            severity: "warning",
+          });
+        }
+        data.poster = filename;
+      } else {
+        data.poster = null;
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error",
+        messages: error.message ? [error.message] : error?.messages || ["Failed to upload poster"],
+        severity: "error",
+      });
+    }
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
@@ -510,7 +528,9 @@ export default function EventForm({
                   label="Poster"
                   control={control}
                   maxFiles={1}
+                  maxSizeMB={10}
                   shape="square"
+                  warnSizeMB={1}
                 />
               </Grid>
             </Grid>
