@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -10,7 +10,6 @@ import {
   Button,
   Typography,
   Grid,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -27,6 +26,8 @@ import { uploadPDFFile } from "utils/files";
 import { createStorageFile } from "actions/storagefiles/create/server_action";
 import { updateStorageFile } from "actions/storagefiles/update/server_action";
 import { deleteStorageFile } from "actions/storagefiles/delete/server_action";
+
+const maxFileSizeMB = 20;
 
 export default function DocForm({ editFile = null, newFile = true }) {
   const [loading, setLoading] = useState(false);
@@ -61,7 +62,9 @@ export default function DocForm({ editFile = null, newFile = true }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to delete document"],
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to delete document"],
         severity: "error",
       });
     } finally {
@@ -73,13 +76,19 @@ export default function DocForm({ editFile = null, newFile = true }) {
     setLoading(true);
 
     try {
-
       // check all fields
       if (!data.title || !data.file) {
-        throw new Error("Please fill all the required Fields before submitting.");
+        throw new Error(
+          "Please fill all the required Fields before submitting."
+        );
       }
 
-      const filename = await uploadPDFFile(data.file[0], true, data.title);
+      const filename = await uploadPDFFile(
+        data.file[0],
+        true,
+        data.title,
+        maxFileSizeMB
+      );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
       }
@@ -111,7 +120,9 @@ export default function DocForm({ editFile = null, newFile = true }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error?.message ? [error.message] : error?.messages || ["Failed to save document"],
+        messages: error?.message
+          ? [error.message]
+          : error?.messages || ["Failed to save document"],
         severity: "error",
       });
     } finally {
@@ -125,7 +136,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
         <Typography variant="h5" sx={{ p: 2 }}>
           Upload File
         </Typography>
-        { !newFile ? (
+        {!newFile ? (
           <Button
             variant="contained"
             align="right"
@@ -134,9 +145,9 @@ export default function DocForm({ editFile = null, newFile = true }) {
             onClick={openDeleteDialog}
             startIcon={<Icon variant="delete" />}
           >
-           Delete
+            Delete
           </Button>
-        ) : null }
+        ) : null}
       </Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
@@ -168,6 +179,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
               type="document"
               control={control}
               maxFiles={1}
+              maxSizeMB={maxFileSizeMB}
             />
           </Grid>
           <Grid item xs={12}>
@@ -194,13 +206,18 @@ export default function DocForm({ editFile = null, newFile = true }) {
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete this file? This action cannot be undone.
+          Are you sure you want to delete this file? This action cannot be
+          undone.
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDeleteDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            variant="contained"
+          >
             Delete
           </Button>
         </DialogActions>

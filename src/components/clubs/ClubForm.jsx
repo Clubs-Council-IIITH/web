@@ -139,11 +139,16 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.logo === "string") {
         data.logo = formData.logo;
       } else if (Array.isArray(formData.logo) && formData.logo.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(formData.logo[0], logo_filename);
+        const { filename, underlimit } = await uploadImageFile(
+          formData.logo[0],
+          logo_filename
+        );
         if (!underlimit) {
           triggerToast({
             title: "Warning",
-            messages: ["Logo FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression."],
+            messages: [
+              "Logo FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
+            ],
             severity: "warning",
           });
         }
@@ -154,7 +159,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to upload logo"],
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload logo"],
         severity: "error",
       });
     }
@@ -163,11 +170,16 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.banner === "string") {
         data.banner = formData.banner;
       } else if (Array.isArray(formData.banner) && formData.banner.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(formData.banner[0], banner_filename);
+        const { filename, underlimit } = await uploadImageFile(
+          formData.banner[0],
+          banner_filename
+        );
         if (!underlimit) {
           triggerToast({
             title: "Warning",
-            messages: ["Banner FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression."],
+            messages: [
+              "Banner FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
+            ],
             severity: "warning",
           });
         } else {
@@ -178,7 +190,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to upload banner"],
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload banner"],
         severity: "error",
       });
     }
@@ -186,12 +200,20 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     try {
       if (typeof formData.bannerSquare === "string") {
         data.bannerSquare = formData.bannerSquare;
-      } else if (Array.isArray(formData.bannerSquare) && formData.bannerSquare.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(formData.bannerSquare[0], bannerSquare_filename);
+      } else if (
+        Array.isArray(formData.bannerSquare) &&
+        formData.bannerSquare.length > 0
+      ) {
+        const { filename, underlimit } = await uploadImageFile(
+          formData.bannerSquare[0],
+          bannerSquare_filename
+        );
         if (!underlimit) {
           triggerToast({
             title: "Warning",
-            messages: ["Square Banner FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression."],
+            messages: [
+              "Square Banner FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
+            ],
             severity: "warning",
           });
         } else {
@@ -202,7 +224,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to upload square banner"],
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload square banner"],
         severity: "error",
       });
     }
@@ -329,7 +353,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="circle"
-                  maxSize={8 * 1024 * 1024}
+                  maxSizeMB={8}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -340,7 +364,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="rectangle"
-                  maxSize={20 * 1024 * 1024}
+                  maxSizeMB={20}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -351,7 +375,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="square"
-                  maxSize={15 * 1024 * 1024}
+                  maxSizeMB={15}
                 />
               </Grid>
             </Grid>

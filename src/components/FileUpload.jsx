@@ -18,7 +18,7 @@ export default function FileUpload({
   name,
   type = "image",
   maxFiles = 0,
-  maxSize = 20 * 1024 * 1024, // 20MB
+  maxSizeMB = 20, // 20MB
   shape = "",
 }) {
   return (
@@ -35,7 +35,7 @@ export default function FileUpload({
             onDrop={onChange}
             type={type}
             maxFiles={maxFiles}
-            maxSize={maxSize}
+            maxSizeMB={maxSizeMB}
             shape={shape}
           />
         )}
@@ -55,7 +55,7 @@ function getIsTypeofFileRejected(fileRejections, type) {
   );
 }
 
-function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
+function DropZone({ files, onDrop, type, maxFiles, maxSizeMB, shape }) {
   const theme = useTheme();
 
   // accept only valid extensions
@@ -83,7 +83,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
     onDropAccepted: onDrop,
     accept,
     maxFiles,
-    maxSize,
+    maxSize: maxSizeMB * 1024 * 1024,
     multiple: maxFiles > 1,
   });
 
@@ -176,7 +176,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSize, shape }) {
         error={getIsTypeofFileRejected(fileRejections, ErrorCode.FileTooLarge)}
         sx={{ mt: 0 }}
       >
-        Allowed file size: {maxSize / 1024 / 1024}MB
+        Allowed file size: {maxSizeMB}MB
       </FormHelperText>
       <FormHelperText
         error={getIsTypeofFileRejected(
