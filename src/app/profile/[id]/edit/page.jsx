@@ -29,7 +29,7 @@ export default async function EditProfile({ params }) {
       userInput: {
         uid: id,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 

@@ -36,7 +36,10 @@ export default async function MemberCard({ uid, poc, roles }) {
   }
 
   // Edge case for profile redirecting 404 for faculty/staff in supervisory-bodies section
-  const clickable = user?.role !== "public" || user?.email.includes("student") || user?.email.includes("research");
+  const clickable =
+    user?.role !== "public" ||
+    user?.email.includes("student") ||
+    user?.email.includes("research");
 
   return (
     <Card

@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
         userInput: {
           uid: id,
         },
-      }
+      },
     );
     const user = { ...userMeta, ...userProfile };
 
@@ -55,7 +55,7 @@ export default async function Profile({ params }) {
       userInput: {
         uid: id,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -64,7 +64,7 @@ export default async function Profile({ params }) {
   if (user?.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } }
+      { clubInput: { cid: user.uid } },
     );
     club = targetClub;
   }
@@ -81,7 +81,7 @@ export default async function Profile({ params }) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      []
+      [],
     );
 
     if (memberships?.length === 0 && currentUser?.uid !== user.uid) {
