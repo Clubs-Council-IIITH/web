@@ -1,6 +1,8 @@
 import { redirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 import { Container } from "@mui/material";
@@ -14,34 +16,47 @@ export const metadata = {
 export default async function EditProfile({ params }) {
   const { id } = params;
 
-  try {
-    // get target user
-    const { data: { userProfile, userMeta } = {} } = await getClient().query(
-      GET_USER_PROFILE,
-      {
-        userInput: {
-          uid: id,
-        },
+  // get currently logged in user
+  const {
+    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
+  } = await getClient().query(GET_USER, { userInput: null });
+  const currentUser = { ...currentUserMeta, ...currentUserProfile };
+
+  // get target user
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(
+    GET_USER_PROFILE,
+    {
+      userInput: {
+        uid: id,
       },
-    );
-    const user = { ...userMeta, ...userProfile };
-
-    if (userProfile === null || userMeta === null) {
-      notFound();
     }
-    // console.log(user);
+  );
+  const user = { ...userMeta, ...userProfile };
 
-    // if user is a club, redirect to club edit page
-    if (user.role === "club") {
-      redirect(`/manage/clubs/${user.uid}/edit`);
-    }
-
-    return (
-      <Container>
-        <UserForm defaultValues={user} action="save" />
-      </Container>
-    );
-  } catch (error) {
+  if (
+    userProfile === null ||
+    userMeta === null ||
+    (currentUser?.uid !== user?.uid && currentUser?.role !== "cc") ||
+    ["club", "cc"].includes(user?.role)
+  )
     redirect("/404");
+
+  // get memberships of the user
+  const {
+    data: { memberRoles },
+  } = await getClient().query(GET_MEMBERSHIPS, {
+    uid: id,
+  });
+  if (memberRoles?.length === 0) notFound();
+
+  // if user is a club, redirect to club edit page
+  if (user.role === "club") {
+    redirect(`/manage/clubs/${user.uid}/edit`);
   }
+
+  return (
+    <Container>
+      <UserForm defaultValues={user} action="save" />
+    </Container>
+  );
 }
