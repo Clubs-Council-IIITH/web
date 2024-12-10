@@ -33,6 +33,10 @@ import { socialsData } from "utils/socialsData";
 import { createClubAction } from "actions/clubs/create/server_action";
 import { editClubAction } from "actions/clubs/edit/server_action";
 
+const logo_warnSizeMB = 0.5;
+const banner_warnSizeMB = 1.5;
+const bannerSquare_warnSizeMB = 1;
+
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -139,20 +143,11 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.logo === "string") {
         data.logo = formData.logo;
       } else if (Array.isArray(formData.logo) && formData.logo.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(
+        data.logo = await uploadImageFile(
           formData.logo[0],
-          logo_filename
+          logo_filename,
+          logo_warnSizeMB
         );
-        if (!underlimit) {
-          triggerToast({
-            title: "Warning",
-            messages: [
-              "Logo FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
-            ],
-            severity: "warning",
-          });
-        }
-        data.logo = filename;
       } else {
         data.logo = null;
       }
@@ -170,22 +165,11 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.banner === "string") {
         data.banner = formData.banner;
       } else if (Array.isArray(formData.banner) && formData.banner.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(
+        data.banner = await uploadImageFile(
           formData.banner[0],
-          banner_filename
+          banner_filename,
+          banner_warnSizeMB
         );
-        if (!underlimit) {
-          triggerToast({
-            title: "Warning",
-            messages: [
-              "Banner FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
-            ],
-            severity: "warning",
-          });
-        } else {
-          data.banner = null;
-        }
-        data.banner = filename;
       }
     } catch (error) {
       triggerToast({
@@ -204,22 +188,11 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         Array.isArray(formData.bannerSquare) &&
         formData.bannerSquare.length > 0
       ) {
-        const { filename, underlimit } = await uploadImageFile(
+        data.bannerSquare = await uploadImageFile(
           formData.bannerSquare[0],
-          bannerSquare_filename
+          bannerSquare_filename,
+          bannerSquare_warnSizeMB
         );
-        if (!underlimit) {
-          triggerToast({
-            title: "Warning",
-            messages: [
-              "Square Banner FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
-            ],
-            severity: "warning",
-          });
-        } else {
-          data.bannerSquare = null;
-        }
-        data.bannerSquare = filename;
       }
     } catch (error) {
       triggerToast({
@@ -353,7 +326,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="circle"
-                  maxSizeMB={8}
+                  maxSizeMB={5}
+                  warnSizeMB={logo_warnSizeMB}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -364,7 +338,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="rectangle"
-                  maxSizeMB={20}
+                  maxSizeMB={15}
+                  warnSizeMB={banner_warnSizeMB}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -375,7 +350,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="square"
-                  maxSizeMB={15}
+                  maxSizeMB={10}
+                  warnSizeMB={bannerSquare_warnSizeMB}
                 />
               </Grid>
             </Grid>

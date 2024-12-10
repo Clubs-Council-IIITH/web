@@ -528,7 +528,9 @@ export default function EventForm({
                   label="Poster"
                   control={control}
                   maxFiles={1}
+                  maxSizeMB={10}
                   shape="square"
+                  warnSizeMB={1}
                 />
               </Grid>
             </Grid>

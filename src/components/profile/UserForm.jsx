@@ -22,6 +22,8 @@ import { uploadImageFile } from "utils/files";
 
 import { updateUserDataAction } from "actions/users/save/server_action";
 
+const profile_warnSizeMB = 0.5;
+
 export default function UserForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
 
@@ -39,11 +41,11 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
 
       if (res.ok) {
         // show success toast & redirect to manage page
-        triggerToast({
-          title: "Success!",
-          messages: ["Profile saved."],
-          severity: "success",
-        });
+        // triggerToast({
+        //   title: "Success!",
+        //   messages: ["Profile saved."],
+        //   severity: "success",
+        // });
         router.push(`/profile/${defaultValues.uid}`);
         router.refresh();
       } else {
@@ -69,26 +71,24 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
     if (formData.phone == "") data.phone = null;
 
     // upload image
-    try{
+    try {
       if (typeof formData.img === "string") {
         data.img = formData.img;
       } else if (Array.isArray(formData.img) && formData.img.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(formData.img[0], filename);
-        if (!underlimit) {
-          triggerToast({
-            title: "Warning",
-            messages: ["FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression."],
-            severity: "warning",
-          });
-        }
-        data.img = filename;
+        data.img = await uploadImageFile(
+          formData.img[0],
+          `profile_${defaultValues.uid}`,
+          profile_warnSizeMB
+        );
       } else {
         data.img = null;
       }
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: error.message ? [error.message] : error?.messages || ["Failed to upload image"],
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload image"],
         severity: "error",
       });
     }
@@ -220,7 +220,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   label="Profile Image"
                   control={control}
                   maxFiles={1}
+                  maxSizeMB={5}
                   shape="circle"
+                  warnSizeMB={profile_warnSizeMB}
                 />
               </Grid>
             </Grid>

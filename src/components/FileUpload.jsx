@@ -1,16 +1,16 @@
 "use client";
 
 import Image from "next/image";
-
 import { useMemo } from "react";
 
 import { Chip, Box, Typography, FormHelperText } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 import { Controller } from "react-hook-form";
-
 import { useDropzone, ErrorCode } from "react-dropzone";
+
 import { getFile } from "utils/files";
+import { useToast } from "components/Toast";
 
 export default function FileUpload({
   control,
@@ -19,6 +19,7 @@ export default function FileUpload({
   type = "image",
   maxFiles = 0,
   maxSizeMB = 20, // 20MB
+  warnSizeMB = null,
   shape = "",
 }) {
   return (
@@ -36,6 +37,7 @@ export default function FileUpload({
             type={type}
             maxFiles={maxFiles}
             maxSizeMB={maxSizeMB}
+            warnSizeMB={warnSizeMB}
             shape={shape}
           />
         )}
@@ -55,8 +57,17 @@ function getIsTypeofFileRejected(fileRejections, type) {
   );
 }
 
-function DropZone({ files, onDrop, type, maxFiles, maxSizeMB, shape }) {
+function DropZone({
+  files,
+  onDrop,
+  type,
+  maxFiles,
+  maxSizeMB,
+  warnSizeMB,
+  shape,
+}) {
   const theme = useTheme();
+  const { triggerToast } = useToast();
 
   // accept only valid extensions
   const accept = useMemo(() => {
@@ -73,6 +84,22 @@ function DropZone({ files, onDrop, type, maxFiles, maxSizeMB, shape }) {
     }
   }, [type]);
 
+  const customValidator = (file) => {
+    // Run only for image type
+    if (type !== "image") return;
+
+    if (warnSizeMB && file.size > warnSizeMB * 1024 * 1024) {
+      triggerToast({
+        title: "File Size Warning!",
+        messages: [
+          "Your uploaded file will be compressed after upload.",
+          `You may upload a smaller file upto ${warnSizeMB}MB for no compression.`,
+        ],
+        severity: "warning",
+      });
+    }
+  };
+
   const {
     getRootProps,
     getInputProps,
@@ -85,6 +112,7 @@ function DropZone({ files, onDrop, type, maxFiles, maxSizeMB, shape }) {
     maxFiles,
     maxSize: maxSizeMB * 1024 * 1024,
     multiple: maxFiles > 1,
+    validator: customValidator,
   });
 
   return (
