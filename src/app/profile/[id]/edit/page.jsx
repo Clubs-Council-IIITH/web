@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
+import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 
 import { Container } from "@mui/material";
 
@@ -26,7 +27,22 @@ export default async function EditProfile({ params }) {
     );
     const user = { ...userMeta, ...userProfile };
 
-    if (userProfile === null || userMeta === null) {
+
+    // get memberships if user is a person
+    let memberships = [];
+    const {
+      data: { memberRoles },
+    } = await getClient().query(GET_MEMBERSHIPS, {
+      uid: id,
+    });
+
+    // get list of memberRoles.roles along with member.cid
+    memberships = memberRoles.reduce(
+      (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
+      [],
+    );
+
+    if ((memberships?.length === 0 && currentUser?.uid !== user.uid) || userProfile === null || userMeta === null) {
       notFound();
     }
     // console.log(user);
