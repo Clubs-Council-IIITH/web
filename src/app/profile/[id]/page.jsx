@@ -96,7 +96,7 @@ export default async function Profile({ params }) {
         1. if current user is CC, or
         2. if current user is viewing their own profile and is not a club
       */}
-      {user?.role !== "club" &&
+      {!["club", "cc"].includes(user?.role) &&
       (currentUser?.role === "cc" ||
         (memberships?.length !== 0 && currentUser?.uid === user?.uid)) ? (
         <ActionPalette right={[EditUser]} />
