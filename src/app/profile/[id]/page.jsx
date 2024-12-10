@@ -13,7 +13,7 @@ import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata({ params }) {
   const { id } = params;
 
   try {
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }, parent) {
         userInput: {
           uid: id,
         },
-      },
+      }
     );
     const user = { ...userMeta, ...userProfile };
 
@@ -55,23 +55,23 @@ export default async function Profile({ params }) {
       userInput: {
         uid: id,
       },
-    },
+    }
   );
   const user = { ...userMeta, ...userProfile };
 
   // if user is a club, display the club's logo as profile picture
   let club = null;
-  if (user.role === "club") {
+  if (user?.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } },
+      { clubInput: { cid: user.uid } }
     );
     club = targetClub;
   }
 
   // get memberships if user is a person
   let memberships = [];
-  if (user.role === "public") {
+  if (user?.role === "public") {
     const {
       data: { memberRoles },
     } = await getClient().query(GET_MEMBERSHIPS, {
@@ -81,7 +81,7 @@ export default async function Profile({ params }) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      [],
+      []
     );
 
     if (memberships?.length === 0 && currentUser?.uid !== user.uid) {
@@ -96,10 +96,9 @@ export default async function Profile({ params }) {
         1. if current user is CC, or
         2. if current user is viewing their own profile and is not a club
       */}
-      {currentUser?.role === "cc" ||
-      (memberships?.length !== 0 &&
-        currentUser?.uid === user.uid &&
-        user.role !== "club") ? (
+      {user?.role !== "club" &&
+      (currentUser?.role === "cc" ||
+        (memberships?.length !== 0 && currentUser?.uid === user?.uid)) ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
