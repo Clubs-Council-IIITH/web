@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 
 import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
@@ -114,7 +115,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       <DrawerDropdown
         title="clubs council"
-        icon={<Icon variant="diversity-2-outline-rounded" />}
+        icon={<EmojiEventsOutlinedIcon sx={{ width: 20, height: 20 }} />}
       >
         <DrawerItem
           title="clubs"
@@ -286,7 +287,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="SLC Tech Team"
         path="/tech-team"
-        icon={<Icon variant="cloud-outline" />}
+        icon={<Icon variant="laptop-chromebook-outline-rounded" />}
       />
     </List>
   );
