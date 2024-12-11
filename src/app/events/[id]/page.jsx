@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getFile, PUBLIC_URL } from "utils/files";
 import EventDetails from "components/events/EventDetails";
 import { locationMap } from "constants/events";
-import { description } from "app/layout";
+import { shortDescription } from "app/layout";
 
 import dayjs from "dayjs";
 
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }) {
     const time = dayjs(event.datetimeperiod[0]).format("dddd h A");
 
     return {
-      title: `${event.name} (Time: ${time}, Location: ${locationMap[event.location]})`,
-      description: event.description ? event.description : description,
+      title: `${event.name} (Time: ${time}, Location: ${locationMap[event.location]}) | Life @ IIITH `,
+      description: event.description ? event.description : shortDescription,
       openGraph: {
         images: [
           {
