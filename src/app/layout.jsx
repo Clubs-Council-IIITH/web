@@ -44,6 +44,7 @@ export const metadata = {
     locale: "en_IN",
     title: "Life @ IIIT Hyderabad",
     description: shortDescription,
+    siteName: "Life @ IIITH",
     images: [
       {
         url: `${PUBLIC_URL}/og-image.png`,
