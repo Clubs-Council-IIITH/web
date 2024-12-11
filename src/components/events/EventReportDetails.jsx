@@ -10,16 +10,15 @@ import EventBudget from "components/events/EventBudget";
 import { locationLabel } from "utils/formatEvent";
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
-export function EventReportDetails({ event, eventReport, submittedUser }) {
-    const formatDate = (date) =>
-        new Intl.DateTimeFormat("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            timeZone: "Asia/Kolkata", // Adjust to the desired time zone
-        }).format(new Date(date));
+export const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateString = date.toISOString().substring(0, 10); // YYYY-MM-DD
+    const timeString = date.toTimeString().substring(0, 5); // HH:MM
+    return { dateString, timeString };
+};
+
+export function EventReportDetails({ event, eventReport, submittedUser, clubs }) {
+    console.log(event, eventReport, submittedUser, clubs);
     const handleDownloadPDF = () => {
         const doc = new jsPDF('p', 'mm', 'a4');
         const pageHeight = doc.internal.pageSize.height;
@@ -42,7 +41,8 @@ export function EventReportDetails({ event, eventReport, submittedUser }) {
         };
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
-        doc.text(formatDate(eventReport?.submittedTime), pageWidth - 20, yOffset, { align: "right" });
+        const submittedDate = formatDateTime(eventReport?.submittedTime);
+        doc.text(submittedDate.dateString + " " + submittedDate.timeString, pageWidth - 20, yOffset, { align: "right" });
         doc.setFontSize(18);
         yOffset = addTextWithPageBreak("Event Report", 20, yOffset);
 
@@ -60,13 +60,13 @@ export function EventReportDetails({ event, eventReport, submittedUser }) {
         yOffset = addTextWithPageBreak(`Event Name: ${event?.name || "Not Available"}`, 20, yOffset);
 
         if (event?.datetimeperiod) {
-            const startDate = formatDate(event.datetimeperiod[0]);
-            const endDate = formatDate(event.datetimeperiod[1]);
-            yOffset = addTextWithPageBreak(`Event Dates: ${startDate} to ${endDate}`, 20, yOffset);
+            const startDate = formatDateTime(event.datetimeperiod[0]);
+            const endDate = formatDateTime(event.datetimeperiod[1]);
+            yOffset = addTextWithPageBreak(`Event Dates: ${startDate.dateString + " " + startDate.timeString} to ${endDate.dateString + " " + endDate.timeString}`, 20, yOffset);
         } else {
             yOffset = addTextWithPageBreak("Event Dates: Not Available", 20, yOffset);
         }
-        yOffset = addTextWithPageBreak(`Organized By: ${event?.clubid} ${event?.collabclubs?.length > 0 ? ` and collabs: ${event?.collabclubs?.join(", ")}` : ""}`, 20, yOffset);
+        yOffset = addTextWithPageBreak(`Organized By: ${clubs?.find(club => club?.cid === event?.clubid)?.name || ""} ${event?.collabclubs?.length > 0 ? ` and collabs: ${event?.collabclubs?.map((collab) => clubs?.find(club => club?.cid === collab)?.name).join(", ")}` : ""}`, 20, yOffset);
         yOffset = addTextWithPageBreak(`Mode of Event: ${event?.mode || "Not Available"}`, 20, yOffset);
 
         yOffset += 2;
@@ -188,9 +188,9 @@ export function EventReportDetails({ event, eventReport, submittedUser }) {
                     <Box mt={2}>
                         <Typography variant="overline">Organized By</Typography>
                         <Typography variant="body2">
-                            <span>{event?.clubid}</span>
-                            {event?.collabclubs.map((club, key) => (
-                                <span key={key}>,{club}</span>
+                            <span>{clubs?.find((club) => club.cid === event?.clubid)?.name}</span>
+                            {event?.collabclubs.map((collab) => (
+                                <span>{clubs?.find((club) => club.cid === collab)?.name}</span>
                             ))}
                         </Typography>
                     </Box>

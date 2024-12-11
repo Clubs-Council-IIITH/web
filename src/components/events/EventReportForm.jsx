@@ -30,7 +30,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import {
     isValidPhoneNumber,
     parsePhoneNumberWithError,
-  } from "libphonenumber-js";
+} from "libphonenumber-js";
 import dayjs, { isDayjs } from "dayjs";
 
 import { useAuth } from "components/AuthProvider";
@@ -290,7 +290,7 @@ export default function EventReportForm({
                                 name="mediaLink"
                                 control={control}
                                 defaultValue={""}
-                                rules={{ 
+                                rules={{
                                     required: "Photos/Videos Link is required!",
                                     pattern: {
                                         value: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
@@ -549,7 +549,6 @@ function SubmittedBy({
                         severity: "error",
                     });
                 } else {
-                    // console.log(res.data);
                     if (res.data?.phone) setHasPhone(true);
                     else setHasPhone(false);
                 }

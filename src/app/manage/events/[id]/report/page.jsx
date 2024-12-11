@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { getFullUser } from "actions/users/get/full/server_action";
 import { EventReportDetails } from "components/events/EventReportDetails";
 import { GET_USER } from "gql/queries/auth";
@@ -30,13 +31,14 @@ export default async function EventReport({ params }) {
       eventid: id,
     });
 
+    const { data: { activeClubs } } = await getClient().query(GET_ACTIVE_CLUBS);
 
     const submittedUserProfile = await getFullUser(eventReport?.submittedBy);
     if(!submittedUserProfile || !eventReport) {
       return redirect("/404");
     }
 
-  return <EventReportDetails event={event} eventReport={eventReport} submittedUser={submittedUserProfile}/>;
+  return <EventReportDetails event={event} eventReport={eventReport} submittedUser={submittedUserProfile} clubs={activeClubs} />;
   } catch (error) {
     return redirect("/404");
   }

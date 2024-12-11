@@ -16,7 +16,8 @@ import ActionPalette from "components/ActionPalette";
 
 import EventDetails from "components/events/EventDetails";
 import EventBudget from "components/events/EventBudget";
-import PostEventDetails from "components/events/PostEventDetails";
+import EventBillStatus from "components/events/EventBillStatus";
+import EventReportStatus from "components/events/EventReportStatus";
 import EventApprovalStatus from "components/events/EventApprovalStatus";
 import {
   EditEvent,
@@ -170,7 +171,7 @@ export default async function ManageEventID({ params }) {
         {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
 
         {/* show post event information */}
-        {["cc", "club", "slo"].includes(user?.role) && PostEventDetails(event)}
+        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event) && EventReportStatus(event)}
       </Box>
     )
   );
