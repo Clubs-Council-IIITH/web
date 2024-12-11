@@ -13,6 +13,16 @@ import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
+export const getEventLocation = (event) => {
+  if (["offline", "hybrid"].includes(event.mode)) {
+    return event.location.length > 0
+      ? event.location.map((l) => locationLabel(l).name).join(", ")
+      : event.mode.charAt(0).toUpperCase() + event.mode.slice(1);
+  } else {
+    return "Online";
+  }
+};
+
 export default function EventDetails({ event, showCode = false }) {
   return (
     <Grid container spacing={2}>
@@ -87,11 +97,7 @@ export default function EventDetails({ event, showCode = false }) {
           <Box display="flex" mt={4} alignItems="center">
             <Icon variant="location-on-outline-rounded" sx={{ mr: 2 }} />
             <Typography variant="body1">
-              {["offline", "hybrid"].includes(event.mode)
-                ? event.location.length > 0
-                  ? event.location.map((l) => locationLabel(l).name).join(", ")
-                  : event.mode.charAt(0).toUpperCase() + event.mode.slice(1)
-                : "Online"}
+              {getEventLocation(event)}
             </Typography>
           </Box>
 
