@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getFile, PUBLIC_URL } from "utils/files";
 import EventDetails from "components/events/EventDetails";
 import { locationMap } from "constants/events";
+import { description } from "app/layout";
 
 import dayjs from "dayjs";
 
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }) {
 
     return {
       title: `${event.name} (Time: ${time}, Location: ${locationMap[event.location]})`,
-      description: event.description,
+      description: event.description ? event.description : description,
       openGraph: {
         images: [
           {

@@ -13,7 +13,7 @@ import TransitionProvider from "components/TransitionProvider";
 import { headers } from "next/headers";
 import { PUBLIC_URL } from "utils/files";
 
-const description =
+export const description =
   "Discover the vibrant campus life at IIIT Hyderabad. Explore diverse student-led clubs and bodies, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";
 const shortDescription =
   "Explore with the Life @ IIIT Hyderabad for diverse student-led clubs and bodies & events that enrich campus life and foster community.";
