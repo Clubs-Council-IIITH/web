@@ -96,9 +96,7 @@ export default function EventDetails({ event, showCode = false }) {
 
           <Box display="flex" mt={4} alignItems="center">
             <Icon variant="location-on-outline-rounded" sx={{ mr: 2 }} />
-            <Typography variant="body1">
-              {getEventLocation(event)}
-            </Typography>
+            <Typography variant="body1">{getEventLocation(event)}</Typography>
           </Box>
 
           <Box display="flex" mt={3} alignItems="center">

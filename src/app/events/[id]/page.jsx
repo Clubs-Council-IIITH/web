@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
       description: event.description ? event.description : shortDescription,
       openGraph: {
         title: `${event.name} (Time: ${time}, Location: ${getEventLocation(
-          event
+          event,
         )}) | Life @ IIITH`,
         siteName: "Life @ IIITH",
         images: [
