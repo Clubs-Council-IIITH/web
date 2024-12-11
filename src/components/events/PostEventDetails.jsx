@@ -1,7 +1,9 @@
 import { getClient } from "gql/client";
+import Link from "next/link";
+import Icon from "components/Icon";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
 
-import { Box, Grid, Typography, Divider } from "@mui/material";
+import { Box, Button, Grid, Typography, Divider, Stack } from "@mui/material";
 
 import { billsStateLabel } from "utils/formatEvent";
 
@@ -85,11 +87,37 @@ export default async function EventBillStatus(event) {
       <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
         Event Report
       </Typography>
-
       {!event.eventReportSubmitted ? (
-        <Box mt={2}>No event report submitted.</Box>
+        <Box mt={2} display={"flex"} flexDirection={"column"}>
+          No event report submitted.
+          <Button
+            component={Link}
+            href={`/manage/events/${event._id}/report/new`}
+            variant="contained"
+            color="primary"
+            startIcon={<Icon variant="add" />}
+            sx={{ mt: 2, width: "max-content" }}
+          >
+            Add Report
+          </Button>
+        </Box>
       ) : (
-        <Box mt={2}>Report submitted</Box>
+        <Box mt={2}>
+          <Typography>Report submitted</Typography>
+          <Stack spacing={2} direction="row" sx={{ mt: 2 }}>
+            <Button
+              component={Link}
+              href={`/manage/events/${event._id}/report`}
+              variant="contained"
+              color="success"
+              startIcon={<Icon variant="visibility-outline" />}
+              sx={{ width: "max-content" }}
+            >
+              View Report
+            </Button>
+          </Stack>
+
+        </Box>
       )}
     </>
   );

@@ -24,6 +24,8 @@ const routes = {
   "/manage/events/new": ["cc", "club"], // has to be higher to not conflict with :id
   "/manage/events/:id": ["cc", "club", "slc", "slo"],
   "/manage/events/:id/edit": ["cc", "club", "slo"],
+  "/manage/events/:id/report": ["cc", "club", "slo"],
+  "/manage/events/:id/report/new": ["cc", "club"],
   "/manage/data-events": ["cc", "club", "slc", "slo"],
   "/manage/finances": ["cc", "club", "slo"],
   "/manage/finances/:id": ["slo"],
