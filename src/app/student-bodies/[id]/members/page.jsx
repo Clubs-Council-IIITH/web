@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
       GET_CLUB,
       {
         clubInput: { cid: id },
-      }
+      },
     );
 
     club = fetchedClub;
