@@ -60,3 +60,21 @@ export const UPDATE_BILLS_STATUS = gql`
     }
   }
 `;
+
+export const ADD_EVENT_REPORT = gql`
+  mutation AddEventReport($details: InputEventReport!) {
+    addEventReport(details: $details) {
+      eventid
+      summary
+      attendance
+      prizes
+      prizesBreakdown
+      winners
+      photosLink
+      feedbackCc
+      feedbackCollege
+      submittedBy
+      submittedTime
+    }
+  }
+`;
