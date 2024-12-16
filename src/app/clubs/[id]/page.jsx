@@ -34,7 +34,8 @@ export async function generateMetadata({ params }) {
     return;
   }
 
-  if (club?.studentBody) return permanentRedirect(`/student-bodies/${id}`);
+  if (club?.category == "body")
+    return permanentRedirect(`/student-bodies/${id}`);
 
   return {
     title: club.name,
@@ -104,7 +105,7 @@ export default async function Club({ params }) {
               color="secondary"
               component={Link}
               href={`/${
-                club?.studentBody ? "student-bodies" : "clubs"
+                club?.category == "body" ? "student-bodies" : "clubs"
               }/${id}/members`}
             >
               <Typography variant="button" color="text.primary">

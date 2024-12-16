@@ -16,7 +16,9 @@ export default async function ClubButton({ clubid }) {
     <Box mr={1} mt={1}>
       <Button
         component={Link}
-        href={`/clubs/${clubid}`}
+        href={`/${
+          club?.category == "body" ? "student-bodies" : "clubs"
+        }/${clubid}`}
         variant="outlined"
         color="secondary"
         display="flex"
