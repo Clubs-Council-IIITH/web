@@ -19,7 +19,6 @@ export default async function MemberCard({ uid, poc, roles }) {
     },
   );
 
-
   if (userMeta === null) {
     return null;
   }
