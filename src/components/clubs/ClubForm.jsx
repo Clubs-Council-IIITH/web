@@ -492,7 +492,7 @@ function ClubCategorySelect({ control, disabled }) {
             <MenuItem value="cultural">Cultural</MenuItem>
             <MenuItem value="technical">Technical</MenuItem>
             <MenuItem value="affinity">Affinity Group</MenuItem>
-            <MenuItem value="slo">SLO</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
             <MenuItem value="body">Student Body</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
