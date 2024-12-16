@@ -19,6 +19,7 @@ export default async function MemberCard({ uid, poc, roles }) {
     },
   );
 
+
   if (userMeta === null) {
     return null;
   }
@@ -38,8 +39,8 @@ export default async function MemberCard({ uid, poc, roles }) {
   // Edge case for profile redirecting 404 for faculty/staff in supervisory-bodies section
   const clickable =
     user?.role !== "public" ||
-    user?.email.includes("student") ||
-    user?.email.includes("research");
+    user?.email?.includes("student") ||
+    user?.email?.includes("research");
 
   return (
     <Card
