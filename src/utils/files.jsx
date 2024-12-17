@@ -60,7 +60,7 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   return await {
     underlimit: underlimit,
     filename: await uploadFileCommon(file, "image", false, filename, maxSizeMB),
-  }
+  };
 }
 
 export async function uploadPDFFile(
