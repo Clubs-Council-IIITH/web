@@ -9,7 +9,7 @@ const redirect = (url, contentSecurityPolicyHeaderValue) => {
   const redirectRes = NextResponse.redirect(url);
   redirectRes.headers.set(
     "Content-Security-Policy",
-    contentSecurityPolicyHeaderValue
+    contentSecurityPolicyHeaderValue,
   );
   redirectRes.headers.set("X-Content-Type-Options", "nosniff");
   redirectRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -23,8 +23,8 @@ export function middleware(req) {
   const cspHeader = `
     default-src 'none';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http: 'unsafe-inline' ${
-    process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
-  };
+      process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
+    };
     manifest-src 'self';
     style-src 'self' 'nonce-${nonce}';
     style-src-attr 'self' 'unsafe-inline';
@@ -53,7 +53,7 @@ export function middleware(req) {
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set(
     "Content-Security-Policy",
-    contentSecurityPolicyHeaderValue
+    contentSecurityPolicyHeaderValue,
   );
   requestHeaders.set("X-Content-Type-Options", "nosniff");
   requestHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -65,7 +65,7 @@ export function middleware(req) {
   });
   response.headers.set(
     "Content-Security-Policy",
-    contentSecurityPolicyHeaderValue
+    contentSecurityPolicyHeaderValue,
   );
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -76,7 +76,7 @@ export function middleware(req) {
     req.cookies.delete("logout");
     return redirect(
       new URL("/logoutCallback", req.url),
-      contentSecurityPolicyHeaderValue
+      contentSecurityPolicyHeaderValue,
     );
   }
 
@@ -84,7 +84,7 @@ export function middleware(req) {
   if (pathname === "/student-bodies/clubs") {
     return redirect(
       new URL("/student-bodies/clubs-council", req.url),
-      contentSecurityPolicyHeaderValue
+      contentSecurityPolicyHeaderValue,
     );
   }
 
@@ -101,7 +101,7 @@ export function middleware(req) {
   if (!req.cookies.has("Authorization")) {
     return redirect(
       new URL(`/login${pathname}`, req.url),
-      contentSecurityPolicyHeaderValue
+      contentSecurityPolicyHeaderValue,
     );
   }
 
@@ -117,7 +117,7 @@ export function middleware(req) {
   if (clubRedirectRoute && user?.role === "club") {
     return redirect(
       new URL(clubRedirects[pathname], req.url),
-      contentSecurityPolicyHeaderValue
+      contentSecurityPolicyHeaderValue,
     );
   }
 
