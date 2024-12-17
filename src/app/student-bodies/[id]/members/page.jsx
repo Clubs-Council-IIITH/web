@@ -27,7 +27,8 @@ export async function generateMetadata({ params }) {
     return;
   }
 
-  if (club?.category != "body") return permanentRedirect(`/clubs/${id}/members`);
+  if (club?.category != "body")
+    return permanentRedirect(`/clubs/${id}/members`);
 
   return {
     title: `Members | ${club.name}`,
