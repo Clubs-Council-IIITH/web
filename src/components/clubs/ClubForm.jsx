@@ -105,7 +105,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       category: formData.category,
       tagline: formData.tagline === "" ? null : formData.tagline,
       description: formData.description,
-      studentBody: formData.studentBody,
       socials: {
         website:
           formData.socials.website === "" ? null : formData.socials.website,
@@ -204,8 +203,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       });
     }
 
-    if (data.category !== "other") data.studentBody = false;
-
     // mutate
     await submitHandlers[action](data);
   }
@@ -249,16 +246,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              {watch("category") == "other" ? (
-                <Grid item xs={12}>
-                  <StudentBodySelect
-                    control={control}
-                    disabled={
-                      user?.role != "cc" || watch("category") != "other"
-                    }
-                  />
-                </Grid>
-              ) : null}
               <Grid item xs={12}>
                 <ClubTaglineInput control={control} />
               </Grid>
@@ -505,36 +492,11 @@ function ClubCategorySelect({ control, disabled }) {
             <MenuItem value="cultural">Cultural</MenuItem>
             <MenuItem value="technical">Technical</MenuItem>
             <MenuItem value="affinity">Affinity Group</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="body">Student Body</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>
-      )}
-    />
-  );
-}
-
-// student body select
-function StudentBodySelect({ control, disabled }) {
-  return (
-    <Controller
-      name="studentBody"
-      control={control}
-      render={({ field }) => (
-        <FormGroup row>
-          <FormControlLabel
-            value="left"
-            control={
-              <Switch
-                color="primary"
-                checked={field.value}
-                {...field}
-                disabled={disabled}
-              />
-            }
-            label="Student Body"
-            labelPlacement="left"
-          />
-        </FormGroup>
       )}
     />
   );

@@ -14,13 +14,12 @@ export default async function StudentBodies() {
     logo: getStaticFile("cc-logo.png"),
     banner: getStaticFile("cc-banner.png"),
     tagline: "Let's make college life fun!",
-    studentBody: true,
-    category: "other",
+    category: "body",
   };
 
   return (
     <Box>
-      <ClubsGrid category="other" studentBody={true} staticClubs={[cc]} />
+      <ClubsGrid category="body" staticClubs={[cc]} />
     </Box>
   );
 }
