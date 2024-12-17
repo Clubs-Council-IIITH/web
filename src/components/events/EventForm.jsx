@@ -1365,8 +1365,10 @@ function EventPOC({
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
+      setLoading(true);
       let res = await currentMembersAction({ cid });
       if (!res.ok) {
         triggerToast({
@@ -1377,6 +1379,7 @@ function EventPOC({
       } else {
         setMembers(res.data);
       }
+      setLoading(false);
     })();
   }, [cid]);
 
@@ -1416,12 +1419,19 @@ function EventPOC({
                 variant="outlined"
                 fullWidth
               />
-            ) : members.length === 0 ? (
+            ) : loading ? (
               <Box py={25} width="100%" display="flex" justifyContent="center">
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
               </Box>
+            ) : members.length === 0 ? (
+              <TextField
+                disabled
+                value="No members found. Please add members to the club/body."
+                variant="outlined"
+                fullWidth
+              />
             ) : (
               <>
                 <InputLabel id="poc">Point of Contact *</InputLabel>
