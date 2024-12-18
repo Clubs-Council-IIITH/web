@@ -31,6 +31,7 @@ export default function EventPoster({ name, poster, width, height, style }) {
       onError={() =>
         setImg(getPlaceholder({ seed: name, w: width, h: height }))
       }
+      priority={true}
     />
   );
 }

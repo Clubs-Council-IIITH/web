@@ -12,6 +12,10 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
+const AddToCalendarBtn = dynamic(
+  () => import("components/events/AddToCalendarBtn"),
+  { ssr: false }
+);
 
 export const getEventLocation = (event) => {
   if (["offline", "hybrid"].includes(event.mode)) {
@@ -50,7 +54,7 @@ export default function EventDetails({ event, showCode = false }) {
 
       <Grid item xs md>
         <Stack direction="column" p={1}>
-          <Box display="flex" alignItems="center">
+          <Box display="flex">
             <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
             <Typography variant="body2">
               <DateTime dt={event.datetimeperiod[0]} />
@@ -102,6 +106,10 @@ export default function EventDetails({ event, showCode = false }) {
           <Box display="flex" mt={3} alignItems="center">
             <Icon variant="group-outline-rounded" sx={{ mr: 2 }} />
             <AudienceChips audience={event.audience} />
+          </Box>
+
+          <Box display="flex" mt={2} alignItems="center" ml={-0.5}>
+            <AddToCalendarBtn event={event} />
           </Box>
 
           <Divider sx={{ borderStyle: "dashed", my: 3 }} />

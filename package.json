@@ -29,6 +29,8 @@
     "@svgr/webpack": "^8.1.0",
     "@urql/next": "^1.1.2",
     "add-dependencies": "^1.1.0",
+    "add-to-calendar-button-react": "^2.7.3",
+    "browser-image-resizer": "^2.4.1",
     "cookies-next": "^4.3.0",
     "dayjs": "^1.11.13",
     "framer-motion": "^11.11.9",
