@@ -243,17 +243,25 @@ export default function EventReportForm({
                                 <InputLabel>Organized By</InputLabel>
                                 <Select
                                     value={[
-                                        ...(defaultValues?.collabclubs || []),
-                                        defaultValues?.clubid,
+                                        defaultValues?.clubid, ...(defaultValues?.collabclubs || []),
                                     ].filter(Boolean)} // Ensure the value is an array
                                     multiple
                                     renderValue={(selected) => {
-                                        return selected
-                                            .map((clubId) => clubs.find((club) => club.cid === clubId)?.name)
-                                            .filter(Boolean)
-                                            .map((clubName) => (
-                                                <Chip key={clubName} label={clubName} />
-                                            )) || "N/A";
+                                        return (
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexWrap: "wrap",
+                                                    gap: 0.5,
+                                                }}
+                                            >
+                                                {selected
+                                                    .map((clubId) => clubs.find((club) => club.cid === clubId)?.name)
+                                                    .filter(Boolean)
+                                                    .map((clubName) => (
+                                                        <Chip key={clubName} label={clubName} />
+                                                    )) || "N/A"}
+                                            </Box>)
                                     }}
                                 >
                                 </Select>
@@ -403,45 +411,47 @@ export default function EventReportForm({
                             />
                         </Grid>
                         {prizesInput?.length != 0 && (
-                            <Grid item xs={12} mt={2}>
-                                <Controller
-                                    name="prizesBreakdown"
-                                    control={control}
-                                    render={({ field, fieldState: { error, invalid } }) => (
-                                        <TextField
-                                            {...field}
-                                            label="Prizes breakdown (if any)"
-                                            multiline
-                                            rows={3}
-                                            fullWidth
-                                            autoComplete="off"
-                                            error={invalid}
-                                            helperText={error?.message}
-                                            variant="outlined"
-                                        />
-                                    )}
-                                />
-                            </Grid>)}
-                        <Grid item xs={12} mt={2}>
-                            <Controller
-                                name="winnersDetails"
-                                control={control}
-                                render={({ field, fieldState: { error, invalid } }) => (
-                                    <TextField
-                                        {...field}
-                                        label="Winners details (if any)"
-                                        autoComplete="off"
-                                        error={invalid}
-                                        helperText={error?.message}
-                                        variant="outlined"
-                                        rows={4}
-                                        fullWidth
-                                        multiline
-                                        disabled={false}
+                            <>
+                                <Grid item xs={12} mt={2}>
+                                    <Controller
+                                        name="prizesBreakdown"
+                                        control={control}
+                                        render={({ field, fieldState: { error, invalid } }) => (
+                                            <TextField
+                                                {...field}
+                                                label="Prizes breakdown (if any)"
+                                                multiline
+                                                rows={3}
+                                                fullWidth
+                                                autoComplete="off"
+                                                error={invalid}
+                                                helperText={error?.message}
+                                                variant="outlined"
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        </Grid>
+                                </Grid>
+                                <Grid item xs={12} mt={2}>
+                                    <Controller
+                                        name="winnersDetails"
+                                        control={control}
+                                        render={({ field, fieldState: { error, invalid } }) => (
+                                            <TextField
+                                                {...field}
+                                                label="Winners details (if any)"
+                                                autoComplete="off"
+                                                error={invalid}
+                                                helperText={error?.message}
+                                                variant="outlined"
+                                                rows={4}
+                                                fullWidth
+                                                multiline
+                                                disabled={false}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+                            </>)}
                         <Grid item xs={12} mt={2}>
                             <Controller
                                 name="feedback"
@@ -449,7 +459,7 @@ export default function EventReportForm({
                                 render={({ field, fieldState: { error, invalid } }) => (
                                     <TextField
                                         {...field}
-                                        label="Feedback (if any)"
+                                        label="Feedback for CC/College (if any)"
                                         autoComplete="off"
                                         error={invalid}
                                         helperText={error?.message}
@@ -565,7 +575,7 @@ function SubmittedBy({
                 rules={{ required: "Select a member!" }}
                 render={({ field, fieldState: { error, invalid } }) => (
                     <FormControl fullWidth error={invalid}>
-                        <InputLabel id="poc">Point of Contact *</InputLabel>
+                        <InputLabel id="poc">Submitted By *</InputLabel>
                         {members.length === 0 ? (
                             <Box py={25} width="100%" display="flex" justifyContent="center">
                                 <Fade in>
@@ -616,7 +626,7 @@ function SubmittedBy({
                                     }
                                 },
                             },
-                            required: "POC Phone number is required!",
+                            required: "submitting Member Phone number is required!",
                         }}
                         render={({ field, fieldState: { error, invalid } }) => (
                             <TextField

@@ -43,7 +43,7 @@ export default async function NewEventReport({ params }) {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
-    if (!event || event?.eventReportSubmitted || (user?.role === "club" && user?.uid !== event.clubid) || event.status.state !== "approved") {
+    if (!event || event?.eventReportSubmitted || (user?.uid !== event.clubid) || event.status.state !== "approved") {
       return redirect("/404");
     }
     return (

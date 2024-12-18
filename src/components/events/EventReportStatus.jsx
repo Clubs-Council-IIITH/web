@@ -3,7 +3,7 @@ import Icon from "components/Icon";
 
 import { Box, Button, Typography, Stack, Divider } from "@mui/material";
 
-export default async function EventReportStatus(event) {
+export default async function EventReportStatus(event, user) {
   if(!event || event?.status?.state !== "approved" || new Date(event?.datetimeperiod[1]) > new Date()){
     return null
   }
@@ -17,7 +17,8 @@ export default async function EventReportStatus(event) {
   {!event.eventReportSubmitted ? (
     <Box mt={2} display={"flex"} flexDirection={"column"}>
       No event report submitted.
-      <Button
+      {event?.clubid === user?.uid ?
+      (<Button
         component={Link}
         href={`/manage/events/${event._id}/report/new`}
         variant="contained"
@@ -26,11 +27,10 @@ export default async function EventReportStatus(event) {
         sx={{ mt: 2, width: "max-content" }}
       >
         Add Report
-      </Button>
+      </Button>) : ""}
     </Box>
   ) : (
     <Box mt={2}>
-      <Typography>Report submitted</Typography>
       <Stack spacing={2} direction="row" sx={{ mt: 2 }}>
         <Button
           component={Link}

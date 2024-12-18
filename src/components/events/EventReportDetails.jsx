@@ -170,14 +170,17 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
 
     return (
         <>
-            <Grid container>
-                <Typography variant="h3" mt={1} mb={1}>
+            <Grid container sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                <Typography variant="h3" mt={1} mb={2}>
                     Event Report
                 </Typography>
+                <Box mr={4}>
+                    <Button variant="contained" color="primary" onClick={handleDownloadPDF} >Download as PDF</Button>
+                </Box>
             </Grid>
 
-            <Grid container spacing={6} >
-                <Grid item xs={12} md={4}>
+            <Grid container spacing={6}>
+                <Grid item xs={12} md={4} sm={6}>
                     <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
                         Details
                     </Typography>
@@ -208,7 +211,7 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
                     </Box>
                 </Grid>
 
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={4} sm={6}>
                     <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
                         Attendance
                     </Typography>
@@ -232,7 +235,7 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
                     </Box>
                 </Grid>
 
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={4} sm={6}>
                     <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
                         Prizes
                     </Typography>
@@ -272,7 +275,7 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
             <Divider sx={{ borderStyle: "dashed", my: 2 }} />
 
             <Grid container spacing={6}>
-                <Grid item xs={12} lg={7}>
+                <Grid item xs={12} md={12} lg={6} sm={12}>
                     <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
                         Budget
                     </Typography>
@@ -283,7 +286,7 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
                     )}
                 </Grid>
 
-                <Grid item xs={12} lg={5}>
+                <Grid item xs={12} lg={3} md={6} sm={6}>
                     <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
                         Venue
                     </Typography>
@@ -307,10 +310,7 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
                         <Box mt={2}>None requested</Box>
                     )}
                 </Grid>
-            </Grid>
-
-            <Grid container spacing={6}>
-                <Grid item xs={12} lg={7} mt={3}>
+                <Grid item xs={12} lg={3} md={6} sm={6}>
                         <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
                             Report Submitted By
                         </Typography>
@@ -331,11 +331,6 @@ export function EventReportDetails({ event, eventReport, submittedUser, clubs })
                                 {eventReport?.feedbackCc || "None"}
                             </Typography>
                         </Grid>
-                </Grid>
-                <Grid item xs={12} lg={5} display="flex" justifyContent="flex-start" alignItems="flex-end" mb={2}>
-                    <Box mt={4}>
-                        <Button variant="contained" color="primary" onClick={handleDownloadPDF}>Download Report as PDF</Button>
-                    </Box>
                 </Grid>
             </Grid>
         </>
