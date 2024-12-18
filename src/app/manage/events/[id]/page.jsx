@@ -19,6 +19,7 @@ import EventBudget from "components/events/EventBudget";
 import EventBillStatus from "components/events/EventBillStatus";
 import EventReportStatus from "components/events/EventReportStatus";
 import EventApprovalStatus from "components/events/EventApprovalStatus";
+import { DownloadEvent } from "components/events/EventpdfDownloads"
 import {
   EditEvent,
   CopyEvent,
@@ -81,6 +82,7 @@ export default async function ManageEventID({ params }) {
             { status: event?.status, location: event?.location },
           ]}
           right={getActions(event, { ...userMeta, ...userProfile })}
+          downloadbtn={<DownloadEvent event={event} />}
         />
         <EventDetails showCode event={event} />
         <Divider sx={{ borderStyle: "dashed", my: 2 }} />
