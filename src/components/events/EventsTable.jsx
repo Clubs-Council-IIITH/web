@@ -74,7 +74,7 @@ export default function EventsTable({
         value ? (
           <>
             { row.budget && row.budget.length > 0 ? (
-              <Icon variant={"receipt-long-outline-rounded"} />
+              <Icon sx={{mr: 0.5}} variant={"paid-rounded"} />
             ): null}
             <Typography
               variant="body2"
@@ -87,7 +87,6 @@ export default function EventsTable({
                 MozHyphens: "auto",
                 WebkitHyphens: "auto",
                 hyphens: "auto",
-                paddingRight: "5",
               }}
             >
               {value}
