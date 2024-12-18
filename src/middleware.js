@@ -5,6 +5,17 @@ import { jwtDecode as jwt_decode } from "jwt-decode";
 import routes from "acl/routes";
 import clubRedirects from "acl/clubRedirects";
 
+const redirect = (url, contentSecurityPolicyHeaderValue) => {
+  const redirectRes = NextResponse.redirect(url);
+  redirectRes.headers.set(
+    "Content-Security-Policy",
+    contentSecurityPolicyHeaderValue,
+  );
+  redirectRes.headers.set("X-Content-Type-Options", "nosniff");
+  redirectRes.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  return redirectRes;
+};
+
 // TODO: make multiple middlewares (one for route acl, one for club redirects) and combine them
 export function middleware(req) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
@@ -23,6 +34,11 @@ export function middleware(req) {
     object-src 'none';
     base-uri 'self';
     form-action 'self';
+    frame-src ${
+      pathname.includes("/docs") || process.env.NODE_ENV !== "production"
+        ? "http://localhost https://clubs.iiit.ac.in https://life.iiit.ac.in"
+        : "https://clubs.iiit.ac.in https://life.iiit.ac.in"
+    };
     frame-ancestors 'self' https://*.iiit.ac.in https://iiit.ac.in;
     connect-src 'self' https://api.iconify.design/ https://api.unisvg.com/ https://api.simplesvg.com/;
     upgrade-insecure-requests;
@@ -58,36 +74,18 @@ export function middleware(req) {
   if (req.cookies.has("logout")) {
     // clear logout cookie
     req.cookies.delete("logout");
-    const redirectRes = NextResponse.redirect(
+    return redirect(
       new URL("/logoutCallback", req.url),
-    );
-    redirectRes.headers.set(
-      "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
-    redirectRes.headers.set(
-      "Referrer-Policy",
-      "strict-origin-when-cross-origin",
-    );
-    return redirectRes;
   }
 
   // redirect to CC about page
   if (pathname === "/student-bodies/clubs") {
-    const redirectRes = NextResponse.redirect(
-      new URL("/clubs-council", req.url),
-    );
-    redirectRes.headers.set(
-      "Content-Security-Policy",
+    return redirect(
+      new URL("/student-bodies/clubs-council", req.url),
       contentSecurityPolicyHeaderValue,
     );
-    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
-    redirectRes.headers.set(
-      "Referrer-Policy",
-      "strict-origin-when-cross-origin",
-    );
-    return redirectRes;
   }
 
   // check if current route is protected
@@ -101,19 +99,10 @@ export function middleware(req) {
 
   // if protected and current user is not logged in, redirect to login page
   if (!req.cookies.has("Authorization")) {
-    const redirectRes = NextResponse.redirect(
+    return redirect(
       new URL(`/login${pathname}`, req.url),
-    );
-    redirectRes.headers.set(
-      "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
-    redirectRes.headers.set(
-      "Referrer-Policy",
-      "strict-origin-when-cross-origin",
-    );
-    return redirectRes;
   }
 
   // if logged in, extract user attributes
@@ -126,35 +115,15 @@ export function middleware(req) {
 
   // club account specific redirects
   if (clubRedirectRoute && user?.role === "club") {
-    const redirectRes = NextResponse.redirect(
+    return redirect(
       new URL(clubRedirects[pathname], req.url),
-    );
-    redirectRes.headers.set(
-      "Content-Security-Policy",
       contentSecurityPolicyHeaderValue,
     );
-    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
-    redirectRes.headers.set(
-      "Referrer-Policy",
-      "strict-origin-when-cross-origin",
-    );
-    return redirectRes;
   }
 
   // check if user has access to route
   if (!routes[protectedRoute].includes(user?.role)) {
-    // redirect to home page if user does not have access
-    const redirectRes = NextResponse.redirect(new URL("/", req.url));
-    redirectRes.headers.set(
-      "Content-Security-Policy",
-      contentSecurityPolicyHeaderValue,
-    );
-    redirectRes.headers.set("X-Content-Type-Options", "nosniff");
-    redirectRes.headers.set(
-      "Referrer-Policy",
-      "strict-origin-when-cross-origin",
-    );
-    return redirectRes;
+    return redirect(new URL("/", req.url), contentSecurityPolicyHeaderValue);
   }
 
   // continue to page

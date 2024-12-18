@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { useTheme } from "@mui/material/styles";
 
-const SLCTechLogoPath = "/assets/slc-tech-logo-black.svg";
+const SLCTechLogoPath = "/assets/slc-tech-logo-black.png";
 
 export default function SLCTechLogo({ height, width }) {
   const theme = useTheme();

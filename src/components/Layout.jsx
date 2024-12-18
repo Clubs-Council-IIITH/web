@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 
 import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
@@ -103,7 +104,10 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   // nav items that everybody can see
   const publicItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List
+      disablePadding
+      sx={{ p: 1, pb: ["slo", "cc", "club"].includes(user.role) ? 0 : 1 }}
+    >
       <DrawerItem
         title="home"
         path="/"
@@ -111,7 +115,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       />
       <DrawerDropdown
         title="clubs council"
-        icon={<Icon variant="diversity-2-outline-rounded" />}
+        icon={<EmojiEventsOutlinedIcon sx={{ width: 20, height: 20 }} />}
       >
         <DrawerItem
           title="clubs"
@@ -177,7 +181,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   // nav items that only club accounts can see
   const clubItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List disablePadding sx={{ p: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
@@ -197,7 +201,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   // nav items that only CC can see
   const ccItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List disablePadding sx={{ p: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
@@ -220,9 +224,19 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </List>
   );
 
+  const privilegedItems = (
+    <List disablePadding sx={{ p: 1, pt: 0 }}>
+      <DrawerItem
+        title="Important Docs"
+        path="/docs"
+        icon={<Icon variant="article-outline-rounded" />}
+      />
+    </List>
+  );
+
   // nav items that only SLC can see
   const SLCItems = (
-    <List disablePadding sx={{ p: 1, pt: 1 }}>
+    <List disablePadding sx={{ p: 1 }}>
       <Box px={4}>
         <Typography variant="overline">Manage</Typography>
       </Box>
@@ -273,7 +287,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="SLC Tech Team"
         path="/tech-team"
-        icon={<Icon variant="cloud-outline" />}
+        icon={<Icon variant="laptop-chromebook-outline-rounded" />}
       />
     </List>
   );
@@ -298,6 +312,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Logo />
       </Box>
       {publicItems}
+      {["slo", "cc", "club"].includes(user.role) ? privilegedItems : null}
       {["club"].includes(user.role) ? clubItems : null}
       {["cc"].includes(user.role) ? ccItems : null}
       {["slc"].includes(user.role) ? SLCItems : null}

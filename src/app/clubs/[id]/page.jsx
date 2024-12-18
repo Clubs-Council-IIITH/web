@@ -18,19 +18,28 @@ import MembersGrid from "components/members/MembersGrid";
 export async function generateMetadata({ params }) {
   const { id } = params;
 
+  let club;
+
   try {
-    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-      clubInput: { cid: id },
-    });
+    const { data: { club: fetchedClub } = {} } = await getClient().query(
+      GET_CLUB,
+      {
+        clubInput: { cid: id },
+      },
+    );
 
-    if (club?.studentBody) return permanentRedirect(`/student-bodies/${id}`);
-
-    return {
-      title: club.name,
-    };
+    club = fetchedClub;
   } catch (error) {
     notFound();
+    return;
   }
+
+  if (club?.category == "body")
+    return permanentRedirect(`/student-bodies/${id}`);
+
+  return {
+    title: club.name,
+  };
 }
 
 export default async function Club({ params }) {
@@ -95,7 +104,9 @@ export default async function Club({ params }) {
               variant="none"
               color="secondary"
               component={Link}
-              href={`/clubs/${id}/members`}
+              href={`/${
+                club?.category == "body" ? "student-bodies" : "clubs"
+              }/${id}/members`}
             >
               <Typography variant="button" color="text.primary">
                 View all

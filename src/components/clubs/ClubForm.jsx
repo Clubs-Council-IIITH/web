@@ -27,11 +27,15 @@ import Icon from "components/Icon";
 import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
 
-import { uploadFile } from "utils/files";
+import { uploadImageFile } from "utils/files";
 import { socialsData } from "utils/socialsData";
 
 import { createClubAction } from "actions/clubs/create/server_action";
 import { editClubAction } from "actions/clubs/edit/server_action";
+
+const logo_warnSizeMB = 0.5;
+const banner_warnSizeMB = 1.5;
+const bannerSquare_warnSizeMB = 1;
 
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
@@ -101,7 +105,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       category: formData.category,
       tagline: formData.tagline === "" ? null : formData.tagline,
       description: formData.description,
-      studentBody: formData.studentBody,
       socials: {
         website:
           formData.socials.website === "" ? null : formData.socials.website,
@@ -129,38 +132,76 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         ? "cc"
         : formData.email.split("@")[0];
 
-    // upload media
+    // set filenames for media
     const logo_filename = "logo_" + data.cid.replace(".", "_");
-    data.logo =
-      typeof formData.logo === "string"
-        ? formData.logo
-        : Array.isArray(formData.logo) && formData.logo.length > 0
-          ? await uploadFile(formData.logo[0], "image", logo_filename)
-          : null;
-
     const banner_filename = "banner_" + data.cid.replace(".", "_");
-    data.banner =
-      typeof formData.banner === "string"
-        ? formData.banner
-        : Array.isArray(formData.banner) && formData.banner.length > 0
-          ? await uploadFile(formData.banner[0], "image", banner_filename, 3)
-          : null;
-
     const bannerSquare_filename = "bannerSquare_" + data.cid.replace(".", "_");
-    data.bannerSquare =
-      typeof formData.bannerSquare === "string"
-        ? formData.bannerSquare
-        : Array.isArray(formData.bannerSquare) &&
-            formData.bannerSquare.length > 0
-          ? await uploadFile(
-              formData.bannerSquare[0],
-              "image",
-              bannerSquare_filename,
-              3,
-            )
-          : null;
 
-    if (data.category !== "other") data.studentBody = false;
+    // upload media
+    try {
+      if (typeof formData.logo === "string") {
+        data.logo = formData.logo;
+      } else if (Array.isArray(formData.logo) && formData.logo.length > 0) {
+        data.logo = await uploadImageFile(
+          formData.logo[0],
+          logo_filename,
+          logo_warnSizeMB,
+        );
+      } else {
+        data.logo = null;
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error",
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload logo"],
+        severity: "error",
+      });
+    }
+
+    try {
+      if (typeof formData.banner === "string") {
+        data.banner = formData.banner;
+      } else if (Array.isArray(formData.banner) && formData.banner.length > 0) {
+        data.banner = await uploadImageFile(
+          formData.banner[0],
+          banner_filename,
+          banner_warnSizeMB,
+        );
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error",
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload banner"],
+        severity: "error",
+      });
+    }
+
+    try {
+      if (typeof formData.bannerSquare === "string") {
+        data.bannerSquare = formData.bannerSquare;
+      } else if (
+        Array.isArray(formData.bannerSquare) &&
+        formData.bannerSquare.length > 0
+      ) {
+        data.bannerSquare = await uploadImageFile(
+          formData.bannerSquare[0],
+          bannerSquare_filename,
+          bannerSquare_warnSizeMB,
+        );
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error",
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload square banner"],
+        severity: "error",
+      });
+    }
 
     // mutate
     await submitHandlers[action](data);
@@ -205,16 +246,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              {watch("category") == "other" ? (
-                <Grid item xs={12}>
-                  <StudentBodySelect
-                    control={control}
-                    disabled={
-                      user?.role != "cc" || watch("category") != "other"
-                    }
-                  />
-                </Grid>
-              ) : null}
               <Grid item xs={12}>
                 <ClubTaglineInput control={control} />
               </Grid>
@@ -282,7 +313,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="circle"
-                  maxSize={8 * 1024 * 1024}
+                  maxSizeMB={5}
+                  warnSizeMB={logo_warnSizeMB}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -293,7 +325,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="rectangle"
-                  maxSize={20 * 1024 * 1024}
+                  maxSizeMB={15}
+                  warnSizeMB={banner_warnSizeMB}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -304,7 +337,8 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="square"
-                  maxSize={15 * 1024 * 1024}
+                  maxSizeMB={10}
+                  warnSizeMB={bannerSquare_warnSizeMB}
                 />
               </Grid>
             </Grid>
@@ -458,36 +492,11 @@ function ClubCategorySelect({ control, disabled }) {
             <MenuItem value="cultural">Cultural</MenuItem>
             <MenuItem value="technical">Technical</MenuItem>
             <MenuItem value="affinity">Affinity Group</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="body">Student Body</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>
-      )}
-    />
-  );
-}
-
-// student body select
-function StudentBodySelect({ control, disabled }) {
-  return (
-    <Controller
-      name="studentBody"
-      control={control}
-      render={({ field }) => (
-        <FormGroup row>
-          <FormControlLabel
-            value="left"
-            control={
-              <Switch
-                color="primary"
-                checked={field.value}
-                {...field}
-                disabled={disabled}
-              />
-            }
-            label="Student Body"
-            labelPlacement="left"
-          />
-        </FormGroup>
       )}
     />
   );

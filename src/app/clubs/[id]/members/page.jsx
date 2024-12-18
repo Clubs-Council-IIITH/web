@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
-import { notFound } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 
 import { Box } from "@mui/material";
 
@@ -9,20 +9,31 @@ import MembersGrid from "components/members/MembersGrid";
 export async function generateMetadata({ params }, parent) {
   const { id } = params;
 
-  try {
-    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-      clubInput: { cid: id },
-    });
+  let club;
 
-    return {
-      title: `Members | ${club.name}`,
-    };
+  try {
+    const { data: { club: fetchedClub } = {} } = await getClient().query(
+      GET_CLUB,
+      {
+        clubInput: { cid: id },
+      },
+    );
+
+    club = fetchedClub;
   } catch (error) {
     notFound();
+    return;
   }
+
+  if (club?.category == "body")
+    return permanentRedirect(`/student-bodies/${id}/members`);
+
+  return {
+    title: `Members | ${club.name}`,
+  };
 }
 
-export default function Members({ params }) {
+export default function ClubMembers({ params }) {
   const { id } = params;
 
   return (

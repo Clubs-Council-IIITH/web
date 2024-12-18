@@ -90,13 +90,9 @@ export default function ClubsTable({ clubs }) {
       field: "category",
       headerName: "Category",
       flex: isMobile ? null : 2,
-      valueGetter: (value, row, column, apiRef) => ({
-        category: row.category,
-        studentBody: row.studentBody,
-      }),
       renderCell: ({ value }) => (
         <Box textTransform="capitalize">
-          {value.studentBody ? "Student Body" : value.category}
+          {value == "body" ? "Student Body" : value}
         </Box>
       ),
       display: "flex",
