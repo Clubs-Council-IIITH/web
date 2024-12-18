@@ -9,8 +9,8 @@ export const CREATE_STORAGEFILE = gql`
 `;
 
 export const UPDATE_STORAGEFILE = gql`
-  mutation UpdateStorageFile($fileId: String!) {
-    updateStorageFile(id: $fileId)
+  mutation UpdateStorageFile($fileId: String!, $version: Int!) {
+    updateStorageFile(id: $fileId, version: $version)
   }
 `;
 

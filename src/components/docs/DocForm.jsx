@@ -79,33 +79,44 @@ export default function DocForm({ editFile = null, newFile = true }) {
       // check all fields
       if (!data.title || !data.file) {
         throw new Error(
-          "Please fill all the required Fields before submitting.",
+          "Please fill all the required Fields before submitting."
         );
       }
 
       const filename = await uploadPDFFile(
         data.file[0],
         true,
-        data.title,
-        maxFileSizeMB,
+        data.title +
+          "_v" +
+          (newFile ? 1 : handleVersionNumbering(editFile)).toString(),
+        maxFileSizeMB
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
       }
 
+      // Extract out file extension from filename
+      const fileType = filename.split(".").pop();
+      const fileName = filename
+        .split(".")
+        .slice(0, -1)
+        .join(".")
+        .replace(/_v\d+$/, "");
+
       if (newFile) {
         // create doc
         const res = await createStorageFile({
           title: data.title,
-          filename: filename,
-          filetype: "pdf",
+          filename: fileName,
+          filetype: fileType,
         });
         if (!res.ok) {
           throw res.error;
         }
       } else {
+        const newVersion = handleVersionNumbering(editFile);
         // update existing doc
-        const res = await updateStorageFile(editFile._id);
+        const res = await updateStorageFile(editFile._id, newVersion);
         if (!res.ok) {
           throw new Error("Updating file to database failed!");
         }
@@ -225,3 +236,28 @@ export default function DocForm({ editFile = null, newFile = true }) {
     </>
   );
 }
+
+const handleVersionNumbering = (oldFile) => {
+  const latestVersion = oldFile.latestVersion;
+
+  // Parse the modified time (IST) and convert it to UTC
+  const modifiedTimeIST = oldFile.modifiedTime.replace(" ", "T") + "+05:30";
+  const modifiedDate = new Date(modifiedTimeIST);
+
+  if (isNaN(modifiedDate)) {
+    throw new Error("Invalid date format for modifiedTime");
+  }
+
+  // Get the current UTC time
+  const currentDate = new Date();
+
+  // Calculate the difference in hours
+  const diffInHours = Math.abs(currentDate - modifiedDate) / 36e5;
+
+  // Return the version number based on the time difference
+  if (diffInHours < 24) {
+    return latestVersion;
+  } else {
+    return latestVersion + 1;
+  }
+};

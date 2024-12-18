@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   Paper,
   Table,
@@ -14,43 +16,31 @@ import {
   Grid,
 } from "@mui/material";
 import DocItem from "./DocItem";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import Icon from "components/Icon";
+import { formatDateTimeCustom } from "utils/formatTime";
 
-import { useRouter } from "next/navigation";
-
-dayjs.extend(customParseFormat);
+export const formatDate = (dateString) => {
+  return formatDateTimeCustom(
+    dateString,
+    "YYYY-MM-DD HH:mm:ss",
+    "hh:mm A, DD MMMM YYYY IST"
+  );
+};
 
 export default function DocsList({ allFiles, priviliged = false }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [version, setVersion] = useState(null);
 
   const router = useRouter();
 
   const handleViewClick = (file) => {
     setSelectedFile(file);
+    setVersion(file.latestVersion);
   };
   const handleViewClose = () => {
     setSelectedFile(null);
-  };
-
-  const formatDate = (dateString) => {
-    try {
-      const date = dayjs(
-        dateString.replace(" IST", ""),
-        "DD-MM-YYYY hh:mm A",
-        true,
-      );
-      if (!date.isValid()) {
-        console.error("Invalid date parsing for:", dateString);
-        return dateString; // Return original string if parsing fails
-      }
-      return date.format("hh:mm:ss A, DD MMMM YYYY IST");
-    } catch (error) {
-      console.error("Date formatting error:", error);
-      return dateString; // Return original string if there's an error
-    }
+    setVersion(null);
   };
 
   return (
@@ -119,6 +109,9 @@ export default function DocsList({ allFiles, priviliged = false }) {
       {selectedFile ? (
         <DocItem
           file={selectedFile}
+          version={version}
+          versionChange={setVersion}
+          maxVersion={selectedFile.latestVersion}
           onClose={handleViewClose}
           open={Boolean(selectedFile)}
         />
