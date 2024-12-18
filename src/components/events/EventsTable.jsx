@@ -70,25 +70,31 @@ export default function EventsTable({
       field: "name",
       headerName: "Name",
       flex: isMobile ? null : 5,
-      renderCell: (p) =>
-        p.value ? (
-          <Typography
-            variant="body2"
-            style={{
-              overflowWrap: "break-word",
-              wordWrap: "break-word",
-              msWordBreak: "break-all",
-              wordBreak: "break-all",
-              msHyphens: "auto",
-              MozHyphens: "auto",
-              WebkitHyphens: "auto",
-              hyphens: "auto",
-            }}
-          >
-            {p.value}
-          </Typography>
+      renderCell: ({value, row}) =>
+        value ? (
+          <>
+            { row.budget && row.budget.length > 0 ? (
+              <Icon variant={"receipt-long-outline-rounded"} />
+            ): null}
+            <Typography
+              variant="body2"
+              style={{
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
+                msWordBreak: "break-all",
+                wordBreak: "break-all",
+                msHyphens: "auto",
+                MozHyphens: "auto",
+                WebkitHyphens: "auto",
+                hyphens: "auto",
+                paddingRight: "5",
+              }}
+            >
+              {value}
+            </Typography>
+          </>
         ) : (
-          p.value
+          value
         ),
       display: "flex",
     },
