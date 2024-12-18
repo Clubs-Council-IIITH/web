@@ -17,6 +17,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
+import { formatDate } from "components/docs/DocsList";
 
 const buildFileName = (file, version) => {
   return file.filename + "_v" + version.toString() + "." + file.filetype;
@@ -82,6 +83,7 @@ export default function DocItem({
               flexDirection: "column",
               gap: 1,
               mt: 2,
+              mb: 2,
               width: "100%",
             }}
           >
@@ -175,7 +177,7 @@ export default function DocItem({
           src={getFile(buildFileName(file, version), true, true)}
           style={{
             width: "100%",
-            height: "80vh",
+            height: "75vh",
             border: "none",
           }}
           title={file.title}
@@ -185,6 +187,10 @@ export default function DocItem({
             it to view.
           </Typography>
         </iframe>
+
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Last Modified: {formatDate(file.modifiedTime)}
+        </Typography>
       </DialogContent>
     </Dialog>
   );

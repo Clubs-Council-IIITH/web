@@ -23,6 +23,24 @@ import { useRouter } from "next/navigation";
 
 dayjs.extend(customParseFormat);
 
+export const formatDate = (dateString) => {
+  try {
+    const date = dayjs(
+      dateString.replace(" IST", ""),
+      "YYYY-MM-DD HH:mm:ss",
+      true,
+    );
+    if (!date.isValid()) {
+      console.error("Invalid date parsing for:", dateString);
+      return dateString; // Return original string if parsing fails
+    }
+    return date.format("hh:mm A, DD MMMM YYYY IST");
+  } catch (error) {
+    console.error("Date formatting error:", error);
+    return dateString; // Return original string if there's an error
+  }
+};
+
 export default function DocsList({ allFiles, priviliged = false }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [version, setVersion] = useState(null);
@@ -36,24 +54,6 @@ export default function DocsList({ allFiles, priviliged = false }) {
   const handleViewClose = () => {
     setSelectedFile(null);
     setVersion(null);
-  };
-
-  const formatDate = (dateString) => {
-    try {
-      const date = dayjs(
-        dateString.replace(" IST", ""),
-        "YYYY-MM-DD HH:mm:ss",
-        true,
-      );
-      if (!date.isValid()) {
-        console.error("Invalid date parsing for:", dateString);
-        return dateString; // Return original string if parsing fails
-      }
-      return date.format("hh:mm A, DD MMMM YYYY IST");
-    } catch (error) {
-      console.error("Date formatting error:", error);
-      return dateString; // Return original string if there's an error
-    }
   };
 
   return (
