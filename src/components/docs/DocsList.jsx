@@ -25,14 +25,17 @@ dayjs.extend(customParseFormat);
 
 export default function DocsList({ allFiles, priviliged = false }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [version, setVersion] = useState(null);
 
   const router = useRouter();
 
   const handleViewClick = (file) => {
     setSelectedFile(file);
+    setVersion(file.latestVersion);
   };
   const handleViewClose = () => {
     setSelectedFile(null);
+    setVersion(null);
   };
 
   const formatDate = (dateString) => {
@@ -119,6 +122,9 @@ export default function DocsList({ allFiles, priviliged = false }) {
       {selectedFile ? (
         <DocItem
           file={selectedFile}
+          version={version}
+          versionChange={setVersion}
+          maxVersion={selectedFile.latestVersion}
           onClose={handleViewClose}
           open={Boolean(selectedFile)}
         />
