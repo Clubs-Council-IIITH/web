@@ -39,14 +39,14 @@ export default function DocsList({ allFiles, priviliged = false }) {
     try {
       const date = dayjs(
         dateString.replace(" IST", ""),
-        "DD-MM-YYYY hh:mm A",
+        "YYYY-MM-DD HH:mm:ss",
         true,
       );
       if (!date.isValid()) {
         console.error("Invalid date parsing for:", dateString);
         return dateString; // Return original string if parsing fails
       }
-      return date.format("hh:mm:ss A, DD MMMM YYYY IST");
+      return date.format("hh:mm A, DD MMMM YYYY IST");
     } catch (error) {
       console.error("Date formatting error:", error);
       return dateString; // Return original string if there's an error
