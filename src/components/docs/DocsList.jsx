@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   Paper,
   Table,
@@ -14,31 +16,16 @@ import {
   Grid,
 } from "@mui/material";
 import DocItem from "./DocItem";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import Icon from "components/Icon";
-
-import { useRouter } from "next/navigation";
-
-dayjs.extend(customParseFormat);
+import { formatDateTimeCustom } from "utils/formatTime";
 
 export const formatDate = (dateString) => {
-  try {
-    const date = dayjs(
-      dateString.replace(" IST", ""),
-      "YYYY-MM-DD HH:mm:ss",
-      true,
-    );
-    if (!date.isValid()) {
-      console.error("Invalid date parsing for:", dateString);
-      return dateString; // Return original string if parsing fails
-    }
-    return date.format("hh:mm A, DD MMMM YYYY IST");
-  } catch (error) {
-    console.error("Date formatting error:", error);
-    return dateString; // Return original string if there's an error
-  }
+  return formatDateTimeCustom(
+    dateString,
+    "YYYY-MM-DD HH:mm:ss",
+    "hh:mm A, DD MMMM YYYY IST"
+  );
 };
 
 export default function DocsList({ allFiles, priviliged = false }) {
