@@ -14,7 +14,7 @@ import Icon from "components/Icon";
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 const AddToCalendarBtn = dynamic(
   () => import("components/events/AddToCalendarBtn"),
-  { ssr: false }
+  { ssr: false },
 );
 
 export const getEventLocation = (event) => {
