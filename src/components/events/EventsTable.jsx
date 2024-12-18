@@ -116,36 +116,6 @@ export default function EventsTable({
             valueFormatter: (value, row, column, apiRef) => ISOtoHuman(value),
           },
         ]),
-    // {
-    //   field: "budget",
-    //   headerName: "Budget/SLC",
-    //   flex: isMobile ? null : 2,
-    //   align: "center",
-    //   headerAlign: "center",
-    //   valueGetter: (value, row, column, apiRef) => ({
-    //     requested: row.budget.length > 0,
-    //     approved: row.status.budget,
-    //   }),
-    //   renderCell: ({ value }) => (
-    //     <Icon
-    //       sx={{
-    //         color: !value.requested
-    //           ? "secondary.main"
-    //           : !value.approved
-    //             ? "warning.main"
-    //             : "success.main",
-    //       }}
-    //       variant={
-    //         !value.requested
-    //           ? "remove-rounded"
-    //           : !value.approved
-    //             ? "refresh-rounded"
-    //             : "check"
-    //       }
-    //     />
-    //   ),
-    //   display: 'flex',
-    // },
     {
       field: "venue",
       headerName: "Venue/SLO",
