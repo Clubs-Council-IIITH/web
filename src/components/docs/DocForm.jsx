@@ -84,7 +84,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
       // check all fields
       if (!data.title || !data.file) {
         throw new Error(
-          "Please fill all the required Fields before submitting."
+          "Please fill all the required Fields before submitting.",
         );
       }
 
