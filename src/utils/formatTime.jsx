@@ -37,11 +37,7 @@ export const formatDateTime = (dateTimeString) => {
 
 export const formatDateTimeCustom = (dateString, inputFormat, outputFormat) => {
   try {
-    const date = dayjs(
-      dateString.replace(" IST", ""),
-      inputFormat,
-      true,
-    );
+    const date = dayjs(dateString.replace(" IST", ""), inputFormat, true);
     if (!date.isValid()) {
       console.error("Invalid date parsing for:", dateString);
       return dateString; // Return original string if parsing fails

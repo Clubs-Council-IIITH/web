@@ -24,7 +24,7 @@ export const formatDate = (dateString) => {
   return formatDateTimeCustom(
     dateString,
     "YYYY-MM-DD HH:mm:ss",
-    "hh:mm A, DD MMMM YYYY IST"
+    "hh:mm A, DD MMMM YYYY IST",
   );
 };
 
