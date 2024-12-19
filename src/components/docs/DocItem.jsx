@@ -8,6 +8,8 @@ import {
   Button,
   Box,
   Typography,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
@@ -15,19 +17,35 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
+import { formatDate } from "components/docs/DocsList";
 
-export default function DocItem({ file, onClose, open }) {
+const buildFileName = (file, version) => {
+  return file.filename + "_v" + version.toString() + "." + file.filetype;
+};
+
+export default function DocItem({
+  file,
+  version,
+  versionChange,
+  maxVersion,
+  onClose,
+  open,
+}) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const handleDownload = () => {
-    const fileUrl = getFile(file.filename, true, true);
+    const fileUrl = getFile(buildFileName(file, version), true, true);
     window.open(fileUrl, "_blank");
   };
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const handleVersionChange = (event) => {
+    versionChange(event.target.value);
+  };
 
   return (
     <Dialog
       open={open}
-      fullScreen={fullScreen}
+      fullScreen={isMobile}
       onClose={onClose}
       maxWidth="xl"
       fullWidth
@@ -37,45 +55,129 @@ export default function DocItem({ file, onClose, open }) {
           m: 0,
           p: 2,
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: isMobile ? "column" : "row", // Adjust layout for mobile
+          justifyContent: isMobile ? "center" : "space-between",
+          alignItems: isMobile ? "center" : "center",
           position: "relative",
         }}
       >
+        {/* Title */}
         <Box
           component="div"
           sx={{
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
+            position: isMobile ? "static" : "absolute",
+            left: isMobile ? "auto" : "50%",
+            transform: isMobile ? "none" : "translateX(-50%)",
             textAlign: "center",
           }}
         >
           {file.title}
         </Box>
 
-        {/* Buttons on the right */}
-        <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
-          <Button
-            variant="contained"
-            startIcon={<Icon variant="download" />}
-            onClick={handleDownload}
-            size="small"
+        {/* Buttons and Dropdown */}
+        {isMobile ? (
+          // Render buttons below the title for mobile
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              mt: 2,
+              mb: 2,
+              width: "100%",
+            }}
           >
-            Download
-          </Button>
-          <IconButton onClick={onClose} size="small">
-            <Icon variant="close" />
-          </IconButton>
-        </Box>
+            {/* Dropdown */}
+            <Box>
+              <Select
+                value={version}
+                onChange={handleVersionChange}
+                size="small"
+                sx={{ minWidth: 100, width: "100%" }}
+              >
+                {Array.from({ length: maxVersion }, (_, i) => {
+                  const version = maxVersion - i;
+                  return (
+                    <MenuItem key={version} value={version}>
+                      {`v${version}${
+                        version === maxVersion ? " (Latest)" : ""
+                      }`}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </Box>
+
+            {/* Download Button */}
+            <Button
+              variant="contained"
+              startIcon={<Icon variant="download" />}
+              onClick={handleDownload}
+              size="small"
+              sx={{ width: "100%" }}
+            >
+              Download
+            </Button>
+
+            <IconButton
+              onClick={onClose}
+              size="small"
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 8,
+              }}
+            >
+              <Icon variant="close" />
+            </IconButton>
+          </Box>
+        ) : (
+          // Desktop layout
+          <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
+            {/* Dropdown */}
+            <Box>
+              <Select
+                value={version}
+                onChange={handleVersionChange}
+                size="small"
+                sx={{ minWidth: 100 }}
+              >
+                {Array.from({ length: maxVersion }, (_, i) => {
+                  const version = maxVersion - i;
+                  return (
+                    <MenuItem key={version} value={version}>
+                      {`v${version}${
+                        version === maxVersion ? " (Latest)" : ""
+                      }`}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </Box>
+
+            {/* Download Button */}
+            <Button
+              variant="contained"
+              startIcon={<Icon variant="download" />}
+              onClick={handleDownload}
+              size="small"
+            >
+              Download
+            </Button>
+
+            <IconButton onClick={onClose} size="small">
+              <Icon variant="close" />
+            </IconButton>
+          </Box>
+        )}
       </DialogTitle>
 
       <DialogContent>
         <iframe
-          src={getFile(file.filename, true, true)}
+          src={getFile(buildFileName(file, version), true, true)}
           style={{
             width: "100%",
-            height: "80vh",
+            height: "75vh",
             border: "none",
           }}
           title={file.title}
@@ -85,6 +187,10 @@ export default function DocItem({ file, onClose, open }) {
             it to view.
           </Typography>
         </iframe>
+
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Last Modified: {formatDate(file.modifiedTime)}
+        </Typography>
       </DialogContent>
     </Dialog>
   );
