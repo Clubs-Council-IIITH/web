@@ -17,12 +17,7 @@ import { useTheme } from "@mui/material/styles";
 
 import ImageModal from "components/ImageModal";
 
-export default function ImageMasonry({
-  images,
-  limit = undefined,
-  cols = 4,
-  priority = true,
-}) {
+export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -123,7 +118,7 @@ export default function ImageMasonry({
           onLoad={() => {
             handleImageLoad();
           }}
-          priority={priority}
+          priority={true}
           style={{ display: "none" }}
         />
       ))}

@@ -6,7 +6,7 @@ export const metadata = {
   title: "Gallery | Life @ IIIT-H",
 };
 
-export default async function Gallery({ limit = undefined, priority = true }) {
+export default async function Gallery({ limit = undefined }) {
   const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
     next: { revalidate: 1200 }, // 20 minutes
   });
@@ -18,7 +18,7 @@ export default async function Gallery({ limit = undefined, priority = true }) {
 
   return (
     <>
-      <ImageMasonry images={galleryItems} limit={limit} priority={priority} />
+      <ImageMasonry images={galleryItems} limit={limit} />
     </>
   );
 }
