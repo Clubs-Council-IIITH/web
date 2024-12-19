@@ -92,9 +92,7 @@ export default function ClubsTable({ clubs }) {
       flex: isMobile ? null : 2,
       valueGetter: (value, row, column, apiRef) =>
         value === "body" ? "Student Body" : value,
-      renderCell: ({ value }) => (
-        <Box textTransform="capitalize">{value}</Box>
-      ),
+      renderCell: ({ value }) => <Box textTransform="capitalize">{value}</Box>,
       display: "flex",
     },
     {
