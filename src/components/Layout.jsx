@@ -182,21 +182,21 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   //nav dropdown for member managment
   const manageMemberItems = (
     <DrawerDropdown
-    title="members"
-    // TODO: Change icon for this
-    icon={<Icon variant="group-outline-rounded" />}
+      title="members"
+      // TODO: Change icon for this
+      icon={<Icon variant="group-outline-rounded" />}
     >
-    <DrawerItem
-    title="Members List"
-    path="/manage/members"
-    icon={<Icon variant="group-outline-rounded" />}
-  />
-  <DrawerItem 
-    title="Data Download"
-    path="/manage/data-members"
-    icon={<Icon variant="sim-card-download-outline-rounded" />}
-  />
-  </DrawerDropdown>
+      <DrawerItem
+        title="Members List"
+        path="/manage/members"
+        icon={<Icon variant="group-outline-rounded" />}
+      />
+      <DrawerItem
+        title="Data Download"
+        path="/manage/data-members"
+        icon={<Icon variant="sim-card-download-outline-rounded" />}
+      />
+    </DrawerDropdown>
   );
 
   // nav items that only club accounts can see

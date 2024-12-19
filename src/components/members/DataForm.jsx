@@ -29,7 +29,7 @@ import { membersDataDownload } from "actions/members/data/server_action";
 
 const allowed_roles = ["cc", "club", "slo", "slc"];
 const admin_roles = ["cc", "slo", "slc"];
-const disabledFields = ["uid", "clubid",]; // Fields that should be disabled and selected
+const disabledFields = ["uid", "clubid"]; // Fields that should be disabled and selected
 
 function DataClubSelect({
   control,
@@ -243,7 +243,12 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel id="typeMembers">Type of Members</InputLabel>
-                <Select labelId="typeMembers" label="typeMembers" fullWidth {...field}>
+                <Select
+                  labelId="typeMembers"
+                  label="typeMembers"
+                  fullWidth
+                  {...field}
+                >
                   <MenuItem value="all">All Members</MenuItem>
                   <MenuItem value="current">Only Current Members</MenuItem>
                 </Select>
