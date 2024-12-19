@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export default async function EventReport({ params }) {
   const { id } = params;
 
-  try{
+  try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
@@ -27,18 +27,30 @@ export default async function EventReport({ params }) {
       return redirect("/404");
     }
 
-    const { data: { eventReport } = {} } = await getClient().query(GET_EVENT_REPORT, {
-      eventid: id,
-    });
+    const { data: { eventReport } = {} } = await getClient().query(
+      GET_EVENT_REPORT,
+      {
+        eventid: id,
+      }
+    );
 
-    const { data: { activeClubs } } = await getClient().query(GET_ACTIVE_CLUBS);
+    const {
+      data: { activeClubs },
+    } = await getClient().query(GET_ACTIVE_CLUBS);
 
     const submittedUserProfile = await getFullUser(eventReport?.submittedBy);
-    if(!submittedUserProfile || !eventReport) {
+    if (!submittedUserProfile || !eventReport) {
       return redirect("/404");
     }
 
-  return <EventReportDetails event={event} eventReport={eventReport} submittedUser={submittedUserProfile} clubs={activeClubs} />;
+    return (
+      <EventReportDetails
+        event={event}
+        eventReport={eventReport}
+        submittedUser={submittedUserProfile}
+        clubs={activeClubs}
+      />
+    );
   } catch (error) {
     return redirect("/404");
   }

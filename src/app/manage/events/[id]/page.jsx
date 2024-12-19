@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
+import { getFullUser } from "actions/users/get/full/server_action";
 
 import {
   Box,
@@ -19,7 +20,7 @@ import EventBudget from "components/events/EventBudget";
 import EventBillStatus from "components/events/EventBillStatus";
 import EventReportStatus from "components/events/EventReportStatus";
 import EventApprovalStatus from "components/events/EventApprovalStatus";
-import { DownloadEvent } from "components/events/EventpdfDownloads"
+import { DownloadEvent } from "components/events/EventpdfDownloads";
 import {
   EditEvent,
   CopyEvent,
@@ -67,6 +68,11 @@ export default async function ManageEventID({ params }) {
   );
   const user = { ...userMeta, ...userProfile };
 
+  const pocProfile = await getFullUser(event?.poc);
+  if (!pocProfile) {
+    return redirect("/404");
+  }
+
   return (
     user?.role === "club" &&
       user?.uid !== event.clubid &&
@@ -82,7 +88,7 @@ export default async function ManageEventID({ params }) {
             { status: event?.status, location: event?.location },
           ]}
           right={getActions(event, { ...userMeta, ...userProfile })}
-          downloadbtn={<DownloadEvent event={event} />}
+          downloadbtn={<DownloadEvent event={event} pocProfile={pocProfile} />}
         />
         <EventDetails showCode event={event} />
         <Divider sx={{ borderStyle: "dashed", my: 2 }} />
@@ -173,7 +179,9 @@ export default async function ManageEventID({ params }) {
         {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
 
         {/* show post event information */}
-        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event) && EventReportStatus(event, user)}
+        {["cc", "club", "slo"].includes(user?.role) &&
+          EventBillStatus(event) &&
+          EventReportStatus(event, user)}
       </Box>
     )
   );
