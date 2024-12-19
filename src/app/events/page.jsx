@@ -1,167 +1,56 @@
 import { getClient } from "gql/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
-import { Box, Divider, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 import EventsFilter from "components/events/EventsFilter";
-import EventsGrid from "components/events/EventsGrid";
+import PaginatedEventsGrid from "components/events/PaginatedEventGrid";
 
 export const metadata = {
-  title: "Events | Clubs Council @ IIIT-H",
+  title: "Events | Life @ IIIT-H",
 };
+
+async function query(querystring) {
+  "use server";
+  const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: querystring["targetClub"],
+    name: querystring["targetName"],
+    public: true,
+    paginationOn: querystring["paginationOn"],
+    skip: querystring["skip"],
+    limit: querystring["limit"],
+  });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data?.events || [];
+}
 
 export default async function Events({ searchParams }) {
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
-  let targetState = [
-    ...(searchParams?.upcoming === "true" ? ["upcoming"] : []),
-    ...(searchParams?.completed === "true" ? ["completed"] : []),
-  ];
 
-  if (targetState.length === 0) targetState = ["upcoming", "completed"];
+  let targetState = ["upcoming", "completed"];
+  targetState = targetState.filter(
+    (state) => searchParams?.[state] !== "false",
+  );
 
-  const ongoingEventsFilter = (event) => {
-    let selectedClub = false,
-      selectedState = false,
-      selectedName = false;
-
-    // filter by club
-    if (!targetClub) {
-      selectedClub = true;
-    } else {
-      selectedClub =
-        event?.clubid === targetClub || event.collabclubs.includes(targetClub);
-    }
-
-    // filter by state
-    if (!targetState) selectedState = true;
-    else {
-      const isOngoing =
-        new Date(event?.datetimeperiod[0]) <= new Date() &&
-        new Date(event?.datetimeperiod[1]) >= new Date();
-      selectedState = isOngoing;
-    }
-
-    // filter by name
-    if (!targetName) selectedName = true;
-    else
-      selectedName = event?.name
-        ?.toLowerCase()
-        ?.includes(targetName?.toLowerCase());
-
-    return selectedClub && selectedState && selectedName;
-  };
-
-  const upcomingEventsFilter = (event) => {
-    let selectedClub = false,
-      selectedState = false,
-      selectedName = false;
-
-    // filter by club
-    if (!targetClub) {
-      selectedClub = true;
-    } else {
-      selectedClub =
-        event?.clubid === targetClub || event.collabclubs.includes(targetClub);
-    }
-    // filter by state
-    if (!targetState) selectedState = true;
-    else {
-      const isUpcoming = new Date(event?.datetimeperiod[0]) > new Date();
-      selectedState = isUpcoming;
-    }
-
-    // filter by name
-    if (!targetName) selectedName = true;
-    else
-      selectedName = event?.name
-        ?.toLowerCase()
-        ?.includes(targetName?.toLowerCase());
-
-    return selectedClub && selectedState && selectedName;
-  };
-
-  const completedEventsFilter = (event) => {
-    let selectedClub = false,
-      selectedState = false,
-      selectedName = false;
-
-    // filter by club
-    if (!targetClub) {
-      selectedClub = true;
-    } else {
-      selectedClub =
-        event?.clubid === targetClub || event.collabclubs.includes(targetClub);
-    }
-    // filter by state
-    if (!targetState) selectedState = true;
-    else {
-      const isOngoing = new Date(event?.datetimeperiod[1]) < new Date();
-      selectedState = isOngoing;
-    }
-
-    // filter by name
-    if (!targetName) selectedName = true;
-    else
-      selectedName = event?.name
-        ?.toLowerCase()
-        ?.includes(targetName?.toLowerCase());
-
-    return selectedClub && selectedState && selectedName;
-  };
-
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: null,
-    public: true,
-  });
+  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUBS);
 
   return (
     <Box>
       <Box mt={2}>
         <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
-
-      <>
-        <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
-          <Typography variant="h5" color="grey">
-            Ongoing Events
-          </Typography>
-        </Divider>
-
-        <EventsGrid type="all" filter={ongoingEventsFilter} events={events} />
-      </>
-
-      {targetState?.includes("upcoming") ? (
-        <>
-          <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
-            <Typography variant="h5" color="grey">
-              Upcoming Events
-            </Typography>
-          </Divider>
-
-          <EventsGrid
-            type="all"
-            filter={upcomingEventsFilter}
-            events={events}
-          />
-        </>
-      ) : null}
-
-      {targetState?.includes("completed") ? (
-        <>
-          <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
-            <Typography variant="h5" color="grey">
-              Completed Events
-            </Typography>
-          </Divider>
-
-          <EventsGrid
-            type="all"
-            filter={completedEventsFilter}
-            events={events}
-          />
-        </>
-      ) : null}
+      <PaginatedEventsGrid
+        query={query}
+        clubs={allClubs}
+        targets={[targetName, targetClub, targetState]}
+      />
     </Box>
   );
 }

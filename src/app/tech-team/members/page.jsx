@@ -9,7 +9,7 @@ import { extractFirstYear } from "components/members/MembersGrid";
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
 export const metadata = {
-  title: "Tech Members | Clubs Council @ IIIT-H",
+  title: "Tech Members | SLC @ IIIT-H",
 };
 
 export default async function TechTeam() {

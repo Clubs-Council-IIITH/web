@@ -11,7 +11,7 @@ ENV NEXT_PUBLIC_ENV=$ENV
 
 WORKDIR /web
 
-COPY --from=node_cache /cache/ /cache/
+COPY --from=node_cache /cache/ .
 COPY entrypoint.sh /cache/
 COPY . .
 

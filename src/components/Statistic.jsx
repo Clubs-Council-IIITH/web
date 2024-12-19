@@ -49,7 +49,7 @@ export default function Statistic({
 
       <Typography variant="h3">{total}</Typography>
 
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+      <Typography variant="subtitle2" sx={{ opacity: 0.75 }}>
         {title}
       </Typography>
     </Card>

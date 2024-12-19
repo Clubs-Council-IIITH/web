@@ -1,4 +1,4 @@
-const SITEMAP_HOSTNAME = "https://clubs.iiit.ac.in";
+const SITEMAP_HOSTNAME = "https://life.iiit.ac.in";
 
 const fs = require("node:fs");
 const { SitemapStream, streamToPromise } = require("sitemap");
@@ -8,7 +8,7 @@ const APP_ROOT = "./src/app";
 const PAGE_FILENAME = "page.jsx";
 const SITEMAP_PATHS = [];
 // const TODAYS_DATE_AS_ARRAY = new Date().toLocaleDateString().split("/");
-const WRITE_FILE_PATH = "./src/app/sitemap.xml";
+const WRITE_FILE_PATH = "./public/sitemap.xml";
 /**
  * Populates [SITEMAP_PATHS] with the fully qualified URLs for our pages to be contained
  * within our sitemap.xml file.

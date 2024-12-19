@@ -3,10 +3,10 @@ import ImageMasonry from "components/ImageMasonry";
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
 
 export const metadata = {
-  title: "Gallery | Clubs Council @ IIIT-H",
+  title: "Gallery | Life @ IIIT-H",
 };
 
-export default async function Gallery({ limit = undefined }) {
+export default async function Gallery({ limit = undefined, priority = true }) {
   const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
     next: { revalidate: 1200 }, // 20 minutes
   });
@@ -18,7 +18,7 @@ export default async function Gallery({ limit = undefined }) {
 
   return (
     <>
-      <ImageMasonry images={galleryItems} limit={limit} />
+      <ImageMasonry images={galleryItems} limit={limit} priority={priority} />
     </>
   );
 }

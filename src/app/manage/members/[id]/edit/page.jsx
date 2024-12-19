@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
@@ -38,7 +38,7 @@ export default async function EditMember({ params }) {
       });
 
     if (userMeta === null || userProfile === null) {
-      return redirect("/404");
+      notFound();
     }
 
     return (
@@ -51,6 +51,6 @@ export default async function EditMember({ params }) {
       </Container>
     );
   } catch (error) {
-    redirect("/404");
+    notFound();
   }
 }

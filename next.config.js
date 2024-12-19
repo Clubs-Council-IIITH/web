@@ -33,17 +33,22 @@ const nextConfig = {
     return [
       {
         source: "/student-bodies/clubs",
-        destination: "/about/clubs-council",
+        destination: "/clubs-council",
         permanent: true,
       },
       {
         source: "/clubs/clubs",
-        destination: "/about/clubs-council",
+        destination: "/clubs-council",
         permanent: true,
       },
       {
         source: "/about",
-        destination: "/about/clubs-council",
+        destination: "/clubs-council",
+        permanent: true,
+      },
+      {
+        source: "/about/clubs-council",
+        destination: "/clubs-council",
         permanent: true,
       },
     ];
@@ -51,6 +56,13 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
     removeConsole: process.env.NODE_ENV === "production",
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
   },
 };
 

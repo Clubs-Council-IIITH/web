@@ -13,7 +13,6 @@ export default function NewClub() {
     name: "",
     email: "",
     category: "cultural",
-    studentBody: false,
     tagline: null,
     description: "",
     socials: {

@@ -1,12 +1,13 @@
 {
   "name": "cc-web-client",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 80",
     "build": "next build",
     "start": "next start -p 80",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sitemap": "node ./sitemap-cc.js && node ./sitemap-life.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -25,8 +26,10 @@
     "@mui/x-data-grid": "^7.21.0",
     "@mui/x-date-pickers": "^7.21.0",
     "@next/mdx": "^14.2.15",
+    "@svgr/webpack": "^8.1.0",
     "@urql/next": "^1.1.2",
     "add-dependencies": "^1.1.0",
+    "add-to-calendar-button-react": "^2.7.3",
     "browser-image-resizer": "^2.4.1",
     "cookies-next": "^4.3.0",
     "dayjs": "^1.11.13",
@@ -50,6 +53,7 @@
     "react-pdf-html": "^2.1.2",
     "react-slick": "^0.30.2",
     "sharp": "^0.33.5",
+    "sitemap": "^8.0.0",
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2",
     "tippy.js": "^6.3.7",

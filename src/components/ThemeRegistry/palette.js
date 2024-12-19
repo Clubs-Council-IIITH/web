@@ -18,8 +18,8 @@ const PRIMARY_DARK = {
   lighter: "#25fff8",
   light: "#53ece4",
   main: "#1EC3BD",
-  dark: "#087f77",
-  darker: "#299383",
+  dark: "#076676",
+  darker: "#1F4D5D",
 };
 const SECONDARY_LIGHT = {
   lighter: "#C4CDD5",

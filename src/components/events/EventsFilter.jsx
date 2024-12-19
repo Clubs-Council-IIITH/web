@@ -30,29 +30,6 @@ export default function EventsFilter({ name, club, state }) {
   const searchParams = useSearchParams();
   const { triggerToast } = useToast();
 
-  // get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams);
-
-      if (
-        !params.has("upcoming") &&
-        !params.has("completed") &&
-        ["upcoming", "completed"].includes(name)
-      ) {
-        params.set("upcoming", "true");
-        params.set("completed", "true");
-      }
-
-      if (value != "") params.set(name, value);
-      else params.delete(name);
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
   // fetch list of clubs
   const [clubs, setClubs] = useState([]);
   useEffect(() => {
@@ -83,9 +60,10 @@ export default function EventsFilter({ name, club, state }) {
             spacing={1}
             onSubmit={(e) => {
               e.preventDefault();
-              router.push(
-                `${pathname}?${createQueryString("name", targetName)}`,
-              );
+              const params = new URLSearchParams(searchParams);
+              if (targetName === "") params.delete("name");
+              else params.set("name", targetName);
+              router.push(`${pathname}?${params.toString()}`);
             }}
           >
             <TextField
@@ -116,11 +94,13 @@ export default function EventsFilter({ name, club, state }) {
               label="Filter by Club/Student Body"
               fullWidth
               onChange={(e) => {
-                router.push(
-                  `${pathname}?${createQueryString("club", e.target.value)}`,
-                );
+                e.preventDefault();
+                const params = new URLSearchParams(searchParams);
+                if (e.target.value === "") params.delete("club");
+                else params.set("club", e.target.value);
+                router.push(`${pathname}?${params.toString()}`);
               }}
-              value={clubs.length ? club : ""}
+              value={club || ""}
             >
               <MenuItem key="all" value="">
                 All Clubs
@@ -138,20 +118,27 @@ export default function EventsFilter({ name, club, state }) {
         </Grid>
         <Grid item xs lg>
           <ToggleButtonGroup
+            id="eventStatus"
             fullWidth
             value={state}
             color="primary"
             sx={{ height: "100%" }}
-            onChange={(e) => {
-              // don't do anything if all states are being unselected
-              if (state.length === 1 && state.includes(e.target.value)) return;
+            onChange={(e, newState) => {
+              e.preventDefault();
 
-              return router.push(
-                `${pathname}?${createQueryString(
-                  e.target.value,
-                  !state.includes(e.target.value),
-                )}`,
-              );
+              const upcomingSelected = newState.includes("upcoming");
+              const completedSelected = newState.includes("completed");
+
+              const params = new URLSearchParams(searchParams);
+              if (upcomingSelected && completedSelected) {
+                params.delete("upcoming");
+                params.delete("completed");
+              } else {
+                params.set("upcoming", upcomingSelected);
+                params.set("completed", completedSelected);
+              }
+
+              router.push(`${pathname}?${params.toString()}`);
             }}
           >
             <ToggleButton disableRipple key="upcoming" value="upcoming">

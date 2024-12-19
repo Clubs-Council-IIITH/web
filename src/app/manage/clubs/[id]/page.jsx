@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Box, Card } from "@mui/material";
 
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }, parent) {
       title: club.name,
     };
   } catch (error) {
-    redirect("/404");
+    notFound();
   }
 }
 

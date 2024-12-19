@@ -1,9 +1,11 @@
 import { getClient } from "gql/client";
 import { GET_EVENT } from "gql/queries/events";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import dayjs from "dayjs";
 
+import { shortDescription } from "app/layout";
 import { getFile, PUBLIC_URL } from "utils/files";
-import EventDetails from "components/events/EventDetails";
+import EventDetails, { getEventLocation } from "components/events/EventDetails";
 
 export async function generateMetadata({ params }) {
   const { id } = params;
@@ -15,22 +17,31 @@ export async function generateMetadata({ params }) {
     const img = event.poster
       ? getFile(event.poster, true)
       : `${PUBLIC_URL}/og-image.png`;
+    const alt = event.poster ? event.name + " Poster" : "Common Poster";
+
+    const time = dayjs(event.datetimeperiod[0]).format("dddd h A");
 
     return {
-      title: event.name,
+      title: `${event.name} | Life @ IIITH`,
+      description: event.description ? event.description : shortDescription,
       openGraph: {
+        title: `${event.name} (Time: ${time}, Location: ${getEventLocation(
+          event,
+        )}) | Life @ IIITH`,
+        siteName: "Life @ IIITH",
         images: [
           {
             url: img,
+            secure_url: img,
             width: 256,
             height: 256,
-            alt: event.name,
+            alt: alt,
           },
         ],
       },
     };
   } catch (error) {
-    return redirect("/404");
+    notFound();
   }
 }
 

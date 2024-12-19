@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
@@ -15,14 +15,27 @@ import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
 import MembersGrid from "components/members/MembersGrid";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata({ params }) {
   const { id } = params;
 
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id },
-  });
+  let club;
 
-  if (club?.studentBody) return permanentRedirect(`/student-bodies/${id}`);
+  try {
+    const { data: { club: fetchedClub } = {} } = await getClient().query(
+      GET_CLUB,
+      {
+        clubInput: { cid: id },
+      },
+    );
+
+    club = fetchedClub;
+  } catch (error) {
+    notFound();
+    return;
+  }
+
+  if (club?.category == "body")
+    return permanentRedirect(`/student-bodies/${id}`);
 
   return {
     title: club.name,
@@ -91,7 +104,9 @@ export default async function Club({ params }) {
               variant="none"
               color="secondary"
               component={Link}
-              href={`/clubs/${id}/members`}
+              href={`/${
+                club?.category == "body" ? "student-bodies" : "clubs"
+              }/${id}/members`}
             >
               <Typography variant="button" color="text.primary">
                 View all

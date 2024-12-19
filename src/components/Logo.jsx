@@ -1,24 +1,15 @@
-import Link from "next/link";
-import Image from "next/image";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-const CCLogoColor = "/assets/cc-logo-full-color.svg";
+import LifeLogo from "components/svg/life-logo-full-color.svg";
 
 export default function Logo() {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
+  const color = theme.palette.mode === "light" ? "#803db2" : "#1ec3bd";
 
   return (
-    <Link href="/">
-      <Image
-        priority={isDesktop}
-        src={CCLogoColor}
-        alt="Clubs Council Logo"
-        width={128}
-        height={64}
-      />
-    </Link>
+    <div style={{ color }}>
+      <LifeLogo width={140} height={60} alt="Life Logo" />
+    </div>
   );
 }

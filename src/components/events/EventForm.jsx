@@ -55,7 +55,7 @@ import { getFullUser } from "actions/users/get/full/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 
-import { uploadFile } from "utils/files";
+import { uploadImageFile } from "utils/files";
 import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 
@@ -244,12 +244,40 @@ export default function EventForm({
     }
 
     // upload poster
-    data.poster =
-      typeof formData.poster === "string"
-        ? formData.poster
-        : Array.isArray(formData.poster) && formData.poster.length > 0
-          ? await uploadFile(formData.poster[0], "image")
-          : null;
+    const poster_filename = ("poster_" + data.name + "_" + data.clubid).replace(
+      ".",
+      "_",
+    );
+    try {
+      if (typeof formData.poster === "string") {
+        data.poster = formData.poster;
+      } else if (Array.isArray(formData.poster) && formData.poster.length > 0) {
+        const { filename, underlimit } = await uploadImageFile(
+          formData.poster[0],
+          poster_filename,
+        );
+        if (!underlimit) {
+          triggerToast({
+            title: "Warning",
+            messages: [
+              "Poster FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
+            ],
+            severity: "warning",
+          });
+        }
+        data.poster = filename;
+      } else {
+        data.poster = null;
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error",
+        messages: error.message
+          ? [error.message]
+          : error?.messages || ["Failed to upload poster"],
+        severity: "error",
+      });
+    }
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
@@ -510,7 +538,9 @@ export default function EventForm({
                   label="Poster"
                   control={control}
                   maxFiles={1}
+                  maxSizeMB={10}
                   shape="square"
+                  warnSizeMB={1}
                 />
               </Grid>
             </Grid>
@@ -753,6 +783,9 @@ function EventNameInput({ control, disabled = true }) {
           fullWidth
           required
           disabled={disabled}
+          onBlur={(e) => {
+            field.onChange(e.target.value.trim());
+          }}
         />
       )}
     />
@@ -1014,6 +1047,11 @@ function EventDescriptionInput({ control }) {
           rows={8}
           fullWidth
           multiline
+          onBlur={(e) => {
+            field.onChange(
+              e.target.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
+            );
+          }}
         />
       )}
     />
@@ -1327,8 +1365,10 @@ function EventPOC({
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
+      setLoading(true);
       let res = await currentMembersAction({ cid });
       if (!res.ok) {
         triggerToast({
@@ -1339,6 +1379,7 @@ function EventPOC({
       } else {
         setMembers(res.data);
       }
+      setLoading(false);
     })();
   }, [cid]);
 
@@ -1371,29 +1412,45 @@ function EventPOC({
         rules={{ required: "Select a member!" }}
         render={({ field, fieldState: { error, invalid } }) => (
           <FormControl fullWidth error={invalid}>
-            <InputLabel id="poc">Point of Contact *</InputLabel>
-            {members.length === 0 ? (
+            {!cid || cid == "" ? (
+              <TextField
+                disabled
+                value="Select a club to choose POC"
+                variant="outlined"
+                fullWidth
+              />
+            ) : loading ? (
               <Box py={25} width="100%" display="flex" justifyContent="center">
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
               </Box>
-            ) : (
-              <Select
-                labelId="poc"
-                label="Point of Contact *"
+            ) : members.length === 0 ? (
+              <TextField
+                disabled
+                value="No members found. Please add members to the club/body."
+                variant="outlined"
                 fullWidth
-                {...field}
-                MenuProps={{
-                  style: { maxHeight: 400 },
-                }}
-              >
-                {members?.slice()?.map((member) => (
-                  <MenuItem key={member._id} value={member.uid}>
-                    <MemberListItem uid={member.uid} />
-                  </MenuItem>
-                ))}
-              </Select>
+              />
+            ) : (
+              <>
+                <InputLabel id="poc">Point of Contact *</InputLabel>
+                <Select
+                  labelId="poc"
+                  label="Point of Contact *"
+                  fullWidth
+                  {...field}
+                  MenuProps={{
+                    style: { maxHeight: 400 },
+                  }}
+                >
+                  {members?.slice()?.map((member) => (
+                    <MenuItem key={member._id} value={member.uid}>
+                      <MemberListItem uid={member.uid} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </>
             )}
             <FormHelperText>{error?.message}</FormHelperText>
           </FormControl>

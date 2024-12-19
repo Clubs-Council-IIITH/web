@@ -72,35 +72,6 @@ export default async function ClubsCouncil() {
       return matchesAdvisoryFilterWords;
     });
 
-  const techMembers = members
-    ?.map((member) => {
-      const { roles } = member;
-      const techTeamRoles = filterRoles(roles, techTeamWords);
-      const newMember = { ...member, roles: techTeamRoles };
-      return newMember;
-    })
-    ?.filter((member) => {
-      return member.roles.length > 0;
-    })
-    ?.sort((a, b) => {
-      const roleNameA = a.roles[0]?.name.toLowerCase();
-      const roleNameB = b.roles[0]?.name.toLowerCase();
-      if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
-        return -1;
-      }
-      if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
-        return 1;
-      }
-      if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
-        return 1;
-      }
-      if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
-        return -1;
-      }
-
-      return 0;
-    });
-
   const extendedMembers = members
     ?.map((member) => {
       const { roles } = member;
@@ -124,9 +95,6 @@ export default async function ClubsCouncil() {
           advisoryMembers?.length ? (
             <LocalUsersGrid users={advisoryMembers} />
           ) : null
-        }
-        techMembers={
-          techMembers?.length ? <LocalUsersGrid users={techMembers} /> : null
         }
         extendedMembers={
           extendedMembers?.length ? (

@@ -7,7 +7,7 @@ export const UPDATE_USERDATA = gql`
 `;
 
 export const UPDATE_USERPHONE = gql`
-  mutation UpdateUserPhone($userDataInput: UserDataInput!) {
+  mutation UpdateUserPhone($userDataInput: PhoneInput!) {
     updateUserPhone(userDataInput: $userDataInput)
   }
 `;

@@ -2,7 +2,7 @@ import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -13,7 +13,7 @@ import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata({ params }) {
   const { id } = params;
 
   try {
@@ -28,14 +28,14 @@ export async function generateMetadata({ params }, parent) {
     const user = { ...userMeta, ...userProfile };
 
     if (userProfile === null || userMeta === null) {
-      return redirect("/404");
+      notFound();
     }
 
     return {
       title: `${user.firstName} ${user.lastName}`,
     };
   } catch (error) {
-    return redirect("/404");
+    notFound();
   }
 }
 
@@ -61,7 +61,7 @@ export default async function Profile({ params }) {
 
   // if user is a club, display the club's logo as profile picture
   let club = null;
-  if (user.role === "club") {
+  if (user?.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
       { clubInput: { cid: user.uid } },
@@ -71,7 +71,7 @@ export default async function Profile({ params }) {
 
   // get memberships if user is a person
   let memberships = [];
-  if (user.role === "public") {
+  if (user?.role === "public") {
     const {
       data: { memberRoles },
     } = await getClient().query(GET_MEMBERSHIPS, {
@@ -83,17 +83,22 @@ export default async function Profile({ params }) {
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
       [],
     );
+
+    if (memberships?.length === 0 && currentUser?.uid !== user.uid) {
+      notFound();
+    }
   }
 
   return (
     <Container>
-      {/* 
+      {/*
         show action palette only
         1. if current user is CC, or
         2. if current user is viewing their own profile and is not a club
       */}
-      {currentUser?.role === "cc" ||
-      (currentUser?.uid === user.uid && user.role !== "club") ? (
+      {!["club", "cc"].includes(user?.role) &&
+      (currentUser?.role === "cc" ||
+        (memberships?.length !== 0 && currentUser?.uid === user?.uid)) ? (
         <ActionPalette right={[EditUser]} />
       ) : null}
       <Grid container spacing={2} mt={4}>
@@ -145,20 +150,23 @@ export default async function Profile({ params }) {
           </Stack>
         </Grid>
 
-        <Grid item container xs spacing={2} mt={5}>
-          <UserDetails user={user} />
-        </Grid>
+        {/* Show user details only for students */}
+        {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
+          <>
+            <Grid item container xs spacing={2} mt={5}>
+              <UserDetails user={user} />
+            </Grid>
 
-        <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
-          {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff from rendering memberships
-            <Stack direction="column" spacing={2}>
-              <Typography variant="subtitle2" textTransform="uppercase">
-                Memberships
-              </Typography>
-              <UserMemberships rows={memberships} />
-            </Stack>
-          ) : null}
-        </Grid>
+            <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
+              <Stack direction="column" spacing={2}>
+                <Typography variant="subtitle2" textTransform="uppercase">
+                  Memberships
+                </Typography>
+                <UserMemberships rows={memberships} />
+              </Stack>
+            </Grid>
+          </>
+        ) : null}
       </Grid>
     </Container>
   );

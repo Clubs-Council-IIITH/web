@@ -11,7 +11,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { Link } from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import ActionPalette from "components/ActionPalette";
 
 import EventDetails from "components/events/EventDetails";
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }) {
       title: event.name,
     };
   } catch (error) {
-    redirect("/404");
+    notFound();
   }
 }
 
