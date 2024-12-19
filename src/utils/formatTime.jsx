@@ -17,11 +17,20 @@ export function ISOtoDateTime(iso) {
 }
 
 // get human readable date time from ISO string
-export function ISOtoHuman(iso, weekDay = false, showTime = true) {
+export function ISOtoHuman(
+  iso,
+  weekDay = false,
+  showTime = true,
+  showYearAlways = false
+) {
   const dt = ISOtoDateTime(iso);
   return `${weekDay ? `${dt.weekday}, ` : ""}${dt.day} ${dt.month}${
-    dt.year !== String(new Date().getFullYear()) ? ` ${dt.year}` : ""
-  }${showTime ? `, ${dt.time.toUpperCase()}` : ""}`;
+    showYearAlways
+      ? ` ${dt.year}`
+      : dt.year !== String(new Date().getFullYear())
+      ? ` ${dt.year}`
+      : ""
+  }${showTime ? `, ${dt.time.toUpperCase()}` : ""} IST`;
 }
 
 export const formatDateTime = (dateTimeString) => {
