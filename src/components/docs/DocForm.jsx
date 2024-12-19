@@ -17,9 +17,10 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
-import FileUpload from "components/FileUpload";
 import Icon from "components/Icon";
 import { useToast } from "components/Toast";
+import FileUpload from "components/FileUpload";
+import ConfirmDialog from "components/ConfirmDialog";
 
 import { uploadPDFFile } from "utils/files";
 
@@ -31,15 +32,19 @@ const maxFileSizeMB = 20;
 
 export default function DocForm({ editFile = null, newFile = true }) {
   const [loading, setLoading] = useState(false);
+  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { control, handleSubmit } = useForm({
+
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       title: editFile?.title || "",
       file: null,
     },
   });
+
   const { triggerToast } = useToast();
   const router = useRouter();
+  const fileDropzone = watch("file");
 
   const openDeleteDialog = () => setDeleteDialogOpen(true);
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
@@ -79,7 +84,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
       // check all fields
       if (!data.title || !data.file) {
         throw new Error(
-          "Please fill all the required Fields before submitting.",
+          "Please fill all the required Fields before submitting."
         );
       }
 
@@ -140,6 +145,23 @@ export default function DocForm({ editFile = null, newFile = true }) {
       setLoading(false);
     }
   }
+
+  const handleSubmitButton = () => {
+    if (newFile) {
+      handleSubmit((data) => onSubmit(data))();
+    } else {
+      setSubmitDialogOpen(true);
+    }
+  };
+
+  const generateSubmitDescription = () => {
+    const latestVersion = editFile?.latestVersion || 1;
+    const newVersion = handleVersionNumbering(editFile);
+
+    if (latestVersion === newVersion)
+      return `This will overwrite the existing v${latestVersion} file (as last-updated in <24 hours). Are you sure you want to proceed?`;
+    else return `This will create a new version v${newVersion} of the file.`;
+  };
 
   return (
     <>
@@ -202,11 +224,14 @@ export default function DocForm({ editFile = null, newFile = true }) {
               >
                 Cancel
               </Button>
+
               <LoadingButton
                 loading={loading}
-                type="submit"
+                // type="submit"
+                onClick={handleSubmitButton}
                 variant="contained"
                 color="primary"
+                disabled={loading || !fileDropzone}
               >
                 Save
               </LoadingButton>
@@ -214,6 +239,15 @@ export default function DocForm({ editFile = null, newFile = true }) {
           </Grid>
         </Grid>
       </form>
+      <ConfirmDialog
+        open={submitDialogOpen}
+        title="Confirm submission"
+        description={generateSubmitDescription()}
+        onConfirm={() => handleSubmit((data) => onSubmit(data))()}
+        onClose={() => setSubmitDialogOpen(false)}
+        confirmProps={{ color: "primary" }}
+        confirmText="Proceed"
+      />
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
