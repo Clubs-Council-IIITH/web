@@ -156,7 +156,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
 
   const generateSubmitDescription = () => {
     if (newFile) return null;
-    
+
     const latestVersion = editFile?.latestVersion || 1;
     const newVersion = handleVersionNumbering(editFile);
 
