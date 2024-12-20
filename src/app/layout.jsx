@@ -77,6 +77,34 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <head>
+        {/* Set the background color dynamically using a script */}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function applyTheme() {
+                  let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const storedMode = window.localStorage.getItem("currentModeCC");
+                  if (storedMode === "false") {
+                    isDarkMode = false;
+                  } else if (storedMode === "true") {
+                    isDarkMode = true;
+                  }
+                  document.body.style.backgroundColor = isDarkMode ? '#1e1e1e' : '#fdfdfd';
+                }
+
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', applyTheme);
+                } else {
+                  applyTheme();
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={fontClass}>
         <ModeProvider>
           <ThemeRegistry nonce={nonce}>
