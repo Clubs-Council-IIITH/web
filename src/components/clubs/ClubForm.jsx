@@ -33,9 +33,13 @@ import { socialsData } from "utils/socialsData";
 import { createClubAction } from "actions/clubs/create/server_action";
 import { editClubAction } from "actions/clubs/edit/server_action";
 
-const logo_warnSizeMB = 0.5;
-const banner_warnSizeMB = 1.5;
-const bannerSquare_warnSizeMB = 1;
+const logo_maxSizeMB = 3;
+const banner_maxSizeMB = 10;
+const bannerSquare_maxSizeMB = 3;
+
+const logo_warnSizeMB = 0.3;
+const banner_warnSizeMB = 1;
+const bannerSquare_warnSizeMB = 0.3;
 
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
@@ -142,10 +146,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.logo === "string") {
         data.logo = formData.logo;
       } else if (Array.isArray(formData.logo) && formData.logo.length > 0) {
-        data.logo = await uploadImageFile(
+          data.logo = await uploadImageFile(
           formData.logo[0],
           logo_filename,
-          logo_warnSizeMB,
         );
       } else {
         data.logo = null;
@@ -164,10 +167,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.banner === "string") {
         data.banner = formData.banner;
       } else if (Array.isArray(formData.banner) && formData.banner.length > 0) {
-        data.banner = await uploadImageFile(
+          data.banner = await uploadImageFile(
           formData.banner[0],
           banner_filename,
-          banner_warnSizeMB,
         );
       }
     } catch (error) {
@@ -187,10 +189,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         Array.isArray(formData.bannerSquare) &&
         formData.bannerSquare.length > 0
       ) {
-        data.bannerSquare = await uploadImageFile(
+          data.bannerSquare = await uploadImageFile(
           formData.bannerSquare[0],
           bannerSquare_filename,
-          bannerSquare_warnSizeMB,
         );
       }
     } catch (error) {
@@ -313,7 +314,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="circle"
-                  maxSizeMB={5}
+                  maxSizeMB={logo_maxSizeMB}
                   warnSizeMB={logo_warnSizeMB}
                 />
               </Grid>
@@ -325,7 +326,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="rectangle"
-                  maxSizeMB={15}
+                  maxSizeMB={banner_maxSizeMB}
                   warnSizeMB={banner_warnSizeMB}
                 />
               </Grid>
@@ -337,7 +338,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="square"
-                  maxSizeMB={10}
+                  maxSizeMB={bannerSquare_maxSizeMB}
                   warnSizeMB={bannerSquare_warnSizeMB}
                 />
               </Grid>
