@@ -14,7 +14,7 @@ export default async function EventBillStatus(event) {
     return null;
 
   const { data, error } = await getClient().query(GET_EVENT_BILLS_STATUS, {
-    eventid: event._id,
+    eventid: event?._id,
   });
 
   if (error || !data) return null;
