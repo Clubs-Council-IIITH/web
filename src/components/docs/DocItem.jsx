@@ -36,8 +36,18 @@ export default function DocItem({
 
   const handleDownload = () => {
     const fileUrl = getFile(buildFileName(file, version), true, true);
-    window.open(fileUrl, "_blank");
+
+    // Create an anchor element
+    const anchor = document.createElement("a");
+    anchor.href = fileUrl;
+    anchor.download = buildFileName(file, version);
+
+    // Append it to the body (necessary for some browsers)
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
   };
+
   const handleVersionChange = (event) => {
     versionChange(event.target.value);
   };
