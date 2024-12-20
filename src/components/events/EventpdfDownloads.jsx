@@ -14,6 +14,7 @@ import Html from "react-pdf-html";
 import { PUBLIC_URL } from "utils/files";
 import { formatDateTime, ISOtoHuman } from "utils/formatTime";
 import { locationLabel, stateLabel, billsStateLabel, audienceLabels } from "utils/formatEvent";
+import Icon from "components/Icon";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";
@@ -377,8 +378,12 @@ export function DownloadEventReport({
   );
   return (
     <PDFDownloadLink document={pdfDoc} fileName={`${event?.name.replace(/\s+/g, "_")}_report.pdf`}>
-      <Button variant="contained" color="primary">
-        Download Report PDF
+      <Button variant="contained" color="primary" 
+            startIcon={
+                <Icon variant="download" />
+            }
+        >
+          Report PDF
       </Button>
     </PDFDownloadLink>
   );
@@ -779,8 +784,12 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
 
   return (
     <PDFDownloadLink document={pdfDoc} fileName={`${event?.name.replace(/\s+/g, "_")}.pdf`}>
-      <Button variant="contained" color="primary">
-        Download Event PDF
+      <Button variant="contained" color="primary" 
+        startIcon={
+            <Icon variant="download" />
+        }
+      >
+        Event PDF
       </Button>
     </PDFDownloadLink>
   );

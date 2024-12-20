@@ -13,6 +13,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { locationLabel, audienceLabels } from "utils/formatEvent";
 import { DownloadEventReport } from "components/events/EventpdfDownloads";
+import { DownloadEventReportDocx } from "components/events/EventDocxDownloads";
 import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
 
@@ -33,12 +34,20 @@ export function EventReportDetails({
         <Typography variant="h3" mt={1} mb={2}>
           Event Report
         </Typography>
-        <DownloadEventReport
-          event={event}
-          eventReport={eventReport}
-          submittedUser={submittedUser}
-          clubs={clubs}
-        />
+        <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
+          <DownloadEventReport
+            event={event}
+            eventReport={eventReport}
+            submittedUser={submittedUser}
+            clubs={clubs}
+          />
+          <DownloadEventReportDocx
+            event={event}
+            eventReport={eventReport}
+            submittedUser={submittedUser}
+            clubs={clubs}
+          />
+        </Grid>
       </Grid>
 
       <Grid container spacing={6}>

@@ -33,6 +33,8 @@
     "browser-image-resizer": "^2.4.1",
     "cookies-next": "^4.3.0",
     "dayjs": "^1.11.13",
+    "docx": "^9.1.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.11.9",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
