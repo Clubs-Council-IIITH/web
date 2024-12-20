@@ -8,9 +8,10 @@ import {
   Divider,
   CardActionArea,
 } from "@mui/material";
+import React from 'react';
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { locationLabel } from "utils/formatEvent";
+import { locationLabel, audienceLabels } from "utils/formatEvent";
 import { DownloadEventReport } from "components/events/EventpdfDownloads";
 import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
@@ -59,9 +60,12 @@ export function EventReportDetails({
               <span>
                 {clubs?.find((club) => club.cid === event?.clubid)?.name}
               </span>
-              {event?.collabclubs.map((collab) => (
-                <span>{clubs?.find((club) => club.cid === collab)?.name}</span>
-              ))}
+              <br />
+               {event?.collabclubs
+                ?.map(
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                )
+              .join(", ")}
             </Typography>
           </Box>
           <Box mt={2}>
@@ -90,8 +94,10 @@ export function EventReportDetails({
           <Box mt={2}>
             <Typography variant="overline">Batches Participated</Typography>
             <Typography variant="body2">
-              {event?.audience?.join(", ") || "None"}
-            </Typography>
+             {event?.audience
+                ? audienceLabels(event?.audience).map(({ name, color }) => name).join(", ")
+                : "None"}
+          </Typography>
           </Box>
           <Box mt={2}>
             <Typography variant="overline">Mode</Typography>
@@ -131,7 +137,17 @@ export function EventReportDetails({
               <Box mt={2}>
                 <Typography variant="overline">Prizes Breakdown</Typography>
                 <Typography variant="body2">
-                  {eventReport?.prizesBreakdown || "None"}
+                  {eventReport?.prizesBreakdown
+                    ? eventReport?.prizesBreakdown
+                      .split('\n')
+                        .map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))
+                    : "None"
+                  }
                 </Typography>
               </Box>
             </>
@@ -139,7 +155,17 @@ export function EventReportDetails({
           <Box mt={2}>
             <Typography variant="overline">Winners</Typography>
             <Typography variant="body2">
-              {eventReport?.winners || "None"}
+              {eventReport?.winners
+                  ? eventReport?.winners
+                    .split('\n')
+                      .map((line, index) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                  : "None"
+              }
             </Typography>
           </Box>
           <Box mt={2}>

@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { getFullUser } from "actions/users/get/full/server_action";
 
@@ -62,6 +63,8 @@ export default async function ManageEventID({ params }) {
     eventid: id,
   });
 
+  const { data: { activeClubs }, } = await getClient().query(GET_ACTIVE_CLUBS);
+
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
     { userInput: null },
@@ -88,7 +91,7 @@ export default async function ManageEventID({ params }) {
             { status: event?.status, location: event?.location },
           ]}
           right={getActions(event, { ...userMeta, ...userProfile })}
-          downloadbtn={<DownloadEvent event={event} pocProfile={pocProfile} />}
+          downloadbtn={<DownloadEvent event={event} clubs={activeClubs} pocProfile={pocProfile} />}
         />
         <EventDetails showCode event={event} />
         <Divider sx={{ borderStyle: "dashed", my: 2 }} />

@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import {
   Document,
   Page,
+  Image,
   StyleSheet,
   PDFDownloadLink,
 } from "@react-pdf/renderer";
@@ -12,7 +13,11 @@ import Html from "react-pdf-html";
 
 import { PUBLIC_URL } from "utils/files";
 import { formatDateTime, ISOtoHuman } from "utils/formatTime";
-import { locationLabel, stateLabel, billsStateLabel } from "utils/formatEvent";
+import { locationLabel, stateLabel, billsStateLabel, audienceLabels } from "utils/formatEvent";
+
+const LifeLogo = "/assets/life-logo-full-color-light.png";
+const IIITLogo = "/assets/iiit-logo-color.png";
+const CCLogo = "/assets/cc-logo-color.png"
 
 export function DownloadEventReport({
   event,
@@ -52,6 +57,7 @@ export function DownloadEventReport({
         h1 {
             color: red;
             font-size: 24px;
+            text-align: center;
             margin-bottom: 10px;
             border-bottom: 2px solid red;
             padding-bottom: 5px;
@@ -102,10 +108,6 @@ export function DownloadEventReport({
             font-style: italic;
         }
 
-        .highlight {
-            color: red;
-        }
-
         .submitted-by {
             font-weight: bold;
         }
@@ -139,10 +141,6 @@ export function DownloadEventReport({
         th {
             background-color: #f2f2f2;
             text-align: center;
-        }
-
-        .no-data {
-            color: #888;
         }
     </style>
     <div class="report-container">
@@ -211,6 +209,11 @@ export function DownloadEventReport({
         
         <div class="section">
             <h2>Participation Overview</h2>
+            <p><strong>Audience:</strong> ${
+              event?.audience
+                ? audienceLabels(event?.audience).map(({ name, color }) => name).join(", ")
+                : "Unknown"
+            }</p>
             <p><strong>Estimated Participation:</strong> ${
               event?.population || "N/A"
             }</p>
@@ -260,10 +263,15 @@ export function DownloadEventReport({
                   .join("")}
             </ul>
             <p><strong>Prizes Breakdown:</strong> ${
-              eventReport?.prizesBreakdown || "N/A"
-            }</p>
-            <p><strong>Winners:</strong> ${eventReport?.winners || "N/A"}</p>
-            `
+                eventReport?.prizesBreakdown
+                  ? eventReport?.prizesBreakdown.replace(/\n/g, "<br />") // Handling line breaks
+                  : "N/A"
+              }</p>
+              <p><strong>Winners:</strong> ${
+                eventReport?.winners
+                  ? eventReport?.winners.replace(/\n/g, "<br />") // Handling line breaks
+                  : "N/A"
+              }</p>`
                 : `<p class="no-data">No prizes awarded.</p>`
             }
         </div>
@@ -334,16 +342,41 @@ export function DownloadEventReport({
     page: {
       padding: "10mm", // Set margins to 10mm for all sides
     },
+    headerContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "5mm", // Space after the header
+    },
+    logo1: {
+      width: 80,
+      height: "auto",
+    },
+    logo2: {
+      width: 90,
+      height: "auto",
+    },
+    logo3: {
+      width: 110,
+      height: "auto",
+    },
   });
+
   const pdfDoc = (
     <Document>
       <Page size="A4" style={styles.page}>
+        <div style={styles.headerContainer}>
+          <Image src={CCLogo} style={styles.logo1} />
+          <Image src={LifeLogo} style={styles.logo2} />
+          <Image src={IIITLogo} style={styles.logo3} />
+        </div>
         <Html>{htmlContent}</Html>
       </Page>
     </Document>
   );
   return (
-    <PDFDownloadLink document={pdfDoc} fileName={`${event?.name}_report.pdf`}>
+    <PDFDownloadLink document={pdfDoc} fileName={`${event?.name.replace(/\s+/g, "_")}_report.pdf`}>
       <Button variant="contained" color="primary">
         Download Report PDF
       </Button>
@@ -351,7 +384,7 @@ export function DownloadEventReport({
   );
 }
 
-export function DownloadEvent({ event, pocProfile }) {
+export function DownloadEvent({ event, clubs, pocProfile }) {
   const startDate = event?.datetimeperiod
     ? formatDateTime(event.datetimeperiod[0])
     : null;
@@ -382,6 +415,7 @@ export function DownloadEvent({ event, pocProfile }) {
         h1 {
             color: red;
             font-size: 24px;
+            text-align: center;
             margin-bottom: 10px;
             border-bottom: 2px solid red;
             padding-bottom: 5px;
@@ -432,10 +466,6 @@ export function DownloadEvent({ event, pocProfile }) {
             font-style: italic;
         }
 
-        .highlight {
-            color: red;
-        }
-
         .submitted-by {
             font-weight: bold;
         }
@@ -471,9 +501,6 @@ export function DownloadEvent({ event, pocProfile }) {
             text-align: center;
         }
 
-        .no-data {
-            color: #888;
-        }
         .adv{
             width: 50px;
         }
@@ -484,9 +511,13 @@ export function DownloadEvent({ event, pocProfile }) {
         <div class="section">
             <h2>Event Details</h2>
             <p><strong>Event Code:</strong> #${event?.code || "N/A"}</p>
-            <p><strong>Organized By:</strong> ${event?.clubid || "N/A"}</p>
+            <p><strong>Organized By:</strong> ${clubs?.find((club) => club?.cid === event?.clubid)?.name || "N/A"}</p>
             <p><strong>Collaborating Clubs/Bodies:</strong> ${
-              event?.collabclubs?.map((collab) => collab).join(", ") || "None"
+              event?.collabclubs
+                ?.map(
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                )
+              .join(", ") || "None"
             }</p>
             <p><strong>Event Dates:</strong> ${
               startDate && endDate
@@ -494,8 +525,11 @@ export function DownloadEvent({ event, pocProfile }) {
                 to ${endDate.dateString + " " + endDate.timeString + " IST"}`
                 : "N/A"
             }</p>
-            <p><strong>Current Status:</strong> ${
+            <p><strong>Current Status: </strong> ${
               stateLabel(event?.status?.state)?.name || "N/A"
+            }</p>
+            <p><strong>Description:</strong> ${
+              event?.description || "N/A"
             }</p>
         </div>
 
@@ -537,6 +571,11 @@ export function DownloadEvent({ event, pocProfile }) {
             <p><strong>Mode:</strong> ${
               event?.mode
                 ? event.mode.charAt(0).toUpperCase() + event.mode.slice(1)
+                : "Unknown"
+            }</p>
+            <p><strong>Audience:</strong> ${
+              event?.audience
+                ? audienceLabels(event?.audience).map(({ name, color }) => name).join(", ")
                 : "Unknown"
             }</p>
             <p><strong>Estimated Participation:</strong> ${
@@ -699,20 +738,47 @@ export function DownloadEvent({ event, pocProfile }) {
         </div>
     </div>
     `;
+
   const styles = StyleSheet.create({
     page: {
       padding: "10mm", // Set margins to 10mm for all sides
     },
+    headerContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "5mm",
+    },
+    logo1: {
+      width: 80,
+      height: "auto",
+    },
+    logo2: {
+      width: 90,
+      height: "auto",
+    },
+    logo3: {
+      width: 110,
+      height: "auto",
+    }
   });
+
   const pdfDoc = (
     <Document>
       <Page size="A4" style={styles.page}>
+        <div style={styles.headerContainer}>
+          <Image src={CCLogo} style={styles.logo1} />
+          <Image src={LifeLogo} style={styles.logo2} />
+          <Image src={IIITLogo} style={styles.logo3} />
+        </div>
         <Html>{htmlContent}</Html>
       </Page>
     </Document>
   );
+
   return (
-    <PDFDownloadLink document={pdfDoc} fileName={`${event?.name}.pdf`}>
+    <PDFDownloadLink document={pdfDoc} fileName={`${event?.name.replace(/\s+/g, "_")}.pdf`}>
       <Button variant="contained" color="primary">
         Download Event PDF
       </Button>
