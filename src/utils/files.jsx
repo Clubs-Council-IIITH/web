@@ -49,18 +49,7 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
   // construct filename
   const ext = file.name.split(".").pop();
   filename = filename ? `${filename}.${ext}` : file.name;
-  let underlimit = true;
-
-  // check file size limits
-  const sizeLimit = maxSizeMB * (1024 * 1024);
-  if (file.size > sizeLimit) {
-    underlimit = false;
-  }
-
-  return await {
-    underlimit: underlimit,
-    filename: await uploadFileCommon(file, "image", false, filename, maxSizeMB),
-  };
+  return await uploadFileCommon(file, "image", false, filename, maxSizeMB);
 }
 
 export async function uploadPDFFile(

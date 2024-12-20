@@ -21,10 +21,12 @@ import { bgBlur } from "utils/cssStyles";
 import Logo from "components/Logo";
 import Icon from "components/Icon";
 import { DrawerItem, DrawerDropdown } from "components/DrawerItem";
+import { useMode } from "contexts/ModeContext";
 import Footer from "components/Footer";
 import AccountPopover from "components/profile/AccountPopover";
 import ScrollbarWrapper from "components/ScrollbarWrapper";
 import { useAuth } from "components/AuthProvider";
+import { ModeSwitch } from "components/ModeSwitch";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
@@ -39,6 +41,12 @@ export const BUG_REPORT_URL =
 
 function Bar({ onOpenDrawer }) {
   const theme = useTheme();
+  const { isDark, setMode } = useMode(); // Accessing isDark and setMode from ModeContext
+
+  const handleChange = () => {
+    // handleupdate();
+    setMode(!isDark); // Toggle the mode
+  };
 
   return (
     <AppBar
@@ -83,6 +91,10 @@ function Bar({ onOpenDrawer }) {
             alignItems: "center",
           }}
         >
+          <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />
+
+          {/* <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "} */}
+          {/* Pass current isDark value and handleChange function to ModeSwitch component */}
           <AccountPopover />
         </Stack>
       </Toolbar>

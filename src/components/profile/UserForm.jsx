@@ -22,7 +22,8 @@ import { uploadImageFile } from "utils/files";
 
 import { updateUserDataAction } from "actions/users/save/server_action";
 
-const profile_warnSizeMB = 0.5;
+const profile_warnSizeMB = 0.3;
+const profile_maxSizeMB = 3;
 
 export default function UserForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
@@ -75,10 +76,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.img === "string") {
         data.img = formData.img;
       } else if (Array.isArray(formData.img) && formData.img.length > 0) {
-        data.img = await uploadImageFile(
+          data.img = await uploadImageFile(
           formData.img[0],
-          `profile_${defaultValues.uid}`,
-          profile_warnSizeMB,
+          `profile_${defaultValues.uid}`
         );
       } else {
         data.img = null;
@@ -220,7 +220,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   label="Profile Image"
                   control={control}
                   maxFiles={1}
-                  maxSizeMB={5}
+                  maxSizeMB={profile_maxSizeMB}
                   shape="circle"
                   warnSizeMB={profile_warnSizeMB}
                 />
