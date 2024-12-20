@@ -33,10 +33,9 @@ export default function DocItem({
 }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const fileUrl = getFile(buildFileName(file, version), true, true);
 
   const handleDownload = () => {
-    const fileUrl = getFile(buildFileName(file, version), true, true);
-
     // Create an anchor element
     const anchor = document.createElement("a");
     anchor.href = fileUrl;
@@ -91,7 +90,7 @@ export default function DocItem({
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 1,
+              gap: 1.5,
               mt: 2,
               mb: 2,
               width: "100%",
@@ -103,7 +102,7 @@ export default function DocItem({
                 value={version}
                 onChange={handleVersionChange}
                 size="small"
-                sx={{ minWidth: 100, width: "100%" }}
+                sx={{ minWidth: 100, width: "100%", mt: 1, py: 0.5 }}
               >
                 {Array.from({ length: maxVersion }, (_, i) => {
                   const version = maxVersion - i;
@@ -124,7 +123,7 @@ export default function DocItem({
               startIcon={<Icon variant="download" />}
               onClick={handleDownload}
               size="small"
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", py: 1.5 }}
             >
               Download
             </Button>
@@ -182,23 +181,52 @@ export default function DocItem({
         )}
       </DialogTitle>
 
-      <DialogContent>
-        <iframe
-          src={getFile(buildFileName(file, version), true, true)}
-          style={{
-            width: "100%",
-            height: "75vh",
-            border: "none",
-          }}
-          title={file.title}
-        >
-          <Typography variant="body1">
-            Your device does not support previewing this file. Please download
-            it to view.
+      <DialogContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: isMobile ? "center" : "flex-start", // Center content for mobile, normal flow for desktop
+          minHeight: isMobile ? "50vh" : "auto", // Make sure the height fills the screen on mobile
+          paddingBottom: isMobile ? 2 : 0, // Add some padding at the bottom for mobile
+        }}
+      >
+        {isMobile ? (
+          <Typography variant="body1" mb={5} sx={{ textAlign: "center" }}>
+            Your device does not support previewing this file. Please{" "}
+            <a href={fileUrl} download={buildFileName(file, version)}>
+              download it
+            </a>{" "}
+            to view.
           </Typography>
-        </iframe>
+        ) : (
+          <iframe
+            src={fileUrl}
+            style={{
+              width: "100%",
+              height: "75vh",
+              border: "none",
+            }}
+            title={file.title}
+          >
+            <Typography variant="body1">
+              Your device does not support previewing this file. Please download
+              it to view.
+            </Typography>
+          </iframe>
+        )}
 
-        <Typography variant="body2" sx={{ mt: 2 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 2,
+            mb: 1,
+            position: isMobile ? "absolute" : "static",
+            bottom: isMobile ? 20 : "auto",
+            left: 0,
+            right: 0,
+            textAlign: isMobile ? "center" : "left",
+          }}
+        >
           Last Modified: {formatDate(file.modifiedTime)}
         </Typography>
       </DialogContent>
