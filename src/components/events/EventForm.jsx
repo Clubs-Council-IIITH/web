@@ -61,6 +61,9 @@ import { locationLabel } from "utils/formatEvent";
 
 const admin_roles = ["cc", "slo"];
 
+const poster_maxSizeMB = 10;
+const poster_warnSizeMB = 1;
+
 export default function EventForm({
   id = null,
   defaultValues = {},
@@ -252,20 +255,10 @@ export default function EventForm({
       if (typeof formData.poster === "string") {
         data.poster = formData.poster;
       } else if (Array.isArray(formData.poster) && formData.poster.length > 0) {
-        const { filename, underlimit } = await uploadImageFile(
+          data.poster = filename = await uploadImageFile(
           formData.poster[0],
           poster_filename,
         );
-        if (!underlimit) {
-          triggerToast({
-            title: "Warning",
-            messages: [
-              "Poster FileSize exceeds the maximum limit of 0.3 MB, might affect quality during compression.",
-            ],
-            severity: "warning",
-          });
-        }
-        data.poster = filename;
       } else {
         data.poster = null;
       }
@@ -538,9 +531,9 @@ export default function EventForm({
                   label="Poster"
                   control={control}
                   maxFiles={1}
-                  maxSizeMB={10}
+                  maxSizeMB={poster_maxSizeMB}
                   shape="square"
-                  warnSizeMB={1}
+                  warnSizeMB={poster_warnSizeMB}
                 />
               </Grid>
             </Grid>
@@ -1428,7 +1421,7 @@ function EventPOC({
             ) : members.length === 0 ? (
               <TextField
                 disabled
-                value="No members found. Please add members to the club/body."
+                value="No approved current members found. Please add members to the club/body or wait for approval."
                 variant="outlined"
                 fullWidth
               />
