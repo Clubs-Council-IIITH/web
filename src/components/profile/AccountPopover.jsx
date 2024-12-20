@@ -2,10 +2,13 @@
 
 import React from "react";
 import {
+  Box,
   Button,
+  ClickAwayListener,
+  Fade,
   IconButton,
   Avatar,
-  Popover,
+  Popper,
   MenuItem,
   Divider,
   Stack,
@@ -26,10 +29,10 @@ export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
   const { isiframe, setIsiframe } = useMode2();
-  const [open, setOpen] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
-  const handleOpen = (event) => {
-    setOpen(event.currentTarget);
+  const handleToggle = (event) => {
+    setOpen((prev) => (prev ? null : event.currentTarget));
   };
 
   const handleClose = () => {
@@ -50,8 +53,8 @@ export default function AccountPopover() {
     return (
       <Button
         sx={{
-          minWidth: "80px",
-          padding: "10px",
+          minWidth: "80",
+          padding: "10",
         }}
         variant="outlined"
         onClick={() => login(pathname)}
@@ -63,14 +66,14 @@ export default function AccountPopover() {
 
   return (
     <>
+    {/*<ClickAwayListener onClickAway={handleClose}>*/}
       <IconButton
-        onClick={handleOpen}
+        onClick={handleToggle}
         aria-label="Account Popover"
         sx={{
           color: "white",
           ...(open && {
             "&:before": {
-              zIndex: 1,
               content: "''",
               width: "100%",
               height: "100%",
@@ -82,7 +85,6 @@ export default function AccountPopover() {
           ...(!open && {
             // "&:after": {
             "&:before": {
-              zIndex: 1,
               content: "''",
               width: "100%",
               height: "100%",
@@ -126,67 +128,65 @@ export default function AccountPopover() {
         </Avatar>
       </IconButton>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        PaperProps={{
-          sx: {
-            p: 0,
-            mt: 1.5,
-            ml: 0.75,
-            width: 180,
-            "& .MuiMenuItem-root": {
-              typography: "body2",
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <>
-          <Stack sx={{ my: 1.5, px: 2.5 }}>
-            <Typography variant="subtitle2" noWrap>
-              {`${user?.firstName} ${user?.lastName}`}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: "text.secondary" }}
-              noWrap
+      { open && (
+        <Popper
+          open={Boolean(open)}
+          anchorEl={open}
+          transition
+        >
+          {({ TransitionProps  }) => (
+          <Fade {...TransitionProps}>
+            <Box
+              sx={{
+                borderRadius: 1,
+                p: 1,
+                bgcolor: 'background.paper'}}
             >
-              {user?.email}
-            </Typography>
-          </Stack>
+              <Stack sx={{ my: 1.5, px: 2.5 }}>
+                <Typography variant="subtitle2" noWrap>
+                  {`${user?.firstName} ${user?.lastName}`}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary" }}
+                  noWrap
+                >
+                  {user?.email}
+                </Typography>
+              </Stack>
 
-          {[...AUTHENTICATED_MENU_OPTIONS].length > 0 ? (
-            <>
+              {[...AUTHENTICATED_MENU_OPTIONS].length > 0 ? (
+                <>
+                  <Divider sx={{ borderStyle: "dashed" }} />
+
+                  <Stack sx={{ p: 1 }}>
+                    {[...AUTHENTICATED_MENU_OPTIONS].map(
+                      (option) => (
+                        <MenuItem
+                          component={Link}
+                          key={option.label}
+                          href={option.url}
+                        >
+                          <Icon variant={option.icon} sx={{ mr: 2 }} />
+                          {option.label}
+                        </MenuItem>
+                      ),
+                    )}
+                  </Stack>
+                </>
+              ) : null}
+
               <Divider sx={{ borderStyle: "dashed" }} />
 
-              <Stack sx={{ p: 1 }}>
-                {[...AUTHENTICATED_MENU_OPTIONS].map(
-                  (option) => (
-                    <MenuItem
-                      component={Link}
-                      key={option.label}
-                      href={option.url}
-                    >
-                      <Icon variant={option.icon} sx={{ mr: 2 }} />
-                      {option.label}
-                    </MenuItem>
-                  ),
-                )}
-              </Stack>
-            </>
-          ) : null}
-
-          <Divider sx={{ borderStyle: "dashed" }} />
-
-          <MenuItem onClick={() => logout(pathname)} sx={{ m: 1 }}>
-            Logout
-          </MenuItem>
-        </>
-      </Popover>
+              <MenuItem onClick={() => logout(pathname)} sx={{ m: 1 }}>
+                Logout
+              </MenuItem>
+            </Box>
+          </Fade>
+          )}
+        </Popper>
+      )}
+    {/*</ClickAwayListener>*/}
     </>
   );
 }
