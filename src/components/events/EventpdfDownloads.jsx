@@ -191,7 +191,7 @@ export function DownloadEventReport({
                       .map(
                         (item) => `
                     <tr>
-                        <td>${item?.description || "Unknown"}</td>
+                        <td>${item?.description?.replace(/\n/g, "<br />") || "Unknown"}</td>
                         <td class="adv">${item?.amount || "Unknown"}</td>
                         <td class="adv">${
                           item?.advance == true ? "Yes" : "No"
@@ -281,7 +281,7 @@ export function DownloadEventReport({
             ? `
         <div class="section">
             <h2>Equipment</h2>
-            <p>${event?.equipment}</p>
+            <p>${event?.equipment?.replace(/\n/g, "<br />")}</p>
         </div>
         `
             : ""
@@ -291,7 +291,7 @@ export function DownloadEventReport({
             ? `
         <div class="section">
             <h2>Additional Information</h2>
-            <p>${event?.additional}</p>
+            <p>${event?.additional?.replace(/\n/g, "<br />")}</p>
         </div>
         `
             : ""
@@ -302,12 +302,12 @@ export function DownloadEventReport({
         </div>
         <div class="section">
             <h2>Event Summary</h2>
-            <p>${eventReport?.summary || "No summary provided."}</p>
+            <p>${eventReport?.summary?.replace(/\n/g, "<br />") || "No summary provided."}</p>
         </div>
 
         <div class="section">
             <h2>Feedback</h2>
-            <p>${eventReport?.feedbackCc || "No feedback available."}</p>
+            <p>${eventReport?.feedbackCc?.replace(/\n/g, "<br />") || "No feedback available."}</p>
         </div>
 
         <div class="section">
@@ -529,7 +529,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
               stateLabel(event?.status?.state)?.name || "N/A"
             }</p>
             <p><strong>Description:</strong> ${
-              event?.description || "N/A"
+              event?.description?.replace(/\n/g, "<br />") || "N/A"
             }</p>
         </div>
 
@@ -551,7 +551,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
                           .map(
                             (item) => `
                         <tr>
-                            <td>${item?.description || "Unknown"}</td>
+                            <td>${item?.description.replace(/\n/g, "<br />") || "Unknown"}</td>
                             <td class="adv">${item?.amount || "Unknown"}</td>
                             <td class="adv">${
                               item?.advance == true ? "Yes" : "No"
@@ -607,7 +607,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
             ? `
         <div class="section">
                 <h2>Equipment</h2>
-                <p>${event?.equipment}</p>
+                <p>${event?.equipment?.replace(/\n/g, "<br />")}</p>
         </div>
         `
             : ""
@@ -617,7 +617,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
             ? `
         <div class="section">
                 <h2>Additional Information</h2>
-                <p>${event?.additional}</p>
+                <p>${event?.additional?.replace(/\n/g, "<br />")}</p>
         </div>
         `
             : ""

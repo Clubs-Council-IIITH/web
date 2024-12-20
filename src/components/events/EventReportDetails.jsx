@@ -190,7 +190,17 @@ export function EventReportDetails({
         </Typography>
         <Box mt={2}>
           <Typography variant="body2">
-            {eventReport?.summary || "None"}
+            {eventReport?.summary ?
+              eventReport?.summary?.
+                split('\n')
+                  .map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))
+              : "None"
+            }
           </Typography>
         </Box>
       </Grid>
@@ -238,7 +248,17 @@ export function EventReportDetails({
               <Box mt={2}>
                 <Typography variant="overline">Equipment</Typography>
                 <Typography variant="body2">
-                  {event?.equipment || "None"}
+                  {event?.equipment ?
+                    event?.equipment?.
+                      split('\n')
+                        .map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))
+                    : "None"
+                  }
                 </Typography>
               </Box>
               <Box mt={2}>
@@ -246,7 +266,17 @@ export function EventReportDetails({
                   Additional Information
                 </Typography>
                 <Typography variant="body2">
-                  {event?.additional || "None"}
+                  {event?.additional ?
+                    event?.additional?.
+                      split('\n')
+                        .map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))
+                    : "None"
+                  }
                 </Typography>
               </Box>
             </>
@@ -284,7 +314,17 @@ export function EventReportDetails({
               Feedback
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {eventReport?.feedbackCc || "None"}
+              {eventReport?.feedbackCc ?
+                  eventReport?.feedbackCc?.
+                  split('\n')
+                    .map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))
+                : "None"
+              }
             </Typography>
           </Grid>
         </Grid>
