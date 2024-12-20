@@ -70,25 +70,30 @@ export default function EventsTable({
       field: "name",
       headerName: "Name",
       flex: isMobile ? null : 5,
-      renderCell: (p) =>
-        p.value ? (
-          <Typography
-            variant="body2"
-            style={{
-              overflowWrap: "break-word",
-              wordWrap: "break-word",
-              msWordBreak: "break-all",
-              wordBreak: "break-all",
-              msHyphens: "auto",
-              MozHyphens: "auto",
-              WebkitHyphens: "auto",
-              hyphens: "auto",
-            }}
-          >
-            {p.value}
-          </Typography>
+      renderCell: ({value, row}) =>
+        value ? (
+          <>
+            { row.budget && row.budget.length > 0 ? (
+              <Icon sx={{mr: 0.5}} variant={"paid-rounded"} />
+            ): null}
+            <Typography
+              variant="body2"
+              style={{
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
+                msWordBreak: "break-all",
+                wordBreak: "break-all",
+                msHyphens: "auto",
+                MozHyphens: "auto",
+                WebkitHyphens: "auto",
+                hyphens: "auto",
+              }}
+            >
+              {value}
+            </Typography>
+          </>
         ) : (
-          p.value
+          value
         ),
       display: "flex",
     },
@@ -111,36 +116,6 @@ export default function EventsTable({
             valueFormatter: (value, row, column, apiRef) => ISOtoHuman(value),
           },
         ]),
-    // {
-    //   field: "budget",
-    //   headerName: "Budget/SLC",
-    //   flex: isMobile ? null : 2,
-    //   align: "center",
-    //   headerAlign: "center",
-    //   valueGetter: (value, row, column, apiRef) => ({
-    //     requested: row.budget.length > 0,
-    //     approved: row.status.budget,
-    //   }),
-    //   renderCell: ({ value }) => (
-    //     <Icon
-    //       sx={{
-    //         color: !value.requested
-    //           ? "secondary.main"
-    //           : !value.approved
-    //             ? "warning.main"
-    //             : "success.main",
-    //       }}
-    //       variant={
-    //         !value.requested
-    //           ? "remove-rounded"
-    //           : !value.approved
-    //             ? "refresh-rounded"
-    //             : "check"
-    //       }
-    //     />
-    //   ),
-    //   display: 'flex',
-    // },
     {
       field: "venue",
       headerName: "Venue/SLO",
