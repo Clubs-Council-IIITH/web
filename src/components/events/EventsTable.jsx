@@ -70,12 +70,12 @@ export default function EventsTable({
       field: "name",
       headerName: "Name",
       flex: isMobile ? null : 5,
-      renderCell: ({value, row}) =>
+      renderCell: ({ value, row }) =>
         value ? (
           <>
-            { row.budget && row.budget.length > 0 ? (
-              <Icon sx={{mr: 0.5}} variant={"paid-rounded"} />
-            ): null}
+            {row.budget && row.budget.length > 0 ? (
+              <Icon sx={{ mr: 0.5 }} variant={"paid-rounded"} />
+            ) : null}
             <Typography
               variant="body2"
               style={{
