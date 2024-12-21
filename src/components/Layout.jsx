@@ -84,17 +84,17 @@ function Bar({ onOpenDrawer }) {
         <Stack
           direction="row"
           spacing={{
-            xs: 0.5,
-            sm: 1,
+            xs: 1,
+            sm: 1.5,
           }}
           sx={{
             alignItems: "center",
           }}
         >
-          <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />
-
-          {/* <ModeSwitch checked={isDark} onChange={handleChange} sx={{ m: 1 }} />{" "} */}
-          {/* Pass current isDark value and handleChange function to ModeSwitch component */}
+          <ModeSwitch
+            checked={isDark}
+            onChange={handleChange}
+          />
           <AccountPopover />
         </Stack>
       </Toolbar>

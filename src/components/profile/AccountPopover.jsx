@@ -12,8 +12,11 @@ import {
   Divider,
   Stack,
   Typography,
+  Tooltip,
 } from "@mui/material";
-import { alpha } from "@mui/material/styles";
+import { useTheme, alpha } from "@mui/material/styles";
+
+import LoginLogo from "components/svg/login.svg";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +32,7 @@ export default function AccountPopover() {
   const { user, isAuthenticated } = useAuth();
   const { isiframe } = useMode2();
   const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
 
   const handleToggle = (event) => {
     setOpen((prev) => (prev ? null : event.currentTarget));
@@ -46,16 +50,33 @@ export default function AccountPopover() {
 
   if (!isAuthenticated) {
     return (
-      <Button
-        sx={{
-          minWidth: "80",
-          padding: "10",
-        }}
-        variant="outlined"
-        onClick={() => login(pathname)}
-      >
-        LOGIN
-      </Button>
+      <Tooltip title={"Login"} placement="bottom" enterDelay={300}>
+        <span>
+          <Button
+            onClick={() => login(pathname)}
+            sx={{
+              borderRadius: "100%",
+              px: 1.5,
+              pt: 1.25,
+              pb: 0.75,
+              minWidth: "auto",
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.5),
+              "&:hover": {
+                bgcolor: (theme) =>
+                  alpha(theme.palette.background.neutral, 0.8),
+              },
+            }}
+          >
+            <div
+              style={{
+                color: theme.palette.mode === "light" ? "#000" : "#fff",
+              }}
+            >
+              <LoginLogo alt="Login" height={20} width={20} />
+            </div>
+          </Button>
+        </span>
+      </Tooltip>
     );
   }
 
