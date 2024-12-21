@@ -13,7 +13,7 @@ import {
     WidthType,
     AlignmentType,
     ImageRun,
-    HorizontalPositionAlign,
+    UnderlineType,
     HorizontalPositionRelativeFrom,
     ExternalHyperlink
 } from "docx";
@@ -42,6 +42,14 @@ export function DownloadEventReportDocx({
     const endDate = event?.datetimeperiod ?
         formatDateTime(event.datetimeperiod[1]) :
         null;
+    const isStudentBodyEvent = clubs.find(
+                                    club => club.cid === event?.clubid
+                                )?.category === "body" || 
+                                event?.collabclubs?.some(
+                                    collab => clubs.find(
+                                        (club) => club.cid === collab
+                                )?.category === "body"
+                            );
 
     const fetchImageBuffer = async (url) => {
         const response = await fetch(url);
@@ -59,49 +67,50 @@ export function DownloadEventReportDocx({
                 children: [
                     new Paragraph({
                         children: [
-                            new ImageRun({
-                                data: ccLogoBuffer,
-                                transformation: {
-                                    width: 100,
-                                    height: 50
-                                },
-                                floating: {
-                                    horizontalPosition: {
-                                        offset: 414400,
-                                    },
-                                    verticalPosition: {
-                                        offset: 414400,
-                                    }
-                                },
-                            }),
+                            isStudentBodyEvent ?
                             new ImageRun({
                                 data: lifeLogoBuffer,
                                 transformation: {
-                                    width: 110,
-                                    height: 50
+                                    width: 150,
+                                    height: 75
                                 },
                                 floating: {
                                     horizontalPosition: {
-                                        align: HorizontalPositionAlign.CENTER,
+                                        offset: 614400,
                                     },
                                     verticalPosition: {
-                                        offset: 414400,
+                                        offset: 214400,
+                                    }
+                                },
+                            }) :
+                            new ImageRun({
+                                data: ccLogoBuffer,
+                                transformation: {
+                                    width: 150,
+                                    height: 75
+                                },
+                                floating: {
+                                    horizontalPosition: {
+                                        offset: 614400,
+                                    },
+                                    verticalPosition: {
+                                        offset: 214400,
                                     }
                                 },
                             }),
                             new ImageRun({
                                 data: IIITLogoBuffer,
                                 transformation: {
-                                    width: 110,
-                                    height: 50
+                                    width: 150,
+                                    height: 75
                                 },
                                 floating: {
                                     horizontalPosition: {
                                         relative: HorizontalPositionRelativeFrom.RIGHT_MARGIN,
-                                        offset: -414400,
+                                        offset: -1014400,
                                     },
                                     verticalPosition: {
-                                        offset: 414400,
+                                        offset: 214400,
                                     }
                                 },
                             }),
@@ -110,47 +119,103 @@ export function DownloadEventReportDocx({
 
                     }),
                     new Paragraph({
-                        text: `Event Report: ${event?.name || "Unnamed Event"}`,
-                        heading: "Heading1",
                         alignment: AlignmentType.CENTER,
+                        children: [
+                            new TextRun({
+                                text: `Event Report: ${event?.name || "Unnamed Event"}`,
+                                bold: true,
+                                color: "FF0000",
+                                size: 32,
+                                underline: {
+                                    type: UnderlineType.SINGLE,
+                                    color: "FF0000",
+                                },
+                                spacing: {
+                                    after: 200,
+                                },
+                            }),
+                        ],
                     }),
                     new Paragraph({
+                        alignment: AlignmentType.RIGHT,
                         children: [
                             new TextRun({
                                 text: `Submitted On: ${submittedDate.dateString} ${submittedDate.timeString}`,
                                 bold: true,
                             }),
                         ],
+                        spacing: {
+                            before: 200, // Adds space before this paragraph (200 twips = 10 points)
+                        },
                     }),
                     new Paragraph({
                         text: "Event Details",
                         heading: "Heading2",
                     }),
                     new Paragraph({
-                        text: `Event Code: #${event?.code || "N/A"}`,
-                    }),
-                    new Paragraph({
-                        text: `Organized By: ${clubs?.find((club) => club?.cid === event?.clubid)?.name || "N/A"
-                            }`,
-                    }),
-                    new Paragraph({
-                        text: `Collaborators: ${event?.collabclubs
-                            ?.map((collab) => clubs?.find((club) => club?.cid === collab)?.name)
-                            .join(", ") || "None"
-                            }`,
-                    }),
-                    new Paragraph({
-                        text: `Event Dates: ${startDate && endDate
-                            ? `${startDate.dateString + " " + startDate.timeString + " IST"} to ${endDate.dateString + " " + endDate.timeString + " IST"}`
-                            : "N/A"
-                            }`,
+                        children: [
+                            new TextRun({
+                                text: "Event Code: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `#${event?.code || "N/A"}`,
+                            }),
+                        ],
                     }),
                     new Paragraph({
                         children: [
+                            new TextRun({
+                                text: "Organized By: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${clubs?.find(
+                                    (club) => club?.cid === event?.clubid)?.name
+                                    || "N/A"
+                                }`,
+                            }),
+                        ],
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Collaborators: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${event?.collabclubs
+                                        ?.map((collab) => clubs?.find((club) => club?.cid === collab)?.name)
+                                            .join(", ") 
+                                    || "None"
+                                }`,
+                            }),
+                        ],
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Event Dates: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${startDate && endDate
+                                        ? `${startDate.dateString + " " + startDate.timeString + " IST"} to ${endDate.dateString + " " + endDate.timeString + " IST"}`
+                                    : "N/A"
+                                }`,
+                            }),
+                        ],
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Event Link: ",
+                                bold: true,
+                            }),
                             new ExternalHyperlink({
                                 children: [
                                     new TextRun({
-                                        text: `Event Link: ${PUBLIC_URL + "/events/" + event._id}`,
+                                        text: `${PUBLIC_URL + "/events/" + event._id}`,
                                         style: "Hyperlink",
                                     }),
                                 ],
@@ -172,21 +237,48 @@ export function DownloadEventReportDocx({
                                 new TableRow({
                                     children: [
                                         new TableCell({
-                                            children: [new Paragraph("Description")],
+                                            children: [
+                                                new Paragraph({
+                                                    children: [
+                                                        new TextRun({
+                                                            text: "Description",
+                                                            bold: true
+                                                        })
+                                                    ]
+                                                })
+                                            ],
                                             width: {
                                                 size: 50,
                                                 type: WidthType.PERCENTAGE
                                             },
                                         }),
                                         new TableCell({
-                                            children: [new Paragraph("Amount")],
+                                            children: [
+                                                new Paragraph({
+                                                    children: [
+                                                        new TextRun({
+                                                            text: "Amount",
+                                                            bold: true
+                                                        })
+                                                    ]
+                                                })
+                                            ],
                                             width: {
                                                 size: 25,
                                                 type: WidthType.PERCENTAGE
                                             },
                                         }),
                                         new TableCell({
-                                            children: [new Paragraph("Advance")],
+                                            children: [
+                                                new Paragraph({
+                                                    children: [
+                                                        new TextRun({
+                                                            text: "Advance",
+                                                            bold: true
+                                                        })
+                                                    ]
+                                                })
+                                            ],
                                             width: {
                                                 size: 25,
                                                 type: WidthType.PERCENTAGE
@@ -233,16 +325,40 @@ export function DownloadEventReportDocx({
                         heading: "Heading2",
                     }),
                     new Paragraph({
-                        text: `Audience: ${event?.audience
-                            ? audienceLabels(event?.audience).map(({ name }) => name).join(", ")
-                            : "Unknown"
-                            }`,
+                        children: [
+                            new TextRun({
+                                text: "Audience: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${event?.audience
+                                        ? audienceLabels(event?.audience).map(({ name }) => name).join(", ")
+                                        : "Unknown"
+                                }`,
+                            }),
+                        ],
                     }),
                     new Paragraph({
-                        text: `Estimated Participation: ${event?.population || "N/A"}`,
+                        children: [
+                            new TextRun({
+                                text: "Estimated Participation: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${event?.population || "N/A"}`,
+                            }),
+                        ],
                     }),
                     new Paragraph({
-                        text: `Actual Attendance: ${eventReport?.attendance || "N/A"}`,
+                        children: [
+                            new TextRun({
+                                text: "Actual Attendance: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${eventReport?.attendance || "N/A"}`,
+                            }),
+                        ],
                     }),
 
                     new Paragraph({
@@ -250,7 +366,19 @@ export function DownloadEventReportDocx({
                         heading: "Heading2"
                     }),
                     new Paragraph({
-                        text: `Mode: ${event?.mode ? event.mode.charAt(0).toUpperCase() + event.mode.slice(1) : "Unknown"}`
+                        children: [
+                            new TextRun({
+                                text: "Mode: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${
+                                    event?.mode ? 
+                                        event.mode.charAt(0).toUpperCase() + event.mode.slice(1) 
+                                        : "Unknown"
+}`,
+                            }),
+                        ],
                     }),
                     ...(event?.location?.length ?
                         event.location.map((venue) =>
@@ -413,26 +541,57 @@ export function DownloadEventReportDocx({
                         heading: "Heading2",
                     }),
                     new Paragraph({
-                        text: `Name: ${`${submittedUser?.data?.firstName} ${submittedUser?.data?.lastName}` || "Unknown"
-                            }`,
+                        children: [
+                            new TextRun({
+                                text: "Name: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${`${submittedUser?.data?.firstName} ${submittedUser?.data?.lastName}` || "Unknown"}`,
+                            }),
+                        ],
                     }),
                     new Paragraph({
-                        text: `ID Number: ${submittedUser?.data?.rollno || "Unknown"}`,
+                        children: [
+                            new TextRun({
+                                text: "ID Number: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${submittedUser?.data?.rollno || "Unknown"}`,
+                            }),
+                        ],
                     }),
                     new Paragraph({
-                        text: `Email: ${submittedUser?.data?.email || "Unknown"}`,
+                        children: [
+                            new TextRun({
+                                text: "Email: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${submittedUser?.data?.email || "Unknown"}`,
+                            }),
+                        ],
                     }),
                     new Paragraph({
-                        text: `Phone Number: ${submittedUser?.data?.phone || "Unknown"}`,
+                        children: [
+                            new TextRun({
+                                text: "Phone Number: ",
+                                bold: true,
+                            }),
+                            new TextRun({
+                                text: `${submittedUser?.data?.phone || "Unknown"}`,
+                            }),
+                        ],
                     }),
                 ],
             },],
         });
 
         const buffer = await Packer.toBlob(doc);
-        saveAs(buffer, `${
+        saveAs(buffer, `${  
             event?.name?.replace(/\s+/g, "_")
-            || "report"}_report.docx`
+            || "event"}_report.docx`
         );
     };
 

@@ -13,7 +13,12 @@ import Html from "react-pdf-html";
 
 import { PUBLIC_URL } from "utils/files";
 import { formatDateTime, ISOtoHuman } from "utils/formatTime";
-import { locationLabel, stateLabel, billsStateLabel, audienceLabels } from "utils/formatEvent";
+import {
+  locationLabel,
+  stateLabel,
+  billsStateLabel,
+  audienceLabels
+} from "utils/formatEvent";
 import Icon from "components/Icon";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
@@ -27,25 +32,22 @@ export function DownloadEventReport({
   clubs,
 }) {
   const submittedDate = formatDateTime(eventReport?.submittedTime);
-  const startDate = event?.datetimeperiod
-    ? formatDateTime(event.datetimeperiod[0])
-    : null;
-  const endDate = event?.datetimeperiod
-    ? formatDateTime(event.datetimeperiod[1])
-    : null;
+  const startDate = event?.datetimeperiod ?
+      formatDateTime(event.datetimeperiod[0]) :
+      null;
+  const endDate = event?.datetimeperiod ?
+      formatDateTime(event.datetimeperiod[1]) :
+      null;
+  const isStudentBodyEvent = clubs.find(
+          club => club.cid === event?.clubid
+      )?.category === "body" ||
+      event?.collabclubs?.some(
+          collab => clubs.find(
+              (club) => club.cid === collab
+          )?.category === "body"
+      );
   const htmlContent = `
     <style>
-
-        h1,
-        h2,
-        p,
-        ul,
-        li {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
         .report-container {
             margin-top: -40px;
             margin-bottom: -10mm;
@@ -64,8 +66,13 @@ export function DownloadEventReport({
             padding-bottom: 5px;
         }
 
+        .submitted_on{
+            text-align: right;
+            font-weight: bold;
+        }
+
         h2 {
-            color: #333;
+            color: #2e74b5;
             font-size: 20px;
             margin-top: 20px;
             margin-bottom: 10px;
@@ -75,18 +82,14 @@ export function DownloadEventReport({
 
         p, a {
             font-size: 13px;
-            line-height: 1.6;
-            margin: 8px 0;
+            margin: 6px 0;
         }
 
         strong {
-            font-weight: bold;
+            color: #062785;
+            font-size: 15px;
         }
 
-        ul {
-            margin-left: 20px;
-            list-style-type: disc;
-        }
 
         li {
             font-size: 13px;
@@ -109,10 +112,7 @@ export function DownloadEventReport({
             font-style: italic;
         }
 
-        .submitted-by {
-            font-weight: bold;
-        }
-
+        .submitted-by,
         .email,
         .idno,
         .phone {
@@ -132,7 +132,6 @@ export function DownloadEventReport({
             border: 1px solid #ddd;
         }
 
-        th,
         td {
             font-size: 13px;
             padding: 8px;
@@ -142,11 +141,16 @@ export function DownloadEventReport({
         th {
             background-color: #f2f2f2;
             text-align: center;
+            font-size: 15px;
+            padding: 10px;
+        }
+        .adv{
+            width: 50px;
         }
     </style>
     <div class="report-container">
         <h1>Event Report: ${event?.name || "Unnamed Event"}</h1>
-        <p><strong>Submitted On:</strong> ${submittedDate.dateString} ${
+        <p class="submitted_on"><strong>Submitted On:</strong> ${submittedDate.dateString} ${
     submittedDate.timeString
   }</p>
 
@@ -233,7 +237,7 @@ export function DownloadEventReport({
               event?.mode !== "online"
                 ? event?.location?.length
                   ? `
-                  <p>Locations:</p>
+                  <p><strong>Locations:</strong></p>
                     <ul>
                         ${event.location
                           .map(
@@ -259,16 +263,17 @@ export function DownloadEventReport({
                 ${eventReport.prizes
                   .map(
                     (prize) =>
-                      `<li>${prize.replace(/_/g, " ").toUpperCase()}</li>`
+                      `<li>${prize.replace(/_/g, " ").charAt(0).toUpperCase() + prize.replace(/_/g, " ").slice(1)}</li>`
                   )
                   .join("")}
             </ul>
-            <p><strong>Prizes Breakdown:</strong> ${
+            <p><strong>Prizes Breakdown:</strong><br /><br />${
                 eventReport?.prizesBreakdown
                   ? eventReport?.prizesBreakdown.replace(/\n/g, "<br />") // Handling line breaks
                   : "N/A"
               }</p>
-              <p><strong>Winners:</strong> ${
+              <br />
+              <p><strong>Winners:</strong><br /><br />${
                 eventReport?.winners
                   ? eventReport?.winners.replace(/\n/g, "<br />") // Handling line breaks
                   : "N/A"
@@ -313,7 +318,7 @@ export function DownloadEventReport({
 
         <div class="section">
             <h2>Submitted By</h2>
-            <p class="submitted-by">${
+            <p class="submitted-by"><strong>Name:</strong> ${
               `${submittedUser?.data?.firstName} ${submittedUser?.data?.lastName}` ||
               "Unknown"
             }</p>
@@ -341,14 +346,14 @@ export function DownloadEventReport({
     `;
   const styles = StyleSheet.create({
     page: {
-      padding: "10mm", // Set margins to 10mm for all sides
+      padding: "10mm",
     },
     headerContainer: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: "5mm", // Space after the header
+      marginBottom: "5mm",
     },
     logo1: {
       width: 80,
@@ -366,48 +371,60 @@ export function DownloadEventReport({
 
   const pdfDoc = (
     <Document>
-      <Page size="A4" style={styles.page}>
-        <div style={styles.headerContainer}>
-          <Image src={CCLogo} style={styles.logo1} />
-          <Image src={LifeLogo} style={styles.logo2} />
-          <Image src={IIITLogo} style={styles.logo3} />
-        </div>
-        <Html>{htmlContent}</Html>
-      </Page>
+      <Page size = "A4" style = { styles.page } >
+        <div style = { styles.headerContainer } >
+          {
+            !isStudentBodyEvent ? (
+              <Image src = { CCLogo } style = { styles.logo1 } />
+            ) : (
+              <Image src = { LifeLogo } style = { styles.logo2 } />
+            )
+          }
+          <Image src = { IIITLogo } style = { styles.logo3 } />
+        </div> 
+        <Html > { htmlContent } </Html>
+      </Page> 
     </Document>
   );
   return (
-    <PDFDownloadLink document={pdfDoc} fileName={`${event?.name.replace(/\s+/g, "_")}_report.pdf`}>
-      <Button variant="contained" color="primary" 
-            startIcon={
-                <Icon variant="download" />
-            }
-        >
-          Report PDF
+    <PDFDownloadLink
+        document = { pdfDoc }
+        fileName = {
+          `${event?.name.replace(/\s+/g, "_")}_report.pdf`
+        }
+    >
+      <Button variant = "contained" color = "primary"
+          startIcon = {
+              <Icon variant = "download" />
+          }
+      >
+        Report PDF
       </Button>
     </PDFDownloadLink>
   );
 }
 
-export function DownloadEvent({ event, clubs, pocProfile }) {
-  const startDate = event?.datetimeperiod
-    ? formatDateTime(event.datetimeperiod[0])
-    : null;
-  const endDate = event?.datetimeperiod
-    ? formatDateTime(event.datetimeperiod[1])
-    : null;
-  const htmlContent = `
+export function DownloadEvent({
+  event,
+  clubs,
+  pocProfile
+}) {
+    const startDate = event?.datetimeperiod ?
+        formatDateTime(event.datetimeperiod[0]) :
+        null;
+    const endDate = event?.datetimeperiod ?
+        formatDateTime(event.datetimeperiod[1]) :
+        null;
+    const isStudentBodyEvent = clubs.find(
+            club => club.cid === event?.clubid
+        )?.category === "body" ||
+        event?.collabclubs?.some(
+            collab => clubs.find(
+                (club) => club.cid === collab
+            )?.category === "body"
+        );
+    const htmlContent = `
     <style>
-        h1,
-        h2,
-        p,
-        ul,
-        li {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
         .report-container {
             margin-top: -40px;
             margin-bottom: -10mm;
@@ -426,8 +443,13 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
             padding-bottom: 5px;
         }
 
+        .submitted_on{
+            text-align: right;
+            font-weight: bold;
+        }
+
         h2 {
-            color: #333;
+            color: #2e74b5;
             font-size: 20px;
             margin-top: 20px;
             margin-bottom: 10px;
@@ -437,18 +459,14 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
 
         p, a {
             font-size: 13px;
-            line-height: 1.6;
-            margin: 8px 0;
+            margin: 6px 0;
         }
 
         strong {
-            font-weight: bold;
+            color: #062785;
+            font-size: 15px;
         }
 
-        ul {
-            margin-left: 20px;
-            list-style-type: disc;
-        }
 
         li {
             font-size: 13px;
@@ -471,10 +489,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
             font-style: italic;
         }
 
-        .submitted-by {
-            font-weight: bold;
-        }
-
+        .submitted-by,
         .email,
         .idno,
         .phone {
@@ -494,9 +509,8 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
             border: 1px solid #ddd;
         }
 
-        th,
         td {
-            font-size: 12px;
+            font-size: 13px;
             padding: 8px;
             text-align: left;
         }
@@ -504,6 +518,8 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
         th {
             background-color: #f2f2f2;
             text-align: center;
+            font-size: 15px;
+            padding: 10px;
         }
 
         .adv{
@@ -516,7 +532,8 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
         <div class="section">
             <h2>Event Details</h2>
             <p><strong>Event Code:</strong> #${event?.code || "N/A"}</p>
-            <p><strong>Organized By:</strong> ${clubs?.find((club) => club?.cid === event?.clubid)?.name || "N/A"}</p>
+            <p><strong>Organized By:</strong> ${
+              clubs?.find((club) => club?.cid === event?.clubid)?.name || "N/A"}</p>
             <p><strong>Collaborating Clubs/Bodies:</strong> ${
               event?.collabclubs
                 ?.map(
@@ -590,7 +607,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
               event?.mode !== "online"
                 ? event?.location?.length
                   ? `
-                  <p>Locations:</p>
+                  <p><strong>Locations:</strong></p>
                     <ul>
                         ${event.location
                           .map(
@@ -630,13 +647,13 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
 
         <div class="section">
             <h2>POC of Event</h2>
-            <p class="submitted-by">${
+            <p class="submitted-by"><strong>Name:</strong>${
               `${pocProfile?.data?.firstName} ${pocProfile?.data?.lastName}` ||
               "Unknown"
             }</p>
             <p class="idno"><strong>ID Number:</strong> ${
               pocProfile?.data?.rollno || "Unknown"
-            }</p>   
+            }</p>
             <p class="email"><strong>Email:</strong> ${
               pocProfile?.data?.email || "Unknown"
             }</p>
@@ -644,13 +661,11 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
               pocProfile?.data?.phone || "Unknown"
             }</p>
         </div>
-            
+
         <div class="section">
         <h2>Timeline</h2>
         <p><strong>Last Edited:</strong> ${
-          event?.status?.lastUpdatedTime
-            ? event?.status?.lastUpdatedTime
-            : "Information not available"
+          event?.status?.lastUpdatedTime || "Information not available"
         }</p>
         <p><strong>Last Edited By:</strong> ${
           event?.lastEditeduser || "Information not available"
@@ -660,9 +675,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
           event?.status?.state === "deleted"
             ? `
                 <p><strong>Event Deletion:</strong> ${
-                  event?.status?.deletedTime
-                    ? event?.status?.deletedTime
-                    : "Information not available"
+                  event?.status?.deletedTime || "Information not available"
                 }</p>
                 <p><strong>Event Deleted By:</strong> ${
                   event?.deletedBy || "Information not available"
@@ -674,28 +687,20 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
           event?.status?.state !== "incomplete"
             ? `
         <p><strong>Event Submission:</strong> ${
-          event?.status?.submissionTime
-            ? event?.status?.submissionTime
-            : "Information not available"
+          event?.status?.submissionTime || "Information not available"
         }</p>
         <p><strong>Clubs Council Approval:</strong> ${
-          event?.status?.ccApproverTime
-            ? event?.status?.ccApproverTime
-            : "Information not available"
+          event?.status?.ccApproverTime || "Information not available"
         }</p>
         <p><strong>Clubs Council Approved By:</strong> ${
           event?.status?.ccApprover || "Information not available"
         }</p>
         
         <p><strong>Students Life Council Approval:</strong> ${
-          event?.status?.slcApproverTime
-            ? event?.status?.slcApproverTime
-            : "Information not available"
+          event?.status?.slcApproverTime || "Information not available"
         }</p>
         <p><strong>Students Life Office Approval:</strong> ${
-          event?.status?.sloApproverTime
-            ? event?.status?.sloApproverTime
-            : "Information not available"
+          event?.status?.sloApproverTime || "Information not available"
         }</p>
         `
             : ""
@@ -708,7 +713,6 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
         <div class="section">
             <h2>Bill Status</h2>
 
-            <!-- Checking if bill status is available -->
             ${
               event?.billStatus
                 ? `
@@ -746,7 +750,7 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
 
   const styles = StyleSheet.create({
     page: {
-      padding: "10mm", // Set margins to 10mm for all sides
+      padding: "10mm",
     },
     headerContainer: {
       display: "flex",
@@ -770,23 +774,34 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
   });
 
   const pdfDoc = (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <div style={styles.headerContainer}>
-          <Image src={CCLogo} style={styles.logo1} />
-          <Image src={LifeLogo} style={styles.logo2} />
-          <Image src={IIITLogo} style={styles.logo3} />
-        </div>
-        <Html>{htmlContent}</Html>
-      </Page>
+    <Document >
+        <Page size="A4" style={ styles.page } >
+            <div style={ styles.headerContainer } > 
+                {
+                    !isStudentBodyEvent ?
+                    (
+                        <Image src={ CCLogo } style={ styles.logo1 } />
+                    ) : (
+                        <Image src={ LifeLogo } style={ styles.logo2 } />
+                    )
+                }
+                <Image src={ IIITLogo } style={ styles.logo3 } />
+            </div> 
+            <Html>{htmlContent}</Html>
+        </Page> 
     </Document>
   );
 
   return (
-    <PDFDownloadLink document={pdfDoc} fileName={`${event?.name.replace(/\s+/g, "_")}.pdf`}>
-      <Button variant="contained" color="primary" 
-        startIcon={
-            <Icon variant="download" />
+    <PDFDownloadLink
+      document = { pdfDoc }
+      fileName = {
+          `${event?.name.replace(/\s+/g, "_")}.pdf`
+      }
+    >
+      <Button variant = "contained" color = "primary"
+        startIcon = {
+          <Icon variant = "download" />
         }
       >
         Event PDF
