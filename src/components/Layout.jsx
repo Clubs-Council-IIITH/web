@@ -30,7 +30,7 @@ import { ModeSwitch } from "components/ModeSwitch";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
-const BAR_HEIGHT_DESKTOP = 92;
+const BAR_HEIGHT_DESKTOP = 85;
 
 // define navigation drawer width
 const DRAWER_WIDTH = 280;

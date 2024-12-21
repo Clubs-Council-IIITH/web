@@ -13,6 +13,7 @@ import {
   Stack,
   Typography,
   Tooltip,
+  ClickAwayListener,
 } from "@mui/material";
 import { useTheme, alpha } from "@mui/material/styles";
 
@@ -36,6 +37,10 @@ export default function AccountPopover() {
 
   const handleToggle = (event) => {
     setOpen((prev) => (prev ? null : event.currentTarget));
+  };
+
+  const handleClickAway = () => {
+    setOpen(false);
   };
 
   const AUTHENTICATED_MENU_OPTIONS = [
@@ -142,57 +147,81 @@ export default function AccountPopover() {
       </IconButton>
 
       {open && (
-        <Popper open={Boolean(open)} anchorEl={open} transition>
-          {({ TransitionProps }) => (
-            <Fade {...TransitionProps}>
-              <Box
-                sx={{
-                  borderRadius: 1,
-                  p: 1,
-                  bgcolor: "background.paper",
-                }}
-              >
-                <Stack sx={{ my: 1.5, px: 2.5 }}>
-                  <Typography variant="subtitle2" noWrap>
-                    {`${user?.firstName} ${user?.lastName}`}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "text.secondary" }}
-                    noWrap
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <Popper
+            open={Boolean(open)}
+            anchorEl={open}
+            transition
+            sx={{ zIndex: theme.zIndex.modal }}
+          >
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps}>
+                <Box
+                  sx={{
+                    borderRadius: 1,
+                    px: 1,
+                    pb: 0.5,
+                    pt: 1.5,
+                    bgcolor: "background.paper",
+                    minWidth: 200,
+                    mr: 1,
+                    boxShadow:
+                      "2px 2px 5px rgba(0, 0, 0, 0.125), -2px -2px 5px rgba(0, 0, 0, 0.01)",
+                  }}
+                >
+                  <Stack sx={{ my: 1.5, px: 1.5 }}>
+                    <Typography variant="subtitle2" noWrap>
+                      {`${user?.firstName} ${user?.lastName}`}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                      noWrap
+                    >
+                      {user?.email}
+                    </Typography>
+                  </Stack>
+
+                  {[...AUTHENTICATED_MENU_OPTIONS].length > 0 ? (
+                    <>
+                      <Divider sx={{ borderStyle: "dashed" }} />
+
+                      <Stack sx={{ p: 1 }}>
+                        {[...AUTHENTICATED_MENU_OPTIONS].map((option) => (
+                          <MenuItem
+                            component={Link}
+                            key={option.label}
+                            href={option.url}
+                            sx={{
+                              ml: 0,
+                            }}
+                          >
+                            <Icon
+                              variant={option.icon}
+                              sx={{ mr: 2, ml: -1 }}
+                            />
+                            <Typography variant="body2">
+                              {option.label}
+                            </Typography>
+                          </MenuItem>
+                        ))}
+                      </Stack>
+                    </>
+                  ) : null}
+
+                  <Divider sx={{ borderStyle: "dashed" }} />
+
+                  <MenuItem
+                    onClick={() => logout(pathname)}
+                    sx={{ m: 1, ml: 0 }}
                   >
-                    {user?.email}
-                  </Typography>
-                </Stack>
-
-                {[...AUTHENTICATED_MENU_OPTIONS].length > 0 ? (
-                  <>
-                    <Divider sx={{ borderStyle: "dashed" }} />
-
-                    <Stack sx={{ p: 1 }}>
-                      {[...AUTHENTICATED_MENU_OPTIONS].map((option) => (
-                        <MenuItem
-                          component={Link}
-                          key={option.label}
-                          href={option.url}
-                        >
-                          <Icon variant={option.icon} sx={{ mr: 2 }} />
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </Stack>
-                  </>
-                ) : null}
-
-                <Divider sx={{ borderStyle: "dashed" }} />
-
-                <MenuItem onClick={() => logout(pathname)} sx={{ m: 1 }}>
-                  Logout
-                </MenuItem>
-              </Box>
-            </Fade>
-          )}
-        </Popper>
+                    <Typography variant="body2">Logout</Typography>
+                  </MenuItem>
+                </Box>
+              </Fade>
+            )}
+          </Popper>
+        </ClickAwayListener>
       )}
     </>
   );
