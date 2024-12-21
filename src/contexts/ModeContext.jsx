@@ -72,20 +72,7 @@ export const ModeProvider = ({ children }) => {
   return (
     <iframeContext.Provider value={{ isiframe, setMode }}>
       <ModeContext.Provider value={{ isDark, setMode }}>
-        {isLoading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <GradientCircularProgress />
-          </div>
-        ) : (
-          children
-        )}
+        {!isLoading && children}
       </ModeContext.Provider>
     </iframeContext.Provider>
   );

@@ -58,7 +58,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   // get the nonce and use it
-  const nonce = headers().get("x-nonce") || " ";
+  const nonce = headers().get('x-nonce') || "";
 
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -78,32 +78,13 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Set the background color dynamically using a script */}
-        <script
-          nonce={nonce}
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                function applyTheme() {
-                  let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  const storedMode = window.localStorage.getItem("currentModeCC");
-                  if (storedMode === "false") {
-                    isDarkMode = false;
-                  } else if (storedMode === "true") {
-                    isDarkMode = true;
-                  }
-                  document.body.style.backgroundColor = isDarkMode ? '#1e1e1e' : '#fdfdfd';
-                }
-
-                if (document.readyState === 'loading') {
-                  document.addEventListener('DOMContentLoaded', applyTheme);
-                } else {
-                  applyTheme();
-                }
-              })();
-            `,
-          }}
-        />
+        <style>{`
+          @media (prefers-color-scheme: dark) {
+            body {
+              background-color: #1e1e1e;
+            }
+          }
+        `}</style>
       </head>
       <body className={fontClass}>
         <ModeProvider>
