@@ -255,9 +255,10 @@ export default function EventForm({
       if (typeof formData.poster === "string") {
         data.poster = formData.poster;
       } else if (Array.isArray(formData.poster) && formData.poster.length > 0) {
-          data.poster = await uploadImageFile(
+        data.poster = await uploadImageFile(
           formData.poster[0],
           poster_filename,
+          poster_warnSizeMB,
         );
       } else {
         data.poster = null;

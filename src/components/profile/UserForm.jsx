@@ -78,7 +78,8 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       } else if (Array.isArray(formData.img) && formData.img.length > 0) {
         data.img = await uploadImageFile(
           formData.img[0],
-          `profile_${defaultValues.uid}`
+          `profile_${defaultValues.uid}`,
+          profile_warnSizeMB,
         );
       } else {
         data.img = null;

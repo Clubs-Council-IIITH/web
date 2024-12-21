@@ -146,9 +146,10 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.logo === "string") {
         data.logo = formData.logo;
       } else if (Array.isArray(formData.logo) && formData.logo.length > 0) {
-          data.logo = await uploadImageFile(
+        data.logo = await uploadImageFile(
           formData.logo[0],
           logo_filename,
+          logo_warnSizeMB,
         );
       } else {
         data.logo = null;
@@ -167,9 +168,10 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
       if (typeof formData.banner === "string") {
         data.banner = formData.banner;
       } else if (Array.isArray(formData.banner) && formData.banner.length > 0) {
-          data.banner = await uploadImageFile(
+        data.banner = await uploadImageFile(
           formData.banner[0],
           banner_filename,
+          banner_warnSizeMB,
         );
       }
     } catch (error) {
@@ -189,9 +191,10 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         Array.isArray(formData.bannerSquare) &&
         formData.bannerSquare.length > 0
       ) {
-          data.bannerSquare = await uploadImageFile(
+        data.bannerSquare = await uploadImageFile(
           formData.bannerSquare[0],
           bannerSquare_filename,
+          bannerSquare_warnSizeMB,
         );
       }
     } catch (error) {
