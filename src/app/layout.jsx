@@ -77,16 +77,16 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <head>
-        <style>{`
-          @media (prefers-color-scheme: dark) {
-            body {
-              background-color: #1e1e1e;
-            }
-          }
-        `}</style>
-      </head>
       <body className={fontClass}>
+      <style>
+          {`
+            @media (prefers-color-scheme: dark) {
+              body {
+                background-color: #1e1e1e;
+              }
+            }
+          `}
+        </style>
         <ModeProvider>
           <ThemeRegistry nonce={nonce}>
             <Progressbar />
