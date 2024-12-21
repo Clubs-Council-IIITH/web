@@ -1,7 +1,7 @@
 // ModeContext.js
 "use client";
+
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { CircularProgress } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ModeContext = createContext({
@@ -14,23 +14,67 @@ const iframeContext = createContext({
   setMode: () => {},
 });
 
-function GradientCircularProgress() {
+const GradientCircularLoader = ({ size = 50, strokeWidth = 4 }) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+
   return (
-    <React.Fragment>
-      <svg width={0} height={0}>
+    <div
+      style={{
+        position: "relative",
+        width: size,
+        height: size,
+      }}
+    >
+      <svg
+        width={size}
+        height={size}
+        style={{
+          animation: "spin 1.5s linear infinite",
+          transformOrigin: "50% 50%",
+        }}
+      >
         <defs>
-          <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <linearGradient
+            id="gradient-loader"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
             <stop offset="0%" stopColor="#e01cd5" />
             <stop offset="100%" stopColor="#1CB5E0" />
           </linearGradient>
         </defs>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="url(#gradient-loader)"
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference * 0.25} // Creates the gap in the circle
+        />
       </svg>
-      <CircularProgress
-        sx={{ "svg circle": { stroke: "url(#my_gradient)" } }}
-      />
-    </React.Fragment>
+      <style jsx>{`
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        svg {
+          display: block;
+          animation-delay: -1500ms;
+        }
+      `}</style>
+    </div>
   );
-}
+};
 
 export const useMode = () => useContext(ModeContext);
 export const useMode2 = () => useContext(iframeContext);
@@ -72,7 +116,20 @@ export const ModeProvider = ({ children }) => {
   return (
     <iframeContext.Provider value={{ isiframe, setMode }}>
       <ModeContext.Provider value={{ isDark, setMode }}>
-        {!isLoading && children}
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <GradientCircularLoader />
+          </div>
+        ) : (
+          children
+        )}
       </ModeContext.Provider>
     </iframeContext.Provider>
   );
