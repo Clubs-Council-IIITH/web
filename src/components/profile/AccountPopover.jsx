@@ -4,7 +4,6 @@ import React from "react";
 import {
   Box,
   Button,
-  ClickAwayListener,
   Fade,
   IconButton,
   Avatar,
@@ -28,15 +27,11 @@ import { usePathname } from "next/navigation";
 export default function AccountPopover() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuth();
-  const { isiframe, setIsiframe } = useMode2();
+  const { isiframe } = useMode2();
   const [open, setOpen] = React.useState(false);
 
   const handleToggle = (event) => {
     setOpen((prev) => (prev ? null : event.currentTarget));
-  };
-
-  const handleClose = () => {
-    setOpen(null);
   };
 
   const AUTHENTICATED_MENU_OPTIONS = [
@@ -66,7 +61,6 @@ export default function AccountPopover() {
 
   return (
     <>
-    {/*<ClickAwayListener onClickAway={handleClose}>*/}
       <IconButton
         onClick={handleToggle}
         aria-label="Account Popover"
@@ -78,8 +72,7 @@ export default function AccountPopover() {
               width: "100%",
               height: "100%",
               borderRadius: "50%",
-              bgcolor: (theme) =>
-                alpha(theme.palette.background.neutral, 0.5),
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.5),
             },
           }),
           ...(!open && {
@@ -89,8 +82,7 @@ export default function AccountPopover() {
               width: "100%",
               height: "100%",
               borderRadius: "50%",
-              bgcolor: (theme) =>
-                alpha(theme.palette.background.neutral, 0.1),
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.1),
             },
             // },
           }),
@@ -128,40 +120,36 @@ export default function AccountPopover() {
         </Avatar>
       </IconButton>
 
-      { open && (
-        <Popper
-          open={Boolean(open)}
-          anchorEl={open}
-          transition
-        >
-          {({ TransitionProps  }) => (
-          <Fade {...TransitionProps}>
-            <Box
-              sx={{
-                borderRadius: 1,
-                p: 1,
-                bgcolor: 'background.paper'}}
-            >
-              <Stack sx={{ my: 1.5, px: 2.5 }}>
-                <Typography variant="subtitle2" noWrap>
-                  {`${user?.firstName} ${user?.lastName}`}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary" }}
-                  noWrap
-                >
-                  {user?.email}
-                </Typography>
-              </Stack>
+      {open && (
+        <Popper open={Boolean(open)} anchorEl={open} transition>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps}>
+              <Box
+                sx={{
+                  borderRadius: 1,
+                  p: 1,
+                  bgcolor: "background.paper",
+                }}
+              >
+                <Stack sx={{ my: 1.5, px: 2.5 }}>
+                  <Typography variant="subtitle2" noWrap>
+                    {`${user?.firstName} ${user?.lastName}`}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary" }}
+                    noWrap
+                  >
+                    {user?.email}
+                  </Typography>
+                </Stack>
 
-              {[...AUTHENTICATED_MENU_OPTIONS].length > 0 ? (
-                <>
-                  <Divider sx={{ borderStyle: "dashed" }} />
+                {[...AUTHENTICATED_MENU_OPTIONS].length > 0 ? (
+                  <>
+                    <Divider sx={{ borderStyle: "dashed" }} />
 
-                  <Stack sx={{ p: 1 }}>
-                    {[...AUTHENTICATED_MENU_OPTIONS].map(
-                      (option) => (
+                    <Stack sx={{ p: 1 }}>
+                      {[...AUTHENTICATED_MENU_OPTIONS].map((option) => (
                         <MenuItem
                           component={Link}
                           key={option.label}
@@ -170,23 +158,21 @@ export default function AccountPopover() {
                           <Icon variant={option.icon} sx={{ mr: 2 }} />
                           {option.label}
                         </MenuItem>
-                      ),
-                    )}
-                  </Stack>
-                </>
-              ) : null}
+                      ))}
+                    </Stack>
+                  </>
+                ) : null}
 
-              <Divider sx={{ borderStyle: "dashed" }} />
+                <Divider sx={{ borderStyle: "dashed" }} />
 
-              <MenuItem onClick={() => logout(pathname)} sx={{ m: 1 }}>
-                Logout
-              </MenuItem>
-            </Box>
-          </Fade>
+                <MenuItem onClick={() => logout(pathname)} sx={{ m: 1 }}>
+                  Logout
+                </MenuItem>
+              </Box>
+            </Fade>
           )}
         </Popper>
       )}
-    {/*</ClickAwayListener>*/}
     </>
   );
 }
