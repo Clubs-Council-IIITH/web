@@ -2,7 +2,7 @@ import { getClient } from "gql/client";
 import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { getFullUser } from "actions/users/get/full/server_action";
-import { EventReportDetails } from "components/events/EventReportDetails";
+import { EventReportDetails } from "components/events/report/EventReportDetails";
 import { GET_USER } from "gql/queries/auth";
 import { redirect } from "next/navigation";
 

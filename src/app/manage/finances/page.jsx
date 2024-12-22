@@ -4,7 +4,7 @@ import { GET_ALL_EVENTS_BILLS_STATUS } from "gql/queries/events";
 
 import { Container, Stack, Typography } from "@mui/material";
 
-import FinancesTable from "components/events/FinancesTable";
+import FinancesTable from "components/events/bills/FinancesTable";
 
 export const metadata = {
   title: "Manage Finances",

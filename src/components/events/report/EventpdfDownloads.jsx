@@ -17,13 +17,13 @@ import {
   locationLabel,
   stateLabel,
   billsStateLabel,
-  audienceLabels
+  audienceLabels,
 } from "utils/formatEvent";
 import Icon from "components/Icon";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";
-const CCLogo = "/assets/cc-logo-color.png"
+const CCLogo = "/assets/cc-logo-color.png";
 
 export function DownloadEventReport({
   event,
@@ -32,20 +32,19 @@ export function DownloadEventReport({
   clubs,
 }) {
   const submittedDate = formatDateTime(eventReport?.submittedTime);
-  const startDate = event?.datetimeperiod ?
-      formatDateTime(event.datetimeperiod[0]) :
-      null;
-  const endDate = event?.datetimeperiod ?
-      formatDateTime(event.datetimeperiod[1]) :
-      null;
-  const isStudentBodyEvent = clubs.find(
-          club => club.cid === event?.clubid
-      )?.category === "body" ||
-      event?.collabclubs?.some(
-          collab => clubs.find(
-              (club) => club.cid === collab
-          )?.category === "body"
-      );
+  const startDate = event?.datetimeperiod
+    ? formatDateTime(event.datetimeperiod[0])
+    : null;
+  const endDate = event?.datetimeperiod
+    ? formatDateTime(event.datetimeperiod[1])
+    : null;
+
+  const isStudentBodyEvent =
+    clubs.find((club) => club.cid === event?.clubid)?.category === "body" ||
+    event?.collabclubs?.some(
+      (collab) => clubs.find((club) => club.cid === collab)?.category === "body"
+    );
+
   const htmlContent = `
     <style>
         .report-container {
@@ -150,9 +149,9 @@ export function DownloadEventReport({
     </style>
     <div class="report-container">
         <h1>Event Report: ${event?.name || "Unnamed Event"}</h1>
-        <p class="submitted_on"><strong>Submitted On:</strong> ${submittedDate.dateString} ${
-    submittedDate.timeString
-  }</p>
+        <p class="submitted_on"><strong>Submitted On:</strong> ${
+          submittedDate.dateString
+        } ${submittedDate.timeString}</p>
 
         <div class="section">
             <h2>Event Details</h2>
@@ -196,7 +195,10 @@ export function DownloadEventReport({
                       .map(
                         (item) => `
                     <tr>
-                        <td>${item?.description?.replace(/\n/g, "<br />") || "Unknown"}</td>
+                        <td>${
+                          item?.description?.replace(/\n/g, "<br />") ||
+                          "Unknown"
+                        }</td>
                         <td class="adv">${item?.amount || "Unknown"}</td>
                         <td class="adv">${
                           item?.advance == true ? "Yes" : "No"
@@ -216,7 +218,9 @@ export function DownloadEventReport({
             <h2>Participation Overview</h2>
             <p><strong>Audience:</strong> ${
               event?.audience
-                ? audienceLabels(event?.audience).map(({ name, color }) => name).join(", ")
+                ? audienceLabels(event?.audience)
+                    .map(({ name, color }) => name)
+                    .join(", ")
                 : "Unknown"
             }</p>
             <p><strong>Estimated Participation:</strong> ${
@@ -263,15 +267,18 @@ export function DownloadEventReport({
                 ${eventReport.prizes
                   .map(
                     (prize) =>
-                      `<li>${prize.replace(/_/g, " ").charAt(0).toUpperCase() + prize.replace(/_/g, " ").slice(1)}</li>`
+                      `<li>${
+                        prize.replace(/_/g, " ").charAt(0).toUpperCase() +
+                        prize.replace(/_/g, " ").slice(1)
+                      }</li>`
                   )
                   .join("")}
             </ul>
             <p><strong>Prizes Breakdown:</strong><br /><br />${
-                eventReport?.prizesBreakdown
-                  ? eventReport?.prizesBreakdown.replace(/\n/g, "<br />") // Handling line breaks
-                  : "N/A"
-              }</p>
+              eventReport?.prizesBreakdown
+                ? eventReport?.prizesBreakdown.replace(/\n/g, "<br />") // Handling line breaks
+                : "N/A"
+            }</p>
               <br />
               <p><strong>Winners:</strong><br /><br />${
                 eventReport?.winners
@@ -308,12 +315,18 @@ export function DownloadEventReport({
         </div>
         <div class="section">
             <h2>Event Summary</h2>
-            <p>${eventReport?.summary?.replace(/\n/g, "<br />") || "No summary provided."}</p>
+            <p>${
+              eventReport?.summary?.replace(/\n/g, "<br />") ||
+              "No summary provided."
+            }</p>
         </div>
 
         <div class="section">
             <h2>Feedback</h2>
-            <p>${eventReport?.feedbackCc?.replace(/\n/g, "<br />") || "No feedback available."}</p>
+            <p>${
+              eventReport?.feedbackCc?.replace(/\n/g, "<br />") ||
+              "No feedback available."
+            }</p>
         </div>
 
         <div class="section">
@@ -371,32 +384,28 @@ export function DownloadEventReport({
 
   const pdfDoc = (
     <Document>
-      <Page size = "A4" style = { styles.page } >
-        <div style = { styles.headerContainer } >
-          {
-            !isStudentBodyEvent ? (
-              <Image src = { CCLogo } style = { styles.logo1 } />
-            ) : (
-              <Image src = { LifeLogo } style = { styles.logo2 } />
-            )
-          }
-          <Image src = { IIITLogo } style = { styles.logo3 } />
-        </div> 
-        <Html > { htmlContent } </Html>
-      </Page> 
+      <Page size="A4" style={styles.page}>
+        <div style={styles.headerContainer}>
+          {!isStudentBodyEvent ? (
+            <Image src={CCLogo} style={styles.logo1} />
+          ) : (
+            <Image src={LifeLogo} style={styles.logo2} />
+          )}
+          <Image src={IIITLogo} style={styles.logo3} />
+        </div>
+        <Html>{htmlContent}</Html>
+      </Page>
     </Document>
   );
   return (
     <PDFDownloadLink
-        document = { pdfDoc }
-        fileName = {
-          `${event?.name.replace(/\s+/g, "_")}_report.pdf`
-        }
+      document={pdfDoc}
+      fileName={`${event?.name.replace(/\s+/g, "_")}_report.pdf`}
     >
-      <Button variant = "contained" color = "primary"
-          startIcon = {
-              <Icon variant = "download" />
-          }
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<Icon variant="download" />}
       >
         Report PDF
       </Button>
@@ -404,26 +413,19 @@ export function DownloadEventReport({
   );
 }
 
-export function DownloadEvent({
-  event,
-  clubs,
-  pocProfile
-}) {
-    const startDate = event?.datetimeperiod ?
-        formatDateTime(event.datetimeperiod[0]) :
-        null;
-    const endDate = event?.datetimeperiod ?
-        formatDateTime(event.datetimeperiod[1]) :
-        null;
-    const isStudentBodyEvent = clubs.find(
-            club => club.cid === event?.clubid
-        )?.category === "body" ||
-        event?.collabclubs?.some(
-            collab => clubs.find(
-                (club) => club.cid === collab
-            )?.category === "body"
-        );
-    const htmlContent = `
+export function DownloadEvent({ event, clubs, pocProfile }) {
+  const startDate = event?.datetimeperiod
+    ? formatDateTime(event.datetimeperiod[0])
+    : null;
+  const endDate = event?.datetimeperiod
+    ? formatDateTime(event.datetimeperiod[1])
+    : null;
+  const isStudentBodyEvent =
+    clubs.find((club) => club.cid === event?.clubid)?.category === "body" ||
+    event?.collabclubs?.some(
+      (collab) => clubs.find((club) => club.cid === collab)?.category === "body"
+    );
+  const htmlContent = `
     <style>
         .report-container {
             margin-top: -40px;
@@ -533,13 +535,14 @@ export function DownloadEvent({
             <h2>Event Details</h2>
             <p><strong>Event Code:</strong> #${event?.code || "N/A"}</p>
             <p><strong>Organized By:</strong> ${
-              clubs?.find((club) => club?.cid === event?.clubid)?.name || "N/A"}</p>
+              clubs?.find((club) => club?.cid === event?.clubid)?.name || "N/A"
+            }</p>
             <p><strong>Collaborating Clubs/Bodies:</strong> ${
               event?.collabclubs
                 ?.map(
                   (collab) => clubs?.find((club) => club?.cid === collab)?.name
                 )
-              .join(", ") || "None"
+                .join(", ") || "None"
             }</p>
             <p><strong>Event Dates:</strong> ${
               startDate && endDate
@@ -573,7 +576,10 @@ export function DownloadEvent({
                           .map(
                             (item) => `
                         <tr>
-                            <td>${item?.description.replace(/\n/g, "<br />") || "Unknown"}</td>
+                            <td>${
+                              item?.description.replace(/\n/g, "<br />") ||
+                              "Unknown"
+                            }</td>
                             <td class="adv">${item?.amount || "Unknown"}</td>
                             <td class="adv">${
                               item?.advance == true ? "Yes" : "No"
@@ -597,7 +603,9 @@ export function DownloadEvent({
             }</p>
             <p><strong>Audience:</strong> ${
               event?.audience
-                ? audienceLabels(event?.audience).map(({ name, color }) => name).join(", ")
+                ? audienceLabels(event?.audience)
+                    .map(({ name, color }) => name)
+                    .join(", ")
                 : "Unknown"
             }</p>
             <p><strong>Estimated Participation:</strong> ${
@@ -770,39 +778,34 @@ export function DownloadEvent({
     logo3: {
       width: 110,
       height: "auto",
-    }
+    },
   });
 
   const pdfDoc = (
-    <Document >
-        <Page size="A4" style={ styles.page } >
-            <div style={ styles.headerContainer } > 
-                {
-                    !isStudentBodyEvent ?
-                    (
-                        <Image src={ CCLogo } style={ styles.logo1 } />
-                    ) : (
-                        <Image src={ LifeLogo } style={ styles.logo2 } />
-                    )
-                }
-                <Image src={ IIITLogo } style={ styles.logo3 } />
-            </div> 
-            <Html>{htmlContent}</Html>
-        </Page> 
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <div style={styles.headerContainer}>
+          {!isStudentBodyEvent ? (
+            <Image src={CCLogo} style={styles.logo1} />
+          ) : (
+            <Image src={LifeLogo} style={styles.logo2} />
+          )}
+          <Image src={IIITLogo} style={styles.logo3} />
+        </div>
+        <Html>{htmlContent}</Html>
+      </Page>
     </Document>
   );
 
   return (
     <PDFDownloadLink
-      document = { pdfDoc }
-      fileName = {
-          `${event?.name.replace(/\s+/g, "_")}.pdf`
-      }
+      document={pdfDoc}
+      fileName={`${event?.name.replace(/\s+/g, "_")}.pdf`}
     >
-      <Button variant = "contained" color = "primary"
-        startIcon = {
-          <Icon variant = "download" />
-        }
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<Icon variant="download" />}
       >
         Event PDF
       </Button>

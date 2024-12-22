@@ -8,12 +8,12 @@ import {
   Divider,
   CardActionArea,
 } from "@mui/material";
-import React from 'react';
+import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { locationLabel, audienceLabels } from "utils/formatEvent";
-import { DownloadEventReport } from "components/events/EventpdfDownloads";
-import { DownloadEventReportDocx } from "components/events/EventDocxDownloads";
+import { DownloadEventReport } from "components/events/report/EventpdfDownloads";
+import { DownloadEventReportDocx } from "components/events/report/EventDocxDownloads";
 import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
 
@@ -70,11 +70,11 @@ export function EventReportDetails({
                 {clubs?.find((club) => club.cid === event?.clubid)?.name}
               </span>
               <br />
-               {event?.collabclubs
+              {event?.collabclubs
                 ?.map(
                   (collab) => clubs?.find((club) => club?.cid === collab)?.name
                 )
-              .join(", ")}
+                .join(", ")}
             </Typography>
           </Box>
           <Box mt={2}>
@@ -103,10 +103,12 @@ export function EventReportDetails({
           <Box mt={2}>
             <Typography variant="overline">Batches Participated</Typography>
             <Typography variant="body2">
-             {event?.audience
-                ? audienceLabels(event?.audience).map(({ name, color }) => name).join(", ")
+              {event?.audience
+                ? audienceLabels(event?.audience)
+                    .map(({ name, color }) => name)
+                    .join(", ")
                 : "None"}
-          </Typography>
+            </Typography>
           </Box>
           <Box mt={2}>
             <Typography variant="overline">Mode</Typography>
@@ -148,15 +150,14 @@ export function EventReportDetails({
                 <Typography variant="body2">
                   {eventReport?.prizesBreakdown
                     ? eventReport?.prizesBreakdown
-                      .split('\n')
+                        .split("\n")
                         .map((line, index) => (
                           <React.Fragment key={index}>
                             {line}
                             <br />
                           </React.Fragment>
                         ))
-                    : "None"
-                  }
+                    : "None"}
                 </Typography>
               </Box>
             </>
@@ -165,16 +166,13 @@ export function EventReportDetails({
             <Typography variant="overline">Winners</Typography>
             <Typography variant="body2">
               {eventReport?.winners
-                  ? eventReport?.winners
-                    .split('\n')
-                      .map((line, index) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))
-                  : "None"
-              }
+                ? eventReport?.winners.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))
+                : "None"}
             </Typography>
           </Box>
           <Box mt={2}>
@@ -199,17 +197,14 @@ export function EventReportDetails({
         </Typography>
         <Box mt={2}>
           <Typography variant="body2">
-            {eventReport?.summary ?
-              eventReport?.summary?.
-                split('\n')
-                  .map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))
-              : "None"
-            }
+            {eventReport?.summary
+              ? eventReport?.summary?.split("\n").map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))
+              : "None"}
           </Typography>
         </Box>
       </Grid>
@@ -257,17 +252,14 @@ export function EventReportDetails({
               <Box mt={2}>
                 <Typography variant="overline">Equipment</Typography>
                 <Typography variant="body2">
-                  {event?.equipment ?
-                    event?.equipment?.
-                      split('\n')
-                        .map((line, index) => (
-                          <React.Fragment key={index}>
-                            {line}
-                            <br />
-                          </React.Fragment>
-                        ))
-                    : "None"
-                  }
+                  {event?.equipment
+                    ? event?.equipment?.split("\n").map((line, index) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                    : "None"}
                 </Typography>
               </Box>
               <Box mt={2}>
@@ -275,17 +267,14 @@ export function EventReportDetails({
                   Additional Information
                 </Typography>
                 <Typography variant="body2">
-                  {event?.additional ?
-                    event?.additional?.
-                      split('\n')
-                        .map((line, index) => (
-                          <React.Fragment key={index}>
-                            {line}
-                            <br />
-                          </React.Fragment>
-                        ))
-                    : "None"
-                  }
+                  {event?.additional
+                    ? event?.additional?.split("\n").map((line, index) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                    : "None"}
                 </Typography>
               </Box>
             </>
@@ -323,17 +312,14 @@ export function EventReportDetails({
               Feedback
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {eventReport?.feedbackCc ?
-                  eventReport?.feedbackCc?.
-                  split('\n')
-                    .map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))
-                : "None"
-              }
+              {eventReport?.feedbackCc
+                ? eventReport?.feedbackCc?.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))
+                : "None"}
             </Typography>
           </Grid>
         </Grid>

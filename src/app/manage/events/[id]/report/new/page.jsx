@@ -5,7 +5,7 @@ import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
-import EventReportForm from "components/events/EventReportForm";
+import EventReportForm from "components/events/report/EventReportForm";
 
 export const metadata = {
   title: "Create Event Report",
@@ -35,7 +35,7 @@ export default async function NewEventReport({ params }) {
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -43,22 +43,27 @@ export default async function NewEventReport({ params }) {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
-    if (!event || event?.eventReportSubmitted || (user?.uid !== event.clubid) || event.status.state !== "approved") {
+    if (
+      !event ||
+      event?.eventReportSubmitted ||
+      user?.uid !== event.clubid ||
+      event.status.state !== "approved"
+    ) {
       return redirect("/404");
     }
     return (
-        <Container>
-          <Typography variant="h3" gutterBottom mb={3}>
-            Create Event Report
-          </Typography>
+      <Container>
+        <Typography variant="h3" gutterBottom mb={3}>
+          Create Event Report
+        </Typography>
 
-          <EventReportForm
-            id={id}
-            defaultValues={transformEvent(event)}
-            action="create"
-          />
-        </Container>
-      );
+        <EventReportForm
+          id={id}
+          defaultValues={transformEvent(event)}
+          action="create"
+        />
+      </Container>
+    );
   } catch (error) {
     return redirect("/404");
   }
