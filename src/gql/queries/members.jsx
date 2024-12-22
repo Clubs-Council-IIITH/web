@@ -90,3 +90,11 @@ export const GET_MEMBER = gql`
     }
   }
 `;
+
+export const DOWNLOAD_MEMBERS_DATA = gql`
+  query DownloadMembersData($details: MemberInputDataReportDetails!) {
+    downloadMembersData(details: $details) {
+      csvFile
+    }
+  }
+`;
