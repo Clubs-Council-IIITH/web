@@ -11,7 +11,7 @@ export function getNginxFile(filepath) {
 export function getStaticFile(
   filepath,
   filetype = "image",
-  public_url = false
+  public_url = false,
 ) {
   if (filepath?.toLowerCase()?.endsWith("pdf")) {
     filetype = "pdf";
@@ -55,7 +55,7 @@ export async function uploadImageFile(file, filename = null, maxSizeMB = 0.3) {
     "image",
     false,
     filename,
-    maxSizeMB
+    maxSizeMB,
   );
   return finalFilename;
 }
@@ -64,7 +64,7 @@ export async function uploadPDFFile(
   file,
   static_file = false,
   title = null,
-  maxSizeMB = 20
+  maxSizeMB = 20,
 ) {
   if (!file || !title) return null;
 
@@ -72,7 +72,7 @@ export async function uploadPDFFile(
   const sizeLimit = maxSizeMB * (1024 * 1024);
   if (file.size > sizeLimit) {
     throw new Error(
-      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`
+      `File size exceeded ${maxSizeMB} MB, Please compress and reupload.`,
     );
   }
 
@@ -87,7 +87,7 @@ export async function uploadPDFFile(
     "document",
     static_file,
     filename,
-    maxSizeMB
+    maxSizeMB,
   );
   return finalFilename;
 }
@@ -97,7 +97,7 @@ async function uploadFileCommon(
   filetype,
   static_file = false,
   filename = null,
-  maxSizeMB = 0.3
+  maxSizeMB = 0.3,
 ) {
   try {
     // get signed url
