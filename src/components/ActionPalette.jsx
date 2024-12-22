@@ -6,6 +6,7 @@ export default function ActionPalette({
   leftProps = [],
   rightProps = [],
   downloadbtn= "",
+  rightJustifyMobile = "center",
 }) {
   return (
     <Box width="100%">
@@ -39,7 +40,7 @@ export default function ActionPalette({
           xs={12}
           md={6}
           spacing={1}
-          justifyContent={{ xs: "center", md: "flex-end" }}
+          justifyContent={{ xs: rightJustifyMobile, md: "flex-end" }}
           alignItems="center"
           my={0.5}
         >

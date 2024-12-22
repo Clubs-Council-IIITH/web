@@ -99,7 +99,7 @@ export default async function Profile({ params }) {
       {!["club", "cc"].includes(user?.role) &&
       (currentUser?.role === "cc" ||
         (memberships?.length !== 0 && currentUser?.uid === user?.uid)) ? (
-        <ActionPalette right={[EditUser]} />
+        <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
