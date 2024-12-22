@@ -56,6 +56,56 @@ export function DownloadEventReportDocx({
     const ccLogoBuffer = await fetchImageBuffer(CCLogo);
 
     const doc = new Document({
+      styles: {
+        paragraphStyles: [
+          {
+            id: "Normal",
+            name: "Normal",
+            basedOn: "Normal",
+            next: "Normal",
+            quickFormat: true,
+            run: {
+              fontSize: 24,
+            }
+          },
+          {
+            id: "Heading2",
+            name: "Heading 2",
+            basedOn: "Normal",
+            next: "Normal",
+            quickFormat: true,
+            run: {
+                size: 30,
+                bold: true,
+                color: "2e74b5",
+            },
+            paragraph: {
+                spacing: {
+                    before: 240,
+                    after: 120
+                },
+            },
+        },
+        {
+          id: "Heading3",
+          name: "Heading 3",
+          basedOn: "Normal",
+          next: "Normal",
+          quickFormat: true,
+          run: {
+              size: 28,
+              bold: true,
+              color: "062785",
+          },
+          paragraph: {
+              spacing: {
+                  before: 200,
+                  after: 80
+              },
+          },
+      },
+        ]
+      },
       sections: [
         {
           properties: {},
@@ -112,6 +162,7 @@ export function DownloadEventReportDocx({
               ],
               alignment: "center",
             }),
+            new Paragraph({}),
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
