@@ -91,10 +91,7 @@ function Bar({ onOpenDrawer }) {
             alignItems: "center",
           }}
         >
-          <ModeSwitch
-            checked={isDark}
-            onChange={handleChange}
-          />
+          <ModeSwitch checked={isDark} onChange={handleChange} />
           <AccountPopover />
         </Stack>
       </Toolbar>
