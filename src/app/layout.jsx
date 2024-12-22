@@ -58,7 +58,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   // get the nonce and use it
-  const nonce = headers().get("x-nonce") || " ";
+  const nonce = headers().get('x-nonce') || "";
 
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -78,6 +78,15 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={fontClass}>
+      <style>
+          {`
+            @media (prefers-color-scheme: dark) {
+              body {
+                background-color: #1e1e1e;
+              }
+            }
+          `}
+        </style>
         <ModeProvider>
           <ThemeRegistry nonce={nonce}>
             <Progressbar />
