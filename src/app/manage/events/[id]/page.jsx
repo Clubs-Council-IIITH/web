@@ -190,8 +190,8 @@ export default async function ManageEventID({ params }) {
         {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
 
         {/* show post event information */}
+        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event)}
         {["cc", "club", "slo"].includes(user?.role) &&
-          EventBillStatus(event) &&
           EventReportStatus(event, user)}
       </Box>
     )
