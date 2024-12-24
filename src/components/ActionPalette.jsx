@@ -5,6 +5,7 @@ export default function ActionPalette({
   right = [],
   leftProps = [],
   rightProps = [],
+  downloadbtn= "",
   rightJustifyMobile = "center",
 }) {
   return (
@@ -48,6 +49,7 @@ export default function ActionPalette({
               <Component {...rightProps[key]} key={key} />
             </Grid>
           ))}
+          { downloadbtn ? <Grid item>{downloadbtn}</Grid> : "" }
         </Grid>
       </Grid>
       <Divider sx={{ borderStyle: "dashed", mt: 2, mb: 2 }} />

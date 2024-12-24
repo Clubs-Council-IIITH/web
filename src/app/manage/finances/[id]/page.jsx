@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Button, Container, Stack, Typography } from "@mui/material";
 
-import BillsStatusForm from "components/events/EditBillsStatus";
+import BillsStatusForm from "components/events/bills/EditBillsStatus";
 
 export const metadata = {
   title: "Edit Bill Status",

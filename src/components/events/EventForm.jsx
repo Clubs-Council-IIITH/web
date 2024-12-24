@@ -81,6 +81,7 @@ export default function EventForm({
   const [budgetEditing, setBudgetEditing] = useState(false);
   const [hasPhone, setHasPhone] = useState(true);
 
+  const { triggerToast } = useToast();
   // fetch list of clubs
   const [clubs, setClubs] = useState([]);
   useEffect(() => {
@@ -101,7 +102,6 @@ export default function EventForm({
   const { control, handleSubmit, watch, resetField, setValue } = useForm({
     defaultValues,
   });
-  const { triggerToast } = useToast();
   const collabEvent = watch("collabEvent");
 
   // different form submission handlers

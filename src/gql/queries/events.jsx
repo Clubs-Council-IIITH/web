@@ -181,6 +181,12 @@ export const GET_FULL_EVENT = gql`
         deletedBy
         deletedTime
       }
+      eventReportSubmitted
+    }
+    eventBills(eventid: $eventid) {
+      state
+      sloComment
+      updatedTime
     }
   }
 `;
@@ -197,6 +203,24 @@ export const DOWNLOAD_EVENTS_DATA = gql`
   query DownloadEventsData($details: InputDataReportDetails!) {
     downloadEventsData(details: $details) {
       csvFile
+    }
+  }
+`;
+
+export const GET_EVENT_REPORT = gql`
+  query EventReport($eventid: String!) {
+    eventReport(eventid: $eventid) {
+      eventid
+      summary
+      attendance
+      prizes
+      prizesBreakdown
+      winners
+      photosLink
+      feedbackCc
+      feedbackCollege
+      submittedBy
+      submittedTime
     }
   }
 `;
