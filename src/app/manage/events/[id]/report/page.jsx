@@ -19,9 +19,10 @@ export default async function EventReport({ params }) {
       { userInput: null },
     );
     const user = { ...userMeta, ...userProfile };
-    if (user?.role === "club" && user?.uid !== event?.clubid) {
-      return redirect("/404");
-    }
+    user?.role === "club" &&
+    user?.uid !== event.clubid &&
+    !event?.collabclubs.includes(user?.uid) &&
+    redirect("/404");
 
     if (!event || !event?.eventReportSubmitted) {
       return redirect("/404");

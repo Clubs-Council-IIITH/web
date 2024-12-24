@@ -1,11 +1,8 @@
-import { getClient } from "gql/client";
-import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
-
 import { Box, Grid, Typography, Divider } from "@mui/material";
 
 import { billsStateLabel } from "utils/formatEvent";
 
-export default async function EventBillStatus(event) {
+export default async function EventBillStatus(event, eventBills) {
   if (
     event?.status?.state !== "approved" ||
     new Date(event?.datetimeperiod[1]) > new Date() ||
@@ -13,13 +10,7 @@ export default async function EventBillStatus(event) {
   )
     return null;
 
-  const { data, error } = await getClient().query(GET_EVENT_BILLS_STATUS, {
-    eventid: event?._id,
-  });
-
-  if (error || !data) return null;
-
-  const eventBills = data?.eventBills;
+  if (!eventBills) return null;
 
   return (
     <>

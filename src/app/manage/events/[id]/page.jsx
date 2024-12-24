@@ -59,7 +59,7 @@ export async function generateMetadata({ params }) {
 export default async function ManageEventID({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+  const { data: { event, eventBills } = {} } = await getClient().query(GET_FULL_EVENT, {
     eventid: id,
   });
 
@@ -98,6 +98,7 @@ export default async function ManageEventID({ params }) {
               event={event}
               clubs={activeClubs}
               pocProfile={pocProfile}
+              eventBills={eventBills}
             />
           }
         />
@@ -190,7 +191,7 @@ export default async function ManageEventID({ params }) {
         {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
 
         {/* show post event information */}
-        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event)}
+        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event, eventBills)}
         {["cc", "club", "slo"].includes(user?.role) &&
           EventReportStatus(event, user)}
       </Box>

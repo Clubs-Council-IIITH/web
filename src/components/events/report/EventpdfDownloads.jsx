@@ -413,7 +413,7 @@ export function DownloadEventReport({
   );
 }
 
-export function DownloadEvent({ event, clubs, pocProfile }) {
+export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
   const startDate = event?.datetimeperiod
     ? formatDateTime(event.datetimeperiod[0])
     : null;
@@ -719,23 +719,22 @@ export function DownloadEvent({ event, clubs, pocProfile }) {
           event?.budget?.length
             ? `
         <div class="section">
-            <h2>Bill Status</h2>
+            <h2>Bill Information</h2>
 
             ${
-              event?.billStatus
+              eventBills
                 ? `
             <div>
-                <h3>Bill Information</h3>
                 <p><strong>Bills Status:</strong> ${
-                  event?.billStatus?.state == null
+                  eventBills?.state == null
                     ? "Information not available"
-                    : billsStateLabel(event?.billStatus?.state)?.name
+                    : billsStateLabel(eventBills?.state)?.name
                 }</p>
                 <p><strong>Last Updated:</strong> ${
-                  event?.billStatus?.updatedTime || "Information not available"
+                  eventBills?.updatedTime || "Information not available"
                 }</p>
                 <p><strong>SLO Comment:</strong> ${
-                  event?.billStatus?.sloComment || "-"
+                  eventBills?.sloComment || "-"
                 }</p>
             </div>
             `
