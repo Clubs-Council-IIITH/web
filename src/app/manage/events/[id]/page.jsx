@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_FULL_EVENT, GET_EVENT_BILLS_STATUS } from "gql/queries/events";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { getFullUser } from "actions/users/get/full/server_action";
@@ -59,9 +59,28 @@ export async function generateMetadata({ params }) {
 export default async function ManageEventID({ params }) {
   const { id } = params;
 
-  const { data: { event, eventBills } = {} } = await getClient().query(GET_FULL_EVENT, {
+  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
     eventid: id,
   });
+
+  let eventBillsData = null;
+
+  if (
+    event &&
+    event?.status?.state === "approved" &&
+    new Date(event?.datetimeperiod[1]) < new Date() &&
+    event?.budget?.length
+  ) {
+    const { error, data = {} } = await getClient().query(
+      GET_EVENT_BILLS_STATUS,
+      {
+        eventid: id,
+      }
+    );
+    if (error && error.message.includes("Event not found"))
+      return redirect("/404");
+    eventBillsData = data;
+  }
 
   const {
     data: { activeClubs },
@@ -98,7 +117,7 @@ export default async function ManageEventID({ params }) {
               event={event}
               clubs={activeClubs}
               pocProfile={pocProfile}
-              eventBills={eventBills}
+              eventBills={eventBillsData?.eventBills || {}}
             />
           }
         />
@@ -191,7 +210,8 @@ export default async function ManageEventID({ params }) {
         {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
 
         {/* show post event information */}
-        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event, eventBills)}
+        {["cc", "club", "slo"].includes(user?.role) &&
+          EventBillStatus(event, eventBillsData?.eventBills || null)}
         {["cc", "club", "slo"].includes(user?.role) &&
           EventReportStatus(event, user)}
       </Box>

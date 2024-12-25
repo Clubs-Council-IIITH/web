@@ -183,11 +183,6 @@ export const GET_FULL_EVENT = gql`
       }
       eventReportSubmitted
     }
-    eventBills(eventid: $eventid) {
-      state
-      sloComment
-      updatedTime
-    }
   }
 `;
 

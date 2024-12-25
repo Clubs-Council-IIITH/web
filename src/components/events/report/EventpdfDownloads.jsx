@@ -554,7 +554,9 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
               stateLabel(event?.status?.state)?.name || "N/A"
             }</p>
             <p><strong>Description:</strong> ${
-              event?.description?.replace(/\n/g, "<br />") || "N/A"
+              (event?.description
+                ? event?.description.replace(/\n/g, "<br />")
+                : null) || "N/A"
             }</p>
         </div>
 
@@ -577,8 +579,9 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
                             (item) => `
                         <tr>
                             <td>${
-                              item?.description.replace(/\n/g, "<br />") ||
-                              "Unknown"
+                              (item?.description
+                                ? item?.description.replace(/\n/g, "<br />")
+                                : null) || "Unknown"
                             }</td>
                             <td class="adv">${item?.amount || "Unknown"}</td>
                             <td class="adv">${
