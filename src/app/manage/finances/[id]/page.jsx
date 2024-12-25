@@ -11,7 +11,7 @@ export const metadata = {
   title: "Edit Bill Status",
 };
 
-export default async function EditHoliday({ params }) {
+export default async function EditFinance({ params }) {
   const { id } = params;
 
   try {
@@ -19,7 +19,7 @@ export default async function EditHoliday({ params }) {
       eventid: id,
     });
 
-    if ((error || !data) && !error?.message.includes("Bills status not found"))
+    if ((error || !data))
       notFound();
 
     const defaultValues = {
