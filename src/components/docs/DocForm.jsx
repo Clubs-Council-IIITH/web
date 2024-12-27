@@ -17,9 +17,10 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
-import FileUpload from "components/FileUpload";
 import Icon from "components/Icon";
 import { useToast } from "components/Toast";
+import FileUpload from "components/FileUpload";
+import ConfirmDialog from "components/ConfirmDialog";
 
 import { uploadPDFFile } from "utils/files";
 
@@ -31,15 +32,19 @@ const maxFileSizeMB = 20;
 
 export default function DocForm({ editFile = null, newFile = true }) {
   const [loading, setLoading] = useState(false);
+  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { control, handleSubmit } = useForm({
+
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       title: editFile?.title || "",
       file: null,
     },
   });
+
   const { triggerToast } = useToast();
   const router = useRouter();
+  const fileDropzone = watch("file");
 
   const openDeleteDialog = () => setDeleteDialogOpen(true);
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
@@ -86,26 +91,37 @@ export default function DocForm({ editFile = null, newFile = true }) {
       const filename = await uploadPDFFile(
         data.file[0],
         true,
-        data.title,
+        data.title +
+          "_v" +
+          (newFile ? 1 : handleVersionNumbering(editFile)).toString(),
         maxFileSizeMB,
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
       }
 
+      // Extract out file extension from filename
+      const fileType = filename.split(".").pop();
+      const fileName = filename
+        .split(".")
+        .slice(0, -1)
+        .join(".")
+        .replace(/_v\d+$/, "");
+
       if (newFile) {
         // create doc
         const res = await createStorageFile({
           title: data.title,
-          filename: filename,
-          filetype: "pdf",
+          filename: fileName,
+          filetype: fileType,
         });
         if (!res.ok) {
           throw res.error;
         }
       } else {
+        const newVersion = handleVersionNumbering(editFile);
         // update existing doc
-        const res = await updateStorageFile(editFile._id);
+        const res = await updateStorageFile(editFile._id, newVersion);
         if (!res.ok) {
           throw new Error("Updating file to database failed!");
         }
@@ -129,6 +145,25 @@ export default function DocForm({ editFile = null, newFile = true }) {
       setLoading(false);
     }
   }
+
+  const handleSubmitButton = () => {
+    if (newFile) {
+      handleSubmit((data) => onSubmit(data))();
+    } else {
+      setSubmitDialogOpen(true);
+    }
+  };
+
+  const generateSubmitDescription = () => {
+    if (newFile) return null;
+
+    const latestVersion = editFile?.latestVersion || 1;
+    const newVersion = handleVersionNumbering(editFile);
+
+    if (latestVersion === newVersion)
+      return `This will overwrite the existing v${latestVersion} file (as last-updated in <24 hours). Are you sure you want to proceed?`;
+    else return `This will create a new version v${newVersion} of the file.`;
+  };
 
   return (
     <>
@@ -191,11 +226,14 @@ export default function DocForm({ editFile = null, newFile = true }) {
               >
                 Cancel
               </Button>
+
               <LoadingButton
                 loading={loading}
-                type="submit"
+                // type="submit"
+                onClick={handleSubmitButton}
                 variant="contained"
                 color="primary"
+                disabled={loading || !fileDropzone}
               >
                 Save
               </LoadingButton>
@@ -203,6 +241,15 @@ export default function DocForm({ editFile = null, newFile = true }) {
           </Grid>
         </Grid>
       </form>
+      <ConfirmDialog
+        open={submitDialogOpen}
+        title="Confirm submission"
+        description={generateSubmitDescription()}
+        onConfirm={() => handleSubmit((data) => onSubmit(data))()}
+        onClose={() => setSubmitDialogOpen(false)}
+        confirmProps={{ color: "primary" }}
+        confirmText="Proceed"
+      />
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
@@ -225,3 +272,28 @@ export default function DocForm({ editFile = null, newFile = true }) {
     </>
   );
 }
+
+const handleVersionNumbering = (oldFile) => {
+  const latestVersion = oldFile.latestVersion;
+
+  // Parse the modified time (IST) and convert it to UTC
+  const modifiedTimeIST = oldFile.modifiedTime.replace(" ", "T") + "+05:30";
+  const modifiedDate = new Date(modifiedTimeIST);
+
+  if (isNaN(modifiedDate)) {
+    throw new Error("Invalid date format for modifiedTime");
+  }
+
+  // Get the current UTC time
+  const currentDate = new Date();
+
+  // Calculate the difference in hours
+  const diffInHours = Math.abs(currentDate - modifiedDate) / 36e5;
+
+  // Return the version number based on the time difference
+  if (diffInHours < 24) {
+    return latestVersion;
+  } else {
+    return latestVersion + 1;
+  }
+};

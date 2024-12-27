@@ -33,9 +33,13 @@ import { socialsData } from "utils/socialsData";
 import { createClubAction } from "actions/clubs/create/server_action";
 import { editClubAction } from "actions/clubs/edit/server_action";
 
-const logo_warnSizeMB = 0.5;
-const banner_warnSizeMB = 1.5;
-const bannerSquare_warnSizeMB = 1;
+const logo_maxSizeMB = 3;
+const banner_maxSizeMB = 10;
+const bannerSquare_maxSizeMB = 3;
+
+const logo_warnSizeMB = 0.3;
+const banner_warnSizeMB = 1;
+const bannerSquare_warnSizeMB = 0.3;
 
 export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
@@ -313,7 +317,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="circle"
-                  maxSizeMB={5}
+                  maxSizeMB={logo_maxSizeMB}
                   warnSizeMB={logo_warnSizeMB}
                 />
               </Grid>
@@ -325,7 +329,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="rectangle"
-                  maxSizeMB={15}
+                  maxSizeMB={banner_maxSizeMB}
                   warnSizeMB={banner_warnSizeMB}
                 />
               </Grid>
@@ -337,7 +341,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   maxFiles={1}
                   shape="square"
-                  maxSizeMB={10}
+                  maxSizeMB={bannerSquare_maxSizeMB}
                   warnSizeMB={bannerSquare_warnSizeMB}
                 />
               </Grid>

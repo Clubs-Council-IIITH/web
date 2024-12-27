@@ -6,6 +6,8 @@ export const GET_ALL_FILES = gql`
       _id
       title
       filename
+      filetype
+      latestVersion
       modifiedTime
     }
   }
@@ -17,6 +19,8 @@ export const GET_FILE = gql`
       _id
       title
       filename
+      filetype
+      latestVersion
       modifiedTime
       creationTime
     }

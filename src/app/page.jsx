@@ -109,7 +109,7 @@ export default function Home() {
             </Button>
           </Box>
         </Stack>
-        <Gallery limit={8} priority={false} />
+        <Gallery limit={8} />
       </Box>
     </Box>
   );

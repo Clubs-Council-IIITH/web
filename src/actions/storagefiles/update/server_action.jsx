@@ -3,12 +3,13 @@
 import { getClient } from "gql/client";
 import { UPDATE_STORAGEFILE } from "gql/mutations/storagefiles";
 
-export async function updateStorageFile(fileId) {
+export async function updateStorageFile(fileId, version) {
   const response = { ok: false, error: null };
 
   try {
     const result = await getClient().mutation(UPDATE_STORAGEFILE, {
       fileId,
+      version,
     });
 
     // Handle case where result is null or undefined

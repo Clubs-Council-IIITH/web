@@ -23,6 +23,7 @@ import { uploadImageFile } from "utils/files";
 import { updateUserDataAction } from "actions/users/save/server_action";
 
 const profile_warnSizeMB = 0.5;
+const profile_maxSizeMB = 5;
 
 export default function UserForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();
@@ -219,10 +220,10 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   name="img"
                   label="Profile Image"
                   control={control}
-                  maxFiles={1}
-                  maxSizeMB={5}
                   shape="circle"
+                  maxFiles={1}
                   warnSizeMB={profile_warnSizeMB}
+                  maxSizeMB={profile_maxSizeMB}
                 />
               </Grid>
             </Grid>

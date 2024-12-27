@@ -1,5 +1,9 @@
 "use client";
 
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
 const LOCALE = "en-IN";
 
 // get datetime components from ISO string
@@ -29,4 +33,18 @@ export const formatDateTime = (dateTimeString) => {
   const dateString = date.toISOString().substring(0, 10); // YYYY-MM-DD
   const timeString = date.toTimeString().substring(0, 5); // HH:MM
   return { dateString, timeString };
+};
+
+export const formatDateTimeCustom = (dateString, inputFormat, outputFormat) => {
+  try {
+    const date = dayjs(dateString.replace(" IST", ""), inputFormat, true);
+    if (!date.isValid()) {
+      console.error("Invalid date parsing for:", dateString);
+      return dateString; // Return original string if parsing fails
+    }
+    return date.format(outputFormat);
+  } catch (error) {
+    console.error("Date formatting error:", error);
+    return dateString; // Return original string if there's an error
+  }
 };
