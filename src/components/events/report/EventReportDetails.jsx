@@ -5,12 +5,14 @@ import {
   Grid,
   Typography,
   Chip,
+  Button,
   Divider,
   CardActionArea,
 } from "@mui/material";
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Icon from "components/Icon";
 import { locationLabel, audienceLabels } from "utils/formatEvent";
 import { DownloadEventReport } from "components/events/report/EventpdfDownloads";
 import { DownloadEventReportDocx } from "components/events/report/EventDocxDownloads";
@@ -26,14 +28,22 @@ export function EventReportDetails({
   clubs,
 }) {
   return (
-    <>
+    <Box p={2}>
       <Grid
         container
-        sx={{ justifyContent: "space-between", alignItems: "center", mb: 3 }}
+        sx={{ justifyContent: { xs: "center", sm: "space-between" }, alignItems: "center", mb: 3, gap: 2 }}
       >
-        <Typography variant="h3" mt={1} mb={2}>
-          Event Report
-        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          href={`/manage/events/${event?._id}`}
+          startIcon={<Icon variant="arrow-back" />}
+        >
+          <Typography variant="button" color="opposite">
+            Back to Event
+          </Typography>
+        </Button>
         <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
           <DownloadEventReport
             event={event}
@@ -48,6 +58,11 @@ export function EventReportDetails({
             clubs={clubs}
           />
         </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Typography variant="h3" mt={1} mb={2} ml={2}>
+            Event Report
+        </Typography>
       </Grid>
 
       <Grid container spacing={6}>
@@ -324,6 +339,6 @@ export function EventReportDetails({
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 }

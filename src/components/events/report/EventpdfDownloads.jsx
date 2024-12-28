@@ -405,7 +405,7 @@ export function DownloadEventReport({
       <Button
         variant="contained"
         color="primary"
-        startIcon={<Icon variant="download" />}
+        startIcon={<Icon variant="picture-as-pdf" />}
       >
         Report PDF
       </Button>

@@ -131,7 +131,7 @@ export function DownloadEventReportDocx({
                   : new ImageRun({
                       data: ccLogoBuffer,
                       transformation: {
-                        width: 150,
+                        width: 120,
                         height: 75,
                       },
                       floating: {
@@ -689,7 +689,7 @@ export function DownloadEventReportDocx({
       variant="contained"
       color="primary"
       onClick={generateDocx}
-      startIcon={<Icon variant="download" />}
+      startIcon={<Icon variant="description" />}
     >
       Report Doc
     </Button>
