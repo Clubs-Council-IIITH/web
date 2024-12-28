@@ -34,7 +34,6 @@ export function EventReportDetails({
         sx={{ justifyContent: { xs: "center", sm: "space-between" }, alignItems: "center", mb: 3, gap: 2 }}
       >
         <Button
-          variant="contained"
           color="primary"
           component={Link}
           href={`/manage/events/${event?._id}`}
