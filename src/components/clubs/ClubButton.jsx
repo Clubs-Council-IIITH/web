@@ -22,7 +22,6 @@ export default async function ClubButton({ clubid }) {
         variant="outlined"
         color="secondary"
         display="flex"
-        alignItems="center"
       >
         <ClubLogo
           name={club.name}

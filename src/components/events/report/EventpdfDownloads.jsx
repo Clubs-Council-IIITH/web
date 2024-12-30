@@ -53,7 +53,6 @@ export function DownloadEventReport({
             width: 100%;
             max-width: 800px;
             padding: 20px;
-            box-sizing: border-box;
         }
 
         h1 {
@@ -121,7 +120,6 @@ export function DownloadEventReport({
 
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 10px;
         }
 
@@ -433,7 +431,6 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
             width: 100%;
             max-width: 800px;
             padding: 20px;
-            box-sizing: border-box;
         }
 
         h1 {
@@ -501,7 +498,6 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
 
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 10px;
         }
 
