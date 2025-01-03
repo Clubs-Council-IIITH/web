@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Icon from "components/Icon";
 
 import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -74,6 +75,35 @@ export default function FinancesTable({ events, role }) {
       ),
       display: "flex",
     },
+    {
+      field: "report_status",
+      headerName: "Report Status",
+      flex: 3,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (value, row, column, apiRef) => ({
+        submitted: row?.eventReportSubmitted,
+      }),
+      renderCell: ({ value }) => (
+          <Icon
+            variant={
+              value.submitted === "true"
+                ? "check"
+                : value.submitted === "old"
+                ? "remove"
+                : "cancel"
+            }
+            color={
+              value.submitted === "true"
+                ? "success.main"
+                : value.submitted === "old"
+                ? "warning.main"
+                : "error.main"
+            }
+          />
+      ),
+      display: "flex",
+    }
   ];
 
   if (!events) return null;

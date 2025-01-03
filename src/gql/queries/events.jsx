@@ -137,6 +137,7 @@ export const GET_ALL_EVENTS_BILLS_STATUS = gql`
         sloComment
         updatedTime
       }
+      eventReportSubmitted
     }
   }
 `;
