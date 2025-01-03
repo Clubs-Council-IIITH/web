@@ -30,7 +30,7 @@ import { membersDataDownload } from "actions/members/data/server_action";
 
 const allowed_roles = ["cc", "club", "slo", "slc"];
 const admin_roles = ["cc", "slo", "slc"];
-const disabledFields = ["uid", "clubid"]; // Fields that should be disabled and selected
+const disabledFields = ["uid", "clubid", "batch"]; // Fields that should be disabled and selected
 
 function DataClubSelect({
   control,
@@ -106,6 +106,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
       fields: disabledFields, // Ensure disabled fields are selected by default
       typeMembers: "current",
       typeRoles: "all",
+      batchFiltering: "all",
       ...defaultValues,
     },
   });
@@ -116,6 +117,12 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   const typeMembers = watch("typeMembers");
   const dateRolesStart = watch("dateRolesStart");
   const clubid = watch("clubid");
+  const batches = [];
+
+  // Generate batches from 2020 to current year
+  for (let year = 20; year <= dayjs()["year"]() - 2000; year++) {
+    batches.push("ug2k" + year);
+  }
 
   useEffect(() => {
     (async () => {
@@ -191,6 +198,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         dayjs(formData.dateRolesStart)["year"](),
         dayjs(formData.dateRolesEnd)["year"](),
       ],
+      batchFiltering: formData.batchFiltering,
     };
     submitHandlers[action](data);
     setLoading(false);
@@ -395,6 +403,37 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
         ) : null}
+        <Grid container item>
+          <Typography
+            variant="subtitle2"
+            textTransform="uppercase"
+            color="text.secondary"
+            sx={{ mb: 1.5 }}
+          >
+            Batches to Include
+          </Typography>
+          <Controller
+            name="batchFiltering"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel id="batchFiltering">Batches</InputLabel>
+                <Select
+                  labelId="batchFiltering"
+                  label="batchFiltering"
+                  fullWidth
+                  {...field}
+                >
+                  <MenuItem value="all">All Batches</MenuItem>
+
+                  {batches.map((batch) => (
+                    <MenuItem key={batch} value={batch}>{batch}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        </Grid>
         <Grid container item>
           <Typography
             variant="subtitle2"
