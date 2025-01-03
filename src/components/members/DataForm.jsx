@@ -3,6 +3,7 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers";
 import {
   Box,
   Button,
@@ -29,7 +30,7 @@ import { membersDataDownload } from "actions/members/data/server_action";
 
 const allowed_roles = ["cc", "club", "slo", "slc"];
 const admin_roles = ["cc", "slo", "slc"];
-const disabledFields = ["uid", "clubid",]; // Fields that should be disabled and selected
+const disabledFields = ["uid", "clubid"]; // Fields that should be disabled and selected
 
 function DataClubSelect({
   control,
@@ -104,6 +105,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
       clubid: "",
       fields: disabledFields, // Ensure disabled fields are selected by default
       typeMembers: "current",
+      typeRoles: "all",
       ...defaultValues,
     },
   });
@@ -111,6 +113,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   const [clubsLoading, setClubsLoading] = useState(true);
   const [clubs, setClubs] = useState([]);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const typeMembers = watch("typeMembers");
+  const dateRolesStart = watch("dateRolesStart");
 
   useEffect(() => {
     (async () => {
@@ -145,7 +149,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `members_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD",
+              "YYYY-MM-DD"
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -180,6 +184,12 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       fields: formData.fields,
+      typeMembers: formData.typeMembers,
+      typeRoles: formData.typeRoles,
+      dateRoles: [
+        dayjs(formData.dateRolesStart)["year"](),
+        dayjs(formData.dateRolesEnd)["year"](),
+      ],
     };
     submitHandlers[action](data);
     setLoading(false);
@@ -243,14 +253,131 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel id="typeMembers">Type of Members</InputLabel>
-                <Select labelId="typeMembers" label="typeMembers" fullWidth {...field}>
+                <Select
+                  labelId="typeMembers"
+                  label="typeMembers"
+                  fullWidth
+                  {...field}
+                >
                   <MenuItem value="all">All Members</MenuItem>
                   <MenuItem value="current">Only Current Members</MenuItem>
+                  <MenuItem value="past">Only Past Members</MenuItem>
                 </Select>
               </FormControl>
             )}
           />
         </Grid>
+        {typeMembers === "current" ? (
+          <Grid container item>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              color="text.secondary"
+              sx={{ mb: 1.5 }}
+            >
+              Roles to Include
+            </Typography>
+            <Controller
+              name="typeRoles"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel id="typeRoles">Type of Roles</InputLabel>
+                  <Select
+                    labelId="typeRoles"
+                    label="typeRoles"
+                    fullWidth
+                    {...field}
+                  >
+                    <MenuItem value="all">All Roles</MenuItem>
+                    <MenuItem value="current">Only Current Roles</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+          </Grid>
+        ) : null}
+        {typeMembers === "past" ? (
+          <Grid container item>
+            <Grid container item>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                color="text.secondary"
+                sx={{ mb: 1.5 }}
+              >
+                Period of Members to Include
+              </Typography>
+            </Grid>
+            <Grid container item direction="row" xs={12} spacing={1} pt={1}>
+              <Grid item xs={6}>
+                <Controller
+                  name="dateRolesStart"
+                  control={control}
+                  rules={{
+                    required: "Start year is required",
+                  }}
+                  render={({
+                    field: { value, ...rest },
+                    fieldState: { error, invalid },
+                  }) => (
+                    <DatePicker
+                      label="Start Period"
+                      slotProps={{
+                        textField: {
+                          error: invalid,
+                          helperText: error?.message,
+                        },
+                      }}
+                      views={["year"]}
+                      openTo="year"
+                      value={value}
+                      maxDate={dayjs(new Date())}
+                      disableFuture={true}
+                      sx={{ width: "100%" }}
+                      {...rest}
+                    />
+                  )}
+                ></Controller>
+              </Grid>
+              <Grid item xs={6}>
+                <Controller
+                  name="dateRolesEnd"
+                  control={control}
+                  rules={{
+                    required: "End year is required",
+                    validate: {
+                      checkDate: (value) =>
+                        value >= dateRolesStart ||
+                        "End year must be after or equal to start year!",
+                    },
+                  }}
+                  render={({
+                    field: { value, ...rest },
+                    fieldState: { error, invalid },
+                  }) => (
+                    <DatePicker
+                      label="End Period"
+                      slotProps={{
+                        textField: {
+                          error: invalid,
+                          helperText: error?.message,
+                        },
+                      }}
+                      views={["year"]}
+                      openTo="year"
+                      value={value}
+                      maxDate={dayjs(new Date())}
+                      disableFuture={true}
+                      sx={{ width: "100%" }}
+                      {...rest}
+                    />
+                  )}
+                ></Controller>
+              </Grid>
+            </Grid>
+          </Grid>
+        ) : null}
         <Grid container item>
           <Typography
             variant="subtitle2"
@@ -271,8 +398,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                     {[
                       { fieldValue: "clubid", fieldName: "Club Name" },
                       { fieldValue: "uid", fieldName: "Member Name" },
-                      { fieldValue: "poc", fieldName: "Is POC" },
+                      { fieldValue: "rollno", fieldName: "Roll No" },
+                      { fieldValue: "batch", fieldName: "Batch" },
+                      { fieldValue: "email", fieldName: "Email" },
+                      {
+                        fieldValue: "partofclub",
+                        fieldName: "Is Currently Part of Club",
+                      },
                       { fieldValue: "roles", fieldName: "Roles" },
+                      { fieldValue: "poc", fieldName: "Is POC" },
                     ].map(({ fieldValue, fieldName }) => (
                       <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
                         <FormControlLabel
@@ -288,7 +422,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value,
+                                    event.target.value
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
