@@ -115,6 +115,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   const [cancelDialog, setCancelDialog] = useState(false);
   const typeMembers = watch("typeMembers");
   const dateRolesStart = watch("dateRolesStart");
+  const clubid = watch("clubid");
 
   useEffect(() => {
     (async () => {
@@ -247,25 +248,41 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           >
             Members to Include
           </Typography>
-          <Controller
-            name="typeMembers"
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth>
-                <InputLabel id="typeMembers">Type of Members</InputLabel>
-                <Select
-                  labelId="typeMembers"
-                  label="typeMembers"
-                  fullWidth
-                  {...field}
-                >
-                  <MenuItem value="all">All Members</MenuItem>
-                  <MenuItem value="current">Only Current Members</MenuItem>
-                  <MenuItem value="past">Only Past Members</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
+          {clubid != "allclubs" ? (
+            <Controller
+              name="typeMembers"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel id="typeMembers">Type of Members</InputLabel>
+                  <Select
+                    labelId="typeMembers"
+                    label="typeMembers"
+                    fullWidth
+                    {...field}
+                  >
+                    <MenuItem value="all">All Members</MenuItem>
+                    <MenuItem value="current">Only Current Members</MenuItem>
+                    <MenuItem value="past">Only Past Members</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
+          ) : (
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: 18,
+                padding: 1.7,
+                color: "#919EAB",
+                width: "100%",
+                border: "1px solid rgba(99, 115, 129, 0.5)",
+                borderRadius: "8px",
+              }}
+            >
+              Only Current Members
+            </Typography>
+          )}
         </Grid>
         {typeMembers === "current" ? (
           <Grid container item>
