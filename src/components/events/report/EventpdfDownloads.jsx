@@ -42,7 +42,8 @@ export function DownloadEventReport({
   const isStudentBodyEvent =
     clubs.find((club) => club.cid === event?.clubid)?.category === "body" ||
     event?.collabclubs?.some(
-      (collab) => clubs.find((club) => club.cid === collab)?.category === "body"
+      (collab) =>
+        clubs.find((club) => club.cid === collab)?.category === "body",
     );
 
   const htmlContent = `
@@ -160,7 +161,7 @@ export function DownloadEventReport({
             <p><strong>Collaborators:</strong> ${
               event?.collabclubs
                 ?.map(
-                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name,
                 )
                 .join(", ") || "None"
             }</p>
@@ -202,7 +203,7 @@ export function DownloadEventReport({
                           item?.advance == true ? "Yes" : "No"
                         }</td>
                     </tr>
-                    `
+                    `,
                       )
                       .join("")}
                 </tbody>
@@ -246,7 +247,7 @@ export function DownloadEventReport({
                             (venue) =>
                               `<li>${
                                 locationLabel(venue)?.name || "Unknown"
-                              }</li>`
+                              }</li>`,
                           )
                           .join("")}
                     </ul>
@@ -268,7 +269,7 @@ export function DownloadEventReport({
                       `<li>${
                         prize.replace(/_/g, " ").charAt(0).toUpperCase() +
                         prize.replace(/_/g, " ").slice(1)
-                      }</li>`
+                      }</li>`,
                   )
                   .join("")}
             </ul>
@@ -350,7 +351,7 @@ export function DownloadEventReport({
               new Date().toISOString(),
               false,
               true,
-              true
+              true,
             )}</p>
         </div>
     </div>
@@ -421,7 +422,8 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
   const isStudentBodyEvent =
     clubs.find((club) => club.cid === event?.clubid)?.category === "body" ||
     event?.collabclubs?.some(
-      (collab) => clubs.find((club) => club.cid === collab)?.category === "body"
+      (collab) =>
+        clubs.find((club) => club.cid === collab)?.category === "body",
     );
   const htmlContent = `
     <style>
@@ -536,7 +538,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
             <p><strong>Collaborating Clubs/Bodies:</strong> ${
               event?.collabclubs
                 ?.map(
-                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name,
                 )
                 .join(", ") || "None"
             }</p>
@@ -584,7 +586,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
                               item?.advance == true ? "Yes" : "No"
                             }</td>
                         </tr>
-                        `
+                        `,
                           )
                           .join("")}
                     </tbody>
@@ -621,7 +623,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
                             (venue) =>
                               `<li>${
                                 locationLabel(venue)?.name || "Unknown"
-                              }</li>`
+                              }</li>`,
                           )
                           .join("")}
                     </ul>
@@ -748,7 +750,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
               new Date().toISOString(),
               false,
               true,
-              true
+              true,
             )}</p>
         </div>
     </div>

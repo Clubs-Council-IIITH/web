@@ -42,7 +42,8 @@ export function DownloadEventReportDocx({
   const isStudentBodyEvent =
     clubs.find((club) => club.cid === event?.clubid)?.category === "body" ||
     event?.collabclubs?.some(
-      (collab) => clubs.find((club) => club.cid === collab)?.category === "body"
+      (collab) =>
+        clubs.find((club) => club.cid === collab)?.category === "body",
     );
 
   const fetchImageBuffer = async (url) => {
@@ -66,7 +67,7 @@ export function DownloadEventReportDocx({
             quickFormat: true,
             run: {
               fontSize: 24,
-            }
+            },
           },
           {
             id: "Heading2",
@@ -75,36 +76,36 @@ export function DownloadEventReportDocx({
             next: "Normal",
             quickFormat: true,
             run: {
-                size: 30,
-                bold: true,
-                color: "2e74b5",
+              size: 30,
+              bold: true,
+              color: "2e74b5",
             },
             paragraph: {
-                spacing: {
-                    before: 240,
-                    after: 120
-                },
+              spacing: {
+                before: 240,
+                after: 120,
+              },
             },
-        },
-        {
-          id: "Heading3",
-          name: "Heading 3",
-          basedOn: "Normal",
-          next: "Normal",
-          quickFormat: true,
-          run: {
+          },
+          {
+            id: "Heading3",
+            name: "Heading 3",
+            basedOn: "Normal",
+            next: "Normal",
+            quickFormat: true,
+            run: {
               size: 28,
               bold: true,
               color: "062785",
-          },
-          paragraph: {
+            },
+            paragraph: {
               spacing: {
-                  before: 200,
-                  after: 80
+                before: 200,
+                after: 80,
               },
+            },
           },
-      },
-        ]
+        ],
       },
       sections: [
         {
@@ -233,7 +234,7 @@ export function DownloadEventReportDocx({
                     event?.collabclubs
                       ?.map(
                         (collab) =>
-                          clubs?.find((club) => club?.cid === collab)?.name
+                          clubs?.find((club) => club?.cid === collab)?.name,
                       )
                       .join(", ") || "None"
                   }`,
@@ -358,7 +359,7 @@ export function DownloadEventReportDocx({
                             new TableCell({
                               children: [
                                 new Paragraph(
-                                  item?.amount?.toString() || "Unknown"
+                                  item?.amount?.toString() || "Unknown",
                                 ),
                               ],
                               width: {
@@ -376,7 +377,7 @@ export function DownloadEventReportDocx({
                               },
                             }),
                           ],
-                        })
+                        }),
                     ),
                   ],
                 })
@@ -456,19 +457,19 @@ export function DownloadEventReportDocx({
                       bullet: {
                         level: 0,
                       },
-                    })
+                    }),
                 )
               : event?.mode !== "online"
-              ? [
-                  new Paragraph({
-                    text: "No venue information available.",
-                    italics: true,
-                    bullet: {
-                      level: 0,
-                    },
-                  }),
-                ]
-              : ""),
+                ? [
+                    new Paragraph({
+                      text: "No venue information available.",
+                      italics: true,
+                      bullet: {
+                        level: 0,
+                      },
+                    }),
+                  ]
+                : ""),
 
             new Paragraph({
               text: "Prizes",
@@ -482,7 +483,7 @@ export function DownloadEventReportDocx({
                       bullet: {
                         level: 0,
                       },
-                    })
+                    }),
                 )
               : [
                   new Paragraph({
@@ -505,7 +506,7 @@ export function DownloadEventReportDocx({
                         (line) =>
                           new Paragraph({
                             text: line.trim(),
-                          })
+                          }),
                       )
                     : [
                         new Paragraph({
@@ -521,7 +522,7 @@ export function DownloadEventReportDocx({
                         (line) =>
                           new Paragraph({
                             text: line.trim(),
-                          })
+                          }),
                       )
                     : [
                         new Paragraph({
@@ -540,7 +541,7 @@ export function DownloadEventReportDocx({
                   (line) =>
                     new Paragraph({
                       text: line.trim(),
-                    })
+                    }),
                 )
               : [
                   new Paragraph({
@@ -558,7 +559,7 @@ export function DownloadEventReportDocx({
                   (line) =>
                     new Paragraph({
                       text: line.trim(),
-                    })
+                    }),
                 )
               : [
                   new Paragraph({
@@ -594,7 +595,7 @@ export function DownloadEventReportDocx({
                   (line) =>
                     new Paragraph({
                       text: line.trim(),
-                    })
+                    }),
                 )
               : [
                   new Paragraph({
@@ -612,7 +613,7 @@ export function DownloadEventReportDocx({
                   (line) =>
                     new Paragraph({
                       text: line.trim(),
-                    })
+                    }),
                 )
               : [
                   new Paragraph({
@@ -680,7 +681,7 @@ export function DownloadEventReportDocx({
     const buffer = await Packer.toBlob(doc);
     saveAs(
       buffer,
-      `${event?.name?.replace(/\s+/g, "_") || "event"}_report.docx`
+      `${event?.name?.replace(/\s+/g, "_") || "event"}_report.docx`,
     );
   };
 

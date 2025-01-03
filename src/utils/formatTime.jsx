@@ -25,15 +25,15 @@ export function ISOtoHuman(
   iso,
   weekDay = false,
   showTime = true,
-  showYearAlways = false
+  showYearAlways = false,
 ) {
   const dt = ISOtoDateTime(iso);
   return `${weekDay ? `${dt.weekday}, ` : ""}${dt.day} ${dt.month}${
     showYearAlways
       ? ` ${dt.year}`
       : dt.year !== String(new Date().getFullYear())
-      ? ` ${dt.year}`
-      : ""
+        ? ` ${dt.year}`
+        : ""
   }${showTime ? `, ${dt.time.toUpperCase()}` : ""} IST`;
 }
 

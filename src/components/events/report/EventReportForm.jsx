@@ -264,7 +264,7 @@ export default function EventReportForm({
                         {selected
                           .map(
                             (clubId) =>
-                              clubs.find((club) => club.cid === clubId)?.name
+                              clubs.find((club) => club.cid === clubId)?.name,
                           )
                           .filter(Boolean)
                           .map((clubName) => (

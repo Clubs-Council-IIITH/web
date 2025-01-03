@@ -85,25 +85,25 @@ export default function FinancesTable({ events, role }) {
         submitted: row?.eventReportSubmitted,
       }),
       renderCell: ({ value }) => (
-          <Icon
-            variant={
-              value.submitted === "true"
-                ? "check"
-                : value.submitted === "old"
+        <Icon
+          variant={
+            value.submitted === "true"
+              ? "check"
+              : value.submitted === "old"
                 ? "remove"
                 : "cancel"
-            }
-            color={
-              value.submitted === "true"
-                ? "success.main"
-                : value.submitted === "old"
+          }
+          color={
+            value.submitted === "true"
+              ? "success.main"
+              : value.submitted === "old"
                 ? "warning.main"
                 : "error.main"
-            }
-          />
+          }
+        />
       ),
       display: "flex",
-    }
+    },
   ];
 
   if (!events) return null;

@@ -31,7 +31,12 @@ export function EventReportDetails({
     <Box p={2}>
       <Grid
         container
-        sx={{ justifyContent: { xs: "center", sm: "space-between" }, alignItems: "center", mb: 3, gap: 2 }}
+        sx={{
+          justifyContent: { xs: "center", sm: "space-between" },
+          alignItems: "center",
+          mb: 3,
+          gap: 2,
+        }}
       >
         <Button
           color="primary"
@@ -60,7 +65,7 @@ export function EventReportDetails({
       </Grid>
       <Grid container spacing={2}>
         <Typography variant="h3" mt={1} mb={2} ml={2}>
-            Event Report
+          Event Report
         </Typography>
       </Grid>
 
@@ -86,7 +91,7 @@ export function EventReportDetails({
               <br />
               {event?.collabclubs
                 ?.map(
-                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name,
                 )
                 .join(", ")}
             </Typography>

@@ -20,9 +20,9 @@ export default async function EventReport({ params }) {
     );
     const user = { ...userMeta, ...userProfile };
     user?.role === "club" &&
-    user?.uid !== event.clubid &&
-    !event?.collabclubs.includes(user?.uid) &&
-    redirect("/404");
+      user?.uid !== event.clubid &&
+      !event?.collabclubs.includes(user?.uid) &&
+      redirect("/404");
 
     if (!event || !event?.eventReportSubmitted) {
       return redirect("/404");
@@ -32,7 +32,7 @@ export default async function EventReport({ params }) {
       GET_EVENT_REPORT,
       {
         eventid: id,
-      }
+      },
     );
 
     const {

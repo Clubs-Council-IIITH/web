@@ -75,7 +75,7 @@ export default async function ManageEventID({ params }) {
       GET_EVENT_BILLS_STATUS,
       {
         eventid: id,
-      }
+      },
     );
     if (error && error.message.includes("Event not found"))
       return redirect("/404");
@@ -88,7 +88,7 @@ export default async function ManageEventID({ params }) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
