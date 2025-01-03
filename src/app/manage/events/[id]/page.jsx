@@ -1,6 +1,8 @@
 import { getClient } from "gql/client";
-import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_FULL_EVENT, GET_EVENT_BILLS_STATUS } from "gql/queries/events";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
+import { getFullUser } from "actions/users/get/full/server_action";
 
 import {
   Box,
@@ -16,8 +18,10 @@ import ActionPalette from "components/ActionPalette";
 
 import EventDetails from "components/events/EventDetails";
 import EventBudget from "components/events/EventBudget";
-import EventBillStatus from "components/events/EventBillStatus";
+import EventBillStatus from "components/events/bills/EventBillStatus";
+import EventReportStatus from "components/events/report/EventReportStatus";
 import EventApprovalStatus from "components/events/EventApprovalStatus";
+import { DownloadEvent } from "components/events/report/EventpdfDownloads";
 import {
   EditEvent,
   CopyEvent,
@@ -59,11 +63,39 @@ export default async function ManageEventID({ params }) {
     eventid: id,
   });
 
+  let eventBillsData = null;
+
+  if (
+    event &&
+    event?.status?.state === "approved" &&
+    new Date(event?.datetimeperiod[1]) < new Date() &&
+    event?.budget?.length
+  ) {
+    const { error, data = {} } = await getClient().query(
+      GET_EVENT_BILLS_STATUS,
+      {
+        eventid: id,
+      }
+    );
+    if (error && error.message.includes("Event not found"))
+      return redirect("/404");
+    eventBillsData = data;
+  }
+
+  const {
+    data: { activeClubs },
+  } = await getClient().query(GET_ACTIVE_CLUBS);
+
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
+
+  const pocProfile = await getFullUser(event?.poc);
+  if (!pocProfile) {
+    return redirect("/404");
+  }
 
   return (
     user?.role === "club" &&
@@ -80,6 +112,14 @@ export default async function ManageEventID({ params }) {
             { status: event?.status, location: event?.location },
           ]}
           right={getActions(event, { ...userMeta, ...userProfile })}
+          downloadbtn={
+            <DownloadEvent
+              event={event}
+              clubs={activeClubs}
+              pocProfile={pocProfile}
+              eventBills={eventBillsData?.eventBills || {}}
+            />
+          }
         />
         <EventDetails showCode event={event} />
         <Divider sx={{ borderStyle: "dashed", my: 2 }} />
@@ -169,8 +209,11 @@ export default async function ManageEventID({ params }) {
         {/* show Approval status */}
         {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
 
-        {/* show financial information */}
-        {["cc", "club", "slo"].includes(user?.role) && EventBillStatus(event)}
+        {/* show post event information */}
+        {["cc", "club", "slo"].includes(user?.role) &&
+          EventBillStatus(event, eventBillsData?.eventBills || null)}
+        {["cc", "club", "slo"].includes(user?.role) &&
+          EventReportStatus(event, user)}
       </Box>
     )
   );
