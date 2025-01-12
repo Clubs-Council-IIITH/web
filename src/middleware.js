@@ -70,16 +70,6 @@ export function middleware(req) {
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
 
-  // if logout cookie is set, log the user out
-  if (req.cookies.has("logout")) {
-    // clear logout cookie
-    req.cookies.delete("logout");
-    return redirect(
-      new URL("/logoutCallback", req.url),
-      contentSecurityPolicyHeaderValue,
-    );
-  }
-
   // redirect to CC about page
   if (pathname === "/student-bodies/clubs") {
     return redirect(
