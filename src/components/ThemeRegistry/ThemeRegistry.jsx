@@ -32,6 +32,20 @@ export default function ThemeRegistry({ children, nonce }) {
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
 
+  // Update the global background color
+  React.useEffect(() => {
+    const backgroundColor = prefersDarkMode.isDark
+      ? palette.dark.background.default
+      : palette.light.background.default;
+
+    document.body.style.backgroundColor = backgroundColor;
+
+    return () => {
+      // Optional cleanup
+      document.body.style.backgroundColor = "";
+    };
+  }, [prefersDarkMode]);
+
   return (
     <NextAppDirEmotionCacheProvider options={{ key: "mui", nonce: nonce }}>
       <ThemeProvider theme={theme}>
