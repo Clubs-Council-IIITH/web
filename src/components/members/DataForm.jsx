@@ -30,7 +30,7 @@ import { membersDataDownload } from "actions/members/data/server_action";
 
 const allowed_roles = ["cc", "club", "slo", "slc"];
 const admin_roles = ["cc", "slo", "slc"];
-const disabledFields = ["uid", "clubid", "batch"]; // Fields that should be disabled and selected
+const disabledFields = ["uid", "clubid"]; // Fields that should be disabled and selected
 
 function DataClubSelect({
   control,
@@ -106,7 +106,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
       fields: disabledFields, // Ensure disabled fields are selected by default
       typeMembers: "current",
       typeRoles: "all",
-      batchFiltering: "all",
+      batchFiltering: ["allBatches"],
       ...defaultValues,
     },
   });
@@ -121,7 +121,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   // Generate batches from 2020 to current year
   for (let year = 20; year <= dayjs()["year"]() - 2000; year++) {
-    batches.push("ug2k" + year);
+    batches.push("2k" + year);
   }
 
   useEffect(() => {
@@ -415,21 +415,53 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           <Controller
             name="batchFiltering"
             control={control}
-            render={({ field }) => (
-              <FormControl fullWidth>
-                <InputLabel id="batchFiltering">Batches</InputLabel>
-                <Select
-                  labelId="batchFiltering"
-                  label="batchFiltering"
-                  fullWidth
-                  {...field}
-                >
-                  <MenuItem value="all">All Batches</MenuItem>
-
-                  {batches.map((batch) => (
-                    <MenuItem key={batch} value={batch}>{batch}</MenuItem>
+            rules={{ required: "Select at least one field!" }}
+            render={({ field, fieldState: { error } }) => (
+              <FormControl component="fieldset" fullWidth error={error}>
+                <FormGroup row>
+                  {[
+                    { fieldValue: "allBatches", fieldName: "All" },
+                    ...batches.map((batch) => ({
+                      fieldValue: batch[2]+batch[3], //This is the numerical value of the batch eg. 2k20 -> 20
+                      fieldName: batch,
+                    })),
+                  ].map(({ fieldValue, fieldName }) => (
+                    <Grid item lg={1} md={3} sm={4} xs={6} key={fieldValue}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            {...field}
+                            value={fieldValue}
+                            checked={
+                              field.value.includes(fieldValue) ||
+                              field.value.includes("allBatches") //If allBatches is selected, all the batches must be selected
+                            }
+                            disabled={
+                              field.value.includes("allBatches") &&
+                              fieldValue !== "allBatches"
+                            }
+                            onChange={(event) => {
+                              const newValue = [...field.value];
+                              if (event.target.checked) {
+                                newValue.push(event.target.value);
+                              } else {
+                                const index = newValue.indexOf(
+                                  event.target.value
+                                );
+                                if (index > -1) {
+                                  newValue.splice(index, 1);
+                                }
+                              }
+                              field.onChange(newValue);
+                            }}
+                          />
+                        }
+                        label={fieldName}
+                      />
+                    </Grid>
                   ))}
-                </Select>
+                </FormGroup>
+                <FormHelperText>{error?.message}</FormHelperText>
               </FormControl>
             )}
           />
