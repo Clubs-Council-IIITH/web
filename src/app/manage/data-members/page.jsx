@@ -7,15 +7,9 @@ export const metadata = {
 };
 
 export default function DownloadMembersData() {
-  // default form values
-  const defaultValues = {
-    clubid: "",
-    allEvents: false,
-  };
-
   return (
     <Container>
-      <DataForm defaultValues={defaultValues} action="create" />
+      <DataForm action="create" />
     </Container>
   );
 }

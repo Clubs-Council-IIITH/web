@@ -19,6 +19,8 @@ import {
   MenuItem,
   CircularProgress,
   Switch,
+  Chip,
+  OutlinedInput,
 } from "@mui/material";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
@@ -54,15 +56,50 @@ function DataClubSelect({
           name="clubid"
           control={control}
           rules={{ required: "Select a club/body!" }}
-          render={({ field, fieldState: { error, invalid } }) => (
+          render={({
+            field: { onChange, value },
+            fieldState: { error, invalid },
+          }) => (
             <FormControl fullWidth error={invalid}>
               <InputLabel id="clubid-label">Club/Body</InputLabel>
               <Select
                 labelId="clubid-label"
                 label="Club/Body"
                 fullWidth
+                multiple
+                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={
+                          value === "allclubs"
+                            ? "All Clubs"
+                            : clubs?.find((club) => club.cid === value).name
+                        }
+                      />
+                    ))}
+                  </Box>
+                )}
+                value={value}
+                onChange={(event) => {
+                  const {
+                    target: { value },
+                  } = event;
+                  console.log(value);
+                  if (value[value.length - 1] === "allclubs") {
+                    onChange(["allclubs"]);
+                  } else {
+                    let index = value.indexOf("allclubs");
+                    if (index > -1) value.splice(index, 1);
+                    onChange(
+                      // On autofill we get a stringified value.
+                      typeof value === "string" ? value.split(",") : value
+                    );
+                  }
+                }}
                 disabled={disabled}
-                {...field}
               >
                 <MenuItem value="allclubs">All Clubs/Bodies</MenuItem>
                 {clubs
@@ -102,7 +139,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   const { triggerToast } = useToast();
   const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: {
-      clubid: "",
+      clubid: [],
       fields: disabledFields, // Ensure disabled fields are selected by default
       typeMembers: "current",
       typeRoles: "all",
@@ -190,7 +227,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   async function onSubmit(formData) {
     setLoading(true);
     const data = {
-      clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
+      clubid: admin_roles.includes(user?.role) ? formData.clubid : [user?.uid],
       fields: formData.fields,
       typeMembers: formData.typeMembers,
       typeRoles: formData.typeRoles,
@@ -256,7 +293,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           >
             Members to Include
           </Typography>
-          {clubid != "allclubs" ? (
+          {!clubid.includes("allclubs") ? (
             <Controller
               name="typeMembers"
               control={control}
@@ -422,7 +459,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                   {[
                     { fieldValue: "allBatches", fieldName: "All" },
                     ...batches.map((batch) => ({
-                      fieldValue: batch[2]+batch[3], //This is the numerical value of the batch eg. 2k20 -> 20
+                      fieldValue: batch[2] + batch[3], //This is the numerical value of the batch eg. 2k20 -> 20
                       fieldName: batch,
                     })),
                   ].map(({ fieldValue, fieldName }) => (
