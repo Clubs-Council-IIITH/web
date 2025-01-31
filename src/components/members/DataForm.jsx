@@ -95,7 +95,7 @@ function DataClubSelect({
                     if (index > -1) value.splice(index, 1);
                     onChange(
                       // On autofill we get a stringified value.
-                      typeof value === "string" ? value.split(",") : value
+                      typeof value === "string" ? value.split(",") : value,
                     );
                   }
                 }}
@@ -194,7 +194,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `members_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD"
+              "YYYY-MM-DD",
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -483,7 +483,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                 newValue.push(event.target.value);
                               } else {
                                 const index = newValue.indexOf(
-                                  event.target.value
+                                  event.target.value,
                                 );
                                 if (index > -1) {
                                   newValue.splice(index, 1);
@@ -547,7 +547,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value
+                                    event.target.value,
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
