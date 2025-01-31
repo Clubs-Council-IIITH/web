@@ -188,6 +188,26 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
     </DrawerDropdown>
   );
 
+  //nav dropdown for member managment
+  const manageMemberItems = (
+    <DrawerDropdown
+      title="members"
+      // TODO: Change icon for this
+      icon={<Icon variant="group-outline-rounded" />}
+    >
+      <DrawerItem
+        title="Members List"
+        path="/manage/members"
+        icon={<Icon variant="group-outline-rounded" />}
+      />
+      <DrawerItem
+        title="Data Download"
+        path="/manage/data-members"
+        icon={<Icon variant="sim-card-download-outline-rounded" />}
+      />
+    </DrawerDropdown>
+  );
+
   // nav items that only club accounts can see
   const clubItems = (
     <List disablePadding sx={{ p: 1 }}>
@@ -200,11 +220,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="explore-outline-rounded" />}
       />
       {manageEventItems}
-      <DrawerItem
-        title="members"
-        path="/manage/members"
-        icon={<Icon variant="group-outline-rounded" />}
-      />
+      {manageMemberItems}
     </List>
   );
 
@@ -225,11 +241,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/holidays"
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
-      <DrawerItem
-        title="members"
-        path="/manage/members"
-        icon={<Icon variant="group-outline-rounded" />}
-      />
+      {manageMemberItems}
     </List>
   );
 
@@ -279,6 +291,17 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/holidays"
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
+      <DrawerDropdown
+        title="members"
+        // TODO: Change icon for this
+        icon={<Icon variant="group-outline-rounded" />}
+      >
+        <DrawerItem
+          title="Data Download"
+          path="/manage/data-members"
+          icon={<Icon variant="sim-card-download-outline-rounded" />}
+        />
+      </DrawerDropdown>
     </List>
   );
 

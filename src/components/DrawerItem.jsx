@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Children, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -90,6 +90,9 @@ export function DrawerItem({ title, path, icon }) {
 export function DrawerDropdown({ title, icon, children }) {
   const theme = useTheme();
   const pathname = usePathname();
+
+  // Have to do this since children is not an array when only 1 children is present in the dropdown, https://react.dev/reference/react/Children#why-is-the-children-prop-not-always-an-array
+  children = Children.toArray(children); //Without this the some() function down below will throw an error
 
   const active = children.some((child) =>
     getActive(child.props.path, pathname),
