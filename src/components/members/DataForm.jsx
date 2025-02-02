@@ -424,7 +424,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       value={value}
                       maxDate={dayjs.min(
                         dayjs(new Date()),
-                        dayjs(dateRolesStart).add(4, "year")
+                        dayjs(dateRolesStart).add(4, "year"),
                       )}
                       minDate={dateRolesStart}
                       disableFuture={true}
