@@ -19,7 +19,6 @@ import {
   MenuItem,
   CircularProgress,
   Chip,
-  OutlinedInput,
 } from "@mui/material";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
@@ -28,6 +27,9 @@ import { LoadingButton } from "@mui/lab";
 
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { membersDataDownload } from "actions/members/data/server_action";
+
+import minMax from "dayjs/plugin/minMax";
+dayjs.extend(minMax);
 
 const allowed_roles = ["cc", "club", "slo", "slc"];
 const admin_roles = ["cc", "slo", "slc"];
@@ -117,7 +119,6 @@ function DataClubSelect({
         <Typography
           variant="body1"
           sx={{
-            fontSize: 18,
             padding: 1.7,
             color: "#919EAB",
             width: "100%",
@@ -268,7 +269,6 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               <Typography
                 variant="body1"
                 sx={{
-                  fontSize: 18,
                   padding: 1.7,
                   color: "#919EAB",
                   width: "100%",
@@ -315,7 +315,6 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             <Typography
               variant="body1"
               sx={{
-                fontSize: 18,
                 padding: 1.7,
                 color: "#919EAB",
                 width: "100%",
@@ -357,7 +356,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             />
           </Grid>
         ) : null}
-        {typeMembers === "past" ? (
+        {typeMembers === "past" && !clubid.includes("allclubs") ? (
           <Grid container item>
             <Grid container item>
               <Typography
@@ -406,12 +405,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                   control={control}
                   rules={{
                     required: "End year is required",
-                    validate: {
-                      checkDate: (value) =>
-                        value >= dateRolesStart ||
-                        "End year must be after or equal to start year!",
-                    },
                   }}
+                  disabled={!dateRolesStart}
                   render={({
                     field: { value, ...rest },
                     fieldState: { error, invalid },
@@ -427,7 +422,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       views={["year"]}
                       openTo="year"
                       value={value}
-                      maxDate={dayjs(new Date())}
+                      maxDate={dayjs.min(
+                        dayjs(new Date()),
+                        dayjs(dateRolesStart).add(4, "year")
+                      )}
+                      minDate={dateRolesStart}
                       disableFuture={true}
                       sx={{ width: "100%" }}
                       {...rest}
