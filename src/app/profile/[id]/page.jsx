@@ -3,8 +3,9 @@ import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
-import { Container, Grid, Stack, Typography } from "@mui/material";
+import { Container, Grid, Stack, Typography, Button, Box } from "@mui/material";
 
 import ActionPalette from "components/ActionPalette";
 import ClubLogo from "components/clubs/ClubLogo";
@@ -159,9 +160,24 @@ export default async function Profile({ params }) {
 
             <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
               <Stack direction="column" spacing={2}>
-                <Typography variant="subtitle2" textTransform="uppercase">
-                  Memberships
-                </Typography>
+                <Stack direction="row" pt={2} mb={2}>
+                  <Typography variant="subtitle2" textTransform="uppercase">
+                    Memberships
+                  </Typography>
+                  <Box sx={{ flexGrow: 1 }} />
+                  {currentUser?.role === "public" && currentUser?.uid === user?.uid && memberships.length > 0 && (
+                    <Box display="flex" alignItems="center">
+                      <Link
+                        href={`/profile/${user.uid}/generate-certificate`}
+                        passHref
+                      >
+                        <Button variant="contained" color="primary">
+                          Generate Certificate
+                        </Button>
+                      </Link>
+                    </Box>
+                  )}
+                </Stack>
                 <UserMemberships rows={memberships} />
               </Stack>
             </Grid>
