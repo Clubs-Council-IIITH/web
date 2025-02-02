@@ -18,7 +18,6 @@ import {
   FormGroup,
   MenuItem,
   CircularProgress,
-  Switch,
   Chip,
   OutlinedInput,
 } from "@mui/material";
@@ -67,7 +66,6 @@ function DataClubSelect({
                 label="Club/Body"
                 fullWidth
                 multiple
-                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map((value) => (
@@ -302,7 +300,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                   <InputLabel id="typeMembers">Type of Members</InputLabel>
                   <Select
                     labelId="typeMembers"
-                    label="typeMembers"
+                    label="Type of Members"
                     fullWidth
                     {...field}
                   >
@@ -347,7 +345,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                   <InputLabel id="typeRoles">Type of Roles</InputLabel>
                   <Select
                     labelId="typeRoles"
-                    label="typeRoles"
+                    label="Type of Roles"
                     fullWidth
                     {...field}
                   >
