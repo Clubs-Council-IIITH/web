@@ -73,7 +73,7 @@ export default async function GenerateCertificatePage({ params }) {
           <UserDetails user={user} />
         </Grid>
         <Grid item xs={12} md={10}>
-          <CertificateGenerationForm userCertificates={getUserCertificates} />
+          <CertificateGenerationForm Certificates={getUserCertificates} />
         </Grid>
       </Grid>
     </Grid>

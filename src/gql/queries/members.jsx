@@ -95,6 +95,7 @@ export const GET_USER_CERTIFICATES = gql`
   query GetUserCertificates {
     getUserCertificates {
       _id
+      userId
       certificateNumber
       status {
         requestedAt

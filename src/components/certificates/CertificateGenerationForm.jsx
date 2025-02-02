@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "@mui/lab";
 import { requestCertificate } from "actions/certificates/request/server_action";
 import downloadCertificate  from "components/certificates/CertificateDownloader";
+import { getFullUser } from "actions/users/get/full/server_action";
 
 import {
   TextField,
@@ -32,7 +33,7 @@ import { ISOtoHuman } from "utils/formatTime";
 import Tag from "components/Tag";
 import { stateLabel } from "utils/formatCertificates";
 
-export default function CertificateGenerationForm({ userCertificates = [] }) {
+export default function CertificateGenerationForm({ Certificates = [] }) {
   const router = useRouter();
   const [reason, setReason] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
@@ -40,10 +41,29 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
   const { triggerToast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState(null);
+  const [userCertificates, setUserCertificates] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const isFormValid = reason.trim() !== "" && agreeToTerms;
-
+  useEffect(() => {
+    const fetchCertificates = async () => {
+        const fetchedCertificates = await Promise.all(
+          Certificates.map(async (cert) => {
+                const { data } = await getFullUser(cert?.userId);
+                return {
+                    ...cert,
+                    userFullName: `${data?.firstName || "N/A"} ${data?.lastName || ""}`,
+                    userEmail: data?.email || "N/A",
+                    userRollno: data?.rollno || "N/A",
+                    userBatch: data?.batch || "N/A",
+                    userStream: data?.stream || "N/A",
+                };
+            })
+        );
+        setUserCertificates(fetchedCertificates);
+      };
+      fetchCertificates();
+  }, [Certificates]);
   const handleCertificateRequest = async () => {
     try {
       const res = await requestCertificate(reason);
