@@ -78,14 +78,22 @@ export default function CertificateGenerationForm({ userCertificates = [] }) {
   };
 
   const hasPendingCertificates = (certs) => {
-    return (
-      certs &&
-      certs.some(
-        (cert) => cert.state !== "approved" && cert.state !== "rejected"
-      )
+    if (!certs || certs.length === 0) return false; // If no certificates exist, return true
+  
+    const fifteenDaysAgo = Date.now() - 15 * 24 * 60 * 60 * 1000;
+    const hasRecentApproval = certs.some(
+      (cert) =>
+        cert.state === "approved" &&
+        new Date(cert?.status?.requestedAt).getTime() >= fifteenDaysAgo
     );
+  
+    const hasPendingRequests = certs.some(
+      (cert) => cert.state !== "approved" && cert.state !== "rejected"
+    );
+  
+    return hasRecentApproval || hasPendingRequests;
   };
-
+  
   const handleRowClick = (cert) => {
     setSelectedCert(cert);
     setDialogOpen(true);
