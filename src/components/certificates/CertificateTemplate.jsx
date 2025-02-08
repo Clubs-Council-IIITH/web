@@ -270,6 +270,14 @@ export async function generateCertificateHTML(certificateData) {
                 color: #666;
                 line-height: 1.6;
             }
+            .certificate,
+            .certificate-text,
+            .recipient-details,
+            .activities-table,
+            .verification-section {
+                page-break-inside: avoid;
+            }
+
         </style>
     </head>
     <body>
@@ -281,14 +289,14 @@ export async function generateCertificateHTML(certificateData) {
             <div class="content">
                 <div class="cert-header">
                     <div class="certificate-header">
-                        <div class="certificate-title">COMENDATION<br />LETTER</div>
+                        <div class="certificate-title">COMMENDATION<br />LETTER</div>
                     </div>
                     <div class="certificate-number">
-                        Certificate Number<br>
-                        ${certificateData.certificateNumber}<br>
-                        <div class="certificate-date">Date: ${new Date().toLocaleDateString('en-GB', {
+                        Certificate Number:<br>
+                        <b>${certificateData.certificateNumber}</b><br>
+                        <div class="certificate-date">Date:<br> <b>${new Date().toLocaleDateString('en-GB', {
                           day: '2-digit', month: 'long', year: 'numeric'
-                        })}</div>
+                        })}</b></div>
                     </div>
                 </div>
 
@@ -300,10 +308,10 @@ export async function generateCertificateHTML(certificateData) {
                         </div>
                     </div>
                 </div>
-                <div class="recipient-roll">Roll Number: ${certificateData.userRollno}</div>
+                <div class="recipient-roll">Roll Number: <b>${certificateData.userRollno}</b></div>
 
                 <div class="certificate-text">
-                    In recognition of outstanding contributions to various clubs and activities as detailed below:
+                    In recognition of outstanding contributions to various clubs & activities as detailed below:
                 </div>
 
                 ${membershipTables} <!-- Render multiple tables here -->
