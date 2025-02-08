@@ -213,7 +213,9 @@ const VersionHistory = () => {
         style={{ marginLeft: "5px", cursor: "pointer", color: "#444" }}
       >
         <Box display="flex" alignItems="center">
-          <Typography sx={{ color: "text.primary" }}>View releases/version history</Typography>
+          <Typography sx={{ color: "text.primary" }}>
+            View releases/version history
+          </Typography>
           <ArrowDropDownIcon
             sx={{
               marginLeft: "8px",
