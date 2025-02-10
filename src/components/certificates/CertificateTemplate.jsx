@@ -241,7 +241,7 @@ export async function generateCertificateHTML(certificateData) {
             }
 
             .verification-section {
-                margin-top: 10px;
+                margin-top: 22px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -323,7 +323,7 @@ export async function generateCertificateHTML(certificateData) {
                     </div>
                     <div class="signature-line">
                         <div class="line"></div>
-                        <div class="title">Director</div>
+                        <div class="title">Chair, Student Affairs Committee</div>
                     </div>
                 </div>
                 <div class="verification-section">

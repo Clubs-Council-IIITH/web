@@ -1,7 +1,7 @@
 import html2pdf from 'html2pdf.js';
 import { generateCertificateHTML } from "components/certificates/CertificateTemplate";
 
-export default async function DownloadCertificate(certificateData) {
+export default async function downloadCertificate(certificateData) {
   const htmlContent = await generateCertificateHTML(certificateData);
 
   const tempDiv = document.createElement('div');
