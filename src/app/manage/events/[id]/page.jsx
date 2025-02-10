@@ -99,7 +99,7 @@ export default async function ManageEventID({ params }) {
 
   return (
     user?.role === "club" &&
-      user?.uid !== event.clubid &&
+      user?.uid !== event?.clubid &&
       !event?.collabclubs.includes(user?.uid) &&
       redirect("/404"),
     (
