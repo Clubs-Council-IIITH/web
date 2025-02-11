@@ -59,9 +59,12 @@ export async function generateMetadata({ params }) {
 export default async function ManageEventID({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-    eventid: id,
-  });
+  const { data: { event } = {} } = await getClient().query(
+    GET_FULL_EVENT,
+    {
+      eventid: id,
+    }
+  );
 
   let eventBillsData = null;
 
@@ -207,7 +210,7 @@ export default async function ManageEventID({ params }) {
         </Grid>
 
         {/* show Approval status */}
-        {EventApprovalStatus(event?.status, event?.studentBodyEvent)}
+        {EventApprovalStatus(event?.status, event?.clubCategory != "club")}
 
         {/* show post event information */}
         {["cc", "club", "slo"].includes(user?.role) &&
@@ -279,7 +282,7 @@ function getActions(event, user) {
     if (
       // upcoming &&
       event?.status?.state === "pending_room" &&
-      (event?.status?.budget || event?.studentBodyEvent) &&
+      (event?.status?.budget || event?.clubCategory == "body") &&
       !event?.status?.room
     )
       return [ApproveEvent, EditEvent, DeleteEvent];

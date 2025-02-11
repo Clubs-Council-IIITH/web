@@ -157,7 +157,7 @@ export const GET_FULL_EVENT = gql`
       }
       clubid
       collabclubs
-      studentBodyEvent
+      clubCategory
       datetimeperiod
       description
       equipment
