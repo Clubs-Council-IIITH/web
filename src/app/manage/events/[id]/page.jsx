@@ -59,12 +59,9 @@ export async function generateMetadata({ params }) {
 export default async function ManageEventID({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(
-    GET_FULL_EVENT,
-    {
-      eventid: id,
-    }
-  );
+  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+    eventid: id,
+  });
 
   let eventBillsData = null;
 
