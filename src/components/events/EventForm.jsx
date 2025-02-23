@@ -211,6 +211,7 @@ export default function EventForm({
         // show error toast
         triggerToast({
           ...res.error,
+          title: "Form Error",
           severity: "error",
         });
 
@@ -309,7 +310,7 @@ export default function EventForm({
         uid: formData.poc,
         phone: formData.poc_phone,
       };
-      let phoneReturn = submitHandlers["phone"](phoneData);
+      let phoneReturn = await submitHandlers["phone"](phoneData);
       if (!phoneReturn) {
         setLoading(false);
         return;
