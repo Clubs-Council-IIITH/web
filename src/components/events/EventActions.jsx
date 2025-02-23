@@ -1,21 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import {useRouter, useParams} from "next/navigation";
 
-import { useState } from "react";
+import {useState} from "react";
 
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 
 import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
-import { useToast } from "components/Toast";
+import {useToast} from "components/Toast";
 
-import { deleteEventAction } from "actions/events/delete/server_action";
-import { eventProgress } from "actions/events/progress/server_action";
+import {deleteEventAction} from "actions/events/delete/server_action";
+import {eventProgress} from "actions/events/progress/server_action";
+import {eventReminder} from "actions/events/reminder/server_action";
 
-export function EditEvent({ sx }) {
-  const { id } = useParams();
+export function EditEvent({sx}) {
+  const {id} = useParams();
 
   return (
     <Button
@@ -23,7 +24,7 @@ export function EditEvent({ sx }) {
       href={`/manage/events/${id}/edit`}
       variant="contained"
       color="warning"
-      startIcon={<Icon variant="edit-outline" />}
+      startIcon={<Icon variant="edit-outline"/>}
       sx={sx}
     >
       Edit
@@ -31,8 +32,8 @@ export function EditEvent({ sx }) {
   );
 }
 
-export function EditFinances({ sx }) {
-  const { id } = useParams();
+export function EditFinances({sx}) {
+  const {id} = useParams();
 
   return (
     <Button
@@ -40,7 +41,7 @@ export function EditFinances({ sx }) {
       href={`/manage/finances/${id}`}
       variant="contained"
       color="warning"
-      startIcon={<Icon variant="edit-outline" />}
+      startIcon={<Icon variant="edit-outline"/>}
       sx={sx}
     >
       Edit Bills Status
@@ -48,8 +49,8 @@ export function EditFinances({ sx }) {
   );
 }
 
-export function CopyEvent({ sx }) {
-  const { id } = useParams();
+export function CopyEvent({sx}) {
+  const {id} = useParams();
 
   return (
     <Button
@@ -57,7 +58,7 @@ export function CopyEvent({ sx }) {
       href={`/manage/events/${id}/copy`}
       variant="contained"
       color="grey"
-      startIcon={<Icon variant="content-copy-outline" />}
+      startIcon={<Icon variant="content-copy-outline"/>}
       sx={sx}
     >
       Copy Event
@@ -65,10 +66,10 @@ export function CopyEvent({ sx }) {
   );
 }
 
-export function DeleteEvent({ sx }) {
+export function DeleteEvent({sx}) {
   const router = useRouter();
-  const { id } = useParams();
-  const { triggerToast } = useToast();
+  const {id} = useParams();
+  const {triggerToast} = useToast();
   const [dialog, setDialog] = useState(false);
 
   const deleteEvent = async () => {
@@ -97,7 +98,7 @@ export function DeleteEvent({ sx }) {
       <Button
         variant="contained"
         color="error"
-        startIcon={<Icon variant="delete-forever-outline" />}
+        startIcon={<Icon variant="delete-forever-outline"/>}
         onClick={() => setDialog(true)}
         sx={sx}
       >
@@ -110,17 +111,17 @@ export function DeleteEvent({ sx }) {
         description="Deleting the event will mark it as deleted and hidden from the public. This action cannot be undone."
         onConfirm={deleteEvent}
         onClose={() => setDialog(false)}
-        confirmProps={{ color: "error" }}
+        confirmProps={{color: "error"}}
         confirmText="Yes, delete it"
       />
     </>
   );
 }
 
-export function SubmitEvent({ sx }) {
+export function SubmitEvent({sx}) {
   const router = useRouter();
-  const { id } = useParams();
-  const { triggerToast } = useToast();
+  const {id} = useParams();
+  const {triggerToast} = useToast();
 
   const submitEvent = async () => {
     let res = await eventProgress({
@@ -148,7 +149,7 @@ export function SubmitEvent({ sx }) {
     <Button
       variant="contained"
       color="info"
-      startIcon={<Icon variant="thumb-up-outline-rounded" />}
+      startIcon={<Icon variant="thumb-up-outline-rounded"/>}
       onClick={submitEvent}
       sx={sx}
     >
@@ -157,10 +158,10 @@ export function SubmitEvent({ sx }) {
   );
 }
 
-export function ApproveEvent({ sx }) {
+export function ApproveEvent({sx}) {
   const router = useRouter();
-  const { id } = useParams();
-  const { triggerToast } = useToast();
+  const {id} = useParams();
+  const {triggerToast} = useToast();
   const [dialog, setDialog] = useState(false);
 
   const approveEvent = async () => {
@@ -190,7 +191,7 @@ export function ApproveEvent({ sx }) {
       <Button
         variant="contained"
         color="success"
-        startIcon={<Icon variant="done" />}
+        startIcon={<Icon variant="done"/>}
         onClick={() => setDialog(true)}
         sx={sx}
       >
@@ -203,25 +204,79 @@ export function ApproveEvent({ sx }) {
         description="This action cannot be undone."
         onConfirm={approveEvent}
         onClose={() => setDialog(false)}
-        confirmProps={{ color: "success" }}
+        confirmProps={{color: "success"}}
         confirmText="Yes, approve it"
       />
     </>
   );
 }
 
-export function ProgressEvent({ sx }) {
-  const { id } = useParams();
+export function ProgressEvent({sx}) {
+  const {id} = useParams();
   return (
     <Button
       component={Link}
       href={`/manage/events/${id}/approve_cc`}
       variant="contained"
       color="secondary"
-      startIcon={<Icon variant="add" />}
+      startIcon={<Icon variant="add"/>}
+      onClick={() => setDialog(true)}
       sx={sx}
     >
       Progress
     </Button>
+  );
+}
+
+export function RequestReminder({sx}) {
+  const router = useRouter();
+  const {id} = useParams();
+  const {triggerToast} = useToast();
+  const [dialog, setDialog] = useState(false);
+
+  const remindEvent = async () => {
+    // console.log("requested approvals:", SLC, SLO);
+    let res = await eventReminder({
+      eventid: id,
+    });
+    if (res.ok) {
+      // show success toast & redirect to manage page
+      triggerToast({
+        title: "Success!",
+        messages: ["Reminder Sent!."],
+        severity: "success",
+      });
+      router.refresh();
+    } else {
+      // show error toast
+      triggerToast({
+        ...res.error,
+        severity: "error",
+      });
+    }
+  };
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        color="secondary"
+        startIcon={<Icon variant="add"/>}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Send Reminder
+      </Button>
+
+      <ConfirmDialog
+        open={dialog}
+        title="Do you really want to send a reminder to SLO?"
+        description="This action cannot be undone."
+        onConfirm={remindEvent}
+        onClose={() => setDialog(false)}
+        confirmProps={{color: "success"}}
+        confirmText="Yes"
+      />
+    </>
   );
 }

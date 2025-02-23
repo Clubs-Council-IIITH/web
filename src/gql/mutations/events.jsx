@@ -78,3 +78,9 @@ export const ADD_EVENT_REPORT = gql`
     }
   }
 `;
+
+export const REMIND_SLO = gql`
+  mutation RemindSlo($eventid: String!) {
+    remindSLO(eventid: $eventid)
+  }
+`;
