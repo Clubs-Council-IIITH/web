@@ -1,6 +1,7 @@
 # Project Structure
 
-This is a Next.js application for managing club activities, events, and members at an educational institution. The project uses a modern tech stack including GraphQL, Material-UI, and MDX for documentation.
+This is a Next.js application for managing club activities, events, and members for the Clubs Council at IIIT Hyderabad. \
+The project uses a modern tech stack, including GraphQL, Material-UI, and MDX for documentation.
 
 ## Root Directory Structure
 
@@ -67,25 +68,30 @@ Reusable React components:
    - Protected routes and actions
    - User profile management
 
-2. **Club Management**
+1. **Club Management**
    - Club creation and editing
    - Member management
    - Social media integration
    - Logo and banner handling
 
-3. **Event System**
+1. **Event System**
    - Event creation and scheduling
    - Approval workflows
    - Budget tracking
    - Report generation
    - Calendar integration
 
-4. **Document Management**
+1. **Members Management**
+   - Member profiles
+   - Managing members for clubs & bodies
+   - Member approval flow
+
+1. **Document Management**
    - MDX-based documentation
    - File upload and storage
    - Secure URL signing
 
-5. **UI/UX Features**
+1. **UI/UX Features**
    - Responsive design
    - Dark/light mode support
    - Image carousel
@@ -113,11 +119,11 @@ Reusable React components:
 
 We use Docker to run the frontend but this is just the frontend microservice.
 
-This should be usually run with the services as a whole, refer to the [`setup repo`](https://github.com/Clubs-Council-IIITH/setup) for running this locally.
+This should usually be run with the services as a whole; refer to the [`setup repo`](https://github.com/Clubs-Council-IIITH/setup) for running this locally.
 
 ## Notes
 
-- The project uses Node.js module linking for optimized dependency management
-- Includes SEO optimization with sitemaps and metadata
-- Supports both development and production Docker environments
-- Uses modern React patterns including Server Components and Actions
+- The project uses Node.js module linking for optimized dependency management.
+- Includes SEO optimization with sitemaps and metadata.
+- Supports both development and production Docker environments.
+- Uses modern React patterns, including Server Components and Actions.
