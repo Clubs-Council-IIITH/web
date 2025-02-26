@@ -5,9 +5,7 @@ import { REMIND_SLO } from "gql/mutations/events";
 
 export async function eventReminder(data) {
   const response = { ok: false, error: null };
-  const {
-    eventid,
-  } = data;
+  const { eventid } = data;
 
   const { error } = await getClient().mutation(REMIND_SLO, {
     eventid,
