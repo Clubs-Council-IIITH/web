@@ -13,6 +13,7 @@ import { useToast } from "components/Toast";
 
 import { deleteEventAction } from "actions/events/delete/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
+import { eventReminder } from "actions/events/reminder/server_action";
 
 export function EditEvent({ sx }) {
   const { id } = useParams();
@@ -219,9 +220,65 @@ export function ProgressEvent({ sx }) {
       variant="contained"
       color="secondary"
       startIcon={<Icon variant="add" />}
+      onClick={() => setDialog(true)}
       sx={sx}
     >
       Progress
     </Button>
+  );
+}
+
+export function RequestReminder({ sx }) {
+  const router = useRouter();
+  const { id } = useParams();
+  const { triggerToast } = useToast();
+  const [dialog, setDialog] = useState(false);
+
+  const remindEvent = async () => {
+    // console.log("requested approvals:", SLC, SLO);
+    let res = await eventReminder({
+      eventid: id,
+    });
+    if (res.ok) {
+      // show success toast & redirect to manage page
+      triggerToast({
+        title: "Success!",
+        messages: ["Reminder Sent!."],
+        severity: "success",
+      });
+      router.refresh();
+    } else {
+      // show error toast
+      triggerToast({
+        ...res.error,
+        severity: "error",
+      });
+    }
+
+    setDialog(false);
+  };
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        color="secondary"
+        startIcon={<Icon variant="add" />}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Send Reminder
+      </Button>
+
+      <ConfirmDialog
+        open={dialog}
+        title="Do you really want to send a reminder to SLO?"
+        description="Avoid sending multiple reminders in a short period. This action cannot be undone."
+        onConfirm={remindEvent}
+        onClose={() => setDialog(false)}
+        confirmProps={{ color: "success" }}
+        confirmText="Yes"
+      />
+    </>
   );
 }

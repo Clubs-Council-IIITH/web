@@ -30,6 +30,7 @@ import {
   DeleteEvent,
   SubmitEvent,
   EditFinances,
+  RequestReminder,
 } from "components/events/EventActions";
 import {
   EventStatus,
@@ -253,6 +254,8 @@ function getActions(event, user) {
   if (user?.role === "cc") {
     if (event?.status?.state === "pending_cc")
       return [ProgressEvent, EditEvent, DeleteEvent];
+    else if (event?.status?.state === "pending_room")
+      return [RequestReminder, EditEvent, DeleteEvent];
     else if (event?.status?.state !== "incomplete")
       return [EditEvent, DeleteEvent, CopyEvent];
     else return [EditEvent];
