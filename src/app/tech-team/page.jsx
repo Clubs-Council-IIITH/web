@@ -91,9 +91,9 @@ export default async function TechTeam() {
       </Typography>
 
       <Typography variant="body">
-        The SLC-CC Tech Team started as the CC Tech Team with a clear mission:
+        The SLC-CC Tech Team started as the CC Tech Team in 2021 with a clear mission:
         to design and maintain the official Clubs Council website. Since the
-        release of <i>Version 1 in 2021</i>, we've grown into a dedicated
+        release of <i>Version 1 in 2022</i>, we've grown into a dedicated
         technical powerhouse serving all clubs and student bodies across the
         institution.
       </Typography>
