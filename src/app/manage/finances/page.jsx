@@ -38,21 +38,30 @@ export default async function ManageBills() {
         </Typography>
       </Stack>
 
-      <Typography variant="h4" gutterBottom>
-        Pending
-      </Typography>
-      <FinancesTable
-        events={filterEventsbyState(["not_submitted", "incomplete"])}
-        role={user?.role}
-      />
-
       <Typography variant="h4" gutterBottom mt={3}>
         Submitted
       </Typography>
       <FinancesTable
-        events={filterEventsbyState(["submitted", "slo_processed"])}
+        events={filterEventsbyState(["submitted"])}
         role={user?.role}
       />
+
+      <Typography variant="h4" gutterBottom>
+        Pending
+      </Typography>
+      <FinancesTable
+        events={filterEventsbyState(["not_submitted", "rejected"])}
+        role={user?.role}
+      />
+
+      <Typography variant="h4" gutterBottom mt={3}>
+        Accepted
+      </Typography>
+      <FinancesTable
+        events={filterEventsbyState(["accepted"])}
+        role={user?.role}
+      />
+
     </Container>
   );
 }

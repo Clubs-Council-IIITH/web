@@ -122,6 +122,8 @@ export const GET_EVENT_BILLS_STATUS = gql`
       state
       sloComment
       updatedTime
+      filename
+      submittedTime
     }
   }
 `;

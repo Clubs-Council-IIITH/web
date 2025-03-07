@@ -61,6 +61,12 @@ export const UPDATE_BILLS_STATUS = gql`
   }
 `;
 
+export const ADD_BILL = gql`
+  mutation AddBill($details: InputBillsUpload!) {
+    addBill(details: $details)
+  }
+`;
+
 export const ADD_EVENT_REPORT = gql`
   mutation AddEventReport($details: InputEventReport!) {
     addEventReport(details: $details) {

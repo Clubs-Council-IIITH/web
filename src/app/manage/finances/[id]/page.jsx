@@ -1,10 +1,14 @@
 import { getClient } from "gql/client";
-import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
+import {GET_EVENT_BILLS_STATUS, GET_FULL_EVENT} from "gql/queries/events";
 import Link from "next/link";
 
-import { Button, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, Stack, Typography, Box } from "@mui/material";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
+import BillPdfViewer from "components/events/bills/BillPdfViewer";
+import FinanceHeader from "components/events/bills/FinanceHeader"
+import {redirect} from "next/navigation";
+import EventBudget from "../../../../components/events/EventBudget";
 
 export const metadata = {
   title: "Edit Bill Status",
@@ -13,9 +17,14 @@ export const metadata = {
 export default async function EditFinance({ params }) {
   const { id } = params;
 
+  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+    eventid: id,
+  });
+
   const { data, error } = await getClient().query(GET_EVENT_BILLS_STATUS, {
     eventid: id,
   });
+
 
   if (error && !error.message.includes("no bills status")) {
     return (
@@ -46,29 +55,26 @@ export default async function EditFinance({ params }) {
 
   const eventBills = data?.eventBills || defaultValues;
 
+  if (eventBills.state === "not_submitted" || eventBills.state === "rejected") {
+    redirect("/404");
+  }
+
   return (
     <Container>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
-        <Typography variant="h3" gutterBottom>
-          Edit Bill Status Details
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          component={Link}
-          href={`/manage/events/${id}`}
-        >
-          <Typography variant="button" color="opposite">
-            View Event
-          </Typography>
-        </Button>
-      </Stack>
+      { eventBills.state === "submitted" ? (
+        <FinanceHeader id={id} eventTitle={event.name} filename={eventBills?.filename} />
+      ) : null }
+      <Box mb={5}>
       <BillsStatusForm id={id} defaultValues={eventBills} />
+      </Box>
+      <EventBudget
+        rows={event?.budget?.map((b, key) => ({
+          ...b,
+          id: b?.id || key,
+        }))} // add ID to each budget item if it doesn't exist (MUI requirement)
+        editable={false}
+      />
     </Container>
+
   );
 }

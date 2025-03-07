@@ -212,7 +212,7 @@ export default async function ManageEventID({ params }) {
 
         {/* show post event information */}
         {["cc", "club", "slo"].includes(user?.role) &&
-          EventBillStatus(event, eventBillsData?.eventBills || null)}
+          EventBillStatus(event, eventBillsData?.eventBills || null, user?.uid)}
         {["cc", "club", "slo"].includes(user?.role) &&
           EventReportStatus(event, user)}
       </Box>

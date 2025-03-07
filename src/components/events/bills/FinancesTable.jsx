@@ -113,12 +113,23 @@ export default function FinancesTable({ events, role }) {
       rows={events}
       columns={columns}
       getRowId={(r) => r.eventid}
-      onRowClick={(params) =>
-        router.push(
-          `/manage/${role === "slo" ? "finances" : "events"}/${
-            params.row.eventid
-          }`,
-        )
+      onRowClick={(params) => {
+        const status = params.row.billsStatus?.state;
+
+        if (role === "slo") {
+          if (status === "rejected" || status === "not_submitted") {
+            router.push(`/manage/finances/${params.row.eventid}`);
+          } else {
+            return;
+          }
+        } else {
+          router.push(`/manage/events/${params.row.eventid}`);
+        }
+      }}
+      getRowClassName={(params) =>
+        ["rejected", "not_submitted"].includes(params.row.billsStatus?.state)
+          ? "disabled-row"
+          : ""
       }
       disableRowSelectionOnClick
       initialState={{
@@ -132,14 +143,9 @@ export default function FinancesTable({ events, role }) {
       }}
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
-        // disable cell selection style
-        ".MuiDataGrid-cell:focus": {
-          outline: "none",
-        },
-        // pointer cursor on ALL rows
-        "& .MuiDataGrid-row:hover": {
-          cursor: "pointer",
-        },
+        ".MuiDataGrid-cell:focus": { outline: "none" },
+        "& .MuiDataGrid-row:hover": { cursor: "pointer" },
+        "& .MuiDataGrid-row.disabled-row:hover": { cursor: "default" },
       }}
     />
   );
