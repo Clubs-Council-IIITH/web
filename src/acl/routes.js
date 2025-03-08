@@ -45,6 +45,9 @@ const routes = {
   "/manage/holidays": ["cc", "slo"],
   "/manage/holidays/new": ["cc", "slo"], // has to be higher to not conflict with :id
   "/manage/holidays/:id": ["cc", "slo"],
+
+  "/certificates": ["cc", "slo"],
+  "/certificates/all": ["cc", "slo"],
 };
 
 export default routes;
