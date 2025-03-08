@@ -32,7 +32,7 @@ export default async function BillsUpload({params}) {
       eventid: id,
     });
 
-    if (!event || !["rejected", "not_submitted"].includes(eventBills?.state) || user?.uid !== event.clubid || event.status.state !== "approved") {
+    if (!event || !["rejected", "not_submitted"].includes(eventBills?.state) || user?.uid !== event.clubid || event.status.state !== "accepted") {
       return redirect("/404");
     }
 
@@ -40,8 +40,14 @@ export default async function BillsUpload({params}) {
         <Typography variant="h3" gutterBottom mb={3}>
           Upload Bill
         </Typography>
-
-        <BillUpload eventid={id} eventCode={event.code}/>
+        <BillUpload
+          eventid={id}
+          eventCode={event.code}
+          budgetRows={event?.budget?.map((b, key) => ({
+          ...b,
+          id: b?.id || key,
+          }))}
+        />
       </Container>);
   } catch (error) {
     return redirect("/404");

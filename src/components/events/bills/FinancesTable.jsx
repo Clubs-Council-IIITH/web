@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import Icon from "components/Icon";
 
-import { Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import {Typography} from "@mui/material";
+import {useTheme} from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 

@@ -73,6 +73,7 @@ export default async function EditFinance({ params }) {
           id: b?.id || key,
         }))} // add ID to each budget item if it doesn't exist (MUI requirement)
         editable={false}
+        billViewable={true}
       />
     </Container>
 

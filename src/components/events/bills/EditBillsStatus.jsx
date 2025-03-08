@@ -19,7 +19,7 @@ export default function BillsStatusForm({id = null, defaultValues = {}}) {
   const submitHandler = async (data) => {
     setLoading(true);
     let details = {
-      eventid: id, state: data.state, // Now 'approved' or 'rejected'
+      eventid: id, state: data.state,
       sloComment: data.sloComment,
     };
 
@@ -107,7 +107,7 @@ export default function BillsStatusForm({id = null, defaultValues = {}}) {
               fullWidth
               loading={loading}
               onClick={() => {
-                setValue("state", "approved");
+                setValue("state", "accepted");
                 handleSubmit(submitHandler)();
               }}
             >

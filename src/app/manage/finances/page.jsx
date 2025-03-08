@@ -38,9 +38,16 @@ export default async function ManageBills() {
         </Typography>
       </Stack>
 
-      <Typography variant="h4" gutterBottom mt={3}>
-        Submitted
-      </Typography>
+      <Stack direction={"row"} spacing={2} alignItems="center">
+        <Typography variant="h4" gutterBottom mt={3}>
+          Submitted
+        </Typography>
+        { user?.role === "slo" ? (
+          <Typography variant="body2" color="secondary" >
+            (Clicking on event takes you to approval page)
+          </Typography>
+        ) : null }
+      </Stack>
       <FinancesTable
         events={filterEventsbyState(["submitted"])}
         role={user?.role}
