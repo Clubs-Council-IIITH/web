@@ -157,6 +157,7 @@ export const GET_FULL_EVENT = gql`
         description
         advance
         billno
+        amountUsed
       }
       clubid
       collabclubs

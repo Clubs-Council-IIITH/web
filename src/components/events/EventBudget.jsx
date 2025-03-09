@@ -26,6 +26,7 @@ export default function EventBudget({
     amount: 0,
     advance: false,
     billno: null,
+    amount_used: null,
   };
 
   // data manipulation functions
@@ -94,7 +95,7 @@ export default function EventBudget({
     {
       field: "amount",
       type: "number",
-      headerName: "Amount",
+      headerName: billViewable ? "Amount" : "Proposed Amount",
       flex: isMobile ? null : 1,
       editable: editable,
       renderCell: (p) => (
@@ -150,6 +151,30 @@ export default function EventBudget({
               </Typography>
             ),
           },
+          {
+            field: "amountUsed",
+            type: "number",
+            headerName: "Amount Used",
+            flex: isMobile ? null : 1,
+            editable: billEditable,
+            renderCell: (p) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  px: "5px",
+                  py: "10px",
+                  justifyContent: "center",
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {fCurrency(p.value)}
+              </Typography>
+            ),
+            display: "flex",
+          },
         ]
       : []),
     {
@@ -190,7 +215,7 @@ export default function EventBudget({
         ]
       : []),
   ];
-  
+
   return (
     <>
       {editable ? (
@@ -210,7 +235,6 @@ export default function EventBudget({
         disableRowSelectionOnClick
         onRowEditStart={(p) => setBudgetEditing(true)}
         onRowEditStop={(p) => setBudgetEditing(false)}
-        experimentalFeatures={{ newEditingApi: true }}
         sx={{
           // disable cell selection style
           ".MuiDataGrid-cell:focus": {

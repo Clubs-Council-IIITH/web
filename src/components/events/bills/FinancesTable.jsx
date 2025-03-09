@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import Icon from "components/Icon";
 
-import {Typography} from "@mui/material";
-import {useTheme} from "@mui/material/styles";
+import { Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
@@ -90,15 +90,15 @@ export default function FinancesTable({ events, role }) {
             value.submitted === "true"
               ? "check"
               : value.submitted === "old"
-                ? "remove"
-                : "cancel"
+              ? "remove"
+              : "cancel"
           }
           color={
             value.submitted === "true"
               ? "success.main"
               : value.submitted === "old"
-                ? "warning.main"
-                : "error.main"
+              ? "warning.main"
+              : "error.main"
           }
         />
       ),
@@ -117,11 +117,13 @@ export default function FinancesTable({ events, role }) {
         const status = params.row.billsStatus?.state;
 
         if (role === "slo") {
-          if (status === "rejected" || status === "not_submitted") {
+          if (status === "submitted")
             router.push(`/manage/finances/${params.row.eventid}`);
-          } else {
-            return;
-          }
+          else router.push(`/manage/events/${params.row.eventid}`);
+        } else if (role === "club") {
+          if (status === "not_submitted" || status === "rejected")
+            router.push(`/manage/events/${params.row.eventid}/bills`);
+          else router.push(`/manage/events/${params.row.eventid}`);
         } else {
           router.push(`/manage/events/${params.row.eventid}`);
         }
@@ -147,6 +149,7 @@ export default function FinancesTable({ events, role }) {
         "& .MuiDataGrid-row:hover": { cursor: "pointer" },
         "& .MuiDataGrid-row.disabled-row:hover": { cursor: "default" },
       }}
+      pageSizeOptions={[5, 10, 20]}
     />
   );
 }
