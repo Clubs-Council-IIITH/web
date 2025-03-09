@@ -75,7 +75,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
             { userid === event?.clubid && ["rejected", "not_submitted"].includes(eventBills?.state) ? (
               <Button
                 component={Link}
-                href={`/manage/events/${event._id}/bills/new`}
+                href={`/manage/events/${event._id}/bills`}
                 variant="contained"
                 color="primary"
                 startIcon={<Icon variant="add" />}
