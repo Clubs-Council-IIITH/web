@@ -103,21 +103,21 @@ export const stateIconMap = {
 
 export const billsStateMap = {
   not_submitted: "Not Submitted",
-  incomplete: "Incomplete",
+  rejected: "Rejected",
   submitted: "Submitted",
-  slo_processed: "Processed by SLO",
+  accepted: "Accepted",
 };
 
 export const billsStateColorMap = {
-  not_submitted: "error",
-  incomplete: "warning",
+  not_submitted: "warning",
+  rejected: "error",
   submitted: "info",
-  slo_processed: "success",
+  accepted: "success",
 };
 
 export const billsStateIconMap = {
   not_submitted: "eva:alert-circle-outline",
-  incomplete: "eva:refresh-outline",
+  rejected: "eva:refresh-outline",
   submitted: "eva:checkmark-outline",
-  slo_processed: "eva:checkmark-circle-outline",
+  accepted: "eva:checkmark-circle-outline",
 };

@@ -87,7 +87,6 @@ function DataClubSelect({
                   const {
                     target: { value },
                   } = event;
-                  console.log(value);
                   if (value[value.length - 1] === "allclubs") {
                     onChange(["allclubs"]);
                   } else {

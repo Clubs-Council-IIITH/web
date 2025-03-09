@@ -92,6 +92,7 @@ export default async function ManageEventID({ params }) {
     { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
+  const billViewable = ["cc", "slo"].includes(user?.role) || (user?.role === "club" && user?.uid === event?.clubid);
 
   const pocProfile = await getFullUser(event?.poc);
   if (!pocProfile) {
@@ -151,6 +152,7 @@ export default async function ManageEventID({ params }) {
                   id: b?.id || key,
                 }))} // add ID to each budget item if it doesn't exist (MUI requirement)
                 editable={false}
+                billViewable={billViewable}
               />
             ) : (
               <Box mt={2}>None requested</Box>
@@ -212,7 +214,7 @@ export default async function ManageEventID({ params }) {
 
         {/* show post event information */}
         {["cc", "club", "slo"].includes(user?.role) &&
-          EventBillStatus(event, eventBillsData?.eventBills || null)}
+          EventBillStatus(event, eventBillsData?.eventBills || null, user?.uid)}
         {["cc", "club", "slo"].includes(user?.role) &&
           EventReportStatus(event, user)}
       </Box>

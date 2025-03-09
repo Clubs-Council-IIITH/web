@@ -7,18 +7,27 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { fCurrency } from "utils/formatCurrency";
+import { validateBillno } from "components/events/bills/BillUpload";
 
 export default function EventBudget({
   editable = false,
   rows = [],
   setRows = console.log,
   setBudgetEditing = console.log,
+  billViewable = false,
+  billEditable = false,
 }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // budget item template
-  const emptyBudgetItem = { description: null, amount: 0, advance: false };
+  const emptyBudgetItem = {
+    description: null,
+    amount: 0,
+    advance: false,
+    billno: null,
+    amount_used: null,
+  };
 
   // data manipulation functions
   const onAdd = () => {
@@ -26,6 +35,13 @@ export default function EventBudget({
   };
   const onUpdate = (row) => {
     row.amount = row.amount > 0 ? row.amount : 0;
+
+    if (row.billno && !validateBillno(row.billno)) {
+      throw new Error(
+        "Bill number must contain only capital letters and digits"
+      );
+    }
+
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
       return r;
@@ -79,7 +95,7 @@ export default function EventBudget({
     {
       field: "amount",
       type: "number",
-      headerName: "Amount",
+      headerName: billViewable ? "Amount" : "Proposed Amount",
       flex: isMobile ? null : 1,
       editable: editable,
       renderCell: (p) => (
@@ -100,6 +116,67 @@ export default function EventBudget({
       ),
       display: "flex",
     },
+    ...(billViewable
+      ? [
+          {
+            field: "billno",
+            type: "string",
+            headerName: "Bill No.",
+            flex: isMobile ? null : 1,
+            editable: billEditable,
+            preProcessEditCellProps: (params) => {
+              if (!params.hasChanged) {
+                return params.props;
+              }
+
+              const hasError =
+                params.props.value && !validateBillno(params.props.value);
+              return { ...params.props, error: hasError };
+            },
+            renderCell: (p) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  px: "5px",
+                  py: "10px",
+                  justifyContent: "center",
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
+                  "&::before": { content: '"#  "', color: "gray" },
+                }}
+              >
+                {p.value}
+              </Typography>
+            ),
+          },
+          {
+            field: "amountUsed",
+            type: "number",
+            headerName: "Amount Used",
+            flex: isMobile ? null : 1,
+            editable: billEditable,
+            renderCell: (p) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  px: "5px",
+                  py: "10px",
+                  justifyContent: "center",
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {fCurrency(p.value)}
+              </Typography>
+            ),
+            display: "flex",
+          },
+        ]
+      : []),
     {
       field: "advance",
       type: "boolean",
@@ -158,7 +235,6 @@ export default function EventBudget({
         disableRowSelectionOnClick
         onRowEditStart={(p) => setBudgetEditing(true)}
         onRowEditStop={(p) => setBudgetEditing(false)}
-        experimentalFeatures={{ newEditingApi: true }}
         sx={{
           // disable cell selection style
           ".MuiDataGrid-cell:focus": {
