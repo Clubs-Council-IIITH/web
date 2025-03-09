@@ -14,7 +14,7 @@ export default function FinanceHeader({id, eventTitle, filename, onlyButton = fa
   const handleOpenPdfViewer = () => setPdfViewerOpen(true);
   const handleClosePdfViewer = () => setPdfViewerOpen(false);
 
-  const fileUrl = getFile(filename, false, false);
+  const fileUrl = getFile(filename, true, false);
 
   const ViewButton = (
     <Button
