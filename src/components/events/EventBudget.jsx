@@ -190,9 +190,7 @@ export default function EventBudget({
         ]
       : []),
   ];
-
-  console.log(rows);
-
+  
   return (
     <>
       {editable ? (
