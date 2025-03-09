@@ -16,13 +16,13 @@ export default async function ManageBills() {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
   const user = { ...userMeta, ...userProfile };
 
   const filterEventsbyState = (states) =>
     allEventsBills.filter((event) =>
-      states.includes(event?.billsStatus?.state),
+      states.includes(event?.billsStatus?.state)
     );
 
   return (
@@ -38,20 +38,22 @@ export default async function ManageBills() {
         </Typography>
       </Stack>
 
-      <Stack direction={"row"} spacing={2} alignItems="center">
-        <Typography variant="h4" gutterBottom mt={3}>
-          Submitted
-        </Typography>
-        { user?.role === "slo" ? (
-          <Typography variant="body2" color="secondary" >
-            (Clicking on event takes you to approval page)
-          </Typography>
-        ) : null }
-      </Stack>
-      <FinancesTable
-        events={filterEventsbyState(["submitted"])}
-        role={user?.role}
-      />
+      {user?.role === "slo" ? (
+        <>
+          <Stack direction={"row"} spacing={2} alignItems="center">
+            <Typography variant="h4" gutterBottom mt={3}>
+              Submitted
+            </Typography>
+            <Typography variant="body2" color="secondary">
+              (Clicking on event takes you to approval page)
+            </Typography>
+          </Stack>
+          <FinancesTable
+            events={filterEventsbyState(["submitted"])}
+            role={user?.role}
+          />{" "}
+        </>
+      ) : null}
 
       <Typography variant="h4" gutterBottom>
         Pending
@@ -61,6 +63,20 @@ export default async function ManageBills() {
         role={user?.role}
       />
 
+      {user?.role !== "slo" ? (
+        <>
+          <Stack direction={"row"} spacing={2} alignItems="center">
+            <Typography variant="h4" gutterBottom mt={3}>
+              Submitted
+            </Typography>
+          </Stack>
+          <FinancesTable
+            events={filterEventsbyState(["submitted"])}
+            role={user?.role}
+          />{" "}
+        </>
+      ) : null}
+
       <Typography variant="h4" gutterBottom mt={3}>
         Accepted
       </Typography>
@@ -68,7 +84,6 @@ export default async function ManageBills() {
         events={filterEventsbyState(["accepted"])}
         role={user?.role}
       />
-
     </Container>
   );
 }
