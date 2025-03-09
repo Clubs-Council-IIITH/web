@@ -1,8 +1,8 @@
-import {Box, Grid, Typography, Divider, Button, Stack} from "@mui/material";
+import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
 import Link from "next/link";
 
 import { billsStateLabel } from "utils/formatEvent";
-import Icon from "../../Icon";
+import Icon from "components/Icon";
 import FinanceHeader from "components/events/bills/FinanceHeader";
 
 export default async function EventBillStatus(event, eventBills, userid) {
@@ -71,21 +71,27 @@ export default async function EventBillStatus(event, eventBills, userid) {
                 </Box>
               </Grid>
             </Grid>
-            <Stack direction="row" spacing={2} sx={{m: 2}}>
-            { userid === event?.clubid && ["rejected", "not_submitted"].includes(eventBills?.state) ? (
-              <Button
-                component={Link}
-                href={`/manage/events/${event._id}/bills`}
-                variant="contained"
-                color="primary"
-                startIcon={<Icon variant="add" />}
-              >
-                Add New Bill
-              </Button>
-            ): null }
-            { eventBills?.state !== "not_submitted" ? (
-              <FinanceHeader id={event._id} eventTitle={event.name} filename={eventBills?.filename} onlyButton={true} />
-            ) : null}
+            <Stack direction="row" spacing={2} sx={{ m: 2 }}>
+              {userid === event?.clubid &&
+              ["rejected", "not_submitted"].includes(eventBills?.state) ? (
+                <Button
+                  component={Link}
+                  href={`/manage/events/${event._id}/bills`}
+                  variant="contained"
+                  color="primary"
+                  startIcon={<Icon variant="add" />}
+                >
+                  Add New Bill
+                </Button>
+              ) : null}
+              {eventBills?.state !== "not_submitted" ? (
+                <FinanceHeader
+                  id={event._id}
+                  eventTitle={event.name}
+                  filename={eventBills?.filename}
+                  onlyButton={true}
+                />
+              ) : null}
             </Stack>
           </>
         ) : null}

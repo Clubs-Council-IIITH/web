@@ -1,17 +1,22 @@
 // components/finances/FinanceHeader.jsx
 "use client";
 
-import {useState} from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Icon from "components/Icon";
-import {Button, Stack, Typography} from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import BillPdfViewer from "components/events/bills/BillPdfViewer";
-import {getFile} from "utils/files";
+import { getFile } from "utils/files";
 
-export default function FinanceHeader({id, eventTitle, filename, onlyButton = false}) {
+export default function FinanceHeader({
+  id,
+  eventTitle,
+  filename,
+  onlyButton = false,
+}) {
   const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
 
-  const handleOpenPdfViewer = () => setPdfViewerOpen(true);
+  const handleOpenPdfViewer = () => setPdfViewerOpen(true)  ;
   const handleClosePdfViewer = () => setPdfViewerOpen(false);
 
   const fileUrl = getFile(filename, true, false);
@@ -20,8 +25,9 @@ export default function FinanceHeader({id, eventTitle, filename, onlyButton = fa
     <Button
       variant="contained"
       color="secondary"
-      startIcon={<Icon variant="article"/>}
+      startIcon={<Icon variant="article" />}
       onClick={handleOpenPdfViewer}
+      disabled={!filename}
     >
       <Typography variant="button" color="opposite">
         View Bill
@@ -49,7 +55,7 @@ export default function FinanceHeader({id, eventTitle, filename, onlyButton = fa
               color="primary"
               component={Link}
               href={`/manage/events/${id}`}
-              startIcon={<Icon variant="north-west"/>}
+              startIcon={<Icon variant="north-west" />}
             >
               <Typography variant="button" color="opposite">
                 Go to Event
@@ -57,7 +63,9 @@ export default function FinanceHeader({id, eventTitle, filename, onlyButton = fa
             </Button>
           </Stack>
         </Stack>
-      ) : ViewButton}
+      ) : (
+        ViewButton
+      )}
 
       <BillPdfViewer
         eventTitle={eventTitle}

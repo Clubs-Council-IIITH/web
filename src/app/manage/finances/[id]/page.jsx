@@ -1,11 +1,10 @@
 import { getClient } from "gql/client";
-import {GET_EVENT_BILLS_STATUS, GET_FULL_EVENT} from "gql/queries/events";
+import {GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET} from "gql/queries/events";
 import Link from "next/link";
 
 import { Button, Container, Stack, Typography, Box } from "@mui/material";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
-import BillPdfViewer from "components/events/bills/BillPdfViewer";
 import FinanceHeader from "components/events/bills/FinanceHeader"
 import {redirect} from "next/navigation";
 import EventBudget from "../../../../components/events/EventBudget";
@@ -17,7 +16,7 @@ export const metadata = {
 export default async function EditFinance({ params }) {
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+  const { data: { event } = {} } = await getClient().query(GET_EVENT_BUDGET, {
     eventid: id,
   });
 

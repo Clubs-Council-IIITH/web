@@ -3,7 +3,7 @@ import { getClient } from "gql/client";
 import { redirect } from "next/navigation";
 
 import BillUpload from "components/events/bills/BillUpload";
-import { GET_EVENT_BILLS_STATUS, GET_FULL_EVENT } from "gql/queries/events";
+import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 import { Container, Typography } from "@mui/material";
 import { GET_USER } from "gql/queries/auth";
 
@@ -32,7 +32,7 @@ export default async function BillsUpload({ params }) {
   }
   const eventBills = data?.eventBills;
 
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+  const { data: { event } = {} } = await getClient().query(GET_EVENT_BUDGET, {
     eventid: id,
   });
 

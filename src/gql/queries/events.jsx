@@ -191,6 +191,28 @@ export const GET_FULL_EVENT = gql`
   }
 `;
 
+export const GET_EVENT_BUDGET = gql`
+  query Event($eventid: String!) {
+    event(eventid: $eventid) {
+      _id
+      code
+      budget {
+        amount
+        description
+        advance
+        billno
+        amountUsed
+      }
+      clubid
+      name
+      status {
+        state
+      }
+      eventReportSubmitted
+    }
+  }
+`;
+
 export const GET_AVAILABLE_LOCATIONS = gql`
   query AvailableRooms($timeslot: [DateTime!]!, $eventid: String) {
     availableRooms(timeslot: $timeslot, eventid: $eventid) {
