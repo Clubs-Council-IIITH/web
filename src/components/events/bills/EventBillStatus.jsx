@@ -72,17 +72,28 @@ export default async function EventBillStatus(event, eventBills, userid) {
               </Grid>
             </Grid>
             <Stack direction="row" spacing={2} sx={{ m: 2 }}>
-              {userid === event?.clubid &&
-              ["rejected", "not_submitted"].includes(eventBills?.state) ? (
-                <Button
-                  component={Link}
-                  href={`/manage/events/${event._id}/bills`}
-                  variant="contained"
-                  color="primary"
-                  startIcon={<Icon variant="add" />}
-                >
-                  Add New Bill
-                </Button>
+              {userid === event?.clubid ? (
+                eventBills?.state === "not_submitted" ? (
+                  <Button
+                    component={Link}
+                    href={`/manage/events/${event._id}/bills`}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Icon variant="add" />}
+                  >
+                    Add New Bill
+                  </Button>
+                ) : eventBills?.state === "rejected" ? (
+                  <Button
+                    component={Link}
+                    href={`/manage/events/${event._id}/bills`}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Icon variant="edit" />}
+                  >
+                    Edit Bill
+                  </Button>
+                ) : null
               ) : null}
               {eventBills?.state !== "not_submitted" ? (
                 <FinanceHeader
