@@ -128,11 +128,23 @@ export default function FinancesTable({ events, role }) {
           router.push(`/manage/events/${params.row.eventid}`);
         }
       }}
-      getRowClassName={(params) =>
-        ["rejected", "not_submitted"].includes(params.row.billsStatus?.state)
-          ? "disabled-row"
-          : ""
-      }
+      // getRowClassName={(params) =>
+      //   ["rejected", "not_submitted"].includes(params.row.billsStatus?.state)
+      //     ? "disabled-row"
+      //     : ""
+      // }
+      getRowClassName={(params) => {
+        if (role === "slo" && params.row.billsStatus?.state === "submitted") {
+          return "";
+        } else if (
+          role === "club" &&
+          ["rejected", "not_submitted"].includes(params.row.billsStatus?.state)
+        ) {
+          return "";
+        } else {
+          return "disabled-row";
+        }
+      }}
       disableRowSelectionOnClick
       initialState={{
         filter: {
