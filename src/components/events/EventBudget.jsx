@@ -38,7 +38,7 @@ export default function EventBudget({
 
     if (row.billno && !validateBillno(row.billno)) {
       throw new Error(
-        "Bill number must contain only capital letters and digits",
+        "Bill number must contain only capital letters and digits"
       );
     }
 
@@ -52,6 +52,9 @@ export default function EventBudget({
   const onDelete = (row) => {
     setRows(rows.filter((r) => r.id !== row.id));
   };
+
+  // Show extra fields only it amount used is > 0
+  const showExtraFields = rows.some((r) => r.amountUsed > 0);
 
   // grid column definition
   const columns = [
@@ -116,7 +119,7 @@ export default function EventBudget({
       ),
       display: "flex",
     },
-    ...(billViewable
+    ...(billEditable || (billViewable && showExtraFields)
       ? [
           {
             field: "billno",

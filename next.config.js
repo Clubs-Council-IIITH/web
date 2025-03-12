@@ -68,9 +68,6 @@ const nextConfig = {
     });
     return config;
   },
-  serverActions: {
-    allowedOrigins: ["life.iiit.ac.in", "clubs.iiit.ac.in"],
-  },
 };
 
 const withMDX = require("@next/mdx")();

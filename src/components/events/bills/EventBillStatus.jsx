@@ -41,69 +41,76 @@ export default async function EventBillStatus(event, eventBills, userid) {
 
         {eventBills?.state != null ? (
           <>
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={0}>Last Updated</Box>
-              </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={0}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box mt={0}>
-                  {eventBills?.updatedTime == null
-                    ? "Information not available"
-                    : eventBills?.updatedTime}
-                </Box>
-              </Grid>
-            </Grid>
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={0}>SLO Comment</Box>
-              </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={0}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box mt={0}>
-                  {eventBills?.sloComment == null
-                    ? "-"
-                    : eventBills?.sloComment}
-                </Box>
-              </Grid>
-            </Grid>
-            <Stack direction="row" spacing={2} sx={{ m: 2 }}>
-              {userid === event?.clubid ? (
-                eventBills?.state === "not_submitted" ? (
-                  <Button
-                    component={Link}
-                    href={`/manage/events/${event._id}/bills`}
-                    variant="contained"
-                    color="primary"
-                    startIcon={<Icon variant="add" />}
-                  >
-                    Add New Bill
-                  </Button>
-                ) : eventBills?.state === "rejected" ? (
-                  <Button
-                    component={Link}
-                    href={`/manage/events/${event._id}/bills`}
-                    variant="contained"
-                    color="primary"
-                    startIcon={<Icon variant="edit" />}
-                  >
-                    Edit Bill
-                  </Button>
-                ) : null
-              ) : null}
-              {eventBills?.state !== "not_submitted" ? (
-                <FinanceHeader
-                  id={event._id}
-                  eventTitle={event.name}
-                  filename={eventBills?.filename}
-                  onlyButton={true}
-                />
-              ) : null}
-            </Stack>
+            {eventBills?.state !== "not_submitted" ? (
+              <>
+                <Grid container item spacing={2}>
+                  <Grid item xs={5} lg={3}>
+                    <Box mt={0}>Last Updated</Box>
+                  </Grid>
+                  <Grid item xs={1} lg={0.1}>
+                    <Box mt={0}>-</Box>
+                  </Grid>
+                  <Grid item xs>
+                    <Box mt={0}>
+                      {eventBills?.updatedTime == null
+                        ? "Information not available"
+                        : eventBills?.updatedTime}
+                    </Box>
+                  </Grid>
+                </Grid>
+                <Grid container item spacing={2}>
+                  <Grid item xs={5} lg={3}>
+                    <Box mt={0}>SLO Comment</Box>
+                  </Grid>
+                  <Grid item xs={1} lg={0.1}>
+                    <Box mt={0}>-</Box>
+                  </Grid>
+                  <Grid item xs>
+                    <Box mt={0}>
+                      {eventBills?.sloComment == null
+                        ? "-"
+                        : eventBills?.sloComment}
+                    </Box>
+                  </Grid>
+                </Grid>
+              </>
+            ) : null}
+            {userid === event?.clubid ||
+              (eventBills?.state !== "not_submitted" && (
+                <Stack direction="row" spacing={2} sx={{ m: 2 }}>
+                  {userid === event?.clubid ? (
+                    eventBills?.state === "not_submitted" ? (
+                      <Button
+                        component={Link}
+                        href={`/manage/events/${event._id}/bills`}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<Icon variant="add" />}
+                      >
+                        Add New Bill
+                      </Button>
+                    ) : eventBills?.state === "rejected" ? (
+                      <Button
+                        component={Link}
+                        href={`/manage/events/${event._id}/bills`}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<Icon variant="edit" />}
+                      >
+                        Edit Bill
+                      </Button>
+                    ) : null
+                  ) : null}
+                  {eventBills?.state !== "not_submitted" ? (
+                    <FinanceHeader
+                      id={event._id}
+                      eventTitle={event.name}
+                      filename={eventBills?.filename}
+                      onlyButton={true}
+                    />
+                  ) : null}
+                </Stack>
+              ))}
           </>
         ) : null}
       </Grid>
