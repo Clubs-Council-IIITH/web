@@ -55,7 +55,7 @@ export default async function ManageBills() {
         </>
       ) : null}
 
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom mt={3}>
         Pending
       </Typography>
       <FinancesTable
@@ -65,11 +65,9 @@ export default async function ManageBills() {
 
       {user?.role !== "slo" ? (
         <>
-          <Stack direction={"row"} spacing={2} alignItems="center">
-            <Typography variant="h4" gutterBottom mt={3}>
-              Submitted
-            </Typography>
-          </Stack>
+          <Typography variant="h4" gutterBottom mt={3}>
+            Submitted
+          </Typography>
           <FinancesTable
             events={filterEventsbyState(["submitted"])}
             role={user?.role}
