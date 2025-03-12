@@ -1,8 +1,11 @@
-import { Box, Grid, Typography, Divider } from "@mui/material";
+import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
+import Link from "next/link";
 
 import { billsStateLabel } from "utils/formatEvent";
+import Icon from "components/Icon";
+import FinanceHeader from "components/events/bills/FinanceHeader";
 
-export default async function EventBillStatus(event, eventBills) {
+export default async function EventBillStatus(event, eventBills, userid) {
   if (
     event?.status?.state !== "approved" ||
     new Date(event?.datetimeperiod[1]) > new Date() ||
@@ -68,6 +71,39 @@ export default async function EventBillStatus(event, eventBills) {
                 </Box>
               </Grid>
             </Grid>
+            <Stack direction="row" spacing={2} sx={{ m: 2 }}>
+              {userid === event?.clubid ? (
+                eventBills?.state === "not_submitted" ? (
+                  <Button
+                    component={Link}
+                    href={`/manage/events/${event._id}/bills`}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Icon variant="add" />}
+                  >
+                    Add New Bill
+                  </Button>
+                ) : eventBills?.state === "rejected" ? (
+                  <Button
+                    component={Link}
+                    href={`/manage/events/${event._id}/bills`}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Icon variant="edit" />}
+                  >
+                    Edit Bill
+                  </Button>
+                ) : null
+              ) : null}
+              {eventBills?.state !== "not_submitted" ? (
+                <FinanceHeader
+                  id={event._id}
+                  eventTitle={event.name}
+                  filename={eventBills?.filename}
+                  onlyButton={true}
+                />
+              ) : null}
+            </Stack>
           </>
         ) : null}
       </Grid>

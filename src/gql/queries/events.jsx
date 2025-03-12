@@ -122,6 +122,8 @@ export const GET_EVENT_BILLS_STATUS = gql`
       state
       sloComment
       updatedTime
+      filename
+      submittedTime
     }
   }
 `;
@@ -154,6 +156,8 @@ export const GET_FULL_EVENT = gql`
         amount
         description
         advance
+        billno
+        amountUsed
       }
       clubid
       collabclubs
@@ -181,6 +185,28 @@ export const GET_FULL_EVENT = gql`
         sloApproverTime
         deletedBy
         deletedTime
+      }
+      eventReportSubmitted
+    }
+  }
+`;
+
+export const GET_EVENT_BUDGET = gql`
+  query Event($eventid: String!) {
+    event(eventid: $eventid) {
+      _id
+      code
+      budget {
+        amount
+        description
+        advance
+        billno
+        amountUsed
+      }
+      clubid
+      name
+      status {
+        state
       }
       eventReportSubmitted
     }
