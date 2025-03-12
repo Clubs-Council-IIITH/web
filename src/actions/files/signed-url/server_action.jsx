@@ -27,11 +27,10 @@ export async function getSignedUploadURL(details) {
         messages: ["No data returned from GraphQL server."],
       };
     }
-  } catch (e) {
+  } catch (error) {
     response.error = {
-      title: e.name,
-      messages: e?.graphQLErrors?.map((ge) => ge?.message),
-      full: e,
+      title: "Request Error",
+      messages: [error.message],
     };
   }
 
