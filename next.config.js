@@ -12,6 +12,10 @@ const nextConfig = {
         hostname: "clubs.iiit.ac.in",
       },
       {
+        protocol: "https",
+        hostname: "life.iiit.ac.in",
+      },
+      {
         protocol: "http",
         hostname: "localhost",
       },
@@ -63,6 +67,9 @@ const nextConfig = {
       use: ["@svgr/webpack"],
     });
     return config;
+  },
+  serverActions: {
+    allowedOrigins: ["life.iiit.ac.in", "clubs.iiit.ac.in"],
   },
 };
 
