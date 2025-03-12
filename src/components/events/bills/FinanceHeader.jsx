@@ -16,7 +16,7 @@ export default function FinanceHeader({
 }) {
   const [pdfViewerOpen, setPdfViewerOpen] = useState(false);
 
-  const handleOpenPdfViewer = () => setPdfViewerOpen(true)  ;
+  const handleOpenPdfViewer = () => setPdfViewerOpen(true);
   const handleClosePdfViewer = () => setPdfViewerOpen(false);
 
   const fileUrl = getFile(filename, true, false);

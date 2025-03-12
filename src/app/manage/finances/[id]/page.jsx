@@ -1,12 +1,12 @@
 import { getClient } from "gql/client";
-import {GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET} from "gql/queries/events";
+import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 import Link from "next/link";
 
 import { Button, Container, Stack, Typography, Box } from "@mui/material";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
-import FinanceHeader from "components/events/bills/FinanceHeader"
-import {redirect} from "next/navigation";
+import FinanceHeader from "components/events/bills/FinanceHeader";
+import { redirect } from "next/navigation";
 import EventBudget from "../../../../components/events/EventBudget";
 
 export const metadata = {
@@ -23,7 +23,6 @@ export default async function EditFinance({ params }) {
   const { data, error } = await getClient().query(GET_EVENT_BILLS_STATUS, {
     eventid: id,
   });
-
 
   if (error && !error.message.includes("no bills status")) {
     return (
@@ -60,11 +59,15 @@ export default async function EditFinance({ params }) {
 
   return (
     <Container>
-      { eventBills.state === "submitted" ? (
-        <FinanceHeader id={id} eventTitle={event.name} filename={eventBills?.filename} />
-      ) : null }
+      {eventBills.state === "submitted" ? (
+        <FinanceHeader
+          id={id}
+          eventTitle={event.name}
+          filename={eventBills?.filename}
+        />
+      ) : null}
       <Box mb={5}>
-      <BillsStatusForm id={id} defaultValues={eventBills} />
+        <BillsStatusForm id={id} defaultValues={eventBills} />
       </Box>
       <EventBudget
         rows={event?.budget?.map((b, key) => ({
@@ -75,6 +78,5 @@ export default async function EditFinance({ params }) {
         billViewable={true}
       />
     </Container>
-
   );
 }

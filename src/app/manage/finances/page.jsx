@@ -16,13 +16,13 @@ export default async function ManageBills() {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null }
+    { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
 
   const filterEventsbyState = (states) =>
     allEventsBills.filter((event) =>
-      states.includes(event?.billsStatus?.state)
+      states.includes(event?.billsStatus?.state),
     );
 
   return (

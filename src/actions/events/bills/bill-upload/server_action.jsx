@@ -1,7 +1,7 @@
 "use server";
 
 import { getClient } from "gql/client";
-import {ADD_BILL, REMIND_SLO} from "gql/mutations/events";
+import { ADD_BILL, REMIND_SLO } from "gql/mutations/events";
 
 export async function eventBillUpload(details) {
   const response = { ok: false, data: null, error: null };

@@ -92,7 +92,9 @@ export default async function ManageEventID({ params }) {
     { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
-  const billViewable = ["cc", "slo"].includes(user?.role) || (user?.role === "club" && user?.uid === event?.clubid);
+  const billViewable =
+    ["cc", "slo"].includes(user?.role) ||
+    (user?.role === "club" && user?.uid === event?.clubid);
 
   const pocProfile = await getFullUser(event?.poc);
   if (!pocProfile) {
