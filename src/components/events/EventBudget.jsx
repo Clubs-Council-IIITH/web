@@ -38,7 +38,7 @@ export default function EventBudget({
 
     if (row.billno && !validateBillno(row.billno)) {
       throw new Error(
-        "Bill number must contain only capital letters and digits"
+        "Bill number must contain only capital letters and digits",
       );
     }
 
