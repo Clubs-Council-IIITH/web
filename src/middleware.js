@@ -22,7 +22,7 @@ export function middleware(req) {
   const { pathname } = req.nextUrl;
   const cspHeader = `
     default-src 'none';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http: 'unsafe-inline' ${
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http: 'unsafe-inline' 'wasm-unsafe-eval' ${
       process.env.NODE_ENV === "production" ? "" : `'unsafe-eval'`
     };
     manifest-src 'self';
