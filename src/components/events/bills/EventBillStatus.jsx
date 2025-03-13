@@ -77,40 +77,40 @@ export default async function EventBillStatus(event, eventBills, userid) {
             ) : null}
             {(userid === event?.clubid ||
               eventBills?.state !== "not_submitted") && (
-                <Stack direction="row" spacing={2} sx={{ m: 2 }}>
-                  {userid === event?.clubid ? (
-                    eventBills?.state === "not_submitted" ? (
-                      <Button
-                        component={Link}
-                        href={`/manage/events/${event._id}/bills`}
-                        variant="contained"
-                        color="primary"
-                        startIcon={<Icon variant="add" />}
-                      >
-                        Add New Bill
-                      </Button>
-                    ) : eventBills?.state === "rejected" ? (
-                      <Button
-                        component={Link}
-                        href={`/manage/events/${event._id}/bills`}
-                        variant="contained"
-                        color="primary"
-                        startIcon={<Icon variant="edit" />}
-                      >
-                        Edit Bill
-                      </Button>
-                    ) : null
-                  ) : null}
-                  {eventBills?.state !== "not_submitted" ? (
-                    <FinanceHeader
-                      id={event._id}
-                      eventTitle={event.name}
-                      filename={eventBills?.filename}
-                      onlyButton={true}
-                    />
-                  ) : null}
-                </Stack>
-              )}
+              <Stack direction="row" spacing={2} sx={{ m: 2 }}>
+                {userid === event?.clubid ? (
+                  eventBills?.state === "not_submitted" ? (
+                    <Button
+                      component={Link}
+                      href={`/manage/events/${event._id}/bills`}
+                      variant="contained"
+                      color="primary"
+                      startIcon={<Icon variant="add" />}
+                    >
+                      Add New Bill
+                    </Button>
+                  ) : eventBills?.state === "rejected" ? (
+                    <Button
+                      component={Link}
+                      href={`/manage/events/${event._id}/bills`}
+                      variant="contained"
+                      color="primary"
+                      startIcon={<Icon variant="edit" />}
+                    >
+                      Edit Bill
+                    </Button>
+                  ) : null
+                ) : null}
+                {eventBills?.state !== "not_submitted" ? (
+                  <FinanceHeader
+                    id={event._id}
+                    eventTitle={event.name}
+                    filename={eventBills?.filename}
+                    onlyButton={true}
+                  />
+                ) : null}
+              </Stack>
+            )}
           </>
         ) : null}
       </Grid>
