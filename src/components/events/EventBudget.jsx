@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { DataGrid } from "@mui/x-data-grid";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -18,6 +20,7 @@ export default function EventBudget({
   billEditable = false,
 }) {
   const theme = useTheme();
+  const [error, setError] = useState("");
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // budget item template
@@ -26,7 +29,7 @@ export default function EventBudget({
     amount: 0,
     advance: false,
     billno: null,
-    amount_used: null,
+    amountUsed: null,
   };
 
   // data manipulation functions
@@ -34,12 +37,13 @@ export default function EventBudget({
     setRows([...rows, { id: rows?.length || 0, ...emptyBudgetItem }]);
   };
   const onUpdate = (row) => {
-    row.amount = row.amount > 0 ? row.amount : 0;
+    row.amount = Math.max(row.amount, 0);
+    row.amountUsed = row.amountUsed
+      ? Math.max(row.amountUsed, 0)
+      : row.amountUsed;
 
     if (row.billno && !validateBillno(row.billno)) {
-      throw new Error(
-        "Bill number must contain only capital letters and digits",
-      );
+      throw new Error("Bill number must contain only allowed characters.");
     }
 
     const newRows = rows.map((r) => {
@@ -47,6 +51,7 @@ export default function EventBudget({
       return r;
     });
     setRows(newRows);
+    setError("");
     return row;
   };
   const onDelete = (row) => {
@@ -127,15 +132,6 @@ export default function EventBudget({
             headerName: "Bill No.",
             flex: isMobile ? null : 1,
             editable: billEditable,
-            preProcessEditCellProps: (params) => {
-              if (!params.hasChanged) {
-                return params.props;
-              }
-
-              const hasError =
-                params.props.value && !validateBillno(params.props.value);
-              return { ...params.props, error: hasError };
-            },
             renderCell: (p) => (
               <Typography
                 variant="body2"
@@ -238,6 +234,10 @@ export default function EventBudget({
         disableRowSelectionOnClick
         onRowEditStart={(p) => setBudgetEditing(true)}
         onRowEditStop={(p) => setBudgetEditing(false)}
+        onProcessRowUpdateError={(error) => {
+          console.error("Row update error:", error);
+          setError(error.message);
+        }}
         sx={{
           // disable cell selection style
           ".MuiDataGrid-cell:focus": {
@@ -245,6 +245,10 @@ export default function EventBudget({
           },
         }}
       />
+
+      <Typography variant="caption" color="error">
+        {error}
+      </Typography>
     </>
   );
 }

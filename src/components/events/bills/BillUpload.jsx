@@ -20,12 +20,13 @@ const maxFileSizeMB = 20;
 
 export const validateBillno = (value) => {
   if (!value) return true; // Allow empty values
-  return /^[A-Z0-9]+$/.test(value);
+  return /^[A-Z0-9 _,\-#()/;]+$/.test(value);
 };
 
 export default function BillUpload(params) {
   const { eventid, eventCode, budgetRows } = params;
   const [loading, setLoading] = useState(false);
+  const [budgetEditing, setBudgetEditing] = useState(false);
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
 
   const { control, handleSubmit, watch } = useForm({
@@ -113,8 +114,8 @@ export default function BillUpload(params) {
               maxFiles={1}
               maxSizeMB={maxFileSizeMB}
             />
-            <Typography variant="h5" color="textSecondary" mt={3}>
-              Update the bill details and the amount used below.
+            <Typography variant="h4" mt={3}>
+              Breakdown and bill details
             </Typography>
             <Box m={1}>
               <Controller
@@ -140,6 +141,7 @@ export default function BillUpload(params) {
                     setRows={onChange}
                     billViewable={true}
                     billEditable={true}
+                    setBudgetEditing={setBudgetEditing}
                   />
                 )}
               />
@@ -161,7 +163,7 @@ export default function BillUpload(params) {
                 onClick={handleSubmitButton}
                 variant="contained"
                 color="primary"
-                disabled={loading || !fileDropzone}
+                disabled={loading || !fileDropzone || budgetEditing}
               >
                 Save
               </LoadingButton>
@@ -169,6 +171,32 @@ export default function BillUpload(params) {
           </Grid>
         </Grid>
       </form>
+
+      <Typography variant="h4" mt={3}>
+        Instructions
+      </Typography>
+
+      <Typography variant="body1">
+        <ul>
+          <li>
+            <strong>File Upload:</strong> Upload the bill/s in PDF format. Merge
+            all bills into one PDF.
+          </li>
+          <li>
+            <strong>Breakdown and bill details:</strong> Fill in the
+            budget/amount used and bill details for each budget entry.
+          </li>
+          <li>
+            <strong>Bill Number:</strong> You are only allowed to enter capital
+            alphabets, digits and certain symbols - _,\-#()/;. In case of
+            multiple bills for a budget item, separate them by commas.
+          </li>
+          <li>
+            <strong>Save:</strong> Click on save to submit the bill. Once
+            submitted, you won't be able to edit the bill until SLO rejects it.
+          </li>
+        </ul>
+      </Typography>
 
       <ConfirmDialog
         open={submitDialogOpen}

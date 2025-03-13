@@ -75,8 +75,8 @@ export default async function EventBillStatus(event, eventBills, userid) {
                 </Grid>
               </>
             ) : null}
-            {userid === event?.clubid ||
-              (eventBills?.state !== "not_submitted" && (
+            {(userid === event?.clubid ||
+              eventBills?.state !== "not_submitted") && (
                 <Stack direction="row" spacing={2} sx={{ m: 2 }}>
                   {userid === event?.clubid ? (
                     eventBills?.state === "not_submitted" ? (
@@ -110,7 +110,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                     />
                   ) : null}
                 </Stack>
-              ))}
+              )}
           </>
         ) : null}
       </Grid>
