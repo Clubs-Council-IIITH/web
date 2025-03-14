@@ -19,6 +19,8 @@ import { DownloadEventReportDocx } from "components/events/report/EventDocxDownl
 import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
 
+const REPORT_EDIT_ACCESS_TIME = 3 * 24 * 60 * 60 * 1000;
+
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
 export function EventReportDetails({
@@ -51,7 +53,7 @@ export function EventReportDetails({
         </Button>
         <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
         {eventReport?.submittedTime && (["cc", "club"].includes(user?.role)) &&  
-          new Date().getTime() - new Date(eventReport.submittedTime).getTime() < 24 * 60 * 60 * 1000 && (  
+          new Date().getTime() - new Date(eventReport.submittedTime).getTime() < REPORT_EDIT_ACCESS_TIME && (  
             <Button  
               component={Link}  
               href={`/manage/events/${event?._id}/report/edit`}  

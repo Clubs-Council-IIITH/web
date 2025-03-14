@@ -6,6 +6,7 @@ import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
+const REPORT_EDIT_ACCESS_TIME = 3 * 24 * 60 * 60 * 1000;
 import EventReportForm from "components/events/report/EventReportForm";
 
 export const metadata = {
@@ -63,7 +64,7 @@ export default async function EditEventReport({ params }) {
         if (!eventReport) {
             return redirect(`/manage/events/${event?._id}/report/new`);
         }
-        else if(eventReport?.submittedTime && (new Date().getTime() - new Date(eventReport.submittedTime).getTime() > 24 * 60 * 60 * 1000)){
+        else if(eventReport?.submittedTime && (new Date().getTime() - new Date(eventReport.submittedTime).getTime() > 3 * 24 * 60 * 60 * 1000)){
             return redirect('/404');
         }
 
