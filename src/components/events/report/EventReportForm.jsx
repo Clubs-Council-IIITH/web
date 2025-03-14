@@ -166,13 +166,13 @@ export default function EventReportForm({
         photosLink: formData.mediaLink,
         feedbackCc: formData.feedback || "N/A",
         feedbackCollege: formData.feedback || "N/A",
-        submittedBy: formData.poc,
+        submittedBy: formData.submittedBy,
         submittedTime: new Date().toISOString(),
       };
-      if (!hasPhone && formData.poc_phone) {
+      if (!hasPhone && formData.submittedBy_phone) {
         const phoneData = {
-          uid: formData.poc,
-          phone: formData.poc_phone,
+          uid: formData.submittedBy,
+          phone: formData.submittedBy_phone,
         };
         let phoneReturn = submitHandlers["phone"](phoneData);
         if (!phoneReturn) {
@@ -561,7 +561,7 @@ function SubmittedBy({
   disabled = false,
 }) {
   const { triggerToast } = useToast();
-  const poc = watch("poc");
+  const submittedBy = watch("submittedBy");
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
@@ -582,9 +582,9 @@ function SubmittedBy({
 
   // fetch phone number of selected member
   useEffect(() => {
-    if (poc) {
+    if (submittedBy) {
       (async () => {
-        let res = await getFullUser(poc);
+        let res = await getFullUser(submittedBy);
         if (!res.ok) {
           triggerToast({
             title: "Unable to fetch phone number",
@@ -597,18 +597,18 @@ function SubmittedBy({
         }
       })();
     }
-  }, [poc]);
+  }, [submittedBy]);
 
   return (
     <>
       <Controller
-        name="poc"
+        name="submittedBy"
         disabled={disabled}
         control={control}
         rules={{ required: "Select a member!" }}
         render={({ field, fieldState: { error, invalid } }) => (
           <FormControl fullWidth error={invalid}>
-            <InputLabel id="poc">Submitted By *</InputLabel>
+            <InputLabel id="submittedBy">Submitted By *</InputLabel>
             {members.length === 0 ? (
               <Box py={25} width="100%" display="flex" justifyContent="center">
                 <Fade in>
@@ -617,7 +617,7 @@ function SubmittedBy({
               </Box>
             ) : (
               <Select
-                labelId="poc"
+                labelId="submittedBy"
                 label="Submitted By *"
                 fullWidth
                 {...field}
@@ -637,10 +637,10 @@ function SubmittedBy({
         )}
       />
 
-      {disabled || members.length === 0 || !poc || hasPhone ? null : (
+      {disabled || members.length === 0 || !submittedBy || hasPhone ? null : (
         <Box mt={2}>
           <Controller
-            name="poc_phone"
+            name="submittedBy_phone"
             defaultValue={""}
             control={control}
             rules={{
