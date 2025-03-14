@@ -39,6 +39,7 @@ import MemberListItem from "components/members/MemberListItem";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventReportAction } from "actions/events/report/create/server_action";
+import { editEventReportAction } from "actions/events/report/edit/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 import { getFullUser } from "actions/users/get/full/server_action";
@@ -56,6 +57,7 @@ const admin_roles = ["cc", "slo"];
 export default function EventReportForm({
   id = null,
   defaultValues = {},
+  defaultReportValues = {},
   action = "log",
 }) {
   const router = useRouter();
@@ -86,7 +88,10 @@ export default function EventReportForm({
   }, []);
 
   const { control, handleSubmit, watch, setValue, resetField } = useForm({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      ...defaultReportValues,
+    },
   });
 
   const prizesInput = watch("prizes");
@@ -101,6 +106,25 @@ export default function EventReportForm({
         triggerToast({
           title: "Success!",
           messages: ["Event Report Successfully Created."],
+          severity: "success",
+        });
+        router.push(`/manage/events/${id}/report`);
+      } else {
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+      }
+      setLoading(false);
+    },
+    edit: async (data) => {
+      setLoading(true);
+      let res = await editEventReportAction(data);
+
+      if (res.ok) {
+        triggerToast({
+          title: "Success!",
+          messages: ["Event Report Successfully Updated."],
           severity: "success",
         });
         router.push(`/manage/events/${id}/report`);
@@ -156,10 +180,10 @@ export default function EventReportForm({
           return;
         }
       }
-      submitHandlers[action](reportData);
+      await submitHandlers[action](reportData);
 
       triggerToast({
-        title: "Report Submitted Successfully!",
+        title: `Report ${action === 'create' ? 'Submitted' : 'Updated'} Successfully!`,
         severity: "success",
       });
     } catch (error) {
@@ -280,6 +304,7 @@ export default function EventReportForm({
               <Controller
                 name="eventSummary"
                 control={control}
+                defaultValue={defaultReportValues?.summary}
                 rules={{
                   required: "Summary of the Event is required!",
                   maxLength: {
@@ -307,7 +332,7 @@ export default function EventReportForm({
               <Controller
                 name="mediaLink"
                 control={control}
-                defaultValue={""}
+                defaultValue={defaultReportValues?.photosLink}
                 rules={{
                   required: "Photos/Videos Link is required!",
                   pattern: {
@@ -333,7 +358,7 @@ export default function EventReportForm({
               <SubmittedBy
                 control={control}
                 watch={watch}
-                cid={user?.uid}
+                cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
                 hasPhone={hasPhone}
                 setHasPhone={setHasPhone}
               />
@@ -370,7 +395,7 @@ export default function EventReportForm({
                 name="actualAttendance"
                 control={control}
                 rules={{ required: "Actual Attendance is required!" }}
-                defaultValue=""
+                defaultValue={defaultReportValues?.attendance}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}
@@ -449,6 +474,7 @@ export default function EventReportForm({
                   <Controller
                     name="winnersDetails"
                     control={control}
+                    defaultValue={defaultReportValues?.winners}
                     render={({ field, fieldState: { error, invalid } }) => (
                       <TextField
                         {...field}
@@ -471,6 +497,7 @@ export default function EventReportForm({
               <Controller
                 name="feedback"
                 control={control}
+                defaultValue={defaultReportValues?.feedbackCc}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}

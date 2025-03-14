@@ -26,6 +26,7 @@ export function EventReportDetails({
   eventReport,
   submittedUser,
   clubs,
+  user,
 }) {
   return (
     <Box p={2}>
@@ -49,6 +50,19 @@ export function EventReportDetails({
           </Typography>
         </Button>
         <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
+        {eventReport?.submittedTime && (["cc", "club"].includes(user?.role)) &&  
+          new Date().getTime() - new Date(eventReport.submittedTime).getTime() < 24 * 60 * 60 * 1000 && (  
+            <Button  
+              component={Link}  
+              href={`/manage/events/${event?._id}/report/edit`}  
+              variant="contained"  
+              color="warning"  
+              startIcon={<Icon variant="edit-outline" />}  
+            >  
+              Edit Report  
+            </Button>  
+          )}  
+
           <DownloadEventReport
             event={event}
             eventReport={eventReport}
@@ -249,7 +263,7 @@ export function EventReportDetails({
           )}
         </Grid>
 
-        <Grid item xs={12} lg={3} md={6} sm={6}>
+        <Grid item xs={12} lg={2} md={6} sm={6}>
           <Typography
             variant="subtitle2"
             textTransform="uppercase"
@@ -301,7 +315,7 @@ export function EventReportDetails({
             <Box mt={2}>None requested</Box>
           )}
         </Grid>
-        <Grid item xs={12} lg={3} md={6} sm={6}>
+        <Grid item xs={12} lg={4} md={6} sm={6}>
           <Typography
             variant="subtitle2"
             textTransform="uppercase"

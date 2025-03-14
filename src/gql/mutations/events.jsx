@@ -85,6 +85,24 @@ export const ADD_EVENT_REPORT = gql`
   }
 `;
 
+export const EDIT_EVENT_REPORT = gql`
+  mutation EditEventReport($details: InputEventReport!) {
+    editEventReport(details: $details) {
+      eventid
+      summary
+      attendance
+      prizes
+      prizesBreakdown
+      winners
+      photosLink
+      feedbackCc
+      feedbackCollege
+      submittedBy
+      submittedTime
+    }
+  }
+`;
+
 export const REMIND_SLO = gql`
   mutation RemindSlo($eventid: String!) {
     remindSLO(eventid: $eventid)
