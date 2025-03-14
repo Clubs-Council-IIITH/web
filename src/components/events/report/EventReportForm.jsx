@@ -181,11 +181,6 @@ export default function EventReportForm({
         }
       }
       await submitHandlers[action](reportData);
-
-      triggerToast({
-        title: `Report ${action === 'create' ? 'Submitted' : 'Updated'} Successfully!`,
-        severity: "success",
-      });
     } catch (error) {
       triggerToast({
         title: "Submission Failed",
