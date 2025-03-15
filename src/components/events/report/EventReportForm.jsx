@@ -39,6 +39,7 @@ import MemberListItem from "components/members/MemberListItem";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventReportAction } from "actions/events/report/create/server_action";
+import { editEventReportAction } from "actions/events/report/edit/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 import { getFullUser } from "actions/users/get/full/server_action";
@@ -56,6 +57,7 @@ const admin_roles = ["cc", "slo"];
 export default function EventReportForm({
   id = null,
   defaultValues = {},
+  defaultReportValues = {},
   action = "log",
 }) {
   const router = useRouter();
@@ -86,7 +88,10 @@ export default function EventReportForm({
   }, []);
 
   const { control, handleSubmit, watch, setValue, resetField } = useForm({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      ...defaultReportValues,
+    },
   });
 
   const prizesInput = watch("prizes");
@@ -101,6 +106,25 @@ export default function EventReportForm({
         triggerToast({
           title: "Success!",
           messages: ["Event Report Successfully Created."],
+          severity: "success",
+        });
+        router.push(`/manage/events/${id}/report`);
+      } else {
+        triggerToast({
+          ...res.error,
+          severity: "error",
+        });
+      }
+      setLoading(false);
+    },
+    edit: async (data) => {
+      setLoading(true);
+      let res = await editEventReportAction(data);
+
+      if (res.ok) {
+        triggerToast({
+          title: "Success!",
+          messages: ["Event Report Successfully Updated."],
           severity: "success",
         });
         router.push(`/manage/events/${id}/report`);
@@ -142,13 +166,13 @@ export default function EventReportForm({
         photosLink: formData.mediaLink,
         feedbackCc: formData.feedback || "N/A",
         feedbackCollege: formData.feedback || "N/A",
-        submittedBy: formData.poc,
+        submittedBy: formData.submittedBy,
         submittedTime: new Date().toISOString(),
       };
-      if (!hasPhone && formData.poc_phone) {
+      if (!hasPhone && formData.submittedBy_phone) {
         const phoneData = {
-          uid: formData.poc,
-          phone: formData.poc_phone,
+          uid: formData.submittedBy,
+          phone: formData.submittedBy_phone,
         };
         let phoneReturn = submitHandlers["phone"](phoneData);
         if (!phoneReturn) {
@@ -156,12 +180,7 @@ export default function EventReportForm({
           return;
         }
       }
-      submitHandlers[action](reportData);
-
-      triggerToast({
-        title: "Report Submitted Successfully!",
-        severity: "success",
-      });
+      await submitHandlers[action](reportData);
     } catch (error) {
       triggerToast({
         title: "Submission Failed",
@@ -280,6 +299,7 @@ export default function EventReportForm({
               <Controller
                 name="eventSummary"
                 control={control}
+                defaultValue={defaultReportValues?.summary}
                 rules={{
                   required: "Summary of the Event is required!",
                   maxLength: {
@@ -307,7 +327,7 @@ export default function EventReportForm({
               <Controller
                 name="mediaLink"
                 control={control}
-                defaultValue={""}
+                defaultValue={defaultReportValues?.photosLink}
                 rules={{
                   required: "Photos/Videos Link is required!",
                   pattern: {
@@ -333,7 +353,7 @@ export default function EventReportForm({
               <SubmittedBy
                 control={control}
                 watch={watch}
-                cid={user?.uid}
+                cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
                 hasPhone={hasPhone}
                 setHasPhone={setHasPhone}
               />
@@ -370,7 +390,7 @@ export default function EventReportForm({
                 name="actualAttendance"
                 control={control}
                 rules={{ required: "Actual Attendance is required!" }}
-                defaultValue=""
+                defaultValue={defaultReportValues?.attendance}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}
@@ -449,6 +469,7 @@ export default function EventReportForm({
                   <Controller
                     name="winnersDetails"
                     control={control}
+                    defaultValue={defaultReportValues?.winners}
                     render={({ field, fieldState: { error, invalid } }) => (
                       <TextField
                         {...field}
@@ -471,6 +492,7 @@ export default function EventReportForm({
               <Controller
                 name="feedback"
                 control={control}
+                defaultValue={defaultReportValues?.feedbackCc}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}
@@ -539,7 +561,7 @@ function SubmittedBy({
   disabled = false,
 }) {
   const { triggerToast } = useToast();
-  const poc = watch("poc");
+  const submittedBy = watch("submittedBy");
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
@@ -560,9 +582,9 @@ function SubmittedBy({
 
   // fetch phone number of selected member
   useEffect(() => {
-    if (poc) {
+    if (submittedBy) {
       (async () => {
-        let res = await getFullUser(poc);
+        let res = await getFullUser(submittedBy);
         if (!res.ok) {
           triggerToast({
             title: "Unable to fetch phone number",
@@ -575,18 +597,18 @@ function SubmittedBy({
         }
       })();
     }
-  }, [poc]);
+  }, [submittedBy]);
 
   return (
     <>
       <Controller
-        name="poc"
+        name="submittedBy"
         disabled={disabled}
         control={control}
         rules={{ required: "Select a member!" }}
         render={({ field, fieldState: { error, invalid } }) => (
           <FormControl fullWidth error={invalid}>
-            <InputLabel id="poc">Submitted By *</InputLabel>
+            <InputLabel id="submittedBy">Submitted By *</InputLabel>
             {members.length === 0 ? (
               <Box py={25} width="100%" display="flex" justifyContent="center">
                 <Fade in>
@@ -595,7 +617,7 @@ function SubmittedBy({
               </Box>
             ) : (
               <Select
-                labelId="poc"
+                labelId="submittedBy"
                 label="Submitted By *"
                 fullWidth
                 {...field}
@@ -615,10 +637,10 @@ function SubmittedBy({
         )}
       />
 
-      {disabled || members.length === 0 || !poc || hasPhone ? null : (
+      {disabled || members.length === 0 || !submittedBy || hasPhone ? null : (
         <Box mt={2}>
           <Controller
-            name="poc_phone"
+            name="submittedBy_phone"
             defaultValue={""}
             control={control}
             rules={{

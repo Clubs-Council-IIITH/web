@@ -50,6 +50,7 @@ export default async function EventReport({ params }) {
         eventReport={eventReport}
         submittedUser={submittedUserProfile}
         clubs={activeClubs}
+        user={user}
       />
     );
   } catch (error) {
