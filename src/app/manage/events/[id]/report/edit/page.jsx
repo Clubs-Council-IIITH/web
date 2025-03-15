@@ -10,79 +10,82 @@ const REPORT_EDIT_ACCESS_TIME = 3 * 24 * 60 * 60 * 1000;
 import EventReportForm from "components/events/report/EventReportForm";
 
 export const metadata = {
-    title: "Edit Event Report",
+  title: "Edit Event Report",
 };
 
 function transformEvent(event) {
-    return {
-        ...event,
-        datetimeperiod: [
-            new Date(event?.datetimeperiod[0]),
-            new Date(event?.datetimeperiod[1]),
-        ],
-        budget:
-            event?.budget?.map((budget, key) => ({
-                ...budget,
-                id: budget?.id || key,
-            })) || [],
-        population: parseInt(event?.population || 0),
-        additional: event?.additional || "",
-        equipment: event?.equipment || "",
-        poc: event?.poc,
-        collabclubs: event?.collabclubs || [],
-    };
+  return {
+    ...event,
+    datetimeperiod: [
+      new Date(event?.datetimeperiod[0]),
+      new Date(event?.datetimeperiod[1]),
+    ],
+    budget:
+      event?.budget?.map((budget, key) => ({
+        ...budget,
+        id: budget?.id || key,
+      })) || [],
+    population: parseInt(event?.population || 0),
+    additional: event?.additional || "",
+    equipment: event?.equipment || "",
+    poc: event?.poc,
+    collabclubs: event?.collabclubs || [],
+  };
 }
 
 export default async function EditEventReport({ params }) {
-    const { id } = params;
-    const { data: { userMeta, userProfile } = {} } = await getClient().query(
-        GET_USER,
-        { userInput: null }
-    );
-    const user = { ...userMeta, ...userProfile };
+  const { id } = params;
+  const { data: { userMeta, userProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null },
+  );
+  const user = { ...userMeta, ...userProfile };
 
-    try {
-        const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-            eventid: id,
-        });
-        if (
-            !event ||
-            (user?.uid !== event.clubid && !["cc"].includes(user?.role)) ||
-            event.status.state !== "approved"
-        ) {
-            return redirect("/404");
-        } else if (!event?.eventReportSubmitted) {
-            return redirect(`/manage/events/${event?._id}/report/new`);
-        }
-        const { data: { eventReport } = {} } = await getClient().query(
-            GET_EVENT_REPORT,
-            {
-                eventid: id,
-            }
-        );
-
-        if (!eventReport) {
-            return redirect(`/manage/events/${event?._id}/report/new`);
-        }
-        else if(eventReport?.submittedTime && (new Date().getTime() - new Date(eventReport.submittedTime).getTime() > 3 * 24 * 60 * 60 * 1000)){
-            return redirect('/404');
-        }
-
-        return (
-            <Container>
-                <Typography variant="h3" gutterBottom mb={3}>
-                    Edit Event Report
-                </Typography>
-
-                <EventReportForm
-                    id={id}
-                    defaultValues={transformEvent(event)}
-                    defaultReportValues={eventReport}
-                    action="edit"
-                />
-            </Container>
-        );
-    } catch (error) {
-        return redirect("/404");
+  try {
+    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
+      eventid: id,
+    });
+    if (
+      !event ||
+      (user?.uid !== event.clubid && !["cc"].includes(user?.role)) ||
+      event.status.state !== "approved"
+    ) {
+      return redirect("/404");
+    } else if (!event?.eventReportSubmitted) {
+      return redirect(`/manage/events/${event?._id}/report/new`);
     }
+    const { data: { eventReport } = {} } = await getClient().query(
+      GET_EVENT_REPORT,
+      {
+        eventid: id,
+      },
+    );
+
+    if (!eventReport) {
+      return redirect(`/manage/events/${event?._id}/report/new`);
+    } else if (
+      eventReport?.submittedTime &&
+      new Date().getTime() - new Date(eventReport.submittedTime).getTime() >
+        3 * 24 * 60 * 60 * 1000
+    ) {
+      return redirect("/404");
+    }
+
+    return (
+      <Container>
+        <Typography variant="h3" gutterBottom mb={3}>
+          Edit Event Report
+        </Typography>
+
+        <EventReportForm
+          id={id}
+          defaultValues={transformEvent(event)}
+          defaultReportValues={eventReport}
+          action="edit"
+        />
+      </Container>
+    );
+  } catch (error) {
+    return redirect("/404");
+  }
 }

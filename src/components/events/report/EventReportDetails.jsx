@@ -52,18 +52,21 @@ export function EventReportDetails({
           </Typography>
         </Button>
         <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
-        {eventReport?.submittedTime && (["cc", "club"].includes(user?.role)) &&  
-          new Date().getTime() - new Date(eventReport.submittedTime).getTime() < REPORT_EDIT_ACCESS_TIME && (  
-            <Button  
-              component={Link}  
-              href={`/manage/events/${event?._id}/report/edit`}  
-              variant="contained"  
-              color="warning"  
-              startIcon={<Icon variant="edit-outline" />}  
-            >  
-              Edit Report  
-            </Button>  
-          )}  
+          {eventReport?.submittedTime &&
+            ["cc", "club"].includes(user?.role) &&
+            new Date().getTime() -
+              new Date(eventReport.submittedTime).getTime() <
+              REPORT_EDIT_ACCESS_TIME && (
+              <Button
+                component={Link}
+                href={`/manage/events/${event?._id}/report/edit`}
+                variant="contained"
+                color="warning"
+                startIcon={<Icon variant="edit-outline" />}
+              >
+                Edit Report
+              </Button>
+            )}
 
           <DownloadEventReport
             event={event}
