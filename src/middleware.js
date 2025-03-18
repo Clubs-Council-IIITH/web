@@ -1,3 +1,40 @@
+/**
+
+This middleware intercepts incoming requests to apply security headers, manage access
+control, and perform route-specific redirects. It performs the following tasks:
+
+1. **Content Security Policy (CSP) Setup:**
+  - Generates a unique nonce using a random UUID to secure inline scripts and styles.
+  - Constructs a strict CSP header that defines allowed sources for scripts, styles, images,
+    fonts, objects, and other resources. The header is adjusted based on whether the app is running
+    in production or development.
+  - Sets additional security headers like "X-Content-Type-Options" and "Referrer-Policy" on both
+    the request and response.
+
+2. **Route Redirection:**
+  - Immediately redirects requests from "/student-bodies/clubs" to "/student-bodies/clubs-council".
+
+3. **Access Control for Protected Routes:**
+  - Checks if the current request's pathname matches any protected route defined in the ACL (imported as `routes`).
+  - If the route is protected and the "Authorization" cookie is missing, the user is redirected to a login page,
+    with the current pathname appended to the login URL.
+  - If the user is authenticated, their JWT token (from the "Authorization" cookie) is decoded to extract user details.
+
+4. **Club Account Specific Redirects:**
+  - For routes defined in the club-specific redirects (imported as `clubRedirects`), if the authenticated user's role is "club" (the user account of a club),
+    the middleware redirects them to the appropriate club-specific page.
+
+5. **Authorization Enforcement:**
+  - After validating the user's role from the decoded JWT, the middleware checks if the user's role is authorized
+    to access the requested route as defined in the ACL.
+  - If the user's role is not permitted, they are redirected to the homepage.
+
+6. **Middleware Configuration:**
+  - The middleware is applied to all request paths except those starting with "api", "_next/static", "_next/image",
+    or "favicon.ico".
+**/
+
+
 import { NextResponse } from "next/server";
 import { match } from "path-to-regexp";
 import { jwtDecode as jwt_decode } from "jwt-decode";
