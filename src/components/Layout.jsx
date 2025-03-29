@@ -242,6 +242,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
       {manageMemberItems}
+      <DrawerItem
+        title="Pending certficates"
+        path="manage/certificates"
+        icon={<Icon variant="card-membership-outline-rounded" />}
+      />
     </List>
   );
 
@@ -300,6 +305,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
           title="Data Download"
           path="/manage/data-members"
           icon={<Icon variant="sim-card-download-outline-rounded" />}
+        />
+        <DrawerItem
+          title="Pending certficates"
+          path="manage/certificates"
+          icon={<Icon variant="card-membership-outline-rounded" />}
         />
       </DrawerDropdown>
     </List>

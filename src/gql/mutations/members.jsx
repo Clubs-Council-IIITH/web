@@ -39,3 +39,47 @@ export const REJECT_MEMBER = gql`
     }
   }
 `;
+
+export const REQUEST_CERTIFICATE = gql`
+  mutation RequestCertificate($certificateInput: CertificateInput!) {
+    requestCertificate(certificateInput: $certificateInput) {
+      _id
+      certificateNumber
+      status {
+        requestedAt
+        ccApprovedAt
+        ccApprover
+        sloApprovedAt
+        sloApprover
+      }
+      state
+      requestReason
+    }
+  }
+`;
+
+export const APPROVE_CERTIFICATE = gql`
+  mutation ApproveCertificate($certificateNumber: String!) {
+    approveCertificate(certificateNumber: $certificateNumber) {
+      _id
+      certificateNumber
+      state
+      status {
+        ccApprovedAt
+        ccApprover
+        sloApprovedAt
+        sloApprover
+      }
+    }
+  }
+`;
+
+export const REJECT_CERTIFICATE = gql`
+  mutation RejectCertificate($certificateNumber: String!) {
+    rejectCertificate(certificateNumber: $certificateNumber) {
+      _id
+      certificateNumber
+      state
+    }
+  }
+`;
