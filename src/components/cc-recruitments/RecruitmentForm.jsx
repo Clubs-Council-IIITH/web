@@ -151,8 +151,8 @@ export default function RecruitmentForm({ user = {} }) {
       teams: formData.teams,
       whyCc: formData.whyCc,
       whyThisPosition: formData.whyThisPosition,
+      ideas: formData.ideas,
       ideas1: formData.ideas1,
-      ideas2: formData.ideas2,
       goodFit: formData.goodFit,
       otherBodies: formData.otherBodies,
       designExperience: formData?.designExperience || null,
@@ -525,7 +525,7 @@ export default function RecruitmentForm({ user = {} }) {
                       </Typography>
                     )}
                     <Controller
-                      name="ideas1"
+                      name="ideas"
                       control={control}
                       rules={{
                         required: "Compulsory Field!",
@@ -566,7 +566,7 @@ export default function RecruitmentForm({ user = {} }) {
                       </Typography>
                     )}
                     <Controller
-                      name="ideas2"
+                      name="ideas1"
                       control={control}
                       rules={{
                         required: "Compulsory Field!",
