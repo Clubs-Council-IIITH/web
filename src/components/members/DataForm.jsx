@@ -154,6 +154,13 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
   const clubid = watch("clubid");
   const batches = [];
 
+  const currDate = new Date();
+  const month = currDate.getMonth();
+  const day = currDate.getDate();
+  const farewellTime =
+    (month === 2 && day >= 15) || // March 15 to March 31
+    (month === 3 && day <= 15); // April 1 to April 15
+
   // Generate batches from 2020 to current year
   for (let year = 20; year <= dayjs()["year"]() - 2000; year++) {
     batches.push("2k" + year);
@@ -290,7 +297,8 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           >
             Members to Include
           </Typography>
-          {!clubid.includes("allclubs") ? (
+          {(farewellTime && admin_roles.includes(user?.role)) ||
+          !clubid.includes("allclubs") ? (
             <Controller
               name="typeMembers"
               control={control}
