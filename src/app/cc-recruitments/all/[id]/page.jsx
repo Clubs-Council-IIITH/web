@@ -37,11 +37,16 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function CCApplicantDetails({ params }) {
+export default async function CCApplicantDetails({ params, searchParams }) {
   const { id } = params;
+  const year = parseInt(searchParams?.year) || new Date().getFullYear();
 
-  const { data: { ccApplications } = {} } =
-    await getClient().query(GET_ALL_RECRUITMENTS);
+  const { data: { ccApplications } = {} } = await getClient().query(
+    GET_ALL_RECRUITMENTS,
+    {
+      year: year,
+    }
+  );
 
   let currentApplicant = ccApplications.find(
     (applicant) => applicant.uid === id,
@@ -182,7 +187,7 @@ export default async function CCApplicantDetails({ params }) {
           <Typography variant="body1" color="text.secondary">
             New Ideas:
           </Typography>
-          <Typography variant="body1">{currentApplicant?.ideas1}</Typography>
+          <Typography variant="body1">{currentApplicant?.ideas1 || "-"}</Typography>
         </Stack>
 
         <Stack direction="row" spacing={1} mb={2}>

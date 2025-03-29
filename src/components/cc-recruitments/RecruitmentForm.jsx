@@ -338,10 +338,10 @@ export default function RecruitmentForm({ user = {} }) {
                         <FormControl fullWidth>
                           <InputLabel id="teams-label">Select Teams</InputLabel>
                           <Select
-                            multiple
                             id="teams"
                             labelId="teams-label"
-                            input={<OutlinedInput label="teams" />}
+                            multiple
+                            input={<OutlinedInput label="Select Teams" />}
                             error={invalid}
                             renderValue={(selected) => (
                               <Box
