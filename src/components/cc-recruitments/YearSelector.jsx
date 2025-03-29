@@ -13,9 +13,13 @@ export default function YearSelector({ currentYear, selectedYear }) {
   return (
     <FormControl size="small">
       <Select value={selectedYear} onChange={handleChange}>
-        {Array.from({ length: currentYear - 2023 }, (_, i) => 2024 + i).map((yr) => (
-          <MenuItem key={yr} value={yr}>{yr}</MenuItem>
-        ))}
+        {Array.from({ length: currentYear - 2023 }, (_, i) => 2024 + i).map(
+          (yr) => (
+            <MenuItem key={yr} value={yr}>
+              {yr}
+            </MenuItem>
+          ),
+        )}
       </Select>
     </FormControl>
   );

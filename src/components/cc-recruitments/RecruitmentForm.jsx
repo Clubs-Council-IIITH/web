@@ -48,38 +48,35 @@ const roles = [
     title: "Logistics",
     points: [
       "Handles website requests, member approvals, and event scheduling.",
-      "Manages inventory, checks for calendar clashes, and coordinates room bookings and approvals."
-    ]
+      "Manages inventory, checks for calendar clashes, and coordinates room bookings and approvals.",
+    ],
   },
   {
     title: "Finance",
     points: [
       "Reviews budget requests, negotiates with clubs, and approves funding.",
-      "Allocates budgets during major events like college fests."
-    ]
+      "Allocates budgets during major events like college fests.",
+    ],
   },
   {
     title: "Corporate",
-    points: [
-      "Secures external sponsorships in addition to what clubs bring."
-    ]
+    points: ["Secures external sponsorships in addition to what clubs bring."],
   },
   {
     title: "Design & Social Media",
     points: [
       "Creates posters, graphics, and promotional materials.",
-      "Handles the Clubs Council's social media."
-    ]
+      "Handles the Clubs Council's social media.",
+    ],
   },
   {
     title: "Stats & Registry",
     points: [
       "Maintains records and ensures timely submission of event reports.",
-      "Provides content for the newsletter."
-    ]
-  }
+      "Provides content for the newsletter.",
+    ],
+  },
 ];
-
 
 function MemberUserInput({ user = {} }) {
   return user ? (
@@ -305,23 +302,34 @@ export default function RecruitmentForm({ user = {} }) {
                   Team Specific Details
                 </Typography>
                 <Grid container spacing={2} direction="column">
-                {roles.map((role, index) => (
-                  <Grid item key={index}>
-                    <Typography variant="h6" fontWeight="bold">{role.title}</Typography>
-                    {role.points.map((point, idx) => (
-                      <Typography key={idx} variant="body2" color="textSecondary">
-                        - {point}
+                  {roles.map((role, index) => (
+                    <Grid item key={index}>
+                      <Typography variant="h6" fontWeight="bold">
+                        {role.title}
                       </Typography>
-                    ))}
+                      {role.points.map((point, idx) => (
+                        <Typography
+                          key={idx}
+                          variant="body2"
+                          color="textSecondary"
+                        >
+                          - {point}
+                        </Typography>
+                      ))}
+                    </Grid>
+                  ))}
+                  <Grid item mt={2}>
+                    <Typography variant="h6" fontWeight="bold">
+                      Note:
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Initially, you will be assigned to a specific team, but
+                      over time, you will gain experience in different teams to
+                      develop a well-rounded understanding, ensuring that
+                      everyone can work collectively and effectively
+                    </Typography>
                   </Grid>
-                ))}
-                <Grid item mt={2}>
-                    <Typography variant="h6" fontWeight="bold">Note:</Typography>
-                      <Typography variant="body2" color="textSecondary">
-                      Initially, you will be assigned to a specific team, but over time, you will gain experience in different teams to develop a well-rounded understanding, ensuring that everyone can work collectively and effectively
-                      </Typography>
-                  </Grid>
-              </Grid>
+                </Grid>
                 <Grid container item spacing={4} pt={3}>
                   <Grid item xs={12} md={12} xl={12}>
                     <Controller
@@ -521,7 +529,9 @@ export default function RecruitmentForm({ user = {} }) {
                         gutterBottom
                         mb={2}
                       >
-                        Did you often want to take part in an event, but couldn't or didn't? What were the reasons? Why do you think that happened?
+                        Did you often want to take part in an event, but
+                        couldn't or didn't? What were the reasons? Why do you
+                        think that happened?
                       </Typography>
                     )}
                     <Controller
@@ -562,7 +572,8 @@ export default function RecruitmentForm({ user = {} }) {
                         gutterBottom
                         mb={2}
                       >
-                        Tell us more about your ideas and thoughts to improve campus life (wrt. club activities) at IIIT Hyderabad.
+                        Tell us more about your ideas and thoughts to improve
+                        campus life (wrt. club activities) at IIIT Hyderabad.
                       </Typography>
                     )}
                     <Controller

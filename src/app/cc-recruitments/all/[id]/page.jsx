@@ -46,7 +46,7 @@ export default async function CCApplicantDetails({ params, searchParams }) {
     GET_ALL_RECRUITMENTS,
     {
       year: year,
-    }
+    },
   );
 
   let currentApplicant = ccApplications.find(
@@ -81,7 +81,12 @@ export default async function CCApplicantDetails({ params, searchParams }) {
     <Container>
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
-          <Stack direction="column" alignItems="end" mt={2} justifyContent="right">
+          <Stack
+            direction="column"
+            alignItems="end"
+            mt={2}
+            justifyContent="right"
+          >
             <Button
               variant="contained"
               color="primary"
@@ -193,7 +198,9 @@ export default async function CCApplicantDetails({ params, searchParams }) {
           <Typography variant="body1" color="text.secondary">
             Participation Obstacles:
           </Typography>
-          <Typography variant="body1">{currentApplicant?.ideas1 || "-"}</Typography>
+          <Typography variant="body1">
+            {currentApplicant?.ideas1 || "-"}
+          </Typography>
         </Stack>
 
         <Stack direction="row" spacing={1} mb={2}>

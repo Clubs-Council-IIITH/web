@@ -15,7 +15,7 @@ export default async function AllRecruitmentsApplications({ searchParams }) {
 
   const { data: { ccApplications } = {} } = await getClient().query(
     GET_ALL_RECRUITMENTS,
-    { year }
+    { year },
   );
   const userPromises =
     ccApplications?.map((applicant) =>
@@ -23,7 +23,7 @@ export default async function AllRecruitmentsApplications({ searchParams }) {
         .query(GET_USER_PROFILE, {
           userInput: { uid: applicant.uid },
         })
-        .toPromise()
+        .toPromise(),
     ) || [];
 
   const users = await Promise.all(userPromises);
