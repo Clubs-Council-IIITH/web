@@ -173,9 +173,16 @@ export default async function CCApplicantDetails({ params }) {
 
         <Stack direction="row" spacing={1} mb={2}>
           <Typography variant="body1" color="text.secondary">
+            Participation Obstacles:
+          </Typography>
+          <Typography variant="body1">{currentApplicant?.ideas1}</Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
             New Ideas:
           </Typography>
-          <Typography variant="body1">{currentApplicant?.ideas}</Typography>
+          <Typography variant="body1">{currentApplicant?.ideas2}</Typography>
         </Stack>
 
         <Stack direction="row" spacing={1} mb={2}>

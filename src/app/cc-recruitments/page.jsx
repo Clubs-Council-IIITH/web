@@ -11,7 +11,7 @@ export const metadata = {
   title: "New Application | Clubs Council @ IIIT-H",
 };
 
-const deadline = new Date("2024-04-17T06:00:00+05:30");
+const deadline = new Date("2025-04-02T06:00:00+05:30");
 
 async function getUser(currentUser) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
@@ -78,9 +78,10 @@ export default async function NewApplication() {
               Only the following batches are allowed to apply for Clubs Council
               position this year:
               <ul>
-                <li>UG 2k22</li>
                 <li>UG 2k23</li>
-                <li>PG 2k23</li>
+                <li>UG 2k24</li>
+                <li>LE 2k24</li>
+                <li>PG 2k24</li>
               </ul>
             </li>
             <li>

@@ -8,7 +8,8 @@ export const GET_ALL_RECRUITMENTS = gql`
       teams
       whyCc
       whyThisPosition
-      ideas
+      ideas1
+      ideas2
       otherBodies
       goodFit
       sentTime
