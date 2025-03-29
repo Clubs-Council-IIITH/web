@@ -5,8 +5,9 @@ import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER_PROFILE } from "gql/queries/users";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 
-import { Box, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
+import Link from "next/link";
 import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
@@ -37,11 +38,16 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function CCApplicantDetails({ params }) {
+export default async function CCApplicantDetails({ params, searchParams }) {
   const { id } = params;
+  const year = parseInt(searchParams?.year) || new Date().getFullYear();
 
-  const { data: { ccApplications } = {} } =
-    await getClient().query(GET_ALL_RECRUITMENTS);
+  const { data: { ccApplications } = {} } = await getClient().query(
+    GET_ALL_RECRUITMENTS,
+    {
+      year: year,
+    }
+  );
 
   let currentApplicant = ccApplications.find(
     (applicant) => applicant.uid === id,
@@ -75,6 +81,18 @@ export default async function CCApplicantDetails({ params }) {
     <Container>
       <Grid container spacing={2} mt={4}>
         <Grid item xs={12}>
+          <Stack direction="column" alignItems="end" mt={2} justifyContent="right">
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              href={`/cc-recruitments/all?year=${year}`}
+            >
+              <Typography variant="button" color="opposite">
+                Go Back
+              </Typography>
+            </Button>
+          </Stack>
           <Stack
             direction={{ xs: "column", lg: "row" }}
             alignItems="center"
@@ -169,6 +187,13 @@ export default async function CCApplicantDetails({ params }) {
           <Typography variant="body1">
             {currentApplicant?.goodFit || "N/A"}
           </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={1} mb={2}>
+          <Typography variant="body1" color="text.secondary">
+            Participation Obstacles:
+          </Typography>
+          <Typography variant="body1">{currentApplicant?.ideas1 || "-"}</Typography>
         </Stack>
 
         <Stack direction="row" spacing={1} mb={2}>

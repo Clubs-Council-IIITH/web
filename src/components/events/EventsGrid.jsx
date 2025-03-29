@@ -31,7 +31,7 @@ export default async function EventsGrid({
   );
 
   const updatedEvents = await Promise.all(
-    data?.data?.events?.map(async (event) => {
+    (data?.data?.events || []).map(async (event) => {
       if (!event.poster || event.poster == null) {
         const club = clubDataMap[event?.clubid];
         event.clubbanner = club?.banner || club?.logo;

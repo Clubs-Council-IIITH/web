@@ -43,11 +43,11 @@ const columns = [
   },
 ];
 
-export default function CCRecruitmentsTable({ data }) {
+export default function CCRecruitmentsTable({ data, year }) {
   const router = useRouter();
 
   const handleRowClick = (params) => {
-    router.push(`/cc-recruitments/all/${params.row.uid}`);
+    router.push(`/cc-recruitments/all/${params.row.uid}?year=${year}`);
   };
 
   return (

@@ -33,14 +33,53 @@ import ConfirmDialog from "components/ConfirmDialog";
 import { ccRecruitmentsApply } from "actions/cc-recruitments/apply/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
 
-const allowedBatches = ["ug2k22", "ug2k23", "mtech2k23", "ms2k23"];
+const allowedBatches = ["ug2k23", "ug2k24", "mtech2k24", "ms2k24"];
 
 const availableTeams = [
   ["Design", "Design"],
   ["Finance", "Finance"],
   ["Logistics and Inventory", "Logistics"],
   ["Stats and Registry", "Stats"],
+  ["Corporate", "Corporate"],
 ];
+
+const roles = [
+  {
+    title: "Logistics",
+    points: [
+      "Handles website requests, member approvals, and event scheduling.",
+      "Manages inventory, checks for calendar clashes, and coordinates room bookings and approvals."
+    ]
+  },
+  {
+    title: "Finance",
+    points: [
+      "Reviews budget requests, negotiates with clubs, and approves funding.",
+      "Allocates budgets during major events like college fests."
+    ]
+  },
+  {
+    title: "Corporate",
+    points: [
+      "Secures external sponsorships in addition to what clubs bring."
+    ]
+  },
+  {
+    title: "Design & Social Media",
+    points: [
+      "Creates posters, graphics, and promotional materials.",
+      "Handles the Clubs Council's social media."
+    ]
+  },
+  {
+    title: "Stats & Registry",
+    points: [
+      "Maintains records and ensures timely submission of event reports.",
+      "Provides content for the newsletter."
+    ]
+  }
+];
+
 
 function MemberUserInput({ user = {} }) {
   return user ? (
@@ -112,6 +151,7 @@ export default function RecruitmentForm({ user = {} }) {
       teams: formData.teams,
       whyCc: formData.whyCc,
       whyThisPosition: formData.whyThisPosition,
+      ideas1: formData.ideas1,
       ideas: formData.ideas,
       goodFit: formData.goodFit,
       otherBodies: formData.otherBodies,
@@ -264,7 +304,25 @@ export default function RecruitmentForm({ user = {} }) {
                 >
                   Team Specific Details
                 </Typography>
-                <Grid container item spacing={4}>
+                <Grid container spacing={2} direction="column">
+                {roles.map((role, index) => (
+                  <Grid item key={index}>
+                    <Typography variant="h6" fontWeight="bold">{role.title}</Typography>
+                    {role.points.map((point, idx) => (
+                      <Typography key={idx} variant="body2" color="textSecondary">
+                        - {point}
+                      </Typography>
+                    ))}
+                  </Grid>
+                ))}
+                <Grid item mt={2}>
+                    <Typography variant="h6" fontWeight="bold">Note:</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                      Initially, you will be assigned to a specific team, but over time, you will gain experience in different teams to develop a well-rounded understanding, ensuring that everyone can work collectively and effectively
+                      </Typography>
+                  </Grid>
+              </Grid>
+                <Grid container item spacing={4} pt={3}>
                   <Grid item xs={12} md={12} xl={12}>
                     <Controller
                       name="teams"
@@ -278,12 +336,12 @@ export default function RecruitmentForm({ user = {} }) {
                       }}
                       render={({ field, fieldState: { error, invalid } }) => (
                         <FormControl fullWidth>
-                          <InputLabel id="teams-label">Teams</InputLabel>
+                          <InputLabel id="teams-label">Select Teams</InputLabel>
                           <Select
-                            multiple
                             id="teams"
                             labelId="teams-label"
-                            input={<OutlinedInput label="teams" />}
+                            multiple
+                            input={<OutlinedInput label="Select Teams" />}
                             error={invalid}
                             renderValue={(selected) => (
                               <Box
@@ -463,8 +521,48 @@ export default function RecruitmentForm({ user = {} }) {
                         gutterBottom
                         mb={2}
                       >
-                        Share your insights on club activities and suggest
-                        improvements for campus life, focusing on our college.
+                        Did you often want to take part in an event, but couldn't or didn't? What were the reasons? Why do you think that happened?
+                      </Typography>
+                    )}
+                    <Controller
+                      name="ideas1"
+                      control={control}
+                      rules={{
+                        required: "Compulsory Field!",
+                        maxLength: {
+                          value: 5000,
+                          message: "Must be at most 5000 characters long!",
+                        },
+                      }}
+                      render={({ field, fieldState: { error, invalid } }) => (
+                        <TextField
+                          {...field}
+                          label={
+                            isDesktop
+                              ? "Did you often want to take part in an event, but couldn't or didn't? What were the reasons? Why do you think that happened?."
+                              : null
+                          }
+                          autoComplete="off"
+                          error={invalid}
+                          helperText={error?.message}
+                          variant="outlined"
+                          rows={8}
+                          fullWidth
+                          multiline
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
+                        Tell us more about your ideas and thoughts to improve campus life (wrt. club activities) at IIIT Hyderabad.
                       </Typography>
                     )}
                     <Controller
@@ -482,7 +580,7 @@ export default function RecruitmentForm({ user = {} }) {
                           {...field}
                           label={
                             isDesktop
-                              ? "Share your insights on club activities and suggest improvements for campus life, focusing on our college."
+                              ? "Tell us more about your ideas and thoughts to improve campus life (wrt. club activities) at IIIT Hyderabad."
                               : null
                           }
                           autoComplete="off"

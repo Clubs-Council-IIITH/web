@@ -1,45 +1,55 @@
 import { getClient } from "gql/client";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
-
 import { Container, Typography } from "@mui/material";
-
 import CCRecruitmentsTable from "components/cc-recruitments/CCRecruitmentsTable";
+import YearSelector from "components/cc-recruitments/YearSelector";
 
 export const metadata = {
   title: "CC Recruitments",
 };
 
-export default async function AllRecruitmentsApplications() {
-  const { data: { ccApplications } = {} } =
-    await getClient().query(GET_ALL_RECRUITMENTS);
+export default async function AllRecruitmentsApplications({ searchParams }) {
+  const currentYear = new Date().getFullYear();
+  const year = parseInt(searchParams?.year) || currentYear;
 
-  const userPromises = [];
-  ccApplications?.forEach((applicant) => {
-    userPromises.push(
+  const { data: { ccApplications } = {} } = await getClient().query(
+    GET_ALL_RECRUITMENTS,
+    { year }
+  );
+  const userPromises =
+    ccApplications?.map((applicant) =>
       getClient()
         .query(GET_USER_PROFILE, {
-          userInput: {
-            uid: applicant.uid,
-          },
+          userInput: { uid: applicant.uid },
         })
-        .toPromise(),
-    );
-  });
+        .toPromise()
+    ) || [];
+
   const users = await Promise.all(userPromises);
-  const processedApplicants = ccApplications.map((applicant, index) => ({
-    ...applicant,
-    ...users[index].data.userProfile,
-    ...users[index].data.userMeta,
-  }));
+  const processedApplicants =
+    ccApplications?.map((applicant, index) => ({
+      ...applicant,
+      ...users[index]?.data?.userProfile,
+      ...users[index]?.data?.userMeta,
+    })) || [];
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
-        All CC Recruitment Applications
-      </Typography>
-
-      <CCRecruitmentsTable data={processedApplicants} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+        }}
+      >
+        <Typography variant="h3" gutterBottom>
+          All CC Recruitment Applications
+        </Typography>
+        <YearSelector currentYear={currentYear} selectedYear={year} />
+      </div>
+      <CCRecruitmentsTable data={processedApplicants} year={year} />
     </Container>
   );
 }
