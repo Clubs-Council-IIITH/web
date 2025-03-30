@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -31,6 +32,20 @@ export default async function NewApplication() {
     data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
   } = await getClient().query(GET_USER, { userInput: null });
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
+
+  if (!currentUser) {
+    return (
+      <Container>
+        <Typography variant="h4" gutterBottom mt={3} align="center">
+          You are not logged in. Please login to apply for Clubs Council
+        </Typography>
+      </Container>
+    );
+  }
+
+  if (currentUser?.role === "cc") {
+    return redirect("/cc-recruitments/all");
+  }
 
   const { data: { haveAppliedForCC } = {} } = await getClient().query(
     HAVE_APPLIED,

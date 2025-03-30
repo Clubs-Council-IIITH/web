@@ -11,7 +11,7 @@ const routes = {
   // "/calendar": [],
   // "/student-bodies": [],
 
-  "/cc-recruitments": ["public"],
+  "/cc-recruitments": ["public", "cc"],
   "/cc-recruitments/all": ["cc"],
   "/cc-recruitments/all/:id": ["cc"],
   "/cc-recruitments/all/:id": ["cc"],
