@@ -529,6 +529,47 @@ export default function RecruitmentForm({ user = {} }) {
                         gutterBottom
                         mb={2}
                       >
+                        Have you been a part of any student-run bodies or clubs
+                        in our campus? If yes, tell us about your experience.
+                      </Typography>
+                    )}
+                    <Controller
+                      name="otherBodies"
+                      control={control}
+                      rules={{
+                        maxLength: {
+                          value: 4000,
+                          message: "Must be at most 4000 characters long!",
+                        },
+                      }}
+                      render={({ field, fieldState: { error, invalid } }) => (
+                        <TextField
+                          {...field}
+                          label={
+                            isDesktop
+                              ? "Have you been a part of any student-run bodies or clubs in our campus? If yes, tell us about your experience."
+                              : null
+                          }
+                          autoComplete="off"
+                          error={invalid}
+                          helperText={error?.message}
+                          variant="outlined"
+                          rows={5}
+                          fullWidth
+                          multiline
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12} xl={12}>
+                    {isDesktop ? null : (
+                      <Typography
+                        variant="subtitle2"
+                        textTransform="uppercase"
+                        color="text.secondary"
+                        gutterBottom
+                        mb={2}
+                      >
                         Did you often want to take part in an event, but
                         couldn't or didn't? What were the reasons? Why do you
                         think that happened?
@@ -599,47 +640,6 @@ export default function RecruitmentForm({ user = {} }) {
                           helperText={error?.message}
                           variant="outlined"
                           rows={8}
-                          fullWidth
-                          multiline
-                        />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
-                    {isDesktop ? null : (
-                      <Typography
-                        variant="subtitle2"
-                        textTransform="uppercase"
-                        color="text.secondary"
-                        gutterBottom
-                        mb={2}
-                      >
-                        Have you been a part of any student-run bodies or clubs
-                        in our campus? If yes, tell us about your experience.
-                      </Typography>
-                    )}
-                    <Controller
-                      name="otherBodies"
-                      control={control}
-                      rules={{
-                        maxLength: {
-                          value: 4000,
-                          message: "Must be at most 4000 characters long!",
-                        },
-                      }}
-                      render={({ field, fieldState: { error, invalid } }) => (
-                        <TextField
-                          {...field}
-                          label={
-                            isDesktop
-                              ? "Have you been a part of any student-run bodies or clubs in our campus? If yes, tell us about your experience."
-                              : null
-                          }
-                          autoComplete="off"
-                          error={invalid}
-                          helperText={error?.message}
-                          variant="outlined"
-                          rows={5}
                           fullWidth
                           multiline
                         />
