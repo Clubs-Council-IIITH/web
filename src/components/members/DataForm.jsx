@@ -243,7 +243,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         dayjs(formData.dateRolesEnd)["year"](),
       ],
       batchFiltering: formData.batchFiltering,
-      batchFilteringType: [...formData.batchFilteringType.map((batch) => batch.toLowerCase())],
+      batchFilteringType: [
+        ...formData.batchFilteringType.map((batch) => batch.toLowerCase()),
+      ],
     };
     submitHandlers[action](data);
     setLoading(false);
@@ -514,41 +516,45 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             control={control}
             rules={{ required: "Select at least one field!" }}
             render={({ field, fieldState: { error } }) => (
-                <FormControl component="fieldset" fullWidth error={error}>
-                    <FormGroup row>
-                        {["UG", "PG"].map((batch) => (
-                        <Grid item lg={1} md={3} sm={4} xs={6} key={batch}>
-                            <FormControlLabel
-                            control={
-                                <Checkbox
-                                {...field}
-                                value={batch}
-                                checked={field.value.includes(batch) || batchFiltering.includes("allBatches")}
-                                disabled={batchFiltering.includes("allBatches")}
-                                onChange={(event) => {
-                                    const newValue = [...field.value];
-                                    if (event.target.checked) {
-                                      newValue.push(event.target.value);
-                                    } else {
-                                      const index = newValue.indexOf(
-                                        event.target.value,
-                                      );
-                                      if (index > -1) {
-                                        newValue.splice(index, 1);
-                                      }
-                                    }
-                                    field.onChange(newValue);
-                                }}
-                                />
+              <FormControl component="fieldset" fullWidth error={error}>
+                <FormGroup row>
+                  {["UG", "PG"].map((batch) => (
+                    <Grid item lg={1} md={3} sm={4} xs={6} key={batch}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            {...field}
+                            value={batch}
+                            checked={
+                              field.value.includes(batch) ||
+                              batchFiltering.includes("allBatches")
                             }
-                            label={batch}
-                            />
-                        </Grid>
-                        ))}
-                    </FormGroup>
-                    <FormHelperText>{error?.message}</FormHelperText>
-                </FormControl>
-            )}/>
+                            disabled={batchFiltering.includes("allBatches")}
+                            onChange={(event) => {
+                              const newValue = [...field.value];
+                              if (event.target.checked) {
+                                newValue.push(event.target.value);
+                              } else {
+                                const index = newValue.indexOf(
+                                  event.target.value,
+                                );
+                                if (index > -1) {
+                                  newValue.splice(index, 1);
+                                }
+                              }
+                              field.onChange(newValue);
+                            }}
+                          />
+                        }
+                        label={batch}
+                      />
+                    </Grid>
+                  ))}
+                </FormGroup>
+                <FormHelperText>{error?.message}</FormHelperText>
+              </FormControl>
+            )}
+          />
         </Grid>
         <Grid container item>
           <Typography
