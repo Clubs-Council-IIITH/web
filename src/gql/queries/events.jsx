@@ -90,6 +90,7 @@ export const GET_EVENT = gql`
       clubid
       collabclubs
       location
+      locationAlternate
       audience
       description
       datetimeperiod
@@ -167,6 +168,7 @@ export const GET_FULL_EVENT = gql`
       equipment
       link
       location
+      locationAlternate
       mode
       name
       population

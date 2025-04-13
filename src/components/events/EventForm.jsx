@@ -232,6 +232,7 @@ export default function EventForm({
       mode: formData.mode,
       link: formData.link,
       location: formData.mode === "online" ? null : formData.location,
+      locationAlternate: formData.mode === "online" ? null : formData.locationAlternate,
       population: parseInt(formData.population),
       additional: formData.additional,
       equipment: formData.equipment,
@@ -1090,9 +1091,11 @@ function EventVenueInput({
   const locationInput = watch("location");
   const startDateInput = watch("datetimeperiod.0");
   const endDateInput = watch("datetimeperiod.1");
+  const locationAlternateNeeded = watch("locationAlternateNeeded");
 
   // reset location if datetime changes
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);
+  useEffect(() => resetField("locationAlternate"), [startDateInput, endDateInput]);
 
   return (
     <Grid container item spacing={2}>
@@ -1122,6 +1125,28 @@ function EventVenueInput({
             </Box>
           )}
         />
+        {["hybrid", "offline"].includes(modeInput) ? (
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={
+                <Controller
+                  name="locationAlternateNeeded"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Switch
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      inputProps={{ "aria-label": "controlled" }}
+                      sx={{ margin: "auto" }}
+                    />
+                  )}
+                />
+              }
+              label="Alternate Location"
+            />
+          </Grid>
+        ) : null}
       </Grid>
 
       {/* show venue selector if event is hybrid or offline*/}
@@ -1135,6 +1160,7 @@ function EventVenueInput({
               endDateInput={endDateInput}
               disabled={disabled}
               eventid={eventid}
+              locationAlternateNeeded={locationAlternateNeeded}
             />
           ) : (
             <FormHelperText>
@@ -1242,6 +1268,7 @@ function EventLocationInput({
   startDateInput,
   endDateInput,
   disabled = true,
+  locationAlternateNeeded = true,
   eventid = null,
 }) {
   const { triggerToast } = useToast();
@@ -1274,52 +1301,107 @@ function EventLocationInput({
   }, [startDateInput, endDateInput]);
 
   return (
-    <Controller
-      name="location"
-      control={control}
-      defaultValue={[]}
-      rules={{ required: "Select at least one location!" }}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <FormControl fullWidth error={invalid}>
-          <InputLabel id="locationSelect">Location</InputLabel>
-          <Select
-            multiple
-            id="location"
-            labelId="locationSelect"
-            disabled={
-              !(startDateInput && endDateInput) ||
-              disabled ||
-              !availableRooms?.locations?.length
-            }
-            input={<OutlinedInput label="Location" />}
-            renderValue={(selected) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 0.5,
-                }}
+    <Grid container spacing={1}>
+      <Grid item xs={12}>
+        <Controller
+          name="location"
+          control={control}
+          defaultValue={[]}
+          rules={{ required: "Select at least one location!" }}
+          render={({ field, fieldState: { error, invalid } }) => (
+            <FormControl fullWidth error={invalid}>
+              <InputLabel id="locationSelect">Location</InputLabel>
+              <Select
+                multiple
+                id="location"
+                labelId="locationSelect"
+                disabled={
+                  !(startDateInput && endDateInput) ||
+                  disabled ||
+                  !availableRooms?.locations?.length
+                }
+                input={<OutlinedInput label="Location" />}
+                renderValue={(selected) => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 0.5,
+                    }}
+                  >
+                    {selected.map((value) => (
+                      <Chip key={value} label={locationLabel(value)?.name} />
+                    ))}
+                  </Box>
+                )}
+                {...field}
               >
-                {selected.map((value) => (
-                  <Chip key={value} label={locationLabel(value)?.name} />
-                ))}
-              </Box>
+                {availableRooms?.locations
+                  ?.slice()
+                  ?.sort()
+                  ?.map((location) => (
+                    <MenuItem key={location} value={location}>
+                      {locationLabel(location)?.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              <FormHelperText>{error?.message}</FormHelperText>
+            </FormControl>
+          )}
+        />
+      </Grid>
+      {locationAlternateNeeded ? (
+        <Grid item xs={12}>
+          <Controller
+            name="locationAlternate"
+            control={control}
+            defaultValue={[]}
+            rules={{ required: "Select at least one location!" }}
+            render={({ field, fieldState: { error, invalid } }) => (
+              <FormControl fullWidth error={invalid}>
+                <InputLabel id="locationAlternateSelect">
+                  Alternate Location
+                </InputLabel>
+                <Select
+                  multiple
+                  id="locationAlternate"
+                  labelId="locationAlternateSelect"
+                  disabled={
+                    !(startDateInput && endDateInput) ||
+                    disabled ||
+                    !availableRooms?.locations?.length
+                  }
+                  input={<OutlinedInput label="Alternate Location" />}
+                  renderValue={(selected) => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 0.5,
+                      }}
+                    >
+                      {selected.map((value) => (
+                        <Chip key={value} label={locationLabel(value)?.name} />
+                      ))}
+                    </Box>
+                  )}
+                  {...field}
+                >
+                  {availableRooms?.locations
+                    ?.slice()
+                    ?.sort()
+                    ?.map((location) => (
+                      <MenuItem key={location} value={location}>
+                        {locationLabel(location)?.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+                <FormHelperText>{error?.message}</FormHelperText>
+              </FormControl>
             )}
-            {...field}
-          >
-            {availableRooms?.locations
-              ?.slice()
-              ?.sort()
-              ?.map((location) => (
-                <MenuItem key={location} value={location}>
-                  {locationLabel(location)?.name}
-                </MenuItem>
-              ))}
-          </Select>
-          <FormHelperText>{error?.message}</FormHelperText>
-        </FormControl>
-      )}
-    />
+          />
+        </Grid> ) : null}
+    </Grid>
   );
 }
 
