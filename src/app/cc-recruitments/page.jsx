@@ -12,7 +12,7 @@ export const metadata = {
   title: "New Application | Clubs Council @ IIIT-H",
 };
 
-const deadline = new Date("2025-04-05T23:59:59+05:30");
+const deadline = new Date("2025-04-20T23:59:59+05:30");
 
 async function getUser(currentUser) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
