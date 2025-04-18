@@ -1133,6 +1133,7 @@ function EventVenueInput({
           startDateInput && endDateInput ? (
             <EventLocationInput
               control={control}
+              watch={watch}
               startDateInput={startDateInput}
               endDateInput={endDateInput}
               disabled={disabled}
@@ -1241,12 +1242,15 @@ function EventVenueInput({
 // select location from available rooms
 function EventLocationInput({
   control,
+  watch,
   startDateInput,
   endDateInput,
   disabled = true,
   eventid = null,
 }) {
   const { triggerToast } = useToast();
+  const locationInput = watch("location");
+  const locationAlternateInput = watch("locationAlternate");
 
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
@@ -1285,7 +1289,7 @@ function EventLocationInput({
           rules={{ required: "Select at least one location!" }}
           render={({ field, fieldState: { error, invalid } }) => (
             <FormControl fullWidth error={invalid}>
-              <InputLabel id="locationSelect">Location</InputLabel>
+              <InputLabel id="locationSelect">Location *</InputLabel>
               <Select
                 multiple
                 id="location"
@@ -1295,7 +1299,7 @@ function EventLocationInput({
                   disabled ||
                   !availableRooms?.locations?.length
                 }
-                input={<OutlinedInput label="Location" />}
+                input={<OutlinedInput label="Location *" />}
                 renderValue={(selected) => (
                   <Box
                     sx={{
@@ -1315,8 +1319,17 @@ function EventLocationInput({
                   ?.slice()
                   ?.sort()
                   ?.map((location) => (
-                    <MenuItem key={location} value={location}>
+                    <MenuItem 
+                      key={location} 
+                      value={location}
+                      disabled={locationAlternateInput?.includes(location)}
+                    >
                       {locationLabel(location)?.name}
+                      {locationAlternateInput?.includes(location) && (
+                        <span style={{ marginLeft: '8px', color: '#999' }}>
+                          (selected as alternate)
+                        </span>
+                      )}
                     </MenuItem>
                   ))}
               </Select>
@@ -1365,8 +1378,17 @@ function EventLocationInput({
                   ?.slice()
                   ?.sort()
                   ?.map((location) => (
-                    <MenuItem key={location} value={location}>
+                    <MenuItem 
+                      key={location} 
+                      value={location}
+                      disabled={locationInput?.includes(location)}
+                    >
                       {locationLabel(location)?.name}
+                      {locationInput?.includes(location) && (
+                        <span style={{ marginLeft: '8px', color: '#999' }}>
+                          (selected as main)
+                        </span>
+                      )}
                     </MenuItem>
                   ))}
               </Select>
@@ -1375,7 +1397,6 @@ function EventLocationInput({
           )}
         />
       </Grid> 
-
     </Grid>
   );
 }
