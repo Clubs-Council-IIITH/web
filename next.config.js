@@ -2,10 +2,19 @@
   const original = console[method];
   console[method] = (...args) => {
     const now = new Date();
-    const formattedDate = 
-      `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')} ` +
-      `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-    original(`[${formattedDate}]`, ...args);
+    
+    const formattedDate = now.toLocaleString('en-US', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).replace(/(\d+)\/(\d+)\/(\d+),\s(\d+):(\d+):(\d+)/, '[$3/$1/$2 $4:$5:$6]');
+    
+    original(`${formattedDate} - `, ...args);
   };
 });
 
