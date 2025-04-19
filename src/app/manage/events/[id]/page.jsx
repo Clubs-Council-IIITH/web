@@ -182,6 +182,23 @@ export default async function ManageEventID({ params }) {
                   ))}
                 </Box>
 
+                {event?.locationAlternate && event?.locationAlternate.length ? (
+                  <Box mt={2}>
+                    <Typography variant="overline">
+                      Alternate Locations
+                    </Typography>
+                    <Box mt={1}>
+                      {event?.locationAlternate?.map((venue, key) => (
+                        <Chip
+                          key={key}
+                          label={locationLabel(venue)?.name}
+                          sx={{ mr: 1, mb: 1, p: 1 }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                ) : null}
+
                 <Box mt={2}>
                   <Typography variant="overline">Population</Typography>
                   <Typography variant="body2">
