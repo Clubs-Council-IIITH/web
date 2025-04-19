@@ -1,19 +1,24 @@
-['log', 'warn', 'error', 'info', 'debug'].forEach((method) => {
+["log", "warn", "error", "info", "debug"].forEach((method) => {
   const original = console[method];
   console[method] = (...args) => {
     const now = new Date();
-    
-    const formattedDate = now.toLocaleString('en-US', {
-      timeZone: 'Asia/Kolkata',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    }).replace(/(\d+)\/(\d+)\/(\d+),\s(\d+):(\d+):(\d+)/, '[$3/$1/$2 $4:$5:$6]');
-    
+
+    const formattedDate = now
+      .toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      })
+      .replace(
+        /(\d+)\/(\d+)\/(\d+),\s(\d+):(\d+):(\d+)/,
+        "[$3/$1/$2 $4:$5:$6]",
+      );
+
     original(`${formattedDate} - `, ...args);
   };
 });
