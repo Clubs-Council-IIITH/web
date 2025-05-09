@@ -82,6 +82,7 @@ export function DownloadEventReport({
         p, a {
             font-size: 13px;
             margin: 6px 0;
+            overflow-wrap: break-word;
         }
 
         strong {
