@@ -217,7 +217,11 @@ export function EventReportDetails({
             <Typography variant="overline">Photos/Videos Link</Typography>
             <Typography variant="body2">
               <a
-                style={{ color: "inherit", textDecoration: "none", overflowWrap: "break-word" }}
+                style={{
+                  color: "inherit",
+                  textDecoration: "none",
+                  overflowWrap: "break-word",
+                }}
                 href={eventReport?.photosLink}
                 target="_blank"
                 rel="noreferrer"
