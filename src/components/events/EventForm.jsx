@@ -232,7 +232,8 @@ export default function EventForm({
       mode: formData.mode,
       link: formData.link,
       location: formData.mode === "online" ? null : formData.location,
-      locationAlternate: formData.mode === "online" ? null : formData.locationAlternate,
+      locationAlternate:
+        formData.mode === "online" ? null : formData.locationAlternate,
       population: parseInt(formData.population),
       additional: formData.additional,
       equipment: formData.equipment,
@@ -1094,7 +1095,10 @@ function EventVenueInput({
 
   // reset location if datetime changes
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);
-  useEffect(() => resetField("locationAlternate"), [startDateInput, endDateInput]);
+  useEffect(
+    () => resetField("locationAlternate"),
+    [startDateInput, endDateInput],
+  );
 
   return (
     <Grid container item spacing={2}>
@@ -1319,14 +1323,14 @@ function EventLocationInput({
                   ?.slice()
                   ?.sort()
                   ?.map((location) => (
-                    <MenuItem 
-                      key={location} 
+                    <MenuItem
+                      key={location}
                       value={location}
                       disabled={locationAlternateInput?.includes(location)}
                     >
                       {locationLabel(location)?.name}
                       {locationAlternateInput?.includes(location) && (
-                        <span style={{ marginLeft: '8px', color: '#999' }}>
+                        <span style={{ marginLeft: "8px", color: "#999" }}>
                           (selected as alternate)
                         </span>
                       )}
@@ -1338,7 +1342,7 @@ function EventLocationInput({
           )}
         />
       </Grid>
-      
+
       <Grid item xs={12}>
         <Controller
           name="locationAlternate"
@@ -1378,14 +1382,14 @@ function EventLocationInput({
                   ?.slice()
                   ?.sort()
                   ?.map((location) => (
-                    <MenuItem 
-                      key={location} 
+                    <MenuItem
+                      key={location}
                       value={location}
                       disabled={locationInput?.includes(location)}
                     >
                       {locationLabel(location)?.name}
                       {locationInput?.includes(location) && (
-                        <span style={{ marginLeft: '8px', color: '#999' }}>
+                        <span style={{ marginLeft: "8px", color: "#999" }}>
                           (selected as main)
                         </span>
                       )}
@@ -1396,7 +1400,7 @@ function EventLocationInput({
             </FormControl>
           )}
         />
-      </Grid> 
+      </Grid>
     </Grid>
   );
 }
