@@ -172,6 +172,7 @@ export const GET_FULL_EVENT = gql`
       mode
       name
       population
+      externalPopulation
       poster
       status {
         state
