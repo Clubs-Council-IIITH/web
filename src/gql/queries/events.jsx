@@ -172,6 +172,7 @@ export const GET_FULL_EVENT = gql`
       mode
       name
       population
+      externalPopulation
       poster
       status {
         state
@@ -237,6 +238,7 @@ export const GET_EVENT_REPORT = gql`
       eventid
       summary
       attendance
+      externalAttendance
       prizes
       prizesBreakdown
       winners
