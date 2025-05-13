@@ -238,6 +238,7 @@ export const GET_EVENT_REPORT = gql`
       eventid
       summary
       attendance
+      externalAttendance
       prizes
       prizesBreakdown
       winners
