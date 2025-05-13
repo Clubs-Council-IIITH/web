@@ -199,29 +199,7 @@ export default async function ManageEventID({ params }) {
                   </Box>
                 ) : null}
 
-
-                <Grid container spacing={2} mt={0.1}>
-                  <Grid item xs={4}>
-                    <Box>
-                      <Typography variant="overline">Population</Typography>
-                      <Typography variant="body2">
-                        {event?.population || 0}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  {event?.externalPopulation && event.externalPopulation > 0 ? (
-                    <Grid item xs={4}>
-                      <Box>
-                        <Typography variant="overline">External Population</Typography>
-                        <Typography variant="body2">
-                          {event?.externalPopulation || 0}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ) : null}
-                </Grid>
-
-                <Box mt={2}>
+               <Box mt={2}>
                   <Typography variant="overline">Equipment</Typography>
                   <Typography variant="body2">
                     {event?.equipment || "None"}
@@ -240,6 +218,27 @@ export default async function ManageEventID({ params }) {
             ) : (
               <Box mt={2}>None requested</Box>
             )}
+
+            <Grid container spacing={2} mt={0.1}>
+              <Grid item xs={4}>
+                <Box>
+                  <Typography variant="overline">Population</Typography>
+                  <Typography variant="body2">
+                    {event?.population || 0}
+                  </Typography>
+                </Box>
+              </Grid>
+              {event?.externalPopulation && event.externalPopulation > 0 ? (
+                <Grid item xs={4}>
+                  <Box>
+                    <Typography variant="overline">External Population</Typography>
+                    <Typography variant="body2">
+                      {event?.externalPopulation || 0}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ) : null}
+            </Grid>
           </Grid>
         </Grid>
 
