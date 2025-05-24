@@ -59,7 +59,10 @@ export default function EventsTable({
             headerName: "Event Code",
             flex: 3,
             renderCell: ({ value }) => (
-              <Typography variant="body2" color="text.disabled">
+              <Typography
+                variant="body2"
+                color="text.disabled"
+              >
                 {value}
               </Typography>
             ),
@@ -72,28 +75,46 @@ export default function EventsTable({
       flex: isMobile ? null : 5,
       renderCell: ({ value, row }) =>
         value ? (
-          <>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              overflow: "hidden"
+            }}
+          >
             {row.budget && row.budget.length > 0 ? (
-              <Icon sx={{ mr: 0.5 }} variant={"paid-rounded"} />
+              <Icon
+                sx={{
+                  mr: 0.5,
+                  flexShrink: 0 // Prevent icon from shrinking
+                }}
+                variant={"paid-rounded"}
+              />
             ) : null}
             <Typography
               variant="body2"
-              style={{
-                overflowWrap: "break-word",
-                wordWrap: "break-word",
-                msWordBreak: "break-all",
-                wordBreak: "break-all",
-                msHyphens: "auto",
-                MozHyphens: "auto",
-                WebkitHyphens: "auto",
-                hyphens: "auto",
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                minWidth: 0 // Allow text to shrink
               }}
             >
               {value}
             </Typography>
-          </>
+          </Box>
         ) : (
-          value
+          <Typography
+            variant="body2"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            }}
+          >
+            {value}
+          </Typography>
         ),
       display: "flex",
     },
@@ -105,6 +126,18 @@ export default function EventsTable({
             headerName: "Club ID",
             flex: 3,
             valueGetter: (value, row, column, apiRef) => row.clubid,
+            renderCell: ({ value }) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                {value}
+              </Typography>
+            ),
           },
           {
             field: "scheduled",
@@ -114,6 +147,18 @@ export default function EventsTable({
             headerAlign: "center",
             valueGetter: (value, row, column, apiRef) => row.datetimeperiod[0],
             valueFormatter: (value, row, column, apiRef) => ISOtoHuman(value),
+            renderCell: ({ formattedValue }) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                {formattedValue}
+              </Typography>
+            ),
           },
         ]),
     {
@@ -172,7 +217,12 @@ export default function EventsTable({
           <Tag
             label={stateLabel(value.state).shortName}
             color={stateLabel(value.state).color}
-            sx={{ my: 2 }}
+            sx={{
+              my: 2,
+              maxWidth: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            }}
           />
         );
       },
