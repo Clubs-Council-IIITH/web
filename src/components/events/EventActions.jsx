@@ -210,7 +210,33 @@ export function ApproveEvent({ sx }) {
     </>
   );
 }
+export function LocationClashApproval({sx}) {
+  const [dialog, setDialog] = useState(false);
+  return (
+    <>
+      <Button
+        variant="contained"
+        color="warning"
+        startIcon={<Icon variant="done" />}
+        onClick={() => setDialog(true)}
+        sx={sx}
+      >
+        Approve
+      </Button>
 
+      <ConfirmDialog
+        open={dialog}
+        title= "Location Clash Detected"
+        description="The location selected for this event is clashing with another booking. Please change the location before approval."
+        onConfirm={() => setDialog(false)}
+        onClose={() => setDialog(false)}
+        confirmProps={{ color:  "warning"}}
+        confirmText="Close"
+
+      />
+    </>
+  );
+}
 export function ProgressEvent({ sx }) {
   const { id } = useParams();
   return (

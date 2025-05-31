@@ -37,8 +37,6 @@ function filterClashingEvents(events, startTime, endTime, inputLocations) {
     ? inputLocations.map((loc) => loc.toLowerCase().trim())
     : [inputLocations.toLowerCase().trim()];
 
-  console.log("inputLocations:", inputLocations);
-  console.log("inputLocs:", inputLocs);
 
   const clashingEvents = events.filter((event) => {
 
