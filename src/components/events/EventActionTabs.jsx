@@ -32,7 +32,38 @@ import { eventProgress } from "actions/events/progress/server_action";
 import { rejectEventAction } from "actions/events/reject/server_action";
 import { getUserByRole } from "actions/users/get/role/server_action";
 
-function EventApproveForm({ eventid, members }) {
+function filterClashingEvents(events, startTime, endTime, inputLocations) {
+  const inputLocs = Array.isArray(inputLocations)
+    ? inputLocations.map((loc) => loc.toLowerCase().trim())
+    : [inputLocations.toLowerCase().trim()];
+
+  console.log("inputLocations:", inputLocations);
+  console.log("inputLocs:", inputLocs);
+
+  const clashingEvents = events.filter((event) => {
+
+    if (!event.status || event.status.state !== "approved") return false;
+    const eventStart = new Date(event.datetimeperiod[0]);
+    const eventEnd = new Date(event.datetimeperiod[1]);
+
+    const isTimeClashing =
+      (startTime >= eventStart && startTime < eventEnd) ||
+      (endTime > eventStart && endTime <= eventEnd) ||
+      (startTime <= eventStart && endTime >= eventEnd);
+
+    const eventLocs = Array.isArray(event.location)
+      ? event.location.map((loc) => loc.toLowerCase().trim())
+      : [event.location.toLowerCase().trim()];
+
+    const isLocationClashing = eventLocs.some((loc) => inputLocs.includes(loc));
+
+    return isTimeClashing && isLocationClashing;
+  });
+
+  return clashingEvents.length ? clashingEvents : null;
+}
+
+function EventApproveForm({ eventid, members, clashFlag }) {
   const { triggerToast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -241,12 +272,18 @@ function EventApproveForm({ eventid, members }) {
           variant="contained"
           color="success"
           startIcon={<Icon variant="done" />}
-          //   fullWidth
+          disabled={clashFlag}
         >
           Approve
         </LoadingButton>
-        <Typography variant="caption" color="textSecondary" ml={1}>
-          (This action cannot be undone.)
+        <Typography
+          variant="caption"
+          color={clashFlag ? "error" : "textSecondary"}
+          ml={1}
+        >
+          {clashFlag
+            ? "(Location of this event is clashing with some other approved event in the same time period. Please edit or reject.)"
+            : "(This action cannot be undone.)"}
         </Typography>
       </form>
     </>
@@ -333,13 +370,27 @@ function EventRejectForm({ eventid }) {
   );
 }
 
-export default function EventActionTabs({ eventid, members }) {
+export default function EventActionTabs({
+  eventid,
+  eventLocation,
+  eventStart,
+  eventEnd,
+  members,
+  existingEvents,
+}) {
   const [selectedTab, setSelectedTab] = useState(0);
-
+  const startTime = new Date(eventStart);
+  const endTime = new Date(eventEnd);
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
-
+  const clashing_events = filterClashingEvents(
+    existingEvents,
+    startTime,
+    endTime,
+    eventLocation
+  );
+  const clashFlag = clashing_events!=null && clashing_events.length > 0
   return (
     <Box sx={{ width: "100%", mb: 3 }}>
       <Tabs
@@ -354,7 +405,7 @@ export default function EventActionTabs({ eventid, members }) {
       </Tabs>
       <Box sx={{ mt: 2 }}>
         {selectedTab === 0 ? (
-          <EventApproveForm eventid={eventid} members={members} />
+          <EventApproveForm eventid={eventid} members={members} clashFlag={clashFlag} />
         ) : (
           <EventRejectForm eventid={eventid} />
         )}
