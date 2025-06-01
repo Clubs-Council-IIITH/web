@@ -331,8 +331,6 @@ function getActions(event, clashFlag, user) {
       event?.status?.state === "pending_budget" &&
       !event?.status?.budget
     ){
-      if(clashFlag)
-        return [LocationClashApproval];
       return [ApproveEvent];
     }
     else return [];
