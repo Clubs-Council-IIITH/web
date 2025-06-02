@@ -405,7 +405,7 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            { defaultValues?.externalPopulation ? (
+            {defaultValues?.externalPopulation ? (
               <>
                 <Grid item xs={12}>
                   <TextField
@@ -419,7 +419,9 @@ export default function EventReportForm({
                   <Controller
                     name="actualExternalAttendance"
                     control={control}
-                    rules={{ required: "Actual External Attendance is required!" }}
+                    rules={{
+                      required: "Actual External Attendance is required!",
+                    }}
                     defaultValue={defaultReportValues?.externalAttendance}
                     render={({ field, fieldState: { error, invalid } }) => (
                       <TextField
@@ -435,7 +437,7 @@ export default function EventReportForm({
                   />
                 </Grid>
               </>
-            ): null }
+            ) : null}
 
             <Grid item xs={12} mt={2}>
               <Controller

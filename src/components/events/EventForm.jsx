@@ -100,7 +100,7 @@ export default function EventForm({
   }, []);
 
   const { control, handleSubmit, watch, resetField, setValue } = useForm({
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues,
   });
   const collabEvent = watch("collabEvent");
@@ -1217,9 +1217,10 @@ function EventVenueInput({
               required: "External participation count is required if enabled.",
               min: {
                 value: 1,
-                message: "External participation count must be at least 1 if enabled.",
+                message:
+                  "External participation count must be at least 1 if enabled.",
               },
-              validate: (value, formValues) => {
+              validate: (value, formValues) => {
                 const population = formValues.population;
                 const externalPopulationValue = Number(value);
                 const populationValue = Number(population);
@@ -1249,7 +1250,7 @@ function EventVenueInput({
             )}
           />
         </Grid>
-      ): null}
+      ) : null}
 
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (

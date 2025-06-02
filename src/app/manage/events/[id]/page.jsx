@@ -244,7 +244,7 @@ export default async function ManageEventID({ params }) {
                   </Box>
                 ) : null}
 
-               <Box mt={2}>
+                <Box mt={2}>
                   <Typography variant="overline">Equipment</Typography>
                   <Typography variant="body2">
                     {event?.equipment || "None"}
@@ -276,7 +276,9 @@ export default async function ManageEventID({ params }) {
               {event?.externalPopulation && event.externalPopulation > 0 ? (
                 <Grid item xs={4}>
                   <Box>
-                    <Typography variant="overline">External Population</Typography>
+                    <Typography variant="overline">
+                      External Population
+                    </Typography>
                     <Typography variant="body2">
                       {event?.externalPopulation || 0}
                     </Typography>

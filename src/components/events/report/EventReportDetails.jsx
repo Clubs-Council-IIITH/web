@@ -156,7 +156,9 @@ export function EventReportDetails({
             <Grid item xs={4}>
               <Box>
                 <Typography variant="overline">Estimated</Typography>
-                <Typography variant="body2">{event?.population || 0}</Typography>
+                <Typography variant="body2">
+                  {event?.population || 0}
+                </Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
@@ -168,7 +170,7 @@ export function EventReportDetails({
               </Box>
             </Grid>
           </Grid>
-          { event?.externalPopulation ? (
+          {event?.externalPopulation ? (
             <>
               <Typography
                 variant="subtitle2"
@@ -181,7 +183,9 @@ export function EventReportDetails({
                 <Grid item xs={4}>
                   <Box>
                     <Typography variant="overline">Estimated</Typography>
-                    <Typography variant="body2">{event?.externalPopulation || 0}</Typography>
+                    <Typography variant="body2">
+                      {event?.externalPopulation || 0}
+                    </Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={4}>
@@ -194,7 +198,7 @@ export function EventReportDetails({
                 </Grid>
               </Grid>
             </>
-          ): null}
+          ) : null}
         </Grid>
 
         <Grid item xs={12} md={4} sm={6}>
