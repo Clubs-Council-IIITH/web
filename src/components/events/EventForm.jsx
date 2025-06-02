@@ -100,6 +100,7 @@ export default function EventForm({
   }, []);
 
   const { control, handleSubmit, watch, resetField, setValue } = useForm({
+    mode: 'onChange',
     defaultValues,
   });
   const collabEvent = watch("collabEvent");
@@ -235,6 +236,7 @@ export default function EventForm({
       locationAlternate:
         formData.mode === "online" ? null : formData.locationAlternate,
       population: parseInt(formData.population),
+      externalPopulation: parseInt(formData.externalPopulation),
       additional: formData.additional,
       equipment: formData.equipment,
       poc: formData.poc,
@@ -507,6 +509,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   resetField={resetField}
+                  defaultValues={defaultValues}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
@@ -1084,6 +1087,7 @@ function EventDescriptionInput({ control }) {
 function EventVenueInput({
   control,
   watch,
+  defaultValues,
   resetField,
   disabled = true,
   eventid = null,
@@ -1092,6 +1096,7 @@ function EventVenueInput({
   const locationInput = watch("location");
   const startDateInput = watch("datetimeperiod.0");
   const endDateInput = watch("datetimeperiod.1");
+  const externalAllowed = watch("externalAllowed");
 
   // reset location if datetime changes
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);
@@ -1156,6 +1161,7 @@ function EventVenueInput({
           name="population"
           control={control}
           rules={{
+            required: "Participation count is required.",
             min: {
               value: 1,
               message: "Expected participation count must be at least 1.",
@@ -1179,6 +1185,71 @@ function EventVenueInput({
           )}
         />
       </Grid>
+
+      <FormControlLabel
+        control={
+          <Controller
+            name="externalAllowed"
+            control={control}
+            defaultValue={
+              defaultValues.externalPopulation &&
+              defaultValues.externalPopulation > 0
+            }
+            render={({ field }) => (
+              <Switch
+                checked={field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+                inputProps={{ "aria-label": "controlled" }}
+                sx={{ m: 2 }}
+              />
+            )}
+          />
+        }
+        label="External Particpants"
+      />
+
+      {externalAllowed ? (
+        <Grid item xs={12}>
+          <Controller
+            name="externalPopulation"
+            control={control}
+            rules={{
+              required: "External participation count is required if enabled.",
+              min: {
+                value: 1,
+                message: "External participation count must be at least 1 if enabled.",
+              },
+              validate: (value, formValues) => {
+                const population = formValues.population;
+                const externalPopulationValue = Number(value);
+                const populationValue = Number(population);
+
+                if (externalPopulationValue > populationValue) {
+                  return "External participation count must be less than total participants.";
+                }
+                return true;
+              },
+            }}
+            defaultValue={0}
+            render={({ field, fieldState: { error, invalid } }) => (
+              <TextField
+                type="number"
+                label="Expected External Participation*"
+                error={invalid}
+                helperText={error?.message}
+                autoComplete="off"
+                variant="outlined"
+                fullWidth
+                InputProps={{
+                  inputProps: { min: 1 },
+                }}
+                disabled={false}
+                {...field}
+              />
+            )}
+          />
+        </Grid>
+      ): null}
 
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (

@@ -159,7 +159,8 @@ export default function EventReportForm({
       const reportData = {
         eventid: id,
         summary: formData.eventSummary,
-        attendance: parseInt(formData.actualAttendance, 10),
+        attendance: parseInt(formData.actualAttendance, 0),
+        externalAttendance: parseInt(formData.actualExternalAttendance, null),
         prizes: formData.prizes || [],
         prizesBreakdown: formData.prizesBreakdown || "N/A",
         winners: formData.winnersDetails || "N/A",
@@ -385,7 +386,7 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} mt={2} mb={3}>
               <Controller
                 name="actualAttendance"
                 control={control}
@@ -404,6 +405,38 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
+            { defaultValues?.externalPopulation ? (
+              <>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Expected External Participation"
+                    value={defaultValues?.population}
+                    disabled
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} mt={2}>
+                  <Controller
+                    name="actualExternalAttendance"
+                    control={control}
+                    rules={{ required: "Actual External Attendance is required!" }}
+                    defaultValue={defaultReportValues?.externalAttendance}
+                    render={({ field, fieldState: { error, invalid } }) => (
+                      <TextField
+                        {...field}
+                        label="Actual External Attendance*"
+                        type="number"
+                        fullWidth
+                        error={invalid}
+                        helperText={error?.message}
+                        autoComplete="off"
+                      />
+                    )}
+                  />
+                </Grid>
+              </>
+            ): null }
+
             <Grid item xs={12} mt={2}>
               <Controller
                 name="prizes"

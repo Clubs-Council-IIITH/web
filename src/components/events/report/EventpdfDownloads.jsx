@@ -213,7 +213,7 @@ export function DownloadEventReport({
                 : `<p class="no-data">No budget details available.</p>`
             }
         </div>
-        
+
         <div class="section">
             <h2>Participation Overview</h2>
             <p><strong>Audience:</strong> ${
@@ -229,6 +229,13 @@ export function DownloadEventReport({
             <p><strong>Actual Attendance:</strong> ${
               eventReport?.attendance || "N/A"
             }</p>
+            <p><strong>Estimated External Participation:</strong> ${
+              event?.externalPopulation || "N/A"
+            }</p>
+            <p><strong>Actual External Attendance:</strong> ${
+              eventReport?.externalAttendance || "N/A"
+            }</p>
+
         </div>
         <div class="section">
             <h2>Venue Information</h2>
@@ -705,7 +712,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
         <p><strong>Clubs Council Approved By:</strong> ${
           event?.status?.ccApprover || "Information not available"
         }</p>
-        
+
         <p><strong>Students Life Council Approval:</strong> ${
           event?.status?.slcApproverTime || "Information not available"
         }</p>
@@ -716,7 +723,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
             : ""
         }
         </div>
-            
+
         ${
           event?.budget?.length
             ? `

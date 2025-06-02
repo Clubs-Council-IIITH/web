@@ -152,16 +152,49 @@ export function EventReportDetails({
             <Typography variant="overline">Mode</Typography>
             <Typography variant="body2">{event?.mode || "None"}</Typography>
           </Box>
-          <Box mt={2}>
-            <Typography variant="overline">Estimated Population</Typography>
-            <Typography variant="body2">{event?.population || 0}</Typography>
-          </Box>
-          <Box mt={2}>
-            <Typography variant="overline">Attended Population</Typography>
-            <Typography variant="body2">
-              {eventReport?.attendance || "None"}
-            </Typography>
-          </Box>
+          <Grid container spacing={2} mt={0.1} mb={4}>
+            <Grid item xs={4}>
+              <Box>
+                <Typography variant="overline">Estimated</Typography>
+                <Typography variant="body2">{event?.population || 0}</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Box>
+                <Typography variant="overline">Attended</Typography>
+                <Typography variant="body2">
+                  {eventReport?.attendance || "None"}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+          { event?.externalPopulation ? (
+            <>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                EXTERNAL ATTENDANCE
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <Box>
+                    <Typography variant="overline">Estimated</Typography>
+                    <Typography variant="body2">{event?.externalPopulation || 0}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Box>
+                    <Typography variant="overline">Attended</Typography>
+                    <Typography variant="body2">
+                      {eventReport?.externalAttendance || "None"}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </>
+          ): null}
         </Grid>
 
         <Grid item xs={12} md={4} sm={6}>

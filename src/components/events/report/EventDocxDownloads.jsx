@@ -429,7 +429,28 @@ export function DownloadEventReportDocx({
                 }),
               ],
             }),
-
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Estimated External Participation: ",
+                  bold: true,
+                }),
+                new TextRun({
+                  text: `${event?.externalPopulation || "N/A"}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Actual external Attendance: ",
+                  bold: true,
+                }),
+                new TextRun({
+                  text: `${eventReport?.externalAttendance || "N/A"}`,
+                }),
+              ],
+            }),
             new Paragraph({
               text: "Venue Information",
               heading: "Heading2",
