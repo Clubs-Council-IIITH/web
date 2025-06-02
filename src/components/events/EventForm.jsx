@@ -509,6 +509,7 @@ export default function EventForm({
                   control={control}
                   watch={watch}
                   resetField={resetField}
+                  defaultValues={defaultValues}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
@@ -1086,6 +1087,7 @@ function EventDescriptionInput({ control }) {
 function EventVenueInput({
   control,
   watch,
+  defaultValues,
   resetField,
   disabled = true,
   eventid = null,
@@ -1189,6 +1191,10 @@ function EventVenueInput({
           <Controller
             name="externalAllowed"
             control={control}
+            defaultValue={
+              defaultValues.externalPopulation &&
+              defaultValues.externalPopulation > 0
+            }
             render={({ field }) => (
               <Switch
                 checked={field.value}
