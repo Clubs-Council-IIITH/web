@@ -59,10 +59,7 @@ export default function EventsTable({
             headerName: "Event Code",
             flex: 3,
             renderCell: ({ value }) => (
-              <Typography
-                variant="body2"
-                color="text.disabled"
-              >
+              <Typography variant="body2" color="text.disabled">
                 {value}
               </Typography>
             ),
@@ -80,14 +77,14 @@ export default function EventsTable({
               display: "flex",
               alignItems: "center",
               width: "100%",
-              overflow: "hidden"
+              overflow: "hidden",
             }}
           >
             {row.budget && row.budget.length > 0 ? (
               <Icon
                 sx={{
                   mr: 0.5,
-                  flexShrink: 0 // Prevent icon from shrinking
+                  flexShrink: 0, // Prevent icon from shrinking
                 }}
                 variant={"paid-rounded"}
               />
@@ -98,7 +95,7 @@ export default function EventsTable({
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
-                minWidth: 0 // Allow text to shrink
+                minWidth: 0, // Allow text to shrink
               }}
             >
               {value}
@@ -110,7 +107,7 @@ export default function EventsTable({
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
+              whiteSpace: "nowrap",
             }}
           >
             {value}
@@ -132,7 +129,7 @@ export default function EventsTable({
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
                 }}
               >
                 {value}
@@ -153,7 +150,7 @@ export default function EventsTable({
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
                 }}
               >
                 {formattedValue}
@@ -221,7 +218,7 @@ export default function EventsTable({
               my: 2,
               maxWidth: "100%",
               overflow: "hidden",
-              textOverflow: "ellipsis"
+              textOverflow: "ellipsis",
             }}
           />
         );
