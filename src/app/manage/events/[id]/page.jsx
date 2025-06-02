@@ -2,6 +2,7 @@ import { getClient } from "gql/client";
 import { GET_FULL_EVENT, GET_EVENT_BILLS_STATUS } from "gql/queries/events";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_EVENTS } from "gql/queries/events";
 import { getFullUser } from "actions/users/get/full/server_action";
 
 import {
@@ -26,6 +27,7 @@ import {
   EditEvent,
   CopyEvent,
   ApproveEvent,
+  LocationClashApproval,
   ProgressEvent,
   DeleteEvent,
   SubmitEvent,
@@ -40,6 +42,34 @@ import {
 
 import { locationLabel } from "utils/formatEvent";
 import MemberListItem from "components/members/MemberListItem";
+
+function filterClashingEvents(events, startTime, endTime, inputLocations) {
+  const inputLocs = Array.isArray(inputLocations)
+    ? inputLocations.map((loc) => loc.toLowerCase().trim())
+    : [inputLocations.toLowerCase().trim()];
+
+  const clashingEvents = events.filter((event) => {
+
+    if (!event.status || event.status.state !== "approved") return false;
+    const eventStart = new Date(event.datetimeperiod[0]);
+    const eventEnd = new Date(event.datetimeperiod[1]);
+
+    const isTimeClashing =
+      (startTime >= eventStart && startTime < eventEnd) ||
+      (endTime > eventStart && endTime <= eventEnd) ||
+      (startTime <= eventStart && endTime >= eventEnd);
+
+    const eventLocs = Array.isArray(event.location)
+      ? event.location.map((loc) => loc.toLowerCase().trim())
+      : [event.location.toLowerCase().trim()];
+
+    const isLocationClashing = eventLocs.some((loc) => inputLocs.includes(loc));
+
+    return isTimeClashing && isLocationClashing;
+  });
+
+  return clashingEvents.length ? clashingEvents : null;
+}
 
 export async function generateMetadata({ params }) {
   const { id } = params;
@@ -87,6 +117,11 @@ export default async function ManageEventID({ params }) {
     data: { activeClubs },
   } = await getClient().query(GET_ACTIVE_CLUBS);
 
+  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: null,
+    public: false,
+  });
+
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
     { userInput: null },
@@ -100,6 +135,11 @@ export default async function ManageEventID({ params }) {
   if (!pocProfile) {
     return redirect("/404");
   }
+  const eventStart = new Date(event.datetimeperiod[0]);
+  const eventEnd = new Date(event.datetimeperiod[1]);
+  const clashing_events = filterClashingEvents(events, eventStart, eventEnd, event.location);
+  
+  const clashFlag = clashing_events != null && clashing_events.length > 0 ? true : false;
 
   return (
     user?.role === "club" &&
@@ -115,7 +155,7 @@ export default async function ManageEventID({ params }) {
             { status: event?.status, budget: event?.budget },
             { status: event?.status, location: event?.location },
           ]}
-          right={getActions(event, { ...userMeta, ...userProfile })}
+          right={getActions(event, clashFlag, { ...userMeta, ...userProfile })}
           downloadbtn={
             <DownloadEvent
               event={event}
@@ -242,7 +282,7 @@ export default async function ManageEventID({ params }) {
 }
 
 // set conditional actions based on event datetime, current status and user role
-function getActions(event, user) {
+function getActions(event, clashFlag, user) {
   const upcoming = new Date(event?.datetimeperiod[0]) >= new Date();
   /*
    * Deleted Event
@@ -290,8 +330,9 @@ function getActions(event, user) {
       // upcoming &&
       event?.status?.state === "pending_budget" &&
       !event?.status?.budget
-    )
+    ){
       return [ApproveEvent];
+    }
     else return [];
   }
 
@@ -305,8 +346,11 @@ function getActions(event, user) {
       event?.status?.state === "pending_room" &&
       (event?.status?.budget || event?.clubCategory == "body") &&
       !event?.status?.room
-    )
+    ){
+      if(clashFlag)
+        return [LocationClashApproval, EditEvent, DeleteEvent]
       return [ApproveEvent, EditEvent, DeleteEvent];
+    }
     else if (
       event?.status?.state === "approved" &&
       !upcoming &&
