@@ -37,9 +37,7 @@ function filterClashingEvents(events, startTime, endTime, inputLocations) {
     ? inputLocations.map((loc) => loc.toLowerCase().trim())
     : [inputLocations.toLowerCase().trim()];
 
-
   const clashingEvents = events.filter((event) => {
-
     if (!event.status || event.status.state !== "approved") return false;
     const eventStart = new Date(event.datetimeperiod[0]);
     const eventEnd = new Date(event.datetimeperiod[1]);
@@ -386,9 +384,9 @@ export default function EventActionTabs({
     existingEvents,
     startTime,
     endTime,
-    eventLocation
+    eventLocation,
   );
-  const clashFlag = clashing_events!=null && clashing_events.length > 0
+  const clashFlag = clashing_events != null && clashing_events.length > 0;
   return (
     <Box sx={{ width: "100%", mb: 3 }}>
       <Tabs
@@ -403,7 +401,11 @@ export default function EventActionTabs({
       </Tabs>
       <Box sx={{ mt: 2 }}>
         {selectedTab === 0 ? (
-          <EventApproveForm eventid={eventid} members={members} clashFlag={clashFlag} />
+          <EventApproveForm
+            eventid={eventid}
+            members={members}
+            clashFlag={clashFlag}
+          />
         ) : (
           <EventRejectForm eventid={eventid} />
         )}

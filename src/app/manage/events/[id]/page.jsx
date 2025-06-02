@@ -49,7 +49,6 @@ function filterClashingEvents(events, startTime, endTime, inputLocations) {
     : [inputLocations.toLowerCase().trim()];
 
   const clashingEvents = events.filter((event) => {
-
     if (!event.status || event.status.state !== "approved") return false;
     const eventStart = new Date(event.datetimeperiod[0]);
     const eventEnd = new Date(event.datetimeperiod[1]);
@@ -137,9 +136,15 @@ export default async function ManageEventID({ params }) {
   }
   const eventStart = new Date(event.datetimeperiod[0]);
   const eventEnd = new Date(event.datetimeperiod[1]);
-  const clashing_events = filterClashingEvents(events, eventStart, eventEnd, event.location);
-  
-  const clashFlag = clashing_events != null && clashing_events.length > 0 ? true : false;
+  const clashing_events = filterClashingEvents(
+    events,
+    eventStart,
+    eventEnd,
+    event.location,
+  );
+
+  const clashFlag =
+    clashing_events != null && clashing_events.length > 0 ? true : false;
 
   return (
     user?.role === "club" &&
@@ -330,10 +335,9 @@ function getActions(event, clashFlag, user) {
       // upcoming &&
       event?.status?.state === "pending_budget" &&
       !event?.status?.budget
-    ){
+    ) {
       return [ApproveEvent];
-    }
-    else return [];
+    } else return [];
   }
 
   /*
@@ -346,12 +350,10 @@ function getActions(event, clashFlag, user) {
       event?.status?.state === "pending_room" &&
       (event?.status?.budget || event?.clubCategory == "body") &&
       !event?.status?.room
-    ){
-      if(clashFlag)
-        return [LocationClashApproval, EditEvent, DeleteEvent]
+    ) {
+      if (clashFlag) return [LocationClashApproval, EditEvent, DeleteEvent];
       return [ApproveEvent, EditEvent, DeleteEvent];
-    }
-    else if (
+    } else if (
       event?.status?.state === "approved" &&
       !upcoming &&
       event?.budget?.length

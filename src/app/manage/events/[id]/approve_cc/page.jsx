@@ -57,8 +57,8 @@ export default async function ApproveEventCC({ params }) {
         return false;
       })
     : [];
-  
-  const curr_event = events.find(temp=>temp._id === event._id)
+
+  const curr_event = events.find((temp) => temp._id === event._id);
   return (
     user?.role !== "cc" && redirect("/404"),
     event?.status?.state !== "pending_cc" && redirect("/404"),
@@ -70,7 +70,14 @@ export default async function ApproveEventCC({ params }) {
           </Typography>
         </center>
 
-        <EventActionTabs eventid={event._id} eventLocation={curr_event.location} eventStart={curr_event.datetimeperiod[0]} eventEnd={curr_event.datetimeperiod[1]} members={currentccMembers} existingEvents={events} />
+        <EventActionTabs
+          eventid={event._id}
+          eventLocation={curr_event.location}
+          eventStart={curr_event.datetimeperiod[0]}
+          eventEnd={curr_event.datetimeperiod[1]}
+          members={currentccMembers}
+          existingEvents={events}
+        />
       </Container>
     )
   );

@@ -210,7 +210,7 @@ export function ApproveEvent({ sx }) {
     </>
   );
 }
-export function LocationClashApproval({sx}) {
+export function LocationClashApproval({ sx }) {
   const [dialog, setDialog] = useState(false);
   return (
     <>
@@ -226,13 +226,12 @@ export function LocationClashApproval({sx}) {
 
       <ConfirmDialog
         open={dialog}
-        title= "Location Clash Detected"
+        title="Location Clash Detected"
         description="The location selected for this event is clashing with another booking. Please change the location before approval."
         onConfirm={() => setDialog(false)}
         onClose={() => setDialog(false)}
-        confirmProps={{ color:  "warning"}}
+        confirmProps={{ color: "warning" }}
         confirmText="Close"
-
       />
     </>
   );
