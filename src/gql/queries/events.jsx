@@ -36,6 +36,8 @@ export const GET_ALL_EVENTS = gql`
     $skip: Int
     $limit: Int
     $public: Boolean
+    $timings: [DateTime!]
+    $location: [Event_Location!]
   ) {
     events(
       clubid: $clubid
@@ -44,6 +46,8 @@ export const GET_ALL_EVENTS = gql`
       skip: $skip
       limit: $limit
       public: $public
+      timings: $timings
+      location: $location
     ) {
       _id
       name
@@ -115,6 +119,14 @@ export const GET_EVENT_STATUS = gql`
       }
     }
   }
+`;
+
+export const GET_CLASHING_EVENTS = gql`
+  query ClashingEvents($eventId: String!) {
+    clashingEvents(id: $eventId) {
+      _id
+    }
+  } 
 `;
 
 export const GET_EVENT_BILLS_STATUS = gql`

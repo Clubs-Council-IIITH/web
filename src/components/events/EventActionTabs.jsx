@@ -32,33 +32,6 @@ import { eventProgress } from "actions/events/progress/server_action";
 import { rejectEventAction } from "actions/events/reject/server_action";
 import { getUserByRole } from "actions/users/get/role/server_action";
 
-function filterClashingEvents(events, startTime, endTime, inputLocations) {
-  const inputLocs = Array.isArray(inputLocations)
-    ? inputLocations.map((loc) => loc.toLowerCase().trim())
-    : [inputLocations.toLowerCase().trim()];
-
-  const clashingEvents = events.filter((event) => {
-    if (!event.status || event.status.state !== "approved") return false;
-    const eventStart = new Date(event.datetimeperiod[0]);
-    const eventEnd = new Date(event.datetimeperiod[1]);
-
-    const isTimeClashing =
-      (startTime >= eventStart && startTime < eventEnd) ||
-      (endTime > eventStart && endTime <= eventEnd) ||
-      (startTime <= eventStart && endTime >= eventEnd);
-
-    const eventLocs = Array.isArray(event.location)
-      ? event.location.map((loc) => loc.toLowerCase().trim())
-      : [event.location.toLowerCase().trim()];
-
-    const isLocationClashing = eventLocs.some((loc) => inputLocs.includes(loc));
-
-    return isTimeClashing && isLocationClashing;
-  });
-
-  return clashingEvents.length ? clashingEvents : null;
-}
-
 function EventApproveForm({ eventid, members, clashFlag }) {
   const { triggerToast } = useToast();
   const router = useRouter();
@@ -368,25 +341,13 @@ function EventRejectForm({ eventid }) {
 
 export default function EventActionTabs({
   eventid,
-  eventLocation,
-  eventStart,
-  eventEnd,
   members,
-  existingEvents,
+  clashFlag,
 }) {
   const [selectedTab, setSelectedTab] = useState(0);
-  const startTime = new Date(eventStart);
-  const endTime = new Date(eventEnd);
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
-  const clashing_events = filterClashingEvents(
-    existingEvents,
-    startTime,
-    endTime,
-    eventLocation,
-  );
-  const clashFlag = clashing_events != null && clashing_events.length > 0;
   return (
     <Box sx={{ width: "100%", mb: 3 }}>
       <Tabs
