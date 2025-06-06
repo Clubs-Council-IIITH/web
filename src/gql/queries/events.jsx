@@ -126,7 +126,7 @@ export const GET_CLASHING_EVENTS = gql`
     clashingEvents(id: $eventId) {
       _id
     }
-  } 
+  }
 `;
 
 export const GET_EVENT_BILLS_STATUS = gql`

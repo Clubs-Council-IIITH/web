@@ -339,11 +339,7 @@ function EventRejectForm({ eventid }) {
   );
 }
 
-export default function EventActionTabs({
-  eventid,
-  members,
-  clashFlag,
-}) {
+export default function EventActionTabs({ eventid, members, clashFlag }) {
   const [selectedTab, setSelectedTab] = useState(0);
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);

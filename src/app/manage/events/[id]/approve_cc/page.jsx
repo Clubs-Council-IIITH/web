@@ -17,13 +17,16 @@ export const metadata = {
 
 export default async function ApproveEventCC({ params }) {
   const { id } = params;
-  
+
   const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
     eventid: id,
   });
-  const { data: { clashingEvents } = {} } = await getClient().query(GET_CLASHING_EVENTS, {
-    eventId: id,
-  });
+  const { data: { clashingEvents } = {} } = await getClient().query(
+    GET_CLASHING_EVENTS,
+    {
+      eventId: id,
+    },
+  );
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -57,7 +60,7 @@ export default async function ApproveEventCC({ params }) {
         return false;
       })
     : [];
-  
+
   const clashFlag = clashingEvents?.length > 0;
 
   return (
