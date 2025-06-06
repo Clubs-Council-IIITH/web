@@ -60,7 +60,7 @@ export default function HolidaysTable({ holidays }) {
       disableRowSelectionOnClick
       initialState={{
         sorting: {
-          sortModel: [{ field: "date", sort: "asc" }],
+          sortModel: [{ field: "date", sort: "desc" }],
         },
         filter: {
           filterModel: {
