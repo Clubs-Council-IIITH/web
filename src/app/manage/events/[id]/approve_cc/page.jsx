@@ -8,7 +8,7 @@ import { Container, Typography } from "@mui/material";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 import { extractFirstYear } from "components/members/MembersGrid";
-import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_CLASHING_EVENTS } from "gql/queries/events";
 import EventActionTabs from "components/events/EventActionTabs";
 
 export const metadata = {
@@ -17,9 +17,14 @@ export const metadata = {
 
 export default async function ApproveEventCC({ params }) {
   const { id } = params;
+  
   const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
     eventid: id,
   });
+  const { data: { clashingEvents } = {} } = await getClient().query(GET_CLASHING_EVENTS, {
+    eventId: id,
+  });
+
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
     { userInput: null },
@@ -30,11 +35,6 @@ export default async function ApproveEventCC({ params }) {
     clubInput: {
       cid: "cc",
     },
-  });
-
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: null,
-    public: false,
   });
   const ccMembers = members
     ?.map((member) => {
@@ -57,8 +57,9 @@ export default async function ApproveEventCC({ params }) {
         return false;
       })
     : [];
+  
+  const clashFlag = clashingEvents?.length > 0;
 
-  const curr_event = events.find((temp) => temp._id === event._id);
   return (
     user?.role !== "cc" && redirect("/404"),
     event?.status?.state !== "pending_cc" && redirect("/404"),
@@ -72,11 +73,8 @@ export default async function ApproveEventCC({ params }) {
 
         <EventActionTabs
           eventid={event._id}
-          eventLocation={curr_event.location}
-          eventStart={curr_event.datetimeperiod[0]}
-          eventEnd={curr_event.datetimeperiod[1]}
           members={currentccMembers}
-          existingEvents={events}
+          clashFlag={clashFlag}
         />
       </Container>
     )

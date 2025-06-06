@@ -57,7 +57,6 @@ function constructQuery({ type, clubid, limit }) {
       {
         clubid: null,
         limit: limit || 12,
-        public: true,
       },
     ];
   } else if (type === "club") {
@@ -65,7 +64,6 @@ function constructQuery({ type, clubid, limit }) {
       GET_ALL_EVENTS,
       {
         clubid,
-        public: true,
       },
     ];
   } else {

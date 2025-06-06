@@ -2,7 +2,7 @@ import { getClient } from "gql/client";
 import { GET_FULL_EVENT, GET_EVENT_BILLS_STATUS } from "gql/queries/events";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
-import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_CLASHING_EVENTS } from "gql/queries/events";
 import { getFullUser } from "actions/users/get/full/server_action";
 
 import {
@@ -43,33 +43,6 @@ import {
 import { locationLabel } from "utils/formatEvent";
 import MemberListItem from "components/members/MemberListItem";
 
-function filterClashingEvents(events, startTime, endTime, inputLocations) {
-  const inputLocs = Array.isArray(inputLocations)
-    ? inputLocations.map((loc) => loc.toLowerCase().trim())
-    : [inputLocations.toLowerCase().trim()];
-
-  const clashingEvents = events.filter((event) => {
-    if (!event.status || event.status.state !== "approved") return false;
-    const eventStart = new Date(event.datetimeperiod[0]);
-    const eventEnd = new Date(event.datetimeperiod[1]);
-
-    const isTimeClashing =
-      (startTime >= eventStart && startTime < eventEnd) ||
-      (endTime > eventStart && endTime <= eventEnd) ||
-      (startTime <= eventStart && endTime >= eventEnd);
-
-    const eventLocs = Array.isArray(event.location)
-      ? event.location.map((loc) => loc.toLowerCase().trim())
-      : [event.location.toLowerCase().trim()];
-
-    const isLocationClashing = eventLocs.some((loc) => inputLocs.includes(loc));
-
-    return isTimeClashing && isLocationClashing;
-  });
-
-  return clashingEvents.length ? clashingEvents : null;
-}
-
 export async function generateMetadata({ params }) {
   const { id } = params;
 
@@ -105,7 +78,7 @@ export default async function ManageEventID({ params }) {
       GET_EVENT_BILLS_STATUS,
       {
         eventid: id,
-      },
+      }
     );
     if (error && error.message.includes("Event not found"))
       return redirect("/404");
@@ -116,15 +89,19 @@ export default async function ManageEventID({ params }) {
     data: { activeClubs },
   } = await getClient().query(GET_ACTIVE_CLUBS);
 
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: null,
-    public: false,
-  });
+  const { data: { clashingEvents } = {} } = await getClient().query(
+    GET_CLASHING_EVENTS,
+    {
+      eventId: id,
+    }
+  );
+  const clashFlag = clashingEvents && clashingEvents.length > 0;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
+
   const user = { ...userMeta, ...userProfile };
   const billViewable =
     ["cc", "slo"].includes(user?.role) ||
@@ -134,17 +111,6 @@ export default async function ManageEventID({ params }) {
   if (!pocProfile) {
     return redirect("/404");
   }
-  const eventStart = new Date(event.datetimeperiod[0]);
-  const eventEnd = new Date(event.datetimeperiod[1]);
-  const clashing_events = filterClashingEvents(
-    events,
-    eventStart,
-    eventEnd,
-    event.location,
-  );
-
-  const clashFlag =
-    clashing_events != null && clashing_events.length > 0 ? true : false;
 
   return (
     user?.role === "club" &&
