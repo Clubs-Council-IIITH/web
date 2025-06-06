@@ -89,13 +89,13 @@ export default async function ManageEventID({ params }) {
     data: { activeClubs },
   } = await getClient().query(GET_ACTIVE_CLUBS);
 
-  const { data: { events } = {} } = await getClient().query(
+  const { data: { clashingEvents } = {} } = await getClient().query(
     GET_CLASHING_EVENTS,
     {
       eventId: id,
     }
   );
-  const clashFlag = events && events.length > 0;
+  const clashFlag = clashingEvents && clashingEvents.length > 0;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,

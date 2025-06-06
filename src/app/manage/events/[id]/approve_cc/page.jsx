@@ -21,7 +21,7 @@ export default async function ApproveEventCC({ params }) {
   const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
     eventid: id,
   });
-  const { data: { events } = {} } = await getClient().query(GET_CLASHING_EVENTS, {
+  const { data: { clashingEvents } = {} } = await getClient().query(GET_CLASHING_EVENTS, {
     eventId: id,
   });
 
@@ -58,7 +58,7 @@ export default async function ApproveEventCC({ params }) {
       })
     : [];
   
-  const clashFlag = events?.length > 0;
+  const clashFlag = clashingEvents?.length > 0;
 
   return (
     user?.role !== "cc" && redirect("/404"),
