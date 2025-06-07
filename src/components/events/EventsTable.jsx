@@ -135,6 +135,7 @@ export default function EventsTable({
                 {value}
               </Typography>
             ),
+            display: "flex",
           },
           {
             field: "scheduled",
@@ -156,6 +157,7 @@ export default function EventsTable({
                 {formattedValue}
               </Typography>
             ),
+            display: "flex",
           },
         ]),
     {
