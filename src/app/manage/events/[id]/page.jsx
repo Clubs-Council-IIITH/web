@@ -88,7 +88,6 @@ export default async function ManageEventID({ params }) {
   const {
     data: { activeClubs },
   } = await getClient().query(GET_ACTIVE_CLUBS);
-  
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -97,8 +96,7 @@ export default async function ManageEventID({ params }) {
 
   const user = { ...userMeta, ...userProfile };
   let clashFlag = false;
-  if(["cc", "slo"].includes(user?.role)){
-
+  if (["cc", "slo"].includes(user?.role)) {
     const { data: { clashingEvents } = {} } = await getClient().query(
       GET_CLASHING_EVENTS,
       {
