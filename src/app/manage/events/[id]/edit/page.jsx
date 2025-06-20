@@ -25,6 +25,11 @@ function transformEvent(event) {
         ...budget,
         id: budget?.id || key,
       })) || [],
+    sponsor:
+      event?.sponsor?.map((sponsor, key) => ({
+        ...sponsor,
+        id: sponsor?.id || key,
+      })) || [],
     // parse population as int
     population: parseInt(event?.population || 0),
     // default fallbacks for text fields

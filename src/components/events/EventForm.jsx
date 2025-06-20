@@ -42,6 +42,7 @@ import { useAuth } from "components/AuthProvider";
 import { useToast } from "components/Toast";
 import FileUpload from "components/FileUpload";
 import EventBudget from "components/events/EventBudget";
+import EventSponsor from "components/events/EventSponsor";
 import ConfirmDialog from "components/ConfirmDialog";
 import EventsDialog from "components/events/EventsDialog";
 import MemberListItem from "components/members/MemberListItem";
@@ -104,11 +105,13 @@ export default function EventForm({
     defaultValues,
   });
   const collabEvent = watch("collabEvent");
+  const haveSponsor = watch("haveSponsor");
 
   // different form submission handlers
   const submitHandlers = {
     log: console.log,
     create: async (data, opts) => {
+      console.log("Sponsors: ", data.sponsor);
       let res = await createEventAction(data);
 
       if (res.ok) {
@@ -305,6 +308,16 @@ export default function EventForm({
       return;
     }
 
+    data.sponsor = formData.sponsor
+      .filter((i) => i?.name)
+      .filter((i) => i?.amount > 0)
+      .map((i) => ({
+        name: i.name,
+        website: i.website,
+        amount: i.amount,
+        previouslySponsored: i.previouslySponsored,
+      }))
+
     // TODO: fix event link field
     data.link = null;
 
@@ -465,7 +478,6 @@ export default function EventForm({
               */}
             </Grid>
           </Grid>
-
           <Grid container item>
             <Typography
               variant="subtitle2"
@@ -491,6 +503,45 @@ export default function EventForm({
               </Grid>
             </Grid>
           </Grid>
+          <Grid container item>
+            <FormControlLabel
+              control={
+                <Controller
+                  name="haveSponsor"
+                  control={control}
+                  defaultValue={
+                    defaultValues.sponsor &&
+                    defaultValues.sponsor.length > 0
+                  }
+                  render={({ field }) => (
+                    <Switch
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      inputProps={{ "aria-label": "controlled" }}
+                      sx={{ m: 2 }}
+                    />
+                  )}
+                />
+              }
+              label="Does event have any Sponsors?"
+            />
+            { haveSponsor ? (
+              <Grid container item spacing={2}>
+                <Grid item xs={12}>
+                  <EventSponsorTable
+                    control={control}
+                    watch={watch}
+                    disabled={
+                      !admin_roles.includes(user?.role) &&
+                      defaultValues?.status?.state != undefined &&
+                      defaultValues?.status?.state != "incomplete"
+                    }
+                  />
+                </Grid>
+              </Grid>
+            ) : null }
+          </Grid>
+
         </Grid>
 
         <Grid container item xs md spacing={3} alignItems="flex-start">
@@ -1494,6 +1545,26 @@ function EventBudgetTable({
           rows={value}
           setRows={onChange}
           setBudgetEditing={setBudgetEditing}
+        />
+      )}
+    />
+  );
+}
+
+function EventSponsorTable({
+  control,
+  watch,
+  disabled = true,
+}) {
+  return (
+    <Controller
+      name="sponsor"
+      control={control}
+      render={({ field: { value, onChange } }) => (
+        <EventSponsor
+          editable={!disabled}
+          rows={value}
+          setRows={onChange}
         />
       )}
     />
