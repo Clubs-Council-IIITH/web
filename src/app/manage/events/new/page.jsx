@@ -20,6 +20,7 @@ export default async function NewEvent() {
     audience: [],
     poster: "",
     budget: [],
+    sponsor: [],
     mode: "online",
     link: "",
     location: [],

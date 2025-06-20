@@ -23,6 +23,7 @@ export default async function EventsGrid({
   const clubDataMap = {};
   await Promise.all(
     uniqueClubIds.map(async (clubid) => {
+      console.log("clubid: ", clubid);
       const { data: { club } = {} } = await getClient().query(GET_CLUB, {
         clubInput: { cid: clubid },
       });

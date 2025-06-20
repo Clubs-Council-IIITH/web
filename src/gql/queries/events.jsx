@@ -172,6 +172,12 @@ export const GET_FULL_EVENT = gql`
         billno
         amountUsed
       }
+      sponsor {
+        name
+        website
+        amount
+        previouslySponsored
+      }
       clubid
       collabclubs
       clubCategory
