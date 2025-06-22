@@ -231,7 +231,10 @@ export const GET_EVENT_BUDGET = gql`
 export const GET_AVAILABLE_LOCATIONS = gql`
   query AvailableRooms($timeslot: [DateTime!]!, $eventid: String) {
     availableRooms(timeslot: $timeslot, eventid: $eventid) {
-      locations
+      locations {
+        location
+        available
+      }
     }
   }
 `;
