@@ -111,7 +111,6 @@ export default function EventForm({
   const submitHandlers = {
     log: console.log,
     create: async (data, opts) => {
-      console.log("Sponsors: ", data.sponsor);
       let res = await createEventAction(data);
 
       if (res.ok) {
