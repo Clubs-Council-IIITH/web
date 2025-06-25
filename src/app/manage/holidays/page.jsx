@@ -8,8 +8,7 @@ export const metadata = {
 };
 
 export default async function ManageHolidays() {
-    const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
+  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
 
-    return <ManageHolidaysClient holidays={holidays} />;
+  return <ManageHolidaysClient holidays={holidays} />;
 }
-

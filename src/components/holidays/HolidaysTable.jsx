@@ -8,85 +8,87 @@ import { ISOtoHuman } from "utils/formatTime";
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 export default function HolidaysTable({ holidays, showPast = false }) {
-    const router = useRouter();
-    const [sortModel, setSortModel] = useState([
-        { field: 'date', sort: showPast ? 'desc' : 'asc' }
+  const router = useRouter();
+  const [sortModel, setSortModel] = useState([
+    { field: "date", sort: showPast ? "desc" : "asc" },
+  ]);
+
+  useEffect(() => {
+    setSortModel([
+      {
+        field: "date",
+        sort: showPast ? "desc" : "asc",
+      },
     ]);
+  }, [showPast]);
 
-    useEffect(() => {
-        setSortModel([{
-            field: 'date',
-            sort: showPast ? 'desc' : 'asc'
-        }]);
-    }, [showPast]);
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 5,
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          sx={{
+            overflowWrap: "break-word",
+            wordWrap: "break-word",
+            msWordBreak: "break-all",
+            wordBreak: "break-all",
+            msHyphens: "auto",
+            MozHyphens: "auto",
+            WebkitHyphens: "auto",
+            hyphens: "auto",
+          }}
+        >
+          {params.value}
+        </Typography>
+      ),
+      display: "flex",
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 3,
+      renderCell: (params) => (
+        <Typography variant="body2">
+          {ISOtoHuman(params.value, true, false)}
+        </Typography>
+      ),
+      display: "flex",
+    },
+  ];
 
-    const columns = [
-        {
-            field: "name",
-            headerName: "Name",
-            flex: 5,
-            renderCell: (params) => (
-                <Typography
-                    variant="body2"
-                    sx={{
-                        overflowWrap: "break-word",
-                        wordWrap: "break-word",
-                        msWordBreak: "break-all",
-                        wordBreak: "break-all",
-                        msHyphens: "auto",
-                        MozHyphens: "auto",
-                        WebkitHyphens: "auto",
-                        hyphens: "auto",
-                    }}
-                >
-                    {params.value}
-                </Typography>
-            ),
-            display: "flex",
+  if (!holidays) return null;
+
+  return (
+    <DataGrid
+      autoHeight
+      rows={holidays}
+      columns={columns}
+      getRowId={(r) => r._id}
+      onRowClick={(params) => router.push(`/manage/holidays/${params.row._id}`)}
+      disableRowSelectionOnClick
+      sortModel={sortModel}
+      onSortModelChange={(newModel) => setSortModel(newModel)}
+      initialState={{
+        filter: {
+          filterModel: {
+            items: [],
+            quickFilterLogicOperator: GridLogicOperator.Or,
+          },
         },
-        {
-            field: "date",
-            headerName: "Date",
-            flex: 3,
-            renderCell: (params) => (
-                <Typography variant="body2">
-                    {ISOtoHuman(params.value, true, false)}
-                </Typography>
-            ),
-            display: "flex",
+        pagination: { paginationModel: { pageSize: 25 } },
+      }}
+      slots={{ toolbar: QuickSearchToolbar }}
+      sx={{
+        ".MuiDataGrid-cell:focus": {
+          outline: "none",
         },
-    ];
-
-    if (!holidays) return null;
-
-    return (
-        <DataGrid
-            autoHeight
-            rows={holidays}
-            columns={columns}
-            getRowId={(r) => r._id}
-            onRowClick={(params) => router.push(`/manage/holidays/${params.row._id}`)}
-            disableRowSelectionOnClick
-            sortModel={sortModel}
-            onSortModelChange={(newModel) => setSortModel(newModel)}
-            initialState={{
-                filter: {
-                    filterModel: {
-                        items: [],
-                        quickFilterLogicOperator: GridLogicOperator.Or,
-                    },
-                },
-                pagination: { paginationModel: { pageSize: 25 } },
-            }}
-            slots={{ toolbar: QuickSearchToolbar }}
-            sx={{
-                ".MuiDataGrid-cell:focus": {
-                    outline: "none",
-                },
-                "& .MuiDataGrid-row:hover": {
-                    cursor: "pointer",
-                },
-            }}
-        />
-    );
+        "& .MuiDataGrid-row:hover": {
+          cursor: "pointer",
+        },
+      }}
+    />
+  );
 }
