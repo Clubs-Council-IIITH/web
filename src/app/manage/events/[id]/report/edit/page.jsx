@@ -6,7 +6,9 @@ import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
-const REPORT_EDIT_ACCESS_TIME = 3 * 24 * 60 * 60 * 1000;
+const REPORT_EDIT_ACCESS_TIME = 2 * 24 * 60 * 60 * 1000;
+const REPORT_EDIT_ACCESS_TIME_SLO = 14 * 24 * 60 * 60 * 1000;
+
 import EventReportForm from "components/events/report/EventReportForm";
 
 export const metadata = {
@@ -33,6 +35,26 @@ function transformEvent(event) {
   };
 }
 
+const canEditReport = (event, eventReport, user) => {
+  if (!eventReport?.submittedTime || !user?.role) return false;
+
+  const timeElapsed = new Date().getTime() - new Date(eventReport.submittedTime).getTime();
+
+  if (["club"].includes(user.role) && user.uid==event.clubid) {
+    return timeElapsed < REPORT_EDIT_ACCESS_TIME;
+  }
+
+  if (["cc"].includes(user.role)) {
+    return timeElapsed < REPORT_EDIT_ACCESS_TIME;
+  }
+
+  if (["slo"].includes(user.role)) {
+    return timeElapsed < REPORT_EDIT_ACCESS_TIME_SLO;
+  }
+
+  return false;
+};
+
 export default async function EditEventReport({ params }) {
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -47,7 +69,7 @@ export default async function EditEventReport({ params }) {
     });
     if (
       !event ||
-      (user?.uid !== event.clubid && !["cc"].includes(user?.role)) ||
+      (user?.uid !== event.clubid && !["cc","slo"].includes(user?.role)) ||
       event.status.state !== "approved"
     ) {
       return redirect("/404");
@@ -61,13 +83,10 @@ export default async function EditEventReport({ params }) {
       },
     );
 
+    const AllowEditReport = canEditReport(event, eventReport, user);
     if (!eventReport) {
       return redirect(`/manage/events/${event?._id}/report/new`);
-    } else if (
-      eventReport?.submittedTime &&
-      new Date().getTime() - new Date(eventReport.submittedTime).getTime() >
-        3 * 24 * 60 * 60 * 1000
-    ) {
+    } else if (!AllowEditReport) {
       return redirect("/404");
     }
 

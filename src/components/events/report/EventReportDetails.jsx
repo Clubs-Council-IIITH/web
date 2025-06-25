@@ -22,12 +22,16 @@ import EventBudget from "components/events/EventBudget";
 const REPORT_EDIT_ACCESS_TIME = 2 * 24 * 60 * 60 * 1000;
 const REPORT_EDIT_ACCESS_TIME_SLO = 14 * 24 * 60 * 60 * 1000;
 
-const canEditReport = (eventReport, user) => {
+const canEditReport = (event, eventReport, user) => {
   if (!eventReport?.submittedTime || !user?.role) return false;
 
   const timeElapsed = new Date().getTime() - new Date(eventReport.submittedTime).getTime();
 
-  if (["cc", "club"].includes(user.role)) {
+  if (["club"].includes(user.role) && user.uid==event.clubid) {
+    return timeElapsed < REPORT_EDIT_ACCESS_TIME;
+  }
+
+  if (["cc"].includes(user.role)) {
     return timeElapsed < REPORT_EDIT_ACCESS_TIME;
   }
 
@@ -47,7 +51,7 @@ export function EventReportDetails({
   clubs,
   user,
 }) {
-  const showEditReportButton = canEditReport(eventReport, user);
+  const showEditReportButton = canEditReport(event, eventReport, user);
 
   return (
     <Box p={2}>
