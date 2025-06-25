@@ -1373,7 +1373,7 @@ function EventLocationInput({
                 disabled={
                   !(startDateInput && endDateInput) ||
                   disabled ||
-                  !availableRooms?.locations?.length
+                  !availableRooms?.length
                 }
                 input={<OutlinedInput label="Location *" />}
                 renderValue={(selected) => (
@@ -1391,19 +1391,27 @@ function EventLocationInput({
                 )}
                 {...field}
               >
-                {availableRooms?.locations
+                {availableRooms
                   ?.slice()
                   ?.sort()
                   ?.map((location) => (
                     <MenuItem
-                      key={location}
-                      value={location}
-                      disabled={locationAlternateInput?.includes(location)}
+                      key={location?.location}
+                      value={location?.location}
+                      disabled={
+                        locationAlternateInput?.includes(location) ||
+                        !location?.available
+                      }
                     >
-                      {locationLabel(location)?.name}
-                      {locationAlternateInput?.includes(location) && (
+                      {locationLabel(location?.location)?.name}
+                      {locationAlternateInput?.includes(location?.location) && (
                         <span style={{ marginLeft: "8px", color: "#999" }}>
                           (selected as alternate)
+                        </span>
+                      )}
+                      {!location?.available && (
+                        <span style={{ marginLeft: "8px", color: "#f00" }}>
+                          (not available)
                         </span>
                       )}
                     </MenuItem>
@@ -1432,7 +1440,7 @@ function EventLocationInput({
                 disabled={
                   !(startDateInput && endDateInput) ||
                   disabled ||
-                  !availableRooms?.locations?.length
+                  !availableRooms?.length
                 }
                 input={<OutlinedInput label="Alternate Location" />}
                 renderValue={(selected) => (
@@ -1450,19 +1458,27 @@ function EventLocationInput({
                 )}
                 {...field}
               >
-                {availableRooms?.locations
+                {availableRooms
                   ?.slice()
                   ?.sort()
                   ?.map((location) => (
                     <MenuItem
-                      key={location}
-                      value={location}
-                      disabled={locationInput?.includes(location)}
+                      key={location?.location}
+                      value={location?.location}
+                      disabled={
+                        locationInput?.includes(location) ||
+                        !location?.available
+                      }
                     >
-                      {locationLabel(location)?.name}
-                      {locationInput?.includes(location) && (
+                      {locationLabel(location?.location)?.name}
+                      {locationInput?.includes(location?.location) && (
                         <span style={{ marginLeft: "8px", color: "#999" }}>
-                          (selected as main)
+                          (selected as alternate)
+                        </span>
+                      )}
+                      {!location?.available && (
+                        <span style={{ marginLeft: "8px", color: "#f00" }}>
+                          (not available)
                         </span>
                       )}
                     </MenuItem>

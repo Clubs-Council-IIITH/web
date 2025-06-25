@@ -245,7 +245,6 @@ export function ProgressEvent({ sx }) {
       variant="contained"
       color="secondary"
       startIcon={<Icon variant="add" />}
-      onClick={() => setDialog(true)}
       sx={sx}
     >
       Progress

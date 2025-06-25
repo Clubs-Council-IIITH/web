@@ -21,7 +21,7 @@ export async function eventsVenues(data) {
     };
   } else {
     response.ok = true;
-    response.data = outputData.availableRooms;
+    response.data = outputData?.availableRooms?.locations;
   }
 
   return response;
