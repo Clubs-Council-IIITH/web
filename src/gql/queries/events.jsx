@@ -122,8 +122,8 @@ export const GET_EVENT_STATUS = gql`
 `;
 
 export const GET_CLASHING_EVENTS = gql`
-  query ClashingEvents($eventId: String!) {
-    clashingEvents(id: $eventId) {
+  query ClashingEvents($eventId: String!, $filterByLocation: Boolean!) {
+    clashingEvents(id: $eventId, filterByLocation: $filterByLocation) {
       _id
     }
   }
