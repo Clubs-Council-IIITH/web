@@ -75,7 +75,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
                 fullWidth
                 onChange={(e) =>
                   router.push(
-                    `${pathname}?${createQueryString("club", e.target.value)}`,
+                    `${pathname}?${createQueryString("club", e?.target?.value)}`,
                   )
                 }
                 value={club}
@@ -101,13 +101,13 @@ export default function MembersFilter({ name, club, state, cc = false }) {
               sx={{ height: "100%" }}
               onChange={(e) => {
                 // don't do anything if all states are being unselected
-                if (state.length === 1 && state.includes(e.target.value))
+                if (state.length === 1 && state.includes(e?.target?.value))
                   return;
 
                 return router.push(
                   `${pathname}?${createQueryString(
-                    e.target.value,
-                    !state.includes(e.target.value),
+                    e?.target?.value,
+                    !state.includes(e?.target?.value),
                   )}`,
                 );
               }}
