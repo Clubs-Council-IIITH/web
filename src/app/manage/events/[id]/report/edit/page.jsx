@@ -6,7 +6,7 @@ import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
-const REPORT_EDIT_ACCESS_TIME = 3 * 24 * 60 * 60 * 1000;
+import { canEditReport } from "utils/eventReportAuth";
 import EventReportForm from "components/events/report/EventReportForm";
 
 export const metadata = {
@@ -47,7 +47,7 @@ export default async function EditEventReport({ params }) {
     });
     if (
       !event ||
-      (user?.uid !== event.clubid && !["cc"].includes(user?.role)) ||
+      (user?.uid !== event.clubid && !["cc","slo"].includes(user?.role)) ||
       event.status.state !== "approved"
     ) {
       return redirect("/404");
@@ -61,13 +61,10 @@ export default async function EditEventReport({ params }) {
       },
     );
 
+    const AllowEditReport = canEditReport(event, eventReport, user);
     if (!eventReport) {
       return redirect(`/manage/events/${event?._id}/report/new`);
-    } else if (
-      eventReport?.submittedTime &&
-      new Date().getTime() - new Date(eventReport.submittedTime).getTime() >
-        3 * 24 * 60 * 60 * 1000
-    ) {
+    } else if (!AllowEditReport) {
       return redirect("/404");
     }
 

@@ -18,8 +18,8 @@ import { DownloadEventReport } from "components/events/report/EventpdfDownloads"
 import { DownloadEventReportDocx } from "components/events/report/EventDocxDownloads";
 import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
+import { canEditReport } from "utils/eventReportAuth";
 
-const REPORT_EDIT_ACCESS_TIME = 3 * 24 * 60 * 60 * 1000;
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
@@ -30,6 +30,8 @@ export function EventReportDetails({
   clubs,
   user,
 }) {
+  const showEditReportButton = canEditReport(event, eventReport, user);
+
   return (
     <Box p={2}>
       <Grid
@@ -52,11 +54,7 @@ export function EventReportDetails({
           </Typography>
         </Button>
         <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
-          {eventReport?.submittedTime &&
-            ["cc", "club"].includes(user?.role) &&
-            new Date().getTime() -
-              new Date(eventReport.submittedTime).getTime() <
-              REPORT_EDIT_ACCESS_TIME && (
+          {showEditReportButton && (
               <Button
                 component={Link}
                 href={`/manage/events/${event?._id}/report/edit`}
