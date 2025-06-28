@@ -75,20 +75,17 @@ Reusable React components:
 ## Key Features
 
 1. **Authentication & Authorization**
-
    - Role-based access control
    - Protected routes and actions
    - User profile management
 
 1. **Club Management**
-
    - Club creation and editing
    - Member management
    - Social media integration
    - Logo and banner handling
 
 1. **Event System**
-
    - Event creation and scheduling
    - Approval workflows
    - Budget tracking
@@ -96,13 +93,11 @@ Reusable React components:
    - Calendar integration
 
 1. **Members Management**
-
    - Member profiles
    - Managing members for clubs & bodies
    - Member approval flow
 
 1. **Document Management**
-
    - MDX-based documentation
    - File upload and storage
    - Secure URL signing

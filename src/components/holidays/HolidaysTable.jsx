@@ -1,16 +1,26 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import { Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
-
 import { ISOtoHuman } from "utils/formatTime";
-
 import QuickSearchToolbar from "components/QuickSearchToolbar";
 
-export default function HolidaysTable({ holidays }) {
+export default function HolidaysTable({ holidays, showPast = false }) {
   const router = useRouter();
+  const [sortModel, setSortModel] = useState([
+    { field: "date", sort: showPast ? "desc" : "asc" },
+  ]);
+
+  useEffect(() => {
+    setSortModel([
+      {
+        field: "date",
+        sort: showPast ? "desc" : "asc",
+      },
+    ]);
+  }, [showPast]);
 
   const columns = [
     {
@@ -20,7 +30,7 @@ export default function HolidaysTable({ holidays }) {
       renderCell: (params) => (
         <Typography
           variant="body2"
-          style={{
+          sx={{
             overflowWrap: "break-word",
             wordWrap: "break-word",
             msWordBreak: "break-all",
@@ -50,6 +60,7 @@ export default function HolidaysTable({ holidays }) {
   ];
 
   if (!holidays) return null;
+
   return (
     <DataGrid
       autoHeight
@@ -58,10 +69,9 @@ export default function HolidaysTable({ holidays }) {
       getRowId={(r) => r._id}
       onRowClick={(params) => router.push(`/manage/holidays/${params.row._id}`)}
       disableRowSelectionOnClick
+      sortModel={sortModel}
+      onSortModelChange={(newModel) => setSortModel(newModel)}
       initialState={{
-        sorting: {
-          sortModel: [{ field: "date", sort: "desc" }],
-        },
         filter: {
           filterModel: {
             items: [],
@@ -72,11 +82,9 @@ export default function HolidaysTable({ holidays }) {
       }}
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
-        // disable cell selection style
         ".MuiDataGrid-cell:focus": {
           outline: "none",
         },
-        // pointer cursor on ALL rows
         "& .MuiDataGrid-row:hover": {
           cursor: "pointer",
         },

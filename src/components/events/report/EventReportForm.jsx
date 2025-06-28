@@ -105,7 +105,9 @@ export default function EventReportForm({
       if (res.ok) {
         triggerToast({
           title: "Success!",
-          messages: ["Event Report Successfully Created."],
+          messages: [
+            "Event Report Created Successfully. You can edit it within 2 days of submission.",
+          ],
           severity: "success",
         });
         router.push(`/manage/events/${id}/report`);

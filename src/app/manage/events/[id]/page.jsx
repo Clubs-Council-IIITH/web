@@ -102,6 +102,7 @@ export default async function ManageEventID({ params }) {
       GET_CLASHING_EVENTS,
       {
         eventId: id,
+        filterByLocation: true,
       },
     );
     clashFlag = clashingEvents && clashingEvents.length > 0;
