@@ -20,7 +20,6 @@ import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
 import { canEditReport } from "utils/eventReportAuth";
 
-
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
 export function EventReportDetails({
@@ -55,16 +54,16 @@ export function EventReportDetails({
         </Button>
         <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
           {showEditReportButton && (
-              <Button
-                component={Link}
-                href={`/manage/events/${event?._id}/report/edit`}
-                variant="contained"
-                color="warning"
-                startIcon={<Icon variant="edit-outline" />}
-              >
-                Edit Report
-              </Button>
-            )}
+            <Button
+              component={Link}
+              href={`/manage/events/${event?._id}/report/edit`}
+              variant="contained"
+              color="warning"
+              startIcon={<Icon variant="edit-outline" />}
+            >
+              Edit Report
+            </Button>
+          )}
 
           <DownloadEventReport
             event={event}

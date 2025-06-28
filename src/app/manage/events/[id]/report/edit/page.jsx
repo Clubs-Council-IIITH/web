@@ -47,7 +47,7 @@ export default async function EditEventReport({ params }) {
     });
     if (
       !event ||
-      (user?.uid !== event.clubid && !["cc","slo"].includes(user?.role)) ||
+      (user?.uid !== event.clubid && !["cc", "slo"].includes(user?.role)) ||
       event.status.state !== "approved"
     ) {
       return redirect("/404");
