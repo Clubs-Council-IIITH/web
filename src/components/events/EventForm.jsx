@@ -374,7 +374,7 @@ export default function EventForm({
                           defaultValues?.status?.state != undefined &&
                           defaultValues?.status?.state != "incomplete"
                         }
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={(e) => field.onChange(e?.target.checked)}
                         inputProps={{ "aria-label": "controlled" }}
                         sx={{ margin: "auto" }}
                       />
@@ -509,13 +509,13 @@ export default function EventForm({
                   name="haveSponsor"
                   control={control}
                   defaultValue={
-                    defaultValues.sponsor &&
-                    defaultValues.sponsor.length > 0
+                    defaultValues?.sponsor &&
+                    defaultValues?.sponsor?.length > 0
                   }
                   render={({ field }) => (
                     <Switch
                       checked={field.value}
-                      onChange={(e) => field.onChange(e.target.checked)}
+                      onChange={(e) => field.onChange(e?.target?.checked)}
                       inputProps={{ "aria-label": "controlled" }}
                       sx={{ m: 2 }}
                     />
@@ -834,7 +834,7 @@ function EventNameInput({ control, disabled = true }) {
           required
           disabled={disabled}
           onBlur={(e) => {
-            field.onChange(e.target.value.trim());
+            field.onChange(e?.target?.value.trim());
           }}
         />
       )}
@@ -1099,7 +1099,7 @@ function EventDescriptionInput({ control }) {
           multiline
           onBlur={(e) => {
             field.onChange(
-              e.target.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
+              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
             );
           }}
         />
@@ -1248,7 +1248,7 @@ function EventVenueInput({
             render={({ field }) => (
               <Switch
                 checked={field.value}
-                onChange={(e) => field.onChange(e.target.checked)}
+                onChange={(e) => field.onChange(e?.target?.checked)}
                 inputProps={{ "aria-label": "controlled" }}
                 sx={{ m: 2 }}
               />

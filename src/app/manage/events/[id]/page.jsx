@@ -156,45 +156,49 @@ export default async function ManageEventID({ params }) {
         <Box my={3} />
         <Grid container spacing={6}>
           <Grid item xs={12} lg={7}>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Budget
-            </Typography>
-            {event?.budget?.length ? (
-              <EventBudget
-                rows={event?.budget?.map((b, key) => ({
-                  ...b,
-                  id: b?.id || key,
-                }))} // add ID to each budget item if it doesn't exist (MUI requirement)
-                editable={false}
-                billViewable={billViewable}
-              />
-            ) : (
-              <Box mt={2}>None requested</Box>
-            )}
-          </Grid>
-          <Grid item xs={12} lg={7}>
-            <Typography
-              variant="subtitle2"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              Sponsor
-            </Typography>
-            {event?.sponsor?.length ? (
-              <EventSponsor
-                rows={event?.sponsor?.map((b, key) => ({
-                  ...b,
-                  id: b?.id || key,
-                }))}
-                editable={false}
-              />
-            ) : (
-              <Box mt={2}>Event has no sponsors</Box>
-            )}
+
+            <Grid>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Budget
+              </Typography>
+              {event?.budget?.length ? (
+                <EventBudget
+                  rows={event?.budget?.map((b, key) => ({
+                    ...b,
+                    id: b?.id || key,
+                  }))} // add ID to each budget item if it doesn't exist (MUI requirement)
+                  editable={false}
+                  billViewable={billViewable}
+                />
+              ) : (
+                <Box mt={2}>None requested</Box>
+              )}
+            </Grid>
+
+            <Grid sx={{ mt: 4 }}>
+              <Typography
+                variant="subtitle2"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                Sponsor
+              </Typography>
+              {event?.sponsor?.length ? (
+                <EventSponsor
+                  rows={event?.sponsor?.map((b, key) => ({
+                    ...b,
+                    id: b?.id || key,
+                  }))}
+                  editable={false}
+                />
+              ) : (
+                <Box mt={2}>Event has no sponsors</Box>
+              )}
+            </Grid>
           </Grid>
 
           <Grid item xs lg>

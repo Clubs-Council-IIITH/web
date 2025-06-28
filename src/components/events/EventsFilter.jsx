@@ -71,7 +71,7 @@ export default function EventsFilter({ name, club, state }) {
               autoComplete="off"
               variant="outlined"
               fullWidth
-              onChange={(e) => setTargetName(e.target.value)}
+              onChange={(e) => setTargetName(e?.target?.value)}
               value={targetName}
               InputProps={{
                 startAdornment: (
@@ -96,8 +96,8 @@ export default function EventsFilter({ name, club, state }) {
               onChange={(e) => {
                 e.preventDefault();
                 const params = new URLSearchParams(searchParams);
-                if (e.target.value === "") params.delete("club");
-                else params.set("club", e.target.value);
+                if (e?.target?.value === "") params.delete("club");
+                else params.set("club", e?.target?.value);
                 router.push(`${pathname}?${params.toString()}`);
               }}
               value={club || ""}
