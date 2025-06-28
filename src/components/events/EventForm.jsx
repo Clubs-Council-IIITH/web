@@ -315,7 +315,7 @@ export default function EventForm({
         website: i.website,
         amount: i.amount,
         previouslySponsored: i.previouslySponsored,
-      }))
+      }));
 
     // TODO: fix event link field
     data.link = null;
@@ -509,8 +509,7 @@ export default function EventForm({
                   name="haveSponsor"
                   control={control}
                   defaultValue={
-                    defaultValues?.sponsor &&
-                    defaultValues?.sponsor?.length > 0
+                    defaultValues?.sponsor && defaultValues?.sponsor?.length > 0
                   }
                   render={({ field }) => (
                     <Switch
@@ -524,7 +523,7 @@ export default function EventForm({
               }
               label="Does event have any Sponsors?"
             />
-            { haveSponsor ? (
+            {haveSponsor ? (
               <Grid container item spacing={2}>
                 <Grid item xs={12}>
                   <EventSponsorTable
@@ -538,9 +537,8 @@ export default function EventForm({
                   />
                 </Grid>
               </Grid>
-            ) : null }
+            ) : null}
           </Grid>
-
         </Grid>
 
         <Grid container item xs md spacing={3} alignItems="flex-start">
@@ -1566,21 +1564,13 @@ function EventBudgetTable({
   );
 }
 
-function EventSponsorTable({
-  control,
-  watch,
-  disabled = true,
-}) {
+function EventSponsorTable({ control, watch, disabled = true }) {
   return (
     <Controller
       name="sponsor"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <EventSponsor
-          editable={!disabled}
-          rows={value}
-          setRows={onChange}
-        />
+        <EventSponsor editable={!disabled} rows={value} setRows={onChange} />
       )}
     />
   );

@@ -156,7 +156,6 @@ export default async function ManageEventID({ params }) {
         <Box my={3} />
         <Grid container spacing={6}>
           <Grid item xs={12} lg={7}>
-
             <Grid>
               <Typography
                 variant="subtitle2"
