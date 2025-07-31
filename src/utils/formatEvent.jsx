@@ -36,5 +36,5 @@ export function billsStateLabel(state) {
 }
 
 export function locationLabel(location) {
-  return { name: locationMap[location] };
+  return { name: locationMap[location] || location };
 }

@@ -230,17 +230,21 @@ export default function EventForm({
 
     // Handle location: if "other" is selected, use the text field value
     let location = formData.location;
-    if (Array.isArray(location) && location.includes("other")) {
-      location = formData.locationOther?.trim() || "Other";
-    } else if (Array.isArray(location)) {
-      location = location[0]; // or join if you want to support multiple
+    if (Array.isArray(location)) {
+      location = location.map(loc =>
+        loc === "other"
+          ? (formData.locationOther?.trim() || "Other")
+          : loc
+      );
     }
 
     let locationAlternate = formData.locationAlternate;
-    if (Array.isArray(locationAlternate) && locationAlternate.includes("other")) {
-      locationAlternate = formData.locationAlternateOther?.trim() || "Other";
-    } else if (Array.isArray(locationAlternate)) {
-      locationAlternate = locationAlternate[0];
+    if (Array.isArray(locationAlternate)) {
+      locationAlternate = locationAlternate.map(loc =>
+        loc === "other"
+          ? (formData.locationAlternateOther?.trim() || "Other")
+          : loc
+      );
     }
 
     const data = {
@@ -1496,18 +1500,16 @@ function EventLocationInput({
               <FormHelperText>{error?.message}</FormHelperText>
               {Array.isArray(field.value) && field.value.includes("other") && (
                 <TextField
-                  label="Please specify location*"
+                  label="Please specify location"
                   name="locationOther"
                   value={watch("locationOther") || ""}
                   onChange={(e) => setValue("locationOther", e.target.value)}
                   margin="normal"
                   fullWidth
                   required
-                  error={!!error?.message && !watch("locationOther")}
+                  error={invalid && !watch("locationOther")}
                   helperText={
-                    !watch("locationOther") && error?.message
-                      ? error?.message
-                      : undefined
+                    invalid && !watch("locationOther") ? error?.message : undefined
                   }
                 />
               )}
@@ -1590,18 +1592,16 @@ function EventLocationInput({
               <FormHelperText>{error?.message}</FormHelperText>
               {Array.isArray(field.value) && field.value.includes("other") && (
                 <TextField
-                  label="Please specify alternate location*"
+                  label="Please specify alternate location"
                   name="locationAlternateOther"
                   value={watch("locationAlternateOther") || ""}
                   onChange={(e) => setValue("locationAlternateOther", e.target.value)}
                   margin="normal"
                   fullWidth
                   required
-                  error={!!error?.message && !watch("locationAlternateOther")}
+                  error={invalid && !watch("locationAlternateOther")}
                   helperText={
-                    !watch("locationAlternateOther") && error?.message
-                      ? error?.message
-                      : undefined
+                    invalid && !watch("locationAlternateOther") ? error?.message : undefined
                   }
                 />
               )}
