@@ -578,6 +578,7 @@ export default function EventForm({
                     defaultValues?.status?.state != "incomplete"
                   }
                   eventid={defaultValues?._id}
+                  setValue={setValue}
                 />
               </Grid>
             </Grid>
@@ -1153,6 +1154,7 @@ function EventVenueInput({
   resetField,
   disabled = true,
   eventid = null,
+  setValue
 }) {
   const modeInput = watch("mode");
   const locationInput = watch("location");
@@ -1209,6 +1211,7 @@ function EventVenueInput({
               endDateInput={endDateInput}
               disabled={disabled}
               eventid={eventid}
+              setValue={setValue}
             />
           ) : (
             <FormHelperText>
@@ -1381,6 +1384,7 @@ function EventVenueInput({
 function EventLocationInput({
   control,
   watch,
+  setValue,
   startDateInput,
   endDateInput,
   disabled = true,
