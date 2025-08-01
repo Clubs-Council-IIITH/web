@@ -216,7 +216,11 @@ export default async function ManageEventID({ params }) {
                   {event?.location?.map((venue, key) => (
                     <Chip
                       key={key}
-                      label={locationLabel(venue)?.name}
+                      label={
+                        venue === "other"
+                          ? event.otherLocation || event.other_location || "Other"
+                          : locationLabel(venue)?.name || "Unknown"
+                      }
                       sx={{ mr: 1, mb: 1, p: 1 }}
                     />
                   ))}
@@ -231,7 +235,11 @@ export default async function ManageEventID({ params }) {
                       {event?.locationAlternate?.map((venue, key) => (
                         <Chip
                           key={key}
-                          label={locationLabel(venue)?.name}
+                          label={
+                            venue === "other"
+                              ? event.otherLocationAlternate || event.other_locationAlternate || "Other"
+                              : locationLabel(venue)?.name || "Unknown"
+                          }
                           sx={{ mr: 1, mb: 1, p: 1 }}
                         />
                       ))}

@@ -20,7 +20,13 @@ export default function AddToCalendarBtn({ event }) {
       location={
         ["offline", "hybrid"].includes(event.mode)
           ? event.location.length > 0
-            ? event.location.map((l) => locationLabel(l).name).join(", ")
+            ? event.location
+                .map((l) =>
+                  l === "other"
+                    ? event.otherLocation || event.other_location || "Other"
+                    : locationLabel(l).name
+                )
+                .join(", ")
             : event.mode.charAt(0).toUpperCase() + event.mode.slice(1)
           : "Online"
       }

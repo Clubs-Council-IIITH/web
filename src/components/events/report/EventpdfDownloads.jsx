@@ -630,8 +630,10 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
                           .map(
                             (venue) =>
                               `<li>${
-                                locationLabel(venue)?.name || "Unknown"
-                              }</li>`,
+                                venue === "other"
+                                  ? event.otherLocation || event.other_location || "Other"
+                                  : locationLabel(venue)?.name || "Unknown"
+                              }</li>`
                           )
                           .join("")}
                     </ul>

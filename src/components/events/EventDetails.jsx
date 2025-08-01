@@ -19,9 +19,17 @@ const AddToCalendarBtn = dynamic(
 
 export const getEventLocation = (event) => {
   if (["offline", "hybrid"].includes(event.mode)) {
-    return event.location.length > 0
-      ? event.location.map((l) => locationLabel(l).name).join(", ")
-      : event.mode.charAt(0).toUpperCase() + event.mode.slice(1);
+    if (event.location.length > 0) {
+      return event.location
+        .map((l) =>
+          l === "other"
+            ? event.otherLocation || event.other_location || "Other"
+            : locationLabel(l).name
+        )
+        .join(", ");
+    } else {
+      return event.mode.charAt(0).toUpperCase() + event.mode.slice(1);
+    }
   } else {
     return "Online";
   }

@@ -471,10 +471,13 @@ export function DownloadEventReportDocx({
               ],
             }),
             ...(event?.location?.length
-              ? event.location.map(
+               ? event.location.map(
                   (venue) =>
                     new Paragraph({
-                      text: `${locationLabel(venue)?.name || "Unknown"}`,
+                      text:
+                        venue === "other"
+                          ? event.otherLocation || event.other_location || "Other"
+                          : locationLabel(venue)?.name || "Unknown",
                       bullet: {
                         level: 0,
                       },
