@@ -231,13 +231,13 @@ export default function EventForm({
     let location = formData.mode === "online" ? null : formData.location;
     let otherLocation = null;
     if (Array.isArray(formData.location) && formData.location.includes("other")) {
-      otherLocation = formData.other_location;
+      otherLocation = formData.otherLocation;
     }
 
     let locationAlternate = formData.mode === "online" ? null : formData.locationAlternate;
     let otherLocationAlternate = null;
     if (Array.isArray(formData.locationAlternate) && formData.locationAlternate.includes("other")) {
-      otherLocationAlternate = formData.other_locationAlternate;
+      otherLocationAlternate = formData.otherLocationAlternate;
     }
 
     const data = {
@@ -1562,7 +1562,7 @@ function EventLocationInput({
       {Array.isArray(locationInput) && locationInput.includes("other") && (
         <Grid item xs={12}>
           <Controller
-            name="other_location"
+            name="otherLocation"
             control={control}
             rules={{
               required: {
@@ -1593,7 +1593,7 @@ function EventLocationInput({
       {Array.isArray(locationAlternateInput) && locationAlternateInput.includes("other") && (
         <Grid item xs={12}>
           <Controller
-            name="other_locationAlternate"
+            name="otherLocationAlternate"
             control={control}
             rules={{
               required: {

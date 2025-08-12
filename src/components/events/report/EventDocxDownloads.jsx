@@ -476,7 +476,7 @@ export function DownloadEventReportDocx({
                     new Paragraph({
                       text:
                         venue === "other"
-                          ? event.otherLocation || event.other_location || "Other"
+                          ? event.otherLocation || "Other"
                           : locationLabel(venue)?.name || "Unknown",
                       bullet: {
                         level: 0,

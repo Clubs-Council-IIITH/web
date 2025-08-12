@@ -218,7 +218,7 @@ export default async function ManageEventID({ params }) {
                       key={key}
                       label={
                         venue === "other"
-                          ? event.otherLocation || event.other_location || "Other"
+                          ? event.otherLocation || "Other"
                           : locationLabel(venue)?.name || "Unknown"
                       }
                       sx={{ mr: 1, mb: 1, p: 1 }}
@@ -237,7 +237,7 @@ export default async function ManageEventID({ params }) {
                           key={key}
                           label={
                             venue === "other"
-                              ? event.otherLocationAlternate || event.other_locationAlternate || "Other"
+                              ? event.otherLocationAlternate || "Other"
                               : locationLabel(venue)?.name || "Unknown"
                           }
                           sx={{ mr: 1, mb: 1, p: 1 }}
