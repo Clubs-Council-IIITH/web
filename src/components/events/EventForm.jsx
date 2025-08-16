@@ -1521,7 +1521,7 @@ function EventLocationInput({
                       {locationLabel(location?.location)?.name}
                       {locationInput?.includes(location?.location) && (
                         <span style={{ marginLeft: "8px", color: "#999" }}>
-                          (selected as alternate)
+                          (selected as main)
                         </span>
                       )}
                       {!location?.available && (
