@@ -61,6 +61,7 @@ import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 
 const admin_roles = ["cc", "slo"];
+const clubsAddPastEvents = true; // whether clubs can add past events - only for special cases
 
 const poster_maxSizeMB = 10;
 const poster_warnSizeMB = 1;
@@ -904,6 +905,7 @@ function EventDatetimeInput({
             required: "Start date is required!",
             validate: {
               minDateCheck: (value) =>
+                clubsAddPastEvents ||
                 admin_roles.includes(role) ||
                 disabled ||
                 dayjs(value) >= dayjs(new Date()) ||
@@ -922,7 +924,7 @@ function EventDatetimeInput({
                   helperText: error?.message,
                 },
               }}
-              disablePast={!admin_roles.includes(role)}
+              disablePast={!(clubsAddPastEvents || admin_roles.includes(role))}
               viewRenderers={{
                 hours: renderTimeViewClock,
                 minutes: renderTimeViewClock,
@@ -968,7 +970,7 @@ function EventDatetimeInput({
                     ).add(1, "minute")
                   : null
               }
-              disablePast={!admin_roles.includes(role)}
+              disablePast={!(clubsAddPastEvents || admin_roles.includes(role))}
               onError={(error) => setError(error)}
               slotProps={{
                 textField: {
