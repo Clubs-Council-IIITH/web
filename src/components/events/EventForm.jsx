@@ -61,7 +61,7 @@ import { audienceMap } from "constants/events";
 import { locationLabel } from "utils/formatEvent";
 
 const admin_roles = ["cc", "slo"];
-const clubsAddPastEvents = true; // whether clubs can add past events - only for special cases
+const clubsAddPastEvents = false; // whether clubs can add past events - only for special cases (default: false)
 
 const poster_maxSizeMB = 10;
 const poster_warnSizeMB = 1;
