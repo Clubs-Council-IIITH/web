@@ -20,6 +20,7 @@ export const GET_PENDING_EVENTS = gql`
         budget
       }
       location
+      otherLocation
       poster
       budget {
         amount
@@ -38,6 +39,7 @@ export const GET_ALL_EVENTS = gql`
     $public: Boolean
     $timings: [DateTime!]
     $location: [Event_Location!]
+    $otherLocation: String
   ) {
     events(
       clubid: $clubid
@@ -48,6 +50,7 @@ export const GET_ALL_EVENTS = gql`
       public: $public
       timings: $timings
       location: $location
+      otherLocation: $otherLocation
     ) {
       _id
       name
@@ -94,7 +97,9 @@ export const GET_EVENT = gql`
       clubid
       collabclubs
       location
+      otherLocation
       locationAlternate
+      otherLocationAlternate
       audience
       description
       datetimeperiod
@@ -186,7 +191,9 @@ export const GET_FULL_EVENT = gql`
       equipment
       link
       location
+      otherLocation
       locationAlternate
+      otherLocationAlternate
       mode
       name
       population
