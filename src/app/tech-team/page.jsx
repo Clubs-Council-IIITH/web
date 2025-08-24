@@ -157,9 +157,7 @@ export default async function TechTeam() {
       </Typography>
 
       <Stack direction="row" mb={2} mt={5}>
-        <Typography variant="h3">
-          Our Perfect Visionary Crew
-        </Typography>
+        <Typography variant="h3">Our Perfect Visionary Crew</Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button
           variant="none"
