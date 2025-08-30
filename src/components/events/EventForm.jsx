@@ -1541,7 +1541,6 @@ function EventLocationInput({
                       }
                     >
                       {locationLabel(location?.location)?.name}
-                      {/* Only show warning if not 'other' */}
                       {location.location !== "other" &&
                         locationInput?.includes(location?.location) && (
                           <span style={{ marginLeft: "8px", color: "#999" }}>
