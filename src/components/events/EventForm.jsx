@@ -1473,10 +1473,11 @@ function EventLocationInput({
                          !location?.available)
                       }>
                       {locationLabel(location?.location)?.name}
-                      {locationAlternateInput?.includes(location?.location) && (
-                        <span style={{ marginLeft: "8px", color: "#999" }}>
-                          (selected as alternate)
-                        </span>
+                      {location.location !== "other" &&
+                        locationAlternateInput?.includes(location?.location) && (
+                          <span style={{ marginLeft: "8px", color: "#999" }}>
+                            (already selected)
+                          </span>
                       )}
                       {!location?.available && (
                         <span style={{ marginLeft: "8px", color: "#f00" }}>
@@ -1540,10 +1541,12 @@ function EventLocationInput({
                       }
                     >
                       {locationLabel(location?.location)?.name}
-                      {locationInput?.includes(location?.location) && (
-                        <span style={{ marginLeft: "8px", color: "#999" }}>
-                          (selected as alternate)
-                        </span>
+                      {/* Only show warning if not 'other' */}
+                      {location.location !== "other" &&
+                        locationInput?.includes(location?.location) && (
+                          <span style={{ marginLeft: "8px", color: "#999" }}>
+                            (already selected)
+                          </span>
                       )}
                       {!location?.available && (
                         <span style={{ marginLeft: "8px", color: "#f00" }}>

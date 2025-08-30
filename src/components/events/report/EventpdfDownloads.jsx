@@ -254,7 +254,9 @@ export function DownloadEventReport({
                           .map(
                             (venue) =>
                               `<li>${
-                                locationLabel(venue)?.name || "Unknown"
+                                venue === "other"
+                                  ? event.otherLocation || "Other"
+                                  : locationLabel(venue)?.name || "Unknown"
                               }</li>`,
                           )
                           .join("")}

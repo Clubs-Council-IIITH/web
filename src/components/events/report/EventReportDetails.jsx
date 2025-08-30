@@ -320,7 +320,11 @@ export function EventReportDetails({
                 {event?.location.map((venue, key) => (
                   <Chip
                     key={key}
-                    label={locationLabel(venue)?.name}
+                    label={
+                      venue === "other"
+                        ? event.otherLocation || "Other"
+                        : locationLabel(venue)?.name
+                    }
                     sx={{ mr: 1, mb: 1, p: 1 }}
                   />
                 ))}
