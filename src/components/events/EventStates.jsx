@@ -23,6 +23,9 @@ export function BudgetStatus({ status, budget, sx }) {
       : "pending"
     : "empty";
 
+  const hidden = status?.state === "incomplete" || status?.state === "deleted";
+  if (hidden) return null;
+
   return (
     <Tag
       sx={sx}
@@ -56,6 +59,9 @@ export function VenueStatus({ status, location, sx }) {
       ? "approved"
       : "pending"
     : "empty";
+
+  const hidden = status?.state === "incomplete" || status?.state === "deleted";
+  if (hidden) return null;
 
   return (
     <Tag

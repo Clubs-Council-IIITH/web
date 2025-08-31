@@ -1,11 +1,14 @@
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Container, Typography, Grid } from "@mui/material";
+import Link from "next/link";
+
+import { Container, Typography, Grid, Stack, Box, Button } from "@mui/material";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { extractFirstYear } from "components/members/MembersGrid";
 import SLCTechLogo from "components/SLCTechLogo";
+import Icon from "components/Icon";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -153,9 +156,21 @@ export default async function TechTeam() {
         institution's digital landscape.
       </Typography>
 
-      <Typography variant="h3" mb={4} mt={5}>
-        Our Perfect Visionary Crew
-      </Typography>
+      <Stack direction="row" mb={2} mt={5}>
+        <Typography variant="h3">Our Perfect Visionary Crew</Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <Button
+          variant="none"
+          color="secondary"
+          component={Link}
+          href="/tech-team/all-members"
+        >
+          <Typography variant="button" color="text.primary">
+            View all
+          </Typography>
+          <Icon variant="chevron-right" />
+        </Button>
+      </Stack>
       {finaltargetMembers?.length ? (
         <LocalUsersGrid users={finaltargetMembers} techMembers={true} />
       ) : (
