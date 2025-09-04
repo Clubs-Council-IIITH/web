@@ -37,8 +37,6 @@ export const GET_ALL_EVENTS = gql`
     $limit: Int
     $public: Boolean
     $timings: [DateTime!]
-    $location: [Event_Location!]
-    $otherLocation: String
   ) {
     events(
       clubid: $clubid
@@ -48,8 +46,6 @@ export const GET_ALL_EVENTS = gql`
       limit: $limit
       public: $public
       timings: $timings
-      location: $location
-      otherLocation: $otherLocation
     ) {
       _id
       name
@@ -96,9 +92,7 @@ export const GET_EVENT = gql`
       clubid
       collabclubs
       location
-      otherLocation
       locationAlternate
-      otherLocationAlternate
       audience
       description
       datetimeperiod
