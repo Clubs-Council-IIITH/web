@@ -1569,10 +1569,6 @@ function EventLocationInput({
             name="otherLocation"
             control={control}
             rules={{
-              required: {
-                value: true,
-                message: "Please specify the 'other' location.",
-              },
               validate: (value) =>
                 locationInput.includes("other") && !value
                   ? "Please specify the 'other' location."
@@ -1600,10 +1596,6 @@ function EventLocationInput({
             name="otherLocationAlternate"
             control={control}
             rules={{
-              required: {
-                value: true,
-                message: "Please specify the 'other' alternate location.",
-              },
               validate: (value) =>
                 locationAlternateInput.includes("other") && !value
                   ? "Please specify the 'other' alternate location."

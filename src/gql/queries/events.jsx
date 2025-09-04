@@ -20,7 +20,6 @@ export const GET_PENDING_EVENTS = gql`
         budget
       }
       location
-      otherLocation
       poster
       budget {
         amount
