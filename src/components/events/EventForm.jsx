@@ -229,15 +229,28 @@ export default function EventForm({
   async function onSubmit(formData, opts) {
     setLoading(true);
 
+    let location = formData.mode === "online" ? null : formData.location;
+    let otherLocation = null;
+    if (Array.isArray(formData.location) && formData.location.includes("other")) {
+      otherLocation = formData.otherLocation;
+    }
+
+    let locationAlternate = formData.mode === "online" ? null : formData.locationAlternate;
+    let otherLocationAlternate = null;
+    if (Array.isArray(formData.locationAlternate) && formData.locationAlternate.includes("other")) {
+      otherLocationAlternate = formData.otherLocationAlternate;
+    }
+
     const data = {
       name: formData.name,
       description: formData.description,
       audience: formData.audience,
       mode: formData.mode,
       link: formData.link,
-      location: formData.mode === "online" ? null : formData.location,
-      locationAlternate:
-        formData.mode === "online" ? null : formData.locationAlternate,
+      location,
+      otherLocation,
+      locationAlternate,
+      otherLocationAlternate,
       population: parseInt(formData.population),
       externalPopulation: parseInt(formData.externalPopulation),
       additional: formData.additional,
@@ -1400,7 +1413,15 @@ function EventLocationInput({
           severity: "error",
         });
       } else {
-        setAvailableRooms(res.data);
+        let rooms = res.data || [];
+        if (!rooms.some((r) => r.location === "other")) {
+          rooms.push({ location: "other", available: true });
+        } else {
+          rooms = rooms.map((r) =>
+            r.location === "other" ? { ...r, available: true } : r
+          );
+        }
+        setAvailableRooms(rooms);
       }
     })();
   }, [startDateInput, endDateInput]);
@@ -1449,15 +1470,16 @@ function EventLocationInput({
                       key={location?.location}
                       value={location?.location}
                       disabled={
-                        locationAlternateInput?.includes(location) ||
-                        !location?.available
-                      }
-                    >
+                        location?.location !== "other" &&
+                        (locationAlternateInput?.includes(location?.location) ||
+                         !location?.available)
+                      }>
                       {locationLabel(location?.location)?.name}
-                      {locationAlternateInput?.includes(location?.location) && (
-                        <span style={{ marginLeft: "8px", color: "#999" }}>
-                          (selected as alternate)
-                        </span>
+                      {location?.location !== "other" &&
+                        locationAlternateInput?.includes(location?.location) && (
+                          <span style={{ marginLeft: "8px", color: "#999" }}>
+                            (already selected)
+                          </span>
                       )}
                       {!location?.available && (
                         <span style={{ marginLeft: "8px", color: "#f00" }}>
@@ -1472,6 +1494,33 @@ function EventLocationInput({
           )}
         />
       </Grid>
+
+      {Array.isArray(locationInput) && locationInput.includes("other") && (
+        <Grid item xs={12}>
+          <Controller
+            name="otherLocation"
+            control={control}
+            rules={{
+              validate: (value) =>
+                locationInput.includes("other") && !value
+                  ? "Please specify the 'other' location."
+                  : true,
+            }}
+            render={({ field, fieldState: { error, invalid } }) => (
+              <TextField
+                {...field}
+                label="Other Location"
+                variant="outlined"
+                fullWidth
+                error={invalid}
+                helperText={error?.message}
+                required
+                disabled={disabled}
+              />
+            )}
+          />
+        </Grid>
+      )}
 
       <Grid item xs={12}>
         <Controller
@@ -1516,15 +1565,17 @@ function EventLocationInput({
                       key={location?.location}
                       value={location?.location}
                       disabled={
-                        locationInput?.includes(location) ||
-                        !location?.available
+                        location?.location !== "other" &&
+                        (locationInput?.includes(location?.location) ||
+                        !location?.available)
                       }
                     >
                       {locationLabel(location?.location)?.name}
-                      {locationInput?.includes(location?.location) && (
-                        <span style={{ marginLeft: "8px", color: "#999" }}>
-                          (selected as main)
-                        </span>
+                      {location?.location !== "other" &&
+                        locationInput?.includes(location?.location) && (
+                          <span style={{ marginLeft: "8px", color: "#999" }}>
+                            (selected as main)
+                          </span>
                       )}
                       {!location?.available && (
                         <span style={{ marginLeft: "8px", color: "#f00" }}>
@@ -1539,6 +1590,33 @@ function EventLocationInput({
           )}
         />
       </Grid>
+
+      {Array.isArray(locationAlternateInput) && locationAlternateInput.includes("other") && (
+        <Grid item xs={12}>
+          <Controller
+            name="otherLocationAlternate"
+            control={control}
+            rules={{
+              validate: (value) =>
+                locationAlternateInput.includes("other") && !value
+                  ? "Please specify the 'other' alternate location."
+                  : true,
+            }}
+            render={({ field, fieldState: { error, invalid } }) => (
+              <TextField
+                {...field}
+                label="Other Alternate Location"
+                variant="outlined"
+                fullWidth
+                error={invalid}
+                helperText={error?.message}
+                required
+                disabled={disabled}
+              />
+            )}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
