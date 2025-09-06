@@ -18,6 +18,7 @@ import { DownloadEventReport } from "components/events/report/EventpdfDownloads"
 import { DownloadEventReportDocx } from "components/events/report/EventDocxDownloads";
 import MemberListItem from "components/members/MemberListItem";
 import EventBudget from "components/events/EventBudget";
+import EventSponsor from "components/events/EventSponsor";
 import { canEditReport } from "utils/eventReportAuth";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
@@ -299,6 +300,22 @@ export function EventReportDetails({
           {event?.budget?.length ? (
             <EventBudget
               rows={event?.budget.map((b, key) => ({ ...b, id: b?.id || key }))}
+              editable={false}
+            />
+          ) : (
+            <Box mt={2}>None requested</Box>
+          )}
+          <Typography
+            variant="subtitle2"
+            textTransform="uppercase"
+            mt={2}
+            gutterBottom
+          >
+            Sponsor
+          </Typography>
+          {event?.sponsor?.length ? (
+            <EventSponsor
+              rows={event?.sponsor.map((b, key) => ({ ...b, id: b?.id || key }))}
               editable={false}
             />
           ) : (

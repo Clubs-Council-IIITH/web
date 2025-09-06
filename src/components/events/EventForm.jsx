@@ -517,6 +517,11 @@ export default function EventForm({
                       checked={field.value}
                       onChange={(e) => field.onChange(e?.target?.checked)}
                       inputProps={{ "aria-label": "controlled" }}
+                      disabled={
+                        !admin_roles.includes(user?.role) &&
+                        defaultValues?.status?.state != undefined &&
+                        defaultValues?.status?.state != "incomplete"
+                      }
                       sx={{ m: 2 }}
                     />
                   )}

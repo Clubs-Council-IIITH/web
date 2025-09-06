@@ -80,11 +80,20 @@ export default function EventsTable({
               overflow: "hidden",
             }}
           >
-            {row.budget && row.budget.length > 0 ? (
+            {row.sponsor && row.sponsor.length > 0 ? (
               <Icon
                 sx={{
                   mr: 0.5,
-                  flexShrink: 0, // Prevent icon from shrinking
+                  flexShrink: 0,
+                }}
+                variant={"paid-rounded"}
+                color='#FFC046'
+              />
+            ) : row.budget && row.budget.length > 0 ? (
+              <Icon
+                sx={{
+                  mr: 0.5,
+                  flexShrink: 0,
                 }}
                 variant={"paid-rounded"}
               />
