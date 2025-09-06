@@ -219,7 +219,7 @@ export default function EventForm({
           severity: "error",
         });
 
-        return false;        
+        return false;
       }
 
       return true;
@@ -1470,12 +1470,12 @@ function EventLocationInput({
                       key={location?.location}
                       value={location?.location}
                       disabled={
-                        location.location !== "other" &&
-                        (locationAlternateInput?.includes(location.location) ||
+                        location?.location !== "other" &&
+                        (locationAlternateInput?.includes(location?.location) ||
                          !location?.available)
                       }>
                       {locationLabel(location?.location)?.name}
-                      {location.location !== "other" &&
+                      {location?.location !== "other" &&
                         locationAlternateInput?.includes(location?.location) && (
                           <span style={{ marginLeft: "8px", color: "#999" }}>
                             (already selected)
@@ -1494,6 +1494,33 @@ function EventLocationInput({
           )}
         />
       </Grid>
+
+      {Array.isArray(locationInput) && locationInput.includes("other") && (
+        <Grid item xs={12}>
+          <Controller
+            name="otherLocation"
+            control={control}
+            rules={{
+              validate: (value) =>
+                locationInput.includes("other") && !value
+                  ? "Please specify the 'other' location."
+                  : true,
+            }}
+            render={({ field, fieldState: { error, invalid } }) => (
+              <TextField
+                {...field}
+                label="Other Location"
+                variant="outlined"
+                fullWidth
+                error={invalid}
+                helperText={error?.message}
+                required
+                disabled={disabled}
+              />
+            )}
+          />
+        </Grid>
+      )}
 
       <Grid item xs={12}>
         <Controller
@@ -1538,12 +1565,13 @@ function EventLocationInput({
                       key={location?.location}
                       value={location?.location}
                       disabled={
-                        locationInput?.includes(location) ||
-                        !location?.available
+                        location?.location !== "other" &&
+                        (locationInput?.includes(location?.location) ||
+                        !location?.available)
                       }
                     >
                       {locationLabel(location?.location)?.name}
-                      {location.location !== "other" &&
+                      {location?.location !== "other" &&
                         locationInput?.includes(location?.location) && (
                           <span style={{ marginLeft: "8px", color: "#999" }}>
                             (selected as main)
@@ -1562,33 +1590,6 @@ function EventLocationInput({
           )}
         />
       </Grid>
-
-      {Array.isArray(locationInput) && locationInput.includes("other") && (
-        <Grid item xs={12}>
-          <Controller
-            name="otherLocation"
-            control={control}
-            rules={{
-              validate: (value) =>
-                locationInput.includes("other") && !value
-                  ? "Please specify the 'other' location."
-                  : true,
-            }}
-            render={({ field, fieldState: { error, invalid } }) => (
-              <TextField
-                {...field}
-                label="Other Location"
-                variant="outlined"
-                fullWidth
-                error={invalid}
-                helperText={error?.message}
-                required
-                disabled={disabled}
-              />
-            )}
-          />
-        </Grid>
-      )}
 
       {Array.isArray(locationAlternateInput) && locationAlternateInput.includes("other") && (
         <Grid item xs={12}>
