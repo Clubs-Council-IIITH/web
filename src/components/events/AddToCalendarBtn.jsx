@@ -24,7 +24,7 @@ export default function AddToCalendarBtn({ event }) {
                 .map((l) =>
                   l === "other"
                     ? event.otherLocation || "Other"
-                    : locationLabel(l).name
+                    : locationLabel(l).name,
                 )
                 .join(", ")
             : event.mode.charAt(0).toUpperCase() + event.mode.slice(1)

@@ -24,7 +24,7 @@ export const getEventLocation = (event) => {
         .map((l) =>
           l === "other"
             ? event.otherLocation || "Other"
-            : locationLabel(l).name
+            : locationLabel(l).name,
         )
         .join(", ");
     } else {

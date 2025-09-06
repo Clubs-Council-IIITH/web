@@ -471,7 +471,7 @@ export function DownloadEventReportDocx({
               ],
             }),
             ...(event?.location?.length
-               ? event.location.map(
+              ? event.location.map(
                   (venue) =>
                     new Paragraph({
                       text:
