@@ -223,7 +223,7 @@ export function DownloadEventReport({
         <div class="section">
             <h2>Sponsor Overview</h2>
             ${
-              event?.budget?.length
+              event?.sponsor?.length
                 ? `
             <table>
                 <thead>
