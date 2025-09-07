@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { Typography, TextField, Box } from "@mui/material";
+import { Typography, TextField, Box, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
@@ -81,22 +81,26 @@ export default function EventsTable({
             }}
           >
             {row.sponsor && row.sponsor.length > 0 ? (
-              <Icon
-                sx={{
-                  mr: 0.5,
-                  flexShrink: 0,
-                }}
-                variant={"paid-rounded"}
-                color='#FFC046'
-              />
+              <Tooltip title="Event has sponsors" arrow>
+                <Icon
+                  sx={{
+                    mr: 0.5,
+                    flexShrink: 0,
+                  }}
+                  variant={"paid-rounded"}
+                  color="#FFC046"
+                />
+              </Tooltip>
             ) : row.budget && row.budget.length > 0 ? (
-              <Icon
-                sx={{
-                  mr: 0.5,
-                  flexShrink: 0,
-                }}
-                variant={"paid-rounded"}
-              />
+              <Tooltip title="Event requires budget" arrow>
+                <Icon
+                  sx={{
+                    mr: 0.5,
+                    flexShrink: 0,
+                  }}
+                  variant={"paid-rounded"}
+                />
+              </Tooltip>
             ) : null}
             <Typography
               variant="body2"
@@ -171,7 +175,7 @@ export default function EventsTable({
         ]),
     {
       field: "venue",
-      headerName: "Venue/SLO",
+      headerName: "Venue",
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",
@@ -180,22 +184,33 @@ export default function EventsTable({
         approved: row.status.room,
       }),
       renderCell: ({ value }) => (
-        <Icon
-          sx={{
-            color: !value.requested
-              ? "secondary.main"
+        <Tooltip
+          title={
+            !value.requested
+              ? "No venue requested"
               : !value.approved
+              ? "Venue requested, pending approval"
+              : "Venue approved"
+          }
+          arrow
+        >
+          <Icon
+            sx={{
+              color: !value.requested
+                ? "secondary.main"
+                : !value.approved
                 ? "warning.main"
                 : "success.main",
-          }}
-          variant={
-            !value.requested
-              ? "remove-rounded"
-              : !value.approved
+            }}
+            variant={
+              !value.requested
+                ? "remove-rounded"
+                : !value.approved
                 ? "refresh-rounded"
                 : "check"
-          }
-        />
+            }
+          />
+        </Tooltip>
       ),
       display: "flex",
       sortComparator: (v1, v2) => {
