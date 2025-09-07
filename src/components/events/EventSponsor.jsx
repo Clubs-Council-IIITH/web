@@ -9,12 +9,12 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { fCurrency } from "utils/formatCurrency";
-import { validateBillno } from "components/events/bills/BillUpload";
 
 export default function EventSponsor({
   editable = false,
   rows = [],
   setRows = console.log,
+  setSponsorEditing = console.log,
 }) {
   const theme = useTheme();
   const [error, setError] = useState("");
@@ -201,6 +201,8 @@ export default function EventSponsor({
         editMode="row"
         processRowUpdate={onUpdate}
         disableRowSelectionOnClick
+        onRowEditStart={() => setSponsorEditing(true)}
+        onRowEditStop={() => setSponsorEditing(false)}
         onProcessRowUpdateError={(error) => {
           console.error("Row update error:", error);
           setError(error.message);

@@ -81,6 +81,7 @@ export default function EventForm({
   const [cancelDialog, setCancelDialog] = useState(false);
   const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [budgetEditing, setBudgetEditing] = useState(false);
+  const [sponsorEditing, setSponsorEditing] = useState(false);
   const [hasPhone, setHasPhone] = useState(true);
 
   const { triggerToast } = useToast();
@@ -492,7 +493,6 @@ export default function EventForm({
               <Grid item xs={12}>
                 <EventBudgetTable
                   control={control}
-                  watch={watch}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
@@ -534,12 +534,12 @@ export default function EventForm({
                 <Grid item xs={12}>
                   <EventSponsorTable
                     control={control}
-                    watch={watch}
                     disabled={
                       !admin_roles.includes(user?.role) &&
                       defaultValues?.status?.state != undefined &&
                       defaultValues?.status?.state != "incomplete"
                     }
+                    setSponsorEditing={setSponsorEditing}
                   />
                 </Grid>
               </Grid>
@@ -635,7 +635,7 @@ export default function EventForm({
                   variant="contained"
                   color="primary"
                   fullWidth
-                  disabled={budgetEditing}
+                  disabled={budgetEditing || sponsorEditing}
                 >
                   Save
                 </LoadingButton>
@@ -647,7 +647,7 @@ export default function EventForm({
                   variant="outlined"
                   color="primary"
                   fullWidth
-                  disabled={budgetEditing}
+                  disabled={budgetEditing || sponsorEditing}
                 >
                   Save as draft
                 </LoadingButton>
@@ -669,7 +669,7 @@ export default function EventForm({
                       onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
-                  disabled={budgetEditing}
+                  disabled={budgetEditing || sponsorEditing}
                 >
                   Save & Submit
                 </LoadingButton>
@@ -1551,7 +1551,6 @@ function EventLocationInput({
 // input event budget as a table
 function EventBudgetTable({
   control,
-  watch,
   disabled = true,
   setBudgetEditing = null,
 }) {
@@ -1571,13 +1570,22 @@ function EventBudgetTable({
   );
 }
 
-function EventSponsorTable({ control, watch, disabled = true }) {
+function EventSponsorTable({
+  control,
+  disabled = true,
+  setSponsorEditing = null,
+}) {
   return (
     <Controller
       name="sponsor"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <EventSponsor editable={!disabled} rows={value} setRows={onChange} />
+        <EventSponsor
+          editable={!disabled}
+          rows={value}
+          setRows={onChange}
+          setSponsorEditing={setSponsorEditing}
+        />
       )}
     />
   );

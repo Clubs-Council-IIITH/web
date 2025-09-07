@@ -232,8 +232,8 @@ export default function EventBudget({
         editMode="row"
         processRowUpdate={onUpdate}
         disableRowSelectionOnClick
-        onRowEditStart={(p) => setBudgetEditing(true)}
-        onRowEditStop={(p) => setBudgetEditing(false)}
+        onRowEditStart={() => setBudgetEditing(true)}
+        onRowEditStop={() => setBudgetEditing(false)}
         onProcessRowUpdateError={(error) => {
           console.error("Row update error:", error);
           setError(error.message);
