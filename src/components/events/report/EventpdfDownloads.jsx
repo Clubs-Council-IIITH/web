@@ -135,8 +135,14 @@ export function DownloadEventReport({
             font-size: 13px;
             padding: 8px;
             text-align: left;
+            word-break: break-word;
+            white-space: normal;
         }
 
+        .website {
+            word-break: break-all;
+            overflow-wrap: anywhere;
+        }
         th {
             background-color: #f2f2f2;
             text-align: center;
@@ -211,6 +217,45 @@ export function DownloadEventReport({
             </table>
             `
                 : `<p class="no-data">No budget details available.</p>`
+            }
+        </div>
+
+        <div class="section">
+            <h2>Sponsor Overview</h2>
+            ${
+              event?.sponsor?.length
+                ? `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sponsor Name</th>
+                        <th class="adv">Amount</th>
+                        <th class="adv">Previously Sponsored?</th>
+                        <th class="adv">Official Website</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${event.sponsor
+                      .map(
+                        (item) => `
+                    <tr>
+                        <td>${
+                          item?.name?.replace(/\n/g, "<br />") ||
+                          "Unknown"
+                        }</td>
+                        <td class="adv">${item?.amount || "Unknown"}</td>
+                        <td class="adv">${
+                          item?.previously_sponsored == true ? "Yes" : "No"
+                        }</td>
+                        <td class="website adv">${item?.website || "Unknown"}</td>
+                    </tr>
+                    `,
+                      )
+                      .join("")}
+                </tbody>
+            </table>
+            `
+                : `<p class="no-data">No sponsor details available.</p>`
             }
         </div>
 

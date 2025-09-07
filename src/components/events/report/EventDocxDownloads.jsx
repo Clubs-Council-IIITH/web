@@ -387,6 +387,139 @@ export function DownloadEventReportDocx({
                 }),
 
             new Paragraph({
+              text: "Sponsor Overview",
+              heading: "Heading2",
+            }),
+            event?.sponsor?.length
+              ? new Table({
+                  width: {
+                    size: 100,
+                    type: WidthType.PERCENTAGE,
+                  },
+                  rows: [
+                    new TableRow({
+                      children: [
+                        new TableCell({
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Sponsor Name",
+                                  bold: true,
+                                }),
+                              ],
+                            }),
+                          ],
+                          width: {
+                            size: 20,
+                            type: WidthType.PERCENTAGE,
+                          },
+                        }),
+                        new TableCell({
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Amount",
+                                  bold: true,
+                                }),
+                              ],
+                            }),
+                          ],
+                          width: {
+                            size: 15,
+                            type: WidthType.PERCENTAGE,
+                          },
+                        }),
+                        new TableCell({
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Previously Sponsored?",
+                                  bold: true,
+                                }),
+                              ],
+                            }),
+                          ],
+                          width: {
+                            size: 15,
+                            type: WidthType.PERCENTAGE,
+                          },
+                        }),
+                        new TableCell({
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Official Website",
+                                  bold: true,
+                                }),
+                              ],
+                            }),
+                          ],
+                          width: {
+                            size: 50,
+                            type: WidthType.PERCENTAGE,
+                          },
+                        }),
+                      ],
+                    }),
+                    ...event.sponsor.map(
+                      (item) =>
+                        new TableRow({
+                          children: [
+                            new TableCell({
+                              children: [
+                                new Paragraph(item?.name || "Unknown"),
+                              ],
+                              width: {
+                                size: 25,
+                                type: WidthType.PERCENTAGE,
+                              },
+                            }),
+                            new TableCell({
+                              children: [
+                                new Paragraph(
+                                  item?.amount?.toString() || "Unknown",
+                                ),
+                              ],
+                              width: {
+                                size: 20,
+                                type: WidthType.PERCENTAGE,
+                              },
+                            }),
+                            new TableCell({
+                              children: [
+                                new Paragraph(item?.previously_sponsored ? "Yes" : "No"),
+                              ],
+                              width: {
+                                size: 15,
+                                type: WidthType.PERCENTAGE,
+                              },
+                            }),
+                            new TableCell({
+                              children: [
+                                new Paragraph(item?.website || "Unknown"),
+                              ],
+                              width: {
+                                size: 50,
+                                type: WidthType.PERCENTAGE,
+                              },
+                            }),
+                          ],
+                        }),
+                    ),
+                  ],
+                })
+              : new Paragraph({
+                  text: "No budget details available.",
+                  italics: true,
+                }),
+
+
+
+            new Paragraph({
               text: "Participation Overview",
               heading: "Heading2",
             }),

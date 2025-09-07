@@ -24,6 +24,7 @@ import {
   Select,
   Switch,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
@@ -81,6 +82,7 @@ export default function EventForm({
   const [cancelDialog, setCancelDialog] = useState(false);
   const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [budgetEditing, setBudgetEditing] = useState(false);
+  const [sponsorEditing, setSponsorEditing] = useState(false);
   const [hasPhone, setHasPhone] = useState(true);
 
   const { triggerToast } = useToast();
@@ -512,7 +514,6 @@ export default function EventForm({
               <Grid item xs={12}>
                 <EventBudgetTable
                   control={control}
-                  watch={watch}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
@@ -537,6 +538,11 @@ export default function EventForm({
                       checked={field.value}
                       onChange={(e) => field.onChange(e?.target?.checked)}
                       inputProps={{ "aria-label": "controlled" }}
+                      disabled={
+                        !admin_roles.includes(user?.role) &&
+                        defaultValues?.status?.state != undefined &&
+                        defaultValues?.status?.state != "incomplete"
+                      }
                       sx={{ m: 2 }}
                     />
                   )}
@@ -549,12 +555,12 @@ export default function EventForm({
                 <Grid item xs={12}>
                   <EventSponsorTable
                     control={control}
-                    watch={watch}
                     disabled={
                       !admin_roles.includes(user?.role) &&
                       defaultValues?.status?.state != undefined &&
                       defaultValues?.status?.state != "incomplete"
                     }
+                    setSponsorEditing={setSponsorEditing}
                   />
                 </Grid>
               </Grid>
@@ -643,29 +649,51 @@ export default function EventForm({
               (user?.role === "club" &&
                 defaultValues?.status?.state != undefined &&
                 defaultValues?.status?.state != "incomplete") ? (
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  disabled={budgetEditing}
+                <Tooltip
+                  title={
+                    budgetEditing || sponsorEditing
+                      ? "Cannot save while editing budget or sponsor details"
+                      : ""
+                  }
+                  disableHoverListener={!(budgetEditing || sponsorEditing)}
                 >
-                  Save
-                </LoadingButton>
+                  <span>
+                    <LoadingButton
+                      loading={loading}
+                      type="submit"
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      disabled={budgetEditing || sponsorEditing}
+                    >
+                      Save
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               ) : (
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  size="large"
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  disabled={budgetEditing}
+                <Tooltip
+                  title={
+                    budgetEditing || sponsorEditing
+                      ? "Cannot save while editing budget or sponsor details"
+                      : ""
+                  }
+                  disableHoverListener={!(budgetEditing || sponsorEditing)}
                 >
-                  Save as draft
-                </LoadingButton>
+                  <span>
+                    <LoadingButton
+                      loading={loading}
+                      type="submit"
+                      size="large"
+                      variant="outlined"
+                      color="primary"
+                      fullWidth
+                      disabled={budgetEditing || sponsorEditing}
+                    >
+                      Save as draft
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
             </Grid>
             {admin_roles.includes(user?.role) ||
@@ -673,21 +701,32 @@ export default function EventForm({
               defaultValues?.status?.state != undefined &&
               defaultValues?.status?.state != "incomplete") ? null : (
               <Grid item xs={12}>
-                <LoadingButton
-                  loading={loading}
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  onClick={() =>
-                    handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true }),
-                    )()
+                <Tooltip
+                  title={
+                    budgetEditing || sponsorEditing
+                      ? "Cannot save while editing budget or sponsor details"
+                      : ""
                   }
-                  disabled={budgetEditing}
+                  disableHoverListener={!(budgetEditing || sponsorEditing)}
                 >
-                  Save & Submit
-                </LoadingButton>
+                  <span>
+                    <LoadingButton
+                      loading={loading}
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      onClick={() =>
+                        handleSubmit((data) =>
+                          onSubmit(data, { shouldSubmit: true })
+                        )()
+                      }
+                      disabled={budgetEditing || sponsorEditing}
+                    >
+                      Save & Submit
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               </Grid>
             )}
           </Grid>
@@ -1635,7 +1674,6 @@ function EventLocationInput({
 // input event budget as a table
 function EventBudgetTable({
   control,
-  watch,
   disabled = true,
   setBudgetEditing = null,
 }) {
@@ -1655,13 +1693,22 @@ function EventBudgetTable({
   );
 }
 
-function EventSponsorTable({ control, watch, disabled = true }) {
+function EventSponsorTable({
+  control,
+  disabled = true,
+  setSponsorEditing = null,
+}) {
   return (
     <Controller
       name="sponsor"
       control={control}
       render={({ field: { value, onChange } }) => (
-        <EventSponsor editable={!disabled} rows={value} setRows={onChange} />
+        <EventSponsor
+          editable={!disabled}
+          rows={value}
+          setRows={onChange}
+          setSponsorEditing={setSponsorEditing}
+        />
       )}
     />
   );

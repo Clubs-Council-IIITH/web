@@ -24,6 +24,9 @@ export const GET_PENDING_EVENTS = gql`
       budget {
         amount
       }
+      sponsor {
+        amount
+      }
     }
   }
 `;
@@ -61,6 +64,9 @@ export const GET_ALL_EVENTS = gql`
       location
       poster
       budget {
+        amount
+      }
+      sponsor {
         amount
       }
     }
