@@ -491,7 +491,9 @@ export function DownloadEventReportDocx({
                             }),
                             new TableCell({
                               children: [
-                                new Paragraph(item?.previously_sponsored ? "Yes" : "No"),
+                                new Paragraph(
+                                  item?.previously_sponsored ? "Yes" : "No",
+                                ),
                               ],
                               width: {
                                 size: 15,
@@ -516,8 +518,6 @@ export function DownloadEventReportDocx({
                   text: "No budget details available.",
                   italics: true,
                 }),
-
-
 
             new Paragraph({
               text: "Participation Overview",

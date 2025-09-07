@@ -315,7 +315,10 @@ export function EventReportDetails({
           </Typography>
           {event?.sponsor?.length ? (
             <EventSponsor
-              rows={event?.sponsor.map((b, key) => ({ ...b, id: b?.id || key }))}
+              rows={event?.sponsor.map((b, key) => ({
+                ...b,
+                id: b?.id || key,
+              }))}
               editable={false}
             />
           ) : (

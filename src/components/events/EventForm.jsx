@@ -718,7 +718,7 @@ export default function EventForm({
                       fullWidth
                       onClick={() =>
                         handleSubmit((data) =>
-                          onSubmit(data, { shouldSubmit: true })
+                          onSubmit(data, { shouldSubmit: true }),
                         )()
                       }
                       disabled={budgetEditing || sponsorEditing}

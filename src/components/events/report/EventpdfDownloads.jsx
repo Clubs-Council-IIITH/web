@@ -240,8 +240,7 @@ export function DownloadEventReport({
                         (item) => `
                     <tr>
                         <td>${
-                          item?.name?.replace(/\n/g, "<br />") ||
-                          "Unknown"
+                          item?.name?.replace(/\n/g, "<br />") || "Unknown"
                         }</td>
                         <td class="adv">${item?.amount || "Unknown"}</td>
                         <td class="adv">${
