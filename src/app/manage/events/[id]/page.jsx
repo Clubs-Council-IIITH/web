@@ -378,7 +378,7 @@ function getActions(event, clashFlag, user) {
       event?.budget?.length
     )
       return [EditFinances, DeleteEvent];
-    else return [DeleteEvent];
+    else return [EditEvent, DeleteEvent];
   }
 
   /*
