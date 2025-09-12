@@ -837,7 +837,7 @@ function EventCollabClubSelect({
                 "&:hover": {
                   background: "rgba(230, 230, 230, 0.7)",
                 },
-                float: 'right' // Ensures it stays to the right
+                float: "right", // Ensures it stays to the right
               }}
             >
               <CloseIcon />
