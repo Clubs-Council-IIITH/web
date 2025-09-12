@@ -837,23 +837,22 @@ function EventCollabClubSelect({
                 </MenuItem>
               ))}
             {open && (
-              <MenuItem>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    width: "100%",
-                  }}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                  p: 1,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setOpen(false)}
                 >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setOpen(false)}
-                  >
-                    Done
-                  </Button>
-                </Box>
-              </MenuItem>
+                  Done
+                </Button>
+              </Box>
             )}
             ;
           </Select>
