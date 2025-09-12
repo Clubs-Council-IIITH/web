@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   Chip,
+  IconButton,
   Grid,
   Fade,
   CircularProgress,
@@ -26,6 +27,7 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
@@ -808,16 +810,10 @@ function EventCollabClubSelect({
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
             input={<OutlinedInput label="Collaborating Clubs *" />}
-            value={field.value || []} // Ensure the value is an array
+            value={field.value || []}
             renderValue={(selected) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 0.5,
-                }}
-              >
-                {selected.map((value) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.filter(Boolean).map((value) => (
                   <Chip
                     key={value}
                     label={clubs.find((club) => club.cid === value)?.name}
@@ -827,6 +823,26 @@ function EventCollabClubSelect({
             )}
             {...field}
           >
+            {/* Close button positioned in the top right corner */}
+            <IconButton
+              size="small"
+              onClick={() => setOpen(false)}
+              sx={{
+                position: "sticky",
+                top: 8,
+                right: 8,
+                zIndex: 1,
+                background: "rgba(255, 255, 255, 0.7)",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  background: "rgba(230, 230, 230, 0.7)",
+                },
+                float: 'right' // Ensures it stays to the right
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+
             {clubs
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))
@@ -836,25 +852,6 @@ function EventCollabClubSelect({
                   {club.name}
                 </MenuItem>
               ))}
-            {open && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%",
-                  p: 1,
-                }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => setOpen(false)}
-                >
-                  Done
-                </Button>
-              </Box>
-            )}
-            ;
           </Select>
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
