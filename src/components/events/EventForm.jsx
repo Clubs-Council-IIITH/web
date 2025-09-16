@@ -336,7 +336,7 @@ export default function EventForm({
       .filter((i) => i?.name)
       .map((i) => ({
         name: i.name,
-        website: i.website,
+        comment: i.comment,
         amount: i.amount,
         previouslySponsored: i.previouslySponsored,
       }));
