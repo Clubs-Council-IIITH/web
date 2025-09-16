@@ -334,6 +334,7 @@ export default function EventForm({
 
     data.sponsor = formData.sponsor
       .filter((i) => i?.name)
+      .filter((i) => i?.amount >= 0)
       .map((i) => ({
         name: i.name,
         comment: i.comment,
