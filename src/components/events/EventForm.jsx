@@ -342,6 +342,17 @@ export default function EventForm({
         previouslySponsored: i.previouslySponsored,
       }));
 
+    // Check if description increases the character limit
+    if (data.sponsor.some((i) => i.comment?.length > 100)) {
+      triggerToast({
+        title: "Character Limit Exceeded!",
+        messages: ["Please keep sponsor comment below 100 characters"],
+        severity: "error",
+      });
+      setLoading(false);
+      return;
+    }
+
     // TODO: fix event link field
     data.link = null;
 
