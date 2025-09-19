@@ -6,7 +6,7 @@ import { UPDATE_BILLS_STATUS } from "gql/mutations/events";
 export async function eventBillStatus(details) {
   const response = { ok: false, data: null, error: null };
 
-  const { data: { updateBillsStatus } = {}, error } =
+  const { data = {}, error } =
     await getClient().mutation(UPDATE_BILLS_STATUS, {
       details,
     });
@@ -17,7 +17,7 @@ export async function eventBillStatus(details) {
     };
   } else {
     response.ok = true;
-    response.data = updateBillsStatus;
+    response.data = data.updateBillsStatus;
   }
 
   return response;
