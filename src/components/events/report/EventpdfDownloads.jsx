@@ -139,7 +139,7 @@ export function DownloadEventReport({
             white-space: normal;
         }
 
-        .website {
+        .comment {
             word-break: break-all;
             overflow-wrap: anywhere;
         }
@@ -231,7 +231,7 @@ export function DownloadEventReport({
                         <th>Sponsor Name</th>
                         <th class="adv">Amount</th>
                         <th class="adv">Previously Sponsored?</th>
-                        <th class="adv">Official Website</th>
+                        <th class="adv">Comments</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -246,7 +246,7 @@ export function DownloadEventReport({
                         <td class="adv">${
                           item?.previously_sponsored == true ? "Yes" : "No"
                         }</td>
-                        <td class="website adv">${item?.website || "Unknown"}</td>
+                        <td class="comment adv">${item?.comment || "Unknown"}</td>
                     </tr>
                     `,
                       )
