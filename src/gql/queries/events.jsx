@@ -178,9 +178,9 @@ export const GET_FULL_EVENT = gql`
       }
       sponsor {
         name
-        website
         amount
         previouslySponsored
+        comment
       }
       clubid
       collabclubs

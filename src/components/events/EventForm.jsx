@@ -334,13 +334,24 @@ export default function EventForm({
 
     data.sponsor = formData.sponsor
       .filter((i) => i?.name)
-      .filter((i) => i?.amount > 0)
+      .filter((i) => i?.amount >= 0)
       .map((i) => ({
         name: i.name,
-        website: i.website,
+        comment: i.comment,
         amount: i.amount,
         previouslySponsored: i.previouslySponsored,
       }));
+
+    // Check if description increases the character limit
+    if (data.sponsor.some((i) => i.comment?.length > 200)) {
+      triggerToast({
+        title: "Character Limit Exceeded!",
+        messages: ["Please keep sponsor comment below 200 characters"],
+        severity: "error",
+      });
+      setLoading(false);
+      return;
+    }
 
     // TODO: fix event link field
     data.link = null;

@@ -23,7 +23,7 @@ export default function EventSponsor({
   // budget item template
   const emptySponsorItem = {
     name: null,
-    website: null,
+    comment: null,
     amount: 0,
     previouslySponsored: false,
   };
@@ -87,8 +87,8 @@ export default function EventSponsor({
       display: "flex",
     },
     {
-      field: "website",
-      headerName: "Official Website",
+      field: "comment",
+      headerName: "Comments",
       width: 200,
       flex: isMobile ? null : 1.75,
       editable: editable,

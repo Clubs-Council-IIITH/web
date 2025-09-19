@@ -452,7 +452,7 @@ export function DownloadEventReportDocx({
                             new Paragraph({
                               children: [
                                 new TextRun({
-                                  text: "Official Website",
+                                  text: "Comment",
                                   bold: true,
                                 }),
                               ],
@@ -502,7 +502,7 @@ export function DownloadEventReportDocx({
                             }),
                             new TableCell({
                               children: [
-                                new Paragraph(item?.website || "Unknown"),
+                                new Paragraph(item?.comment || "Unknown"),
                               ],
                               width: {
                                 size: 50,
