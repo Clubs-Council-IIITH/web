@@ -17,14 +17,14 @@ import { useTheme } from "@mui/material/styles";
 import ImageModal from "components/ImageModal";
 
 export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
-  images = useMemo(() => {
-    const shuffled = [...images];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }, [images]);
+  // images = useMemo(() => {
+  //   const shuffled = [...images];
+  //   for (let i = shuffled.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  //   }
+  //   return shuffled;
+  // }, [images]);
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
