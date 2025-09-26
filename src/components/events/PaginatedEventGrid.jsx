@@ -44,7 +44,6 @@ export default function PaginatedEventGrid({
         paginationOn: true,
         skip: -1,
         limit: 10,
-        last4Months: filterMonth?.includes("last4Months") ? "true" : "false",
       };
       const eventsResponse = await query(queryData);
       // console.log(eventsResponse);
