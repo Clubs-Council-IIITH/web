@@ -15,11 +15,9 @@ export const metadata = {
 async function query(querystring) {
   "use server";
   
-  let filter = null;
-  if (querystring["last4Months"] === "true") {
-    const endDate = dayjs();
-    const startDate = endDate.subtract(4, "month");
-    filter = [startDate.toISOString(), endDate.toISOString()];
+  let pastEventsLimit = null;
+  if (querystring["pastEventsLimit"] === "true") {
+    pastEventsLimit = 4;
   }
 
   const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
@@ -29,7 +27,7 @@ async function query(querystring) {
     paginationOn: querystring["paginationOn"],
     skip: querystring["skip"],
     limit: querystring["limit"],
-    timings: filter,
+    pastEventsLimit: pastEventsLimit,
   });
 
   if (error) {
@@ -49,8 +47,8 @@ export default async function Events({ searchParams }) {
     (state) => searchParams?.[state] !== "false",
   );
 
-  let filterMonth = ["last4Months"];
-  if (searchParams?.last4Months === "false") { filterMonth = []; }
+  let filterMonth = ["pastEventsLimit"];
+  if (searchParams?.pastEventsLimit === "false") { filterMonth = []; }
 
   const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUBS);
 
@@ -67,7 +65,7 @@ export default async function Events({ searchParams }) {
       <PaginatedEventsGrid
         query={query}
         clubs={allClubs}
-        targets={[targetName, targetClub, targetState, filterMonth]}
+        targets={[targetName, targetClub, targetState]}
       />
     </Box>
   );

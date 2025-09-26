@@ -6,7 +6,7 @@ import { EventCards, LoadingIndicator } from "./EventCards";
 
 export default function PaginatedEventGrid({
   limit = 24, // Default limit if pagination is enabled
-  targets = [null, null, null, null],
+  targets = [null, null, null],
   clubs = [],
   query = async () => {},
 }) {
@@ -17,7 +17,7 @@ export default function PaginatedEventGrid({
   const [hasMore, setHasMore] = useState(true);
   const [skip, setSkip] = useState(0);
 
-  const [targetName, targetClub, targetState, filterMonth] = targets;
+  const [targetName, targetClub, targetState] = targets;
 
   // Reference to the "load more" trigger element
   const loadMoreRef = useRef(null);
@@ -84,7 +84,6 @@ export default function PaginatedEventGrid({
           paginationOn: true,
           skip: reset ? 0 : skip,
           limit,
-          last4Months: filterMonth?.includes("last4Months") ? "true" : "false",
         };
         const eventsResponse = await query(queryData);
         // console.log(eventsResponse);
@@ -124,7 +123,7 @@ export default function PaginatedEventGrid({
   useEffect(() => {
     setCompletedEvents([]);
     loadPastEvents(true, targetClub, targetName);
-  }, [targetClub, targetName, filterMonth]);
+  }, [targetClub, targetName]);
 
   const completedEventsFilter = (event) => {
     const selectedClub =

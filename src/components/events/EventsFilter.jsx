@@ -151,23 +151,23 @@ export default function EventsFilter({ name, club, state, filterMonth }) {
         </Grid>
         <Grid item xs lg>
           <ToggleButtonGroup
-            id="last4Months"
+            id="pastEventsLimit"
             value={filterMonth}
             color="primary"
             sx={{ height: "100%", marginLeft: 1 }}
             onChange={(e, newState) => {
               e.preventDefault();
               const params = new URLSearchParams(searchParams);
-              const last4MonthsSelected = newState.includes("last4Months");
-              if (last4MonthsSelected) {
-                params.set("last4Months", "true");
+              const pastEventsLimitSelected = newState.includes("pastEventsLimit");
+              if (pastEventsLimitSelected) {
+                params.set("pastEventsLimit", "true");
               } else {
-                params.set("last4Months", "false");
+                params.set("pastEventsLimit", "false");
               }
               router.push(`${pathname}?${params.toString()}`);
             }}
           >
-            <ToggleButton disableRipple key="last4Months" value="last4Months">
+            <ToggleButton disableRipple key="pastEventsLimit" value="pastEventsLimit">
               Last 4 Months
             </ToggleButton>
           </ToggleButtonGroup>
