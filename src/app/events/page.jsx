@@ -15,9 +15,9 @@ export const metadata = {
 async function query(querystring) {
   "use server";
   
-  let pastEventsLimit = 4;
+  let EventsLimit = 4;
   if (querystring["pastEventsLimit"] === "false") {
-    pastEventsLimit = null;
+    EventsLimit = null;
   }
 
   const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
@@ -27,7 +27,7 @@ async function query(querystring) {
     paginationOn: querystring["paginationOn"],
     skip: querystring["skip"],
     limit: querystring["limit"],
-    pastEventsLimit: pastEventsLimit,
+    pastEventsLimit: EventsLimit,
   });
 
   if (error) {
