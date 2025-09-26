@@ -15,9 +15,9 @@ export const metadata = {
 async function query(querystring) {
   "use server";
   
-  let pastEventsLimit = null;
-  if (querystring["pastEventsLimit"] === "true") {
-    pastEventsLimit = 4;
+  let pastEventsLimit = 4;
+  if (querystring["pastEventsLimit"] === "false") {
+    pastEventsLimit = null;
   }
 
   const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
@@ -48,7 +48,8 @@ export default async function Events({ searchParams }) {
   );
 
   let filterMonth = ["pastEventsLimit"];
-  if (searchParams?.pastEventsLimit === "false") { filterMonth = []; }
+  let pastEventsLimit = searchParams?.pastEventsLimit;
+  if (pastEventsLimit === "false") { filterMonth = []; }
 
   const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUBS);
 
@@ -65,7 +66,7 @@ export default async function Events({ searchParams }) {
       <PaginatedEventsGrid
         query={query}
         clubs={allClubs}
-        targets={[targetName, targetClub, targetState]}
+        targets={[targetName, targetClub, targetState, pastEventsLimit]}
       />
     </Box>
   );

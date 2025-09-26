@@ -160,7 +160,7 @@ export default function EventsFilter({ name, club, state, filterMonth }) {
               const params = new URLSearchParams(searchParams);
               const pastEventsLimitSelected = newState.includes("pastEventsLimit");
               if (pastEventsLimitSelected) {
-                params.set("pastEventsLimit", "true");
+                params.delete("pastEventsLimit");
               } else {
                 params.set("pastEventsLimit", "false");
               }

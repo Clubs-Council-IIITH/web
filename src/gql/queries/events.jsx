@@ -40,7 +40,7 @@ export const GET_ALL_EVENTS = gql`
     $limit: Int
     $public: Boolean
     $timings: [DateTime!]
-    pastEventsLimit: Int
+    $pastEventsLimit: Int
   ) {
     events(
       clubid: $clubid
