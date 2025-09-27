@@ -18,7 +18,6 @@ async function getalleventsquery(querystring) {
 
   const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
     clubid: querystring["targetClub"],
-    name: querystring["targetName"],
     public: false,
     pastEventsLimit: querystring["pastEventsLimit"],
   });
