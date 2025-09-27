@@ -24,7 +24,7 @@ import Icon from "components/Icon";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 
-export default function EventsFilter({ name, club, state, filterMonth }) {
+export default function EventsFilter({ name, club, state }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -146,29 +146,6 @@ export default function EventsFilter({ name, club, state, filterMonth }) {
             </ToggleButton>
             <ToggleButton disableRipple key="completed" value="completed">
               Completed
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
-        <Grid item xs lg>
-          <ToggleButtonGroup
-            id="pastEventsLimit"
-            value={filterMonth}
-            color="primary"
-            sx={{ height: "100%", marginLeft: 1 }}
-            onChange={(e, newState) => {
-              e.preventDefault();
-              const params = new URLSearchParams(searchParams);
-              const pastEventsLimitSelected = newState.includes("pastEventsLimit");
-              if (pastEventsLimitSelected) {
-                params.delete("pastEventsLimit");
-              } else {
-                params.set("pastEventsLimit", "false");
-              }
-              router.push(`${pathname}?${params.toString()}`);
-            }}
-          >
-            <ToggleButton disableRipple key="pastEventsLimit" value="pastEventsLimit">
-              Last 4 Months
             </ToggleButton>
           </ToggleButtonGroup>
         </Grid>

@@ -3,7 +3,6 @@ import { GET_ALL_EVENTS } from "gql/queries/events";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import { Box } from "@mui/material";
-import dayjs from "dayjs";
 
 import EventsFilter from "components/events/EventsFilter";
 import PaginatedEventsGrid from "components/events/PaginatedEventGrid";
@@ -14,11 +13,6 @@ export const metadata = {
 
 async function query(querystring) {
   "use server";
-  
-  let EventsLimit = 4;
-  if (querystring["pastEventsLimit"] === "false") {
-    EventsLimit = null;
-  }
 
   const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
     clubid: querystring["targetClub"],
@@ -27,7 +21,6 @@ async function query(querystring) {
     paginationOn: querystring["paginationOn"],
     skip: querystring["skip"],
     limit: querystring["limit"],
-    pastEventsLimit: EventsLimit,
   });
 
   if (error) {
@@ -47,10 +40,6 @@ export default async function Events({ searchParams }) {
     (state) => searchParams?.[state] !== "false",
   );
 
-  let filterMonth = ["pastEventsLimit"];
-  let pastEventsLimit = searchParams?.pastEventsLimit;
-  if (pastEventsLimit === "false") { filterMonth = []; }
-
   const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUBS);
 
   return (
@@ -60,13 +49,12 @@ export default async function Events({ searchParams }) {
           name={targetName}
           club={targetClub}
           state={targetState}
-          filterMonth={filterMonth}
         />
       </Box>
       <PaginatedEventsGrid
         query={query}
         clubs={allClubs}
-        targets={[targetName, targetClub, targetState, pastEventsLimit]}
+        targets={[targetName, targetClub, targetState]}
       />
     </Box>
   );

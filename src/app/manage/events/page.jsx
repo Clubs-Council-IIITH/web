@@ -13,6 +13,24 @@ export const metadata = {
   title: "Manage Events",
 };
 
+async function getalleventsquery(querystring) {
+  "use server";
+
+  const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: querystring["targetClub"],
+    name: querystring["targetName"],
+    public: false,
+    pastEventsLimit: querystring["pastEventsLimit"],
+  });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data?.events || [];
+}
+
 export default async function ManageEvents() {
   const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
     userInput: null,
@@ -22,11 +40,6 @@ export default async function ManageEvents() {
     GET_PENDING_EVENTS,
     { clubid: userMeta?.role === "club" ? userMeta.uid : null },
   );
-
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: userMeta?.role === "club" ? userMeta.uid : null,
-    public: false,
-  });
 
   return (
     <Container>
@@ -82,7 +95,8 @@ export default async function ManageEvents() {
           All Events
         </Typography>
         <EventsTable
-          events={events}
+          query={getalleventsquery}
+          clubid={userMeta?.role === "club" ? userMeta.uid : null}
           scheduleSort="desc"
           hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
         />
