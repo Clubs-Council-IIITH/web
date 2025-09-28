@@ -66,7 +66,7 @@ export default function UserMemberships({ rows = [] }) {
     },
     {
       field: "cid",
-      headerName: "Club",
+      headerName: "Club/Student Body",
       flex: isMobile ? null : 5,
       renderCell: (p) => {
         return (
