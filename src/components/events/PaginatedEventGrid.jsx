@@ -107,7 +107,7 @@ export default function PaginatedEventGrid({
         if (completedEvents.length > 0) {
           const lastEvent = completedEvents[completedEvents.length - 1];
           const shouldShowButton = !toShowLoadMoreButton(
-            lastEvent.datetimeperiod[0]
+            lastEvent.datetimeperiod[0],
           );
           setShowLoadMoreButton(shouldShowButton);
         }
@@ -120,7 +120,7 @@ export default function PaginatedEventGrid({
           setCompletedEvents((prevEvents) => {
             const combinedEvents = [...prevEvents, ...completedEvents];
             return Array.from(
-              new Set(combinedEvents.map((event) => event._id))
+              new Set(combinedEvents.map((event) => event._id)),
             ).map((id) => combinedEvents.find((event) => event._id === id));
           });
         }
@@ -132,7 +132,7 @@ export default function PaginatedEventGrid({
         setLoadingPast(false);
       }
     },
-    [loadingPast, hasMore, skip, limit, query]
+    [loadingPast, hasMore, skip, limit, query],
   );
 
   // When targetClub or targetName changes, reset skip, hasMore, and completedEvents
@@ -203,7 +203,7 @@ export default function PaginatedEventGrid({
       },
       {
         threshold: 1.0,
-      }
+      },
     );
 
     if (loadMoreRef.current) {
