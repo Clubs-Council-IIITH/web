@@ -57,7 +57,6 @@ export default function UserMemberships({ rows = [] }) {
           severity: "error",
         });
       } else {
-        console.log(res.data);
         const clubsData = res.data.reduce((acc, { cid, name, category }) => {
           acc[cid] = { name, category };
           return acc;
