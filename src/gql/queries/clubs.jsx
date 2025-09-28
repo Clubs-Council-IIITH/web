@@ -49,6 +49,7 @@ export const GET_ACTIVE_CLUB_IDS = gql`
       _id
       cid
       name
+      category
     }
   }
 `;

@@ -29,8 +29,8 @@ export default function UserMemberships({ rows = [] }) {
         });
       } else {
         setClubs(
-          res.data.reduce((acc, { cid, name }) => {
-            acc[cid] = name;
+          res.data.reduce((acc, { cid, name, category }) => {
+            acc[cid] = { name, category };
             return acc;
           }, {}),
         );
@@ -83,7 +83,7 @@ export default function UserMemberships({ rows = [] }) {
               hyphens: "auto",
             }}
           >
-            {clubs[p.value]}
+            {clubs[p.value]?.name}
           </Typography>
         );
       },
