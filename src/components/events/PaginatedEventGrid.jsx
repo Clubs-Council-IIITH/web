@@ -1,8 +1,15 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Typography, Divider } from "@mui/material";
+import { Typography, Divider, Button, Box } from "@mui/material";
+import HistoryIcon from "@mui/icons-material/History";
 import { EventCards, LoadingIndicator } from "./EventCards";
+
+const toShowLoadMoreButton = (eventDate) => {
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  return new Date(eventDate) > oneYearAgo;
+};
 
 export default function PaginatedEventGrid({
   limit = 24, // Default limit if pagination is enabled
@@ -16,6 +23,7 @@ export default function PaginatedEventGrid({
   const [loadingFuture, setLoadingFuture] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [skip, setSkip] = useState(0);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
 
   const [targetName, targetClub, targetState] = targets;
 
@@ -96,6 +104,14 @@ export default function PaginatedEventGrid({
         const completedEvents = eventsResponse.filter(completedEventsFilter);
         const newEventsLength = completedEvents.length;
 
+        if (completedEvents.length > 0) {
+          const lastEvent = completedEvents[completedEvents.length - 1];
+          const shouldShowButton = !toShowLoadMoreButton(
+            lastEvent.datetimeperiod[0]
+          );
+          setShowLoadMoreButton(shouldShowButton);
+        }
+
         if (reset) {
           setSkip(newEventsLength);
           setCompletedEvents(completedEvents);
@@ -104,7 +120,7 @@ export default function PaginatedEventGrid({
           setCompletedEvents((prevEvents) => {
             const combinedEvents = [...prevEvents, ...completedEvents];
             return Array.from(
-              new Set(combinedEvents.map((event) => event._id)),
+              new Set(combinedEvents.map((event) => event._id))
             ).map((id) => combinedEvents.find((event) => event._id === id));
           });
         }
@@ -116,12 +132,13 @@ export default function PaginatedEventGrid({
         setLoadingPast(false);
       }
     },
-    [loadingPast, hasMore, skip, limit, query],
+    [loadingPast, hasMore, skip, limit, query]
   );
 
   // When targetClub or targetName changes, reset skip, hasMore, and completedEvents
   useEffect(() => {
     setCompletedEvents([]);
+    setShowLoadMoreButton(false);
     loadPastEvents(true, targetClub, targetName);
   }, [targetClub, targetName]);
 
@@ -169,8 +186,15 @@ export default function PaginatedEventGrid({
     return selectedClub && selectedState && selectedName;
   };
 
+  const handleLoadMoreClick = () => {
+    loadPastEvents();
+  };
+
   // Initialize IntersectionObserver to detect when "load more" is visible
+  // Only observe if we shouldn't show the button (i.e., for recent events)
   useEffect(() => {
+    if (showLoadMoreButton) return; // Don't auto-load if we should show the button
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (!loadingPast && entries[0].isIntersecting && hasMore) {
@@ -179,7 +203,7 @@ export default function PaginatedEventGrid({
       },
       {
         threshold: 1.0,
-      },
+      }
     );
 
     if (loadMoreRef.current) {
@@ -191,7 +215,7 @@ export default function PaginatedEventGrid({
         observer.unobserve(loadMoreRef.current);
       }
     };
-  }, [loadPastEvents, hasMore]);
+  }, [loadPastEvents, hasMore, showLoadMoreButton]);
 
   return (
     <>
@@ -246,10 +270,30 @@ export default function PaginatedEventGrid({
         </>
       )}
 
-      {/* "Load more" trigger */}
-      <div ref={loadMoreRef} style={{ height: "50px", marginBottom: "10px" }}>
-        {loadingPast && <LoadingIndicator />}
-      </div>
+      {/* Load more section - either auto-trigger or button */}
+      {hasMore && (
+        <Box sx={{ textAlign: "center", mt: 2, mb: 2 }}>
+          {showLoadMoreButton ? (
+            <Button
+              variant="outlined"
+              onClick={handleLoadMoreClick}
+              disabled={loadingPast}
+              sx={{ minWidth: 150 }}
+              color="secondary"
+              endIcon={<HistoryIcon />}
+            >
+              {loadingPast ? "Loading..." : "Load More Events"}
+            </Button>
+          ) : (
+            <div
+              ref={loadMoreRef}
+              style={{ height: "50px", marginBottom: "10px" }}
+            >
+              {loadingPast && <LoadingIndicator />}
+            </div>
+          )}
+        </Box>
+      )}
     </>
   );
 }
