@@ -2,12 +2,11 @@ import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
 import ActionPalette from "components/ActionPalette";
-import ClubLogo from "components/clubs/ClubLogo";
 import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
@@ -69,9 +68,14 @@ export default async function Profile({ params }) {
     club = targetClub;
   }
 
+  const fetchMemberships =
+    user?.role === "public" ||
+    user?.email?.includes("@students.") ||
+    user?.email?.includes("@research.");
+
   // get memberships if user is a person
   let memberships = [];
-  if (user?.role === "public") {
+  if (fetchMemberships) {
     const {
       data: { memberRoles },
     } = await getClient().query(GET_MEMBERSHIPS, {
@@ -84,10 +88,15 @@ export default async function Profile({ params }) {
       [],
     );
 
-    if (memberships?.length === 0 && currentUser?.uid !== user.uid) {
-      notFound();
+    if (memberships?.length > 0) {
+      if (club) club = null;
+    } else {
+      if (!club && currentUser?.uid !== user.uid) notFound();
     }
   }
+
+  if (user?.role === "cc") redirect("/clubs-council");
+  if (club) redirect(`/clubs/${club.cid}`);
 
   return (
     <Container>
@@ -96,9 +105,8 @@ export default async function Profile({ params }) {
         1. if current user is CC, or
         2. if current user is viewing their own profile and is not a club
       */}
-      {!["club", "cc"].includes(user?.role) &&
-      (currentUser?.role === "cc" ||
-        (memberships?.length !== 0 && currentUser?.uid === user?.uid)) ? (
+      {currentUser?.role === "cc" ||
+      (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
         <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
       <Grid container spacing={2} mt={4}>
@@ -108,22 +116,13 @@ export default async function Profile({ params }) {
             alignItems="center"
             spacing={4}
           >
-            {club ? (
-              <ClubLogo
-                name={club.name}
-                logo={club.logo}
-                width={150}
-                height={150}
-              />
-            ) : (
-              <UserImage
-                image={user.img}
-                name={user.firstName}
-                gender={user.gender}
-                width={150}
-                height={150}
-              />
-            )}
+            <UserImage
+              image={user.img}
+              name={user.firstName}
+              gender={user.gender}
+              width={150}
+              height={150}
+            />
             <Stack direction="column" spacing={1}>
               <Typography
                 variant="h2"

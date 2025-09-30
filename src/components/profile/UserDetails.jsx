@@ -27,7 +27,17 @@ export default async function UserDetails({ user }) {
         </Box>
       ) : null}
 
-      {user?.role !== "club" ? (
+      <Box>
+        <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+          Batch
+        </Typography>
+        <Typography fontWeight={400} textTransform="uppercase">
+          {user.batch} · {user.stream}
+        </Typography>
+      </Box>
+
+      {["cc", "slo", "slc"].includes(currentUser?.role) ||
+      (currentUser?.uid === user?.uid && user?.role !== "club") ? (
         <>
           <Box>
             <Typography
@@ -35,42 +45,20 @@ export default async function UserDetails({ user }) {
               textTransform="uppercase"
               gutterBottom
             >
-              Batch
+              Roll Number
             </Typography>
-            <Typography fontWeight={400} textTransform="uppercase">
-              {user.batch} · {user.stream}
-            </Typography>
+            <Typography fontWeight={400}>{user.rollno || "Unknown"}</Typography>
           </Box>
-
-          {["cc", "slo", "slc"].includes(currentUser?.role) ||
-          (currentUser?.uid === user?.uid && user?.role !== "club") ? (
-            <>
-              <Box>
-                <Typography
-                  variant="subtitle2"
-                  textTransform="uppercase"
-                  gutterBottom
-                >
-                  Roll Number
-                </Typography>
-                <Typography fontWeight={400}>
-                  {user.rollno || "Unknown"}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="subtitle2"
-                  textTransform="uppercase"
-                  gutterBottom
-                >
-                  Phone Number
-                </Typography>
-                <Typography fontWeight={400}>
-                  {user.phone || "Unknown"}
-                </Typography>
-              </Box>
-            </>
-          ) : null}
+          <Box>
+            <Typography
+              variant="subtitle2"
+              textTransform="uppercase"
+              gutterBottom
+            >
+              Phone Number
+            </Typography>
+            <Typography fontWeight={400}>{user.phone || "Unknown"}</Typography>
+          </Box>
         </>
       ) : null}
     </Stack>

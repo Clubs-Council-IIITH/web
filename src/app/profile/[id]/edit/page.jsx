@@ -29,15 +29,18 @@ export default async function EditProfile({ params }) {
       userInput: {
         uid: id,
       },
-    },
+    }
   );
   const user = { ...userMeta, ...userProfile };
+
+  let isClub = user?.role === "club";
+  const isCC = user?.role === "cc";
 
   if (
     userProfile === null ||
     userMeta === null ||
     (currentUser?.uid !== user?.uid && currentUser?.role !== "cc") ||
-    ["club", "cc"].includes(user?.role)
+    isCC
   )
     redirect("/404");
 
@@ -48,9 +51,12 @@ export default async function EditProfile({ params }) {
     uid: id,
   });
   if (memberRoles?.length === 0) notFound();
+  else { 
+    if (isClub) isClub = false;
+  }
 
   // if user is a club, redirect to club edit page
-  if (user.role === "club") {
+  if (isClub) {
     redirect(`/manage/clubs/${user.uid}/edit`);
   }
 

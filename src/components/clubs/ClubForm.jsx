@@ -15,11 +15,8 @@ import {
   Typography,
   InputAdornment,
   FormControl,
-  FormGroup,
-  FormControlLabel,
   InputLabel,
   Select,
-  Switch,
   MenuItem,
 } from "@mui/material";
 
@@ -48,7 +45,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
 
-  const { control, handleSubmit, watch } = useForm({ defaultValues });
+  const { control, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
 
   // different form submission handlers
