@@ -29,7 +29,7 @@ export default async function EditProfile({ params }) {
       userInput: {
         uid: id,
       },
-    }
+    },
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -51,7 +51,7 @@ export default async function EditProfile({ params }) {
     uid: id,
   });
   if (memberRoles?.length === 0) notFound();
-  else { 
+  else {
     if (isClub) isClub = false;
   }
 
