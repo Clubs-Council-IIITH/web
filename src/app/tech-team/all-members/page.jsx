@@ -15,7 +15,7 @@ export const metadata = {
 export default async function TechTeam() {
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: {
-      cid: "cc",
+      cid: "clubs",
     },
   });
 

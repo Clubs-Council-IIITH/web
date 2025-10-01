@@ -60,7 +60,7 @@ export default async function Changelog({ searchParams }) {
 
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: {
-      cid: "cc",
+      cid: "clubs",
     },
   });
 

@@ -36,7 +36,7 @@ export default async function ApproveEventCC({ params }) {
 
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: {
-      cid: "cc",
+      cid: "clubs",
     },
   });
   const ccMembers = members
