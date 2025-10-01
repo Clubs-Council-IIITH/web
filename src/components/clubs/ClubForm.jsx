@@ -130,11 +130,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
     };
 
     // set CID based on club email
-    // Special case for Clubs Council
-    data.cid =
-      formData.email === "clubs@iiit.ac.in"
-        ? "cc"
-        : formData.email.split("@")[0];
+    data.cid = formData.email.split("@")[0];
 
     // set filenames for media
     const logo_filename = "logo_" + data.cid.replace(".", "_");
