@@ -1738,18 +1738,20 @@ function EventPOC({
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
-      setLoading(true);
-      let res = await currentMembersAction({ cid });
-      if (!res.ok) {
-        triggerToast({
-          title: "Unable to fetch members",
-          messages: res.error.messages,
-          severity: "error",
-        });
-      } else {
-        setMembers(res.data);
+      if (cid) {
+        setLoading(true);
+        let res = await currentMembersAction({ cid });
+        if (!res.ok) {
+          triggerToast({
+            title: "Unable to fetch members",
+            messages: res.error.messages,
+            severity: "error",
+          });
+        } else {
+          setMembers(res.data);
+        }
+        setLoading(false);
       }
-      setLoading(false);
     })();
   }, [cid]);
 
