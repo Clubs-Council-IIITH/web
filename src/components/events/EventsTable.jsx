@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { Typography, TextField, Box, Tooltip, Grid, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { Typography, TextField, Box, Tooltip, Grid, Switch, FormControlLabel } from "@mui/material";
+import ConfirmDialog from "components/ConfirmDialog";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
@@ -56,6 +57,8 @@ export default function EventsTable({
   // Toggle state for Last 4 Months
   const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
   const [events, setEvents] = useState(initialEvents || []);
+  const [dialog, setDialog] = useState(false);
+  const [pendingChecked, setPendingChecked] = useState(false);
 
   useEffect(() => {
     // If query is not provided, just use initialEvents
@@ -332,17 +335,58 @@ export default function EventsTable({
 
   return (
     <Grid>
-      {query && (
-        <ToggleButtonGroup
-          value={filterMonth}
-          color="primary"
-          sx={{ height: "100%", marginLeft: 1, mb: 2 }}
-          onChange={(e, newState) => setFilterMonth(newState)}
+      {(
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 2,
+            mt: 2,
+          }}
         >
-          <ToggleButton disableRipple key="pastEventsLimit" value="pastEventsLimit">
-            Last 4 Months
-          </ToggleButton>
-        </ToggleButtonGroup>
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            textTransform="uppercase"
+            gutterBottom
+          >
+            {query ? "All Events" : "Pending Events"}
+          </Typography>
+          {query && (
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={filterMonth.includes("pastEventsLimit")}
+                  onChange={(e) => {
+                    // Only show dialog when switching from ON to OFF
+                    if (filterMonth.includes("pastEventsLimit") && !e.target.checked) {
+                      setPendingChecked(false);
+                      setDialog(true);
+                    } else {
+                      setFilterMonth(e.target.checked ? ["pastEventsLimit"] : []);
+                    }
+                  }}
+                  color="primary"
+                />
+              }
+              label="Last 4 Months"
+              sx={{ marginLeft: 1 }}
+            />
+          )}
+          <ConfirmDialog
+                    open={dialog}
+                    title="Are you sure you want to fetch all events?"
+                    description="Fetching all events from the start will take a lot of time."
+                    onConfirm={() => {
+                      setFilterMonth([]);
+                      setDialog(false);
+                    }}
+                    onClose={() => setDialog(false)}
+                    confirmProps={{ color: "error" }}
+                    confirmText="Yes, Fetch them"
+                  />
+        </Box>
       )}
       <DataGrid
         autoHeight

@@ -66,40 +66,20 @@ export default async function ManageEvents() {
 
       {/* only pending events */}
       {pendingEvents.length ? (
-        <Box mb={3}>
-          <Typography
-            color="text.secondary"
-            variant="subtitle2"
-            textTransform="uppercase"
-            gutterBottom
-          >
-            Pending Events
-          </Typography>
-          <EventsTable
-            events={pendingEvents}
-            scheduleSort="asc"
-            hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
-          />
-        </Box>
+        <EventsTable
+          events={pendingEvents}
+          scheduleSort="asc"
+          hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+        />
       ) : null}
 
       {/* all events */}
-      <Box>
-        <Typography
-          color="text.secondary"
-          variant="subtitle2"
-          textTransform="uppercase"
-          gutterBottom
-        >
-          All Events
-        </Typography>
-        <EventsTable
-          query={getalleventsquery}
-          clubid={userMeta?.role === "club" ? userMeta.uid : null}
-          scheduleSort="desc"
-          hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
-        />
-      </Box>
+      <EventsTable
+        query={getalleventsquery}
+        clubid={userMeta?.role === "club" ? userMeta.uid : null}
+        scheduleSort="desc"
+        hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+      />
     </Container>
   );
 }
