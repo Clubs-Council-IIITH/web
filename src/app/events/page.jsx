@@ -13,6 +13,7 @@ export const metadata = {
 
 async function query(querystring) {
   "use server";
+
   const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
     clubid: querystring["targetClub"],
     name: querystring["targetName"],
@@ -44,7 +45,11 @@ export default async function Events({ searchParams }) {
   return (
     <Box>
       <Box mt={2}>
-        <EventsFilter name={targetName} club={targetClub} state={targetState} />
+        <EventsFilter
+          name={targetName}
+          club={targetClub}
+          state={targetState}
+        />
       </Box>
       <PaginatedEventsGrid
         query={query}

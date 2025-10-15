@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { Typography, TextField, Box, Tooltip } from "@mui/material";
+import { Typography, TextField, Box, Tooltip, Grid, Switch, FormControlLabel } from "@mui/material";
+import ConfirmDialog from "components/ConfirmDialog";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
@@ -42,13 +44,40 @@ function FilterTextInputValue(props) {
 }
 
 export default function EventsTable({
-  events,
+  events: initialEvents,
+  query,
+  clubid,
   scheduleSort = "asc",
   hideClub = false,
 }) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Toggle state for Last 4 Months
+  const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
+  const [events, setEvents] = useState(initialEvents || []);
+  const [dialog, setDialog] = useState(false);
+  const [pendingChecked, setPendingChecked] = useState(false);
+
+  useEffect(() => {
+    // If query is not provided, just use initialEvents
+    if (!query) {
+      setEvents(initialEvents || []);
+      return;
+    }
+
+    // If query is provided, run it with pastEventsLimit based on toggle
+    async function fetchEvents() {
+      let params = {
+        targetClub: clubid,
+        pastEventsLimit: filterMonth.includes("pastEventsLimit") ? 4 : null,
+      };
+      const result = await query(params);
+      setEvents(result || []);
+    }
+    fetchEvents();
+  }, [query, clubid, filterMonth, initialEvents]);
 
   const columns = [
     ...(isMobile
@@ -304,39 +333,93 @@ export default function EventsTable({
     },
   ];
 
-  if (!events) return null;
   return (
-    <DataGrid
-      autoHeight
-      getRowHeight={() => (isMobile ? "auto" : "none")}
-      rows={events}
-      columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
-      getRowId={(r) => r._id}
-      onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
-      disableRowSelectionOnClick
-      initialState={{
-        sorting: {
-          sortModel: [{ field: "scheduled", sort: scheduleSort }],
-        },
-        filter: {
-          filterModel: {
-            items: [],
-            quickFilterLogicOperator: GridLogicOperator.Or,
+    <Grid>
+      {(
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 2,
+            mt: 2,
+          }}
+        >
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            textTransform="uppercase"
+            gutterBottom
+          >
+            {query ? "All Events" : "Pending Events"}
+          </Typography>
+          {query && (
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={filterMonth.includes("pastEventsLimit")}
+                  onChange={(e) => {
+                    // Only show dialog when switching from ON to OFF
+                    if (filterMonth.includes("pastEventsLimit") && !e.target.checked) {
+                      setPendingChecked(false);
+                      setDialog(true);
+                    } else {
+                      setFilterMonth(e.target.checked ? ["pastEventsLimit"] : []);
+                    }
+                  }}
+                  color="primary"
+                />
+              }
+              label="Last 4 Months"
+              sx={{ marginLeft: 1 }}
+            />
+          )}
+          <ConfirmDialog
+                    open={dialog}
+                    title="Are you sure you want to fetch all events?"
+                    description="Fetching all events from the start will take a lot of time."
+                    onConfirm={() => {
+                      setFilterMonth([]);
+                      setDialog(false);
+                    }}
+                    onClose={() => setDialog(false)}
+                    confirmProps={{ color: "error" }}
+                    confirmText="Yes, Fetch them"
+                  />
+        </Box>
+      )}
+      <DataGrid
+        autoHeight
+        getRowHeight={() => (isMobile ? "auto" : "none")}
+        rows={events}
+        columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
+        getRowId={(r) => r._id}
+        onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
+        disableRowSelectionOnClick
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "scheduled", sort: scheduleSort }],
           },
-        },
-        pagination: { paginationModel: { pageSize: 25 } },
-      }}
-      slots={{ toolbar: QuickSearchToolbar }}
-      sx={{
-        // disable cell selection style
-        ".MuiDataGrid-cell:focus": {
-          outline: "none",
-        },
-        // pointer cursor on ALL rows
-        "& .MuiDataGrid-row:hover": {
-          cursor: "pointer",
-        },
-      }}
-    />
+          filter: {
+            filterModel: {
+              items: [],
+              quickFilterLogicOperator: GridLogicOperator.Or,
+            },
+          },
+          pagination: { paginationModel: { pageSize: 25 } },
+        }}
+        slots={{ toolbar: QuickSearchToolbar }}
+        sx={{
+          // disable cell selection style
+          ".MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          // pointer cursor on ALL rows
+          "& .MuiDataGrid-row:hover": {
+            cursor: "pointer",
+          },
+        }}
+      />
+    </Grid>
   );
 }
