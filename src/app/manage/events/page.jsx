@@ -4,7 +4,14 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
 
-import { Box, Container, Divider, Typography, Button, Stack } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  Typography,
+  Button,
+  Stack,
+} from "@mui/material";
 
 import Icon from "components/Icon";
 import EventsTable from "components/events/EventsTable";
@@ -72,7 +79,6 @@ export default async function ManageEvents() {
             scheduleSort="asc"
             hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
           />
-
           {/* separator */}
           <Divider sx={{ my: 4 }} /> {/* marginY=4 for spacing */}
         </>

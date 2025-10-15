@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { Typography, TextField, Box, Tooltip, Grid, Switch, FormControlLabel } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  Box,
+  Tooltip,
+  Grid,
+  Switch,
+  FormControlLabel,
+} from "@mui/material";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -335,7 +343,7 @@ export default function EventsTable({
 
   return (
     <Grid>
-      {(
+      {
         <Box
           sx={{
             display: "flex",
@@ -360,11 +368,16 @@ export default function EventsTable({
                   checked={filterMonth.includes("pastEventsLimit")}
                   onChange={(e) => {
                     // Only show dialog when switching from ON to OFF
-                    if (filterMonth.includes("pastEventsLimit") && !e.target.checked) {
+                    if (
+                      filterMonth.includes("pastEventsLimit") &&
+                      !e.target.checked
+                    ) {
                       setPendingChecked(false);
                       setDialog(true);
                     } else {
-                      setFilterMonth(e.target.checked ? ["pastEventsLimit"] : []);
+                      setFilterMonth(
+                        e.target.checked ? ["pastEventsLimit"] : [],
+                      );
                     }
                   }}
                   color="primary"
@@ -375,19 +388,19 @@ export default function EventsTable({
             />
           )}
           <ConfirmDialog
-                    open={dialog}
-                    title="Are you sure you want to fetch all events?"
-                    description="Fetching all events from the start will take a lot of time."
-                    onConfirm={() => {
-                      setFilterMonth([]);
-                      setDialog(false);
-                    }}
-                    onClose={() => setDialog(false)}
-                    confirmProps={{ color: "error" }}
-                    confirmText="Yes, Fetch them"
-                  />
+            open={dialog}
+            title="Are you sure you want to fetch all events?"
+            description="Fetching all events from the start will take a lot of time."
+            onConfirm={() => {
+              setFilterMonth([]);
+              setDialog(false);
+            }}
+            onClose={() => setDialog(false)}
+            confirmProps={{ color: "error" }}
+            confirmText="Yes, Fetch them"
+          />
         </Box>
-      )}
+      }
       <DataGrid
         autoHeight
         getRowHeight={() => (isMobile ? "auto" : "none")}

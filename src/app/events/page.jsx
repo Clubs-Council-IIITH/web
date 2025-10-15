@@ -45,11 +45,7 @@ export default async function Events({ searchParams }) {
   return (
     <Box>
       <Box mt={2}>
-        <EventsFilter
-          name={targetName}
-          club={targetClub}
-          state={targetState}
-        />
+        <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
       <PaginatedEventsGrid
         query={query}
