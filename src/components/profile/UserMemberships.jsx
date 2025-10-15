@@ -19,6 +19,14 @@ const colors = {
   body: "#ddf5ddff", // Light Green
   other: "#F5F5F5", // Light Gray
 };
+const colorsDarkTheme = {
+  cultural: "#DF8700",   // Dark Orange
+  technical: "#1565C0",  // Dark Blue
+  affinity: "#6A1B9A",   // Dark Purple
+  admin: "#C62828",      // Dark Red
+  body: "#388E3C",       // Dark Green
+  other: "#424242",      // Dark Gray
+};
 const displayNames = {
   cultural: "Cultural Club",
   technical: "Technical Club",
@@ -31,6 +39,8 @@ const displayNames = {
 export default function UserMemberships({ rows = [] }) {
   const { triggerToast } = useToast();
   const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+  const legendColors = isDark ? colorsDarkTheme : colors;
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [clubs, setClubs] = useState([]);
@@ -100,7 +110,7 @@ export default function UserMemberships({ rows = [] }) {
       renderCell: (p) => {
         const club = clubs[p.value];
         const backgroundColor = club?.category
-          ? colors[club.category]
+          ? legendColors[club.category]
           : "transparent";
 
         return (
@@ -177,7 +187,7 @@ export default function UserMemberships({ rows = [] }) {
               sx={{
                 mt: 1,
                 p: 1,
-                backgroundColor: "#fafafa",
+                backgroundColor: theme.palette.background.paper,
                 borderRadius: 1,
               }}
             >
@@ -202,15 +212,15 @@ export default function UserMemberships({ rows = [] }) {
                       sx={{
                         width: 12,
                         height: 12,
-                        backgroundColor: colors[category] || "#F5F5F5",
+                        backgroundColor: legendColors[category],
                         borderRadius: "20px",
-                        border: "1px solid #ddd",
+                        border: `1px solid ${theme.palette.divider}`,
                       }}
                     />
                     <Typography
                       variant="caption"
                       sx={{
-                        color: "#666",
+                        color: theme.palette.text.secondary,
                         fontSize: "0.75rem",
                         fontWeight: 400,
                       }}
