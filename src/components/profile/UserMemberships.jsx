@@ -20,12 +20,12 @@ const colors = {
   other: "#F5F5F5", // Light Gray
 };
 const colorsDarkTheme = {
-  cultural: "#DF8700",   // Dark Orange
-  technical: "#1565C0",  // Dark Blue
-  affinity: "#6A1B9A",   // Dark Purple
-  admin: "#C62828",      // Dark Red
-  body: "#388E3C",       // Dark Green
-  other: "#424242",      // Dark Gray
+  cultural: "#DF8700", // Dark Orange
+  technical: "#1565C0", // Dark Blue
+  affinity: "#6A1B9A", // Dark Purple
+  admin: "#C62828", // Dark Red
+  body: "#388E3C", // Dark Green
+  other: "#424242", // Dark Gray
 };
 const displayNames = {
   cultural: "Cultural Club",
