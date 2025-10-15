@@ -20,7 +20,7 @@ const colors = {
   other: "#F5F5F5", // Light Gray
 };
 const colorsDarkTheme = {
-  cultural: "#FF9800",   // Dark Orange
+  cultural: "#DF8700",   // Dark Orange
   technical: "#1565C0",  // Dark Blue
   affinity: "#6A1B9A",   // Dark Purple
   admin: "#C62828",      // Dark Red
