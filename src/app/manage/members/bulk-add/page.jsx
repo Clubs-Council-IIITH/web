@@ -1,7 +1,7 @@
 import {getClient} from "gql/client";
 import {GET_USER} from "gql/queries/auth";
 import {notFound} from "next/navigation";
-import BulkAddForm from "components/members/BulkAddForm";
+import BulkEditForm from "components/members/BulkEditForm";
 
 export const metadata = {
   title: "Bulk Edit",
@@ -18,5 +18,5 @@ export default async function BulkEditPage() {
     notFound();
   }
 
-  return <BulkAddForm/>;
+  return <BulkEditForm mode="add"/>;
 }
