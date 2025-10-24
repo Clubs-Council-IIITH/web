@@ -658,90 +658,29 @@ export default function EventForm({
               />
             </Grid>
             <Grid item xs={6}>
-              {admin_roles.includes(user?.role) ||
-              (user?.role === "club" &&
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete") ? (
-                <Tooltip
-                  title={
-                    budgetEditing || sponsorEditing
-                      ? "Cannot save while editing budget or sponsor details"
-                      : ""
-                  }
-                  disableHoverListener={!(budgetEditing || sponsorEditing)}
-                >
-                  <span>
-                    <LoadingButton
-                      loading={loading}
-                      type="submit"
-                      size="large"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      disabled={budgetEditing || sponsorEditing}
-                    >
-                      Save
-                    </LoadingButton>
-                  </span>
-                </Tooltip>
-              ) : (
-                <Tooltip
-                  title={
-                    budgetEditing || sponsorEditing
-                      ? "Cannot save while editing budget or sponsor details"
-                      : ""
-                  }
-                  disableHoverListener={!(budgetEditing || sponsorEditing)}
-                >
-                  <span>
-                    <LoadingButton
-                      loading={loading}
-                      type="submit"
-                      size="large"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      disabled={budgetEditing || sponsorEditing}
-                    >
-                      Save as draft
-                    </LoadingButton>
-                  </span>
-                </Tooltip>
-              )}
+              <SubmitButton
+                mode="draft"
+                loading={loading}
+                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
+                defaultValues={defaultValues}
+                user={user}
+                disabled={budgetEditing || sponsorEditing}
+                admin_roles={admin_roles}
+              />
             </Grid>
-            {admin_roles.includes(user?.role) ||
-            (user?.role === "club" &&
-              defaultValues?.status?.state != undefined &&
-              defaultValues?.status?.state != "incomplete") ? null : (
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    budgetEditing || sponsorEditing
-                      ? "Cannot save while editing budget or sponsor details"
-                      : ""
-                  }
-                  disableHoverListener={!(budgetEditing || sponsorEditing)}
-                >
-                  <span>
-                    <LoadingButton
-                      loading={loading}
-                      size="large"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      onClick={() =>
-                        handleSubmit((data) =>
-                          onSubmit(data, { shouldSubmit: true }),
-                        )()
-                      }
-                      disabled={budgetEditing || sponsorEditing}
-                    >
-                      Save & Submit
-                    </LoadingButton>
-                  </span>
-                </Tooltip>
-              </Grid>
-            )}
+            <Grid item xs={12}>
+              <SubmitButton
+                mode="submit"
+                loading={loading}
+                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
+                defaultValues={defaultValues}
+                user={user}
+                disabled={budgetEditing || sponsorEditing}
+                admin_roles={admin_roles}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -756,6 +695,59 @@ export default function EventForm({
         cancelText="Continue"
       />
     </form>
+  );
+}
+function SubmitButton({
+  mode = "draft", // "draft" or "submit"
+  loading,
+  handleSubmit,
+  onSubmit,
+  defaultValues = {},
+  user = {},
+  disabled = true,
+  admin_roles = [],
+}) {
+  const privileged =
+    admin_roles.includes(user?.role) ||
+    (user?.role === "club" &&
+      defaultValues?.status?.state !== undefined &&
+      defaultValues?.status?.state !== "incomplete");
+
+  // hide "Save & Submit" for privileged users (matches original logic)
+  if (mode === "submit" && privileged) return null;
+
+  const tooltipText = disabled
+    ? "Cannot save while editing budget or sponsor details"
+    : "";
+
+  const label =
+    mode === "submit" ? "Save & Submit" : privileged ? "Save" : "Save as draft";
+
+  const variant =
+    mode === "submit" ? "contained" : privileged ? "contained" : "outlined";
+
+  return (
+    <Tooltip title={tooltipText} disableHoverListener={!tooltipText}>
+      <span>
+        <LoadingButton
+          loading={loading}
+          type={mode === "draft" ? "submit" : undefined}
+          onClick={
+            mode === "submit"
+              ? () =>
+                handleSubmit((data) => onSubmit(data, { shouldSubmit: true }))()
+              : undefined
+          }
+          size="large"
+          variant={variant}
+          color="primary"
+          fullWidth
+          disabled={disabled}
+        >
+          {label}
+        </LoadingButton>
+      </span>
+    </Tooltip>
   );
 }
 
