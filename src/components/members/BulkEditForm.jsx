@@ -107,7 +107,9 @@ export default function BulkEdit({ mode = "add" }) {
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
             startYear: latestRole?.startYear || new Date().getFullYear(),
+            originalStartYear: latestRole?.startYear || new Date().getFullYear(),
             endYear: latestRole?.endYear,
+            originalEndYear: latestRole?.endYear,
             isPoc: member.poc,
             isValid: true,
             error: null,
@@ -416,7 +418,9 @@ function MembersTable({
     role: null,
     originalRole: null,
     startYear: new Date().getFullYear(),
+    originalStartYear: new Date().getFullYear(),
     endYear: null,
+    originalEndYear: null,
     isPoc: false,
     isValid: false,
     error: "Incomplete entry",
@@ -516,14 +520,16 @@ function MembersTable({
 
   const columns = [
     {
+      // Hidden column to sort by edited rows
       field: "isEdited",
       headerName: "",
-      width: 0,
       hideable: false,
       filterable: false,
       sortable: true,
-      valueGetter: (value, row) => (row.role !== row.originalRole ? 1 : 0),
-      renderCell: () => null,
+      valueGetter: (value, row) => (row.role !== row.originalRole
+        || row.startYear !== row.originalStartYear
+        || row.endYear !== row.originalEndYear
+        ? 1 : 0),
     },
     {
       field: "uid",
@@ -605,12 +611,11 @@ function MembersTable({
       headerName: "Start Year",
       flex: isMobile ? null : 2,
       editable: true,
-      valueGetter: (value, row) => row?.role === row?.originalRole ? row.startYear : new Date().getFullYear(),
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
-            p.row?.role === p.row?.originalRole
+            p.row?.startYear === p.row?.originalStartYear
               ? "text.secondary"
               : "text.primary"
           }
@@ -639,7 +644,7 @@ function MembersTable({
         <Typography
           variant="body2"
           color={
-            p.row?.role === p.row?.originalRole
+            p.row?.endYear === p.row?.originalEndYear
               ? "text.secondary"
               : "text.primary"
           }
@@ -747,7 +752,10 @@ function MembersTable({
             paginationModel: { pageSize: 10 },
           },
           sorting: {
-            sortModel: [{ field: "isEdited", sort: "desc" }],
+            sortModel: [
+              { field: "isEdited", sort: "desc" },
+              { field: "uid", sort: "asc" },
+            ],
           },
           columns: {
             columnVisibilityModel: {
