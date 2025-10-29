@@ -76,7 +76,7 @@ export default function BulkEdit({ mode = "add" }) {
     } catch (error) {
       triggerToast({
         title: "Error",
-        messages: ["Unable to fetch clubs",error.message],
+        messages: ["Unable to fetch clubs", error.message],
         severity: "error",
       });
       setClubs([]);
@@ -107,7 +107,8 @@ export default function BulkEdit({ mode = "add" }) {
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
             startYear: latestRole?.startYear || new Date().getFullYear(),
-            originalStartYear: latestRole?.startYear || new Date().getFullYear(),
+            originalStartYear:
+              latestRole?.startYear || new Date().getFullYear(),
             endYear: latestRole?.endYear,
             originalEndYear: latestRole?.endYear,
             isPoc: member.poc,
@@ -174,7 +175,9 @@ export default function BulkEdit({ mode = "add" }) {
       } else {
         failureCount++;
         failureMessages.push(
-          `- Failed to ${actionName} ${member.uid}: ${res.error.messages.join(", ")}`,
+          `- Failed to ${actionName} ${member.uid}: ${res.error.messages.join(
+            ", "
+          )}`
         );
       }
     }
@@ -183,12 +186,12 @@ export default function BulkEdit({ mode = "add" }) {
     let toastMessages = [];
     if (successCount > 0) {
       toastMessages.push(
-        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`,
+        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`
       );
     }
     if (failureCount > 0) {
       toastMessages.push(
-        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`,
+        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`
       );
       toastMessages = toastMessages.concat(failureMessages);
     }
@@ -292,12 +295,22 @@ export default function BulkEdit({ mode = "add" }) {
       <Typography variant="h3" gutterBottom textTransform={"capitalize"}>
         Bulk {mode} Members
       </Typography>
+
       {mode === "edit" && (
         <Typography variant="body2" gutterBottom>
           Only current members with latest roles will be shown here, for more
-          detailed editing use the individual member edit page.
+          detailed editing use the individual member edit page. For adding new
+          members, please use the bulk add functionality.
         </Typography>
       )}
+      {mode === "add" && (
+        <Typography variant="body2" gutterBottom>
+          This page is only to add new members not already present in the
+          selected club/body. For editing existing members, please use the bulk
+          edit functionality.
+        </Typography>
+      )}
+
       <FormControl fullWidth sx={{ mb: 4, mt: 4 }}>
         <InputLabel id="cid-label">Club/Body *</InputLabel>
         <Select
@@ -324,6 +337,33 @@ export default function BulkEdit({ mode = "add" }) {
           )}
         </Select>
       </FormControl>
+
+      {mode === "add" && (
+        <Typography variant="subtitle2" color="text.secondary" align="right">
+          <u>NOTE</u>: Please ensure that the members being added do not already exist
+          in the selected club/body.
+          <br />
+          The default start year for all members will be set as{" "}
+          {new Date().getFullYear()}.
+          <br />
+          Any invalid entries marked in red will be skipped during submission.
+        </Typography>
+      )}
+
+      {mode === "edit" && (
+        <Typography
+          variant="subtitle2"
+          color="text.secondary"
+          align="right"
+          mb={1}
+        >
+          <u>NOTE</u>: If you change the role to a new one, the current role's end year
+          will be set to the new role's start year.
+          <br />
+          Any invalid entries marked in red will be skipped during submission.
+        </Typography>
+      )}
+
       <Controller
         name="newMembers"
         defaultValue={mode === "add" ? [] : existingMembers}
@@ -338,13 +378,6 @@ export default function BulkEdit({ mode = "add" }) {
           />
         )}
       />
-      {mode === "edit" && (
-        <Typography variant="subtitle2"  color="text.secondary" align="right">
-          NOTE: If you
-          change the role to a new one, the current role's end year will be set
-          to the new role's start year.
-        </Typography>
-      )}
       <Stack
         direction="row"
         spacing={1}
@@ -410,7 +443,7 @@ function MembersTable({
   const { triggerToast } = useToast();
 
   const minYear = 2010;
-  const editable = mode === "add";
+  const addMode = mode === "add";
 
   // position item template
   const emptyPositionItem = {
@@ -430,7 +463,11 @@ function MembersTable({
     const revalidated = rows.map((row) => {
       const newRow = { ...row };
 
-      if (editable && newRow.uid && existingMembers?.some((m) => m.uid === newRow.uid)) {
+      if (
+        addMode &&
+        newRow.uid &&
+        existingMembers?.some((m) => m.uid === newRow.uid)
+      ) {
         newRow.isValid = false;
         newRow.error = "Member already exists in the club/body";
       } else {
@@ -451,8 +488,8 @@ function MembersTable({
   };
 
   const onUpdate = async (row) => {
-    if (editable) {
-      let res = await getUsers(row.uid); // Add await here
+    if (addMode) {
+      let res = await getUsers(row.uid);
 
       if (!res.ok) {
         row.isValid = false;
@@ -526,22 +563,24 @@ function MembersTable({
       hideable: false,
       filterable: false,
       sortable: true,
-      valueGetter: (value, row) => (row.role !== row.originalRole
-        || row.startYear !== row.originalStartYear
-        || row.endYear !== row.originalEndYear
-        ? 1 : 0),
+      valueGetter: (value, row) =>
+        row.role !== row.originalRole ||
+        row.startYear !== row.originalStartYear ||
+        row.endYear !== row.originalEndYear
+          ? 1
+          : 0,
     },
     {
       field: "uid",
       headerName: "User Id (LDAP)",
       width: 250,
       flex: isMobile ? null : 4,
-      editable: editable,
+      editable: addMode,
       renderCell: (p) => {
         return p.value ? (
           <Typography
             variant="body2"
-            color={editable ? "text.primary" : "text.secondary"}
+            color={addMode ? "text.primary" : "text.secondary"}
             sx={{
               wordBreak: "break-word",
               overflowWrap: "break-word",
@@ -611,12 +650,16 @@ function MembersTable({
       headerName: "Start Year",
       flex: isMobile ? null : 2,
       editable: true,
-      valueGetter: (value, row) => row?.role === row?.originalRole ? row.startYear : new Date().getFullYear(),
+      valueGetter: (value, row) =>
+        row?.role === row?.originalRole
+          ? row.startYear
+          : new Date().getFullYear(),
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
-            p.row?.startYear === p.row?.originalStartYear || p.row?.role !== p.row?.originalRole
+            p.row?.startYear === p.row?.originalStartYear ||
+            p.row?.role !== p.row?.originalRole
               ? "text.secondary"
               : "text.primary"
           }
@@ -699,7 +742,7 @@ function MembersTable({
       ),
       display: "flex",
     },
-    ...(editable
+    ...(addMode
       ? [
           {
             field: "action",
@@ -723,7 +766,7 @@ function MembersTable({
 
   return (
     <>
-      {editable && (
+      {addMode && (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
           <Icon variant="add" mr={1} />
           Add Item
@@ -762,6 +805,8 @@ function MembersTable({
             columnVisibilityModel: {
               // Hide the 'isEdited' column, it's only for sorting
               isEdited: false,
+              // Hide the year columns in add mode
+              ...(addMode ? { startYear: false, endYear: false } : {}),
             },
           },
         }}
