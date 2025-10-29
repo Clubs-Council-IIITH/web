@@ -790,7 +790,7 @@ function MembersTable({
             outline: "none",
           },
         }}
-        sortingOrder={["desc", , "asc"]}
+        sortingOrder={["desc", "asc"]}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 10 },
