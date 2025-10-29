@@ -611,11 +611,12 @@ function MembersTable({
       headerName: "Start Year",
       flex: isMobile ? null : 2,
       editable: true,
+      valueGetter: (value, row) => row?.role === row?.originalRole ? row.startYear : new Date().getFullYear(),
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
-            p.row?.startYear === p.row?.originalStartYear
+            p.row?.startYear === p.row?.originalStartYear || p.row?.role !== p.row?.originalRole
               ? "text.secondary"
               : "text.primary"
           }
