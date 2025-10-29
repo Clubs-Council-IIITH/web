@@ -311,13 +311,13 @@ export default function BulkEdit({ mode = "add" }) {
         </Typography>
       )}
 
-      <FormControl fullWidth sx={{ mb: 4, mt: 4 }}>
+      {!disableClubSelector && <FormControl fullWidth sx={{ mb: 4, mt: 4 }}>
         <InputLabel id="cid-label">Club/Body *</InputLabel>
         <Select
           labelId="cid-label"
           id="cid"
           label="Club/Body *"
-          disabled={disableClubSelector || clubsLoading}
+          disabled={clubsLoading}
           value={selectedClub}
           onChange={handleClubChange}
           variant="outlined"
@@ -336,7 +336,7 @@ export default function BulkEdit({ mode = "add" }) {
               ))
           )}
         </Select>
-      </FormControl>
+      </FormControl>}
 
       {mode === "add" && (
         <Typography variant="subtitle2" color="text.secondary" align="right">
