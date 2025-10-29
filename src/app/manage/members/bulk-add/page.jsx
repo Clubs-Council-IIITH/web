@@ -4,7 +4,7 @@ import {notFound} from "next/navigation";
 import BulkEditForm from "components/members/BulkEditForm";
 
 export const metadata = {
-  title: "Bulk Edit",
+  title: "Bulk Add",
 };
 
 export default async function BulkEditPage() {
