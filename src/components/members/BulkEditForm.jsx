@@ -263,7 +263,7 @@ export default function BulkEdit({ mode = "add" }) {
               return {
                 name: role.name,
                 startYear: addNew ? role.startYear : member.startYear,
-                endYear: addNew ? parseInt(member.startYear) : member.endYear,
+                endYear: addNew ? parseInt(member.startYear) : member.endYear === "-" ? null : parseInt(member.endYear),
               };
             }
             return role;
@@ -511,11 +511,6 @@ function MembersTable({
       row.startYear > new Date().getFullYear()
         ? new Date().getFullYear()
         : row.startYear;
-    if (row.startYear > new Date().getFullYear()) {
-      row.isValid = false;
-      row.error = "Start year cannot be in the future";
-      return row;
-    }
 
     const rawEnd = row.endYear;
     if (rawEnd === null || rawEnd === "" || rawEnd === "-") {
