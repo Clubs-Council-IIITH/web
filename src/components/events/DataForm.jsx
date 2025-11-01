@@ -402,11 +402,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                             { fieldValue: "status", fieldName: "Status" },
                           ]
                         : [
-                          {
-                            fieldValue: "event_report_submitted",
-                            fieldName: "Event Report Submitted",
-                          }
-                        ]),
+                            {
+                              fieldValue: "event_report_submitted",
+                              fieldName: "Event Report Submitted",
+                            },
+                          ]),
                     ].map(({ fieldValue, fieldName }) => (
                       <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
                         <FormControlLabel
