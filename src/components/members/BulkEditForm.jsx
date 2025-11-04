@@ -405,7 +405,9 @@ function MembersTable({
 
   // data manipulation functions
   const onAdd = () => {
-    setRows([...rows, {id: rows?.length || 0, ...emptyPositionItem}]);
+    const maxId = rows.length > 0 ? Math.max(...rows.map((r) => r.id)) : -1;
+    const newId = maxId + 1;
+    setRows([...rows, {id: newId, ...emptyPositionItem}]);
   };
 
   const onUpdate = async (row) => {
@@ -420,6 +422,9 @@ function MembersTable({
       } else if (row.uid && existingMembers?.some((m) => m.uid === row.uid)) {
         row.isValid = false;
         row.error = "Member already exists in the club/body";
+      } else if (row.uid && rows.filter((r) => r.uid === row.uid).length > 1) {
+        row.isValid = false;
+        row.error = "Duplicate member entry";
       }
     }
 
@@ -455,6 +460,7 @@ function MembersTable({
   };
 
   const onDelete = (row) => {
+    // console.log("rows:", rows, "row:", row);
     setRows(rows.filter((r) => r.id !== row.id));
   };
 
