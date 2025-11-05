@@ -34,7 +34,9 @@ export default function EventBudget({
 
   // data manipulation functions
   const onAdd = () => {
-    setRows([...rows, { id: rows?.length || 0, ...emptyBudgetItem }]);
+    const maxId = rows.length > 0 ? Math.max(...rows.map((r) => r.id)) : -1;
+    const newId = maxId + 1;
+    setRows([...rows, {id: newId, ...emptyBudgetItem}]);
   };
   const onUpdate = (row) => {
     row.amount = Math.max(row.amount, 0);

@@ -22,8 +22,8 @@ export default async function ManageMembers({ searchParams }) {
     ...(searchParams?.current === "true" ? ["current"] : []),
     ...(searchParams?.past === "true" ? ["past"] : []),
   ];
-  const onlyCurrent = searchParams?.current === "true" ? true : false;
-  const onlyPast = searchParams?.past === "true" ? true : false;
+  const onlyCurrent = searchParams?.current === "true";
+  const onlyPast = searchParams?.past === "true";
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -43,14 +43,39 @@ export default async function ManageMembers({ searchParams }) {
           Manage Members
         </Typography>
 
-        <Button
-          component={Link}
-          href="/manage/members/new"
-          variant="contained"
-          startIcon={<Icon variant="add" />}
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          gap={2}
         >
-          New Member
-        </Button>
+          <Button
+            component={Link}
+            href="/manage/members/bulk-add"
+            variant="contained"
+            startIcon={<Icon variant="playlist-add" />}
+          >
+            Bulk Add
+          </Button>
+          <Button
+            component={Link}
+            href="/manage/members/bulk-edit"
+            variant="contained"
+            startIcon={<Icon variant="edit" />}
+            color="warning"
+          >
+            Bulk Edit
+          </Button>
+          <Button
+            component={Link}
+            href="/manage/members/new"
+            variant="contained"
+            startIcon={<Icon variant="add" />}
+            color="secondary"
+          >
+            New Member
+          </Button>
+        </Stack>
       </Stack>
 
       {/* only pending members */}
