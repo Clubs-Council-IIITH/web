@@ -226,27 +226,28 @@ export default function EventBudget({
         </Button>
       ) : null}
 
-      <DataGrid
-        autoHeight
-        getRowHeight={() => "auto"}
-        columns={columns}
-        rows={rows}
-        editMode="row"
-        processRowUpdate={onUpdate}
-        disableRowSelectionOnClick
-        onRowEditStart={() => setBudgetEditing(true)}
-        onRowEditStop={() => setBudgetEditing(false)}
-        onProcessRowUpdateError={(error) => {
-          console.error("Row update error:", error);
-          setError(error.message);
-        }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-        }}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DataGrid
+          getRowHeight={() => "auto"}
+          columns={columns}
+          rows={rows}
+          editMode="row"
+          processRowUpdate={onUpdate}
+          disableRowSelectionOnClick
+          onRowEditStart={() => setBudgetEditing(true)}
+          onRowEditStop={() => setBudgetEditing(false)}
+          onProcessRowUpdateError={(error) => {
+            console.error("Row update error:", error);
+            setError(error.message);
+          }}
+          sx={{
+            // disable cell selection style
+            ".MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+          }}
+        />
+      </div>
 
       <Typography variant="caption" color="error">
         {error}

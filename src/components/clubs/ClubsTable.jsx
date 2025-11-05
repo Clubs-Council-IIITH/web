@@ -78,8 +78,9 @@ export default function ClubsTable({ clubs }) {
                 sx={{
                   textTransform: "lowercase",
                   fontSize: "0.9em",
-                  fontFamily: "monospace"
-                }}>
+                  fontFamily: "monospace",
+                }}
+              >
                 {value}
               </Box>
             ),
@@ -93,9 +94,15 @@ export default function ClubsTable({ clubs }) {
       flex: isMobile ? null : 2,
       valueGetter: (value, row, column, apiRef) =>
         value === "body" ? "Student Body" : value,
-      renderCell: ({ value }) => <Box sx={{
-        textTransform: "capitalize"
-      }}>{value}</Box>,
+      renderCell: ({ value }) => (
+        <Box
+          sx={{
+            textTransform: "capitalize",
+          }}
+        >
+          {value}
+        </Box>
+      ),
       display: "flex",
     },
     {
@@ -139,7 +146,6 @@ export default function ClubsTable({ clubs }) {
           paginationModel: { pageSize: 25 },
         },
       }}
-      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         // disable cell selection style

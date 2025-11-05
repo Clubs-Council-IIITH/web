@@ -96,9 +96,12 @@ export default function EventsTable({
             headerName: "Event Code",
             flex: 3,
             renderCell: ({ value }) => (
-              <Typography variant="body2" sx={{
-                color: "text.disabled"
-              }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.disabled",
+                }}
+              >
                 {value}
               </Typography>
             ),
@@ -228,8 +231,8 @@ export default function EventsTable({
             !value.requested
               ? "No venue requested"
               : !value.approved
-                ? "Venue requested, pending approval"
-                : "Venue approved"
+              ? "Venue requested, pending approval"
+              : "Venue approved"
           }
           arrow
         >
@@ -238,15 +241,15 @@ export default function EventsTable({
               color: !value.requested
                 ? "secondary.main"
                 : !value.approved
-                  ? "warning.main"
-                  : "success.main",
+                ? "warning.main"
+                : "success.main",
             }}
             variant={
               !value.requested
                 ? "remove-rounded"
                 : !value.approved
-                  ? "refresh-rounded"
-                  : "check"
+                ? "refresh-rounded"
+                : "check"
             }
           />
         </Tooltip>
@@ -360,8 +363,9 @@ export default function EventsTable({
             gutterBottom
             sx={{
               color: "text.secondary",
-              textTransform: "uppercase"
-            }}>
+              textTransform: "uppercase",
+            }}
+          >
             {query ? "All Events" : "Pending Events"}
           </Typography>
           {query && (
@@ -379,7 +383,7 @@ export default function EventsTable({
                       setDialog(true);
                     } else {
                       setFilterMonth(
-                        e.target.checked ? ["pastEventsLimit"] : [],
+                        e.target.checked ? ["pastEventsLimit"] : []
                       );
                     }
                   }}
@@ -404,39 +408,44 @@ export default function EventsTable({
           />
         </Box>
       }
-      <DataGrid
-        autoHeight
-        getRowHeight={() => (isMobile ? "auto" : "none")}
-        rows={events}
-        columns={hideClub ? columns.filter((c) => c.field !== "club") : columns}
-        getRowId={(r) => r._id}
-        onRowClick={(params) => router.push(`/manage/events/${params.row._id}`)}
-        disableRowSelectionOnClick
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "scheduled", sort: scheduleSort }],
-          },
-          filter: {
-            filterModel: {
-              items: [],
-              quickFilterLogicOperator: GridLogicOperator.Or,
+
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DataGrid
+          getRowHeight={() => (isMobile ? "auto" : "none")}
+          rows={events}
+          columns={
+            hideClub ? columns.filter((c) => c.field !== "club") : columns
+          }
+          getRowId={(r) => r._id}
+          onRowClick={(params) =>
+            router.push(`/manage/events/${params.row._id}`)
+          }
+          disableRowSelectionOnClick
+          initialState={{
+            sorting: {
+              sortModel: [{ field: "scheduled", sort: scheduleSort }],
             },
-          },
-          pagination: { paginationModel: { pageSize: 25 } },
-        }}
-        showToolbar
-        slots={{ toolbar: QuickSearchToolbar }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-          // pointer cursor on ALL rows
-          "& .MuiDataGrid-row:hover": {
-            cursor: "pointer",
-          },
-        }}
-      />
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterLogicOperator: GridLogicOperator.Or,
+              },
+            },
+            pagination: { paginationModel: { pageSize: 25 } },
+          }}
+          slots={{ toolbar: QuickSearchToolbar }}
+          sx={{
+            // disable cell selection style
+            ".MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+            // pointer cursor on ALL rows
+            "& .MuiDataGrid-row:hover": {
+              cursor: "pointer",
+            },
+          }}
+        />
+      </div>
     </Grid>
   );
 }

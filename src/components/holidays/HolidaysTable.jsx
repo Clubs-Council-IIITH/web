@@ -80,7 +80,6 @@ export default function HolidaysTable({ holidays, showPast = false }) {
         },
         pagination: { paginationModel: { pageSize: 25 } },
       }}
-      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         ".MuiDataGrid-cell:focus": {

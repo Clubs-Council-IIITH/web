@@ -90,15 +90,15 @@ export default function FinancesTable({ events, role }) {
             value.submitted === "true"
               ? "check"
               : value.submitted === "old"
-                ? "remove"
-                : "cancel"
+              ? "remove"
+              : "cancel"
           }
           color={
             value.submitted === "true"
               ? "success.main"
               : value.submitted === "old"
-                ? "warning.main"
-                : "error.main"
+              ? "warning.main"
+              : "error.main"
           }
         />
       ),
@@ -155,7 +155,6 @@ export default function FinancesTable({ events, role }) {
         },
         pagination: { paginationModel: { pageSize: 10 } },
       }}
-      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         ".MuiDataGrid-cell:focus": { outline: "none" },

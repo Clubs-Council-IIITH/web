@@ -73,8 +73,9 @@ export default function MembersTable({
                 sx={{
                   textTransform: "lowercase",
                   fontSize: "0.9em",
-                  fontFamily: "monospace"
-                }}>
+                  fontFamily: "monospace",
+                }}
+              >
                 {value || "Email Not Available"}
               </Box>
             ),
@@ -116,8 +117,9 @@ export default function MembersTable({
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        width: "100%"
-                      }}>
+                        width: "100%",
+                      }}
+                    >
                       <Typography
                         variant="body2"
                         sx={{
@@ -143,8 +145,9 @@ export default function MembersTable({
                             color: "grey.400",
                             display: "inline-block",
                             mx: 0.5,
-                            flexShrink: 0
-                          }}>
+                            flexShrink: 0,
+                          }}
+                        >
                           ({role?.startYear} - {role?.endYear || "present"})
                         </Box>
                       </Typography>
@@ -154,16 +157,17 @@ export default function MembersTable({
                             display: "flex",
                             justifyContent: "flex-end",
                             ml: 1,
-                            flexShrink: 0
-                          }}>
+                            flexShrink: 0,
+                          }}
+                        >
                           <Tooltip
                             arrow
                             title={
                               role?.approved
                                 ? "Approved"
                                 : role?.rejected
-                                  ? "Rejected"
-                                  : "Pending approval"
+                                ? "Rejected"
+                                : "Pending approval"
                             }
                           >
                             <Icon
@@ -172,15 +176,15 @@ export default function MembersTable({
                                 role?.approved
                                   ? "success.main"
                                   : role?.rejected
-                                    ? "error.main"
-                                    : "warning.main"
+                                  ? "error.main"
+                                  : "warning.main"
                               }
                               variant={
                                 role?.approved
                                   ? "eva:checkmark-outline"
                                   : role?.rejected
-                                    ? "eva:close-outline"
-                                    : "eva:refresh-fill"
+                                  ? "eva:close-outline"
+                                  : "eva:refresh-fill"
                               }
                             />
                           </Tooltip>
@@ -217,7 +221,6 @@ export default function MembersTable({
         },
         pagination: { paginationModel: { pageSize: 25 } },
       }}
-      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         ".MuiDataGrid-cell:focus": {
