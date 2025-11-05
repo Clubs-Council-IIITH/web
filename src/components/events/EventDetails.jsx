@@ -11,10 +11,9 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 import Icon from "components/Icon";
 
-const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
-const AddToCalendarBtn = dynamic(
-  () => import("components/events/AddToCalendarBtn"),
-  { ssr: false }
+const DateTime = dynamic(() => import("components/DateTime"));
+const AddToCalendarBtn = dynamic(() =>
+  import("components/events/AddToCalendarBtn")
 );
 
 export const getEventLocation = (event) => {
@@ -39,8 +38,9 @@ export default function EventDetails({ event, showCode = false }) {
       <Grid
         size={{
           xs: 12,
-          md: 6
-        }}>
+          md: 6,
+        }}
+      >
         <Card variant="outlined">
           <Box sx={{ pt: "100%", position: "relative" }}>
             {event.poster ? (
@@ -64,8 +64,9 @@ export default function EventDetails({ event, showCode = false }) {
       <Grid
         size={{
           xs: "grow",
-          md: "grow"
-        }}>
+          md: "grow",
+        }}
+      >
         <Stack
           direction="column"
           sx={{
@@ -136,7 +137,7 @@ export default function EventDetails({ event, showCode = false }) {
               >
                 <ClubButton clubid={event.clubid} />
                 {event.collabclubs.map((clubid) => (
-                  <ClubButton clubid={clubid} />
+                  <ClubButton clubid={clubid} key={clubid} />
                 ))}
               </Box>
             </>
