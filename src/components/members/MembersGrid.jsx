@@ -32,7 +32,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
       ?.filter((year) => (onlyCurrent ? year === currentYear : true))
       ?.sort((a, b) => parseInt(b) - parseInt(a))
       ?.map((year) => (
-        <>
+        <div key={year}>
           {!onlyCurrent ? (
             <Divider textAlign="left" sx={{ mb: 2 }}>
               <Typography variant="h5" sx={{
@@ -43,7 +43,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
             </Divider>
           ) : null}
           <LocalUsersGrid users={targetMembers[year]} />
-        </>
+        </div>
       ))
   ) : (
     <center>

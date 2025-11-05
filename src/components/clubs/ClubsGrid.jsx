@@ -17,7 +17,7 @@ export default async function ClubsGrid({ category, staticClubs = [] }) {
         ?.sort((a, b) => a.name.localeCompare(b.name))
         ?.map((club) => (
           <Grid
-            key={club._id}
+            key={club.cid}
             size={{
               xs: 12,
               md: 6,

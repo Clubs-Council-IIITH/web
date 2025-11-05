@@ -3,7 +3,6 @@ import gql from "graphql-tag";
 export const GET_ACTIVE_CLUBS = gql`
   query ActiveClubs {
     activeClubs {
-      _id
       cid
       state
       category

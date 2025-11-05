@@ -55,7 +55,7 @@ export default function ActionPalette({
             md: 6
           }}>
           {right.map((Component, key) => (
-            <Grid>
+            <Grid key={key} size="auto">
               <Component {...rightProps[key]} key={key} />
             </Grid>
           ))}
