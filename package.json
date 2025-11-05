@@ -46,7 +46,7 @@
     "path-to-regexp": "^8.2.0",
     "prop-types": "^15.8.1",
     "react": "19.2.0",
-    "react-custom-scrollbars-2": "^4.5.0",
+    "react-custom-scrollbars-2": "github:bhavberi/react-custom-scrollbars-2",
     "react-dom": "19.2.0",
     "react-dropzone": "^14.2.10",
     "react-hook-form": "^7.53.1",
