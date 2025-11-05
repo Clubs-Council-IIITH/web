@@ -24,7 +24,7 @@ export const canEditReport = (event, eventReport, user) => {
 
 export const isEventsReportSubmitted = (events, userMeta) => {
   const DAYS = 7 * 24 * 60 * 60 * 1000;
-  const START_DATE = new Date("2025-09-10").getTime();
+  const START_DATE = new Date("2025-11-10").getTime();
   const cutoff = Date.now() - DAYS;
 
   const pastEvents = events.filter(e =>
