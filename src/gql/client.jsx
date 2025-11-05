@@ -6,7 +6,7 @@ const GRAPHQL_ENDPOINT =
   process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";
 
 const makeClient = async () => {
-  const cookieList = await cookies().getAll();
+  const cookieList = (await cookies()).getAll();
   const cookieHeader = cookieList.length
     ? cookieList.map((c) => `${c.name}=${c.value}`).join("; ")
     : undefined;
@@ -24,4 +24,20 @@ const makeClient = async () => {
   });
 };
 
-export const { getClient } = registerUrql(makeClient);
+const { getClient: _rscGetClient } = registerUrql(makeClient);
+
+export const getClient = () => {
+  return {
+    query: async (document, variables) => {
+      const client = await _rscGetClient();
+      const result = client.query(document, variables);
+      // urql query returns an object with toPromise method
+      return result.toPromise ? await result.toPromise() : await result;
+    },
+    mutation: async (document, variables) => {
+      const client = await _rscGetClient();
+      const result = client.mutation(document, variables);
+      return result.toPromise ? await result.toPromise() : await result;
+    },
+  };
+};
