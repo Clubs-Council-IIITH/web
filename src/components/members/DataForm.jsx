@@ -270,7 +270,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           alignItems: "flex-start",
         }}
       >
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             sx={{
@@ -308,7 +308,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           </Grid>
         </Grid>
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             sx={{
@@ -356,7 +356,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           )}
         </Grid>
         {typeMembers === "current" ? (
-          <Grid container>
+          <Grid size={12}>
             <Typography
               variant="subtitle2"
               sx={{
@@ -388,19 +388,17 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         ) : null}
         {typeMembers === "past" && !clubid.includes("allclubs") ? (
-          <Grid container>
-            <Grid container>
-              <Typography
-                variant="subtitle2"
-                sx={{
-                  textTransform: "uppercase",
-                  color: "text.secondary",
-                  mb: 1.5,
-                }}
-              >
-                Period of Members to Include
-              </Typography>
-            </Grid>
+          <Grid size={12}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 1.5,
+              }}
+            >
+              Period of Members to Include
+            </Typography>
             <Grid
               container
               direction="row"
@@ -478,7 +476,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
         ) : null}
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             sx={{
@@ -506,11 +504,12 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                     <Grid
                       key={fieldValue}
                       size={{
-                        lg: 1,
+                        lg: 2,
                         md: 3,
                         sm: 4,
-                        xs: 6
-                      }}>
+                        xs: 6,
+                      }}
+                    >
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -560,11 +559,12 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                     <Grid
                       key={batch}
                       size={{
-                        lg: 1,
+                        lg: 2,
                         md: 3,
                         sm: 4,
-                        xs: 6
-                      }}>
+                        xs: 6,
+                      }}
+                    >
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -601,7 +601,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           />
         </Grid>
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -645,8 +645,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                           lg: 2,
                           md: 3,
                           sm: 4,
-                          xs: 6
-                        }}>
+                          xs: 6,
+                        }}
+                      >
                         <FormControlLabel
                           control={
                             <Checkbox

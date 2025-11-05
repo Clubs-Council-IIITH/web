@@ -102,7 +102,6 @@ function EventDatetimeInput({ control, watch, user }) {
   return (
     <Grid
       container
-      
       direction="row"
       spacing={1}
       sx={{
@@ -304,7 +303,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           alignItems: "flex-start",
         }}
       >
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             sx={{
@@ -343,7 +342,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           </Grid>
         </Grid>
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -357,7 +356,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           <EventDatetimeInput control={control} watch={watch} user={user} />
         </Grid>
         {admin_roles.includes(user?.role) ? (
-          <Grid container>
+          <Grid size={12}>
             <Typography
               variant="subtitle2"
               sx={{
@@ -384,7 +383,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             />
           </Grid>
         ) : null}
-        <Grid container>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -404,7 +403,6 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                 <FormGroup row>
                   <Grid
                     container
-                    
                     spacing={1}
                     sx={{
                       ml: 1,
@@ -451,8 +449,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                           lg: 2,
                           md: 3,
                           sm: 4,
-                          xs: 6
-                        }}>
+                          xs: 6,
+                        }}
+                      >
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -490,7 +489,6 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
       </Grid>
       <Grid
         container
-        
         direction="row"
         spacing={1}
         sx={{
