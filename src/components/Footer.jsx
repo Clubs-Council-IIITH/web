@@ -70,7 +70,6 @@ export default function Footer() {
       <Divider sx={{ py: 4 }} />
       <Grid container sx={{ py: 5 }} spacing={2} justifyContent="space-between">
         <Grid
-          item
           xs={12}
           lg
           display="flex"
@@ -105,7 +104,7 @@ export default function Footer() {
           </Box>
         </Grid>
         <Grid
-          item
+          
           xs={12}
           lg
           display="flex"

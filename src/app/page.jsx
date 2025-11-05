@@ -34,24 +34,29 @@ export default function Home() {
         direction="row"
         sx={{
           pt: 2,
-          mb: 2
-        }}>
+          mb: 2,
+        }}
+      >
         <Typography variant="h4">Upcoming & Recent Events</Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Box
           sx={{
             display: "flex",
-            alignItems: "center"
-          }}>
+            alignItems: "center",
+          }}
+        >
           <Button
             variant="none"
             color="secondary"
             component={Link}
             href="/events"
           >
-            <Typography variant="button" sx={{
-              color: "text.primary"
-            }}>
+            <Typography
+              variant="button"
+              sx={{
+                color: "text.primary",
+              }}
+            >
               View all
             </Typography>
             <Icon variant="chevron-right" />
@@ -71,11 +76,13 @@ export default function Home() {
         pursuits, from a jaw dropping cauldron of ways to participate in music,
         dance, sports, quizzes, etc.
       </Typography>
-      <Box sx={{
-        my: 3
-      }}>
+      <Box
+        sx={{
+          my: 3,
+        }}
+      >
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
+          <Grid xs={12} md={6}>
             <Link href="/student-bodies" style={{ textDecoration: "none" }}>
               <Statistic
                 color="warning"
@@ -86,7 +93,7 @@ export default function Home() {
               />
             </Link>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid xs={12} md={6}>
             <Link href="/clubs" style={{ textDecoration: "none" }}>
               <Statistic
                 color="info"
@@ -99,28 +106,37 @@ export default function Home() {
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{
-        my: 3
-      }}>
-        <Stack direction="row" sx={{
-          pt: 2
-        }}>
+      <Box
+        sx={{
+          my: 3,
+        }}
+      >
+        <Stack
+          direction="row"
+          sx={{
+            pt: 2,
+          }}
+        >
           <Typography variant="h4">Gallery</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box
             sx={{
               display: "flex",
-              alignItems: "center"
-            }}>
+              alignItems: "center",
+            }}
+          >
             <Button
               variant="none"
               color="secondary"
               component={Link}
               href={"/gallery"}
             >
-              <Typography variant="button" sx={{
-                color: "text.primary"
-              }}>
+              <Typography
+                variant="button"
+                sx={{
+                  color: "text.primary",
+                }}
+              >
                 View more
               </Typography>
               <Icon variant="chevron-right" />

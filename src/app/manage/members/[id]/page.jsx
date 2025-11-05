@@ -63,15 +63,19 @@ export default async function ManageMember(props) {
           user={currentUser}
           allowEditing={userProfile != null}
         />
-        <Grid container spacing={2} sx={{
-          mt: 4
-        }}>
-          <Grid item xs={12}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            mt: 4,
+          }}
+        >
+          <Grid xs={12}>
             <Stack
               direction={{ xs: "column", lg: "row" }}
               spacing={4}
               sx={{
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <UserImage
@@ -89,38 +93,47 @@ export default async function ManageMember(props) {
                   variant="body1"
                   sx={{
                     color: "text.secondary",
-                    fontFamily: "monospace"
-                  }}>
+                    fontFamily: "monospace",
+                  }}
+                >
                   {user?.email || "Email Not Available"}
                 </Typography>
               </Stack>
             </Stack>
           </Grid>
-          <Grid item container xs spacing={1} sx={{
-            mt: 5
-          }}>
-            <Grid item xs>
+          <Grid
+            container
+            xs
+            spacing={1}
+            sx={{
+              mt: 5,
+            }}
+          >
+            <Grid xs>
               <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
                 }}
               >
                 Point of Contact
               </Typography>
-              <Typography variant="h5" sx={{
-                fontWeight: 300
-              }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 300,
+                }}
+              >
                 {member.poc ? "Yes" : "No"}
               </Typography>
             </Grid>
-            <Grid item xs>
+            <Grid xs>
               <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
                 }}
               >
                 Club/Body
@@ -128,15 +141,18 @@ export default async function ManageMember(props) {
               <ClubButton clubid={id?.split(encodeURIComponent(":"))[0]} />
             </Grid>
           </Grid>
-          <Grid item container sx={{
-            mt: 3
-          }}>
-            <Grid item xs={12}>
+          <Grid
+            container
+            sx={{
+              mt: 3,
+            }}
+          >
+            <Grid xs={12}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
                 }}
               >
                 Positions
@@ -151,15 +167,20 @@ export default async function ManageMember(props) {
               />
             </Grid>
           </Grid>
-          <Grid item container xs spacing={1} sx={{
-            mt: 5
-          }}>
-            <Grid item xs={12} md={6}>
+          <Grid
+            container
+            xs
+            spacing={1}
+            sx={{
+              mt: 5,
+            }}
+          >
+            <Grid xs={12} md={6}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
                 }}
               >
                 Creation Time
@@ -168,19 +189,20 @@ export default async function ManageMember(props) {
                 variant="body"
                 sx={{
                   color: "#777777",
-                  fontWeight: "100"
-                }}>
+                  fontWeight: "100",
+                }}
+              >
                 {member.creationTime
                   ? member.creationTime
                   : "Information Not Available"}
               </Typography>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid xs={12} md={6}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
                 }}
               >
                 Last Edited Time
@@ -189,8 +211,9 @@ export default async function ManageMember(props) {
                 variant="body"
                 sx={{
                   color: "#777777",
-                  fontWeight: "100"
-                }}>
+                  fontWeight: "100",
+                }}
+              >
                 {member.lastEditedTime
                   ? member.lastEditedTime
                   : "Information Not Available"}

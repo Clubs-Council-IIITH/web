@@ -36,11 +36,12 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
           sx={{
             width: "100%",
             display: "flex",
-            justifyContent: "center"
-          }}>
+            justifyContent: "center",
+          }}
+        >
           <Grid container spacing={5}>
             {Array.from({ length: 12 }, (_, i) => (
-              <Grid item key={i} xs={6} lg={3}>
+              <Grid key={i} xs={6} lg={3}>
                 <Skeleton
                   variant="rectangular"
                   width="100%"

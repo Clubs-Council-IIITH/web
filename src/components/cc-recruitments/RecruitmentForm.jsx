@@ -83,7 +83,7 @@ function MemberUserInput({ user = {} }) {
       direction={{ xs: "column", lg: "row" }}
       spacing={4}
       sx={{
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       <UserImage
@@ -101,8 +101,9 @@ function MemberUserInput({ user = {} }) {
           variant="body2"
           sx={{
             color: "text.secondary",
-            fontFamily: "monospace"
-          }}>
+            fontFamily: "monospace",
+          }}
+        >
           {user.email}
         </Typography>
       </Stack>
@@ -183,17 +184,27 @@ export default function RecruitmentForm({ user = {} }) {
   return (
     <>
       {submiited ? (
-        <Typography variant="h5" gutterBottom align="center" sx={{
-          mt: 6
-        }}>
+        <Typography
+          variant="h5"
+          gutterBottom
+          align="center"
+          sx={{
+            mt: 6,
+          }}
+        >
           Thank you for your interest in applying for a Clubs Council Position.
           Your application has been successfully submitted. You will be notified
           about the next stages of the process shortly.
         </Typography>
       ) : !allowedBatches.includes(user.batch) ? (
-        <Typography variant="h5" gutterBottom align="center" sx={{
-          mt: 6
-        }}>
+        <Typography
+          variant="h5"
+          gutterBottom
+          align="center"
+          sx={{
+            mt: 6,
+          }}
+        >
           You are not eligible to apply for Clubs Council Position this year.
           <br />
           Please contact the Clubs Council for more information.
@@ -201,23 +212,24 @@ export default function RecruitmentForm({ user = {} }) {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={4}>
-            <Grid container item xs={12} md={12} xl={12} spacing={3}>
-              <Grid container item>
+            <Grid container xs={12} md={12} xl={12} spacing={3}>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
-                    mb: 2
-                  }}>
+                    mb: 2,
+                  }}
+                >
                   User Details
                 </Typography>
-                <Grid container item spacing={4}>
-                  <Grid item xs={12} md={12} xl={12}>
+                <Grid container spacing={4}>
+                  <Grid xs={12} md={12} xl={12}>
                     <MemberUserInput user={user} />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     <TextField
                       label="Roll No"
                       variant="outlined"
@@ -227,7 +239,7 @@ export default function RecruitmentForm({ user = {} }) {
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     <TextField
                       label="Batch"
                       variant="outlined"
@@ -237,7 +249,7 @@ export default function RecruitmentForm({ user = {} }) {
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     <TextField
                       label="Stream"
                       variant="outlined"
@@ -247,7 +259,7 @@ export default function RecruitmentForm({ user = {} }) {
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     {user?.phone ? (
                       <TextField
                         label="Phone number"
@@ -298,23 +310,27 @@ export default function RecruitmentForm({ user = {} }) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid container item>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
-                    mb: 2
-                  }}>
+                    mb: 2,
+                  }}
+                >
                   Team Specific Details
                 </Typography>
                 <Grid container spacing={2} direction="column">
                   {roles.map((role, index) => (
-                    <Grid item key={index}>
-                      <Typography variant="h6" sx={{
-                        fontWeight: "bold"
-                      }}>
+                    <Grid key={index}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: "bold",
+                        }}
+                      >
                         {role.title}
                       </Typography>
                       {role.points.map((point, idx) => (
@@ -328,12 +344,17 @@ export default function RecruitmentForm({ user = {} }) {
                       ))}
                     </Grid>
                   ))}
-                  <Grid item sx={{
-                    mt: 2
-                  }}>
-                    <Typography variant="h6" sx={{
-                      fontWeight: "bold"
-                    }}>
+                  <Grid
+                    sx={{
+                      mt: 2,
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "bold",
+                      }}
+                    >
                       Note:
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
@@ -344,10 +365,15 @@ export default function RecruitmentForm({ user = {} }) {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Grid container item spacing={4} sx={{
-                  pt: 3
-                }}>
-                  <Grid item xs={12} md={12} xl={12}>
+                <Grid
+                  container
+                  
+                  spacing={4}
+                  sx={{
+                    pt: 3,
+                  }}
+                >
+                  <Grid xs={12} md={12} xl={12}>
                     <Controller
                       name="teams"
                       control={control}
@@ -398,7 +424,7 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -406,8 +432,9 @@ export default function RecruitmentForm({ user = {} }) {
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
-                          mb: 2
-                        }}>
+                          mb: 2,
+                        }}
+                      >
                         Why did you choose the team(s) you have chosen?
                       </Typography>
                     )}
@@ -442,19 +469,20 @@ export default function RecruitmentForm({ user = {} }) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid container item>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
-                    mb: 2
-                  }}>
+                    mb: 2,
+                  }}
+                >
                   Other Details
                 </Typography>
-                <Grid container item spacing={4}>
-                  <Grid item xs={12} md={12} xl={12}>
+                <Grid container spacing={4}>
+                  <Grid xs={12} md={12} xl={12}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -462,8 +490,9 @@ export default function RecruitmentForm({ user = {} }) {
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
-                          mb: 2
-                        }}>
+                          mb: 2,
+                        }}
+                      >
                         Why do you want to be a part of the Clubs Council? Tell
                         us about your vision and improvements you wish to make.
                       </Typography>
@@ -497,7 +526,7 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -505,8 +534,9 @@ export default function RecruitmentForm({ user = {} }) {
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
-                          mb: 2
-                        }}>
+                          mb: 2,
+                        }}
+                      >
                         Why do you believe you are a good fit for the position
                         you are applying to?
                       </Typography>
@@ -540,7 +570,7 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -548,8 +578,9 @@ export default function RecruitmentForm({ user = {} }) {
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
-                          mb: 2
-                        }}>
+                          mb: 2,
+                        }}
+                      >
                         Have you been a part of any student-run bodies or clubs
                         in our campus? If yes, tell us about your experience.
                       </Typography>
@@ -582,7 +613,7 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -590,8 +621,9 @@ export default function RecruitmentForm({ user = {} }) {
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
-                          mb: 2
-                        }}>
+                          mb: 2,
+                        }}
+                      >
                         Did you often want to take part in an event, but
                         couldn't or didn't? What were the reasons? Why do you
                         think that happened?
@@ -626,7 +658,7 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={12} xl={12}>
+                  <Grid xs={12} md={12} xl={12}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -634,8 +666,9 @@ export default function RecruitmentForm({ user = {} }) {
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
-                          mb: 2
-                        }}>
+                          mb: 2,
+                        }}
+                      >
                         Tell us more about your ideas and thoughts to improve
                         campus life (wrt. club activities) at IIIT Hyderabad.
                       </Typography>
@@ -670,7 +703,7 @@ export default function RecruitmentForm({ user = {} }) {
                     />
                   </Grid>
                   {teams?.includes("Design") && (
-                    <Grid item xs={12} md={12} xl={12}>
+                    <Grid xs={12} md={12} xl={12}>
                       {isDesktop ? null : (
                         <Typography
                           variant="subtitle2"
@@ -678,8 +711,9 @@ export default function RecruitmentForm({ user = {} }) {
                           sx={{
                             textTransform: "uppercase",
                             color: "text.secondary",
-                            mb: 2
-                          }}>
+                            mb: 2,
+                          }}
+                        >
                           Share your design experience.
                         </Typography>
                       )}
@@ -713,29 +747,38 @@ export default function RecruitmentForm({ user = {} }) {
                   )}
                 </Grid>
               </Grid>
-              <Grid container item>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
-                    mb: 2
-                  }}>
+                    mb: 2,
+                  }}
+                >
                   Final Submission
                 </Typography>
-                <Typography variant="body2" gutterBottom sx={{
-                  mb: 2
-                }}>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  sx={{
+                    mb: 2,
+                  }}
+                >
                   "By pressing the submit button, I specify that I have filled
                   the form by myself with utmost honesty, and I want to apply to
                   the Clubs Council, as mentioned in my application. I am fine
                   with sharing of my responses with any of the Clubs Council
                   team member for the process itself."
                 </Typography>
-                <Typography variant="body2" gutterBottom sx={{
-                  mb: 2
-                }}>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  sx={{
+                    mb: 2,
+                  }}
+                >
                   <i>
                     You won't be able to edit your response after submission, so
                     have a look at it once more.
@@ -743,9 +786,13 @@ export default function RecruitmentForm({ user = {} }) {
                   The form responses will remain anonymous, and won't be shared
                   with anyone outside of Clubs Council.
                 </Typography>
-                <Typography variant="body2" gutterBottom sx={{
-                  mb: 2
-                }}>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  sx={{
+                    mb: 2,
+                  }}
+                >
                   <b>Selection:</b> Interested members who fill this form will
                   be called for an interview with the incumbent Clubs Council
                   team, and members will be selected in consultation with the
@@ -753,10 +800,17 @@ export default function RecruitmentForm({ user = {} }) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container item direction="row" xs={12} spacing={1} sx={{
-              pt: 3
-            }}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              
+              direction="row"
+              xs={12}
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+            >
+              <Grid xs={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -778,7 +832,7 @@ export default function RecruitmentForm({ user = {} }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid xs={6}>
                 <Button
                   loading={loading}
                   type="submit"

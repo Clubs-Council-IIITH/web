@@ -105,17 +105,19 @@ export default function BillUpload(params) {
         container
         sx={{
           alignItems: "center",
-          justifyContent: "space-between"
-        }}></Grid>
+          justifyContent: "space-between",
+        }}
+      ></Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid
-            item
+            
             xs={12}
             sx={{
               alignItems: "center",
-              m: 1
-            }}>
+              m: 1,
+            }}
+          >
             <FileUpload
               name="file"
               label="File Upload"
@@ -124,14 +126,19 @@ export default function BillUpload(params) {
               maxFiles={1}
               maxSizeMB={maxFileSizeMB}
             />
-            <Typography variant="h4" sx={{
-              mt: 3
-            }}>
+            <Typography
+              variant="h4"
+              sx={{
+                mt: 3,
+              }}
+            >
               Breakdown and bill details
             </Typography>
-            <Box sx={{
-              m: 1
-            }}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <Controller
                 name="budget"
                 control={control}
@@ -161,13 +168,14 @@ export default function BillUpload(params) {
               />
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid xs={12}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
-                gap: 2
-              }}>
+                gap: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 color="primary"
@@ -190,9 +198,12 @@ export default function BillUpload(params) {
           </Grid>
         </Grid>
       </form>
-      <Typography variant="h4" sx={{
-        mt: 3
-      }}>
+      <Typography
+        variant="h4"
+        sx={{
+          mt: 3,
+        }}
+      >
         Instructions
       </Typography>
       <Typography variant="body1">

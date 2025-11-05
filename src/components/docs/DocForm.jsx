@@ -170,8 +170,9 @@ export default function DocForm({ editFile = null, newFile = true }) {
         container
         sx={{
           alignItems: "center",
-          justifyContent: "space-between"
-        }}>
+          justifyContent: "space-between",
+        }}
+      >
         <Typography variant="h5" sx={{ p: 2 }}>
           Upload File
         </Typography>
@@ -190,9 +191,12 @@ export default function DocForm({ editFile = null, newFile = true }) {
       </Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-          <Grid item xs={12} sx={{
-            m: 1
-          }}>
+          <Grid
+            xs={12}
+            sx={{
+              m: 1,
+            }}
+          >
             <Controller
               name="title"
               control={control}
@@ -214,12 +218,12 @@ export default function DocForm({ editFile = null, newFile = true }) {
             />
           </Grid>
           <Grid
-            item
             xs={12}
             sx={{
               alignItems: "center",
-              m: 1
-            }}>
+              m: 1,
+            }}
+          >
             <FileUpload
               name="file"
               label="File Upload"
@@ -229,13 +233,14 @@ export default function DocForm({ editFile = null, newFile = true }) {
               maxSizeMB={maxFileSizeMB}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid xs={12}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
-                gap: 2
-              }}>
+                gap: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 color="primary"

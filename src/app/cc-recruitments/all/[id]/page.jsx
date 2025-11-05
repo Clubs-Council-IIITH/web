@@ -23,7 +23,7 @@ export async function generateMetadata(props) {
         userInput: {
           uid: id,
         },
-      },
+      }
     );
     const user = { ...userMeta, ...userProfile };
 
@@ -49,11 +49,11 @@ export default async function CCApplicantDetails(props) {
     GET_ALL_RECRUITMENTS,
     {
       year: year,
-    },
+    }
   );
 
   let currentApplicant = ccApplications.find(
-    (applicant) => applicant.uid === id,
+    (applicant) => applicant.uid === id
   );
 
   // get target user
@@ -63,7 +63,7 @@ export default async function CCApplicantDetails(props) {
       userInput: {
         uid: id,
       },
-    },
+    }
   );
   const user = { ...userMeta, ...userProfile };
 
@@ -77,22 +77,27 @@ export default async function CCApplicantDetails(props) {
   // get list of memberRoles.roles along with member.cid
   memberships = memberRoles.reduce(
     (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-    [],
+    []
   );
 
   return (
     <Container>
-      <Grid container spacing={2} sx={{
-        mt: 4
-      }}>
-        <Grid item xs={12}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          mt: 4,
+        }}
+      >
+        <Grid xs={12}>
           <Stack
             direction="column"
             sx={{
               alignItems: "end",
               mt: 2,
-              justifyContent: "right"
-            }}>
+              justifyContent: "right",
+            }}
+          >
             <Button
               variant="contained"
               color="primary"
@@ -108,7 +113,7 @@ export default async function CCApplicantDetails(props) {
             direction={{ xs: "column", lg: "row" }}
             spacing={4}
             sx={{
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <UserImage
@@ -124,8 +129,9 @@ export default async function CCApplicantDetails(props) {
                 sx={{
                   textAlign: { xs: "center", lg: "left" },
                   fontSize: { xs: 25, lg: 38 },
-                  wordBreak: "break-word"
-                }}>
+                  wordBreak: "break-word",
+                }}
+              >
                 {user.firstName} {user.lastName}
               </Typography>
               <Typography
@@ -134,46 +140,68 @@ export default async function CCApplicantDetails(props) {
                   color: "text.secondary",
                   fontFamily: "monospace",
                   textAlign: { xs: "center", lg: "left" },
-                  fontSize: { xs: 14, lg: 20 }
-                }}>
+                  fontSize: { xs: 14, lg: 20 },
+                }}
+              >
                 {user.email}
               </Typography>
             </Stack>
           </Stack>
         </Grid>
 
-        <Grid item container xs spacing={2} sx={{
-          mt: 5
-        }}>
+        <Grid
+          container
+          xs
+          spacing={2}
+          sx={{
+            mt: 5,
+          }}
+        >
           <UserDetails user={user} />
         </Grid>
 
-        <Grid item xs={12} lg={9} sx={{
-          mt: { xs: 2, lg: 5 }
-        }}>
+        <Grid
+          xs={12}
+          lg={9}
+          sx={{
+            mt: { xs: 2, lg: 5 },
+          }}
+        >
           <Stack direction="column" spacing={2}>
-            <Typography variant="subtitle2" sx={{
-              textTransform: "uppercase"
-            }}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
               Memberships
             </Typography>
             <UserMemberships rows={memberships} />
           </Stack>
         </Grid>
       </Grid>
-      <Box sx={{
-        mt: 5
-      }}>
+      <Box
+        sx={{
+          mt: 5,
+        }}
+      >
         <Typography variant="h3" gutterBottom>
           Application Details
         </Typography>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Teams:
           </Typography>
           <Typography variant="body1">
@@ -186,12 +214,19 @@ export default async function CCApplicantDetails(props) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Why these teams:
           </Typography>
           <Typography variant="body1">
@@ -199,23 +234,37 @@ export default async function CCApplicantDetails(props) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Why CC:
           </Typography>
           <Typography variant="body1">{currentApplicant?.whyCc}</Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Good Fit:
           </Typography>
           <Typography variant="body1">
@@ -223,12 +272,19 @@ export default async function CCApplicantDetails(props) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Participation Obstacles:
           </Typography>
           <Typography variant="body1">
@@ -236,23 +292,37 @@ export default async function CCApplicantDetails(props) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             New Ideas:
           </Typography>
           <Typography variant="body1">{currentApplicant?.ideas}</Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Other Bodies:
           </Typography>
           <Typography variant="body1">
@@ -260,12 +330,19 @@ export default async function CCApplicantDetails(props) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Design Experience:
           </Typography>
           <Typography variant="body1">
@@ -273,12 +350,19 @@ export default async function CCApplicantDetails(props) {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} sx={{
-          mb: 2
-        }}>
-          <Typography variant="body1" sx={{
-            color: "text.secondary"
-          }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Time of Submission:
           </Typography>
           <Typography variant="body1">

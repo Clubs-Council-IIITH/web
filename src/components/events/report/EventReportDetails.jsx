@@ -33,9 +33,11 @@ export function EventReportDetails({
   const showEditReportButton = canEditReport(event, eventReport, user);
 
   return (
-    <Box sx={{
-      p: 2
-    }}>
+    <Box
+      sx={{
+        p: 2,
+      }}
+    >
       <Grid
         container
         sx={{
@@ -55,7 +57,7 @@ export function EventReportDetails({
             Back to Event
           </Typography>
         </Button>
-        <Grid item sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
+        <Grid sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
           {showEditReportButton && (
             <Button
               component={Link}
@@ -88,31 +90,36 @@ export function EventReportDetails({
           sx={{
             mt: 1,
             mb: 2,
-            ml: 2
-          }}>
+            ml: 2,
+          }}
+        >
           Event Report
         </Typography>
       </Grid>
       <Grid container spacing={6}>
-        <Grid item xs={12} md={4} sm={6}>
+        <Grid xs={12} md={4} sm={6}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             Details
           </Typography>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Event Name</Typography>
             <Typography variant="body2">{event?.name || "None"}</Typography>
           </Box>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Organized By</Typography>
             <Typography variant="body2">
               <span>
@@ -121,23 +128,27 @@ export function EventReportDetails({
               <br />
               {event?.collabclubs
                 ?.map(
-                  (collab) => clubs?.find((club) => club?.cid === collab)?.name,
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
                 )
                 .join(", ")}
             </Typography>
           </Box>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Event Date</Typography>
             <Typography variant="body2">
               <DateTime dt={event?.datetimeperiod[0]} /> -{" "}
               <DateTime dt={event?.datetimeperiod[1]} />
             </Typography>
           </Box>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Report Submitted on</Typography>
             <Typography variant="body2">
               <DateTime dt={eventReport?.submittedTime} />
@@ -145,19 +156,21 @@ export function EventReportDetails({
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={4} sm={6}>
+        <Grid xs={12} md={4} sm={6}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             Attendance
           </Typography>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Batches Participated</Typography>
             <Typography variant="body2">
               {event?.audience
@@ -167,9 +180,11 @@ export function EventReportDetails({
                 : "None"}
             </Typography>
           </Box>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Mode</Typography>
             <Typography variant="body2">{event?.mode || "None"}</Typography>
           </Box>
@@ -178,9 +193,10 @@ export function EventReportDetails({
             spacing={2}
             sx={{
               mt: 0.1,
-              mb: 4
-            }}>
-            <Grid item xs={4}>
+              mb: 4,
+            }}
+          >
+            <Grid xs={4}>
               <Box>
                 <Typography variant="overline">Estimated</Typography>
                 <Typography variant="body2">
@@ -188,7 +204,7 @@ export function EventReportDetails({
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid xs={4}>
               <Box>
                 <Typography variant="overline">Attended</Typography>
                 <Typography variant="body2">
@@ -203,13 +219,13 @@ export function EventReportDetails({
                 variant="subtitle2"
                 gutterBottom
                 sx={{
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
                 }}
               >
                 EXTERNAL ATTENDANCE
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={4}>
+                <Grid xs={4}>
                   <Box>
                     <Typography variant="overline">Estimated</Typography>
                     <Typography variant="body2">
@@ -217,7 +233,7 @@ export function EventReportDetails({
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid xs={4}>
                   <Box>
                     <Typography variant="overline">Attended</Typography>
                     <Typography variant="body2">
@@ -230,21 +246,23 @@ export function EventReportDetails({
           ) : null}
         </Grid>
 
-        <Grid item xs={12} md={4} sm={6}>
+        <Grid xs={12} md={4} sm={6}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             Prizes
           </Typography>
           {eventReport?.prizes?.length > 0 && (
             <>
-              <Box sx={{
-                mt: 2
-              }}>
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
                 {eventReport?.prizes.map((prize, key) => (
                   <Chip
                     key={key}
@@ -253,9 +271,11 @@ export function EventReportDetails({
                   />
                 ))}
               </Box>
-              <Box sx={{
-                mt: 2
-              }}>
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
                 <Typography variant="overline">Prizes Breakdown</Typography>
                 <Typography variant="body2">
                   {eventReport?.prizesBreakdown
@@ -272,9 +292,11 @@ export function EventReportDetails({
               </Box>
             </>
           )}
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Winners</Typography>
             <Typography variant="body2">
               {eventReport?.winners
@@ -287,9 +309,11 @@ export function EventReportDetails({
                 : "None"}
             </Typography>
           </Box>
-          <Box sx={{
-            mt: 2
-          }}>
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography variant="overline">Photos/Videos Link</Typography>
             <Typography variant="body2">
               <a
@@ -308,17 +332,26 @@ export function EventReportDetails({
           </Box>
         </Grid>
       </Grid>
-      <Grid item xs={12} sx={{
-        mt: 3
-      }}>
-        <Typography variant="subtitle2" gutterBottom sx={{
-          textTransform: "uppercase"
-        }}>
+      <Grid
+        xs={12}
+        sx={{
+          mt: 3,
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          gutterBottom
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
           Summary of the event held
         </Typography>
-        <Box sx={{
-          mt: 2
-        }}>
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
           <Typography variant="body2">
             {eventReport?.summary
               ? eventReport?.summary?.split("\n").map((line, index) => (
@@ -333,12 +366,12 @@ export function EventReportDetails({
       </Grid>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
       <Grid container spacing={6}>
-        <Grid item xs={12} md={12} lg={6} sm={12}>
+        <Grid xs={12} md={12} lg={6} sm={12}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             Budget
@@ -349,17 +382,22 @@ export function EventReportDetails({
               editable={false}
             />
           ) : (
-            <Box sx={{
-              mt: 2
-            }}>None requested</Box>
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              None requested
+            </Box>
           )}
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               textTransform: "uppercase",
-              mt: 2
-            }}>
+              mt: 2,
+            }}
+          >
             Sponsor
           </Typography>
           {event?.sponsor?.length ? (
@@ -371,27 +409,33 @@ export function EventReportDetails({
               editable={false}
             />
           ) : (
-            <Box sx={{
-              mt: 2
-            }}>None requested</Box>
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              None requested
+            </Box>
           )}
         </Grid>
 
-        <Grid item xs={12} lg={2} md={6} sm={6}>
+        <Grid xs={12} lg={2} md={6} sm={6}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             Venue
           </Typography>
           {event?.location?.length ? (
             <>
-              <Box sx={{
-                mt: 2
-              }}>
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
                 {event?.location.map((venue, key) => (
                   <Chip
                     key={key}
@@ -404,9 +448,11 @@ export function EventReportDetails({
                   />
                 ))}
               </Box>
-              <Box sx={{
-                mt: 2
-              }}>
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
                 <Typography variant="overline">Equipment</Typography>
                 <Typography variant="body2">
                   {event?.equipment
@@ -419,9 +465,11 @@ export function EventReportDetails({
                     : "None"}
                 </Typography>
               </Box>
-              <Box sx={{
-                mt: 2
-              }}>
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
                 <Typography variant="overline">
                   Additional Information
                 </Typography>
@@ -438,17 +486,21 @@ export function EventReportDetails({
               </Box>
             </>
           ) : (
-            <Box sx={{
-              mt: 2
-            }}>None requested</Box>
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              None requested
+            </Box>
           )}
         </Grid>
-        <Grid item xs={12} lg={4} md={6} sm={6}>
+        <Grid xs={12} lg={4} md={6} sm={6}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             Report Submitted By
@@ -460,31 +512,43 @@ export function EventReportDetails({
           >
             <MemberListItem uid={eventReport?.submittedBy} />
           </CardActionArea>
-          <Typography variant="body2" sx={{
-            color: "text.secondary"
-          }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             ID No: {submittedUser?.data?.rollno || "None"}
           </Typography>
-          <Typography variant="body2" sx={{
-            color: "text.secondary"
-          }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
             Phone Number: {submittedUser?.data?.phone || "None"}
           </Typography>
-          <Grid item xs={12} sx={{
-            mt: 2
-          }}>
+          <Grid
+            xs={12}
+            sx={{
+              mt: 2,
+            }}
+          >
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
-                textTransform: "uppercase"
+                textTransform: "uppercase",
               }}
             >
               Feedback
             </Typography>
-            <Typography variant="body2" sx={{
-              color: "text.secondary"
-            }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "text.secondary",
+              }}
+            >
               {eventReport?.feedbackCc
                 ? eventReport?.feedbackCc?.split("\n").map((line, index) => (
                     <React.Fragment key={index}>

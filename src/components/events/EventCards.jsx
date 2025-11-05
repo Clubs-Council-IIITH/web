@@ -21,7 +21,7 @@ export function EventCards({ events, loading, noEventsMessage }) {
     <Grid container spacing={2}>
       {events?.length ? (
         events.map((event) => (
-          <Grid key={event._id} item xs={6} md={4} lg={3}>
+          <Grid key={event._id} xs={6} md={4} lg={3}>
             <EventCard
               _id={event._id}
               name={event.name}

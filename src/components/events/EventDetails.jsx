@@ -14,7 +14,7 @@ import Icon from "components/Icon";
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 const AddToCalendarBtn = dynamic(
   () => import("components/events/AddToCalendarBtn"),
-  { ssr: false },
+  { ssr: false }
 );
 
 export const getEventLocation = (event) => {
@@ -22,9 +22,7 @@ export const getEventLocation = (event) => {
     if (event.location.length > 0) {
       return event.location
         .map((l) =>
-          l === "other"
-            ? event.otherLocation || "Other"
-            : locationLabel(l).name,
+          l === "other" ? event.otherLocation || "Other" : locationLabel(l).name
         )
         .join(", ");
     } else {
@@ -38,7 +36,7 @@ export const getEventLocation = (event) => {
 export default function EventDetails({ event, showCode = false }) {
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
+      <Grid xs={12} md={6}>
         <Card variant="outlined">
           <Box sx={{ pt: "100%", position: "relative" }}>
             {event.poster ? (
@@ -59,20 +57,29 @@ export default function EventDetails({ event, showCode = false }) {
           </Box>
         </Card>
       </Grid>
-      <Grid item xs md>
-        <Stack direction="column" sx={{
-          p: 1
-        }}>
-          <Box sx={{
-            display: "flex"
-          }}>
+      <Grid xs md>
+        <Stack
+          direction="column"
+          sx={{
+            p: 1,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
             <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
             <Typography variant="body2">
               <DateTime dt={event.datetimeperiod[0]} />
             </Typography>
-            <Box sx={{
-              mx: 1
-            }}>-</Box>
+            <Box
+              sx={{
+                mx: 1,
+              }}
+            >
+              -
+            </Box>
             <Typography variant="body2">
               <DateTime dt={event.datetimeperiod[1]} />
             </Typography>
@@ -83,8 +90,9 @@ export default function EventDetails({ event, showCode = false }) {
             paragraph
             sx={{
               mt: 1,
-              mb: 0
-            }}>
+              mb: 0,
+            }}
+          >
             {event.name}
           </Typography>
           {showCode ? (
@@ -94,15 +102,18 @@ export default function EventDetails({ event, showCode = false }) {
                 color: "text.disabled",
                 fontFamily: "monospace",
                 mt: 0,
-                mb: 1.5
-              }}>
+                mb: 1.5,
+              }}
+            >
               #{event.code}
             </Typography>
           ) : null}
 
-          <Box sx={{
-            my: 1
-          }} />
+          <Box
+            sx={{
+              my: 1,
+            }}
+          />
 
           {event.collabclubs && event.collabclubs.length > 0 ? (
             <>
@@ -112,8 +123,9 @@ export default function EventDetails({ event, showCode = false }) {
               <Box
                 sx={{
                   display: "flex",
-                  flexWrap: "wrap"
-                }}>
+                  flexWrap: "wrap",
+                }}
+              >
                 <ClubButton clubid={event.clubid} />
                 {event.collabclubs.map((clubid) => (
                   <ClubButton clubid={clubid} />
@@ -128,8 +140,9 @@ export default function EventDetails({ event, showCode = false }) {
             sx={{
               display: "flex",
               mt: 4,
-              alignItems: "center"
-            }}>
+              alignItems: "center",
+            }}
+          >
             <Icon variant="location-on-outline-rounded" sx={{ mr: 2 }} />
             <Typography variant="body1">{getEventLocation(event)}</Typography>
           </Box>
@@ -138,8 +151,9 @@ export default function EventDetails({ event, showCode = false }) {
             sx={{
               display: "flex",
               mt: 3,
-              alignItems: "center"
-            }}>
+              alignItems: "center",
+            }}
+          >
             <Icon variant="group-outline-rounded" sx={{ mr: 2 }} />
             <AudienceChips audience={event.audience} />
           </Box>
@@ -149,8 +163,9 @@ export default function EventDetails({ event, showCode = false }) {
               display: "flex",
               mt: 2,
               alignItems: "center",
-              ml: -0.5
-            }}>
+              ml: -0.5,
+            }}
+          >
             <AddToCalendarBtn event={event} />
           </Box>
 

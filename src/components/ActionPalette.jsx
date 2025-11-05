@@ -9,19 +9,21 @@ export default function ActionPalette({
   rightJustifyMobile = "center",
 }) {
   return (
-    <Box sx={{
-      width: "100%"
-    }}>
+    <Box
+      sx={{
+        width: "100%",
+      }}
+    >
       <Grid
         container
         direction={{ xs: "column-reverse", md: "row" }}
         spacing={2}
         sx={{
           alignItems: "center",
-          justifyContent: "space-between"
-        }}>
+          justifyContent: "space-between",
+        }}
+      >
         <Grid
-          item
           container
           xs={12}
           md={6}
@@ -29,17 +31,17 @@ export default function ActionPalette({
           sx={{
             justifyContent: { xs: "center", md: "flex-start" },
             alignItems: "center",
-            my: 0.5
-          }}>
+            my: 0.5,
+          }}
+        >
           {left.map((Component, key) => (
-            <Grid item xs="auto">
+            <Grid xs="auto">
               <Component {...leftProps[key]} key={key} />
             </Grid>
           ))}
         </Grid>
 
         <Grid
-          item
           container
           xs={12}
           md={6}
@@ -47,14 +49,15 @@ export default function ActionPalette({
           sx={{
             justifyContent: { xs: rightJustifyMobile, md: "flex-end" },
             alignItems: "center",
-            my: 0.5
-          }}>
+            my: 0.5,
+          }}
+        >
           {right.map((Component, key) => (
-            <Grid item>
+            <Grid>
               <Component {...rightProps[key]} key={key} />
             </Grid>
           ))}
-          {downloadbtn ? <Grid item>{downloadbtn}</Grid> : ""}
+          {downloadbtn ? <Grid>{downloadbtn}</Grid> : ""}
         </Grid>
       </Grid>
       <Divider sx={{ borderStyle: "dashed", mt: 2, mb: 2 }} />

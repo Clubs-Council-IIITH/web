@@ -45,7 +45,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid xs={12}>
           <Controller
             name="sloComment"
             control={control}
@@ -74,10 +74,17 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
             )}
           />
         </Grid>
-        <Grid container item direction="row" xs={12} spacing={1} sx={{
-          pt: 3
-        }}>
-          <Grid item xs={4}>
+        <Grid
+          container
+          
+          direction="row"
+          xs={12}
+          spacing={1}
+          sx={{
+            pt: 3,
+          }}
+        >
+          <Grid xs={4}>
             <Button
               size="large"
               variant="contained"
@@ -92,7 +99,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               Reject
             </Button>
           </Grid>
-          <Grid item xs={4}>
+          <Grid xs={4}>
             <Button
               size="large"
               variant="outlined"
@@ -113,7 +120,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               confirmText="Yes, discard my changes"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid xs={4}>
             <Button
               size="large"
               variant="contained"

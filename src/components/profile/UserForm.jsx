@@ -102,20 +102,23 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       <Grid container spacing={4}>
         <Grid
           container
-          item
           xs={12}
           md={7}
           xl={8}
           spacing={3}
           sx={{
-            alignItems: "flex-start"
+            alignItems: "flex-start",
           }}
         >
-          <Grid container item>
-            <Grid container item spacing={2} sx={{
-              mt: 1
-            }}>
-              <Grid item xs={6}>
+          <Grid container>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                mt: 1,
+              }}
+            >
+              <Grid xs={6}>
                 <TextField
                   fullWidth
                   disabled
@@ -123,7 +126,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.firstName}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid xs={6}>
                 <TextField
                   fullWidth
                   disabled
@@ -131,7 +134,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.lastName}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <TextField
                   fullWidth
                   disabled
@@ -139,15 +142,15 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.email}
                 />
               </Grid>
-              <Grid container item xs={12} spacing={1}>
-                <Grid item>
+              <Grid container xs={12} spacing={1}>
+                <Grid>
                   <TextField
                     disabled
                     label="Batch"
                     value={defaultValues?.batch?.toUpperCase()}
                   />
                 </Grid>
-                <Grid item>
+                <Grid>
                   <TextField
                     disabled
                     label="Stream"
@@ -157,19 +160,20 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
                 textTransform: "uppercase",
                 color: "text.secondary",
-                mb: defaultValues?.phone ? 2 : 1
-              }}>
+                mb: defaultValues?.phone ? 2 : 1,
+              }}
+            >
               Details
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid xs={12}>
                 <Controller
                   name="phone"
                   control={control}
@@ -207,21 +211,28 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} sx={{
-          alignItems: "flex-start"
-        }}>
-          <Grid container item>
+        <Grid
+          container
+          xs
+          md
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+        >
+          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
                 textTransform: "uppercase",
-                color: "text.secondary"
-              }}>
+                color: "text.secondary",
+              }}
+            >
               Media
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid xs={12}>
                 <FileUpload
                   type="image"
                   name="img"
@@ -235,10 +246,16 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} sx={{
-              pt: 3
-            }}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              direction="row"
+              xs={12}
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+            >
+              <Grid xs={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -260,7 +277,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid xs={6}>
                 <Button
                   loading={loading}
                   type="submit"

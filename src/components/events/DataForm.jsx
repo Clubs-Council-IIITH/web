@@ -44,8 +44,9 @@ function DataClubSelect({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%"
-          }}>
+            height: "100%",
+          }}
+        >
           <CircularProgress />
         </Box>
       ) : clubs.length > 0 ? (
@@ -99,10 +100,17 @@ function DataClubSelect({
 function EventDatetimeInput({ control, watch, user }) {
   const startDateInput = watch("datetimeperiod.0");
   return (
-    <Grid container item direction="row" xs={12} spacing={1} sx={{
-      pt: 1
-    }}>
-      <Grid item xs={6}>
+    <Grid
+      container
+      
+      direction="row"
+      xs={12}
+      spacing={1}
+      sx={{
+        pt: 1,
+      }}
+    >
+      <Grid xs={6}>
         <Controller
           name="datetimeperiod.0"
           control={control}
@@ -140,7 +148,7 @@ function EventDatetimeInput({ control, watch, user }) {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid xs={6}>
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -280,27 +288,36 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Download Events Data
       </Typography>
-      <Grid container spacing={3} sx={{
-        alignItems: "flex-start"
-      }}>
-        <Grid container item>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Grid container>
           <Typography
             variant="subtitle2"
             sx={{
               textTransform: "uppercase",
               color: "text.secondary",
-              mb: 1.5
-            }}>
+              mb: 1.5,
+            }}
+          >
             {admin_roles.includes(user?.role)
               ? "Select Club/Student Body"
               : "Selected Club/Student Body"}
           </Typography>
-          <Grid item xs={12}>
+          <Grid xs={12}>
             {admin_roles.includes(user?.role) ? (
               <DataClubSelect
                 control={control}
@@ -326,27 +343,29 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           </Grid>
         </Grid>
-        <Grid container item>
+        <Grid container>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               textTransform: "uppercase",
-              color: "text.secondary"
-            }}>
+              color: "text.secondary",
+            }}
+          >
             Date Range
           </Typography>
           <EventDatetimeInput control={control} watch={watch} user={user} />
         </Grid>
         {admin_roles.includes(user?.role) ? (
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
               sx={{
                 textTransform: "uppercase",
                 color: "text.secondary",
-                mb: 1.5
-              }}>
+                mb: 1.5,
+              }}
+            >
               Events to Include
             </Typography>
             <Controller
@@ -365,14 +384,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             />
           </Grid>
         ) : null}
-        <Grid container item>
+        <Grid container>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               textTransform: "uppercase",
-              color: "text.secondary"
-            }}>
+              color: "text.secondary",
+            }}
+          >
             Fields to Include
           </Typography>
           <Controller
@@ -382,9 +402,14 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field, fieldState: { error } }) => (
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
-                  <Grid container item spacing={1} sx={{
-                    ml: 1
-                  }}>
+                  <Grid
+                    container
+                    
+                    spacing={1}
+                    sx={{
+                      ml: 1,
+                    }}
+                  >
                     {[
                       { fieldValue: "code", fieldName: "Event Code" },
                       { fieldValue: "name", fieldName: "Event Name" },
@@ -420,7 +445,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                             },
                           ]),
                     ].map(({ fieldValue, fieldName }) => (
-                      <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
+                      <Grid lg={2} md={3} sm={4} xs={6} key={fieldValue}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -456,10 +481,17 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           />
         </Grid>
       </Grid>
-      <Grid container item direction="row" xs={12} spacing={1} sx={{
-        pt: 3
-      }}>
-        <Grid item xs={6}>
+      <Grid
+        container
+        
+        direction="row"
+        xs={12}
+        spacing={1}
+        sx={{
+          pt: 3,
+        }}
+      >
+        <Grid xs={6}>
           <Button
             size="large"
             variant="outlined"
@@ -484,7 +516,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             confirmText="Yes, discard my changes"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid xs={6}>
           {allowed_roles.includes(user?.role) && (
             <Button
               loading={loading}

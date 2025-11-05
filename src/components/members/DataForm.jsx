@@ -48,8 +48,9 @@ function DataClubSelect({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%"
-          }}>
+            height: "100%",
+          }}
+        >
           <CircularProgress />
         </Box>
       ) : clubs.length > 0 ? (
@@ -253,27 +254,36 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Download Members Data
       </Typography>
-      <Grid container spacing={3} sx={{
-        alignItems: "flex-start"
-      }}>
-        <Grid container item>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Grid container>
           <Typography
             variant="subtitle2"
             sx={{
               textTransform: "uppercase",
               color: "text.secondary",
-              mb: 1.5
-            }}>
+              mb: 1.5,
+            }}
+          >
             {admin_roles.includes(user?.role)
               ? "Select Club/Student Body"
               : "Selected Club/Student Body"}
           </Typography>
-          <Grid item xs={12}>
+          <Grid xs={12}>
             {admin_roles.includes(user?.role) ? (
               <DataClubSelect
                 control={control}
@@ -298,14 +308,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           </Grid>
         </Grid>
-        <Grid container item>
+        <Grid container>
           <Typography
             variant="subtitle2"
             sx={{
               textTransform: "uppercase",
               color: "text.secondary",
-              mb: 1.5
-            }}>
+              mb: 1.5,
+            }}
+          >
             Members to Include
           </Typography>
           {(farewellTime && admin_roles.includes(user?.role)) ||
@@ -345,14 +356,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           )}
         </Grid>
         {typeMembers === "current" ? (
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
               sx={{
                 textTransform: "uppercase",
                 color: "text.secondary",
-                mb: 1.5
-              }}>
+                mb: 1.5,
+              }}
+            >
               Roles to Include
             </Typography>
             <Controller
@@ -376,22 +388,29 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         ) : null}
         {typeMembers === "past" && !clubid.includes("allclubs") ? (
-          <Grid container item>
-            <Grid container item>
+          <Grid container>
+            <Grid container>
               <Typography
                 variant="subtitle2"
                 sx={{
                   textTransform: "uppercase",
                   color: "text.secondary",
-                  mb: 1.5
-                }}>
+                  mb: 1.5,
+                }}
+              >
                 Period of Members to Include
               </Typography>
             </Grid>
-            <Grid container item direction="row" xs={12} spacing={1} sx={{
-              pt: 1
-            }}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              direction="row"
+              xs={12}
+              spacing={1}
+              sx={{
+                pt: 1,
+              }}
+            >
+              <Grid xs={6}>
                 <Controller
                   name="dateRolesStart"
                   control={control}
@@ -421,7 +440,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                   )}
                 ></Controller>
               </Grid>
-              <Grid item xs={6}>
+              <Grid xs={6}>
                 <Controller
                   name="dateRolesEnd"
                   control={control}
@@ -459,14 +478,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
         ) : null}
-        <Grid container item>
+        <Grid container>
           <Typography
             variant="subtitle2"
             sx={{
               textTransform: "uppercase",
               color: "text.secondary",
-              mb: 1.5
-            }}>
+              mb: 1.5,
+            }}
+          >
             Batches to Include
           </Typography>
           <Controller
@@ -483,7 +503,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       fieldName: batch,
                     })),
                   ].map(({ fieldValue, fieldName }) => (
-                    <Grid item lg={1} md={3} sm={4} xs={6} key={fieldValue}>
+                    <Grid lg={1} md={3} sm={4} xs={6} key={fieldValue}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -530,7 +550,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
                   {["UG", "PG"].map((batch) => (
-                    <Grid item lg={1} md={3} sm={4} xs={6} key={batch}>
+                    <Grid lg={1} md={3} sm={4} xs={6} key={batch}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -567,14 +587,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           />
         </Grid>
-        <Grid container item>
+        <Grid container>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               textTransform: "uppercase",
-              color: "text.secondary"
-            }}>
+              color: "text.secondary",
+            }}
+          >
             Fields to Include
           </Typography>
           <Controller
@@ -584,9 +605,13 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field, fieldState: { error } }) => (
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
-                  <Grid container item spacing={1} sx={{
-                    ml: 1
-                  }}>
+                  <Grid
+                    container
+                    spacing={1}
+                    sx={{
+                      ml: 1,
+                    }}
+                  >
                     {[
                       { fieldValue: "clubid", fieldName: "Club Name" },
                       { fieldValue: "uid", fieldName: "Member Name" },
@@ -600,7 +625,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       { fieldValue: "roles", fieldName: "Roles" },
                       { fieldValue: "poc", fieldName: "Is POC" },
                     ].map(({ fieldValue, fieldName }) => (
-                      <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
+                      <Grid lg={2} md={3} sm={4} xs={6} key={fieldValue}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -636,10 +661,16 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           />
         </Grid>
       </Grid>
-      <Grid container item direction="row" xs={12} spacing={1} sx={{
-        pt: 3
-      }}>
-        <Grid item xs={6}>
+      <Grid
+        container
+        direction="row"
+        xs={12}
+        spacing={1}
+        sx={{
+          pt: 3,
+        }}
+      >
+        <Grid xs={6}>
           <Button
             size="large"
             variant="outlined"
@@ -664,7 +695,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             confirmText="Yes, discard my changes"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid xs={6}>
           {allowed_roles.includes(user?.role) && (
             <Button
               loading={loading}

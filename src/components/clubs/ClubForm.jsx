@@ -206,107 +206,117 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
-        <Grid container item xs={12} md={7} xl={8} spacing={3}>
-          <Grid container item>
+        <Grid container xs={12} md={7} xl={8} spacing={3}>
+          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
                 textTransform: "uppercase",
                 color: "text.secondary",
-                mb: 2
-              }}>
+                mb: 2,
+              }}
+            >
               Details
             </Typography>
-            <Grid container item spacing={2}>
+            <Grid container spacing={2}>
               {/* show club code input only when creating a new club */}
               {!defaultValues.cid ? (
-                <Grid item xs={12}>
+                <Grid xs={12}>
                   <ClubCodeInput control={control} />
                 </Grid>
               ) : null}
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubNameInput
                   control={control}
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubEmailInput
                   control={control}
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubCategorySelect
                   control={control}
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubTaglineInput control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubDescriptionInput control={control} />
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
                 textTransform: "uppercase",
                 color: "text.secondary",
-                mb: 2
-              }}>
+                mb: 2,
+              }}
+            >
               Socials
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid xs={12}>
                 <ClubSocialInput name="website" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="instagram" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="facebook" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="twitter" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="linkedin" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="youtube" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="discord" control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <ClubSocialInput name="whatsapp" control={control} />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} sx={{
-          alignItems: "flex-start"
-        }}>
-          <Grid container item>
+        <Grid
+          container
+          
+          xs
+          md
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+        >
+          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
                 textTransform: "uppercase",
-                color: "text.secondary"
-              }}>
+                color: "text.secondary",
+              }}
+            >
               Media
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid xs={12}>
                 <FileUpload
                   type="image"
                   name="logo"
@@ -318,7 +328,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   warnSizeMB={logo_warnSizeMB}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <FileUpload
                   type="image"
                   name="banner"
@@ -330,7 +340,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   warnSizeMB={banner_warnSizeMB}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <FileUpload
                   type="image"
                   name="bannerSquare"
@@ -344,10 +354,17 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} sx={{
-              pt: 3
-            }}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              
+              direction="row"
+              xs={12}
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+            >
+              <Grid xs={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -369,7 +386,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid xs={6}>
                 <Button
                   loading={loading}
                   type="submit"

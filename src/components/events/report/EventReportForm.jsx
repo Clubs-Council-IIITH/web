@@ -196,14 +196,17 @@ export default function EventReportForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={4} sx={{
-        alignItems: "flex-start"
-      }}>
-        <Grid container item xs={12} md={7} xl={8} spacing={3}>
-          <Grid container item>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Grid container xs={12} md={7} xl={8} spacing={3}>
+          <Grid container>
             <Grid
               container
-              item
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography
@@ -212,12 +215,13 @@ export default function EventReportForm({
                 sx={{
                   textTransform: "uppercase",
                   color: "text.secondary",
-                  mb: 2
-                }}>
+                  mb: 2,
+                }}
+              >
                 Details
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <TextField
                 label="Name"
                 value={defaultValues?.name}
@@ -225,11 +229,14 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6} xl={6}>
+                <Grid xs={12} md={6} xl={6}>
                   <DateTimePicker
                     label="Starts Date"
                     viewRenderers={{
@@ -248,7 +255,7 @@ export default function EventReportForm({
                     format="DD/MM/YYYY hh:mm A"
                   />
                 </Grid>
-                <Grid item xs={12} md={6} xl={6}>
+                <Grid xs={12} md={6} xl={6}>
                   <DateTimePicker
                     label="End Date"
                     viewRenderers={{
@@ -269,9 +276,12 @@ export default function EventReportForm({
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <FormControl fullWidth disabled>
                 <InputLabel>Organized By</InputLabel>
                 <Select
@@ -304,9 +314,12 @@ export default function EventReportForm({
                 ></Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <Controller
                 name="eventSummary"
                 control={control}
@@ -334,9 +347,12 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <Controller
                 name="mediaLink"
                 control={control}
@@ -362,9 +378,12 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <SubmittedBy
                 control={control}
                 watch={watch}
@@ -375,13 +394,18 @@ export default function EventReportForm({
             </Grid>
           </Grid>
         </Grid>
-        <Grid container item xs md spacing={3} sx={{
-          alignItems: "flex-start"
-        }}>
-          <Grid container item>
+        <Grid
+          container
+          xs
+          md
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+        >
+          <Grid container>
             <Grid
               container
-              item
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography
@@ -390,12 +414,13 @@ export default function EventReportForm({
                 sx={{
                   textTransform: "uppercase",
                   color: "text.secondary",
-                  mb: 2
-                }}>
+                  mb: 2,
+                }}
+              >
                 Attendance
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <TextField
                 label="Expected Participation"
                 value={defaultValues?.population}
@@ -404,12 +429,12 @@ export default function EventReportForm({
               />
             </Grid>
             <Grid
-              item
               xs={12}
               sx={{
                 mt: 2,
-                mb: 3
-              }}>
+                mb: 3,
+              }}
+            >
               <Controller
                 name="actualAttendance"
                 control={control}
@@ -430,7 +455,7 @@ export default function EventReportForm({
             </Grid>
             {defaultValues?.externalPopulation ? (
               <>
-                <Grid item xs={12}>
+                <Grid xs={12}>
                   <TextField
                     label="Expected External Participation"
                     value={defaultValues?.population}
@@ -438,9 +463,12 @@ export default function EventReportForm({
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sx={{
-                  mt: 2
-                }}>
+                <Grid
+                  xs={12}
+                  sx={{
+                    mt: 2,
+                  }}
+                >
                   <Controller
                     name="actualExternalAttendance"
                     control={control}
@@ -464,9 +492,12 @@ export default function EventReportForm({
               </>
             ) : null}
 
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <Controller
                 name="prizes"
                 control={control}
@@ -508,9 +539,12 @@ export default function EventReportForm({
             </Grid>
             {prizesInput?.length != 0 && (
               <>
-                <Grid item xs={12} sx={{
-                  mt: 2
-                }}>
+                <Grid
+                  xs={12}
+                  sx={{
+                    mt: 2,
+                  }}
+                >
                   <Controller
                     name="prizesBreakdown"
                     control={control}
@@ -529,9 +563,12 @@ export default function EventReportForm({
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} sx={{
-                  mt: 2
-                }}>
+                <Grid
+                  xs={12}
+                  sx={{
+                    mt: 2,
+                  }}
+                >
                   <Controller
                     name="winnersDetails"
                     control={control}
@@ -554,9 +591,12 @@ export default function EventReportForm({
                 </Grid>
               </>
             )}
-            <Grid item xs={12} sx={{
-              mt: 2
-            }}>
+            <Grid
+              xs={12}
+              sx={{
+                mt: 2,
+              }}
+            >
               <Controller
                 name="feedback"
                 control={control}
@@ -577,10 +617,16 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid container item direction="row" xs={12} spacing={1} sx={{
-              pt: 3
-            }}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              direction="row"
+              xs={12}
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+            >
+              <Grid xs={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -602,7 +648,7 @@ export default function EventReportForm({
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid xs={6}>
                 <Button
                   loading={loading}
                   size="large"
@@ -685,8 +731,9 @@ function SubmittedBy({
                   py: 25,
                   width: "100%",
                   display: "flex",
-                  justifyContent: "center"
-                }}>
+                  justifyContent: "center",
+                }}
+              >
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
@@ -713,9 +760,11 @@ function SubmittedBy({
         )}
       />
       {disabled || members.length === 0 || !submittedBy || hasPhone ? null : (
-        <Box sx={{
-          mt: 2
-        }}>
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
           <Controller
             name="submittedBy_phone"
             defaultValue={""}
