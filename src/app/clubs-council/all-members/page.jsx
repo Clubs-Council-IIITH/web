@@ -15,7 +15,7 @@ export const metadata = {
 export default async function AllMembers() {
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: {
-      cid: "cc",
+      cid: "clubs",
     },
   });
 
@@ -65,7 +65,7 @@ export default async function AllMembers() {
             }
           })
           ?.map((year) => (
-            <>
+            <div key={year}>
               <Divider textAlign="left" sx={{ mb: 2 }}>
                 <Typography variant="h5" sx={{
                   textTransform: "uppercase"
@@ -74,7 +74,7 @@ export default async function AllMembers() {
                 </Typography>
               </Divider>
               <LocalUsersGrid users={targetMembers[year]} />
-            </>
+            </div>
           ))
       ) : (
         <center>

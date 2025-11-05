@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ButtonLink from "components/Link";
 
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -48,7 +48,7 @@ export default async function MemberCard({ uid, poc, roles }) {
       sx={{ backgroundColor: "inherit", border: "none", boxShadow: 0 }}
     >
       <CardActionArea
-        component={clickable ? Link : "div"}
+        component={clickable ? ButtonLink : "div"}
         href={`/profile/${uid}`}
         disabled={userProfile === null}
         sx={{
@@ -90,9 +90,12 @@ export default async function MemberCard({ uid, poc, roles }) {
               color="error.main"
               mr={1}
             />
-            <Typography variant="subtitle2" sx={{
-              fontWeight: 400
-            }}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                fontWeight: 400,
+              }}
+            >
               Point of Contact
             </Typography>
           </Box>
@@ -115,8 +118,9 @@ export default async function MemberCard({ uid, poc, roles }) {
               key={key}
               sx={{
                 mt: 0.5,
-                textAlign: "center"
-              }}>
+                textAlign: "center",
+              }}
+            >
               <Typography
                 variant="body2"
                 sx={{ display: "inline-block", color: "text.secondary" }}
@@ -128,8 +132,9 @@ export default async function MemberCard({ uid, poc, roles }) {
                 sx={{
                   color: "grey.400",
                   ml: 0.5,
-                  display: "inline-block"
-                }}>
+                  display: "inline-block",
+                }}
+              >
                 ({role.startYear} - {role.endYear || "present"})
               </Typography>
             </Box>

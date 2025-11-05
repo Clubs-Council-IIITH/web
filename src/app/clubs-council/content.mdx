@@ -34,9 +34,14 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
 
 </Typography>
 
-<Box my={3}>
+<Box sx={{ my: 3, width: "100%" }}>
   <Grid container spacing={2}>
-    <Grid xs={12} md={4}>
+    <Grid
+      size={{
+        xs: 12,
+        md: 4,
+      }}
+    >
       <Statistic
         color="success"
         icon="groups-3-outline-rounded"
@@ -45,7 +50,12 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
         sx={{ height: 200, p: 3 }}
       />
     </Grid>
-    <Grid xs={12} md={4}>
+    <Grid
+      size={{
+        xs: 12,
+        md: 4,
+      }}
+    >
       <Statistic
         color="error"
         icon="school-outline-rounded"
@@ -54,7 +64,12 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
         sx={{ height: 200, p: 3 }}
       />
     </Grid>
-    <Grid xs={12} md={4}>
+    <Grid
+      size={{
+        xs: 12,
+        md: 4,
+      }}
+    >
       <Statistic
         color="primary"
         icon="map-outline-rounded"
@@ -75,15 +90,20 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
   Students across all UG/PG batches engage in the events, which tells how lively
   the campus life is! There are 2 Affinity Groups & 23 Clubs at IIITH, divided
   into technical and cultural categories.
-  <Box my={2} />
+  <Box sx={{ my: 2 }} />
   Clubs on campus are run by students, for the students. Club activities help
   develop new hobbies and interests in students and thereby contributing to the
   all around development of the students.
 </Typography>
 
-<Box my={3}>
+<Box sx={{ my: 3, width: "100%" }}>
   <Grid container spacing={2}>
-    <Grid xs={12} md={4}>
+    <Grid
+      size={{
+        xs: 12,
+        md: 4,
+      }}
+    >
       <Statistic
         color="info"
         icon="component-exchange"
@@ -92,7 +112,12 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
         sx={{ height: 200, p: 3 }}
       />
     </Grid>
-    <Grid xs={12} md={4}>
+    <Grid
+      size={{
+        xs: 12,
+        md: 4,
+      }}
+    >
       <Statistic
         color="warning"
         icon="music-note-rounded"
@@ -101,7 +126,12 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
         sx={{ height: 200, p: 3 }}
       />
     </Grid>
-    <Grid xs={12} md={4}>
+    <Grid
+      size={{
+        xs: 12,
+        md: 4,
+      }}
+    >
       <Statistic
         color="secondary"
         icon="psychology-rounded"
@@ -113,11 +143,21 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
   </Grid>
 </Box>
 
-<Typography variant="h3" mt={5}>
+<Typography
+  variant="h3"
+  sx={{
+    mt: 5,
+  }}
+>
   Team @ Clubs Council
 </Typography>
 
-<Stack direction="row" mb={2}>
+<Stack
+  direction="row"
+  sx={{
+    mb: 2,
+  }}
+>
   ### Executive Board
   <Box sx={{ flexGrow: 1 }} />
   <Button
@@ -134,7 +174,14 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
 </Stack>
 {props.ccMembers}
 
-<Stack direction="row" pt={2} mb={2} mt={3}>
+<Stack
+  direction="row"
+  sx={{
+    pt: 2,
+    mb: 2,
+    mt: 3,
+  }}
+>
   ### Advisory Board
   <Box sx={{ flexGrow: 1 }} />
   <Button
@@ -151,7 +198,14 @@ The primary aim of the Clubs Council is to ensure that all student-driven organi
 </Stack>
 {props.advisoryMembers}
 
-<Stack direction="row" pt={2} mb={2} mt={3}>
+<Stack
+  direction="row"
+  sx={{
+    pt: 2,
+    mb: 2,
+    mt: 3,
+  }}
+>
   ### Extended Team
   <Box sx={{ flexGrow: 1 }} />
   <Button
