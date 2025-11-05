@@ -8,18 +8,18 @@ import Statistic from "components/Statistic";
 import Icon from "components/Icon";
 
 // carousel images
-// import carousel1 from "/public/assets/img/carousel/1.jpg";
-// // import carousel2 from "/public/assets/img/carousel/2.jpg";
-// import carousel3 from "/public/assets/img/carousel/3.jpg";
-// import carousel4 from "/public/assets/img/carousel/4.jpg";
-// import carousel5 from "/public/assets/img/carousel/5.jpg";
-// import carousel6 from "/public/assets/img/carousel/6.jpg";
-// import carousel7 from "/public/assets/img/carousel/7.jpg";
-// import carousel8 from "/public/assets/img/carousel/8.jpg";
-// import carousel9 from "/public/assets/img/carousel/9.webp";
-// import carousel10 from "/public/assets/img/carousel/10.jpg";
-// // import carousel11 from "/public/assets/img/carousel/11.jpg";
-// import carousel12 from "/public/assets/img/carousel/12.jpg";
+import carousel1 from "/public/assets/img/carousel/1.jpg";
+// import carousel2 from "/public/assets/img/carousel/2.jpg";
+import carousel3 from "/public/assets/img/carousel/3.jpg";
+import carousel4 from "/public/assets/img/carousel/4.jpg";
+import carousel5 from "/public/assets/img/carousel/5.jpg";
+import carousel6 from "/public/assets/img/carousel/6.jpg";
+import carousel7 from "/public/assets/img/carousel/7.jpg";
+import carousel8 from "/public/assets/img/carousel/8.jpg";
+import carousel9 from "/public/assets/img/carousel/9.webp";
+import carousel10 from "/public/assets/img/carousel/10.jpg";
+// import carousel11 from "/public/assets/img/carousel/11.jpg";
+import carousel12 from "/public/assets/img/carousel/12.jpg";
 import Gallery from "./gallery/page";
 
 export const metadata = {
@@ -117,62 +117,52 @@ export default function Home() {
 
 const carouselItems = [
   {
-    // image: carousel1,
-    image: "/assets/img/carousel/1.jpg",
+    image: carousel1,
     title: "Clubs at IIIT",
     description: "Explore your student life beyond the classroom.",
   },
   {
-    // image: carousel12,
-    image: "/assets/img/carousel/12.jpg",
+    image: carousel12,
     title: "Experience IIIT",
     description: "Expand your mind, explore your passion.",
   },
   {
-    // image: carousel3,
-    image: "/assets/img/carousel/3.jpg",
+    image: carousel3,
     title: "Success Stories",
     description: "Witness legends in the making.",
   },
   {
-    // image: carousel4,
-    image: "/assets/img/carousel/4.jpg",
+    image: carousel4,
     title: "Perform Together",
     description: "Let the beat take over.",
   },
   {
-    // image: carousel6,
-    image: "/assets/img/carousel/6.jpg",
+    image: carousel6,
     title: "Connect IIIT",
     description: "Come together to learn, work, live and play.",
   },
   {
-    // image: carousel5,
-    image: "/assets/img/carousel/5.jpg",
+    image: carousel5,
     title: "Campus Life",
     description: "A vibrant residential community.",
   },
   {
-    // image: carousel7,
-    image: "/assets/img/carousel/7.jpg",
+    image: carousel7,
     title: "Artistry",
     description: "Unleash your creativity.",
   },
   {
-    // image: carousel8,
-    image: "/assets/img/carousel/8.jpg",
+    image: carousel8,
     title: "Challengers",
     description: "Up the potential for fun.",
   },
   {
-    // image: carousel9,
-    image: "/assets/img/carousel/9.webp",
+    image: carousel9,
     title: "Unrestricted Fun!",
     description: "Join in on fun events!",
   },
   {
-    // image: carousel10,
-    image: "/assets/img/carousel/10.jpg",
+    image: carousel10,
     title: "Life at IIIT",
     description: "Eat. Sleep. Code? Not Quite.",
   },
