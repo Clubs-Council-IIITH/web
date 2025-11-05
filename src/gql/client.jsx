@@ -18,6 +18,7 @@ const makeClient = async () => {
       cache: "no-store",
       credentials: "include",
       headers: {
+        "content-type": "application/json",
         ...(cookieHeader ? { cookie: cookieHeader } : {}),
       },
     },
