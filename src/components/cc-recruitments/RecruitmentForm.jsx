@@ -212,7 +212,14 @@ export default function RecruitmentForm({ user = {} }) {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={4}>
-            <Grid container xs={12} md={12} xl={12} spacing={3}>
+            <Grid
+              container
+              spacing={3}
+              size={{
+                xs: 12,
+                md: 12,
+                xl: 12
+              }}>
               <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
@@ -226,10 +233,20 @@ export default function RecruitmentForm({ user = {} }) {
                   User Details
                 </Typography>
                 <Grid container spacing={4}>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     <MemberUserInput user={user} />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     <TextField
                       label="Roll No"
                       variant="outlined"
@@ -239,7 +256,12 @@ export default function RecruitmentForm({ user = {} }) {
                       disabled
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     <TextField
                       label="Batch"
                       variant="outlined"
@@ -249,7 +271,12 @@ export default function RecruitmentForm({ user = {} }) {
                       disabled
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     <TextField
                       label="Stream"
                       variant="outlined"
@@ -259,7 +286,12 @@ export default function RecruitmentForm({ user = {} }) {
                       disabled
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {user?.phone ? (
                       <TextField
                         label="Phone number"
@@ -373,7 +405,12 @@ export default function RecruitmentForm({ user = {} }) {
                     pt: 3,
                   }}
                 >
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     <Controller
                       name="teams"
                       control={control}
@@ -424,7 +461,12 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -482,7 +524,12 @@ export default function RecruitmentForm({ user = {} }) {
                   Other Details
                 </Typography>
                 <Grid container spacing={4}>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -526,7 +573,12 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -570,7 +622,12 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -613,7 +670,12 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -658,7 +720,12 @@ export default function RecruitmentForm({ user = {} }) {
                       )}
                     />
                   </Grid>
-                  <Grid xs={12} md={12} xl={12}>
+                  <Grid
+                    size={{
+                      xs: 12,
+                      md: 12,
+                      xl: 12
+                    }}>
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -703,7 +770,12 @@ export default function RecruitmentForm({ user = {} }) {
                     />
                   </Grid>
                   {teams?.includes("Design") && (
-                    <Grid xs={12} md={12} xl={12}>
+                    <Grid
+                      size={{
+                        xs: 12,
+                        md: 12,
+                        xl: 12
+                      }}>
                       {isDesktop ? null : (
                         <Typography
                           variant="subtitle2"
@@ -804,13 +876,13 @@ export default function RecruitmentForm({ user = {} }) {
               container
               
               direction="row"
-              xs={12}
               spacing={1}
               sx={{
                 pt: 3,
               }}
+              size={12}
             >
-              <Grid xs={6}>
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -832,7 +904,7 @@ export default function RecruitmentForm({ user = {} }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid xs={6}>
+              <Grid size={6}>
                 <Button
                   loading={loading}
                   type="submit"

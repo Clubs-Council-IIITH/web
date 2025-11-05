@@ -151,7 +151,7 @@ export default function HolidayForm({
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Controller
               name="name"
               control={control}
@@ -179,7 +179,11 @@ export default function HolidayForm({
               )}
             />
           </Grid>
-          <Grid xs={12} md={6}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6
+            }}>
             <Controller
               name="date"
               control={control}
@@ -235,13 +239,13 @@ export default function HolidayForm({
           <Grid
             container
             direction="row"
-            xs={12}
             spacing={1}
             sx={{
               pt: 3,
             }}
+            size={12}
           >
-            <Grid xs={6}>
+            <Grid size={6}>
               <Button
                 size="large"
                 variant="outlined"
@@ -263,7 +267,7 @@ export default function HolidayForm({
                 confirmText="Yes, discard my changes"
               />
             </Grid>
-            <Grid xs={6}>
+            <Grid size={6}>
               <Button
                 type="submit"
                 size="large"

@@ -118,7 +118,7 @@ export default async function Profile(props) {
           mt: 4,
         }}
       >
-        <Grid xs={12}>
+        <Grid size={12}>
           <Stack
             direction={{ xs: "column", lg: "row" }}
             spacing={4}
@@ -161,24 +161,25 @@ export default async function Profile(props) {
 
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
-          <>
+          (<>
             <Grid
               container
-              xs
               spacing={2}
               sx={{
                 mt: 5,
               }}
+              size="grow"
             >
               <UserDetails user={user} />
             </Grid>
             <Grid
-              xs={12}
-              lg={9}
               sx={{
                 mt: { xs: 2, lg: 5 },
               }}
-            >
+              size={{
+                xs: 12,
+                lg: 9
+              }}>
               <Stack direction="column" spacing={2}>
                 <Typography
                   variant="subtitle2"
@@ -191,7 +192,7 @@ export default async function Profile(props) {
                 <UserMemberships rows={memberships} />
               </Stack>
             </Grid>
-          </>
+          </>)
         ) : null}
       </Grid>
     </Container>

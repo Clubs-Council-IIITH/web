@@ -70,7 +70,7 @@ export default async function ManageMember(props) {
             mt: 4,
           }}
         >
-          <Grid xs={12}>
+          <Grid size={12}>
             <Stack
               direction={{ xs: "column", lg: "row" }}
               spacing={4}
@@ -103,13 +103,13 @@ export default async function ManageMember(props) {
           </Grid>
           <Grid
             container
-            xs
             spacing={1}
             sx={{
               mt: 5,
             }}
+            size="grow"
           >
-            <Grid xs>
+            <Grid size="grow">
               <Typography
                 variant="subtitle2"
                 gutterBottom
@@ -128,7 +128,7 @@ export default async function ManageMember(props) {
                 {member.poc ? "Yes" : "No"}
               </Typography>
             </Grid>
-            <Grid xs>
+            <Grid size="grow">
               <Typography
                 variant="subtitle2"
                 gutterBottom
@@ -147,7 +147,7 @@ export default async function ManageMember(props) {
               mt: 3,
             }}
           >
-            <Grid xs={12}>
+            <Grid size={12}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
@@ -169,13 +169,17 @@ export default async function ManageMember(props) {
           </Grid>
           <Grid
             container
-            xs
             spacing={1}
             sx={{
               mt: 5,
             }}
+            size="grow"
           >
-            <Grid xs={12} md={6}>
+            <Grid
+              size={{
+                xs: 12,
+                md: 6
+              }}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
@@ -197,7 +201,11 @@ export default async function ManageMember(props) {
                   : "Information Not Available"}
               </Typography>
             </Grid>
-            <Grid xs={12} md={6}>
+            <Grid
+              size={{
+                xs: 12,
+                md: 6
+              }}>
               <Typography
                 variant="subtitle2"
                 gutterBottom

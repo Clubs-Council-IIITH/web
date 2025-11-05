@@ -70,12 +70,13 @@ export default function Footer() {
       <Divider sx={{ py: 4 }} />
       <Grid container sx={{ py: 5 }} spacing={2} justifyContent="space-between">
         <Grid
-          xs={12}
-          lg
           display="flex"
           alignItems="center"
           justifyContent={isDesktop ? "flex-start" : "center"}
-        >
+          size={{
+            xs: 12,
+            lg: "grow"
+          }}>
           <Box sx={{ mr: 3 }}>
             <Link href={IIIT_MAIN_URL} target="_blank" rel="noreferrer">
               <Image
@@ -104,13 +105,13 @@ export default function Footer() {
           </Box>
         </Grid>
         <Grid
-          
-          xs={12}
-          lg
           display="flex"
           alignItems="center"
           justifyContent={isDesktop ? "flex-end" : "center"}
-        >
+          size={{
+            xs: 12,
+            lg: "grow"
+          }}>
           {socialsData.map((social, index) => (
             <IconButton
               key={index}
@@ -126,7 +127,6 @@ export default function Footer() {
           ))}
         </Grid>
       </Grid>
-
       {isDesktop ? (
         <Stack direction="row" spacing={1}>
           <Typography

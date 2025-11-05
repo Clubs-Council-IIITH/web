@@ -380,7 +380,14 @@ export default function EventForm({
           alignItems: "flex-start",
         }}
       >
-        <Grid container xs={12} md={7} xl={8} spacing={3}>
+        <Grid
+          container
+          spacing={3}
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8
+          }}>
           <Grid container>
             <Grid
               container
@@ -428,7 +435,7 @@ export default function EventForm({
             </Grid>
             <Grid container spacing={2}>
               {admin_roles.includes(user?.role) ? (
-                <Grid xs={12}>
+                <Grid size={12}>
                   <EventClubSelect
                     control={control}
                     disabled={
@@ -441,7 +448,7 @@ export default function EventForm({
                 </Grid>
               ) : null}
               {collabEvent ? (
-                <Grid xs={12}>
+                <Grid size={12}>
                   <EventCollabClubSelect
                     control={control}
                     disabled={
@@ -455,7 +462,7 @@ export default function EventForm({
                   />
                 </Grid>
               ) : null}
-              <Grid xs={12}>
+              <Grid size={12}>
                 <EventNameInput
                   control={control}
                   disabled={
@@ -465,7 +472,7 @@ export default function EventForm({
                   }
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <EventDatetimeInput
                   control={control}
                   watch={watch}
@@ -480,14 +487,14 @@ export default function EventForm({
                   clubs={clubs}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <EventAudienceSelect control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <EventDescriptionInput control={control} />
               </Grid>
               {user?.role === "club" ? (
-                <Grid xs={12}>
+                <Grid size={12}>
                   <EventPOC
                     control={control}
                     watch={watch}
@@ -502,7 +509,7 @@ export default function EventForm({
                   />
                 </Grid>
               ) : user?.role === "cc" ? (
-                <Grid xs={12}>
+                <Grid size={12}>
                   <EventPOC
                     control={control}
                     watch={watch}
@@ -532,7 +539,7 @@ export default function EventForm({
               Budget
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <EventBudgetTable
                   control={control}
                   disabled={
@@ -573,7 +580,7 @@ export default function EventForm({
             />
             {haveSponsor ? (
               <Grid container spacing={2}>
-                <Grid xs={12}>
+                <Grid size={12}>
                   <EventSponsorTable
                     control={control}
                     disabled={
@@ -591,13 +598,14 @@ export default function EventForm({
 
         <Grid
           container
-          xs
-          md
           spacing={3}
           sx={{
             alignItems: "flex-start",
           }}
-        >
+          size={{
+            xs: "grow",
+            md: "grow"
+          }}>
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -610,7 +618,7 @@ export default function EventForm({
               Venue
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <EventVenueInput
                   control={control}
                   watch={watch}
@@ -639,7 +647,7 @@ export default function EventForm({
               Media
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <FileUpload
                   type="image"
                   name="poster"
@@ -657,13 +665,13 @@ export default function EventForm({
           <Grid
             container
             direction="row"
-            xs={12}
             spacing={1}
             sx={{
               pt: 3,
             }}
+            size={12}
           >
-            <Grid xs={6}>
+            <Grid size={6}>
               <Button
                 size="large"
                 variant="outlined"
@@ -685,7 +693,7 @@ export default function EventForm({
                 confirmText="Yes, discard my changes"
               />
             </Grid>
-            <Grid xs={6}>
+            <Grid size={6}>
               <SubmitButton
                 mode="draft"
                 loading={loading}
@@ -697,7 +705,7 @@ export default function EventForm({
                 admin_roles={admin_roles}
               />
             </Grid>
-            <Grid xs={12}>
+            <Grid size={12}>
               <SubmitButton
                 mode="submit"
                 loading={loading}
@@ -985,7 +993,12 @@ function EventDatetimeInput({
 
   return (
     <Grid container spacing={2}>
-      <Grid xs={12} md={6} xl={4}>
+      <Grid
+        size={{
+          xs: 12,
+          md: 6,
+          xl: 4
+        }}>
         <Controller
           name="datetimeperiod.0"
           control={control}
@@ -1029,7 +1042,12 @@ function EventDatetimeInput({
           )}
         />
       </Grid>
-      <Grid xs={12} md={6} xl={4}>
+      <Grid
+        size={{
+          xs: 12,
+          md: 6,
+          xl: 4
+        }}>
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -1086,7 +1104,11 @@ function EventDatetimeInput({
         <>
           {existingEvents?.length ? (
             filterEvents(existingEvents, startDateInput, endDateInput) ? (
-              <Grid xs={8} xl={4}>
+              <Grid
+                size={{
+                  xs: 8,
+                  xl: 4
+                }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -1247,7 +1269,7 @@ function EventVenueInput({
 
   return (
     <Grid container spacing={2}>
-      <Grid xs={12}>
+      <Grid size={12}>
         <Controller
           name="mode"
           control={control}
@@ -1275,26 +1297,21 @@ function EventVenueInput({
         />
       </Grid>
       {/* show venue selector if event is hybrid or offline*/}
-      <Grid xs={12}>
+      <Grid size={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
-          startDateInput && endDateInput ? (
-            <EventLocationInput
-              control={control}
-              watch={watch}
-              startDateInput={startDateInput}
-              endDateInput={endDateInput}
-              disabled={disabled}
-              eventid={eventid}
-            />
-          ) : (
-            <FormHelperText>
-              Enter start and end dates to get available venues
-            </FormHelperText>
-          )
+          (startDateInput && endDateInput ? (<EventLocationInput
+            control={control}
+            watch={watch}
+            startDateInput={startDateInput}
+            endDateInput={endDateInput}
+            disabled={disabled}
+            eventid={eventid}
+          />) : (<FormHelperText>Enter start and end dates to get available venues
+                        </FormHelperText>))
         ) : null}
       </Grid>
-      <Grid xs={12}>
+      <Grid size={12}>
         <Controller
           name="population"
           control={control}
@@ -1345,7 +1362,7 @@ function EventVenueInput({
         label="External Particpants"
       />
       {externalAllowed ? (
-        <Grid xs={12}>
+        <Grid size={12}>
           <Controller
             name="externalPopulation"
             control={control}
@@ -1390,7 +1407,7 @@ function EventVenueInput({
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (
         <>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Controller
               name="equipment"
               control={control}
@@ -1417,7 +1434,7 @@ function EventVenueInput({
               )}
             />
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Controller
               name="additional"
               control={control}
@@ -1500,7 +1517,7 @@ function EventLocationInput({
 
   return (
     <Grid container spacing={1}>
-      <Grid xs={12}>
+      <Grid size={12}>
         <Controller
           name="location"
           control={control}
@@ -1569,9 +1586,8 @@ function EventLocationInput({
           )}
         />
       </Grid>
-
       {Array.isArray(locationInput) && locationInput.includes("other") && (
-        <Grid xs={12}>
+        <Grid size={12}>
           <Controller
             name="otherLocation"
             control={control}
@@ -1596,8 +1612,7 @@ function EventLocationInput({
           />
         </Grid>
       )}
-
-      <Grid xs={12}>
+      <Grid size={12}>
         <Controller
           name="locationAlternate"
           control={control}
@@ -1665,10 +1680,9 @@ function EventLocationInput({
           )}
         />
       </Grid>
-
       {Array.isArray(locationAlternateInput) &&
         locationAlternateInput.includes("other") && (
-          <Grid xs={12}>
+          <Grid size={12}>
             <Controller
               name="otherLocationAlternate"
               control={control}

@@ -48,10 +48,15 @@ export default async function RecruitmentSchedule() {
           Clubs Recruitment Calendar
         </Typography>
       </center>
-
       <Grid container spacing={2}>
         {months.map((month) => (
-          <Grid xs={12} md={6} lg={3} xl={3}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+              lg: 3,
+              xl: 3
+            }}>
             <RecruitmentCard
               clubs={recruitmentScheduleJSON.filter(
                 (val) => val.month === month.toLowerCase()

@@ -36,7 +36,11 @@ export const getEventLocation = (event) => {
 export default function EventDetails({ event, showCode = false }) {
   return (
     <Grid container spacing={2}>
-      <Grid xs={12} md={6}>
+      <Grid
+        size={{
+          xs: 12,
+          md: 6
+        }}>
         <Card variant="outlined">
           <Box sx={{ pt: "100%", position: "relative" }}>
             {event.poster ? (
@@ -57,7 +61,11 @@ export default function EventDetails({ event, showCode = false }) {
           </Box>
         </Card>
       </Grid>
-      <Grid xs md>
+      <Grid
+        size={{
+          xs: "grow",
+          md: "grow"
+        }}>
         <Stack
           direction="column"
           sx={{

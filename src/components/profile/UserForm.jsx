@@ -102,14 +102,15 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
       <Grid container spacing={4}>
         <Grid
           container
-          xs={12}
-          md={7}
-          xl={8}
           spacing={3}
           sx={{
             alignItems: "flex-start",
           }}
-        >
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8
+          }}>
           <Grid container>
             <Grid
               container
@@ -118,7 +119,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                 mt: 1,
               }}
             >
-              <Grid xs={6}>
+              <Grid size={6}>
                 <TextField
                   fullWidth
                   disabled
@@ -126,7 +127,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.firstName}
                 />
               </Grid>
-              <Grid xs={6}>
+              <Grid size={6}>
                 <TextField
                   fullWidth
                   disabled
@@ -134,7 +135,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.lastName}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <TextField
                   fullWidth
                   disabled
@@ -142,7 +143,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.email}
                 />
               </Grid>
-              <Grid container xs={12} spacing={1}>
+              <Grid container spacing={1} size={12}>
                 <Grid>
                   <TextField
                     disabled
@@ -173,7 +174,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               Details
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <Controller
                   name="phone"
                   control={control}
@@ -213,13 +214,14 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
 
         <Grid
           container
-          xs
-          md
           spacing={3}
           sx={{
             alignItems: "flex-start",
           }}
-        >
+          size={{
+            xs: "grow",
+            md: "grow"
+          }}>
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -232,7 +234,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               Media
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <FileUpload
                   type="image"
                   name="img"
@@ -249,13 +251,13 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
             <Grid
               container
               direction="row"
-              xs={12}
               spacing={1}
               sx={{
                 pt: 3,
               }}
+              size={12}
             >
-              <Grid xs={6}>
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -277,7 +279,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid xs={6}>
+              <Grid size={6}>
                 <Button
                   loading={loading}
                   type="submit"

@@ -112,11 +112,11 @@ export default function BillUpload(params) {
         <Grid container spacing={3}>
           <Grid
             
-            xs={12}
             sx={{
               alignItems: "center",
               m: 1,
             }}
+            size={12}
           >
             <FileUpload
               name="file"
@@ -168,7 +168,7 @@ export default function BillUpload(params) {
               />
             </Box>
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: "flex",

@@ -192,10 +192,10 @@ export default function DocForm({ editFile = null, newFile = true }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid
-            xs={12}
             sx={{
               m: 1,
             }}
+            size={12}
           >
             <Controller
               name="title"
@@ -218,11 +218,11 @@ export default function DocForm({ editFile = null, newFile = true }) {
             />
           </Grid>
           <Grid
-            xs={12}
             sx={{
               alignItems: "center",
               m: 1,
             }}
+            size={12}
           >
             <FileUpload
               name="file"
@@ -233,7 +233,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
               maxSizeMB={maxFileSizeMB}
             />
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: "flex",

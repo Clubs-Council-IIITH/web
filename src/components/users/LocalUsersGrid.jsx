@@ -16,7 +16,12 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
       {users?.map((member) => (
         <React.Fragment key={member.uid}>
           {techMembers ? (
-            <Grid xs={12} md={6} lg={6}>
+            <Grid
+              size={{
+                xs: 12,
+                md: 6,
+                lg: 6
+              }}>
               <TechMemberCard
                 uid={member.uid}
                 poc={member.poc}
@@ -24,7 +29,13 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
               />
             </Grid>
           ) : (
-            <Grid xs={12} sm={6} md={4} lg={2.4}>
+            <Grid
+              size={{
+                xs: 12,
+                sm: 6,
+                md: 4,
+                lg: 2.4
+              }}>
               <MemberCard
                 uid={member.uid}
                 poc={member.poc}

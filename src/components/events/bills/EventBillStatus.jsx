@@ -29,7 +29,11 @@ export default async function EventBillStatus(event, eventBills, userid) {
       </Typography>
       <Grid container spacing={2}>
         <Grid container spacing={2}>
-          <Grid xs={5} lg={3}>
+          <Grid
+            size={{
+              xs: 5,
+              lg: 3
+            }}>
             <Box
               sx={{
                 mt: 2,
@@ -38,7 +42,11 @@ export default async function EventBillStatus(event, eventBills, userid) {
               Bills Status
             </Box>
           </Grid>
-          <Grid xs={1} lg={0.1}>
+          <Grid
+            size={{
+              xs: 1,
+              lg: 0.1
+            }}>
             <Box
               sx={{
                 mt: 2,
@@ -47,7 +55,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
               -
             </Box>
           </Grid>
-          <Grid xs>
+          <Grid size="grow">
             <Box
               sx={{
                 mt: 2,
@@ -65,7 +73,11 @@ export default async function EventBillStatus(event, eventBills, userid) {
             {eventBills?.state !== "not_submitted" ? (
               <>
                 <Grid container spacing={2}>
-                  <Grid xs={5} lg={3}>
+                  <Grid
+                    size={{
+                      xs: 5,
+                      lg: 3
+                    }}>
                     <Box
                       sx={{
                         mt: 0,
@@ -74,7 +86,11 @@ export default async function EventBillStatus(event, eventBills, userid) {
                       Last Updated
                     </Box>
                   </Grid>
-                  <Grid xs={1} lg={0.1}>
+                  <Grid
+                    size={{
+                      xs: 1,
+                      lg: 0.1
+                    }}>
                     <Box
                       sx={{
                         mt: 0,
@@ -83,7 +99,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                       -
                     </Box>
                   </Grid>
-                  <Grid xs>
+                  <Grid size="grow">
                     <Box
                       sx={{
                         mt: 0,
@@ -96,7 +112,11 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   </Grid>
                 </Grid>
                 <Grid container spacing={2}>
-                  <Grid xs={5} lg={3}>
+                  <Grid
+                    size={{
+                      xs: 5,
+                      lg: 3
+                    }}>
                     <Box
                       sx={{
                         mt: 0,
@@ -105,7 +125,11 @@ export default async function EventBillStatus(event, eventBills, userid) {
                       SLO Comment
                     </Box>
                   </Grid>
-                  <Grid xs={1} lg={0.1}>
+                  <Grid
+                    size={{
+                      xs: 1,
+                      lg: 0.1
+                    }}>
                     <Box
                       sx={{
                         mt: 0,
@@ -114,7 +138,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                       -
                     </Box>
                   </Grid>
-                  <Grid xs>
+                  <Grid size="grow">
                     <Box
                       sx={{
                         mt: 0,

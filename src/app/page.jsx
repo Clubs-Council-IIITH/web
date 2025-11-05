@@ -82,7 +82,11 @@ export default function Home() {
         }}
       >
         <Grid container spacing={2}>
-          <Grid xs={12} md={6}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6
+            }}>
             <Link href="/student-bodies" style={{ textDecoration: "none" }}>
               <Statistic
                 color="warning"
@@ -93,7 +97,11 @@ export default function Home() {
               />
             </Link>
           </Grid>
-          <Grid xs={12} md={6}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6
+            }}>
             <Link href="/clubs" style={{ textDecoration: "none" }}>
               <Statistic
                 color="info"

@@ -89,7 +89,7 @@ export default async function CCApplicantDetails(props) {
           mt: 4,
         }}
       >
-        <Grid xs={12}>
+        <Grid size={12}>
           <Stack
             direction="column"
             sx={{
@@ -151,22 +151,23 @@ export default async function CCApplicantDetails(props) {
 
         <Grid
           container
-          xs
           spacing={2}
           sx={{
             mt: 5,
           }}
+          size="grow"
         >
           <UserDetails user={user} />
         </Grid>
 
         <Grid
-          xs={12}
-          lg={9}
           sx={{
             mt: { xs: 2, lg: 5 },
           }}
-        >
+          size={{
+            xs: 12,
+            lg: 9
+          }}>
           <Stack direction="column" spacing={2}>
             <Typography
               variant="subtitle2"

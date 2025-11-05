@@ -206,7 +206,14 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
-        <Grid container xs={12} md={7} xl={8} spacing={3}>
+        <Grid
+          container
+          spacing={3}
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8
+          }}>
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -222,32 +229,32 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
             <Grid container spacing={2}>
               {/* show club code input only when creating a new club */}
               {!defaultValues.cid ? (
-                <Grid xs={12}>
+                <Grid size={12}>
                   <ClubCodeInput control={control} />
                 </Grid>
               ) : null}
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubNameInput
                   control={control}
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubEmailInput
                   control={control}
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubCategorySelect
                   control={control}
                   disabled={user?.role != "cc"}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubTaglineInput control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubDescriptionInput control={control} />
               </Grid>
             </Grid>
@@ -266,28 +273,28 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               Socials
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="website" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="instagram" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="facebook" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="twitter" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="linkedin" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="youtube" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="discord" control={control} />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <ClubSocialInput name="whatsapp" control={control} />
               </Grid>
             </Grid>
@@ -296,14 +303,14 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
 
         <Grid
           container
-          
-          xs
-          md
           spacing={3}
           sx={{
             alignItems: "flex-start",
           }}
-        >
+          size={{
+            xs: "grow",
+            md: "grow"
+          }}>
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -316,7 +323,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               Media
             </Typography>
             <Grid container spacing={2}>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <FileUpload
                   type="image"
                   name="logo"
@@ -328,7 +335,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   warnSizeMB={logo_warnSizeMB}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <FileUpload
                   type="image"
                   name="banner"
@@ -340,7 +347,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   warnSizeMB={banner_warnSizeMB}
                 />
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 <FileUpload
                   type="image"
                   name="bannerSquare"
@@ -358,13 +365,13 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               container
               
               direction="row"
-              xs={12}
               spacing={1}
               sx={{
                 pt: 3,
               }}
+              size={12}
             >
-              <Grid xs={6}>
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -386,7 +393,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid xs={6}>
+              <Grid size={6}>
                 <Button
                   loading={loading}
                   type="submit"

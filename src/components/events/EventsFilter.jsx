@@ -53,7 +53,7 @@ export default function EventsFilter({ name, club, state }) {
   return (
     <Container>
       <Grid container spacing={2}>
-        <Grid xs={12}>
+        <Grid size={12}>
           <Stack
             component="form"
             direction="row"
@@ -86,7 +86,11 @@ export default function EventsFilter({ name, club, state }) {
             </Button>
           </Stack>
         </Grid>
-        <Grid xs={12} lg={8}>
+        <Grid
+          size={{
+            xs: 12,
+            lg: 8
+          }}>
           <FormControl fullWidth>
             <InputLabel id="clubid">Filter by Club/Student Body</InputLabel>
             <Select
@@ -116,7 +120,11 @@ export default function EventsFilter({ name, club, state }) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid xs lg>
+        <Grid
+          size={{
+            xs: "grow",
+            lg: "grow"
+          }}>
           <ToggleButtonGroup
             id="eventStatus"
             fullWidth

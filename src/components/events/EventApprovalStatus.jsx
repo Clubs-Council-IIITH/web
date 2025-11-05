@@ -75,7 +75,11 @@ export default async function EventApprovalStatus(
       </Typography>
       <Grid container spacing={2}>
         <Grid container spacing={2}>
-          <Grid xs={5} lg={3}>
+          <Grid
+            size={{
+              xs: 5,
+              lg: 3
+            }}>
             <Box
               sx={{
                 mt: 2,
@@ -84,7 +88,11 @@ export default async function EventApprovalStatus(
               Last Edited
             </Box>
           </Grid>
-          <Grid xs={1} lg={0.1}>
+          <Grid
+            size={{
+              xs: 1,
+              lg: 0.1
+            }}>
             <Box
               sx={{
                 mt: 2,
@@ -93,7 +101,7 @@ export default async function EventApprovalStatus(
               -
             </Box>
           </Grid>
-          <Grid xs>
+          <Grid size="grow">
             <Box
               sx={{
                 mt: 2,
@@ -109,7 +117,11 @@ export default async function EventApprovalStatus(
         </Grid>
         {status?.lastUpdatedBy != null ? (
           <Grid container spacing={2}>
-            <Grid xs={5} lg={3}>
+            <Grid
+              size={{
+                xs: 5,
+                lg: 3
+              }}>
               <Box
                 sx={{
                   mt: 0,
@@ -118,7 +130,11 @@ export default async function EventApprovalStatus(
                 Last Edited By
               </Box>
             </Grid>
-            <Grid xs={1} lg={0.1}>
+            <Grid
+              size={{
+                xs: 1,
+                lg: 0.1
+              }}>
               <Box
                 sx={{
                   mt: 0,
@@ -127,7 +143,7 @@ export default async function EventApprovalStatus(
                 -
               </Box>
             </Grid>
-            <Grid xs>
+            <Grid size="grow">
               <Box
                 sx={{
                   mt: 0,
@@ -141,7 +157,11 @@ export default async function EventApprovalStatus(
         {status?.state && status?.state == "deleted" ? (
           <>
             <Grid container spacing={2}>
-              <Grid xs={5} lg={3}>
+              <Grid
+                size={{
+                  xs: 5,
+                  lg: 3
+                }}>
                 <Box
                   sx={{
                     mt: 1,
@@ -150,7 +170,11 @@ export default async function EventApprovalStatus(
                   Event Deletion
                 </Box>
               </Grid>
-              <Grid xs={1} lg={0.1}>
+              <Grid
+                size={{
+                  xs: 1,
+                  lg: 0.1
+                }}>
                 <Box
                   sx={{
                     mt: 1,
@@ -159,7 +183,7 @@ export default async function EventApprovalStatus(
                   -
                 </Box>
               </Grid>
-              <Grid xs>
+              <Grid size="grow">
                 <Box
                   sx={{
                     mt: 1,
@@ -175,7 +199,11 @@ export default async function EventApprovalStatus(
             </Grid>
             {status?.deletedTime != null && status?.deletedBy != null ? (
               <Grid container spacing={2}>
-                <Grid xs={5} lg={3}>
+                <Grid
+                  size={{
+                    xs: 5,
+                    lg: 3
+                  }}>
                   <Box
                     sx={{
                       mt: 0,
@@ -184,7 +212,11 @@ export default async function EventApprovalStatus(
                     Event Deleted By
                   </Box>
                 </Grid>
-                <Grid xs={1} lg={0.1}>
+                <Grid
+                  size={{
+                    xs: 1,
+                    lg: 0.1
+                  }}>
                   <Box
                     sx={{
                       mt: 0,
@@ -193,7 +225,7 @@ export default async function EventApprovalStatus(
                     -
                   </Box>
                 </Grid>
-                <Grid xs>
+                <Grid size="grow">
                   <Box
                     sx={{
                       mt: 0,
@@ -208,7 +240,11 @@ export default async function EventApprovalStatus(
         ) : status?.state && status?.state !== "incomplete" ? (
           <>
             <Grid container spacing={2}>
-              <Grid xs={5} lg={3}>
+              <Grid
+                size={{
+                  xs: 5,
+                  lg: 3
+                }}>
                 <Box
                   sx={{
                     mt: 1,
@@ -217,7 +253,11 @@ export default async function EventApprovalStatus(
                   Event Submission
                 </Box>
               </Grid>
-              <Grid xs={1} lg={0.1}>
+              <Grid
+                size={{
+                  xs: 1,
+                  lg: 0.1
+                }}>
                 <Box
                   sx={{
                     mt: 1,
@@ -226,7 +266,7 @@ export default async function EventApprovalStatus(
                   -
                 </Box>
               </Grid>
-              <Grid xs>
+              <Grid size="grow">
                 <Box
                   sx={{
                     mt: 1,
@@ -246,7 +286,11 @@ export default async function EventApprovalStatus(
 
             {!isStudentBodyEvent ? (
               <Grid container spacing={2}>
-                <Grid xs={5} lg={3}>
+                <Grid
+                  size={{
+                    xs: 5,
+                    lg: 3
+                  }}>
                   <Box
                     sx={{
                       mt: 1,
@@ -255,7 +299,11 @@ export default async function EventApprovalStatus(
                     Clubs Council Approval
                   </Box>
                 </Grid>
-                <Grid xs={1} lg={0.1}>
+                <Grid
+                  size={{
+                    xs: 1,
+                    lg: 0.1
+                  }}>
                   <Box
                     sx={{
                       mt: 1,
@@ -264,7 +312,7 @@ export default async function EventApprovalStatus(
                     -
                   </Box>
                 </Grid>
-                <Grid xs>
+                <Grid size="grow">
                   <Box
                     sx={{
                       mt: 1,
@@ -285,7 +333,11 @@ export default async function EventApprovalStatus(
 
             {status?.ccApprover != null && status?.ccApproverTime != null ? (
               <Grid container spacing={2}>
-                <Grid xs={5} lg={3}>
+                <Grid
+                  size={{
+                    xs: 5,
+                    lg: 3
+                  }}>
                   <Box
                     sx={{
                       mt: 0,
@@ -294,7 +346,11 @@ export default async function EventApprovalStatus(
                     Clubs Council Approved By
                   </Box>
                 </Grid>
-                <Grid xs={1} lg={0.1}>
+                <Grid
+                  size={{
+                    xs: 1,
+                    lg: 0.1
+                  }}>
                   <Box
                     sx={{
                       mt: 0,
@@ -303,7 +359,7 @@ export default async function EventApprovalStatus(
                     -
                   </Box>
                 </Grid>
-                <Grid xs>
+                <Grid size="grow">
                   <Box
                     sx={{
                       mt: 0,
@@ -317,7 +373,11 @@ export default async function EventApprovalStatus(
 
             {!isStudentBodyEvent ? (
               <Grid container spacing={2}>
-                <Grid xs={5} lg={3}>
+                <Grid
+                  size={{
+                    xs: 5,
+                    lg: 3
+                  }}>
                   <Box
                     sx={{
                       mt: 1,
@@ -326,7 +386,11 @@ export default async function EventApprovalStatus(
                     Students Life Council Approval
                   </Box>
                 </Grid>
-                <Grid xs={1} lg={0.1}>
+                <Grid
+                  size={{
+                    xs: 1,
+                    lg: 0.1
+                  }}>
                   <Box
                     sx={{
                       mt: 1,
@@ -335,7 +399,7 @@ export default async function EventApprovalStatus(
                     -
                   </Box>
                 </Grid>
-                <Grid xs>
+                <Grid size="grow">
                   <Box
                     sx={{
                       mt: 1,
@@ -355,7 +419,11 @@ export default async function EventApprovalStatus(
             ) : null}
             {status?.slcApprover != null && status?.slcApproverTime != null ? (
               <Grid container spacing={2}>
-                <Grid xs={5} lg={3}>
+                <Grid
+                  size={{
+                    xs: 5,
+                    lg: 3
+                  }}>
                   <Box
                     sx={{
                       mt: 0,
@@ -364,7 +432,11 @@ export default async function EventApprovalStatus(
                     Students Life Council Approved By
                   </Box>
                 </Grid>
-                <Grid xs={1} lg={0.1}>
+                <Grid
+                  size={{
+                    xs: 1,
+                    lg: 0.1
+                  }}>
                   <Box
                     sx={{
                       mt: 0,
@@ -373,7 +445,7 @@ export default async function EventApprovalStatus(
                     -
                   </Box>
                 </Grid>
-                <Grid xs>
+                <Grid size="grow">
                   <Box
                     sx={{
                       mt: 0,
@@ -386,7 +458,11 @@ export default async function EventApprovalStatus(
             ) : null}
 
             <Grid container spacing={2}>
-              <Grid xs={5} lg={3}>
+              <Grid
+                size={{
+                  xs: 5,
+                  lg: 3
+                }}>
                 <Box
                   sx={{
                     mt: 1,
@@ -395,7 +471,11 @@ export default async function EventApprovalStatus(
                   Students Life Office Approval
                 </Box>
               </Grid>
-              <Grid xs={1} lg={0.1}>
+              <Grid
+                size={{
+                  xs: 1,
+                  lg: 0.1
+                }}>
                 <Box
                   sx={{
                     mt: 1,
@@ -404,7 +484,7 @@ export default async function EventApprovalStatus(
                   -
                 </Box>
               </Grid>
-              <Grid xs>
+              <Grid size="grow">
                 <Box
                   sx={{
                     mt: 1,

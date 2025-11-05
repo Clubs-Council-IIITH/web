@@ -97,7 +97,12 @@ export function EventReportDetails({
         </Typography>
       </Grid>
       <Grid container spacing={6}>
-        <Grid xs={12} md={4} sm={6}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 4,
+            sm: 6
+          }}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -156,7 +161,12 @@ export function EventReportDetails({
           </Box>
         </Grid>
 
-        <Grid xs={12} md={4} sm={6}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 4,
+            sm: 6
+          }}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -196,7 +206,7 @@ export function EventReportDetails({
               mb: 4,
             }}
           >
-            <Grid xs={4}>
+            <Grid size={4}>
               <Box>
                 <Typography variant="overline">Estimated</Typography>
                 <Typography variant="body2">
@@ -204,7 +214,7 @@ export function EventReportDetails({
                 </Typography>
               </Box>
             </Grid>
-            <Grid xs={4}>
+            <Grid size={4}>
               <Box>
                 <Typography variant="overline">Attended</Typography>
                 <Typography variant="body2">
@@ -225,7 +235,7 @@ export function EventReportDetails({
                 EXTERNAL ATTENDANCE
               </Typography>
               <Grid container spacing={2}>
-                <Grid xs={4}>
+                <Grid size={4}>
                   <Box>
                     <Typography variant="overline">Estimated</Typography>
                     <Typography variant="body2">
@@ -233,7 +243,7 @@ export function EventReportDetails({
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid xs={4}>
+                <Grid size={4}>
                   <Box>
                     <Typography variant="overline">Attended</Typography>
                     <Typography variant="body2">
@@ -246,7 +256,12 @@ export function EventReportDetails({
           ) : null}
         </Grid>
 
-        <Grid xs={12} md={4} sm={6}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 4,
+            sm: 6
+          }}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -333,10 +348,10 @@ export function EventReportDetails({
         </Grid>
       </Grid>
       <Grid
-        xs={12}
         sx={{
           mt: 3,
         }}
+        size={12}
       >
         <Typography
           variant="subtitle2"
@@ -366,7 +381,13 @@ export function EventReportDetails({
       </Grid>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
       <Grid container spacing={6}>
-        <Grid xs={12} md={12} lg={6} sm={12}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 12,
+            lg: 6,
+            sm: 12
+          }}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -419,7 +440,13 @@ export function EventReportDetails({
           )}
         </Grid>
 
-        <Grid xs={12} lg={2} md={6} sm={6}>
+        <Grid
+          size={{
+            xs: 12,
+            lg: 2,
+            md: 6,
+            sm: 6
+          }}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -495,7 +522,13 @@ export function EventReportDetails({
             </Box>
           )}
         </Grid>
-        <Grid xs={12} lg={4} md={6} sm={6}>
+        <Grid
+          size={{
+            xs: 12,
+            lg: 4,
+            md: 6,
+            sm: 6
+          }}>
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -529,10 +562,10 @@ export function EventReportDetails({
             Phone Number: {submittedUser?.data?.phone || "None"}
           </Typography>
           <Grid
-            xs={12}
             sx={{
               mt: 2,
             }}
+            size={12}
           >
             <Typography
               variant="subtitle2"

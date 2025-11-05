@@ -104,13 +104,13 @@ function EventDatetimeInput({ control, watch, user }) {
       container
       
       direction="row"
-      xs={12}
       spacing={1}
       sx={{
         pt: 1,
       }}
+      size={12}
     >
-      <Grid xs={6}>
+      <Grid size={6}>
         <Controller
           name="datetimeperiod.0"
           control={control}
@@ -148,7 +148,7 @@ function EventDatetimeInput({ control, watch, user }) {
           )}
         />
       </Grid>
-      <Grid xs={6}>
+      <Grid size={6}>
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -317,7 +317,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               ? "Select Club/Student Body"
               : "Selected Club/Student Body"}
           </Typography>
-          <Grid xs={12}>
+          <Grid size={12}>
             {admin_roles.includes(user?.role) ? (
               <DataClubSelect
                 control={control}
@@ -445,7 +445,14 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                             },
                           ]),
                     ].map(({ fieldValue, fieldName }) => (
-                      <Grid lg={2} md={3} sm={4} xs={6} key={fieldValue}>
+                      <Grid
+                        key={fieldValue}
+                        size={{
+                          lg: 2,
+                          md: 3,
+                          sm: 4,
+                          xs: 6
+                        }}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -485,13 +492,13 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         container
         
         direction="row"
-        xs={12}
         spacing={1}
         sx={{
           pt: 3,
         }}
+        size={12}
       >
-        <Grid xs={6}>
+        <Grid size={6}>
           <Button
             size="large"
             variant="outlined"
@@ -516,7 +523,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             confirmText="Yes, discard my changes"
           />
         </Grid>
-        <Grid xs={6}>
+        <Grid size={6}>
           {allowed_roles.includes(user?.role) && (
             <Button
               loading={loading}
