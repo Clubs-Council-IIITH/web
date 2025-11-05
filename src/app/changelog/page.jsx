@@ -2,7 +2,6 @@ import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 import { getNginxFile } from "utils/files";
 
-import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import {
   Container,
@@ -20,6 +19,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -131,7 +131,7 @@ export default async function Changelog(props) {
         <Button
           variant="none"
           color="secondary"
-          component={Link}
+          component={ButtonLink}
           href="/tech-team/members"
         >
           <Typography variant="button" sx={{
@@ -163,7 +163,7 @@ export default async function Changelog(props) {
                 <Button
                   variant="none"
                   color="secondary"
-                  component={Link}
+                  component={ButtonLink}
                   href="/changelog"
                 >
                   <Icon variant="chevron-left" />
@@ -177,7 +177,7 @@ export default async function Changelog(props) {
                 <Button
                   variant="none"
                   color="secondary"
-                  component={Link}
+                  component={ButtonLink}
                   href="/changelog?all=true"
                 >
                   <Typography variant="button" sx={{

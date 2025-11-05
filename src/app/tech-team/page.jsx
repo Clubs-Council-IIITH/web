@@ -1,14 +1,13 @@
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import Link from "next/link";
-
 import { Container, Typography, Grid, Stack, Box, Button } from "@mui/material";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { extractFirstYear } from "components/members/MembersGrid";
 import SLCTechLogo from "components/SLCTechLogo";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -175,7 +174,7 @@ export default async function TechTeam() {
         <Button
           variant="none"
           color="secondary"
-          component={Link}
+          component={ButtonLink}
           href="/tech-team/all-members"
         >
           <Typography variant="button" sx={{

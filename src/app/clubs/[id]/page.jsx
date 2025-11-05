@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { permanentRedirect, notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
@@ -7,6 +6,7 @@ import { GET_CLUB } from "gql/queries/clubs";
 import { Divider, Stack, Button, Box, Card, Typography } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
@@ -106,7 +106,7 @@ export default async function Club(props) {
             <Button
               variant="none"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href={`/events?club=${id}`}
             >
               <Typography
@@ -147,7 +147,7 @@ export default async function Club(props) {
             <Button
               variant="none"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href={`/${
                 club?.category == "body" ? "student-bodies" : "clubs"
               }/${id}/members`}

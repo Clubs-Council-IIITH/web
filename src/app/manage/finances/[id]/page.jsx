@@ -1,13 +1,13 @@
 import { getClient } from "gql/client";
 import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
-import Link from "next/link";
 
 import { Button, Container, Stack, Typography, Box } from "@mui/material";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
 import FinanceHeader from "components/events/bills/FinanceHeader";
 import { redirect } from "next/navigation";
-import EventBudget from "../../../../components/events/EventBudget";
+import ButtonLink from "components/Link";
+import EventBudget from "components/events/EventBudget";
 
 export const metadata = {
   title: "Edit Bill Status",
@@ -46,7 +46,7 @@ export default async function EditFinance(props) {
           <Button
             variant="contained"
             color="primary"
-            component={Link}
+            component={ButtonLink}
             href={`/manage/finances`}
           >
             <Typography variant="button" color="opposite">

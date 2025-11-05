@@ -50,7 +50,7 @@ export default async function TechMemberCard({ uid, poc, roles }) {
       }}
     >
       {/* <CardActionArea
-        component={Link}
+        component={ButtonLink}
         href={`/profile/${uid}`}
         disabled={userProfile === null}
         sx={{

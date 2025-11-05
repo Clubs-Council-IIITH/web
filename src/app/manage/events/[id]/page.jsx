@@ -13,8 +13,8 @@ import {
   Divider,
   CardActionArea,
 } from "@mui/material";
-import { Link } from "next/link";
 import { notFound, redirect } from "next/navigation";
+import ButtonLink from "components/Link";
 import ActionPalette from "components/ActionPalette";
 
 import EventDetails from "components/events/EventDetails";
@@ -152,7 +152,7 @@ export default async function ManageEventID(props) {
       Point of Contact
     </Typography>
     <CardActionArea
-      component={Link}
+      component={ButtonLink}
       href={`/profile/${event?.poc}`}
       sx={{ textDecoration: "none", maxWidth: "max-content" }}
     >

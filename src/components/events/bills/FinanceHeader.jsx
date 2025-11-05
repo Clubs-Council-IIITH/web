@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import ButtonLink from "components/Link";
 import Icon from "components/Icon";
 import { Button, Stack, Typography } from "@mui/material";
 import BillPdfViewer from "components/events/bills/BillPdfViewer";
@@ -54,7 +54,7 @@ export default function FinanceHeader({
             <Button
               variant="contained"
               color="primary"
-              component={Link}
+              component={ButtonLink}
               href={`/manage/events/${id}`}
               startIcon={<Icon variant="north-west" />}
             >

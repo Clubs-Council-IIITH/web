@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ButtonLink from "components/Link";
 
 import {
   Button,
@@ -59,7 +60,7 @@ export default function GlobalError({ error, reset }) {
             <Button
               variant="outlined"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href="/"
               startIcon={<Icon variant="home-outline" />}
             >

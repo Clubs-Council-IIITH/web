@@ -1,11 +1,10 @@
-import Link from "next/link";
-
 import { getClient } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import { Container, Typography, Button, Stack } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import ClubsTable from "components/clubs/ClubsTable";
 
 export const metadata = {
@@ -30,7 +29,7 @@ export default async function ManageClubs() {
         </Typography>
 
         <Button
-          component={Link}
+          component={ButtonLink}
           href="/manage/clubs/new"
           variant="contained"
           startIcon={<Icon variant="add" />}

@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
 
 import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
 
 import EventPoster from "components/events/EventPoster";
+import ButtonLink from "components/Link";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
@@ -18,7 +18,7 @@ export default function EventCard({
 }) {
   return (
     <Card>
-      <CardActionArea component={Link} href={`/events/${_id}`}>
+      <CardActionArea component={ButtonLink} href={`/events/${_id}`}>
         <Box sx={{ pt: "100%", position: "relative" }}>
           {poster ? (
             <EventPoster
@@ -34,9 +34,13 @@ export default function EventCard({
         </Box>
 
         <Stack spacing={1} sx={{ p: 3 }}>
-          <Typography variant="subtitle2" noWrap sx={{
-            fontSize: 16
-          }}>
+          <Typography
+            variant="subtitle2"
+            noWrap
+            sx={{
+              fontSize: 16,
+            }}
+          >
             {name}
           </Typography>
           <Typography variant="caption" noWrap>

@@ -15,6 +15,7 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import SLCTechLogo from "components/SLCTechLogo";
 import LifeLogo from "components/svg/life-logo-full-color.svg";
 
@@ -75,8 +76,9 @@ export default function Footer() {
           justifyContent={isDesktop ? "flex-start" : "center"}
           size={{
             xs: 12,
-            lg: "grow"
-          }}>
+            lg: "grow",
+          }}
+        >
           <Box sx={{ mr: 3 }}>
             <Link href={IIIT_MAIN_URL} target="_blank" rel="noreferrer">
               <Image
@@ -110,8 +112,9 @@ export default function Footer() {
           justifyContent={isDesktop ? "flex-end" : "center"}
           size={{
             xs: 12,
-            lg: "grow"
-          }}>
+            lg: "grow",
+          }}
+        >
           {socialsData.map((social, index) => (
             <IconButton
               key={index}
@@ -153,7 +156,7 @@ export default function Footer() {
             Developed & Maintained with ❤️ by{" "}
             <Typography
               variant="body2"
-              component={Link}
+              component={ButtonLink}
               href={"/tech-team"}
               sx={{
                 fontWeight: 500,
@@ -173,7 +176,7 @@ export default function Footer() {
 
           <Typography
             variant="body2"
-            component={Link}
+            component={ButtonLink}
             href="/changelog"
             sx={{
               fontWeight: 600,
@@ -189,7 +192,7 @@ export default function Footer() {
           <Box sx={{ mx: 1 }}>·</Box>
           <Typography
             variant="body2"
-            component={Link}
+            component={ButtonLink}
             href={PRIVACY_POLICY_URL}
             target="_blank"
             rel="noreferrer"
@@ -227,7 +230,7 @@ export default function Footer() {
               Developed & Maintained with ❤️ by{" "}
               <Typography
                 variant="body2"
-                component={Link}
+                component={ButtonLink}
                 href={"/tech-team"}
                 sx={{
                   fontWeight: 500,
@@ -253,7 +256,7 @@ export default function Footer() {
 
             <Typography
               variant="body2"
-              component={Link}
+              component={ButtonLink}
               href="/changelog"
               sx={{
                 fontWeight: 600,
@@ -269,7 +272,7 @@ export default function Footer() {
             <Box sx={{ mx: 1 }}>·</Box>
             <Typography
               variant="body2"
-              component={Link}
+              component={ButtonLink}
               href={PRIVACY_POLICY_URL}
               target="_blank"
               rel="noreferrer"

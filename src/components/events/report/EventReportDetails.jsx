@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import ButtonLink from "components/Link";
 import Icon from "components/Icon";
 import { locationLabel, audienceLabels } from "utils/formatEvent";
 import { DownloadEventReport } from "components/events/report/EventpdfDownloads";
@@ -49,7 +49,7 @@ export function EventReportDetails({
       >
         <Button
           color="primary"
-          component={Link}
+          component={ButtonLink}
           href={`/manage/events/${event?._id}`}
           startIcon={<Icon variant="arrow-back" />}
         >
@@ -60,7 +60,7 @@ export function EventReportDetails({
         <Grid sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
           {showEditReportButton && (
             <Button
-              component={Link}
+              component={ButtonLink}
               href={`/manage/events/${event?._id}/report/edit`}
               variant="contained"
               color="warning"
@@ -539,7 +539,7 @@ export function EventReportDetails({
             Report Submitted By
           </Typography>
           <CardActionArea
-            component={Link}
+            component={ButtonLink}
             href={`/profile/${eventReport?.submittedBy}`}
             sx={{ textDecoration: "none", maxWidth: "max-content" }}
           >

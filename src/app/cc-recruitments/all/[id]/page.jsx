@@ -7,7 +7,7 @@ import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-import Link from "next/link";
+import ButtonLink from "components/Link";
 import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
@@ -101,7 +101,7 @@ export default async function CCApplicantDetails(props) {
             <Button
               variant="contained"
               color="primary"
-              component={Link}
+              component={ButtonLink}
               href={`/cc-recruitments/all?year=${year}`}
             >
               <Typography variant="button" color="opposite">

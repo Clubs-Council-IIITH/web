@@ -1,8 +1,7 @@
-import Link from "next/link";
-
 import { Box, Button, Typography } from "@mui/material";
 
 import ClubLogo from "components/clubs/ClubLogo";
+import ButtonLink from "components/Link";
 
 export default async function ClubBox({ club }) {
   if (!club) return null;
@@ -10,7 +9,7 @@ export default async function ClubBox({ club }) {
   return (
     <Box>
       <Button
-        component={Link}
+        component={ButtonLink}
         href={`/clubs/${club.cid}`}
         variant="outlined"
         color="secondary"

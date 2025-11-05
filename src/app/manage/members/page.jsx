@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
@@ -8,6 +6,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import { Box, Container, Typography, Button, Stack } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import MembersTable from "components/members/MembersTable";
 import MembersFilter from "components/members/MembersFilter";
 
@@ -53,7 +52,7 @@ export default async function ManageMembers(props) {
             gap: 2
           }}>
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/members/bulk-add"
             variant="contained"
             startIcon={<Icon variant="playlist-add" />}
@@ -61,7 +60,7 @@ export default async function ManageMembers(props) {
             Bulk Add
           </Button>
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/members/bulk-edit"
             variant="contained"
             startIcon={<Icon variant="edit" />}
@@ -70,7 +69,7 @@ export default async function ManageMembers(props) {
             Bulk Edit
           </Button>
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/members/new"
             variant="contained"
             startIcon={<Icon variant="add" />}

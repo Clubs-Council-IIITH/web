@@ -1,11 +1,8 @@
-import Link from "next/link";
-
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
 
 import {
-  Box,
   Container,
   Divider,
   Typography,
@@ -14,6 +11,7 @@ import {
 } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import EventsTable from "components/events/EventsTable";
 
 export const metadata = {
@@ -62,7 +60,7 @@ export default async function ManageEvents() {
 
         {["cc", "club"].includes(userMeta?.role) ? (
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/events/new"
             variant="contained"
             startIcon={<Icon variant="add" />}

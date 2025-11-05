@@ -20,7 +20,7 @@ import { useTheme, alpha } from "@mui/material/styles";
 import LoginLogo from "components/svg/login.svg";
 
 import Image from "next/image";
-import Link from "next/link";
+import ButtonLink from "components/Link";
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { login, logout } from "utils/auth";
@@ -189,7 +189,7 @@ export default function AccountPopover() {
                       <Stack sx={{ p: 1 }}>
                         {[...AUTHENTICATED_MENU_OPTIONS].map((option) => (
                           <MenuItem
-                            component={Link}
+                            component={ButtonLink}
                             key={option.label}
                             href={option.url}
                             sx={{

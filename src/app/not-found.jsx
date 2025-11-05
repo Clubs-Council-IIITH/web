@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 export default function NotFound() {
   const theme = useTheme();
@@ -48,7 +47,7 @@ export default function NotFound() {
             <Button
               variant="contained"
               color="primary"
-              component={Link}
+              component={ButtonLink}
               href="/"
               startIcon={<Icon variant="home-outline" />}
             >

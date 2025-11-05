@@ -1,8 +1,8 @@
 import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
-import Link from "next/link";
 
 import { billsStateLabel } from "utils/formatEvent";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import FinanceHeader from "components/events/bills/FinanceHeader";
 
 export default async function EventBillStatus(event, eventBills, userid) {
@@ -158,7 +158,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                 {userid === event?.clubid ? (
                   eventBills?.state === "not_submitted" ? (
                     <Button
-                      component={Link}
+                      component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"
                       color="primary"
@@ -168,7 +168,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                     </Button>
                   ) : eventBills?.state === "rejected" ? (
                     <Button
-                      component={Link}
+                      component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"
                       color="primary"

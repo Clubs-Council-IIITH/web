@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 
 import { Button, Box } from "@mui/material";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 import { socialsData } from "utils/socialsData";
 import { useMode } from "contexts/ModeContext";
@@ -37,7 +37,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
     <Box>
       {email ? (
         <Button
-          component={Link}
+          component={ButtonLink}
           href={`mailto:${email}`}
           target="_blank"
           rel="noreferrer"
@@ -55,7 +55,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
         ?.filter((k) => socials[k])
         ?.map((item, index) => (
           <Button
-            component={Link}
+            component={ButtonLink}
             href={socials[item]}
             target="_blank"
             rel="noreferrer"

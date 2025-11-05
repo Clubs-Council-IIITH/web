@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Box, Grid, Typography, Stack, Button } from "@mui/material";
+import ButtonLink from 'components/Link';
 import Carousel from "components/carousel/Carousel";
 
 import EventsGrid from "components/events/EventsGrid";
@@ -48,7 +49,7 @@ export default function Home() {
           <Button
             variant="none"
             color="secondary"
-            component={Link}
+            component={ButtonLink}
             href="/events"
           >
             <Typography
@@ -136,7 +137,7 @@ export default function Home() {
             <Button
               variant="none"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href={"/gallery"}
             >
               <Typography
