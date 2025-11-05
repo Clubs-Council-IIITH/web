@@ -30,18 +30,28 @@ export default function Home() {
   return (
     <Box>
       <Carousel items={carouselItems} sx={{ mb: 3 }} />
-
-      <Stack direction="row" pt={2} mb={2}>
+      <Stack
+        direction="row"
+        sx={{
+          pt: 2,
+          mb: 2
+        }}>
         <Typography variant="h4">Upcoming & Recent Events</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Box display="flex" alignItems="center">
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center"
+          }}>
           <Button
             variant="none"
             color="secondary"
             component={Link}
             href="/events"
           >
-            <Typography variant="button" color="text.primary">
+            <Typography variant="button" sx={{
+              color: "text.primary"
+            }}>
               View all
             </Typography>
             <Icon variant="chevron-right" />
@@ -49,11 +59,9 @@ export default function Home() {
         </Box>
       </Stack>
       <EventsGrid type="recent" limit={4} />
-
       <Typography variant="h3" sx={{ mb: 2, mt: 4 }}>
         Life @ IIITH
       </Typography>
-
       <Typography variant="body">
         IIIT H is where bright, committed, innovative people congregate to
         learn, live, play and work. Diverse in every sense of the word, our
@@ -63,8 +71,9 @@ export default function Home() {
         pursuits, from a jaw dropping cauldron of ways to participate in music,
         dance, sports, quizzes, etc.
       </Typography>
-
-      <Box my={3}>
+      <Box sx={{
+        my: 3
+      }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Link href="/student-bodies" style={{ textDecoration: "none" }}>
@@ -90,19 +99,28 @@ export default function Home() {
           </Grid>
         </Grid>
       </Box>
-
-      <Box my={3}>
-        <Stack direction="row" pt={2}>
+      <Box sx={{
+        my: 3
+      }}>
+        <Stack direction="row" sx={{
+          pt: 2
+        }}>
           <Typography variant="h4">Gallery</Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box display="flex" alignItems="center">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center"
+            }}>
             <Button
               variant="none"
               color="secondary"
               component={Link}
               href={"/gallery"}
             >
-              <Typography variant="button" color="text.primary">
+              <Typography variant="button" sx={{
+                color: "text.primary"
+              }}>
                 View more
               </Typography>
               <Icon variant="chevron-right" />

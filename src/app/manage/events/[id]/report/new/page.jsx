@@ -54,10 +54,11 @@ export default async function NewEventReport(props) {
     }
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
+        <Typography variant="h3" gutterBottom sx={{
+          mb: 3
+        }}>
           Create Event Report
         </Typography>
-
         <EventReportForm
           id={id}
           defaultValues={transformEvent(event)}

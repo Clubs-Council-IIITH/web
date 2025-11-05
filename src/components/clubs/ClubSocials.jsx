@@ -47,7 +47,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
             color: "text.secondary",
           }}
         >
-          <Icon external variant={"mdi:email"} mr={1} />
+          <Icon external variant={"mdi:email"} sx={{ mr: 1 }} />
           {email}
         </Button>
       ) : null}
@@ -68,7 +68,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
                 : socialsData[item].color,
             }}
           >
-            <Icon external variant={socialsData[item].icon} mr={1} />
+            <Icon external variant={socialsData[item].icon} sx={{ mr: 1 }} />
             {processedSocials[item]}
           </Button>
         ))}

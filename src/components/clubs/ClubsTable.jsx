@@ -75,10 +75,11 @@ export default function ClubsTable({ clubs }) {
             flex: 6,
             renderCell: ({ value }) => (
               <Box
-                textTransform="lowercase"
-                fontSize="0.9em"
-                fontFamily="monospace"
-              >
+                sx={{
+                  textTransform: "lowercase",
+                  fontSize: "0.9em",
+                  fontFamily: "monospace"
+                }}>
                 {value}
               </Box>
             ),
@@ -92,7 +93,9 @@ export default function ClubsTable({ clubs }) {
       flex: isMobile ? null : 2,
       valueGetter: (value, row, column, apiRef) =>
         value === "body" ? "Student Body" : value,
-      renderCell: ({ value }) => <Box textTransform="capitalize">{value}</Box>,
+      renderCell: ({ value }) => <Box sx={{
+        textTransform: "capitalize"
+      }}>{value}</Box>,
       display: "flex",
     },
     {

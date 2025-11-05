@@ -76,23 +76,22 @@ export default async function TechTeam() {
     <Container>
       <Grid
         container
-        display="flex"
         direction="column"
-        alignItems="center"
-        justifyContent="center"
         spacing={2}
         sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           width: "100%",
-          padding: 2.5,
-        }}
-      >
+          padding: 2.5
+        }}>
         <SLCTechLogo height={120} width={500} />
       </Grid>
-
-      <Typography variant="h3" mb={2}>
+      <Typography variant="h3" sx={{
+        mb: 2
+      }}>
         About Us
       </Typography>
-
       <Typography variant="body">
         The SLC-CC Tech Team started as the CC Tech Team in 2021 with a clear
         mission: to design and maintain the official Clubs Council website.
@@ -100,26 +99,31 @@ export default async function TechTeam() {
         dedicated technical powerhouse serving all clubs and student bodies
         across the institution.
       </Typography>
-
-      <Typography variant="h5" mb={2} mt={2}>
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 2,
+          mt: 2
+        }}>
         Who are we?
       </Typography>
-
       <Typography variant="body">
         We're a passionate team committed to empowering our institution through
         technology. From crafting dynamic websites to managing critical systems,
         we strive to ensure seamless digital experiences for the student
         community.
       </Typography>
-
-      <Typography variant="h5" mb={2} mt={2}>
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 2,
+          mt: 2
+        }}>
         What We Do
       </Typography>
-
       <Typography variant="body">
         Our work spans a wide range of technical services, including:
       </Typography>
-
       <Typography variant="body" component="ul" sx={{ marginLeft: 2 }}>
         <li>
           Developing and maintaining websites for the Clubs Council and various
@@ -135,8 +139,12 @@ export default async function TechTeam() {
           infrastructure and resolve technical challenges.
         </li>
       </Typography>
-
-      <Typography variant="h5" mb={2} mt={2}>
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 2,
+          mt: 2
+        }}>
         Our Projects
       </Typography>
       <Typography variant="body" paragraph>
@@ -149,14 +157,19 @@ export default async function TechTeam() {
           Websites for NSS, Cultural Council, CLC, and other student bodies
         </li>
       </Typography>
-
-      <Typography variant="body1" paragraph mt={3}>
+      <Typography variant="body1" paragraph sx={{
+        mt: 3
+      }}>
         With each project, we aim to uphold our core values of innovation,
         reliability, and teamwork. Together, we're shaping the future of our
         institution's digital landscape.
       </Typography>
-
-      <Stack direction="row" mb={2} mt={5}>
+      <Stack
+        direction="row"
+        sx={{
+          mb: 2,
+          mt: 5
+        }}>
         <Typography variant="h3">Our Perfect Visionary Crew</Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button
@@ -165,7 +178,9 @@ export default async function TechTeam() {
           component={Link}
           href="/tech-team/all-members"
         >
-          <Typography variant="button" color="text.primary">
+          <Typography variant="button" sx={{
+            color: "text.primary"
+          }}>
             View all
           </Typography>
           <Icon variant="chevron-right" />
@@ -178,10 +193,13 @@ export default async function TechTeam() {
           <h2>No Members Found!</h2>
         </center>
       )}
-
       {/* Reach out to us at webadmin@students.iiit.ac.in */}
-
-      <Typography variant="h3" mb={2} mt={5}>
+      <Typography
+        variant="h3"
+        sx={{
+          mb: 2,
+          mt: 5
+        }}>
         Reach Out to Us
       </Typography>
       <Typography variant="body1" paragraph>

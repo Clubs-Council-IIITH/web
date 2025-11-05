@@ -36,20 +36,22 @@ export default async function ManageMembers(props) {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Manage Members
         </Typography>
 
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          gap={2}
-        >
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2
+          }}>
           <Button
             component={Link}
             href="/manage/members/bulk-add"
@@ -78,25 +80,28 @@ export default async function ManageMembers(props) {
           </Button>
         </Stack>
       </Stack>
-
       {/* only pending members */}
       {user?.role === "cc" ? <PendingMembersDataGrid /> : null}
-
       {/* all members */}
       <Box>
         <Box>
           {user?.role === "cc" ? (
             <>
               <Typography
-                color="text.secondary"
                 variant="subtitle2"
-                textTransform="uppercase"
                 gutterBottom
-                mb={2}
-              >
+                sx={{
+                  color: "text.secondary",
+                  textTransform: "uppercase",
+                  mb: 2
+                }}>
                 All Members
               </Typography>
-              <Box mt={2} mb={3}>
+              <Box
+                sx={{
+                  mt: 2,
+                  mb: 3
+                }}>
                 <MembersFilter
                   name={targetName}
                   club={targetClub}
@@ -110,7 +115,11 @@ export default async function ManageMembers(props) {
             <>
               {user?.role !== "cc" ? (
                 <>
-                  <Box mt={2} mb={3}>
+                  <Box
+                    sx={{
+                      mt: 2,
+                      mb: 3
+                    }}>
                     <MembersFilter
                       name={targetName}
                       club={targetClub}
@@ -162,13 +171,16 @@ async function PendingMembersDataGrid() {
   return (
     <>
       {processedMembers.length > 0 ? (
-        <Box mb={3}>
+        <Box sx={{
+          mb: 3
+        }}>
           <Typography
-            color="text.secondary"
             variant="subtitle2"
-            textTransform="uppercase"
             gutterBottom
-          >
+            sx={{
+              color: "text.secondary",
+              textTransform: "uppercase"
+            }}>
             Pending Approval
           </Typography>
           <MembersTable

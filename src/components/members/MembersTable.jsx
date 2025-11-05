@@ -70,10 +70,11 @@ export default function MembersTable({
             flex: 8,
             renderCell: ({ value }) => (
               <Box
-                textTransform="lowercase"
-                fontSize="0.9em"
-                fontFamily="monospace"
-              >
+                sx={{
+                  textTransform: "lowercase",
+                  fontSize: "0.9em",
+                  fontFamily: "monospace"
+                }}>
                 {value || "Email Not Available"}
               </Box>
             ),
@@ -111,11 +112,12 @@ export default function MembersTable({
                   {value?.map((role, key) => (
                     <Box
                       key={key}
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      width="100%"
-                    >
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%"
+                      }}>
                       <Typography
                         variant="body2"
                         sx={{
@@ -137,21 +139,23 @@ export default function MembersTable({
                           {role?.name}
                         </span>
                         <Box
-                          color="grey.400"
-                          display="inline-block"
-                          mx={0.5}
-                          flexShrink={0}
-                        >
+                          sx={{
+                            color: "grey.400",
+                            display: "inline-block",
+                            mx: 0.5,
+                            flexShrink: 0
+                          }}>
                           ({role?.startYear} - {role?.endYear || "present"})
                         </Box>
                       </Typography>
                       {showIcon && (
                         <Box
-                          display="flex"
-                          justifyContent="flex-end"
-                          ml={1}
-                          flexShrink={0}
-                        >
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            ml: 1,
+                            flexShrink: 0
+                          }}>
                           <Tooltip
                             arrow
                             title={

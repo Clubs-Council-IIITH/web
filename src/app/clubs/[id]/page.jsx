@@ -62,7 +62,11 @@ export default async function Club(props) {
           priority={true}
         />
       </Card>
-      <Box my={4}>
+      <Box
+        sx={{
+          my: 4,
+        }}
+      >
         <ClubInfo
           name={club.name}
           logo={club.logo}
@@ -71,14 +75,32 @@ export default async function Club(props) {
         />
       </Box>
       <ClubSocials socials={club.socials} email={club.email} />
-
       <Divider sx={{ borderStyle: "dashed", mt: 3 }} />
-
-      <Stack direction="column" mx={2}>
-        <Box my={4}>
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Box display="flex" alignItems="center">
-              <Icon variant="local-activity-outline-rounded" mr={1} />
+      <Stack
+        direction="column"
+        sx={{
+          mx: 2,
+        }}
+      >
+        <Box
+          sx={{
+            my: 4,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="local-activity-outline-rounded" sx={{ mr: 1 }} />
               <Typography variant="h4">Events</Typography>
             </Box>
             <Button
@@ -87,7 +109,12 @@ export default async function Club(props) {
               component={Link}
               href={`/events?club=${id}`}
             >
-              <Typography variant="button" color="text.primary">
+              <Typography
+                variant="button"
+                sx={{
+                  color: "text.primary",
+                }}
+              >
                 View all
               </Typography>
               <Icon variant="chevron-right" />
@@ -96,10 +123,25 @@ export default async function Club(props) {
           <EventsGrid type="club" clubid={id} limit={4} />
         </Box>
 
-        <Box my={4}>
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Box display="flex" alignItems="center">
-              <Icon variant="group-outline-rounded" mr={1} />
+        <Box
+          sx={{
+            my: 4,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="group-outline-rounded" sx={{ mr: 1 }} />
               <Typography variant="h4">Members</Typography>
             </Box>
             <Button
@@ -110,7 +152,12 @@ export default async function Club(props) {
                 club?.category == "body" ? "student-bodies" : "clubs"
               }/${id}/members`}
             >
-              <Typography variant="button" color="text.primary">
+              <Typography
+                variant="button"
+                sx={{
+                  color: "text.primary",
+                }}
+              >
                 View all
               </Typography>
               <Icon variant="chevron-right" />

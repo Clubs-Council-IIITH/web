@@ -8,7 +8,6 @@ import Icon from "components/Icon";
 import { useToast } from "components/Toast";
 import MemberListItem from "components/members/MemberListItem";
 
-import { LoadingButton } from "@mui/lab";
 import {
   Box,
   TextField,
@@ -26,6 +25,7 @@ import {
   MenuItem,
   Chip,
   Divider,
+  Button,
 } from "@mui/material";
 
 import { eventProgress } from "actions/events/progress/server_action";
@@ -124,10 +124,12 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                   </InputLabel>
                   {slcMembers.length === 0 ? (
                     <Box
-                      py={25}
-                      width="100%"
-                      display="flex"
-                      justifyContent="center"
+                      sx={{
+                        py: 25,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
                     >
                       <Fade in>
                         <CircularProgress color="primary" />
@@ -203,10 +205,12 @@ function EventApproveForm({ eventid, members, clashFlag }) {
               <InputLabel id="approver-label">Approver</InputLabel>
               {members.length === 0 ? (
                 <Box
-                  py={25}
-                  width="100%"
-                  display="flex"
-                  justifyContent="center"
+                  sx={{
+                    py: 25,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
                   <Fade in>
                     <CircularProgress color="primary" />
@@ -234,7 +238,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
           )}
         />
         <p></p> {/* For New line */}
-        <LoadingButton
+        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -244,11 +248,10 @@ function EventApproveForm({ eventid, members, clashFlag }) {
           disabled={clashFlag}
         >
           Approve
-        </LoadingButton>
+        </Button>
         <Typography
           variant="caption"
-          color={clashFlag ? "error" : "textSecondary"}
-          ml={1}
+          sx={{ ml: 1, color: clashFlag ? "error.main" : "text.secondary" }}
         >
           {clashFlag
             ? "(Location of this event is clashing with some other approved event in the same time period. Please edit or reject.)"
@@ -320,8 +323,8 @@ function EventRejectForm({ eventid }) {
         )}
       />
 
-      <Box mt={2}>
-        <LoadingButton
+      <Box sx={{ mt: 2 }}>
+        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -330,8 +333,8 @@ function EventRejectForm({ eventid }) {
           startIcon={<Icon variant="close"></Icon>}
         >
           Reject
-        </LoadingButton>
-        <Typography variant="caption" color="textSecondary" ml={1}>
+        </Button>
+        <Typography variant="caption" sx={{ ml: 1, color: "text.secondary" }}>
           (This action cannot be undone.)
         </Typography>
       </Box>

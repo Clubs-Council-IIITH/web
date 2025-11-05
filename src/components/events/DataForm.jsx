@@ -22,7 +22,6 @@ import {
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
-import { LoadingButton } from "@mui/lab";
 
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { eventsDataDownload } from "actions/events/data/server_action";
@@ -41,11 +40,12 @@ function DataClubSelect({
     <>
       {loading ? (
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
-        >
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%"
+          }}>
           <CircularProgress />
         </Box>
       ) : clubs.length > 0 ? (
@@ -99,7 +99,9 @@ function DataClubSelect({
 function EventDatetimeInput({ control, watch, user }) {
   const startDateInput = watch("datetimeperiod.0");
   return (
-    <Grid container item direction="row" xs={12} spacing={1} pt={1}>
+    <Grid container item direction="row" xs={12} spacing={1} sx={{
+      pt: 1
+    }}>
       <Grid item xs={6}>
         <Controller
           name="datetimeperiod.0"
@@ -232,7 +234,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD",
+              "YYYY-MM-DD"
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -267,7 +269,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD"),
+        dayjs(date).format("YYYY-MM-DD")
       ),
       fields: formData.fields,
       status: formData.status || "approved",
@@ -278,17 +280,22 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography variant="h3" gutterBottom sx={{
+        mb: 3
+      }}>
         Download Events Data
       </Typography>
-      <Grid container spacing={3} alignItems="flex-start">
+      <Grid container spacing={3} sx={{
+        alignItems: "flex-start"
+      }}>
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
-            sx={{ mb: 1.5 }}
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 1.5
+            }}>
             {admin_roles.includes(user?.role)
               ? "Select Club/Student Body"
               : "Selected Club/Student Body"}
@@ -322,10 +329,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
             gutterBottom
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary"
+            }}>
             Date Range
           </Typography>
           <EventDatetimeInput control={control} watch={watch} user={user} />
@@ -334,10 +342,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              sx={{ mb: 1.5 }}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 1.5
+              }}>
               Events to Include
             </Typography>
             <Controller
@@ -359,10 +368,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
             gutterBottom
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary"
+            }}>
             Fields to Include
           </Typography>
           <Controller
@@ -372,7 +382,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field, fieldState: { error } }) => (
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
-                  <Grid container item spacing={1} ml={1}>
+                  <Grid container item spacing={1} sx={{
+                    ml: 1
+                  }}>
                     {[
                       { fieldValue: "code", fieldName: "Event Code" },
                       { fieldValue: "name", fieldName: "Event Name" },
@@ -422,7 +434,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value,
+                                    event.target.value
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
@@ -444,7 +456,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           />
         </Grid>
       </Grid>
-      <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+      <Grid container item direction="row" xs={12} spacing={1} sx={{
+        pt: 3
+      }}>
         <Grid item xs={6}>
           <Button
             size="large"
@@ -472,7 +486,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         </Grid>
         <Grid item xs={6}>
           {allowed_roles.includes(user?.role) && (
-            <LoadingButton
+            <Button
               loading={loading}
               type="submit"
               size="large"
@@ -481,7 +495,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               fullWidth
             >
               Download CSV
-            </LoadingButton>
+            </Button>
           )}
         </Grid>
       </Grid>

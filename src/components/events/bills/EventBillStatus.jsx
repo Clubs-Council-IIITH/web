@@ -18,20 +18,27 @@ export default async function EventBillStatus(event, eventBills, userid) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{
+        textTransform: "uppercase"
+      }}>
         Financial Information
       </Typography>
-
       <Grid container spacing={2}>
         <Grid container item spacing={2}>
           <Grid item xs={5} lg={3}>
-            <Box mt={2}>Bills Status</Box>
+            <Box sx={{
+              mt: 2
+            }}>Bills Status</Box>
           </Grid>
           <Grid item xs={1} lg={0.1}>
-            <Box mt={2}>-</Box>
+            <Box sx={{
+              mt: 2
+            }}>-</Box>
           </Grid>
           <Grid item xs>
-            <Box mt={2}>
+            <Box sx={{
+              mt: 2
+            }}>
               {eventBills?.state == null
                 ? "Information not available"
                 : billsStateLabel(eventBills?.state)?.name}
@@ -45,13 +52,19 @@ export default async function EventBillStatus(event, eventBills, userid) {
               <>
                 <Grid container item spacing={2}>
                   <Grid item xs={5} lg={3}>
-                    <Box mt={0}>Last Updated</Box>
+                    <Box sx={{
+                      mt: 0
+                    }}>Last Updated</Box>
                   </Grid>
                   <Grid item xs={1} lg={0.1}>
-                    <Box mt={0}>-</Box>
+                    <Box sx={{
+                      mt: 0
+                    }}>-</Box>
                   </Grid>
                   <Grid item xs>
-                    <Box mt={0}>
+                    <Box sx={{
+                      mt: 0
+                    }}>
                       {eventBills?.updatedTime == null
                         ? "Information not available"
                         : eventBills?.updatedTime}
@@ -60,13 +73,19 @@ export default async function EventBillStatus(event, eventBills, userid) {
                 </Grid>
                 <Grid container item spacing={2}>
                   <Grid item xs={5} lg={3}>
-                    <Box mt={0}>SLO Comment</Box>
+                    <Box sx={{
+                      mt: 0
+                    }}>SLO Comment</Box>
                   </Grid>
                   <Grid item xs={1} lg={0.1}>
-                    <Box mt={0}>-</Box>
+                    <Box sx={{
+                      mt: 0
+                    }}>-</Box>
                   </Grid>
                   <Grid item xs>
-                    <Box mt={0}>
+                    <Box sx={{
+                      mt: 0
+                    }}>
                       {eventBills?.sloComment == null
                         ? "-"
                         : eventBills?.sloComment}

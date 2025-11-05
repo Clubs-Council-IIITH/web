@@ -111,12 +111,16 @@ export default async function Profile(props) {
       (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
         <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
-      <Grid container spacing={2} mt={4}>
+      <Grid container spacing={2} sx={{
+        mt: 4
+      }}>
         <Grid item xs={12}>
           <Stack
             direction={{ xs: "column", lg: "row" }}
-            alignItems="center"
             spacing={4}
+            sx={{
+              alignItems: "center"
+            }}
           >
             <UserImage
               image={user.img}
@@ -128,23 +132,21 @@ export default async function Profile(props) {
             <Stack direction="column" spacing={1}>
               <Typography
                 variant="h2"
-                textAlign={{ xs: "center", lg: "left" }}
                 sx={{
+                  textAlign: { xs: "center", lg: "left" },
                   fontSize: { xs: 25, lg: 38 },
-                  wordBreak: "break-word",
-                }}
-              >
+                  wordBreak: "break-word"
+                }}>
                 {user.firstName} {user.lastName}
               </Typography>
               <Typography
                 variant="body1"
-                color="text.secondary"
-                fontFamily="monospace"
-                textAlign={{ xs: "center", lg: "left" }}
                 sx={{
-                  fontSize: { xs: 14, lg: 20 },
-                }}
-              >
+                  color: "text.secondary",
+                  fontFamily: "monospace",
+                  textAlign: { xs: "center", lg: "left" },
+                  fontSize: { xs: 14, lg: 20 }
+                }}>
                 {user.email}
               </Typography>
             </Stack>
@@ -154,12 +156,18 @@ export default async function Profile(props) {
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
           (<>
-            <Grid item container xs spacing={2} mt={5}>
+            <Grid item container xs spacing={2} sx={{
+              mt: 5
+            }}>
               <UserDetails user={user} />
             </Grid>
-            <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
+            <Grid item xs={12} lg={9} sx={{
+              mt: { xs: 2, lg: 5 }
+            }}>
               <Stack direction="column" spacing={2}>
-                <Typography variant="subtitle2" textTransform="uppercase">
+                <Typography variant="subtitle2" sx={{
+                  textTransform: "uppercase"
+                }}>
                   Memberships
                 </Typography>
                 <UserMemberships rows={memberships} />

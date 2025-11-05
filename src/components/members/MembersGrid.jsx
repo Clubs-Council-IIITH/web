@@ -35,7 +35,9 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
         <>
           {!onlyCurrent ? (
             <Divider textAlign="left" sx={{ mb: 2 }}>
-              <Typography variant="h5" textTransform="uppercase">
+              <Typography variant="h5" sx={{
+                textTransform: "uppercase"
+              }}>
                 {year === currentYear ? "Current Members" : year}
               </Typography>
             </Divider>

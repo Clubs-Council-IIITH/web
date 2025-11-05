@@ -90,8 +90,8 @@ export default function EventBudget({
           </Typography>
         ) : (
           <Typography
-            color="text.secondary"
             sx={{
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -221,7 +221,7 @@ export default function EventBudget({
     <>
       {editable ? (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
-          <Icon variant="add" mr={1} />
+          <Icon variant="add" sx={{ mr: 1 }} />
           Add Item
         </Button>
       ) : null}

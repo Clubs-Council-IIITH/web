@@ -32,7 +32,12 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   return (
     <>
       {loadedImages !== totalImages && (
-        <Box width="100%" display="flex" justifyContent="center">
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center"
+          }}>
           <Grid container spacing={5}>
             {Array.from({ length: 12 }, (_, i) => (
               <Grid item key={i} xs={6} lg={3}>
@@ -51,7 +56,6 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
           </Grid>
         </Box>
       )}
-
       {loadedImages === totalImages && (
         <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
           {images.slice(0, limit).map((url, id) => {
@@ -99,13 +103,11 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
           })}
         </ImageList>
       )}
-
       <ImageModal
         images={images}
         id={openImage}
         onClose={() => setOpenImage(null)}
       />
-
       {/* Hidden Pre-loading for the images */}
       {images.slice(0, limit).map((url, i) => (
         <Image

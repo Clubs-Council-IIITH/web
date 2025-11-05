@@ -20,10 +20,11 @@ export default async function ManageClubs() {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Manage Clubs & Student Bodies
         </Typography>
@@ -37,7 +38,6 @@ export default async function ManageClubs() {
           New Club/Body
         </Button>
       </Stack>
-
       <ClubsTable clubs={clubs} />
     </Container>
   );

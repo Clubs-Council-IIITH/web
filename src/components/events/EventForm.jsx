@@ -28,7 +28,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import InfoIcon from "@mui/icons-material/Info";
@@ -281,7 +280,7 @@ export default function EventForm({
     // upload poster
     const poster_filename = ("poster_" + data.name + "_" + data.clubid).replace(
       ".",
-      "_",
+      "_"
     );
     try {
       if (typeof formData.poster === "string") {
@@ -290,7 +289,7 @@ export default function EventForm({
         data.poster = await uploadImageFile(
           formData.poster[0],
           poster_filename,
-          poster_warnSizeMB,
+          poster_warnSizeMB
         );
       } else {
         data.poster = null;
@@ -307,7 +306,7 @@ export default function EventForm({
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString(),
+      new Date(d).toISOString()
     );
 
     // convert budget to array of objects with only required attributes
@@ -374,7 +373,9 @@ export default function EventForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={4} alignItems="flex-start">
+      <Grid container spacing={4} sx={{
+        alignItems: "flex-start"
+      }}>
         <Grid container item xs={12} md={7} xl={8} spacing={3}>
           <Grid container item>
             <Grid
@@ -384,11 +385,12 @@ export default function EventForm({
             >
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
                 gutterBottom
-                mb={2}
-              >
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2
+                }}>
                 Details
               </Typography>
               <FormControlLabel
@@ -516,11 +518,12 @@ export default function EventForm({
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2
+              }}>
               Budget
             </Typography>
             <Grid container item spacing={2}>
@@ -581,14 +584,17 @@ export default function EventForm({
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
+        <Grid container item xs md spacing={3} sx={{
+          alignItems: "flex-start"
+        }}>
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary"
+              }}>
               Venue
             </Typography>
             <Grid container item spacing={2}>
@@ -612,10 +618,11 @@ export default function EventForm({
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary"
+              }}>
               Media
             </Typography>
             <Grid container item spacing={2}>
@@ -634,7 +641,9 @@ export default function EventForm({
             </Grid>
           </Grid>
 
-          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+          <Grid container item direction="row" xs={12} spacing={1} sx={{
+            pt: 3
+          }}>
             <Grid item xs={6}>
               <Button
                 size="large"
@@ -729,14 +738,14 @@ function SubmitButton({
   return (
     <Tooltip title={tooltipText} disableHoverListener={!tooltipText}>
       <span>
-        <LoadingButton
+        <Button
           loading={loading}
           type={mode === "draft" ? "submit" : undefined}
           onClick={
             mode === "submit"
               ? () =>
                   handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true }),
+                    onSubmit(data, { shouldSubmit: true })
                   )()
               : undefined
           }
@@ -747,7 +756,7 @@ function SubmitButton({
           disabled={disabled}
         >
           {label}
-        </LoadingButton>
+        </Button>
       </span>
     </Tooltip>
   );
@@ -1060,11 +1069,12 @@ function EventDatetimeInput({
             filterEvents(existingEvents, startDateInput, endDateInput) ? (
               <Grid item xs={8} xl={4}>
                 <Box
-                  display="flex"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  height="100%"
-                >
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    height: "100%"
+                  }}>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -1081,7 +1091,7 @@ function EventDatetimeInput({
                   events={filterEvents(
                     existingEvents,
                     startDateInput,
-                    endDateInput,
+                    endDateInput
                   )}
                   clubs={clubs}
                 />
@@ -1159,7 +1169,7 @@ function EventDescriptionInput({ control }) {
           multiline
           onBlur={(e) => {
             field.onChange(
-              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
+              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, "")
             );
           }}
         />
@@ -1212,7 +1222,7 @@ function EventVenueInput({
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);
   useEffect(
     () => resetField("locationAlternate"),
-    [startDateInput, endDateInput],
+    [startDateInput, endDateInput]
   );
 
   return (
@@ -1455,7 +1465,7 @@ function EventLocationInput({
           rooms.push({ location: "other", available: true });
         } else {
           rooms = rooms.map((r) =>
-            r.location === "other" ? { ...r, available: true } : r,
+            r.location === "other" ? { ...r, available: true } : r
           );
         }
         setAvailableRooms(rooms);
@@ -1515,7 +1525,7 @@ function EventLocationInput({
                       {locationLabel(location?.location)?.name}
                       {location?.location !== "other" &&
                         locationAlternateInput?.includes(
-                          location?.location,
+                          location?.location
                         ) && (
                           <span style={{ marginLeft: "8px", color: "#999" }}>
                             (already selected)
@@ -1774,7 +1784,13 @@ function EventPOC({
                 fullWidth
               />
             ) : loading ? (
-              <Box py={25} width="100%" display="flex" justifyContent="center">
+              <Box
+                sx={{
+                  py: 25,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center"
+                }}>
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
@@ -1810,9 +1826,10 @@ function EventPOC({
           </FormControl>
         )}
       />
-
       {disabled || members.length === 0 || !poc || hasPhone ? null : (
-        <Box mt={2}>
+        <Box sx={{
+          mt: 2
+        }}>
           <Controller
             name="poc_phone"
             control={control}

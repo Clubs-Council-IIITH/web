@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 import { useForm, Controller } from "react-hook-form";
 
-import { LoadingButton } from "@mui/lab";
 import { DatePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { Box, Button, Grid, TextField } from "@mui/material";
@@ -120,14 +119,14 @@ export default function HolidayForm({
   return (
     <Box>
       {/* Add delete button on right side */}
-
       {id ? (
         <Box
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="center"
-          pb={2}
-        >
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            pb: 2
+          }}>
           <Button
             variant="contained"
             color="error"
@@ -232,7 +231,9 @@ export default function HolidayForm({
             )}
           />
         </Grid> */}
-          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+          <Grid container item direction="row" xs={12} spacing={1} sx={{
+            pt: 3
+          }}>
             <Grid item xs={6}>
               <Button
                 size="large"
@@ -256,7 +257,7 @@ export default function HolidayForm({
               />
             </Grid>
             <Grid item xs={6}>
-              <LoadingButton
+              <Button
                 type="submit"
                 size="large"
                 variant="contained"
@@ -265,7 +266,7 @@ export default function HolidayForm({
                 loading={loading}
               >
                 Submit
-              </LoadingButton>
+              </Button>
             </Grid>
           </Grid>
         </Grid>

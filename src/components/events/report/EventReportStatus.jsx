@@ -14,11 +14,18 @@ export default async function EventReportStatus(event, user) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{
+        textTransform: "uppercase"
+      }}>
         Event Report
       </Typography>
       {!event.eventReportSubmitted ? (
-        <Box mt={2} display={"flex"} flexDirection={"column"}>
+        <Box
+          sx={{
+            mt: 2,
+            display: "flex",
+            flexDirection: "column"
+          }}>
           No event report submitted.
           {event?.clubid === user?.uid ? (
             <Button
@@ -36,7 +43,9 @@ export default async function EventReportStatus(event, user) {
           )}
         </Box>
       ) : (
-        <Box mt={2}>
+        <Box sx={{
+          mt: 2
+        }}>
           <Stack spacing={2} direction="row" sx={{ mt: 2 }}>
             <Button
               component={Link}

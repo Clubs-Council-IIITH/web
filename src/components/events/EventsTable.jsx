@@ -96,7 +96,9 @@ export default function EventsTable({
             headerName: "Event Code",
             flex: 3,
             renderCell: ({ value }) => (
-              <Typography variant="body2" color="text.disabled">
+              <Typography variant="body2" sx={{
+                color: "text.disabled"
+              }}>
                 {value}
               </Typography>
             ),
@@ -354,11 +356,12 @@ export default function EventsTable({
           }}
         >
           <Typography
-            color="text.secondary"
             variant="subtitle2"
-            textTransform="uppercase"
             gutterBottom
-          >
+            sx={{
+              color: "text.secondary",
+              textTransform: "uppercase"
+            }}>
             {query ? "All Events" : "Pending Events"}
           </Typography>
           {query && (

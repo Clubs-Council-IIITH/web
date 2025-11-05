@@ -28,10 +28,21 @@ export default async function EditFinance(props) {
   if (error && !error.message.includes("no bills status")) {
     return (
       <Container>
-        <Typography variant="h4" align="center" mt={5} px={2}>
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{
+            mt: 5,
+            px: 2
+          }}>
           Error: {error.message.slice(10)}
         </Typography>
-        <Stack direction="column" alignItems="center" mt={2}>
+        <Stack
+          direction="column"
+          sx={{
+            alignItems: "center",
+            mt: 2
+          }}>
           <Button
             variant="contained"
             color="primary"
@@ -67,7 +78,9 @@ export default async function EditFinance(props) {
           filename={eventBills?.filename}
         />
       ) : null}
-      <Box mb={5}>
+      <Box sx={{
+        mb: 5
+      }}>
         <BillsStatusForm id={id} defaultValues={eventBills} />
       </Box>
       <EventBudget

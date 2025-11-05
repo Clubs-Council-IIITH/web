@@ -113,7 +113,12 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
         }}
       >
         {isMobile ? (
-          <Typography variant="body1" mb={5} sx={{ textAlign: "center" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              mb: 5,
+              textAlign: "center"
+            }}>
             Your device does not support previewing this file. Please download
             it to view.
           </Typography>

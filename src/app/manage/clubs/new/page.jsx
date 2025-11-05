@@ -32,10 +32,11 @@ export default function NewClub() {
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography variant="h3" gutterBottom sx={{
+        mb: 3
+      }}>
         Create a New Club
       </Typography>
-
       <ClubForm defaultValues={defaultValues} action="create" />
     </Container>
   );

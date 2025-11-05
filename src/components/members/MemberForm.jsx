@@ -24,7 +24,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -177,11 +176,12 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2
+              }}>
               User
             </Typography>
             <Grid container item spacing={2}>
@@ -200,11 +200,12 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2
+              }}>
               Positions
             </Typography>
             <Grid container item spacing={2}>
@@ -220,14 +221,17 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
+        <Grid container item xs md spacing={3} sx={{
+          alignItems: "flex-start"
+        }}>
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary"
+              }}>
               Other
             </Typography>
             <Grid container item spacing={2}>
@@ -236,7 +240,9 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+            <Grid container item direction="row" xs={12} spacing={1} sx={{
+              pt: 3
+            }}>
               <Grid item xs={6}>
                 <Button
                   size="large"
@@ -260,7 +266,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                 />
               </Grid>
               <Grid item xs={6}>
-                <LoadingButton
+                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -270,7 +276,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   disabled={positionEditing || !userMember}
                 >
                   Save
-                </LoadingButton>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -320,7 +326,9 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
   };
 
   return user ? (
-    <Stack direction="row" alignItems="center" spacing={isMobile ? 2 : 4}>
+    <Stack direction="row" spacing={isMobile ? 2 : 4} sx={{
+      alignItems: "center"
+    }}>
       <UserImage
         image={user.img}
         name={user.firstName}
@@ -334,13 +342,12 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
         </Typography>
         <Typography
           variant="body2"
-          color="text.secondary"
-          fontFamily="monospace"
           sx={{
+            color: "text.secondary",
+            fontFamily: "monospace",
             wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
-        >
+            overflowWrap: "break-word"
+          }}>
           {user.email}
         </Typography>
       </Stack>

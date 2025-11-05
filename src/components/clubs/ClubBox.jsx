@@ -27,7 +27,9 @@ export default async function ClubBox({ club }) {
             border: "2px solid lightgray",
           }}
         />
-        <Typography variant="body2" color="text.primary">
+        <Typography variant="body2" sx={{
+          color: "text.primary"
+        }}>
           {club.name}
         </Typography>
       </Button>

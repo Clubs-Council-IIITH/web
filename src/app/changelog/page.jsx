@@ -116,9 +116,15 @@ export default async function Changelog(props) {
         <Status status={await status.json()} version={2.2} />
         <VersionHistory />
       </Box>
-
-      <Stack direction="row" pt={2} mb={2}>
-        <Typography variant="h3" mt={3}>
+      <Stack
+        direction="row"
+        sx={{
+          pt: 2,
+          mb: 2
+        }}>
+        <Typography variant="h3" sx={{
+          mt: 3
+        }}>
           Maintainers
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
@@ -128,20 +134,31 @@ export default async function Changelog(props) {
           component={Link}
           href="/tech-team/members"
         >
-          <Typography variant="button" color="text.primary">
+          <Typography variant="button" sx={{
+            color: "text.primary"
+          }}>
             View all
           </Typography>
           <Icon variant="chevron-right" />
         </Button>
       </Stack>
       {techMembers?.length ? <LocalUsersGrid users={techMembers} /> : null}
-
-      <Stack direction="row" pt={2} mb={2} mt={3}>
+      <Stack
+        direction="row"
+        sx={{
+          pt: 2,
+          mb: 2,
+          mt: 3
+        }}>
         <Typography variant="h3">Changelog</Typography>
         {logsText.split("\n").length > limit ? (
           <>
             <Box sx={{ flexGrow: 1 }} />
-            <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center"
+              }}>
               {show_all ? (
                 <Button
                   variant="none"
@@ -150,7 +167,9 @@ export default async function Changelog(props) {
                   href="/changelog"
                 >
                   <Icon variant="chevron-left" />
-                  <Typography variant="button" color="text.primary">
+                  <Typography variant="button" sx={{
+                    color: "text.primary"
+                  }}>
                     View less
                   </Typography>
                 </Button>
@@ -161,7 +180,9 @@ export default async function Changelog(props) {
                   component={Link}
                   href="/changelog?all=true"
                 >
-                  <Typography variant="button" color="text.primary">
+                  <Typography variant="button" sx={{
+                    color: "text.primary"
+                  }}>
                     View all
                   </Typography>
                   <Icon variant="chevron-right" />
@@ -171,15 +192,18 @@ export default async function Changelog(props) {
           </>
         ) : null}
       </Stack>
-
       <MDXRemote
         source={
           show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
         }
       />
-
       {logsText.split("\n").length > limit ? (
-        <Typography variant="body2" color="text.secondary" mb={2}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            mb: 2
+          }}>
           Showing {show_all ? logsText?.split("\n").length : limit} of{" "}
           {logsText?.split("\n").length} entries.
         </Typography>
@@ -213,7 +237,11 @@ const VersionHistory = () => {
         id="panel1-header"
         style={{ marginLeft: "5px", cursor: "pointer", color: "#444" }}
       >
-        <Box display="flex" alignItems="center">
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center"
+          }}>
           <Typography sx={{ color: "text.primary" }}>
             View releases/version history
           </Typography>

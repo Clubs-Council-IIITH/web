@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
-import { LoadingButton } from "@mui/lab";
 import { Button, Grid, TextField } from "@mui/material";
 import { useToast } from "components/Toast";
 import ConfirmDialog from "components/ConfirmDialog";
@@ -75,9 +74,11 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
             )}
           />
         </Grid>
-        <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+        <Grid container item direction="row" xs={12} spacing={1} sx={{
+          pt: 3
+        }}>
           <Grid item xs={4}>
-            <LoadingButton
+            <Button
               size="large"
               variant="contained"
               color="error"
@@ -89,7 +90,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               }}
             >
               Reject
-            </LoadingButton>
+            </Button>
           </Grid>
           <Grid item xs={4}>
             <Button
@@ -113,7 +114,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
             />
           </Grid>
           <Grid item xs={4}>
-            <LoadingButton
+            <Button
               size="large"
               variant="contained"
               color="success"
@@ -125,7 +126,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               }}
             >
               Accept
-            </LoadingButton>
+            </Button>
           </Grid>
         </Grid>
       </Grid>

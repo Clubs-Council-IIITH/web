@@ -40,10 +40,11 @@ export default function FinanceHeader({
       {!onlyButton ? (
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={3}
-        >
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 3
+          }}>
           <Typography variant="h3" gutterBottom={false}>
             Edit Bill Status Details
           </Typography>
@@ -66,7 +67,6 @@ export default function FinanceHeader({
       ) : (
         ViewButton
       )}
-
       <BillPdfViewer
         eventTitle={eventTitle}
         pdfUrl={fileUrl}

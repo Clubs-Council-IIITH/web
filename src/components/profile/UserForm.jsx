@@ -8,7 +8,6 @@ import { useForm, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 
-import { LoadingButton } from "@mui/lab";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import {
   isValidPhoneNumber,
@@ -79,7 +78,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
         data.img = await uploadImageFile(
           formData.img[0],
           `profile_${defaultValues.uid}`,
-          profile_warnSizeMB,
+          profile_warnSizeMB
         );
       } else {
         data.img = null;
@@ -108,10 +107,14 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           md={7}
           xl={8}
           spacing={3}
-          alignItems="flex-start"
+          sx={{
+            alignItems: "flex-start"
+          }}
         >
           <Grid container item>
-            <Grid container item spacing={2} mt={1}>
+            <Grid container item spacing={2} sx={{
+              mt: 1
+            }}>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
@@ -157,11 +160,12 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={defaultValues?.phone ? 2 : 1}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: defaultValues?.phone ? 2 : 1
+              }}>
               Details
             </Typography>
             <Grid container item spacing={2}>
@@ -203,14 +207,17 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
+        <Grid container item xs md spacing={3} sx={{
+          alignItems: "flex-start"
+        }}>
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary"
+              }}>
               Media
             </Typography>
             <Grid container item spacing={2}>
@@ -228,7 +235,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+            <Grid container item direction="row" xs={12} spacing={1} sx={{
+              pt: 3
+            }}>
               <Grid item xs={6}>
                 <Button
                   size="large"
@@ -252,7 +261,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                 />
               </Grid>
               <Grid item xs={6}>
-                <LoadingButton
+                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -261,7 +270,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   fullWidth
                 >
                   Save
-                </LoadingButton>
+                </Button>
               </Grid>
             </Grid>
           </Grid>

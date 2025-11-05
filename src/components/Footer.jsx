@@ -62,11 +62,13 @@ export default function Footer() {
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <Box
-      bgcolor={theme.palette.background.default}
-      color={theme.palette.text.primary}
+      sx={{
+        bgcolor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+      }}
     >
       <Divider sx={{ py: 4 }} />
-      <Grid container py={5} spacing={2} justifyContent="space-between">
+      <Grid container sx={{ py: 5 }} spacing={2} justifyContent="space-between">
         <Grid
           item
           xs={12}
@@ -75,7 +77,7 @@ export default function Footer() {
           alignItems="center"
           justifyContent={isDesktop ? "flex-start" : "center"}
         >
-          <Box mr={3}>
+          <Box sx={{ mr: 3 }}>
             <Link href={IIIT_MAIN_URL} target="_blank" rel="noreferrer">
               <Image
                 src={IIITLogo}
@@ -89,7 +91,7 @@ export default function Footer() {
               />
             </Link>
           </Box>
-          <Box mr={3}>
+          <Box sx={{ mx: 3 }}>
             <div
               style={{
                 color: theme.palette.mode === "light" ? "#000" : "#fff",
@@ -185,7 +187,7 @@ export default function Footer() {
           >
             Changelog
           </Typography>
-          <Box mx={1}>·</Box>
+          <Box sx={{ mx: 1 }}>·</Box>
           <Typography
             variant="body2"
             component={Link}
@@ -210,7 +212,7 @@ export default function Footer() {
             display="flex"
             alignItems="center"
             justifyContent={"center"}
-            mb={isTablet ? 3 : 2}
+            sx={{ mb: isTablet ? 3 : 2 }}
           >
             <Typography
               variant="body2"
@@ -265,7 +267,7 @@ export default function Footer() {
             >
               Changelog
             </Typography>
-            <Box mx={1}>·</Box>
+            <Box sx={{ mx: 1 }}>·</Box>
             <Typography
               variant="body2"
               component={Link}

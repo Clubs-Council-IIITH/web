@@ -7,7 +7,6 @@ import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
 import { useMode } from "contexts/ModeContext";
 
-import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Grid,
@@ -142,7 +141,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.logo = await uploadImageFile(
           formData.logo[0],
           logo_filename,
-          logo_warnSizeMB,
+          logo_warnSizeMB
         );
       } else {
         data.logo = null;
@@ -164,7 +163,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.banner = await uploadImageFile(
           formData.banner[0],
           banner_filename,
-          banner_warnSizeMB,
+          banner_warnSizeMB
         );
       }
     } catch (error) {
@@ -187,7 +186,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.bannerSquare = await uploadImageFile(
           formData.bannerSquare[0],
           bannerSquare_filename,
-          bannerSquare_warnSizeMB,
+          bannerSquare_warnSizeMB
         );
       }
     } catch (error) {
@@ -211,11 +210,12 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2
+              }}>
               Details
             </Typography>
             <Grid container item spacing={2}>
@@ -255,11 +255,12 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2
+              }}>
               Socials
             </Typography>
             <Grid container item spacing={2}>
@@ -291,14 +292,17 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
+        <Grid container item xs md spacing={3} sx={{
+          alignItems: "flex-start"
+        }}>
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary"
+              }}>
               Media
             </Typography>
             <Grid container item spacing={2}>
@@ -340,7 +344,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+            <Grid container item direction="row" xs={12} spacing={1} sx={{
+              pt: 3
+            }}>
               <Grid item xs={6}>
                 <Button
                   size="large"
@@ -364,7 +370,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 />
               </Grid>
               <Grid item xs={6}>
-                <LoadingButton
+                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -373,7 +379,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                   fullWidth
                 >
                   Save
-                </LoadingButton>
+                </Button>
               </Grid>
             </Grid>
           </Grid>

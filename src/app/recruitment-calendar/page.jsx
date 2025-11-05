@@ -83,9 +83,10 @@ function RecruitmentCard({ clubs, month = "January" }) {
         {clubs.length === 0 && (
           <Typography
             variant="body1"
-            color="text.secondary"
-            sx={{ textAlign: "center" }}
-          >
+            sx={{
+              color: "text.secondary",
+              textAlign: "center"
+            }}>
             No clubs are recruiting this month.
           </Typography>
         )}

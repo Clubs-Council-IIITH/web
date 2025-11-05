@@ -23,7 +23,6 @@ import {
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
-import { LoadingButton } from "@mui/lab";
 
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { membersDataDownload } from "actions/members/data/server_action";
@@ -45,11 +44,12 @@ function DataClubSelect({
     <>
       {loading ? (
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
-        >
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%"
+          }}>
           <CircularProgress />
         </Box>
       ) : clubs.length > 0 ? (
@@ -94,7 +94,7 @@ function DataClubSelect({
                     if (index > -1) value.splice(index, 1);
                     onChange(
                       // On autofill we get a stringified value.
-                      typeof value === "string" ? value.split(",") : value,
+                      typeof value === "string" ? value.split(",") : value
                     );
                   }
                 }}
@@ -201,7 +201,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `members_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD",
+              "YYYY-MM-DD"
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -253,17 +253,22 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography variant="h3" gutterBottom sx={{
+        mb: 3
+      }}>
         Download Members Data
       </Typography>
-      <Grid container spacing={3} alignItems="flex-start">
+      <Grid container spacing={3} sx={{
+        alignItems: "flex-start"
+      }}>
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
-            sx={{ mb: 1.5 }}
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 1.5
+            }}>
             {admin_roles.includes(user?.role)
               ? "Select Club/Student Body"
               : "Selected Club/Student Body"}
@@ -296,10 +301,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
-            sx={{ mb: 1.5 }}
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 1.5
+            }}>
             Members to Include
           </Typography>
           {(farewellTime && admin_roles.includes(user?.role)) ||
@@ -342,10 +348,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              sx={{ mb: 1.5 }}
-            >
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 1.5
+              }}>
               Roles to Include
             </Typography>
             <Controller
@@ -373,14 +380,17 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             <Grid container item>
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
-                sx={{ mb: 1.5 }}
-              >
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 1.5
+                }}>
                 Period of Members to Include
               </Typography>
             </Grid>
-            <Grid container item direction="row" xs={12} spacing={1} pt={1}>
+            <Grid container item direction="row" xs={12} spacing={1} sx={{
+              pt: 1
+            }}>
               <Grid item xs={6}>
                 <Controller
                   name="dateRolesStart"
@@ -436,7 +446,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       value={value}
                       maxDate={dayjs.min(
                         dayjs(new Date()),
-                        dayjs(dateRolesStart).add(4, "year"),
+                        dayjs(dateRolesStart).add(4, "year")
                       )}
                       minDate={dateRolesStart}
                       disableFuture={true}
@@ -452,10 +462,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
-            sx={{ mb: 1.5 }}
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 1.5
+            }}>
             Batches to Include
           </Typography>
           <Controller
@@ -492,7 +503,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                 newValue.push(event.target.value);
                               } else {
                                 const index = newValue.indexOf(
-                                  event.target.value,
+                                  event.target.value
                                 );
                                 if (index > -1) {
                                   newValue.splice(index, 1);
@@ -536,7 +547,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                 newValue.push(event.target.value);
                               } else {
                                 const index = newValue.indexOf(
-                                  event.target.value,
+                                  event.target.value
                                 );
                                 if (index > -1) {
                                   newValue.splice(index, 1);
@@ -559,10 +570,11 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         <Grid container item>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
             gutterBottom
-          >
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary"
+            }}>
             Fields to Include
           </Typography>
           <Controller
@@ -572,7 +584,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field, fieldState: { error } }) => (
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
-                  <Grid container item spacing={1} ml={1}>
+                  <Grid container item spacing={1} sx={{
+                    ml: 1
+                  }}>
                     {[
                       { fieldValue: "clubid", fieldName: "Club Name" },
                       { fieldValue: "uid", fieldName: "Member Name" },
@@ -600,7 +614,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value,
+                                    event.target.value
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
@@ -622,7 +636,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           />
         </Grid>
       </Grid>
-      <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+      <Grid container item direction="row" xs={12} spacing={1} sx={{
+        pt: 3
+      }}>
         <Grid item xs={6}>
           <Button
             size="large"
@@ -650,7 +666,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
         </Grid>
         <Grid item xs={6}>
           {allowed_roles.includes(user?.role) && (
-            <LoadingButton
+            <Button
               loading={loading}
               type="submit"
               size="large"
@@ -659,7 +675,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               fullWidth
             >
               Download CSV
-            </LoadingButton>
+            </Button>
           )}
         </Grid>
       </Grid>

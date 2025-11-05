@@ -69,22 +69,30 @@ export default async function MemberCard({ uid, poc, roles }) {
           height={150}
         />
         <Typography
-          textAlign="center"
           variant="subtitle1"
-          textTransform="capitalize"
-          mt={3}
-        >
+          sx={{
+            textAlign: "center",
+            textTransform: "capitalize",
+            mt: 3
+          }}>
           {`${user.firstName} ${user.lastName}`.toLowerCase()}
         </Typography>
 
         {poc ? (
-          <Box display="flex" alignItems="center" mt={1}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              mt: 1
+            }}>
             <Icon
               variant="contact-emergency-rounded"
               color="error.main"
               mr={1}
             />
-            <Typography variant="subtitle2" fontWeight={400}>
+            <Typography variant="subtitle2" sx={{
+              fontWeight: 400
+            }}>
               Point of Contact
             </Typography>
           </Box>
@@ -103,7 +111,12 @@ export default async function MemberCard({ uid, poc, roles }) {
             }
           })
           .map((role, key) => (
-            <Box key={key} mt={0.5} textAlign="center">
+            <Box
+              key={key}
+              sx={{
+                mt: 0.5,
+                textAlign: "center"
+              }}>
               <Typography
                 variant="body2"
                 sx={{ display: "inline-block", color: "text.secondary" }}
@@ -112,12 +125,11 @@ export default async function MemberCard({ uid, poc, roles }) {
               </Typography>
               <Typography
                 variant="body2"
-                color="grey.400"
                 sx={{
-                  display: "inline-block",
-                }}
-                ml={0.5}
-              >
+                  color: "grey.400",
+                  ml: 0.5,
+                  display: "inline-block"
+                }}>
                 ({role.startYear} - {role.endYear || "present"})
               </Typography>
             </Box>

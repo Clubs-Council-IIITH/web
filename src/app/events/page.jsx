@@ -45,7 +45,9 @@ export default async function Events(props) {
 
   return (
     <Box>
-      <Box mt={2}>
+      <Box sx={{
+        mt: 2
+      }}>
         <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
       <PaginatedEventsGrid

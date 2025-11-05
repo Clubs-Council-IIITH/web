@@ -45,7 +45,12 @@ export default function DocsList({ allFiles, priviliged = false }) {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
+      <Grid
+        container
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}>
         <Typography variant="h3" sx={{ mb: 2, ml: 1 }}>
           Important Documents
         </Typography>
@@ -78,7 +83,9 @@ export default function DocsList({ allFiles, priviliged = false }) {
                 <TableCell>{file.title}</TableCell>
                 <TableCell>{formatDate(file.modifiedTime)}</TableCell>
                 <TableCell align="right">
-                  <Grid container spacing={1.5} justifyContent="flex-end">
+                  <Grid container spacing={1.5} sx={{
+                    justifyContent: "flex-end"
+                  }}>
                     {priviliged && (
                       <Grid item>
                         <Button

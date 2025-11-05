@@ -20,7 +20,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { useTheme } from "@mui/material/styles";
@@ -197,7 +196,9 @@ export default function EventReportForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={4} alignItems="flex-start">
+      <Grid container spacing={4} sx={{
+        alignItems: "flex-start"
+      }}>
         <Grid container item xs={12} md={7} xl={8} spacing={3}>
           <Grid container item>
             <Grid
@@ -207,11 +208,12 @@ export default function EventReportForm({
             >
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
                 gutterBottom
-                mb={2}
-              >
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2
+                }}>
                 Details
               </Typography>
             </Grid>
@@ -223,7 +225,9 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6} xl={6}>
                   <DateTimePicker
@@ -265,7 +269,9 @@ export default function EventReportForm({
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <FormControl fullWidth disabled>
                 <InputLabel>Organized By</InputLabel>
                 <Select
@@ -286,7 +292,7 @@ export default function EventReportForm({
                         {selected
                           .map(
                             (clubId) =>
-                              clubs.find((club) => club.cid === clubId)?.name,
+                              clubs.find((club) => club.cid === clubId)?.name
                           )
                           .filter(Boolean)
                           .map((clubName) => (
@@ -298,7 +304,9 @@ export default function EventReportForm({
                 ></Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <Controller
                 name="eventSummary"
                 control={control}
@@ -326,7 +334,9 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <Controller
                 name="mediaLink"
                 control={control}
@@ -352,7 +362,9 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <SubmittedBy
                 control={control}
                 watch={watch}
@@ -363,7 +375,9 @@ export default function EventReportForm({
             </Grid>
           </Grid>
         </Grid>
-        <Grid container item xs md spacing={3} alignItems="flex-start">
+        <Grid container item xs md spacing={3} sx={{
+          alignItems: "flex-start"
+        }}>
           <Grid container item>
             <Grid
               container
@@ -372,11 +386,12 @@ export default function EventReportForm({
             >
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
                 gutterBottom
-                mb={2}
-              >
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2
+                }}>
                 Attendance
               </Typography>
             </Grid>
@@ -388,7 +403,13 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} mt={2} mb={3}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                mt: 2,
+                mb: 3
+              }}>
               <Controller
                 name="actualAttendance"
                 control={control}
@@ -417,7 +438,9 @@ export default function EventReportForm({
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} mt={2}>
+                <Grid item xs={12} sx={{
+                  mt: 2
+                }}>
                   <Controller
                     name="actualExternalAttendance"
                     control={control}
@@ -441,7 +464,9 @@ export default function EventReportForm({
               </>
             ) : null}
 
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <Controller
                 name="prizes"
                 control={control}
@@ -483,7 +508,9 @@ export default function EventReportForm({
             </Grid>
             {prizesInput?.length != 0 && (
               <>
-                <Grid item xs={12} mt={2}>
+                <Grid item xs={12} sx={{
+                  mt: 2
+                }}>
                   <Controller
                     name="prizesBreakdown"
                     control={control}
@@ -502,7 +529,9 @@ export default function EventReportForm({
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} mt={2}>
+                <Grid item xs={12} sx={{
+                  mt: 2
+                }}>
                   <Controller
                     name="winnersDetails"
                     control={control}
@@ -525,7 +554,9 @@ export default function EventReportForm({
                 </Grid>
               </>
             )}
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} sx={{
+              mt: 2
+            }}>
               <Controller
                 name="feedback"
                 control={control}
@@ -546,7 +577,9 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
+            <Grid container item direction="row" xs={12} spacing={1} sx={{
+              pt: 3
+            }}>
               <Grid item xs={6}>
                 <Button
                   size="large"
@@ -570,7 +603,7 @@ export default function EventReportForm({
                 />
               </Grid>
               <Grid item xs={6}>
-                <LoadingButton
+                <Button
                   loading={loading}
                   size="large"
                   variant="contained"
@@ -579,7 +612,7 @@ export default function EventReportForm({
                   onClick={() => handleSubmit((data) => onSubmit(data))()}
                 >
                   Save & Submit
-                </LoadingButton>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -647,7 +680,13 @@ function SubmittedBy({
           <FormControl fullWidth error={invalid}>
             <InputLabel id="submittedBy">Submitted By *</InputLabel>
             {members.length === 0 ? (
-              <Box py={25} width="100%" display="flex" justifyContent="center">
+              <Box
+                sx={{
+                  py: 25,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center"
+                }}>
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
@@ -673,9 +712,10 @@ function SubmittedBy({
           </FormControl>
         )}
       />
-
       {disabled || members.length === 0 || !submittedBy || hasPhone ? null : (
-        <Box mt={2}>
+        <Box sx={{
+          mt: 2
+        }}>
           <Controller
             name="submittedBy_phone"
             defaultValue={""}
