@@ -3,7 +3,6 @@
 import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import NextAppDirEmotionCacheProvider from "./EmotionCache";
 import { useMode } from "contexts/ModeContext";
 
 import palette from "./palette";
@@ -12,7 +11,7 @@ import breakpoints from "./breakpoints";
 import componentsOverride from "./overrides";
 import shadows, { customShadows } from "./shadows";
 
-export default function ThemeRegistry({ children, nonce }) {
+export default function ThemeRegistry({ children }) {
   const prefersDarkMode = useMode();
 
   const themeOptions = React.useMemo(
@@ -27,7 +26,7 @@ export default function ThemeRegistry({ children, nonce }) {
         ? customShadows.dark
         : customShadows.light,
     }),
-    [prefersDarkMode], // TODO: add setting dependency
+    [prefersDarkMode]
   );
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
@@ -47,11 +46,9 @@ export default function ThemeRegistry({ children, nonce }) {
   }, [prefersDarkMode]);
 
   return (
-    <NextAppDirEmotionCacheProvider options={{ key: "mui", nonce: nonce }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
-    </NextAppDirEmotionCacheProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
   );
 }
