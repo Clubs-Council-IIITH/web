@@ -31,7 +31,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function NewEventReport({ params }) {
+export default async function NewEventReport(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,

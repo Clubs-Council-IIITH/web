@@ -5,7 +5,12 @@ import { registerUrql } from "@urql/next/rsc";
 const GRAPHQL_ENDPOINT =
   process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";
 
-const makeClient = () => {
+const makeClient = async () => {
+  const cookieList = await cookies().getAll();
+  const cookieHeader = cookieList.length
+    ? cookieList.map((c) => `${c.name}=${c.value}`).join("; ")
+    : undefined;
+
   return createClient({
     url: GRAPHQL_ENDPOINT,
     exchanges: [cacheExchange, fetchExchange],
@@ -13,10 +18,7 @@ const makeClient = () => {
       cache: "no-store",
       credentials: "include",
       headers: {
-        cookie: cookies()
-          .getAll()
-          .map((cookie) => `${cookie.name}=${cookie.value}`)
-          .join("; "),
+        ...(cookieHeader ? { cookie: cookieHeader } : {}),
       },
     },
   });

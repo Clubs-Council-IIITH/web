@@ -55,7 +55,8 @@ export const metadata = {
   title: "Changelog | Life @ IIIT-H",
 };
 
-export default async function Changelog({ searchParams }) {
+export default async function Changelog(props) {
+  const searchParams = await props.searchParams;
   const show_all = searchParams?.all === "true" ? true : false;
 
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {

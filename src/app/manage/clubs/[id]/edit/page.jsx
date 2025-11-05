@@ -11,7 +11,8 @@ export const metadata = {
   title: "Edit Club",
 };
 
-export default async function EditClub({ params }) {
+export default async function EditClub(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {

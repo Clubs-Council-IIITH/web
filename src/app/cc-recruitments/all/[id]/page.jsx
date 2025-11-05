@@ -12,7 +12,8 @@ import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -38,7 +39,9 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function CCApplicantDetails({ params, searchParams }) {
+export default async function CCApplicantDetails(props) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { id } = params;
   const year = parseInt(searchParams?.year) || new Date().getFullYear();
 

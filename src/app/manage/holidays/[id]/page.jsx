@@ -10,7 +10,8 @@ export const metadata = {
   title: "Edit Holiday",
 };
 
-export default async function EditHoliday({ params }) {
+export default async function EditHoliday(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {

@@ -58,7 +58,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   // get the nonce and use it
-  const nonce = headers().get("x-nonce") || "";
+  const nonce = (await headers()).get("x-nonce") || "";
 
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(

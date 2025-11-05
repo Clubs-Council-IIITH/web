@@ -12,7 +12,8 @@ import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -38,7 +39,8 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function Profile({ params }) {
+export default async function Profile(props) {
+  const params = await props.params;
   const { id } = params;
 
   // get currently logged in user
@@ -151,11 +153,10 @@ export default async function Profile({ params }) {
 
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
-          <>
+          (<>
             <Grid item container xs spacing={2} mt={5}>
               <UserDetails user={user} />
             </Grid>
-
             <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
               <Stack direction="column" spacing={2}>
                 <Typography variant="subtitle2" textTransform="uppercase">
@@ -164,7 +165,7 @@ export default async function Profile({ params }) {
                 <UserMemberships rows={memberships} />
               </Stack>
             </Grid>
-          </>
+          </>)
         ) : null}
       </Grid>
     </Container>

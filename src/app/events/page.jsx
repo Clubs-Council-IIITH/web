@@ -31,7 +31,8 @@ async function query(querystring) {
   return data?.events || [];
 }
 
-export default async function Events({ searchParams }) {
+export default async function Events(props) {
+  const searchParams = await props.searchParams;
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
 

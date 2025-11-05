@@ -44,7 +44,8 @@ import {
 import { locationLabel } from "utils/formatEvent";
 import MemberListItem from "components/members/MemberListItem";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -60,7 +61,8 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function ManageEventID({ params }) {
+export default async function ManageEventID(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {

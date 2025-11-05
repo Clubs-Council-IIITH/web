@@ -15,7 +15,8 @@ export const metadata = {
   title: "Approve/Reject Event | CC",
 };
 
-export default async function ApproveEventCC({ params }) {
+export default async function ApproveEventCC(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {

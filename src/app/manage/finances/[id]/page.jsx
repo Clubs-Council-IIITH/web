@@ -13,7 +13,8 @@ export const metadata = {
   title: "Edit Bill Status",
 };
 
-export default async function EditFinance({ params }) {
+export default async function EditFinance(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query(GET_EVENT_BUDGET, {

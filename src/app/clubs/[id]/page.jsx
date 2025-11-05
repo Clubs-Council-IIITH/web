@@ -15,7 +15,8 @@ import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
 import MembersGrid from "components/members/MembersGrid";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   let club;
@@ -42,7 +43,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function Club({ params }) {
+export default async function Club(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { club } = {} } = await getClient().query(GET_CLUB, {

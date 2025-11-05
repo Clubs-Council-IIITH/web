@@ -15,7 +15,8 @@ export const metadata = {
   title: "Viewing Member",
 };
 
-export default async function ManageMember({ params }) {
+export default async function ManageMember(props) {
+  const params = await props.params;
   const { id } = params;
   const [cid, uid] = id?.split(encodeURIComponent(":"));
 

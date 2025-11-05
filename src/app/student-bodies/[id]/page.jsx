@@ -9,7 +9,8 @@ import { GET_CLUB } from "gql/queries/clubs";
 
 import Club from "app/clubs/[id]/page";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   let club;
@@ -35,6 +36,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function StudentBody({ params }) {
+export default async function StudentBody(props) {
+  const params = await props.params;
   return Club({ params });
 }

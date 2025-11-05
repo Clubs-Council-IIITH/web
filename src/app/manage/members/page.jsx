@@ -15,7 +15,8 @@ export const metadata = {
   title: "Manage Members",
 };
 
-export default async function ManageMembers({ searchParams }) {
+export default async function ManageMembers(props) {
+  const searchParams = await props.searchParams;
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
