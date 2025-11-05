@@ -6,6 +6,7 @@ import { GET_USER } from "gql/queries/auth";
 import { Container, Typography } from "@mui/material";
 
 import EventForm from "components/events/EventForm";
+import { isEventsReportSubmitted } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "New Event",
@@ -49,6 +50,15 @@ export default async function CopyEvent({ params }) {
   );
   const user = { ...userMeta, ...userProfile };
 
+  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+    clubid: null,
+    public: false,
+  });
+
+  if (!isEventsReportSubmitted(events, userMeta)) {
+    redirect("/manage/events");
+  }
+
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
@@ -62,11 +72,6 @@ export default async function CopyEvent({ params }) {
     delete event.budget;
     delete event.location;
     delete event.status;
-
-    const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-      clubid: null,
-      public: false,
-    });
 
     return (
       user?.role === "club" &&

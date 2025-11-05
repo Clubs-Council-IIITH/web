@@ -4,6 +4,9 @@ import EventForm from "components/events/EventForm";
 
 import { getClient } from "gql/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_USER } from "gql/queries/auth";
+import { redirect } from "next/navigation";
+import { isEventsReportSubmitted } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "New Event",
@@ -34,6 +37,14 @@ export default async function NewEvent() {
     clubid: null,
     public: false,
   });
+
+  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+    userInput: null,
+  });
+
+  if (!isEventsReportSubmitted(events, userMeta)) {
+    redirect("/manage/events");
+  }
 
   return (
     <Container>

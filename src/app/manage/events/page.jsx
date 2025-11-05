@@ -15,6 +15,7 @@ import {
 
 import Icon from "components/Icon";
 import EventsTable from "components/events/EventsTable";
+import { isEventsReportSubmitted } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "Manage Events",
@@ -47,6 +48,12 @@ export default async function ManageEvents() {
     { clubid: userMeta?.role === "club" ? userMeta.uid : null },
   );
 
+  const isReportsSubmitted = await getalleventsquery({
+    targetClub: userMeta?.role === "club" ? userMeta.uid : null,
+  }).then(events => {
+      return isEventsReportSubmitted(events, userMeta);
+  });
+
   return (
     <Container>
       <Stack
@@ -65,6 +72,7 @@ export default async function ManageEvents() {
             href="/manage/events/new"
             variant="contained"
             startIcon={<Icon variant="add" />}
+            disabled={!isReportsSubmitted}
           >
             New Event
           </Button>

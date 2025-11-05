@@ -21,3 +21,17 @@ export const canEditReport = (event, eventReport, user) => {
 
   return false;
 };
+
+export const isEventsReportSubmitted = (events, userMeta) => {
+  const DAYS = 7 * 24 * 60 * 60 * 1000;
+  const START_DATE = new Date("2025-09-10").getTime();
+  const cutoff = Date.now() - DAYS;
+
+  const pastEvents = events.filter(e =>
+    e.clubid === userMeta?.uid &&
+    new Date(e?.datetimeperiod?.[1]) < cutoff &&
+    new Date(e?.datetimeperiod?.[1]) > START_DATE
+  );
+
+  return !(userMeta?.role === "club" && pastEvents.some(e => !e.eventReportSubmitted));
+};

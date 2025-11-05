@@ -71,6 +71,7 @@ export const GET_ALL_EVENTS = gql`
       sponsor {
         amount
       }
+      eventReportSubmitted
     }
   }
 `;
