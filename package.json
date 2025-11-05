@@ -27,7 +27,7 @@
     "@mui/x-date-pickers": "^7.21.0",
     "@next/mdx": "15.5.6",
     "@svgr/webpack": "^8.1.0",
-    "@urql/next": "^1.1.2",
+    "@urql/next": "^2.0.0",
     "add-dependencies": "^1.1.0",
     "add-to-calendar-button-react": "^2.8.5",
     "browser-image-resizer": "^2.4.1",
