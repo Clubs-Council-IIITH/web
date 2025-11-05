@@ -213,6 +213,7 @@ export default function MembersTable({
         },
         pagination: { paginationModel: { pageSize: 25 } },
       }}
+      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         ".MuiDataGrid-cell:focus": {

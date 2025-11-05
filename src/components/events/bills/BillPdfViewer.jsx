@@ -53,7 +53,7 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
         {eventTitle} - Bill
         {/* Buttons */}
         {isMobile ? ( // Mobile layout
-          <Box
+          (<Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -73,7 +73,6 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
             >
               Download
             </Button>
-
             <IconButton
               onClick={onClose}
               size="small"
@@ -85,7 +84,7 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
             >
               <Icon variant="close" />
             </IconButton>
-          </Box> // Desktop layout
+          </Box>) // Desktop layout
         ) : (
           <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
             {/* Download Button */}
@@ -104,7 +103,6 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
           </Box>
         )}
       </DialogTitle>
-
       <DialogContent
         sx={{
           display: "flex",

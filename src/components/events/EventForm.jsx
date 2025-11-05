@@ -1244,28 +1244,21 @@ function EventVenueInput({
           )}
         />
       </Grid>
-
       {/* show venue selector if event is hybrid or offline*/}
       <Grid item xs={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
-          startDateInput && endDateInput ? (
-            <EventLocationInput
-              control={control}
-              watch={watch}
-              startDateInput={startDateInput}
-              endDateInput={endDateInput}
-              disabled={disabled}
-              eventid={eventid}
-            />
-          ) : (
-            <FormHelperText>
-              Enter start and end dates to get available venues
-            </FormHelperText>
-          )
+          (startDateInput && endDateInput ? (<EventLocationInput
+            control={control}
+            watch={watch}
+            startDateInput={startDateInput}
+            endDateInput={endDateInput}
+            disabled={disabled}
+            eventid={eventid}
+          />) : (<FormHelperText>Enter start and end dates to get available venues
+                        </FormHelperText>))
         ) : null}
       </Grid>
-
       <Grid item xs={12}>
         <Controller
           name="population"
@@ -1295,7 +1288,6 @@ function EventVenueInput({
           )}
         />
       </Grid>
-
       <FormControlLabel
         control={
           <Controller
@@ -1317,7 +1309,6 @@ function EventVenueInput({
         }
         label="External Particpants"
       />
-
       {externalAllowed ? (
         <Grid item xs={12}>
           <Controller
@@ -1361,7 +1352,6 @@ function EventVenueInput({
           />
         </Grid>
       ) : null}
-
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (
         <>

@@ -85,7 +85,6 @@ export function EventReportDetails({
           Event Report
         </Typography>
       </Grid>
-
       <Grid container spacing={6}>
         <Grid item xs={12} md={4} sm={6}>
           <Typography
@@ -267,7 +266,6 @@ export function EventReportDetails({
           </Box>
         </Grid>
       </Grid>
-
       <Grid item xs={12} mt={3}>
         <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
           Summary of the event held
@@ -285,9 +283,7 @@ export function EventReportDetails({
           </Typography>
         </Box>
       </Grid>
-
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-
       <Grid container spacing={6}>
         <Grid item xs={12} md={12} lg={6} sm={12}>
           <Typography

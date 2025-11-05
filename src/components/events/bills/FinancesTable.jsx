@@ -155,6 +155,7 @@ export default function FinancesTable({ events, role }) {
         },
         pagination: { paginationModel: { pageSize: 10 } },
       }}
+      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         ".MuiDataGrid-cell:focus": { outline: "none" },

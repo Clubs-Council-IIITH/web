@@ -136,6 +136,7 @@ export default function ClubsTable({ clubs }) {
           paginationModel: { pageSize: 25 },
         },
       }}
+      showToolbar
       slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         // disable cell selection style
