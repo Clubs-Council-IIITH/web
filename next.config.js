@@ -26,6 +26,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -85,6 +86,7 @@ const nextConfig = {
     styledComponents: true,
     removeConsole: process.env.NODE_ENV === "production",
   },
+  reactCompiler: true,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -120,7 +122,9 @@ const nextConfig = {
       },
     },
   },
-
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
 };
 
 const withMDX = require("@next/mdx")();

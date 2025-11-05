@@ -17,7 +17,7 @@ const redirect = (url, contentSecurityPolicyHeaderValue) => {
 };
 
 // TODO: make multiple middlewares (one for route acl, one for club redirects) and combine them
-export function middleware(req) {
+export function proxy(req) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const { pathname } = req.nextUrl;
   const cspHeader = `
