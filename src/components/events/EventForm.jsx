@@ -735,7 +735,9 @@ function SubmitButton({
           onClick={
             mode === "submit"
               ? () =>
-                handleSubmit((data) => onSubmit(data, { shouldSubmit: true }))()
+                  handleSubmit((data) =>
+                    onSubmit(data, { shouldSubmit: true }),
+                  )()
               : undefined
           }
           size="large"

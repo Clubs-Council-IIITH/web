@@ -32,7 +32,7 @@ export default function EventSponsor({
   const onAdd = () => {
     const maxId = rows.length > 0 ? Math.max(...rows.map((r) => r.id)) : -1;
     const newId = maxId + 1;
-    setRows([...rows, {id: newId, ...emptySponsorItem}]);
+    setRows([...rows, { id: newId, ...emptySponsorItem }]);
   };
   const onUpdate = (row) => {
     row.amount = Math.max(row.amount, 0);
