@@ -339,7 +339,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   );
 
   const drawerContent = (
-    <ScrollbarWrapper>
+    <ScrollbarWrapper hideScrollbar={true}>
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
         <Logo />
       </Box>
@@ -414,7 +414,7 @@ export function Content({ children }) {
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
-    <ScrollbarWrapper>
+    <ScrollbarWrapper scrollbarColor={theme.palette.primary.main}>
       <Box
         sx={{
           display: "flex",
