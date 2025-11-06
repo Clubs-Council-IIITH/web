@@ -1,5 +1,6 @@
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
+import React from "react";
 
 import { Box, Grid, Typography, Divider } from "@mui/material";
 
@@ -67,442 +68,46 @@ export default async function EventApprovalStatus(
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
         TIMELINE{" "}
-        <Typography variant="caption" gutterBottom sx={{ marginLeft: 1 }}>
+        <Typography
+          component="span"
+          variant="caption"
+          sx={{ marginLeft: 1, color: "text.secondary" }}
+        >
           (Times in IST)
         </Typography>
       </Typography>
-      <Grid container spacing={2}>
-        <Grid container spacing={2}>
+
+      <Grid container direction="column" spacing={0.5}>
+        {[
+          ["Last Edited", status?.lastUpdatedTime ? `Edited on ${status?.lastUpdatedTime}` : "Information not available"],
+          ["Last Edited By", lastEditeduser],
+          ["Event Submission", status?.submissionTime ? ( `Submitted on ${status?.submissionTime}` ) : "Information not available"],
+          ["Clubs Council Approval", status?.ccApproverTime.includes("Not Approved") ? "Not Approved" : `Approved on ${status?.ccApproverTime}`],
+          ["Students Life Council Approval", status?.slcApproverTime.includes("Not Approved") ? "Not Approved" : `Approved on ${status?.slcApproverTime}`],
+          ["Students Life Office Approval", status?.sloApproverTime.includes("Not Approved") ? "Not Approved" : `Approved on ${status?.sloApproverTime}`],
+        ].map(([label, value], i) => (
           <Grid
-            size={{
-              xs: 5,
-              lg: 3
-            }}>
+            key={i}
+            columns={16}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "3fr 10fr", // label 37.5%, value 62.5%
+              borderBottom: "1px dashed #eee",
+              py: 0.5,
+            }}
+          >
+            <Box sx={{ color: "#555", fontWeight: 500 }}>{label}</Box>
             <Box
               sx={{
-                mt: 2,
+                color: value?.includes("Not Approved") ? "red" : "inherit",
               }}
             >
-              Last Edited
+              {`- ${value}`}
             </Box>
           </Grid>
-          <Grid
-            size={{
-              xs: 1,
-              lg: 0.1
-            }}>
-            <Box
-              sx={{
-                mt: 2,
-              }}
-            >
-              -
-            </Box>
-          </Grid>
-          <Grid size="grow">
-            <Box
-              sx={{
-                mt: 2,
-                color: status?.lastUpdatedTime == null ? "#5a5a5a" : "inherit",
-              }}
-            >
-              {status?.lastUpdatedTime == null
-                ? "Information not available"
-                : (status?.lastUpdatedTime.includes(":") ? "Edited on " : "") +
-                  status?.lastUpdatedTime}
-            </Box>
-          </Grid>
-        </Grid>
-        {status?.lastUpdatedBy != null ? (
-          <Grid container spacing={2}>
-            <Grid
-              size={{
-                xs: 5,
-                lg: 3
-              }}>
-              <Box
-                sx={{
-                  mt: 0,
-                }}
-              >
-                Last Edited By
-              </Box>
-            </Grid>
-            <Grid
-              size={{
-                xs: 1,
-                lg: 0.1
-              }}>
-              <Box
-                sx={{
-                  mt: 0,
-                }}
-              >
-                -
-              </Box>
-            </Grid>
-            <Grid size="grow">
-              <Box
-                sx={{
-                  mt: 0,
-                }}
-              >
-                {lastEditeduser}
-              </Box>
-            </Grid>
-          </Grid>
-        ) : null}
-        {status?.state && status?.state == "deleted" ? (
-          <>
-            <Grid container spacing={2}>
-              <Grid
-                size={{
-                  xs: 5,
-                  lg: 3
-                }}>
-                <Box
-                  sx={{
-                    mt: 1,
-                  }}
-                >
-                  Event Deletion
-                </Box>
-              </Grid>
-              <Grid
-                size={{
-                  xs: 1,
-                  lg: 0.1
-                }}>
-                <Box
-                  sx={{
-                    mt: 1,
-                  }}
-                >
-                  -
-                </Box>
-              </Grid>
-              <Grid size="grow">
-                <Box
-                  sx={{
-                    mt: 1,
-                    color: status?.deletedTime == null ? "#5a5a5a" : "inherit",
-                  }}
-                >
-                  {status?.deletedTime == null
-                    ? "Information not available"
-                    : (status?.deletedTime.includes(":") ? "Deleted on " : "") +
-                      status?.deletedTime}
-                </Box>
-              </Grid>
-            </Grid>
-            {status?.deletedTime != null && status?.deletedBy != null ? (
-              <Grid container spacing={2}>
-                <Grid
-                  size={{
-                    xs: 5,
-                    lg: 3
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    Event Deleted By
-                  </Box>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 1,
-                    lg: 0.1
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    -
-                  </Box>
-                </Grid>
-                <Grid size="grow">
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    {deletedBy}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-          </>
-        ) : status?.state && status?.state !== "incomplete" ? (
-          <>
-            <Grid container spacing={2}>
-              <Grid
-                size={{
-                  xs: 5,
-                  lg: 3
-                }}>
-                <Box
-                  sx={{
-                    mt: 1,
-                  }}
-                >
-                  Event Submission
-                </Box>
-              </Grid>
-              <Grid
-                size={{
-                  xs: 1,
-                  lg: 0.1
-                }}>
-                <Box
-                  sx={{
-                    mt: 1,
-                  }}
-                >
-                  -
-                </Box>
-              </Grid>
-              <Grid size="grow">
-                <Box
-                  sx={{
-                    mt: 1,
-
-                    color:
-                      status?.submissionTime == null ? "#5a5a5a" : "inherit",
-                  }}
-                >
-                  {status?.submissionTime == null
-                    ? "Information not available"
-                    : (status?.submissionTime.includes(":")
-                        ? "Submitted on "
-                        : "") + status?.submissionTime}
-                </Box>
-              </Grid>
-            </Grid>
-
-            {!isStudentBodyEvent ? (
-              <Grid container spacing={2}>
-                <Grid
-                  size={{
-                    xs: 5,
-                    lg: 3
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 1,
-                    }}
-                  >
-                    Clubs Council Approval
-                  </Box>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 1,
-                    lg: 0.1
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 1,
-                    }}
-                  >
-                    -
-                  </Box>
-                </Grid>
-                <Grid size="grow">
-                  <Box
-                    sx={{
-                      mt: 1,
-
-                      color:
-                        status?.ccApproverTime == null ? "#5a5a5a" : "inherit",
-                    }}
-                  >
-                    {status?.ccApproverTime == null
-                      ? "Information not available"
-                      : (status?.ccApproverTime.includes(":")
-                          ? "Approved on "
-                          : "") + status?.ccApproverTime}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-
-            {status?.ccApprover != null && status?.ccApproverTime != null ? (
-              <Grid container spacing={2}>
-                <Grid
-                  size={{
-                    xs: 5,
-                    lg: 3
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    Clubs Council Approved By
-                  </Box>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 1,
-                    lg: 0.1
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    -
-                  </Box>
-                </Grid>
-                <Grid size="grow">
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    {ccApprover}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-
-            {!isStudentBodyEvent ? (
-              <Grid container spacing={2}>
-                <Grid
-                  size={{
-                    xs: 5,
-                    lg: 3
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 1,
-                    }}
-                  >
-                    Students Life Council Approval
-                  </Box>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 1,
-                    lg: 0.1
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 1,
-                    }}
-                  >
-                    -
-                  </Box>
-                </Grid>
-                <Grid size="grow">
-                  <Box
-                    sx={{
-                      mt: 1,
-
-                      color:
-                        status?.slcApproverTime == null ? "#5a5a5a" : "inherit",
-                    }}
-                  >
-                    {status?.slcApproverTime == null
-                      ? "Information not available"
-                      : (status?.slcApproverTime.includes(":")
-                          ? "Approved on "
-                          : "") + status?.slcApproverTime}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-            {status?.slcApprover != null && status?.slcApproverTime != null ? (
-              <Grid container spacing={2}>
-                <Grid
-                  size={{
-                    xs: 5,
-                    lg: 3
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    Students Life Council Approved By
-                  </Box>
-                </Grid>
-                <Grid
-                  size={{
-                    xs: 1,
-                    lg: 0.1
-                  }}>
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    -
-                  </Box>
-                </Grid>
-                <Grid size="grow">
-                  <Box
-                    sx={{
-                      mt: 0,
-                    }}
-                  >
-                    {slcApprover}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-
-            <Grid container spacing={2}>
-              <Grid
-                size={{
-                  xs: 5,
-                  lg: 3
-                }}>
-                <Box
-                  sx={{
-                    mt: 1,
-                  }}
-                >
-                  Students Life Office Approval
-                </Box>
-              </Grid>
-              <Grid
-                size={{
-                  xs: 1,
-                  lg: 0.1
-                }}>
-                <Box
-                  sx={{
-                    mt: 1,
-                  }}
-                >
-                  -
-                </Box>
-              </Grid>
-              <Grid size="grow">
-                <Box
-                  sx={{
-                    mt: 1,
-
-                    color:
-                      status?.sloApproverTime == null ? "#5a5a5a" : "inherit",
-                  }}
-                >
-                  {status?.sloApproverTime == null
-                    ? "Information not available"
-                    : (status?.sloApproverTime.includes(":")
-                        ? "Approved on "
-                        : "") + status?.sloApproverTime}
-                </Box>
-              </Grid>
-            </Grid>
-          </>
-        ) : null}
+        ))}
       </Grid>
     </>
   );
