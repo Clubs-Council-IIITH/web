@@ -36,8 +36,8 @@ export default function ActionPalette({
             md: 6
           }}>
           {left.map((Component, key) => (
-            <Grid size="auto">
-              <Component {...leftProps[key]} key={key} />
+            <Grid key={key} size="auto">
+              <Component {...leftProps[key]} />
             </Grid>
           ))}
         </Grid>
@@ -56,7 +56,7 @@ export default function ActionPalette({
           }}>
           {right.map((Component, key) => (
             <Grid key={key} size="auto">
-              <Component {...rightProps[key]} key={key} />
+              <Component {...rightProps[key]}/>
             </Grid>
           ))}
           {downloadbtn ? <Grid>{downloadbtn}</Grid> : ""}
