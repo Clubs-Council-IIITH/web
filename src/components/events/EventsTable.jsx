@@ -411,7 +411,7 @@ export default function EventsTable({
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <DataGrid
-          getRowHeight={() => (isMobile ? "auto" : "none")}
+          getRowHeight={() => (isMobile ? "auto" : null)}
           rows={events}
           columns={
             hideClub ? columns.filter((c) => c.field !== "club") : columns

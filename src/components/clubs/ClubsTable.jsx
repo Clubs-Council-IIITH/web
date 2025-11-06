@@ -126,7 +126,7 @@ export default function ClubsTable({ clubs }) {
   return (
     <DataGrid
       autoHeight
-      getRowHeight={() => (isMobile ? "auto" : "none")}
+      getRowHeight={() => (isMobile ? "auto" : null)}
       rows={clubs}
       columns={columns}
       getRowId={(r) => r.cid}
