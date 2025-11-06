@@ -1,3 +1,5 @@
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+
 import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 import LocalizationWrapper from "components/LocalizationWrapper";
 import Progressbar from "components/Progressbar";
@@ -58,7 +60,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   // get the nonce and use it
-  const nonce = headers().get("x-nonce") || "";
+  const nonce = (await headers()).get("x-nonce") || "";
 
   // fetch currently logged in user
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -88,20 +90,22 @@ export default async function RootLayout({ children }) {
           `}
         </style>
         <ModeProvider>
-          <ThemeRegistry nonce={nonce}>
-            <Progressbar />
-            <LocalizationWrapper>
-              <AuthProvider user={user}>
-                <ToastProvider>
-                  <Navigation />
-                  <Content>
-                    <TransitionProvider>{children}</TransitionProvider>
-                  </Content>
-                  <Toast />
-                </ToastProvider>
-              </AuthProvider>
-            </LocalizationWrapper>
-          </ThemeRegistry>
+          <AppRouterCacheProvider options={{ nonce: nonce }}>
+            <ThemeRegistry>
+              <Progressbar />
+              <LocalizationWrapper>
+                <AuthProvider user={user}>
+                  <ToastProvider>
+                    <Navigation />
+                    <Content>
+                      <TransitionProvider>{children}</TransitionProvider>
+                    </Content>
+                    <Toast />
+                  </ToastProvider>
+                </AuthProvider>
+              </LocalizationWrapper>
+            </ThemeRegistry>
+          </AppRouterCacheProvider>
         </ModeProvider>
       </body>
     </html>

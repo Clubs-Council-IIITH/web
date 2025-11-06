@@ -15,6 +15,7 @@ import {
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import SLCTechLogo from "components/SLCTechLogo";
 import LifeLogo from "components/svg/life-logo-full-color.svg";
 
@@ -62,20 +63,23 @@ export default function Footer() {
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <Box
-      bgcolor={theme.palette.background.default}
-      color={theme.palette.text.primary}
+      sx={{
+        bgcolor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+      }}
     >
       <Divider sx={{ py: 4 }} />
-      <Grid container py={5} spacing={2} justifyContent="space-between">
+      <Grid container sx={{ py: 5 }} spacing={2} justifyContent="space-between">
         <Grid
-          item
-          xs={12}
-          lg
           display="flex"
           alignItems="center"
           justifyContent={isDesktop ? "flex-start" : "center"}
+          size={{
+            xs: 12,
+            lg: "grow",
+          }}
         >
-          <Box mr={3}>
+          <Box sx={{ mr: 3 }}>
             <Link href={IIIT_MAIN_URL} target="_blank" rel="noreferrer">
               <Image
                 src={IIITLogo}
@@ -89,7 +93,7 @@ export default function Footer() {
               />
             </Link>
           </Box>
-          <Box mr={3}>
+          <Box sx={{ mx: 3 }}>
             <div
               style={{
                 color: theme.palette.mode === "light" ? "#000" : "#fff",
@@ -103,12 +107,13 @@ export default function Footer() {
           </Box>
         </Grid>
         <Grid
-          item
-          xs={12}
-          lg
           display="flex"
           alignItems="center"
           justifyContent={isDesktop ? "flex-end" : "center"}
+          size={{
+            xs: 12,
+            lg: "grow",
+          }}
         >
           {socialsData.map((social, index) => (
             <IconButton
@@ -125,7 +130,6 @@ export default function Footer() {
           ))}
         </Grid>
       </Grid>
-
       {isDesktop ? (
         <Stack direction="row" spacing={1}>
           <Typography
@@ -152,7 +156,7 @@ export default function Footer() {
             Developed & Maintained with ❤️ by{" "}
             <Typography
               variant="body2"
-              component={Link}
+              component={ButtonLink}
               href={"/tech-team"}
               sx={{
                 fontWeight: 500,
@@ -172,7 +176,7 @@ export default function Footer() {
 
           <Typography
             variant="body2"
-            component={Link}
+            component={ButtonLink}
             href="/changelog"
             sx={{
               fontWeight: 600,
@@ -185,10 +189,10 @@ export default function Footer() {
           >
             Changelog
           </Typography>
-          <Box mx={1}>·</Box>
+          <Box sx={{ mx: 1 }}>·</Box>
           <Typography
             variant="body2"
-            component={Link}
+            component={ButtonLink}
             href={PRIVACY_POLICY_URL}
             target="_blank"
             rel="noreferrer"
@@ -210,7 +214,7 @@ export default function Footer() {
             display="flex"
             alignItems="center"
             justifyContent={"center"}
-            mb={isTablet ? 3 : 2}
+            sx={{ mb: isTablet ? 3 : 2 }}
           >
             <Typography
               variant="body2"
@@ -226,7 +230,7 @@ export default function Footer() {
               Developed & Maintained with ❤️ by{" "}
               <Typography
                 variant="body2"
-                component={Link}
+                component={ButtonLink}
                 href={"/tech-team"}
                 sx={{
                   fontWeight: 500,
@@ -252,7 +256,7 @@ export default function Footer() {
 
             <Typography
               variant="body2"
-              component={Link}
+              component={ButtonLink}
               href="/changelog"
               sx={{
                 fontWeight: 600,
@@ -265,10 +269,10 @@ export default function Footer() {
             >
               Changelog
             </Typography>
-            <Box mx={1}>·</Box>
+            <Box sx={{ mx: 1 }}>·</Box>
             <Typography
               variant="body2"
-              component={Link}
+              component={ButtonLink}
               href={PRIVACY_POLICY_URL}
               target="_blank"
               rel="noreferrer"

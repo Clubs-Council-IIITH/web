@@ -62,33 +62,36 @@ export default function HolidaysTable({ holidays, showPast = false }) {
   if (!holidays) return null;
 
   return (
-    <DataGrid
-      autoHeight
-      rows={holidays}
-      columns={columns}
-      getRowId={(r) => r._id}
-      onRowClick={(params) => router.push(`/manage/holidays/${params.row._id}`)}
-      disableRowSelectionOnClick
-      sortModel={sortModel}
-      onSortModelChange={(newModel) => setSortModel(newModel)}
-      initialState={{
-        filter: {
-          filterModel: {
-            items: [],
-            quickFilterLogicOperator: GridLogicOperator.Or,
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <DataGrid
+        rows={holidays}
+        columns={columns}
+        getRowId={(r) => r._id}
+        onRowClick={(params) =>
+          router.push(`/manage/holidays/${params.row._id}`)
+        }
+        disableRowSelectionOnClick
+        sortModel={sortModel}
+        onSortModelChange={(newModel) => setSortModel(newModel)}
+        initialState={{
+          filter: {
+            filterModel: {
+              items: [],
+              quickFilterLogicOperator: GridLogicOperator.Or,
+            },
           },
-        },
-        pagination: { paginationModel: { pageSize: 25 } },
-      }}
-      slots={{ toolbar: QuickSearchToolbar }}
-      sx={{
-        ".MuiDataGrid-cell:focus": {
-          outline: "none",
-        },
-        "& .MuiDataGrid-row:hover": {
-          cursor: "pointer",
-        },
-      }}
-    />
+          pagination: { paginationModel: { pageSize: 25 } },
+        }}
+        slots={{ toolbar: QuickSearchToolbar }}
+        sx={{
+          ".MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-row:hover": {
+            cursor: "pointer",
+          },
+        }}
+      />
+    </div>
   );
 }

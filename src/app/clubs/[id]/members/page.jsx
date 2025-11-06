@@ -6,7 +6,8 @@ import { Box } from "@mui/material";
 
 import MembersGrid from "components/members/MembersGrid";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   let club;
@@ -33,7 +34,8 @@ export async function generateMetadata({ params }, parent) {
   };
 }
 
-export default function ClubMembers({ params }) {
+export default async function ClubMembers(props) {
+  const params = await props.params;
   const { id } = params;
 
   return (

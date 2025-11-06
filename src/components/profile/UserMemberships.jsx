@@ -161,7 +161,7 @@ export default function UserMemberships({ rows = [] }) {
         <>
           <DataGrid
             autoHeight
-            getRowHeight={() => (isMobile ? "auto" : "none")}
+            getRowHeight={() => (isMobile ? "auto" : null)}
             rows={rows}
             columns={columns}
             disableRowSelectionOnClick

@@ -16,7 +16,8 @@ import {
   UnDeleteClub,
 } from "components/clubs/ClubActions";
 
-export async function generateMetadata({ params }, parent) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -38,7 +39,8 @@ export async function generateMetadata({ params }, parent) {
   }
 }
 
-export default async function ManageClub({ params }) {
+export default async function ManageClub(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -63,7 +65,9 @@ export default async function ManageClub({ params }) {
           height={480}
         />
       </Card>
-      <Box my={4}>
+      <Box sx={{
+        my: 4
+      }}>
         <ClubInfo
           name={club.name}
           logo={club.logo}

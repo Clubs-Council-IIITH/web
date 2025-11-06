@@ -1,8 +1,8 @@
 import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
-import Link from "next/link";
 
 import { billsStateLabel } from "utils/formatEvent";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import FinanceHeader from "components/events/bills/FinanceHeader";
 
 export default async function EventBillStatus(event, eventBills, userid) {
@@ -18,20 +18,49 @@ export default async function EventBillStatus(event, eventBills, userid) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+      <Typography
+        variant="subtitle2"
+        gutterBottom
+        sx={{
+          textTransform: "uppercase",
+        }}
+      >
         Financial Information
       </Typography>
-
       <Grid container spacing={2}>
-        <Grid container item spacing={2}>
-          <Grid item xs={5} lg={3}>
-            <Box mt={2}>Bills Status</Box>
+        <Grid container spacing={2}>
+          <Grid
+            size={{
+              xs: 5,
+              lg: 3
+            }}>
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              Bills Status
+            </Box>
           </Grid>
-          <Grid item xs={1} lg={0.1}>
-            <Box mt={2}>-</Box>
+          <Grid
+            size={{
+              xs: 1,
+              lg: 0.1
+            }}>
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              -
+            </Box>
           </Grid>
-          <Grid item xs>
-            <Box mt={2}>
+          <Grid size="grow">
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
               {eventBills?.state == null
                 ? "Information not available"
                 : billsStateLabel(eventBills?.state)?.name}
@@ -43,30 +72,78 @@ export default async function EventBillStatus(event, eventBills, userid) {
           <>
             {eventBills?.state !== "not_submitted" ? (
               <>
-                <Grid container item spacing={2}>
-                  <Grid item xs={5} lg={3}>
-                    <Box mt={0}>Last Updated</Box>
+                <Grid container spacing={2}>
+                  <Grid
+                    size={{
+                      xs: 5,
+                      lg: 3
+                    }}>
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
+                      Last Updated
+                    </Box>
                   </Grid>
-                  <Grid item xs={1} lg={0.1}>
-                    <Box mt={0}>-</Box>
+                  <Grid
+                    size={{
+                      xs: 1,
+                      lg: 0.1
+                    }}>
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
+                      -
+                    </Box>
                   </Grid>
-                  <Grid item xs>
-                    <Box mt={0}>
+                  <Grid size="grow">
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
                       {eventBills?.updatedTime == null
                         ? "Information not available"
                         : eventBills?.updatedTime}
                     </Box>
                   </Grid>
                 </Grid>
-                <Grid container item spacing={2}>
-                  <Grid item xs={5} lg={3}>
-                    <Box mt={0}>SLO Comment</Box>
+                <Grid container spacing={2}>
+                  <Grid
+                    size={{
+                      xs: 5,
+                      lg: 3
+                    }}>
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
+                      SLO Comment
+                    </Box>
                   </Grid>
-                  <Grid item xs={1} lg={0.1}>
-                    <Box mt={0}>-</Box>
+                  <Grid
+                    size={{
+                      xs: 1,
+                      lg: 0.1
+                    }}>
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
+                      -
+                    </Box>
                   </Grid>
-                  <Grid item xs>
-                    <Box mt={0}>
+                  <Grid size="grow">
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
                       {eventBills?.sloComment == null
                         ? "-"
                         : eventBills?.sloComment}
@@ -81,7 +158,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                 {userid === event?.clubid ? (
                   eventBills?.state === "not_submitted" ? (
                     <Button
-                      component={Link}
+                      component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"
                       color="primary"
@@ -91,7 +168,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                     </Button>
                   ) : eventBills?.state === "rejected" ? (
                     <Button
-                      component={Link}
+                      component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"
                       color="primary"

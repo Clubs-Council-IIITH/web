@@ -1,10 +1,8 @@
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import LifeLogo from "components/svg/life-logo-full-color.svg";
 
 export default function Logo() {
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const color = theme.palette.mode === "light" ? "#803db2" : "#1ec3bd";
 
   return (
