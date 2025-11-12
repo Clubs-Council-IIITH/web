@@ -13,8 +13,7 @@ export default async function Calendar() {
   const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS);
 
   const { data: { calendarEvents } = {} } = await getClient().query(GET_ALL_EVENTS_FOR_CALENDAR, {
-    clubid: null,
-    public: false,
+    clubid: null
   });
 
   const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);

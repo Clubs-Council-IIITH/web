@@ -76,8 +76,8 @@ export const GET_ALL_EVENTS = gql`
 `;
 
 export const GET_ALL_EVENTS_FOR_CALENDAR = gql`
-  query CalendarEvents($clubid: String, $public: Boolean) {
-    calendarEvents(clubid: $clubid, public: $public) {
+  query CalendarEvents($clubid: String) {
+    calendarEvents(clubid: $clubid) {
       _id
       name
       code
