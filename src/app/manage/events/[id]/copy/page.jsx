@@ -1,12 +1,11 @@
 import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 import { redirect, notFound } from "next/navigation";
 import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
 import EventForm from "components/events/EventForm";
-import { isEventsReportSubmitted } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "New Event",
@@ -50,12 +49,17 @@ export default async function CopyEvent({ params }) {
   );
   const user = { ...userMeta, ...userProfile };
 
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+  const { data: { events } = {} } = await getClient().query(GET_UNFINISHED_EVENTS, {
     clubid: null,
     public: false,
+    excludeCompleted: true,
   });
 
-  if (!isEventsReportSubmitted(events, userMeta)) {
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, { 
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,      
+  });
+
+  if (!isEventReportsSubmitted) {
     redirect("/manage/events");
   }
 

@@ -3,10 +3,9 @@ import { Container, Typography } from "@mui/material";
 import EventForm from "components/events/EventForm";
 
 import { getClient } from "gql/client";
-import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
 import { redirect } from "next/navigation";
-import { isEventsReportSubmitted } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "New Event",
@@ -33,16 +32,21 @@ export default async function NewEvent() {
     poc: "",
   };
 
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+  const { data: { events } = {} } = await getClient().query(GET_UNFINISHED_EVENTS, {
     clubid: null,
     public: false,
+    excludeCompleted: true,
   });
 
   const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
     userInput: null,
   });
 
-  if (!isEventsReportSubmitted(events, userMeta)) {
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,      
+  });
+
+  if (!isEventReportsSubmitted) {
     redirect("/manage/events");
   }
 

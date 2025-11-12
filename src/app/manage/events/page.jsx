@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
+import { GET_ALL_EVENTS, GET_PENDING_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 
 import {
   Box,
@@ -15,7 +15,6 @@ import {
 
 import Icon from "components/Icon";
 import EventsTable from "components/events/EventsTable";
-import { isEventsReportSubmitted } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "Manage Events",
@@ -48,10 +47,8 @@ export default async function ManageEvents() {
     { clubid: userMeta?.role === "club" ? userMeta.uid : null },
   );
 
-  const isReportsSubmitted = await getalleventsquery({
-    targetClub: userMeta?.role === "club" ? userMeta.uid : null,
-  }).then(events => {
-      return isEventsReportSubmitted(events, userMeta);
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, { 
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
   });
 
   return (
@@ -72,7 +69,7 @@ export default async function ManageEvents() {
             href="/manage/events/new"
             variant="contained"
             startIcon={<Icon variant="add" />}
-            disabled={!isReportsSubmitted}
+            disabled={!isEventReportsSubmitted}
           >
             New Event
           </Button>

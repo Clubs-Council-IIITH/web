@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_ALL_EVENTS_FOR_CALENDAR } from "gql/queries/events";
 import { GET_HOLIDAYS } from "gql/queries/holidays";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
@@ -12,7 +12,7 @@ export const metadata = {
 export default async function Calendar() {
   const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS);
 
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
+  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS_FOR_CALENDAR, {
     clubid: null,
     public: false,
   });
