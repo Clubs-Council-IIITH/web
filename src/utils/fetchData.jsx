@@ -22,7 +22,7 @@ export const getClub = cache(async (id) => {
 });
 
 export const getEvent = cache(async (id) => {
-  console.log("Fetching event with id:", id);
+  // console.log("Fetching event with id:", id);
   try {
     const { data: { event } = {} } = await getClient().query(GET_EVENT, {
       eventid: id,
@@ -35,7 +35,7 @@ export const getEvent = cache(async (id) => {
 });
 
 export const getFullEvent = cache(async (id) => {
-  console.log("Fetching full event with id:", id);
+  // console.log("Fetching full event with id:", id);
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
