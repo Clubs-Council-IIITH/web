@@ -10,14 +10,24 @@ export const metadata = {
 };
 
 export default async function Calendar() {
-  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS);
+  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS, {}, {
+    fetchOptions: {
+      next: { revalidate: 3600 }, // 60 minutes
+      cache: "force-cache",
+    },
+  });
 
   const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
     clubid: null,
     public: false,
   });
 
-  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
+  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS, {}, {
+    fetchOptions: {
+      next: { revalidate: 3600 }, // 60 minutes
+      cache: "force-cache",
+    },
+  });
 
   return (
     <FullCalendar events={events} holidays={holidays} allClubs={allClubs} />
