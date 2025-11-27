@@ -5,8 +5,7 @@ import { notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
-import { GET_EVENT } from "gql/queries/events";
-import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_EVENT, GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 export const getClub = cache(async (id) => {
@@ -49,14 +48,19 @@ export const getFullEvent = cache(async (id) => {
 
 export const getUserProfile = cache(async (id) => {
   const userInput = id ? { uid: id } : null;
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput,
-    }
-  );
 
-  if (userProfile === null || userMeta === null) notFound();
+  try {
+    const { data: { userProfile, userMeta } = {} } = await getClient().query(
+      GET_USER_PROFILE,
+      {
+        userInput,
+      }
+    );
 
-  return { ...userMeta, ...userProfile };
+    if (userProfile === null || userMeta === null) notFound();
+
+    return { ...userMeta, ...userProfile };
+  } catch (error) {
+    notFound();
+  }
 });
