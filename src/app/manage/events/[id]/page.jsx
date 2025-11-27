@@ -87,7 +87,7 @@ export default async function ManageEventID({ params }) {
   }
 
   const {
-    data: { activeClubs },
+    data: { allClubs },
   } = await getClient().query(GET_ACTIVE_CLUBS);
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -135,7 +135,7 @@ export default async function ManageEventID({ params }) {
           downloadbtn={
             <DownloadEvent
               event={event}
-              clubs={activeClubs}
+              clubs={allClubs}
               pocProfile={pocProfile}
               eventBills={eventBillsData?.eventBills || {}}
             />
