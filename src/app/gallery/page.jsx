@@ -16,9 +16,5 @@ export default async function Gallery({ limit = undefined }) {
     (item) => `${FILESERVER_URL}${item.url}`,
   );
 
-  return (
-    <>
-      <ImageMasonry images={galleryItems} limit={limit} />
-    </>
-  );
+  return <ImageMasonry images={galleryItems} limit={limit} />;
 }
