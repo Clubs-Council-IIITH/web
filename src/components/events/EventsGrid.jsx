@@ -9,16 +9,21 @@ export default async function EventsGrid({
   clubid = null,
   limit = undefined,
   filter = () => true,
-  events = null,
+  // events = null,
 }) {
-  let data;
-  if (events) {
-    data = { data: { events } };
-  } else {
-    data = await getClient().query(...constructQuery({ type, clubid, limit }));
-  }
+  // let data;
+  // if (events) {
+  //   data = { data: { events } };
+  // } else {
+  //   data = await getClient().query(...constructQuery({ type, clubid, limit }));
+  // }
+
+  const data = await getClient().query(
+    ...constructQuery({ type, clubid, limit })
+  );
+
   const uniqueClubIds = Array.from(
-    new Set(data?.data?.events?.map((event) => event?.clubid)),
+    new Set(data?.data?.events?.map((event) => event?.clubid))
   );
   const clubDataMap = {};
   await Promise.all(
@@ -27,7 +32,7 @@ export default async function EventsGrid({
         clubInput: { cid: clubid },
       });
       clubDataMap[clubid] = club;
-    }),
+    })
   );
 
   const updatedEvents = await Promise.all(
@@ -37,7 +42,7 @@ export default async function EventsGrid({
         event.clubbanner = club?.banner || club?.logo;
       }
       return event;
-    }),
+    })
   );
 
   return (
@@ -60,8 +65,7 @@ function constructQuery({ type, clubid, limit }) {
       },
       {
         fetchOptions: {
-          next: { revalidate: 1800 }, // 30 minutes
-          cache: "force-cache",
+          next: { revalidate: 30 }, // 30 minutes
         },
       },
     ];
@@ -73,8 +77,7 @@ function constructQuery({ type, clubid, limit }) {
       },
       {
         fetchOptions: {
-          next: { revalidate: 2700 }, // 45 minutes
-          cache: "force-cache",
+          next: { revalidate: 30 }, // 45 minutes
         },
       },
     ];

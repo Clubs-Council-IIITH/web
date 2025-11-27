@@ -13,7 +13,6 @@ export default async function Calendar() {
   const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS, {}, {
     fetchOptions: {
       next: { revalidate: 3600 }, // 60 minutes
-      cache: "force-cache",
     },
   });
 
@@ -25,7 +24,6 @@ export default async function Calendar() {
   const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS, {}, {
     fetchOptions: {
       next: { revalidate: 3600 }, // 60 minutes
-      cache: "force-cache",
     },
   });
 
