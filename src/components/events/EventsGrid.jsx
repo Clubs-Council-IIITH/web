@@ -58,12 +58,24 @@ function constructQuery({ type, clubid, limit }) {
         clubid: null,
         limit: limit || 12,
       },
+      {
+        fetchOptions: {
+          next: { revalidate: 1800 }, // 30 minutes
+          cache: "force-cache",
+        },
+      },
     ];
   } else if (type === "club") {
     return [
       GET_ALL_EVENTS,
       {
         clubid,
+      },
+      {
+        fetchOptions: {
+          next: { revalidate: 2700 }, // 45 minutes
+          cache: "force-cache",
+        },
       },
     ];
   } else {
