@@ -5,14 +5,14 @@ import { Grid } from "@mui/material";
 import ClubCard from "components/clubs/ClubCard";
 
 export default async function ClubsGrid({ category, staticClubs = [] }) {
-  const { data: { activeClubs } = {} } = await getClient().query(
+  const { data: { allClubs } = {} } = await getClient().query(
     GET_ACTIVE_CLUBS,
     {},
   );
 
   return (
     <Grid container spacing={2}>
-      {[...staticClubs, ...activeClubs]
+      {[...staticClubs, ...allClubs]
         ?.filter((club) => club.category === category)
         ?.sort((a, b) => a.name.localeCompare(b.name))
         ?.map((club) => (
