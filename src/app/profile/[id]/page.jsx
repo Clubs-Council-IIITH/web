@@ -16,8 +16,8 @@ export async function generateMetadata({ params }) {
   const user = await getUserProfile(id);
 
   return {
-      title: `${user.firstName} ${user.lastName}`,
-    };
+    title: `${user.firstName} ${user.lastName}`,
+  };
 }
 
 export default async function Profile({ params }) {

@@ -21,8 +21,8 @@ export async function generateMetadata({ params }) {
   );
 
   return {
-      title: club.name,
-    };
+    title: club.name,
+  };
 }
 
 export default async function ManageClub({ params }) {
@@ -35,9 +35,7 @@ export default async function ManageClub({ params }) {
 
   return (
     <Box>
-      <ActionPalette
-        right={getActions(club, user)}
-      />
+      <ActionPalette right={getActions(club, user)} />
       <Card variant="none" sx={{ boxShadow: 0 }}>
         <ClubBanner
           name={club.name}

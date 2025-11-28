@@ -10,7 +10,7 @@ import Club from "app/clubs/[id]/page";
 
 export async function generateMetadata({ params }) {
   const { id } = params;
-  
+
   const club = await getClub(id);
   if (club?.category != "body") return permanentRedirect(`/clubs/${id}`);
 

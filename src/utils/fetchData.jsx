@@ -54,7 +54,7 @@ export const getUserProfile = cache(async (id) => {
       GET_USER_PROFILE,
       {
         userInput,
-      }
+      },
     );
 
     if (userProfile === null || userMeta === null) notFound();
