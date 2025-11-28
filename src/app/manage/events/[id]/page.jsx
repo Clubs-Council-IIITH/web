@@ -1,10 +1,5 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_EVENT_BILLS_STATUS } from "gql/queries/events";
-import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { GET_USER } from "gql/queries/auth";
-import { GET_CLASHING_EVENTS } from "gql/queries/events";
-import { getFullUser } from "actions/users/get/full/server_action";
-
+import { Link } from "next/link";
+import { redirect } from "next/navigation";
 import {
   Box,
   Chip,
@@ -13,10 +8,18 @@ import {
   Divider,
   CardActionArea,
 } from "@mui/material";
-import { Link } from "next/link";
-import { notFound, redirect } from "next/navigation";
-import ActionPalette from "components/ActionPalette";
 
+import { getClient } from "gql/client";
+import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+import { GET_USER } from "gql/queries/auth";
+import { GET_CLASHING_EVENTS } from "gql/queries/events";
+import { getFullEvent } from "utils/fetchData";
+
+import { getFullUser } from "actions/users/get/full/server_action";
+import { locationLabel } from "utils/formatEvent";
+
+import ActionPalette from "components/ActionPalette";
 import EventDetails from "components/events/EventDetails";
 import EventBudget from "components/events/EventBudget";
 import EventSponsor from "components/events/EventSponsor";
@@ -40,32 +43,21 @@ import {
   BudgetStatus,
   VenueStatus,
 } from "components/events/EventStates";
-
-import { locationLabel } from "utils/formatEvent";
 import MemberListItem from "components/members/MemberListItem";
 
 export async function generateMetadata({ params }) {
   const { id } = params;
 
-  try {
-    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-      eventid: id,
-    });
-
-    return {
-      title: event.name,
-    };
-  } catch (error) {
-    notFound();
-  }
+  const event = await getFullEvent(id);
+  return {
+    title: event.name,
+    description: event.description || "No description provided.",
+  };
 }
 
 export default async function ManageEventID({ params }) {
   const { id } = params;
-
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-    eventid: id,
-  });
+  const event = await getFullEvent(id);
 
   let eventBillsData = null;
 
