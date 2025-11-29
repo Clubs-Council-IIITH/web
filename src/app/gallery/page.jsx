@@ -8,7 +8,7 @@ export const metadata = {
 
 export default async function Gallery({ limit = undefined }) {
   const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
-    next: { revalidate: 1200 }, // 20 minutes
+    next: { revalidate: 2700 }, // 45 minutes
   });
 
   const galleryJSON = await response.json();

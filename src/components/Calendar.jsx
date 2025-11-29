@@ -81,7 +81,7 @@ export default function Calendar({ events, holidays, allClubs }) {
     const { event, el } = info;
     const clubName = allClubs.find(
       (club) => club.cid === event.extendedProps.clubid,
-    )?.name;
+    )?.name || "Unknown Club";
     const content = `<strong>${event.title}</strong> ${
       event.extendedProps.clubid ? "by" : ""
     } ${event.extendedProps.clubid ? clubName : "Holiday"}`;
