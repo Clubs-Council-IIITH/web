@@ -3,7 +3,11 @@ import { GridToolbarQuickFilter } from "@mui/x-data-grid";
 
 export default function QuickSearchToolbar() {
   return (
-    <Box p={1} pb={0}>
+    <Box
+      sx={{
+        p: 1,
+        pb: 0
+      }}>
       <GridToolbarQuickFilter
         variant="outlined"
         sx={{ width: "100%" }}

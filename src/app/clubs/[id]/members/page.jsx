@@ -17,7 +17,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function ClubMembers({ params }) {
+export default async function ClubMembers(props) {
+  const params = await props.params;
   const { id } = params;
 
   return (

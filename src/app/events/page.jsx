@@ -31,7 +31,8 @@ async function query(querystring) {
   return data?.events || [];
 }
 
-export default async function Events({ searchParams }) {
+export default async function Events(props) {
+  const searchParams = await props.searchParams;
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
 
@@ -44,7 +45,9 @@ export default async function Events({ searchParams }) {
 
   return (
     <Box>
-      <Box mt={2}>
+      <Box sx={{
+        mt: 2
+      }}>
         <EventsFilter name={targetName} club={targetClub} state={targetState} />
       </Box>
       <PaginatedEventsGrid

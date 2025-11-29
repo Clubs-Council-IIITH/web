@@ -136,14 +136,17 @@ export default async function NewCCTeam2425() {
   return (
     <Container>
       <center>
-        <Typography variant="h3" mb={3}>
+        <Typography variant="h3" sx={{
+          mb: 3
+        }}>
           New Clubs Council Team '24-'25 🎉
         </Typography>
       </center>
       <LocalUsersGrid users={new_team} />
-
       <center>
-        <Typography variant="h4" mt={3}>
+        <Typography variant="h4" sx={{
+          mt: 3
+        }}>
           New Advisors
         </Typography>
       </center>

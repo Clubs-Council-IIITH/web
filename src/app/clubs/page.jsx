@@ -10,25 +10,58 @@ export const metadata = {
 export default async function Clubs() {
   return (
     <Box>
-      <Box mb={2} display="flex" alignItems="center">
-        <Icon variant="component-exchange" mr={1} />
-        <Typography variant="subtitle2" textTransform="uppercase">
+      <Box
+        sx={{
+          mb: 2,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Icon variant="component-exchange" sx={{ mr: 1 }} />
+        <Typography
+          variant="subtitle2"
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
           Technical Clubs
         </Typography>
       </Box>
       <ClubsGrid category="technical" />
-
-      <Box mb={2} mt={4} display="flex" alignItems="center">
-        <Icon variant="music-note-rounded" mr={1} />
-        <Typography variant="subtitle2" textTransform="uppercase">
+      <Box
+        sx={{
+          mb: 2,
+          mt: 4,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Icon variant="music-note-rounded" sx={{ mr: 1 }} />
+        <Typography
+          variant="subtitle2"
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
           Cultural Clubs
         </Typography>
       </Box>
       <ClubsGrid category="cultural" />
-
-      <Box mb={2} mt={4} display="flex" alignItems="center">
-        <Icon variant="psychology-rounded" mr={1} />
-        <Typography variant="subtitle2" textTransform="uppercase">
+      <Box
+        sx={{
+          mb: 2,
+          mt: 4,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Icon variant="psychology-rounded" sx={{ mr: 1 }} />
+        <Typography
+          variant="subtitle2"
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
           Affinity Groups
         </Typography>
       </Box>

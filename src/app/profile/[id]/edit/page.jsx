@@ -13,7 +13,8 @@ export const metadata = {
   title: "Edit Profile",
 };
 
-export default async function EditProfile({ params }) {
+export default async function EditProfile(props) {
+  const params = await props.params;
   const { id } = params;
 
   // get currently logged in user

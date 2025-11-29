@@ -24,7 +24,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -159,11 +158,18 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
-        <Grid container item xs={12} md={7} xl={8} spacing={3}>
-          <Grid container item>
-            <Grid container item spacing={2}>
+        <Grid
+          container
+          spacing={3}
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8
+          }}>
+          <Grid container>
+            <Grid container spacing={2}>
               {user?.role === "cc" ? (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <MemberClubSelect
                     control={control}
                     watch={watch}
@@ -174,18 +180,20 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
 
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2,
+              }}
             >
               User
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid size={12}>
                 <MemberUserInput
                   control={control}
                   watch={watch}
@@ -197,18 +205,20 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
 
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2,
+              }}
             >
               Positions
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid size={12}>
                 <MemberPositionsTable
                   control={control}
                   watch={watch}
@@ -220,24 +230,43 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
-          <Grid container item>
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+          size={{
+            xs: "grow",
+            md: "grow"
+          }}>
+          <Grid container>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+              }}
             >
               Other
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid size={12}>
                 <MemberPOCSwitch control={control} watch={watch} />
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              direction="row"
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+              size={12}
+            >
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -259,8 +288,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
-                <LoadingButton
+              <Grid size={6}>
+                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -270,7 +299,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   disabled={positionEditing || !userMember}
                 >
                   Save
-                </LoadingButton>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -320,7 +349,13 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
   };
 
   return user ? (
-    <Stack direction="row" alignItems="center" spacing={isMobile ? 2 : 4}>
+    <Stack
+      direction="row"
+      spacing={isMobile ? 2 : 4}
+      sx={{
+        alignItems: "center",
+      }}
+    >
       <UserImage
         image={user.img}
         name={user.firstName}
@@ -334,9 +369,9 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
         </Typography>
         <Typography
           variant="body2"
-          color="text.secondary"
-          fontFamily="monospace"
           sx={{
+            color: "text.secondary",
+            fontFamily: "monospace",
             wordBreak: "break-word",
             overflowWrap: "break-word",
           }}
