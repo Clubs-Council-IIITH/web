@@ -126,7 +126,7 @@ export default async function ManageEventID(props) {
       downloadbtn={
         <DownloadEvent
           event={event}
-          clubs={activeClubs}
+          clubs={allClubs}
           pocProfile={pocProfile}
           eventBills={eventBillsData?.eventBills || {}}
         />
@@ -144,7 +144,7 @@ export default async function ManageEventID(props) {
       Point of Contact
     </Typography>
     <CardActionArea
-      component={ButtonLink}
+      component={Link}
       href={`/profile/${event?.poc}`}
       sx={{ textDecoration: "none", maxWidth: "max-content" }}
     >
