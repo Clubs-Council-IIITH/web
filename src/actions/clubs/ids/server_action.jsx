@@ -7,7 +7,7 @@ export async function getActiveClubIds() {
   const response = { ok: false, data: null, error: null };
 
   const {
-    data: { activeClubs },
+    data: { allClubs },
     error,
   } = await getClient().query(GET_ACTIVE_CLUB_IDS, {});
   if (error) {
@@ -17,7 +17,7 @@ export async function getActiveClubIds() {
     };
   } else {
     response.ok = true;
-    response.data = activeClubs;
+    response.data = allClubs;
   }
 
   return response;

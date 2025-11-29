@@ -1,9 +1,7 @@
-import { notFound, redirect } from "next/navigation";
-
 import { getClient } from "gql/client";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
-import { GET_USER_PROFILE } from "gql/queries/users";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
+import { getUserProfile } from "utils/fetchData";
 
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
@@ -15,28 +13,11 @@ import UserMemberships from "components/profile/UserMemberships";
 export async function generateMetadata(props) {
   const params = await props.params;
   const { id } = params;
+  const user = await getUserProfile(id);
 
-  try {
-    const { data: { userProfile, userMeta } = {} } = await getClient().query(
-      GET_USER_PROFILE,
-      {
-        userInput: {
-          uid: id,
-        },
-      }
-    );
-    const user = { ...userMeta, ...userProfile };
-
-    if (userProfile === null || userMeta === null) {
-      notFound();
-    }
-
-    return {
-      title: `${user.firstName} ${user.lastName}`,
-    };
-  } catch (error) {
-    redirect("/404");
-  }
+  return {
+    title: `${user.firstName} ${user.lastName}`,
+  };
 }
 
 export default async function CCApplicantDetails(props) {
@@ -57,15 +38,7 @@ export default async function CCApplicantDetails(props) {
   );
 
   // get target user
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput: {
-        uid: id,
-      },
-    }
-  );
-  const user = { ...userMeta, ...userProfile };
+  const user = await getUserProfile(id);
 
   // get memberships if user is a person
   let memberships = [];

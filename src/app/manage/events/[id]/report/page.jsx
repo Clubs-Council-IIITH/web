@@ -37,7 +37,7 @@ export default async function EventReport(props) {
     );
 
     const {
-      data: { activeClubs },
+      data: { allClubs },
     } = await getClient().query(GET_ACTIVE_CLUBS);
 
     const submittedUserProfile = await getFullUser(eventReport?.submittedBy);
@@ -50,7 +50,7 @@ export default async function EventReport(props) {
         event={event}
         eventReport={eventReport}
         submittedUser={submittedUserProfile}
-        clubs={activeClubs}
+        clubs={allClubs}
         user={user}
       />
     );

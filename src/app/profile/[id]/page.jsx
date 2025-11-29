@@ -1,10 +1,9 @@
+import { notFound, redirect } from "next/navigation";
+import { Container, Grid, Stack, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
-import { GET_USER } from "gql/queries/auth";
-import { GET_USER_PROFILE } from "gql/queries/users";
-import { notFound, redirect } from "next/navigation";
-
-import { Container, Grid, Stack, Typography } from "@mui/material";
+import { getUserProfile } from "utils/fetchData";
 
 import ActionPalette from "components/ActionPalette";
 import UserImage from "components/users/UserImage";
@@ -15,28 +14,11 @@ import UserMemberships from "components/profile/UserMemberships";
 export async function generateMetadata(props) {
   const params = await props.params;
   const { id } = params;
+  const user = await getUserProfile(id);
 
-  try {
-    const { data: { userProfile, userMeta } = {} } = await getClient().query(
-      GET_USER_PROFILE,
-      {
-        userInput: {
-          uid: id,
-        },
-      }
-    );
-    const user = { ...userMeta, ...userProfile };
-
-    if (userProfile === null || userMeta === null) {
-      notFound();
-    }
-
-    return {
-      title: `${user.firstName} ${user.lastName}`,
-    };
-  } catch (error) {
-    notFound();
-  }
+  return {
+    title: `${user.firstName} ${user.lastName}`,
+  };
 }
 
 export default async function Profile(props) {
@@ -44,21 +26,10 @@ export default async function Profile(props) {
   const { id } = params;
 
   // get currently logged in user
-  const {
-    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
-  } = await getClient().query(GET_USER, { userInput: null });
-  const currentUser = { ...currentUserMeta, ...currentUserProfile };
+  const currentUser = await getUserProfile(null);
 
   // get target user
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput: {
-        uid: id,
-      },
-    }
-  );
-  const user = { ...userMeta, ...userProfile };
+  const user = await getUserProfile(id);
 
   // if user is a club, display the club's logo as profile picture
   let club = null;
