@@ -1,5 +1,5 @@
 import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 import { redirect, notFound } from "next/navigation";
 import { GET_USER } from "gql/queries/auth";
 
@@ -49,6 +49,20 @@ export default async function CopyEvent({ params }) {
   );
   const user = { ...userMeta, ...userProfile };
 
+  const { data: { events } = {} } = await getClient().query(GET_UNFINISHED_EVENTS, {
+    clubid: null,
+    public: false,
+    excludeCompleted: true,
+  });
+
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, { 
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,      
+  });
+
+  if (!isEventReportsSubmitted) {
+    redirect("/manage/events");
+  }
+
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
@@ -62,11 +76,6 @@ export default async function CopyEvent({ params }) {
     delete event.budget;
     delete event.location;
     delete event.status;
-
-    const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-      clubid: null,
-      public: false,
-    });
 
     return (
       user?.role === "club" &&
