@@ -166,7 +166,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                       )}
                     >
                       {slcMembers?.slice()?.map((member) => (
-                        <MenuItem key={member.uid} value={member.uid}>
+                        <MenuItem key={member.uid} value={member.uid} component="div">
                           <MemberListItem uid={member.uid} />
                         </MenuItem>
                       ))}
@@ -227,7 +227,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                   }}
                 >
                   {members?.slice()?.map((member) => (
-                    <MenuItem key={member.uid} value={member.uid}>
+                    <MenuItem key={member.uid} value={member.uid} component="div">
                       <MemberListItem uid={member.uid} />
                     </MenuItem>
                   ))}

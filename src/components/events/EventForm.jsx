@@ -1853,7 +1853,7 @@ function EventPOC({
                   }}
                 >
                   {members?.slice()?.map((member) => (
-                    <MenuItem key={member._id} value={member.uid}>
+                    <MenuItem key={member._id} value={member.uid} component="div">
                       <MemberListItem uid={member.uid} />
                     </MenuItem>
                   ))}
