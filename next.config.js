@@ -95,6 +95,7 @@ const nextConfig = {
     return config;
   },
   turbopack: {
+    root: '/',
     rules: {
       '*.svg': {
         loaders: [

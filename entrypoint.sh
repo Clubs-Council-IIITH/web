@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Copy node_modules from cache to the volume
-echo "Copying node_modules from cache to volume..."
-cp -r /cache/node_modules /web/
+# Create a symbolic link to the node_modules directory in the cache directory
+ln -s /cache/node_modules /web/node_modules
 
 # Execute the container's main process
 exec "$@"
