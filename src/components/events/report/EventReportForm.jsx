@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 
 import {
   Box,
@@ -86,7 +86,7 @@ export default function EventReportForm({
     fetchClubs();
   }, []);
 
-  const { control, handleSubmit, watch, setValue, resetField } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       ...defaultValues,
       ...defaultReportValues,
@@ -403,7 +403,6 @@ export default function EventReportForm({
             >
               <SubmittedBy
                 control={control}
-                watch={watch}
                 cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
                 hasPhone={hasPhone}
                 setHasPhone={setHasPhone}
@@ -688,14 +687,16 @@ export default function EventReportForm({
 
 function SubmittedBy({
   control,
-  watch,
   cid,
   hasPhone,
   setHasPhone,
   disabled = false,
 }) {
   const { triggerToast } = useToast();
-  const submittedBy = watch("submittedBy");
+  const submittedBy = useWatch({
+    control,
+    name: "submittedBy",
+  });
 
   // fetch list of current members
   const [members, setMembers] = useState([]);

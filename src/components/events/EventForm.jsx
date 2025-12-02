@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, Controller, useController } from "react-hook-form";
+import { useForm, useWatch, Controller, useController } from "react-hook-form";
 
 import {
   Box,
@@ -459,7 +459,6 @@ export default function EventForm({
                     }
                     defaultValue={defaultValues.collabclubs}
                     clubs={clubs}
-                    watch={watch}
                   />
                 </Grid>
               ) : null}
@@ -476,7 +475,6 @@ export default function EventForm({
               <Grid size={12}>
                 <EventDatetimeInput
                   control={control}
-                  watch={watch}
                   setValue={setValue}
                   disabled={
                     !admin_roles.includes(user?.role) &&
@@ -498,7 +496,6 @@ export default function EventForm({
                 <Grid size={12}>
                   <EventPOC
                     control={control}
-                    watch={watch}
                     cid={user?.uid}
                     hasPhone={hasPhone}
                     setHasPhone={setHasPhone}
@@ -513,7 +510,6 @@ export default function EventForm({
                 <Grid size={12}>
                   <EventPOC
                     control={control}
-                    watch={watch}
                     cid={watch("clubid")}
                     hasPhone={hasPhone}
                     setHasPhone={setHasPhone}
@@ -617,7 +613,6 @@ export default function EventForm({
               <Grid size={12}>
                 <EventVenueInput
                   control={control}
-                  watch={watch}
                   resetField={resetField}
                   defaultValues={defaultValues}
                   disabled={
@@ -820,12 +815,14 @@ function EventClubSelect({ control, disabled = true, clubs = [] }) {
 
 function EventCollabClubSelect({
   control,
-  watch,
   defaultValue,
   disabled = true,
   clubs = [],
 }) {
-  const selectedClub = watch("clubid");
+  const selectedClub = useWatch({
+    control,
+    name: "clubid",
+  });
   const [open, setOpen] = useState(false);
 
   return (
@@ -952,14 +949,16 @@ function filterEvents(events, startTime, endTime) {
 // event datetime range input
 function EventDatetimeInput({
   control,
-  watch,
   setValue,
   disabled = true,
   role = "public",
   existingEvents = [],
   clubs = [],
 }) {
-  const [startDateInput, endDateInput] = watch(["datetimeperiod.0", "datetimeperiod.1"]);
+  const [startDateInput, endDateInput] = useWatch({
+    control,
+    name: ["datetimeperiod.0", "datetimeperiod.1"],
+  });
   const [error, setError] = useState(null);
   const [eventsDialogOpen, setEventsDialogOpen] = useState(false);
 
@@ -1243,17 +1242,21 @@ function EventDescriptionInput({ control }) {
 // conditional event venue selector
 function EventVenueInput({
   control,
-  watch,
   defaultValues,
   resetField,
   disabled = true,
   eventid = null,
 }) {
-  const modeInput = watch("mode");
-  const locationInput = watch("location");
-  const startDateInput = watch("datetimeperiod.0");
-  const endDateInput = watch("datetimeperiod.1");
-  const externalAllowed = watch("externalAllowed");
+  const [modeInput, locationInput, startDateInput, endDateInput, externalAllowed] = useWatch({
+    control,
+    name: [
+      "mode",
+      "location",
+      "datetimeperiod.0",
+      "datetimeperiod.1",
+      "externalAllowed",
+    ],
+  });
 
   // reset location if datetime changes
   useEffect(() => resetField("location"), [startDateInput, endDateInput]);
@@ -1297,7 +1300,6 @@ function EventVenueInput({
           // show venue selector if start and end dates are set
           (startDateInput && endDateInput ? (<EventLocationInput
             control={control}
-            watch={watch}
             startDateInput={startDateInput}
             endDateInput={endDateInput}
             disabled={disabled}
@@ -1468,15 +1470,16 @@ function EventVenueInput({
 // select location from available rooms
 function EventLocationInput({
   control,
-  watch,
   startDateInput,
   endDateInput,
   disabled = true,
   eventid = null,
 }) {
   const { triggerToast } = useToast();
-  const locationInput = watch("location");
-  const locationAlternateInput = watch("locationAlternate");
+  const [locationInput, locationAlternateInput] = useWatch({
+    control,
+    name: ["location", "locationAlternate"],
+  });
 
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
@@ -1755,14 +1758,16 @@ function EventSponsorTable({
 // input event POC
 function EventPOC({
   control,
-  watch,
   cid,
   hasPhone,
   setHasPhone,
   disabled = false,
 }) {
   const { triggerToast } = useToast();
-  const poc = watch("poc");
+  const poc = useWatch({
+    control,
+    name: "poc",
+  });
 
   // fetch list of current members
   const [members, setMembers] = useState([]);

@@ -2,7 +2,7 @@
 
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
   Box,
@@ -97,8 +97,11 @@ function DataClubSelect({
   );
 }
 
-function EventDatetimeInput({ control, watch, user }) {
-  const startDateInput = watch("datetimeperiod.0");
+function EventDatetimeInput({ control, user }) {
+  const startDateInput = useWatch({
+    control,
+    name: "datetimeperiod.0",
+  });
   return (
     <Grid
       container
@@ -353,7 +356,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           >
             Date Range
           </Typography>
-          <EventDatetimeInput control={control} watch={watch} user={user} />
+          <EventDatetimeInput control={control} user={user} />
         </Grid>
         {admin_roles.includes(user?.role) ? (
           <Grid size={12}>

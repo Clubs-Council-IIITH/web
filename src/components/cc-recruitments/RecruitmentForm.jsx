@@ -116,7 +116,7 @@ function MemberUserInput({ user = {} }) {
 export default function RecruitmentForm({ user = {} }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const defaultValues = {};
   const { control, handleSubmit, watch } = useForm({ defaultValues });

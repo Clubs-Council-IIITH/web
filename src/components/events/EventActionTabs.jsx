@@ -139,7 +139,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                     <Select
                       multiple
                       labelId="poc"
-                      label="Point of Contact *"
+                      label="SLC Members to Send Email"
                       fullWidth
                       {...field}
                       MenuProps={{
@@ -219,7 +219,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
               ) : (
                 <Select
                   labelId="poc"
-                  label="Point of Contact *"
+                  label="Approver"
                   fullWidth
                   {...field}
                   MenuProps={{
