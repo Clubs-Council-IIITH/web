@@ -107,8 +107,8 @@ export default function FinancesTable({ events, role }) {
 
   if (!events) return null;
   return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
     <DataGrid
-      autoHeight
       rows={events}
       columns={columns}
       getRowId={(r) => r.eventid}
@@ -161,6 +161,7 @@ export default function FinancesTable({ events, role }) {
         "& .MuiDataGrid-row.disabled-row:hover": { cursor: "default" },
       }}
       pageSizeOptions={[5, 10, 20]}
-    />
+      />
+      </div>
   );
 }

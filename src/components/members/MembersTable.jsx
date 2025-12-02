@@ -200,8 +200,8 @@ export default function MembersTable({
 
   if (!members) return null;
   return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
     <DataGrid
-      autoHeight
       rows={members}
       columns={columns}
       getRowId={(r) => r.mid}
@@ -235,6 +235,7 @@ export default function MembersTable({
           padding: "0 8px",
         },
       }}
-    />
+      />
+      </div>
   );
 }

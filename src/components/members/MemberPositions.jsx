@@ -278,8 +278,8 @@ export default function MemberPositions({
         </Button>
       ) : null}
 
+      <div style={{ display: "flex", flexDirection: "column" }}>
       <DataGrid
-        autoHeight
         getRowHeight={() => "auto"}
         rows={rows}
         columns={columns}
@@ -299,7 +299,8 @@ export default function MemberPositions({
           pagination: { paginationModel: { pageSize: 5 } },
         }}
         pageSizeOptions={[5, 10, 15]}
-      />
+        />
+      </div>
     </>
   );
 }

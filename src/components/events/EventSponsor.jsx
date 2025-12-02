@@ -197,7 +197,6 @@ export default function EventSponsor({
 
       <div style={{ display: "flex", flexDirection: "column" }}>
       <DataGrid
-        autoHeight
         getRowHeight={() => "auto"}
         columns={columns}
         rows={rows}
