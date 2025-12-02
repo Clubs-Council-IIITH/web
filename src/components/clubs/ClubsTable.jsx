@@ -8,7 +8,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Tag from "components/Tag";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import ClubLogo from "components/clubs/ClubLogo";
 
@@ -146,7 +145,7 @@ export default function ClubsTable({ clubs }) {
           paginationModel: { pageSize: 25 },
         },
       }}
-      slots={{ toolbar: QuickSearchToolbar }}
+      showToolbar
       sx={{
         // disable cell selection style
         ".MuiDataGrid-cell:focus": {

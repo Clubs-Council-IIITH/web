@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 import { ISOtoHuman } from "utils/formatTime";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 export default function HolidaysTable({ holidays, showPast = false }) {
   const router = useRouter();
@@ -82,7 +81,7 @@ export default function HolidaysTable({ holidays, showPast = false }) {
           },
           pagination: { paginationModel: { pageSize: 25 } },
         }}
-        slots={{ toolbar: QuickSearchToolbar }}
+        showToolbar
         sx={{
           ".MuiDataGrid-cell:focus": {
             outline: "none",

@@ -382,7 +382,7 @@ export default function EventForm({
       >
         <Grid
           container
-          spacing={3}
+          spacing={2}
           size={{
             xs: 12,
             md: 7,
@@ -391,7 +391,7 @@ export default function EventForm({
           <Grid container>
             <Grid
               container
-              sx={{ display: "flex", justifyContent: "space-between" }}
+              sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
             >
               <Typography
                 variant="subtitle2"
@@ -399,7 +399,8 @@ export default function EventForm({
                 sx={{
                   textTransform: "uppercase",
                   color: "text.secondary",
-                  mb: 2,
+                  alignSelf: "center",
+                  mb: 0
                 }}
               >
                 Details

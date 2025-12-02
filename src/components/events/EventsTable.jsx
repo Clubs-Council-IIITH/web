@@ -22,7 +22,6 @@ import { stateLabel } from "utils/formatEvent";
 
 import Tag from "components/Tag";
 import Icon from "components/Icon";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 function FilterTextInputValue(props) {
   const { item, applyValue } = props;
@@ -66,7 +65,6 @@ export default function EventsTable({
   const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
   const [events, setEvents] = useState(initialEvents || []);
   const [dialog, setDialog] = useState(false);
-  const [pendingChecked, setPendingChecked] = useState(false);
 
   useEffect(() => {
     // If query is not provided, just use initialEvents
@@ -364,6 +362,7 @@ export default function EventsTable({
             sx={{
               color: "text.secondary",
               textTransform: "uppercase",
+              mb: 0,
             }}
           >
             {query ? "All Events" : "Pending Events"}
@@ -379,7 +378,6 @@ export default function EventsTable({
                       filterMonth.includes("pastEventsLimit") &&
                       !e.target.checked
                     ) {
-                      setPendingChecked(false);
                       setDialog(true);
                     } else {
                       setFilterMonth(
@@ -433,7 +431,7 @@ export default function EventsTable({
             },
             pagination: { paginationModel: { pageSize: 25 } },
           }}
-          slots={{ toolbar: QuickSearchToolbar }}
+          showToolbar
           sx={{
             // disable cell selection style
             ".MuiDataGrid-cell:focus": {

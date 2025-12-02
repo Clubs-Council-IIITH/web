@@ -16,7 +16,6 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import { getFile } from "utils/files";
 import { getUserNameFromUID } from "utils/users";
@@ -221,7 +220,7 @@ export default function MembersTable({
         },
         pagination: { paginationModel: { pageSize: 25 } },
       }}
-      slots={{ toolbar: QuickSearchToolbar }}
+      showToolbar
       sx={{
         ".MuiDataGrid-cell:focus": {
           outline: "none",
