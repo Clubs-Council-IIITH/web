@@ -527,7 +527,7 @@ export default function EventForm({
               */}
             </Grid>
           </Grid>
-          <Grid container>
+          <Grid sx={{ width: "100%" }}>
             <Typography
               variant="subtitle2"
               gutterBottom
@@ -539,61 +539,56 @@ export default function EventForm({
             >
               Budget
             </Typography>
-            <Grid container spacing={2}>
-              <Grid size={12}>
-                <EventBudgetTable
+            <EventBudgetTable
+              control={control}
+              disabled={
+                !admin_roles.includes(user?.role) &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete"
+              }
+              setBudgetEditing={setBudgetEditing}
+            />
+          </Grid>
+          <Grid sx={{ width: "100%" }}>
+            <Grid size={12}>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="haveSponsor"
+                    control={control}
+                    defaultValue={
+                      defaultValues?.sponsor && defaultValues?.sponsor?.length > 0
+                    }
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e?.target?.checked)}
+                        disabled={
+                          !admin_roles.includes(user?.role) &&
+                          defaultValues?.status?.state != undefined &&
+                          defaultValues?.status?.state != "incomplete"
+                        }
+                        sx={{ m: 2 }}
+                      />
+                    )}
+                  />
+                }
+                label="Does event have any Sponsors?"
+              />
+            </Grid>
+            <Grid size={12}>
+            {haveSponsor ? (
+                <EventSponsorTable
                   control={control}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
-                  setBudgetEditing={setBudgetEditing}
+                  setSponsorEditing={setSponsorEditing}
                 />
-              </Grid>
+              ) : null}
             </Grid>
-          </Grid>
-          <Grid container>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="haveSponsor"
-                  control={control}
-                  defaultValue={
-                    defaultValues?.sponsor && defaultValues?.sponsor?.length > 0
-                  }
-                  render={({ field }) => (
-                    <Switch
-                      checked={field.value}
-                      onChange={(e) => field.onChange(e?.target?.checked)}
-                      inputProps={{ "aria-label": "controlled" }}
-                      disabled={
-                        !admin_roles.includes(user?.role) &&
-                        defaultValues?.status?.state != undefined &&
-                        defaultValues?.status?.state != "incomplete"
-                      }
-                      sx={{ m: 2 }}
-                    />
-                  )}
-                />
-              }
-              label="Does event have any Sponsors?"
-            />
-            {haveSponsor ? (
-              <Grid container spacing={2}>
-                <Grid size={12}>
-                  <EventSponsorTable
-                    control={control}
-                    disabled={
-                      !admin_roles.includes(user?.role) &&
-                      defaultValues?.status?.state != undefined &&
-                      defaultValues?.status?.state != "incomplete"
-                    }
-                    setSponsorEditing={setSponsorEditing}
-                  />
-                </Grid>
-              </Grid>
-            ) : null}
           </Grid>
         </Grid>
 
@@ -964,8 +959,7 @@ function EventDatetimeInput({
   existingEvents = [],
   clubs = [],
 }) {
-  const startDateInput = watch("datetimeperiod.0");
-  const endDateInput = watch("datetimeperiod.1");
+  const [startDateInput, endDateInput] = watch(["datetimeperiod.0", "datetimeperiod.1"]);
   const [error, setError] = useState(null);
   const [eventsDialogOpen, setEventsDialogOpen] = useState(false);
 
@@ -1353,15 +1347,14 @@ function EventVenueInput({
             }
             render={({ field }) => (
               <Switch
-                checked={field.value}
+                checked={field.value || false}
                 onChange={(e) => field.onChange(e?.target?.checked)}
-                inputProps={{ "aria-label": "controlled" }}
-                sx={{ m: 2 }}
+                sx={{ m: 1 }}
               />
             )}
           />
         }
-        label="External Particpants"
+        label="External Participants (Non-IIIT)"
       />
       {externalAllowed ? (
         <Grid size={12}>
@@ -1386,7 +1379,7 @@ function EventVenueInput({
                 return true;
               },
             }}
-            defaultValue={0}
+
             render={({ field, fieldState: { error, invalid } }) => (
               <TextField
                 type="number"
@@ -1397,12 +1390,14 @@ function EventVenueInput({
                 variant="outlined"
                 fullWidth
                 disabled={false}
+                value={field.value || 0}
                 {...field}
                 slotProps={{
                   input: {
                     inputProps: { min: 1 },
                   }
-                }} />
+                }}
+              />
             )}
           />
         </Grid>

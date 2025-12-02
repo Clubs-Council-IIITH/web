@@ -240,6 +240,10 @@ export default function EventBudget({
             console.error("Row update error:", error);
             setError(error.message);
           }}
+          pageSizeOptions={[5, 10, 15]}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
           sx={{
             // disable cell selection style
             ".MuiDataGrid-cell:focus": {

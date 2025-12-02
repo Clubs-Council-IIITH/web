@@ -195,6 +195,7 @@ export default function EventSponsor({
         </Button>
       ) : null}
 
+      <div style={{ display: "flex", flexDirection: "column" }}>
       <DataGrid
         autoHeight
         getRowHeight={() => "auto"}
@@ -209,13 +210,18 @@ export default function EventSponsor({
           console.error("Row update error:", error);
           setError(error.message);
         }}
+        pageSizeOptions={[5, 10, 15]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
         sx={{
           // disable cell selection style
           ".MuiDataGrid-cell:focus": {
             outline: "none",
           },
         }}
-      />
+        />
+        </div>
 
       <Typography variant="caption" color="error">
         {error}
