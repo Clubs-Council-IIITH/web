@@ -1331,12 +1331,13 @@ function EventVenueInput({
               autoComplete="off"
               variant="outlined"
               fullWidth
-              InputProps={{
-                inputProps: { min: 1 },
-              }}
               disabled={false}
               {...field}
-            />
+              slotProps={{
+                input: {
+                  inputProps: { min: 1 },
+                }
+              }} />
           )}
         />
       </Grid>
@@ -1394,12 +1395,13 @@ function EventVenueInput({
                 autoComplete="off"
                 variant="outlined"
                 fullWidth
-                InputProps={{
-                  inputProps: { min: 1 },
-                }}
                 disabled={false}
                 {...field}
-              />
+                slotProps={{
+                  input: {
+                    inputProps: { min: 1 },
+                  }
+                }} />
             )}
           />
         </Grid>

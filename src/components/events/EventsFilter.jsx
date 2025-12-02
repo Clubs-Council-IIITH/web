@@ -73,12 +73,14 @@ export default function EventsFilter({ name, club, state }) {
               fullWidth
               onChange={(e) => setTargetName(e?.target?.value)}
               value={targetName}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Icon variant="search" />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon variant="search" />
+                    </InputAdornment>
+                  ),
+                }
               }}
             />
             <Button type="submit" variant="contained">

@@ -212,8 +212,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           size={{
             xs: 12,
             md: 7,
-            xl: 8
-          }}>
+            xl: 8,
+          }}
+        >
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -309,8 +310,9 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
           }}
           size={{
             xs: "grow",
-            md: "grow"
-          }}>
+            md: "grow",
+          }}
+        >
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -363,7 +365,6 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
 
             <Grid
               container
-              
               direction="row"
               spacing={1}
               sx={{
@@ -552,6 +553,7 @@ function ClubTaglineInput({ control }) {
           autoComplete="off"
           error={invalid}
           helperText={error?.message}
+          value={field.value || ""}
           variant="outlined"
           fullWidth
         />
@@ -613,7 +615,7 @@ function ClubSocialInput({ name, control }) {
             socialsData[name].validation &&
             !value.includes(socialsData[name].validation)
           )
-            return `Invalid ${socialsData[name].label} Ualdiation`;
+            return `Invalid ${socialsData[name].label} Valdiation`;
 
           return true;
         },
@@ -626,24 +628,27 @@ function ClubSocialInput({ name, control }) {
           autoComplete="off"
           variant="outlined"
           fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Icon
-                  external
-                  variant={socialsData[name].icon}
-                  sx={{
-                    color: isDark
-                      ? socialsData[name].darkcolor
-                      : socialsData[name].color,
-                    marginRight: 1,
-                  }}
-                />
-              </InputAdornment>
-            ),
-          }}
           error={invalid}
           helperText={error?.message}
+          value={field.value || ""}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Icon
+                    external
+                    variant={socialsData[name].icon}
+                    sx={{
+                      color: isDark
+                        ? socialsData[name].darkcolor
+                        : socialsData[name].color,
+                      marginRight: 1,
+                    }}
+                  />
+                </InputAdornment>
+              ),
+            },
+          }}
         />
       )}
     />
