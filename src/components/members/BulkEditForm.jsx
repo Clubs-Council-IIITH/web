@@ -560,8 +560,8 @@ function MembersTable({
         row.role !== row.originalRole ||
         row.startYear !== row.originalStartYear ||
         row.endYear !== row.originalEndYear
-          ? 1
-          : 0,
+          ? "0" + row?.uid
+          : "1" + row?.uid,
     },
     {
       field: "uid",
@@ -799,8 +799,7 @@ function MembersTable({
             sortModel: addMode
               ? []
               : [
-                  { field: "isEdited", sort: "desc" },
-                  { field: "uid", sort: "asc" },
+                  { field: "isEdited", sort: "asc" },
                 ],
           },
           columns: {
