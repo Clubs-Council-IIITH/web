@@ -155,8 +155,7 @@ async function PendingMembersDataGrid() {
           userInput: {
             uid: member.uid,
           },
-        })
-        .toPromise(),
+        }),
     );
   });
   const users = await Promise.all(userPromises);
@@ -223,8 +222,7 @@ async function MembersDataGrid({
           userInput: {
             uid: member.uid,
           },
-        })
-        .toPromise(),
+        }),
     );
   });
   const users = await Promise.all(userPromises);

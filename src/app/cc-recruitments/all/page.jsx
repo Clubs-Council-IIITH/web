@@ -23,8 +23,7 @@ export default async function AllRecruitmentsApplications(props) {
       getClient()
         .query(GET_USER_PROFILE, {
           userInput: { uid: applicant.uid },
-        })
-        .toPromise(),
+        }),
     ) || [];
 
   const users = await Promise.all(userPromises);

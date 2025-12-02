@@ -140,6 +140,7 @@ export default function MembersTable({
                           {role?.name}
                         </span>
                         <Box
+                          component="span"
                           sx={{
                             color: "grey.400",
                             display: "inline-block",
