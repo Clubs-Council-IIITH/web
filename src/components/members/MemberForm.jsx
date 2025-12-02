@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { useState, useEffect } from "react";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
@@ -50,7 +50,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [positionEditing, setPositionEditing] = useState(false);
 
-  const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
+  const { control, setValue, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
 
   // different form submission handlers
@@ -168,7 +168,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                 <Grid size={12}>
                   <MemberClubSelect
                     control={control}
-                    watch={watch}
                     edit={action === "edit"}
                   />
                 </Grid>
@@ -189,7 +188,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
               <Grid size={12}>
                 <MemberUserInput
                   control={control}
-                  watch={watch}
                   setValue={setValue}
                   user={userMember}
                   setUser={setUserMember}
@@ -211,7 +209,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
               <Grid size={12}>
                 <MemberPositionsTable
                   control={control}
-                  watch={watch}
                   positionEditing={positionEditing}
                   setPositionEditing={setPositionEditing}
                 />
@@ -238,7 +235,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             </Typography>
             <Grid  spacing={2}>
               <Grid size={12}>
-                <MemberPOCSwitch control={control} watch={watch} />
+                <MemberPOCSwitch control={control} />
               </Grid>
             </Grid>
 
@@ -304,15 +301,19 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 }
 
 // find user by email
-function MemberUserInput({ control, watch, setValue, user, setUser }) {
+function MemberUserInput({ control, setValue, user, setUser }) {
   const { triggerToast } = useToast();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const uid = watch("uid");
-  const emailInput = watch("userSelector");
+  const uid = useWatch({
+    control,
+    name: "uid",
+  });
+
   useEffect(() => {
     (async () => {
+      // console.log("UID changed:", uid);
       if (uid) await getUser();
     })();
   }, [uid]);
@@ -368,6 +369,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
     <Controller
       name="userSelector"
       control={control}
+      defaultValue=""
       render={({ field }) => (
         <Stack direction="row" spacing={1}>
           <TextField
@@ -376,7 +378,6 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
             label="Email"
             autoComplete="off"
             variant="outlined"
-            value={field.value || ""}
             helperText={
               "Click the 👍 button to confirm the user and verify their email"
             }
@@ -386,7 +387,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => setValue("uid", emailInput?.split("@")[0])}
+            onClick={() => setValue("uid", field.value?.split("@")[0])}
           >
             <Icon variant="thumb-up-outline-rounded" />
           </Button>
@@ -451,7 +452,6 @@ function MemberClubSelect({ control, edit }) {
 // input event budget as a table
 function MemberPositionsTable({
   control,
-  watch,
   positionEditing,
   setPositionEditing,
 }) {
@@ -476,7 +476,7 @@ function MemberPositionsTable({
 }
 
 // switch for member POC status
-function MemberPOCSwitch({ control, watch }) {
+function MemberPOCSwitch({ control }) {
   // TODO: watch for uid & cid change, populate table with existing data
   // [AFTER create and edit member mutations have been merged into one]
 
