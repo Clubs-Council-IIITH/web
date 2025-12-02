@@ -50,8 +50,8 @@ export default function CCRecruitmentsTable({ data, year }) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
     <DataGrid
+      autoHeight
       rows={data}
       columns={columns}
       getRowId={(row) => row.uid}
@@ -72,7 +72,6 @@ export default function CCRecruitmentsTable({ data, year }) {
           cursor: "pointer",
         },
       }}
-      />
-      </div>
+    />
   );
 }

@@ -159,8 +159,8 @@ export default function UserMemberships({ rows = [] }) {
     <>
       {rows?.length ? (
         <>
-          <div style={{ display: "flex", flexDirection: "column" }}>
           <DataGrid
+            autoHeight
             getRowHeight={() => (isMobile ? "auto" : null)}
             rows={rows}
             columns={columns}
@@ -179,8 +179,7 @@ export default function UserMemberships({ rows = [] }) {
                 outline: "none",
               },
             }}
-            />
-            </div>
+          />
 
           {/* Category Legend */}
           {getActiveCategoriesFromUserClubs().length > 0 && (

@@ -123,8 +123,8 @@ export default function ClubsTable({ clubs }) {
 
   if (!clubs) return null;
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
     <DataGrid
+      autoHeight
       getRowHeight={() => (isMobile ? "auto" : null)}
       rows={clubs}
       columns={columns}
@@ -156,7 +156,6 @@ export default function ClubsTable({ clubs }) {
           cursor: "pointer",
         },
       }}
-      />
-      </div>
+    />
   );
 }
