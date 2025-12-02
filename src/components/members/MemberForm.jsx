@@ -159,15 +159,11 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
         <Grid
-          container
-          spacing={3}
           size={{
             xs: 12,
             md: 7,
             xl: 8
           }}>
-          <Grid container>
-            <Grid container spacing={2}>
               {user?.role === "cc" ? (
                 <Grid size={12}>
                   <MemberClubSelect
@@ -177,10 +173,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   />
                 </Grid>
               ) : null}
-            </Grid>
-          </Grid>
 
-          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
@@ -188,11 +181,11 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                 textTransform: "uppercase",
                 color: "text.secondary",
                 mb: 2,
+                mt: 3,
               }}
             >
               User
             </Typography>
-            <Grid container spacing={2}>
               <Grid size={12}>
                 <MemberUserInput
                   control={control}
@@ -201,11 +194,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   user={userMember}
                   setUser={setUserMember}
                 />
-              </Grid>
             </Grid>
-          </Grid>
 
-          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
@@ -213,11 +203,11 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                 textTransform: "uppercase",
                 color: "text.secondary",
                 mb: 2,
+                mt: 3,
               }}
             >
               Positions
             </Typography>
-            <Grid container spacing={2}>
               <Grid size={12}>
                 <MemberPositionsTable
                   control={control}
@@ -225,14 +215,10 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   positionEditing={positionEditing}
                   setPositionEditing={setPositionEditing}
                 />
-              </Grid>
-            </Grid>
           </Grid>
         </Grid>
 
         <Grid
-          container
-          spacing={3}
           sx={{
             alignItems: "flex-start",
           }}
@@ -240,7 +226,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             xs: "grow",
             md: "grow"
           }}>
-          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
@@ -251,7 +236,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             >
               Other
             </Typography>
-            <Grid container spacing={2}>
+            <Grid  spacing={2}>
               <Grid size={12}>
                 <MemberPOCSwitch control={control} watch={watch} />
               </Grid>
@@ -301,7 +286,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   Save
                 </Button>
               </Grid>
-            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -392,6 +376,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
             label="Email"
             autoComplete="off"
             variant="outlined"
+            value={field.value || ""}
             helperText={
               "Click the 👍 button to confirm the user and verify their email"
             }
@@ -401,7 +386,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => setValue("uid", emailInput.split("@")[0])}
+            onClick={() => setValue("uid", emailInput?.split("@")[0])}
           >
             <Icon variant="thumb-up-outline-rounded" />
           </Button>
