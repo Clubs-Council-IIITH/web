@@ -544,8 +544,11 @@ function MembersTable({
   };
 
   const onDelete = (row) => {
-    // console.log("rows:", rows, "row:", row);
-    setRows(rows.filter((r) => r.id !== row.id));
+    const newRows = rows.filter((r) => r.id !== row.id);
+    setRows(newRows);
+
+    const allValid = newRows.every((r) => r.isValid);
+    setAllValid(allValid);
   };
 
   const columns = [
