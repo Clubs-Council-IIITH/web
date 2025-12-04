@@ -1,14 +1,14 @@
+import { Box, Button, Container, Stack,Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import { Box, Container, Typography, Button, Stack } from "@mui/material";
-
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import MembersTable from "components/members/MembersTable";
 import MembersFilter from "components/members/MembersFilter";
+import MembersTable from "components/members/MembersTable";
 
 export const metadata = {
   title: "Manage Members",
@@ -16,7 +16,7 @@ export const metadata = {
 
 export default async function ManageMembers(props) {
   const searchParams = await props.searchParams;
-  const targetName = searchParams?.name;
+  // const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
     ...(searchParams?.current === "true" ? ["current"] : []),
@@ -102,7 +102,7 @@ export default async function ManageMembers(props) {
                   mb: 3
                 }}>
                 <MembersFilter
-                  name={targetName}
+                  // name={targetName}
                   club={targetClub}
                   state={targetState}
                   cc={true}
@@ -120,7 +120,7 @@ export default async function ManageMembers(props) {
                       mb: 3
                     }}>
                     <MembersFilter
-                      name={targetName}
+                      // name={targetName}
                       club={targetClub}
                       state={targetState}
                       cc={false}

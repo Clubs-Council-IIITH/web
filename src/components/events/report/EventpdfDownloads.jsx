@@ -1,25 +1,25 @@
 "use client";
 
-import { Button } from "@mui/material";
-
 import {
   Document,
-  Page,
   Image,
-  StyleSheet,
+  Page,
   PDFDownloadLink,
+  StyleSheet,
 } from "@react-pdf/renderer";
 import Html from "react-pdf-html";
 
+import { Button } from "@mui/material";
+
+import Icon from "components/Icon";
 import { PUBLIC_URL } from "utils/files";
-import { formatDateTime, ISOtoHuman } from "utils/formatTime";
 import {
+  audienceLabels,
+  billsStateLabel,
   locationLabel,
   stateLabel,
-  billsStateLabel,
-  audienceLabels,
 } from "utils/formatEvent";
-import Icon from "components/Icon";
+import { formatDateTime, ISOtoHuman } from "utils/formatTime";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";
@@ -440,11 +440,11 @@ export function DownloadEventReport({
       <Page size="A4" style={styles.page}>
         <div style={styles.headerContainer}>
           {!isStudentBodyEvent ? (
-            <Image src={CCLogo} style={styles.logo1} />
+            <Image src={CCLogo} style={styles.logo1} alt="CC Logo" />
           ) : (
-            <Image src={LifeLogo} style={styles.logo2} />
+            <Image src={LifeLogo} style={styles.logo2} alt="Life Logo" />
           )}
-          <Image src={IIITLogo} style={styles.logo3} />
+          <Image src={IIITLogo} style={styles.logo3} alt="IIITH Logo" />
         </div>
         <Html>{htmlContent}</Html>
       </Page>
@@ -842,11 +842,11 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
       <Page size="A4" style={styles.page}>
         <div style={styles.headerContainer}>
           {!isStudentBodyEvent ? (
-            <Image src={CCLogo} style={styles.logo1} />
+            <Image src={CCLogo} style={styles.logo1} alt="CC Logo" />
           ) : (
-            <Image src={LifeLogo} style={styles.logo2} />
+            <Image src={LifeLogo} style={styles.logo2} alt="Life Logo" />
           )}
-          <Image src={IIITLogo} style={styles.logo3} />
+          <Image src={IIITLogo} style={styles.logo3} alt="IIITH Logo"/>
         </div>
         <Html>{htmlContent}</Html>
       </Page>
