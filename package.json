@@ -55,7 +55,6 @@
     "react-pdf-html": "^2.1.4",
     "react-slick": "^0.31.0",
     "sharp": "^0.34.5",
-    "sitemap": "^8.0.2",
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2",
     "tippy.js": "^6.3.7",
@@ -66,7 +65,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.6",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "^3.7.4"
+    "prettier": "^3.7.4",
+    "sitemap": "^8.0.2"
   },
   "engines": {
     "node": ">=20.9.0"
