@@ -21,13 +21,27 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run ESLint fix
+        id: lint
+        continue-on-error: true
+        run: npm run lint:fix -- --quiet
+
       - name: Install Prettier
-        run: |
-          npm install --global prettier
+        run: npm install --global prettier
 
       - name: Format with Prettier
         run: prettier --write "**/*.{js,jsx,md,css,yaml}"
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Commit formatting changes
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Apply Prettier Formatting Fixes
+
+      - name: Fail if linting had errors
+        if: steps.lint.outcome == 'failure'
+        run: |
+          echo "ESLint found errors that need manual fixing"
+          exit 1
