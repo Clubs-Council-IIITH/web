@@ -3,7 +3,7 @@ import { Container, Grid, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
-import { getUserProfile } from "utils/fetchData";
+import { getUserProfile, getCurrentUser } from "utils/fetchData";
 
 import ActionPalette from "components/ActionPalette";
 import UserImage from "components/users/UserImage";
@@ -26,7 +26,7 @@ export default async function Profile(props) {
   const { id } = params;
 
   // get currently logged in user
-  const currentUser = await getUserProfile(null);
+  const currentUser = await getCurrentUser();
 
   // get target user
   const user = await getUserProfile(id);
@@ -70,6 +70,9 @@ export default async function Profile(props) {
 
   if (user?.role === "cc") redirect("/clubs-council");
   if (club) redirect(`/clubs/${club.cid}`);
+
+  console.log(memberships?.length !== 0, currentUser?.uid === user?.uid)
+  console.log(currentUser, user)
 
   return (
     <Container>
