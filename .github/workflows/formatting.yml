@@ -24,6 +24,7 @@ jobs:
       - name: Install Prettier
         run: |
           npm install --global prettier
+
       - name: Format with Prettier
         run: prettier --write "**/*.{js,jsx,md,css,yaml}"
 
