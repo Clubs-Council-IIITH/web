@@ -102,7 +102,7 @@ export default async function ManageMembers(props) {
                   mb: 3
                 }}>
                 <MembersFilter
-                  name={targetName}
+                  // name={targetName}
                   club={targetClub}
                   state={targetState}
                   cc={true}
@@ -120,7 +120,7 @@ export default async function ManageMembers(props) {
                       mb: 3
                     }}>
                     <MembersFilter
-                      name={targetName}
+                      // name={targetName}
                       club={targetClub}
                       state={targetState}
                       cc={false}

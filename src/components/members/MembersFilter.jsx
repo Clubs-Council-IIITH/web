@@ -19,7 +19,7 @@ import { useToast } from "components/Toast";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 
-export default function MembersFilter({ name, club, state, cc = false }) {
+export default function MembersFilter({ club, state, cc = false }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -82,7 +82,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
                     `${pathname}?${createQueryString("club", e?.target?.value)}`
                   )
                 }
-                value={club}
+                value={club || ""}
               >
                 {clubs
                   ?.slice()
