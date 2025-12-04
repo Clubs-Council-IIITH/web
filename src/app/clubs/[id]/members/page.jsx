@@ -5,7 +5,8 @@ import { getClub } from "utils/fetchData";
 
 import MembersGrid from "components/members/MembersGrid";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   const club = await getClub(id);
