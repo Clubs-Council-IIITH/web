@@ -1381,6 +1381,7 @@ function EventVenueInput({
                 return true;
               },
             }}
+            defaultValue={defaultValues.externalPopulation || 0}
 
             render={({ field, fieldState: { error, invalid } }) => (
               <TextField
@@ -1392,7 +1393,6 @@ function EventVenueInput({
                 variant="outlined"
                 fullWidth
                 disabled={false}
-                value={field.value || 0}
                 {...field}
                 slotProps={{
                   input: {
