@@ -71,9 +71,6 @@ export default async function Profile(props) {
   if (user?.role === "cc") redirect("/clubs-council");
   if (club) redirect(`/clubs/${club.cid}`);
 
-  console.log(memberships?.length !== 0, currentUser?.uid === user?.uid)
-  console.log(currentUser, user)
-
   return (
     <Container>
       {/*
