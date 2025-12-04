@@ -1622,6 +1622,7 @@ function EventLocationInput({
                   ? "Please specify the 'other' location."
                   : true,
             }}
+            defaultValue=""
             render={({ field, fieldState: { error, invalid } }) => (
               <TextField
                 {...field}
@@ -1717,6 +1718,7 @@ function EventLocationInput({
                     ? "Please specify the 'other' alternate location."
                     : true,
               }}
+              defaultValue=""
               render={({ field, fieldState: { error, invalid } }) => (
                 <TextField
                   {...field}
