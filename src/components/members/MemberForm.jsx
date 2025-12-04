@@ -67,7 +67,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           severity: "success",
         });
         router.push(`/manage/members?club=${data.cid}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -88,7 +87,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           severity: "success",
         });
         router.push(`/manage/members?club=${data.cid}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({

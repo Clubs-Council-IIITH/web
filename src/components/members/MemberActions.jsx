@@ -52,7 +52,6 @@ export function DeleteMember({ sx }) {
         severity: "success",
       });
       router.push("/manage/members");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({
@@ -108,7 +107,6 @@ export function ApproveAllMember({ sx }) {
         severity: "success",
       });
       router.push("/manage/members");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({

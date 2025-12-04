@@ -209,7 +209,6 @@ export default function BulkEdit({ mode = "add" }) {
     });
 
     router.push(`/manage/members`);
-    router.refresh();
   }
 
   // transform data and mutate

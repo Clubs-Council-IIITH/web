@@ -32,7 +32,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
         severity: "success",
       });
       router.push("/manage/finances/");
-      router.refresh();
     } else {
       triggerToast({
         ...res.error,

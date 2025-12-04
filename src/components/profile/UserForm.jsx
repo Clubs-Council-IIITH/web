@@ -47,7 +47,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
         //   severity: "success",
         // });
         router.push(`/profile/${defaultValues.uid}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({

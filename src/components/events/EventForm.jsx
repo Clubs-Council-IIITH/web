@@ -131,7 +131,6 @@ export default function EventForm({
               severity: "success",
             });
             router.push("/manage/events");
-            router.refresh();
           } else {
             // show error toast
             triggerToast({
@@ -154,7 +153,6 @@ export default function EventForm({
           severity: "success",
         });
         router.push(`/manage/events/${res.data._id}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -181,7 +179,6 @@ export default function EventForm({
               severity: "success",
             });
             router.push("/manage/events");
-            router.refresh();
           } else {
             // show error toast
             triggerToast({
@@ -201,7 +198,6 @@ export default function EventForm({
           severity: "success",
         });
         router.push(`/manage/events/${res.data._id}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({

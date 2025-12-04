@@ -83,7 +83,6 @@ export function DeleteEvent({ sx }) {
         severity: "success",
       });
       router.push("/manage/events");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({

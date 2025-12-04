@@ -48,7 +48,6 @@ export function DeleteClub({ sx }) {
         severity: "success",
       });
       router.push("/manage/clubs");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({

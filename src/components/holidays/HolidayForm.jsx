@@ -53,7 +53,6 @@ export default function HolidayForm({
           severity: "success",
         });
         router.push("/manage/holidays/");
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -80,7 +79,6 @@ export default function HolidayForm({
           severity: "success",
         });
         router.push("/manage/holidays/");
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -101,7 +99,6 @@ export default function HolidayForm({
           severity: "success",
         });
         router.push("/manage/holidays/");
-        router.refresh();
       } else {
         // show error toast
         triggerToast({

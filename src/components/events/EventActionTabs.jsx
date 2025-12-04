@@ -83,7 +83,6 @@ function EventApproveForm({ eventid, members, clashFlag }) {
     if (res.ok) {
       triggerToast("Event approved", "success");
       router.push(`/manage/events/${eventid}`);
-      router.refresh();
     } else {
       triggerToast({
         ...res.error,
@@ -284,7 +283,6 @@ function EventRejectForm({ eventid }) {
     if (res.ok) {
       triggerToast("Event rejected", "success");
       router.push(`/manage/events/${eventid}`);
-      router.refresh();
     } else {
       triggerToast({
         ...res.error,
