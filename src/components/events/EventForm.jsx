@@ -104,7 +104,7 @@ export default function EventForm({
     })();
   }, []);
 
-  const { control, handleSubmit, watch, resetField, setValue } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     mode: "onChange",
     defaultValues,
   });
@@ -386,12 +386,17 @@ export default function EventForm({
           size={{
             xs: 12,
             md: 7,
-            xl: 8
-          }}>
+            xl: 8,
+          }}
+        >
           <Grid container>
             <Grid
               container
-              sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
             >
               <Typography
                 variant="subtitle2"
@@ -400,7 +405,7 @@ export default function EventForm({
                   textTransform: "uppercase",
                   color: "text.secondary",
                   alignSelf: "center",
-                  mb: 0
+                  mb: 0,
                 }}
               >
                 Details
@@ -553,7 +558,8 @@ export default function EventForm({
                     name="haveSponsor"
                     control={control}
                     defaultValue={
-                      defaultValues?.sponsor && defaultValues?.sponsor?.length > 0
+                      defaultValues?.sponsor &&
+                      defaultValues?.sponsor?.length > 0
                     }
                     render={({ field }) => (
                       <Switch
@@ -573,7 +579,7 @@ export default function EventForm({
               />
             </Grid>
             <Grid size={12}>
-            {haveSponsor ? (
+              {haveSponsor ? (
                 <EventSponsorTable
                   control={control}
                   disabled={
@@ -596,8 +602,9 @@ export default function EventForm({
           }}
           size={{
             xs: "grow",
-            md: "grow"
-          }}>
+            md: "grow",
+          }}
+        >
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -613,7 +620,6 @@ export default function EventForm({
               <Grid size={12}>
                 <EventVenueInput
                   control={control}
-                  resetField={resetField}
                   defaultValues={defaultValues}
                   disabled={
                     !admin_roles.includes(user?.role) &&
@@ -985,14 +991,20 @@ function EventDatetimeInput({
       setValue("datetimeperiod.1", null);
   }, [startDateInput]);
 
+  const resetLocations = () => {
+    setValue("location", []);
+    setValue("locationAlternate", []);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid
         size={{
           xs: 12,
           md: 6,
-          xl: 4
-        }}>
+          xl: 4,
+        }}
+      >
         <Controller
           name="datetimeperiod.0"
           control={control}
@@ -1008,7 +1020,7 @@ function EventDatetimeInput({
             },
           }}
           render={({
-            field: { value, ...rest },
+            field: { value, onChange, ...rest },
             fieldState: { error, invalid },
           }) => (
             <DateTimePicker
@@ -1029,6 +1041,10 @@ function EventDatetimeInput({
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
+              onChange={(newValue) => {
+                onChange(newValue);
+                resetLocations();
+              }}
               disabled={disabled}
               format="DD/MM/YYYY hh:mm A"
               {...rest}
@@ -1040,8 +1056,9 @@ function EventDatetimeInput({
         size={{
           xs: 12,
           md: 6,
-          xl: 4
-        }}>
+          xl: 4,
+        }}
+      >
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -1057,7 +1074,7 @@ function EventDatetimeInput({
             },
           }}
           render={({
-            field: { value, ...rest },
+            field: { value, onChange, ...rest },
             fieldState: { error, invalid },
           }) => (
             <DateTimePicker
@@ -1087,6 +1104,10 @@ function EventDatetimeInput({
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
+              onChange={(newValue) => {
+                onChange(newValue);
+                resetLocations();
+              }}
               disabled={!startDateInput || disabled}
               format="DD/MM/YYYY hh:mm A"
               {...rest}
@@ -1101,8 +1122,9 @@ function EventDatetimeInput({
               <Grid
                 size={{
                   xs: 8,
-                  xl: 4
-                }}>
+                  xl: 4,
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -1243,11 +1265,16 @@ function EventDescriptionInput({ control }) {
 function EventVenueInput({
   control,
   defaultValues,
-  resetField,
   disabled = true,
   eventid = null,
 }) {
-  const [modeInput, locationInput, startDateInput, endDateInput, externalAllowed] = useWatch({
+  const [
+    modeInput,
+    locationInput,
+    startDateInput,
+    endDateInput,
+    externalAllowed,
+  ] = useWatch({
     control,
     name: [
       "mode",
@@ -1257,13 +1284,6 @@ function EventVenueInput({
       "externalAllowed",
     ],
   });
-
-  // reset location if datetime changes
-  useEffect(() => resetField("location"), [startDateInput, endDateInput]);
-  useEffect(
-    () => resetField("locationAlternate"),
-    [startDateInput, endDateInput]
-  );
 
   return (
     <Grid container spacing={2}>
@@ -1298,14 +1318,19 @@ function EventVenueInput({
       <Grid size={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
-          (startDateInput && endDateInput ? (<EventLocationInput
-            control={control}
-            startDateInput={startDateInput}
-            endDateInput={endDateInput}
-            disabled={disabled}
-            eventid={eventid}
-          />) : (<FormHelperText>Enter start and end dates to get available venues
-                        </FormHelperText>))
+          startDateInput && endDateInput ? (
+            <EventLocationInput
+              control={control}
+              startDateInput={startDateInput}
+              endDateInput={endDateInput}
+              disabled={disabled}
+              eventid={eventid}
+            />
+          ) : (
+            <FormHelperText>
+              Enter start and end dates to get available venues
+            </FormHelperText>
+          )
         ) : null}
       </Grid>
       <Grid size={12}>
@@ -1333,8 +1358,9 @@ function EventVenueInput({
               slotProps={{
                 input: {
                   inputProps: { min: 1 },
-                }
-              }} />
+                },
+              }}
+            />
           )}
         />
       </Grid>
@@ -1382,7 +1408,6 @@ function EventVenueInput({
               },
             }}
             defaultValue={defaultValues.externalPopulation || 0}
-
             render={({ field, fieldState: { error, invalid } }) => (
               <TextField
                 type="number"
@@ -1397,7 +1422,7 @@ function EventVenueInput({
                 slotProps={{
                   input: {
                     inputProps: { min: 1 },
-                  }
+                  },
                 }}
               />
             )}
@@ -1756,13 +1781,7 @@ function EventSponsorTable({
 }
 
 // input event POC
-function EventPOC({
-  control,
-  cid,
-  hasPhone,
-  setHasPhone,
-  disabled = false,
-}) {
+function EventPOC({ control, cid, hasPhone, setHasPhone, disabled = false }) {
   const { triggerToast } = useToast();
   const poc = useWatch({
     control,
@@ -1858,7 +1877,11 @@ function EventPOC({
                   }}
                 >
                   {members?.slice()?.map((member) => (
-                    <MenuItem key={member._id} value={member.uid} component="div">
+                    <MenuItem
+                      key={member._id}
+                      value={member.uid}
+                      component="div"
+                    >
                       <MemberListItem uid={member.uid} />
                     </MenuItem>
                   ))}
