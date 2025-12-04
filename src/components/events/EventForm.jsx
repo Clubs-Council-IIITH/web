@@ -269,6 +269,9 @@ export default function EventForm({
     };
 
     data.collabclubs = collabEvent ? formData.collabclubs : [];
+    data.collabclubs = data.collabclubs.filter(
+      (cid) => cid && cid !== data.clubid
+    );
 
     // set club ID for event based on user role
     if (user?.role === "club") {
@@ -1901,6 +1904,7 @@ function EventPOC({ control, cid, hasPhone, setHasPhone, disabled = false }) {
           <Controller
             name="poc_phone"
             control={control}
+            defaultValue=""
             rules={{
               validate: {
                 checkPhoneNumber: (value) => {
