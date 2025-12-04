@@ -24,9 +24,9 @@ const eslintConfig = [
             // React
             ["^react$", "^next", "^next/"],
             // Other libraries (excluding internal modules)
-            ["^(?!acl|actions|app|assets|components|constants|contexts|gql|utils|react|next|@mui)(@?\\w)"],
+            ["^(?!acl|actions|app|assets|components|constants|contexts|gql|utils|next|@mui)(@?\\w)"],
             // MUI
-            ["^@mui"],
+            ["^@mui/material", "^@mui/icons-material", "^@mui/"],
             // Internal modules
             ["^(acl|contexts|gql)(/|$)"],
             ["^(app|components|utils)(/|$)"],

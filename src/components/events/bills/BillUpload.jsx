@@ -223,7 +223,7 @@ export default function BillUpload(params) {
           </li>
           <li>
             <strong>Save:</strong> Click on save to submit the bill. Once
-            submitted, you won't be able to edit the bill until SLO rejects it.
+            submitted, you won&apos;t be able to edit the bill until SLO rejects it.
           </li>
         </ul>
       </Typography>

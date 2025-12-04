@@ -94,7 +94,7 @@ export default async function TechTeam() {
       <Typography variant="body">
         The SLC-CC Tech Team started as the CC Tech Team in 2021 with a clear
         mission: to design and maintain the official Clubs Council website.
-        Since the release of <i>Version 1 in 2022</i>, we've grown into a
+        Since the release of <i>Version 1 in 2022</i>, we&apos;ve grown into a
         dedicated technical powerhouse serving all clubs and student bodies
         across the institution.
       </Typography>
@@ -107,7 +107,7 @@ export default async function TechTeam() {
         Who are we?
       </Typography>
       <Typography variant="body">
-        We're a passionate team committed to empowering our institution through
+        We&apos;re a passionate team committed to empowering our institution through
         technology. From crafting dynamic websites to managing critical systems,
         we strive to ensure seamless digital experiences for the student
         community.
@@ -134,7 +134,7 @@ export default async function TechTeam() {
           of student activities and operations.
         </li>
         <li>
-          Collaborating with the institute's IT department to maintain essential
+          Collaborating with the institute&apos;s IT department to maintain essential
           infrastructure and resolve technical challenges.
         </li>
       </Typography>
@@ -147,7 +147,7 @@ export default async function TechTeam() {
         Our Projects
       </Typography>
       <Typography variant="body" paragraph>
-        Here are some of the websites we've developed and currently maintain:
+        Here are some of the websites we&apos;ve developed and currently maintain:
       </Typography>
       <Typography variant="body" component="ul" sx={{ marginLeft: 2 }}>
         <li>Life Website</li>
@@ -160,8 +160,8 @@ export default async function TechTeam() {
         mt: 3
       }}>
         With each project, we aim to uphold our core values of innovation,
-        reliability, and teamwork. Together, we're shaping the future of our
-        institution's digital landscape.
+        reliability, and teamwork. Together, we&apos;re shaping the future of our
+        institution&apos;s digital landscape.
       </Typography>
       <Stack
         direction="row"
