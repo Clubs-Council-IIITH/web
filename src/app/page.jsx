@@ -73,7 +73,7 @@ export default function Home() {
         IIIT H is where bright, committed, innovative people congregate to
         learn, live, play and work. Diverse in every sense of the word, our
         community is a fertile breeding ground for opportunity in the heart of
-        one of the leading tech hubs of the country. "Work hard and play harder"
+        one of the leading tech hubs of the country. &quot;Work hard and play harder&quot;
         is our unofficial motto and students choose their own extracurricular
         pursuits, from a jaw dropping cauldron of ways to participate in music,
         dance, sports, quizzes, etc.

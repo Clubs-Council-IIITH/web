@@ -1,7 +1,8 @@
 // ModeContext.js
 "use client";
 
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { CircularProgress } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -41,17 +42,20 @@ export const ModeProvider = ({ children }) => {
   const [isiframe, setIsiframe] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  let theme_bool = useMediaQuery("(prefers-color-scheme: dark)");
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedMode = window.localStorage.getItem("currentModeCC");
+      let initialMode = prefersDarkMode;
+
       if (storedMode === "false") {
-        theme_bool = false;
+        initialMode = false;
       } else if (storedMode === "true") {
-        theme_bool = true;
+        initialMode = true;
       }
-      setIsDark(theme_bool);
+
+      setIsDark(initialMode);
       setIsLoading(false);
     }
 
@@ -61,7 +65,7 @@ export const ModeProvider = ({ children }) => {
     } else {
       setIsiframe(false);
     }
-  }, [theme_bool]);
+  }, [prefersDarkMode]);
 
   const setMode = (mode) => {
     setIsDark(mode);

@@ -56,7 +56,9 @@ export default async function RecruitmentSchedule() {
               md: 6,
               lg: 3,
               xl: 3
-            }}>
+            }}
+            key={month}
+          >
             <RecruitmentCard
               clubs={recruitmentScheduleJSON.filter(
                 (val) => val.month === month.toLowerCase()
@@ -82,7 +84,7 @@ function RecruitmentCard({ clubs, month = "January" }) {
       />
       <CardContent>
         {clubs?.map((club) => (
-          <Box sx={{ mb: 1 }}>
+          <Box sx={{ mb: 1 }} key={club.cid}>
             {/* <ArrowForwardIosIcon sx={{ float: 'left', mt: 0.5, mr: 5, ml: 1, mb: 0.5 }} /> */}
             <ClubButton clubid={club.cid} />
           </Box>
