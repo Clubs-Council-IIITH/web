@@ -29,9 +29,6 @@ jobs:
         continue-on-error: true
         run: npm run lint:fix -- --quiet
 
-      - name: Install Prettier
-        run: npm install --global prettier
-
       - name: Format with Prettier
         run: prettier --write "**/*.{js,jsx,md,css,yaml}"
 
