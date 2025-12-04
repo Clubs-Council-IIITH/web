@@ -1,66 +1,64 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo,useState,useEffectEvent } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, useWatch, Controller, useController } from "react-hook-form";
+import dayjs, { isDayjs } from "dayjs";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+} from "libphonenumber-js";
+import { Controller, useController,useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
   Button,
   Chip,
-  IconButton,
-  Grid,
-  Fade,
   CircularProgress,
-  TextField,
-  Typography,
-  ToggleButtonGroup,
-  ToggleButton,
-  FormHelperText,
+  Fade,
   FormControl,
   FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Select,
   Switch,
-  MenuItem,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
+  Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import InfoIcon from "@mui/icons-material/Info";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-import {
-  isValidPhoneNumber,
-  parsePhoneNumberWithError,
-} from "libphonenumber-js";
-import dayjs, { isDayjs } from "dayjs";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoIcon from "@mui/icons-material/Info";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 import { useAuth } from "components/AuthProvider";
-import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
-import EventBudget from "components/events/EventBudget";
-import EventSponsor from "components/events/EventSponsor";
 import ConfirmDialog from "components/ConfirmDialog";
+import EventBudget from "components/events/EventBudget";
 import EventsDialog from "components/events/EventsDialog";
+import EventSponsor from "components/events/EventSponsor";
+import FileUpload from "components/FileUpload";
 import MemberListItem from "components/members/MemberListItem";
+import { useToast } from "components/Toast";
+import { uploadImageFile } from "utils/files";
+import { locationLabel } from "utils/formatEvent";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventAction } from "actions/events/create/server_action";
 import { editEventAction } from "actions/events/edit/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
 import { eventsVenues } from "actions/events/venues/server_action";
+import { currentMembersAction } from "actions/members/current/server_action";
 import { getFullUser } from "actions/users/get/full/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
-import { currentMembersAction } from "actions/members/current/server_action";
-
-import { uploadImageFile } from "utils/files";
 import { audienceMap } from "constants/events";
-import { locationLabel } from "utils/formatEvent";
 
 const admin_roles = ["cc", "slo"];
 const clubsAddPastEvents = true; // whether clubs can add past events - only for special cases (default: false)
@@ -1501,11 +1499,14 @@ function EventLocationInput({
   });
 
   const [availableRooms, setAvailableRooms] = useState([]);
+  const setAvailableRoomsEffectEvent = useEffectEvent((rooms) => {
+    setAvailableRooms(rooms);
+  });
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
 
     if (new Date(startDateInput) > new Date(endDateInput)) {
-      setAvailableRooms([]);
+      setAvailableRoomsEffectEvent([]);
       return;
     }
 
@@ -1530,7 +1531,7 @@ function EventLocationInput({
             r.location === "other" ? { ...r, available: true } : r
           );
         }
-        setAvailableRooms(rooms);
+        setAvailableRoomsEffectEvent(rooms);
       }
     })();
   }, [startDateInput, endDateInput]);

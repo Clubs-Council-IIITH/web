@@ -1,18 +1,17 @@
 "use client";
 
+import { useEffect, useState, useEffectEvent } from "react";
 import Image from "next/image";
 
-import { useState, useEffect } from "react";
-
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "./slick-theme.css";
 
 import { Box } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { Typography, Card, CardContent } from "@mui/material";
+import "slick-carousel/slick/slick.css";
+import "./slick-theme.css";
 
 export default function Carousel({ items, sx }) {
   const settings = {
@@ -47,9 +46,12 @@ function CarouselItem({ item }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [size, setSize] = useState("40%");
+  const updateSize = useEffectEvent(() => {
+    setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%");
+  });
   useEffect(
-    () => setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"),
-    [isDesktop, isMobile],
+    () => updateSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"),
+    [isDesktop, isMobile]
   );
 
   return (
@@ -111,8 +113,9 @@ function CarouselItem({ item }) {
           sx={{
             fontWeight: 400,
             color: "common.white",
-            display: "flex"
-          }}>
+            display: "flex",
+          }}
+        >
           {description}
         </Typography>
       </CardContent>
