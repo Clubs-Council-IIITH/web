@@ -30,7 +30,7 @@ export default function HolidaysTitleBar({ showPast, onToggle, children }) {
         <Stack direction="row" spacing={1} sx={{
           alignItems: "center"
         }}>
-          <Typography variant="h6">Show Past</Typography>
+          <Typography>Show Past?</Typography>
           <Switch checked={showPast} onChange={onToggle} color="primary" />
         </Stack>
         {children}
