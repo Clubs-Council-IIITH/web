@@ -146,7 +146,9 @@ export default async function TechTeam() {
         }}>
         Our Projects
       </Typography>
-      <Typography variant="body" paragraph>
+      <Typography variant="body" sx={{
+        marginBottom: "16px"
+      }}>
         Here are some of the websites we&apos;ve developed and currently maintain:
       </Typography>
       <Typography variant="body" component="ul" sx={{ marginLeft: 2 }}>
@@ -156,9 +158,12 @@ export default async function TechTeam() {
           Websites for NSS, Cultural Council, CLC, and other student bodies
         </li>
       </Typography>
-      <Typography variant="body1" paragraph sx={{
-        mt: 3
-      }}>
+      <Typography
+        variant="body1"
+        sx={{
+          mt: 3,
+          marginBottom: "16px"
+        }}>
         With each project, we aim to uphold our core values of innovation,
         reliability, and teamwork. Together, we&apos;re shaping the future of our
         institution&apos;s digital landscape.
@@ -201,7 +206,9 @@ export default async function TechTeam() {
         }}>
         Reach Out to Us
       </Typography>
-      <Typography variant="body1" paragraph>
+      <Typography variant="body1" sx={{
+        marginBottom: "16px"
+      }}>
         For any queries, suggestions, or collaborations, feel free to reach out
         to us at{" "}
         <a href="mailto:webadmin@students.iiit.ac.in" target="_blank">

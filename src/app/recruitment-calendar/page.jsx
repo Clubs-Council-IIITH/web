@@ -75,8 +75,10 @@ function RecruitmentCard({ clubs, month = "January" }) {
     <Card variant="outlined" sx={{ position: "relative" }}>
       <CardHeader
         title={month}
-        titleTypographyProps={{ textAlign: "center", mb: 2 }}
         sx={{ backgroundColor: "#1EC3BD" }}
+        slotProps={{
+          title: { textAlign: "center", mb: 2 }
+        }}
       />
       <CardContent>
         {clubs?.map((club) => (

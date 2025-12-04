@@ -8,6 +8,7 @@ import Carousel from "components/carousel/Carousel";
 import EventsGrid from "components/events/EventsGrid";
 import Statistic from "components/Statistic";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 // carousel images
 import carousel1 from "assets/carousel/1.jpg";
@@ -22,7 +23,6 @@ import carousel9 from "assets/carousel/9.webp";
 import carousel10 from "assets/carousel/10.jpg";
 // import carousel11 from "assets/carousel/11.jpg";
 import carousel12 from "assets/carousel/12.jpg";
-import Gallery from "./gallery/page";
 
 export const metadata = {
   title: "Home | Life @ IIIT-H",

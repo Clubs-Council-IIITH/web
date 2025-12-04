@@ -1317,19 +1317,14 @@ function EventVenueInput({
       <Grid size={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
-          startDateInput && endDateInput ? (
-            <EventLocationInput
-              control={control}
-              startDateInput={startDateInput}
-              endDateInput={endDateInput}
-              disabled={disabled}
-              eventid={eventid}
-            />
-          ) : (
-            <FormHelperText>
-              Enter start and end dates to get available venues
-            </FormHelperText>
-          )
+          (startDateInput && endDateInput ? (<EventLocationInput
+            control={control}
+            startDateInput={startDateInput}
+            endDateInput={endDateInput}
+            disabled={disabled}
+            eventid={eventid}
+          />) : (<FormHelperText>Enter start and end dates to get available venues
+                        </FormHelperText>))
         ) : null}
       </Grid>
       <Grid size={12}>
