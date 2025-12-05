@@ -8,7 +8,8 @@ import { getClub } from "utils/fetchData";
 
 import ClubMembers from "app/clubs/[id]/members/page";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   const club = await getClub(id);
@@ -20,6 +21,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function BodyMembers({ params }) {
+export default async function BodyMembers(props) {
+  const params = await props.params;
   return ClubMembers({ params });
 }

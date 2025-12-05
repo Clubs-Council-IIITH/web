@@ -9,7 +9,8 @@ export const metadata = {
   title: "CC Recruitments",
 };
 
-export default async function AllRecruitmentsApplications({ searchParams }) {
+export default async function AllRecruitmentsApplications(props) {
+  const searchParams = await props.searchParams;
   const currentYear = new Date().getFullYear();
   const year = parseInt(searchParams?.year) || currentYear;
 
@@ -22,8 +23,7 @@ export default async function AllRecruitmentsApplications({ searchParams }) {
       getClient()
         .query(GET_USER_PROFILE, {
           userInput: { uid: applicant.uid },
-        })
-        .toPromise(),
+        }),
     ) || [];
 
   const users = await Promise.all(userPromises);

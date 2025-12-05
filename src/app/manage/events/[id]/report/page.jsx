@@ -6,7 +6,8 @@ import { EventReportDetails } from "components/events/report/EventReportDetails"
 import { GET_USER } from "gql/queries/auth";
 import { redirect } from "next/navigation";
 
-export default async function EventReport({ params }) {
+export default async function EventReport(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {

@@ -1,18 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 export function EditUser({ sx }) {
   const { id } = useParams();
 
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/profile/${id}/edit`}
       variant="contained"
       color="warning"

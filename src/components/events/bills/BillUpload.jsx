@@ -5,7 +5,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 
 import { useToast } from "components/Toast";
 import FileUpload from "components/FileUpload";
@@ -61,7 +60,7 @@ export default function BillUpload(params) {
         data.file[0],
         false,
         eventCode + "_bill",
-        maxFileSizeMB,
+        maxFileSizeMB
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
@@ -102,10 +101,23 @@ export default function BillUpload(params) {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between"></Grid>
+      <Grid
+        container
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      ></Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-          <Grid item xs={12} alignItems="center" m={1}>
+          <Grid
+            
+            sx={{
+              alignItems: "center",
+              m: 1,
+            }}
+            size={12}
+          >
             <FileUpload
               name="file"
               label="File Upload"
@@ -114,10 +126,19 @@ export default function BillUpload(params) {
               maxFiles={1}
               maxSizeMB={maxFileSizeMB}
             />
-            <Typography variant="h4" mt={3}>
+            <Typography
+              variant="h4"
+              sx={{
+                mt: 3,
+              }}
+            >
               Breakdown and bill details
             </Typography>
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <Controller
                 name="budget"
                 control={control}
@@ -125,7 +146,7 @@ export default function BillUpload(params) {
                   validate: {
                     validBillNumbers: (value) => {
                       const invalidItems = value.filter(
-                        (item) => item.billno && !validateBillno(item.billno),
+                        (item) => item.billno && !validateBillno(item.billno)
                       );
                       return (
                         invalidItems.length === 0 ||
@@ -147,8 +168,14 @@ export default function BillUpload(params) {
               />
             </Box>
           </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Grid size={12}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 color="primary"
@@ -157,7 +184,7 @@ export default function BillUpload(params) {
                 Cancel
               </Button>
 
-              <LoadingButton
+              <Button
                 loading={loading}
                 // type="submit"
                 onClick={handleSubmitButton}
@@ -166,16 +193,19 @@ export default function BillUpload(params) {
                 disabled={loading || !fileDropzone || budgetEditing}
               >
                 Save
-              </LoadingButton>
+              </Button>
             </Box>
           </Grid>
         </Grid>
       </form>
-
-      <Typography variant="h4" mt={3}>
+      <Typography
+        variant="h4"
+        sx={{
+          mt: 3,
+        }}
+      >
         Instructions
       </Typography>
-
       <Typography variant="body1">
         <ul>
           <li>
@@ -197,7 +227,6 @@ export default function BillUpload(params) {
           </li>
         </ul>
       </Typography>
-
       <ConfirmDialog
         open={submitDialogOpen}
         title="Confirm submission"

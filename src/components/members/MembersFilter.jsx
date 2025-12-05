@@ -19,7 +19,7 @@ import { useToast } from "components/Toast";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 
-export default function MembersFilter({ name, club, state, cc = false }) {
+export default function MembersFilter({ club, state, cc = false }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,14 +34,14 @@ export default function MembersFilter({ name, club, state, cc = false }) {
 
       return params.toString();
     },
-    [searchParams],
+    [searchParams]
   );
 
   // show both current and past if no state is selected
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`,
+        `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`
       );
   }, [state]);
 
@@ -66,7 +66,11 @@ export default function MembersFilter({ name, club, state, cc = false }) {
     <Container>
       <Grid container spacing={2}>
         {cc && (
-          <Grid item xs={12} lg={club ? 8 : 12}>
+          <Grid
+            size={{
+              xs: 12,
+              lg: club ? 8 : 12
+            }}>
             <FormControl fullWidth>
               <InputLabel id="clubid">Filter by club</InputLabel>
               <Select
@@ -75,10 +79,10 @@ export default function MembersFilter({ name, club, state, cc = false }) {
                 fullWidth
                 onChange={(e) =>
                   router.push(
-                    `${pathname}?${createQueryString("club", e?.target?.value)}`,
+                    `${pathname}?${createQueryString("club", e?.target?.value)}`
                   )
                 }
-                value={club}
+                value={club || ""}
               >
                 {clubs
                   ?.slice()
@@ -93,7 +97,11 @@ export default function MembersFilter({ name, club, state, cc = false }) {
           </Grid>
         )}
         {club ? (
-          <Grid item xs lg>
+          <Grid
+            size={{
+              xs: "grow",
+              lg: "grow"
+            }}>
             <ToggleButtonGroup
               fullWidth
               value={state}
@@ -107,8 +115,8 @@ export default function MembersFilter({ name, club, state, cc = false }) {
                 return router.push(
                   `${pathname}?${createQueryString(
                     e?.target?.value,
-                    !state.includes(e?.target?.value),
-                  )}`,
+                    !state.includes(e?.target?.value)
+                  )}`
                 );
               }}
             >

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 
 import {
   Box,
@@ -20,7 +20,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { useTheme } from "@mui/material/styles";
@@ -87,7 +86,7 @@ export default function EventReportForm({
     fetchClubs();
   }, []);
 
-  const { control, handleSubmit, watch, setValue, resetField } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       ...defaultValues,
       ...defaultReportValues,
@@ -197,25 +196,39 @@ export default function EventReportForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={4} alignItems="flex-start">
-        <Grid container item xs={12} md={7} xl={8} spacing={3}>
-          <Grid container item>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Grid
+          container
+          spacing={3}
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8
+          }}>
+          <Grid container>
             <Grid
               container
-              item
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
                 gutterBottom
-                mb={2}
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2,
+                }}
               >
                 Details
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 label="Name"
                 value={defaultValues?.name}
@@ -223,9 +236,19 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6} xl={6}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    md: 6,
+                    xl: 6
+                  }}>
                   <DateTimePicker
                     label="Starts Date"
                     viewRenderers={{
@@ -244,7 +267,12 @@ export default function EventReportForm({
                     format="DD/MM/YYYY hh:mm A"
                   />
                 </Grid>
-                <Grid item xs={12} md={6} xl={6}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    md: 6,
+                    xl: 6
+                  }}>
                   <DateTimePicker
                     label="End Date"
                     viewRenderers={{
@@ -265,7 +293,12 @@ export default function EventReportForm({
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <FormControl fullWidth disabled>
                 <InputLabel>Organized By</InputLabel>
                 <Select
@@ -286,7 +319,7 @@ export default function EventReportForm({
                         {selected
                           .map(
                             (clubId) =>
-                              clubs.find((club) => club.cid === clubId)?.name,
+                              clubs.find((club) => club.cid === clubId)?.name
                           )
                           .filter(Boolean)
                           .map((clubName) => (
@@ -298,7 +331,12 @@ export default function EventReportForm({
                 ></Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <Controller
                 name="eventSummary"
                 control={control}
@@ -326,7 +364,12 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <Controller
                 name="mediaLink"
                 control={control}
@@ -352,10 +395,14 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <SubmittedBy
                 control={control}
-                watch={watch}
                 cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
                 hasPhone={hasPhone}
                 setHasPhone={setHasPhone}
@@ -363,24 +410,34 @@ export default function EventReportForm({
             </Grid>
           </Grid>
         </Grid>
-        <Grid container item xs md spacing={3} alignItems="flex-start">
-          <Grid container item>
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+          size={{
+            xs: "grow",
+            md: "grow"
+          }}>
+          <Grid container>
             <Grid
               container
-              item
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
                 gutterBottom
-                mb={2}
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2,
+                }}
               >
                 Attendance
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 label="Expected Participation"
                 value={defaultValues?.population}
@@ -388,7 +445,13 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} mt={2} mb={3}>
+            <Grid
+              sx={{
+                mt: 2,
+                mb: 3,
+              }}
+              size={12}
+            >
               <Controller
                 name="actualAttendance"
                 control={control}
@@ -409,7 +472,7 @@ export default function EventReportForm({
             </Grid>
             {defaultValues?.externalPopulation ? (
               <>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     label="Expected External Participation"
                     value={defaultValues?.population}
@@ -417,7 +480,12 @@ export default function EventReportForm({
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} mt={2}>
+                <Grid
+                  sx={{
+                    mt: 2,
+                  }}
+                  size={12}
+                >
                   <Controller
                     name="actualExternalAttendance"
                     control={control}
@@ -441,7 +509,12 @@ export default function EventReportForm({
               </>
             ) : null}
 
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <Controller
                 name="prizes"
                 control={control}
@@ -483,7 +556,12 @@ export default function EventReportForm({
             </Grid>
             {prizesInput?.length != 0 && (
               <>
-                <Grid item xs={12} mt={2}>
+                <Grid
+                  sx={{
+                    mt: 2,
+                  }}
+                  size={12}
+                >
                   <Controller
                     name="prizesBreakdown"
                     control={control}
@@ -502,7 +580,12 @@ export default function EventReportForm({
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} mt={2}>
+                <Grid
+                  sx={{
+                    mt: 2,
+                  }}
+                  size={12}
+                >
                   <Controller
                     name="winnersDetails"
                     control={control}
@@ -525,7 +608,12 @@ export default function EventReportForm({
                 </Grid>
               </>
             )}
-            <Grid item xs={12} mt={2}>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <Controller
                 name="feedback"
                 control={control}
@@ -546,8 +634,16 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              direction="row"
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+              size={12}
+            >
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -569,8 +665,8 @@ export default function EventReportForm({
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
-                <LoadingButton
+              <Grid size={6}>
+                <Button
                   loading={loading}
                   size="large"
                   variant="contained"
@@ -579,7 +675,7 @@ export default function EventReportForm({
                   onClick={() => handleSubmit((data) => onSubmit(data))()}
                 >
                   Save & Submit
-                </LoadingButton>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -591,14 +687,16 @@ export default function EventReportForm({
 
 function SubmittedBy({
   control,
-  watch,
   cid,
   hasPhone,
   setHasPhone,
   disabled = false,
 }) {
   const { triggerToast } = useToast();
-  const submittedBy = watch("submittedBy");
+  const submittedBy = useWatch({
+    control,
+    name: "submittedBy",
+  });
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
@@ -647,7 +745,14 @@ function SubmittedBy({
           <FormControl fullWidth error={invalid}>
             <InputLabel id="submittedBy">Submitted By *</InputLabel>
             {members.length === 0 ? (
-              <Box py={25} width="100%" display="flex" justifyContent="center">
+              <Box
+                sx={{
+                  py: 25,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
@@ -663,7 +768,7 @@ function SubmittedBy({
                 }}
               >
                 {members?.slice()?.map((member) => (
-                  <MenuItem key={member._id} value={member.uid}>
+                  <MenuItem key={member._id} value={member.uid} component="div">
                     <MemberListItem uid={member.uid} />
                   </MenuItem>
                 ))}
@@ -673,9 +778,12 @@ function SubmittedBy({
           </FormControl>
         )}
       />
-
       {disabled || members.length === 0 || !submittedBy || hasPhone ? null : (
-        <Box mt={2}>
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
           <Controller
             name="submittedBy_phone"
             defaultValue={""}

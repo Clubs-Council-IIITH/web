@@ -24,7 +24,9 @@ export default function FileUpload({
 }) {
   return (
     <>
-      <Typography variant="caption" color="text.secondary" gutterBottom>
+      <Typography variant="caption" gutterBottom sx={{
+        color: "text.secondary"
+      }}>
         {label}
       </Typography>
       <Controller
@@ -184,12 +186,16 @@ function DropZone({
             ))
           )
         ) : (
-          <Box p={3}>
+          <Box sx={{
+            p: 3
+          }}>
             <Typography gutterBottom variant="h5">
               Select (or drop) file
             </Typography>
 
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{
+              color: "text.secondary"
+            }}>
               Drag-and-drop file here or click to browse local files.
             </Typography>
           </Box>

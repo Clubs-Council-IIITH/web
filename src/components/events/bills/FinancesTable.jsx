@@ -9,7 +9,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Tag from "components/Tag";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 import { billsStateLabel } from "utils/formatEvent";
 
 export default function FinancesTable({ events, role }) {
@@ -90,15 +89,15 @@ export default function FinancesTable({ events, role }) {
             value.submitted === "true"
               ? "check"
               : value.submitted === "old"
-                ? "remove"
-                : "cancel"
+              ? "remove"
+              : "cancel"
           }
           color={
             value.submitted === "true"
               ? "success.main"
               : value.submitted === "old"
-                ? "warning.main"
-                : "error.main"
+              ? "warning.main"
+              : "error.main"
           }
         />
       ),
@@ -155,7 +154,7 @@ export default function FinancesTable({ events, role }) {
         },
         pagination: { paginationModel: { pageSize: 10 } },
       }}
-      slots={{ toolbar: QuickSearchToolbar }}
+      showToolbar
       sx={{
         ".MuiDataGrid-cell:focus": { outline: "none" },
         "& .MuiDataGrid-row:hover": { cursor: "pointer" },

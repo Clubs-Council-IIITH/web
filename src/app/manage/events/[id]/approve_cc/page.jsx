@@ -15,7 +15,8 @@ export const metadata = {
   title: "Approve/Reject Event | CC",
 };
 
-export default async function ApproveEventCC({ params }) {
+export default async function ApproveEventCC(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
@@ -63,25 +64,20 @@ export default async function ApproveEventCC({ params }) {
 
   const clashFlag = clashingEvents?.length > 0;
 
-  return (
-    user?.role !== "cc" && redirect("/404"),
-    event?.status?.state !== "pending_cc" && redirect("/404"),
-    (
-      <Container>
-        <center>
-          <Typography variant="h3" gutterBottom mb={3}>
-            Approve or Reject Event | Clubs Council
-          </Typography>
-        </center>
-
-        <EventActionTabs
-          eventid={event._id}
-          members={currentccMembers}
-          clashFlag={clashFlag}
-        />
-      </Container>
-    )
-  );
+  return (user?.role !== "cc" && redirect("/404"), event?.status?.state !== "pending_cc" && redirect("/404"), (<Container>
+    <center>
+      <Typography variant="h3" gutterBottom sx={{
+        mb: 3
+      }}>
+        Approve or Reject Event | Clubs Council
+      </Typography>
+    </center>
+    <EventActionTabs
+      eventid={event._id}
+      members={currentccMembers}
+      clashFlag={clashFlag}
+    />
+  </Container>));
 }
 
 const filterRoles = (roles, filterWords) => {

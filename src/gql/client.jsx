@@ -5,7 +5,12 @@ import { registerUrql } from "@urql/next/rsc";
 const GRAPHQL_ENDPOINT =
   process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";
 
-const makeClient = () => {
+const makeClient = async () => {
+  const cookieList = (await cookies()).getAll();
+  const cookieHeader = cookieList.length
+    ? cookieList.map((c) => `${c.name}=${c.value}`).join("; ")
+    : undefined;
+
   return createClient({
     url: GRAPHQL_ENDPOINT,
     exchanges: [cacheExchange, fetchExchange],
@@ -13,13 +18,27 @@ const makeClient = () => {
       cache: "no-store",
       credentials: "include",
       headers: {
-        cookie: cookies()
-          .getAll()
-          .map((cookie) => `${cookie.name}=${cookie.value}`)
-          .join("; "),
+        "content-type": "application/json",
+        ...(cookieHeader ? { cookie: cookieHeader } : {}),
       },
     },
   });
 };
 
-export const { getClient } = registerUrql(makeClient);
+const { getClient: _rscGetClient } = registerUrql(makeClient);
+
+export const getClient = () => {
+  return {
+    query: async (document, variables) => {
+      const client = await _rscGetClient();
+      const result = client.query(document, variables);
+      // urql query returns an object with toPromise method
+      return result.toPromise ? await result.toPromise() : await result;
+    },
+    mutation: async (document, variables) => {
+      const client = await _rscGetClient();
+      const result = client.mutation(document, variables);
+      return result.toPromise ? await result.toPromise() : await result;
+    },
+  };
+};

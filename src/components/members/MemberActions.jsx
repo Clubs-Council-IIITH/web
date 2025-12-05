@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 
 import { useState } from "react";
@@ -8,6 +7,7 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 
@@ -19,7 +19,7 @@ export function EditMember({ sx }) {
 
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/manage/members/${id}/edit`}
       variant="contained"
       color="warning"
@@ -52,7 +52,6 @@ export function DeleteMember({ sx }) {
         severity: "success",
       });
       router.push("/manage/members");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({
@@ -108,7 +107,6 @@ export function ApproveAllMember({ sx }) {
         severity: "success",
       });
       router.push("/manage/members");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({

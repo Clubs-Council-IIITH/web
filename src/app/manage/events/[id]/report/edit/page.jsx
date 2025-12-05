@@ -33,7 +33,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function EditEventReport({ params }) {
+export default async function EditEventReport(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -70,10 +71,11 @@ export default async function EditEventReport({ params }) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
+        <Typography variant="h3" gutterBottom sx={{
+          mb: 3
+        }}>
           Edit Event Report
         </Typography>
-
         <EventReportForm
           id={id}
           defaultValues={transformEvent(event)}

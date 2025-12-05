@@ -4,6 +4,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
+import {GET_USER} from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_EVENT, GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -47,7 +48,7 @@ export const getFullEvent = cache(async (id) => {
 });
 
 export const getUserProfile = cache(async (id) => {
-  const userInput = id ? { uid: id } : null;
+  const userInput = { uid: id };
 
   try {
     const { data: { userProfile, userMeta } = {} } = await getClient().query(
@@ -62,5 +63,19 @@ export const getUserProfile = cache(async (id) => {
     return { ...userMeta, ...userProfile };
   } catch (error) {
     notFound();
+  }
+});
+
+export const getCurrentUser = cache(async () => {
+  try {
+    const {
+      data: { userMeta, userProfile } = {},
+    } = await getClient().query(GET_USER, { userInput: null });
+
+    if (userMeta === null || userProfile === null) return null;
+
+    return { ...userMeta, ...userProfile };
+  } catch (error) {
+    return null;
   }
 });

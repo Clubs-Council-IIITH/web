@@ -1,11 +1,8 @@
-import Link from "next/link";
-
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
 
 import {
-  Box,
   Container,
   Divider,
   Typography,
@@ -14,6 +11,7 @@ import {
 } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import EventsTable from "components/events/EventsTable";
 
 export const metadata = {
@@ -51,17 +49,18 @@ export default async function ManageEvents() {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Manage Events
         </Typography>
 
         {["cc", "club"].includes(userMeta?.role) ? (
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/events/new"
             variant="contained"
             startIcon={<Icon variant="add" />}
@@ -70,7 +69,6 @@ export default async function ManageEvents() {
           </Button>
         ) : null}
       </Stack>
-
       {/* only pending events */}
       {pendingEvents.length ? (
         <>
@@ -83,7 +81,6 @@ export default async function ManageEvents() {
           <Divider sx={{ my: 4 }} /> {/* marginY=4 for spacing */}
         </>
       ) : null}
-
       {/* all events */}
       <EventsTable
         query={getalleventsquery}
