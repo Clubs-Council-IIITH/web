@@ -96,12 +96,10 @@ export default function EventDetails({ event, showCode = false }) {
 
           <Typography
             variant="h3"
-            paragraph
             sx={{
               mt: 1,
               mb: 0,
-            }}
-          >
+            }}>
             {event.name}
           </Typography>
           {showCode ? (

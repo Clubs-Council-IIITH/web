@@ -2,11 +2,10 @@
 /* COPY OF `src/app/clubs/[id]/members/page.jsx`
 */
 
-import { permanentRedirect, notFound } from "next/navigation";
-
-import { getClub } from "utils/fetchData";
+import { permanentRedirect } from "next/navigation";
 
 import ClubMembers from "app/clubs/[id]/members/page";
+import { getClub } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;

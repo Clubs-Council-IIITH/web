@@ -12,12 +12,6 @@ export default function MemberListItem({ uid, showEmail = true }) {
   const { triggerToast } = useToast();
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      if (uid) await getUser();
-    })();
-  }, [uid]);
-
   const getUser = async () => {
     const res = await getUsers(uid);
 
@@ -32,6 +26,12 @@ export default function MemberListItem({ uid, showEmail = true }) {
       });
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (uid) await getUser();
+    })();
+  }, [uid]);
 
   return user ? (
     <ListItem>

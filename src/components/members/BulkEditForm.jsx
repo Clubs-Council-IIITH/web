@@ -367,8 +367,8 @@ export default function BulkEdit({ mode = "add" }) {
           mb={1}
         >
           <u>NOTE</u>: <br />
-          - If you change the role to a new one, the current role's end year
-          will be set to the new role's start year.
+          - If you change the role to a new one, the current role&apos;s end year
+          will be set to the new role&apos;s start year.
           <br />
           - Any invalid entries marked in red will be skipped during submission.
           <br />- Edited entries will be sent to the top.
@@ -470,15 +470,6 @@ function MembersTable({
     error: "Incomplete entry",
   };
 
-  useEffect(() => {
-    if (!addMode) {
-      return;
-    }
-    rows.forEach((row) => {
-      void onUpdate(row);
-    });
-  }, [existingMembers]);
-
   // data manipulation functions
   const onAdd = () => {
     const maxId = rows.length > 0 ? Math.max(...rows.map((r) => r.id)) : -1;
@@ -549,6 +540,15 @@ function MembersTable({
     const allValid = newRows.every((r) => r.isValid);
     setAllValid(allValid);
   };
+
+  useEffect(() => {
+    if (!addMode) {
+      return;
+    }
+    rows.forEach((row) => {
+      void onUpdate(row);
+    });
+  }, [existingMembers]);
 
   const columns = [
     {

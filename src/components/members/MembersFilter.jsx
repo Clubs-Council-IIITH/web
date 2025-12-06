@@ -1,18 +1,17 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-
-import { useState, useEffect, useCallback } from "react";
+import { useCallback,useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
   Container,
-  Grid,
   FormControl,
-  Select,
-  MenuItem,
+  Grid,
   InputLabel,
-  ToggleButtonGroup,
+  MenuItem,
+  Select,
   ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 
 import { useToast } from "components/Toast";
@@ -43,7 +42,7 @@ export default function MembersFilter({ club, state, cc = false }) {
       router.push(
         `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`
       );
-  }, [state]);
+  }, [state, club]);
 
   // fetch list of clubs
   const [clubs, setClubs] = useState([]);

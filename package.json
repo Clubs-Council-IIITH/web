@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start -p 80",
     "lint": "eslint .",
+    "lint:fix": "eslint src --fix",
     "sitemap": "node ./sitemap-cc.js && node ./sitemap-life.js"
   },
   "dependencies": {
@@ -43,7 +44,6 @@
     "next-mdx-remote": "^5.0.0",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^8.3.0",
-    "prop-types": "^15.8.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-dropzone": "^14.3.8",
@@ -54,7 +54,6 @@
     "react-pdf-html": "^2.1.4",
     "react-slick": "^0.31.0",
     "sharp": "^0.34.5",
-    "sitemap": "^8.0.2",
     "slick-carousel": "^1.8.1",
     "string-to-color": "^2.2.2",
     "tippy.js": "^6.3.7",
@@ -63,7 +62,10 @@
   "devDependencies": {
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.0.6"
+    "eslint-config-next": "16.0.6",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "prettier": "^3.7.4",
+    "sitemap": "^8.0.2"
   },
   "engines": {
     "node": ">=20.9.0"

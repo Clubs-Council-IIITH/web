@@ -687,7 +687,7 @@ export default function RecruitmentForm({ user = {} }) {
                         }}
                       >
                         Did you often want to take part in an event, but
-                        couldn't or didn't? What were the reasons? Why do you
+                        couldn&apos;t or didn&apos;t? What were the reasons? Why do you
                         think that happened?
                       </Typography>
                     )}
@@ -838,11 +838,11 @@ export default function RecruitmentForm({ user = {} }) {
                     mb: 2,
                   }}
                 >
-                  "By pressing the submit button, I specify that I have filled
+                  &quot;By pressing the submit button, I specify that I have filled
                   the form by myself with utmost honesty, and I want to apply to
                   the Clubs Council, as mentioned in my application. I am fine
                   with sharing of my responses with any of the Clubs Council
-                  team member for the process itself."
+                  team member for the process itself.&quot;
                 </Typography>
                 <Typography
                   variant="body2"
@@ -852,10 +852,10 @@ export default function RecruitmentForm({ user = {} }) {
                   }}
                 >
                   <i>
-                    You won't be able to edit your response after submission, so
+                    You won&apos;t be able to edit your response after submission, so
                     have a look at it once more.
                   </i>{" "}
-                  The form responses will remain anonymous, and won't be shared
+                  The form responses will remain anonymous, and won&apos;t be shared
                   with anyone outside of Clubs Council.
                 </Typography>
                 <Typography

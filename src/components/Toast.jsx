@@ -64,10 +64,12 @@ export default function Toast() {
       }}
       onClose={handleClose}
       autoHideDuration={8000}
-      TransitionComponent={Slide}
       sx={{
         mb: 3,
         mr: isDesktop ? 3 : 0,
+      }}
+      slots={{
+        transition: Slide
       }}
     >
       <Alert variant="standard" onClose={handleClose} severity={severity}>
