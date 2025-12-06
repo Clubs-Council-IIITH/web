@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
+import { GET_ALL_EVENTS, GET_PENDING_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 
 import {
   Box,
@@ -47,6 +47,10 @@ export default async function ManageEvents() {
     { clubid: userMeta?.role === "club" ? userMeta.uid : null },
   );
 
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, { 
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+  });
+
   return (
     <Container>
       <Stack
@@ -65,6 +69,7 @@ export default async function ManageEvents() {
             href="/manage/events/new"
             variant="contained"
             startIcon={<Icon variant="add" />}
+            disabled={!isEventReportsSubmitted}
           >
             New Event
           </Button>
