@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect,useState,useEffectEvent } from "react";
+import { useEffect,useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -65,14 +65,10 @@ export default function EventsTable({
   const [events, setEvents] = useState(initialEvents || []);
   const [dialog, setDialog] = useState(false);
 
-  const setEventsEffectEvent = useEffectEvent((newEvents) => {
-    setEvents(newEvents);
-  });
-
   useEffect(() => {
     // If query is not provided, just use initialEvents
     if (!query) {
-      setEventsEffectEvent(initialEvents || []);
+      setEvents(initialEvents || []);
       return;
     }
 
@@ -83,7 +79,7 @@ export default function EventsTable({
         pastEventsLimit: filterMonth.includes("pastEventsLimit") ? 4 : null,
       };
       const result = await query(params);
-      setEventsEffectEvent(result || []);
+      setEvents(result || []);
     }
     fetchEvents();
   }, [query, clubid, filterMonth, initialEvents]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo,useState,useEffectEvent } from "react";
+import { useEffect, useMemo,useState } from "react";
 import { useRouter } from "next/navigation";
 
 import dayjs, { isDayjs } from "dayjs";
@@ -1499,14 +1499,11 @@ function EventLocationInput({
   });
 
   const [availableRooms, setAvailableRooms] = useState([]);
-  const setAvailableRoomsEffectEvent = useEffectEvent((rooms) => {
-    setAvailableRooms(rooms);
-  });
   useEffect(() => {
     if (!(startDateInput && endDateInput)) return;
 
     if (new Date(startDateInput) > new Date(endDateInput)) {
-      setAvailableRoomsEffectEvent([]);
+      setAvailableRooms([]);
       return;
     }
 

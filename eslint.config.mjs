@@ -17,6 +17,7 @@ const eslintConfig = [
       "simple-import-sort": simpleImportSort,
     },
     rules: {
+      "react-hooks/set-state-in-effect": "off",
       "simple-import-sort/imports": [
         "error",
         {

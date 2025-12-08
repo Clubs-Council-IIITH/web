@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect,useState,useEffectEvent } from "react";
+import { useEffect,useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Typography } from "@mui/material";
@@ -14,12 +14,8 @@ export default function HolidaysTable({ holidays, showPast = false }) {
     { field: "date", sort: showPast ? "desc" : "asc" },
   ]);
 
-  const setSortModelEffectEvent = useEffectEvent((newModel) => {
-    setSortModel(newModel);
-  });
-
   useEffect(() => {
-    setSortModelEffectEvent([
+    setSortModel([
       {
         field: "date",
         sort: showPast ? "desc" : "asc",

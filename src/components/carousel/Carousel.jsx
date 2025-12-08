@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useEffectEvent } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import Slider from "react-slick";
@@ -46,11 +46,8 @@ function CarouselItem({ item }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [size, setSize] = useState("40%");
-  const updateSize = useEffectEvent(() => {
-    setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%");
-  });
   useEffect(
-    () => updateSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"),
+    () => setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"),
     [isDesktop, isMobile]
   );
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect,useState,useEffectEvent } from "react";
+import { useEffect,useState } from "react";
 
 import ActionPalette from "components/ActionPalette";
 import {
@@ -19,20 +19,16 @@ export default function MemberActionsList({
     DeleteMember,
   ]);
 
-  const setActionsEffectEvent = useEffectEvent((newActions) => {
-    setActions(newActions);
-  });
-
   useEffect(() => {
     if (member && user && user?.role === "cc") {
-      setActionsEffectEvent([...(allowEditing ? [EditMember] : []), DeleteMember]);
+      setActions([...(allowEditing ? [EditMember] : []), DeleteMember]);
       let i = 0;
       for (i in member.roles) {
         if (
           member.roles[i].approved == false &&
           member.roles[i].rejected == false
         ) {
-          setActionsEffectEvent([
+          setActions([
             ApproveAllMember,
             ...(allowEditing ? [EditMember] : []),
             DeleteMember,
