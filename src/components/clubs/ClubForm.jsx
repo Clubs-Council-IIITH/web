@@ -424,6 +424,7 @@ function ClubCodeInput({ control }) {
           message: "Club code must be at most 15 characters long!",
         },
       }}
+      defaultValue=""
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}

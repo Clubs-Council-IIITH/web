@@ -81,7 +81,7 @@ export default function MembersFilter({ club, state, cc = false }) {
                     `${pathname}?${createQueryString("club", e?.target?.value)}`
                   )
                 }
-                value={club}
+                value={club || ""}
               >
                 {clubs
                   ?.slice()

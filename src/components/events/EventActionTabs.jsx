@@ -41,6 +41,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
     defaultValues: {
       SLC: false,
       SLO: false,
+      approver: "",
     },
   });
 

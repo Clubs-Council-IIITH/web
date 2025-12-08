@@ -12,7 +12,8 @@ import {
   UnDeleteClub,
 } from "components/clubs/ClubActions";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   const user = await getCurrentUser();
