@@ -743,6 +743,8 @@ function MembersTable({
         </Tooltip>
       ),
       display: "flex",
+      disableColumnMenu: true,
+      sortable: false,
     },
     ...(addMode
       ? [
@@ -761,6 +763,9 @@ function MembersTable({
               </IconButton>
             ),
             display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),

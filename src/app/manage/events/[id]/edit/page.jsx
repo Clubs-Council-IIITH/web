@@ -19,7 +19,6 @@ function transformEvent(event) {
       new Date(event?.datetimeperiod[0]),
       new Date(event?.datetimeperiod[1]),
     ],
-    // add mandatory ID field for DataGrid
     budget:
       event?.budget?.map((budget, key) => ({
         ...budget,

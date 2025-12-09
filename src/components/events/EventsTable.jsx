@@ -219,6 +219,7 @@ export default function EventsTable({
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",
+      disableExport: true,
       valueGetter: (value, row, column, apiRef) => ({
         requested: row.location.length > 0,
         approved: row.status.room,
@@ -264,6 +265,7 @@ export default function EventsTable({
       flex: isMobile ? null : 3,
       align: "center",
       headerAlign: "center",
+      disableExport: true,
       valueGetter: (value, row, column, apiRef) => ({
         state: row.status.state,
         start: row.datetimeperiod[0],

@@ -65,6 +65,7 @@ export default function FinancesTable({ events, role }) {
         state: row?.billsStatus?.state,
         status: billsStateLabel(row?.billsStatus?.state),
       }),
+      disableExport: true,
       renderCell: ({ value }) => (
         <Tag
           label={value.status.name}
@@ -80,22 +81,16 @@ export default function FinancesTable({ events, role }) {
       flex: 3,
       align: "center",
       headerAlign: "center",
-      valueGetter: (value, row, column, apiRef) => ({
-        submitted: row?.eventReportSubmitted,
-      }),
+      valueGetter: (value, row, column, apiRef) => row?.eventReportSubmitted,
       renderCell: ({ value }) => (
         <Icon
           variant={
-            value.submitted === "true"
-              ? "check"
-              : value.submitted === "old"
-              ? "remove"
-              : "cancel"
+            value === "true" ? "check" : value === "old" ? "remove" : "cancel"
           }
           color={
-            value.submitted === "true"
+            value === "true"
               ? "success.main"
-              : value.submitted === "old"
+              : value === "old"
               ? "warning.main"
               : "error.main"
           }

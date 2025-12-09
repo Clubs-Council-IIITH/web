@@ -181,6 +181,9 @@ export default function EventSponsor({
               </IconButton>
             ),
             display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),

@@ -23,6 +23,7 @@ const columns = [
       <>{value.clubdata ? <ClubBox club={value.clubdata} /> : value.name}</>
     ),
     display: "flex",
+    disableExport: true,
   },
   {
     field: "date",
