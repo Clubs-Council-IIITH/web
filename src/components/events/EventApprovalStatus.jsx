@@ -67,6 +67,16 @@ export default async function EventApprovalStatus({
     timelineRows.push(["Last Edited By", lastEditeduser, false]);
   }
 
+  // Add the creationTime row
+  timelineRows.push([
+    "Event Created",
+    status?.creationTime == null
+      ? "Information not available"
+      : (status?.creationTime.includes(":") ? "Created on " : "") +
+        status?.creationTime,
+    status?.creationTime == null,
+  ]);
+
   // Handle deleted state
   if (status?.state && status?.state == "deleted") {
     timelineRows.push([
