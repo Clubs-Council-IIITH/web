@@ -58,13 +58,14 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
                 message: "Comment must be at least 2 characters long!",
               },
             }}
-            render={({ field, fieldState: { error, invalid } }) => (
+            render={({ field: {value, ...rest}, fieldState: { error, invalid } }) => (
               <TextField
-                {...field}
+                {...rest}
                 label="Comment"
                 autoComplete="off"
                 error={invalid}
                 helperText={error?.message}
+                value={value || ""}
                 variant="outlined"
                 rows={4}
                 fullWidth
