@@ -39,6 +39,9 @@ export default function MembersTable({
         name: row.firstName,
         img: row.img,
       }),
+      disableExport: true,
+      disableColumnMenu: true,
+      sortable: false,
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
@@ -100,6 +103,9 @@ export default function MembersTable({
             headerName: "Positions",
             flex: 8,
             width: 300,
+            disableExport: true,
+            disableColumnMenu: true,
+            sortable: false,
             valueGetter: (value, row, column, apiRef) => row.roles,
             renderCell: ({ value }) => (
               <Box sx={{ width: "100%", height: "100%", p: 1 }}>

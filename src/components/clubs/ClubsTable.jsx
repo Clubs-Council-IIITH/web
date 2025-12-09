@@ -30,6 +30,9 @@ export default function ClubsTable({ clubs }) {
         <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
       ),
       display: "flex",
+      disableExport: true,
+      disableColumnMenu: true,
+      sortable: false,
     },
     ...(isMobile
       ? []

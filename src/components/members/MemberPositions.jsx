@@ -209,6 +209,7 @@ export default function MemberPositions({
               rejected: row.rejected,
               rejectionTime: row.rejectionTime,
             }),
+            disableExport: true,
             renderCell: ({
               value: { approved, approvalTime, rejected, rejectionTime },
             }) => (
@@ -251,6 +252,9 @@ export default function MemberPositions({
                     rejected: row.rejected,
                     rid: row.rid,
                   }),
+                  disableExport: true,
+                  disableColumnMenu: true,
+                  sortable: false,
                   renderCell: ({ value: { approved, rejected, rid } }) => (
                     <>
                       {approved || rejected ? null : (
