@@ -912,6 +912,7 @@ function EventNameInput({ control, disabled = true }) {
           value: 150,
           message: "Event name must be at most 150 characters long!",
         },
+        required: "Event name is required!",
       }}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
