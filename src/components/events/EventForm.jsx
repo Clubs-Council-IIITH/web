@@ -1529,7 +1529,7 @@ function EventLocationInput({
             r.location === "other" ? { ...r, available: true } : r
           );
         }
-        setAvailableRoomsEffectEvent(rooms);
+        setAvailableRooms(rooms);
       }
     })();
   }, [startDateInput, endDateInput]);
