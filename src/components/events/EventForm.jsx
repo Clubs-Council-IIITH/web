@@ -1628,6 +1628,7 @@ function EventLocationInput({
                 {...field}
                 label="Other Location"
                 variant="outlined"
+                value={field.value ?? ""}
                 fullWidth
                 error={invalid}
                 helperText={error?.message}
@@ -1724,6 +1725,7 @@ function EventLocationInput({
                   {...field}
                   label="Other Alternate Location"
                   variant="outlined"
+                  value={field.value ?? ""}
                   fullWidth
                   error={invalid}
                   helperText={error?.message}
