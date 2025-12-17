@@ -1,21 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import ButtonLink from "components/Link";
 
 import {
+  Alert,
+  AlertTitle,
   Button,
   Container,
   Stack,
   Typography,
-  Alert,
-  AlertTitle,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { BUG_REPORT_URL } from "components/Layout";
+import ButtonLink from "components/Link";
 
 export default function GlobalError({ error, reset }) {
   const theme = useTheme();

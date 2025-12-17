@@ -846,7 +846,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
           ) : (
             <Image src={LifeLogo} style={styles.logo2} alt="Life Logo" />
           )}
-          <Image src={IIITLogo} style={styles.logo3} alt="IIITH Logo"/>
+          <Image src={IIITLogo} style={styles.logo3} alt="IIITH Logo" />
         </div>
         <Html>{htmlContent}</Html>
       </Page>

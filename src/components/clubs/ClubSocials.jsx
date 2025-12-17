@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { Button, Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
+
+import { useMode } from "contexts/ModeContext";
+
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-
 import { socialsData } from "utils/socialsData";
-import { useMode } from "contexts/ModeContext";
 
 export default function ClubSocials({ socials = {}, email = null }) {
   const [processedSocials, setProcessedSocials] = useState({});

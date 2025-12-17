@@ -1,7 +1,9 @@
+import React from "react";
+
+import { Box, Divider, Grid, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import React from "react";
-import { Box, Grid, Typography, Divider } from "@mui/material";
 
 export default async function EventApprovalStatus({
   status,

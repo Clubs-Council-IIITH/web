@@ -1,9 +1,9 @@
 import { permanentRedirect } from "next/navigation";
+
 import { Box } from "@mui/material";
 
-import { getClub } from "utils/fetchData";
-
 import MembersGrid from "components/members/MembersGrid";
+import { getClub } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;

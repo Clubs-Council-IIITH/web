@@ -1,11 +1,10 @@
-import ButtonLink from "components/Link";
+import { Box, Card, CardActionArea, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import { Card, Box, Typography, CardActionArea } from "@mui/material";
-
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import UserImage from "components/users/UserImage";
 import { getUserNameFromUID } from "utils/users";
 

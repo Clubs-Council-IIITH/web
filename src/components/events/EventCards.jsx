@@ -1,4 +1,5 @@
-import { Grid, Typography, CircularProgress, Box } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+
 import EventCard from "components/events/EventCard";
 
 export function EventCards({ events, loading, noEventsMessage }) {

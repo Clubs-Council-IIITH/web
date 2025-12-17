@@ -2,10 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
+
+import { Controller, useForm } from "react-hook-form";
+
 import { Button, Grid, TextField } from "@mui/material";
-import { useToast } from "components/Toast";
+
 import ConfirmDialog from "components/ConfirmDialog";
+import { useToast } from "components/Toast";
+
 import { eventBillStatus } from "actions/events/bills/bill-status/server_action";
 
 export default function BillsStatusForm({ id = null, defaultValues = {} }) {
@@ -58,7 +62,10 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
                 message: "Comment must be at least 2 characters long!",
               },
             }}
-            render={({ field: {value, ...rest}, fieldState: { error, invalid } }) => (
+            render={({
+              field: { value, ...rest },
+              fieldState: { error, invalid },
+            }) => (
               <TextField
                 {...rest}
                 {...rest}
@@ -77,7 +84,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
         </Grid>
         <Grid
           container
-          
           direction="row"
           spacing={1}
           sx={{

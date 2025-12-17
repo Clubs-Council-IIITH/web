@@ -1,7 +1,9 @@
 "use client";
 
 import { forwardRef } from "react";
+
 import { Icon as Iconify } from "@iconify/react";
+
 import { Box } from "@mui/material";
 
 const Icon = forwardRef(
@@ -13,7 +15,7 @@ const Icon = forwardRef(
       sx={{ width, height: width, ...sx }}
       {...other}
     />
-  )
+  ),
 );
 
 Icon.displayName = "Icon";

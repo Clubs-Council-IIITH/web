@@ -1,11 +1,11 @@
+import { Button, Container, Stack, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
-import { Container, Typography, Button, Stack } from "@mui/material";
-
+import ClubsTable from "components/clubs/ClubsTable";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import ClubsTable from "components/clubs/ClubsTable";
 
 export const metadata = {
   title: "Manage Clubs",

@@ -1,15 +1,13 @@
 "use client";
 
-import { useRouter, useParams } from "next/navigation";
-
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@mui/material";
 
+import ConfirmDialog from "components/ConfirmDialog";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import ConfirmDialog from "components/ConfirmDialog";
-
 import { useToast } from "components/Toast";
 
 import { deleteClubAction } from "actions/clubs/delete/server_action";

@@ -6,7 +6,7 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
-import { Controller,useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import {
   Box,
@@ -699,8 +699,8 @@ export default function RecruitmentForm({ user = {} }) {
                         }}
                       >
                         Did you often want to take part in an event, but
-                        couldn&apos;t or didn&apos;t? What were the reasons? Why do you
-                        think that happened?
+                        couldn&apos;t or didn&apos;t? What were the reasons? Why
+                        do you think that happened?
                       </Typography>
                     )}
                     <Controller
@@ -852,11 +852,11 @@ export default function RecruitmentForm({ user = {} }) {
                     mb: 2,
                   }}
                 >
-                  &quot;By pressing the submit button, I specify that I have filled
-                  the form by myself with utmost honesty, and I want to apply to
-                  the Clubs Council, as mentioned in my application. I am fine
-                  with sharing of my responses with any of the Clubs Council
-                  team member for the process itself.&quot;
+                  &quot;By pressing the submit button, I specify that I have
+                  filled the form by myself with utmost honesty, and I want to
+                  apply to the Clubs Council, as mentioned in my application. I
+                  am fine with sharing of my responses with any of the Clubs
+                  Council team member for the process itself.&quot;
                 </Typography>
                 <Typography
                   variant="body2"
@@ -866,11 +866,11 @@ export default function RecruitmentForm({ user = {} }) {
                   }}
                 >
                   <i>
-                    You won&apos;t be able to edit your response after submission, so
-                    have a look at it once more.
+                    You won&apos;t be able to edit your response after
+                    submission, so have a look at it once more.
                   </i>{" "}
-                  The form responses will remain anonymous, and won&apos;t be shared
-                  with anyone outside of Clubs Council.
+                  The form responses will remain anonymous, and won&apos;t be
+                  shared with anyone outside of Clubs Council.
                 </Typography>
                 <Typography
                   variant="body2"

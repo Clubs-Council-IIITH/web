@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Icon from "components/Icon";
 
 import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
+import Icon from "components/Icon";
 import Tag from "components/Tag";
 import { billsStateLabel } from "utils/formatEvent";
 
@@ -91,8 +91,8 @@ export default function FinancesTable({ events, role }) {
             value === "true"
               ? "success.main"
               : value === "old"
-              ? "warning.main"
-              : "error.main"
+                ? "warning.main"
+                : "error.main"
           }
         />
       ),

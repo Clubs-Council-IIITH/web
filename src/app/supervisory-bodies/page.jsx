@@ -1,8 +1,8 @@
 import { Container } from "@mui/material";
 
-import Content from "./content.mdx";
-
 import { getStaticFile } from "utils/files";
+
+import Content from "./content.mdx";
 
 export const metadata = {
   title: "Supervisory Bodies @ IIIT-H",

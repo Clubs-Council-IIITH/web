@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-import { DataGrid } from "@mui/x-data-grid";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { DataGrid } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
 import { fCurrency } from "utils/formatCurrency";
@@ -205,32 +205,32 @@ export default function EventSponsor({
       ) : null}
 
       <div style={{ display: "flex", flexDirection: "column" }}>
-      <DataGrid
-        autoHeight
-        getRowHeight={() => "auto"}
-        columns={columns}
-        rows={rows}
-        editMode="row"
-        processRowUpdate={onUpdate}
-        disableRowSelectionOnClick
-        onRowEditStart={() => setSponsorEditing(true)}
-        onRowEditStop={() => setSponsorEditing(false)}
-        onProcessRowUpdateError={(error) => {
-          console.error("Row update error:", error);
-          setError(error.message);
-        }}
-        pageSizeOptions={[5, 10, 15]}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5 } },
-        }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-        }}
+        <DataGrid
+          autoHeight
+          getRowHeight={() => "auto"}
+          columns={columns}
+          rows={rows}
+          editMode="row"
+          processRowUpdate={onUpdate}
+          disableRowSelectionOnClick
+          onRowEditStart={() => setSponsorEditing(true)}
+          onRowEditStop={() => setSponsorEditing(false)}
+          onProcessRowUpdateError={(error) => {
+            console.error("Row update error:", error);
+            setError(error.message);
+          }}
+          pageSizeOptions={[5, 10, 15]}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
+          sx={{
+            // disable cell selection style
+            ".MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+          }}
         />
-        </div>
+      </div>
 
       <Typography variant="caption" color="error">
         {error}

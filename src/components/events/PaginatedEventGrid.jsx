@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import { Typography, Divider, Button, Box } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { Box, Button, Divider, Typography } from "@mui/material";
 import HistoryIcon from "@mui/icons-material/History";
+
 import { EventCards, LoadingIndicator } from "./EventCards";
 
 const toShowLoadMoreButton = (eventDate) => {
@@ -257,8 +259,9 @@ export default function PaginatedEventGrid({
                 color: "text.secondary",
                 flexGrow: 1,
                 textAlign: "center",
-                mt: 5
-              }}>
+                mt: 5,
+              }}
+            >
               No events found.
             </Typography>
           ) : (

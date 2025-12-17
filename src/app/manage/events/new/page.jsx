@@ -1,9 +1,9 @@
 import { Container, Typography } from "@mui/material";
 
-import EventForm from "components/events/EventForm";
-
 import { getClient } from "gql/client";
 import { GET_ALL_EVENTS } from "gql/queries/events";
+
+import EventForm from "components/events/EventForm";
 
 export const metadata = {
   title: "New Event",

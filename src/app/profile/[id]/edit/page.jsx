@@ -1,11 +1,11 @@
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+
+import { Container } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER_PROFILE } from "gql/queries/users";
-
-import { Container } from "@mui/material";
 
 import UserForm from "components/profile/UserForm";
 

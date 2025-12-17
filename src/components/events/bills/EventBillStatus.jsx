@@ -1,9 +1,9 @@
-import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
+import { Box, Button, Divider, Grid, Stack, Typography } from "@mui/material";
 
-import { billsStateLabel } from "utils/formatEvent";
+import FinanceHeader from "components/events/bills/FinanceHeader";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import FinanceHeader from "components/events/bills/FinanceHeader";
+import { billsStateLabel } from "utils/formatEvent";
 
 export default async function EventBillStatus(event, eventBills, userid) {
   if (

@@ -1,7 +1,8 @@
+import { Grid } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 
-import { Grid } from "@mui/material";
 import ClubCard from "components/clubs/ClubCard";
 
 export default async function ClubsGrid({ category, staticClubs = [] }) {
@@ -22,8 +23,9 @@ export default async function ClubsGrid({ category, staticClubs = [] }) {
               xs: 12,
               md: 6,
               lg: 4,
-              xl: 3
-            }}>
+              xl: 3,
+            }}
+          >
             <ClubCard
               dim
               cid={club.cid}

@@ -1,23 +1,22 @@
 "use client";
 
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Button,
   Box,
-  Typography,
-  Select,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   MenuItem,
+  Select,
+  Typography,
 } from "@mui/material";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+import { formatDate } from "components/docs/DocsList";
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
-import { formatDate } from "components/docs/DocsList";
 
 const buildFileName = (file, version) => {
   return file.filename + "_v" + version.toString() + "." + file.filetype;
@@ -86,7 +85,7 @@ export default function DocItem({
         {/* Buttons and Dropdown */}
         {isMobile ? (
           // Render buttons below the title for mobile
-          (<Box
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -137,10 +136,10 @@ export default function DocItem({
             >
               <Icon variant="close" />
             </IconButton>
-          </Box>)
+          </Box>
         ) : (
           // Desktop layout
-          (<Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
+          <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
             {/* Dropdown */}
             <Box>
               <Select
@@ -173,7 +172,7 @@ export default function DocItem({
             <IconButton onClick={onClose} size="small">
               <Icon variant="close" />
             </IconButton>
-          </Box>)
+          </Box>
         )}
       </DialogTitle>
       <DialogContent

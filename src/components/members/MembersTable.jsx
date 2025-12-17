@@ -1,22 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import {
-  Box,
   Avatar,
-  Stack,
+  Box,
   Divider,
+  Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
-
 import { getFile } from "utils/files";
 import { getUserNameFromUID } from "utils/users";
 
@@ -172,8 +171,8 @@ export default function MembersTable({
                               role?.approved
                                 ? "Approved"
                                 : role?.rejected
-                                ? "Rejected"
-                                : "Pending approval"
+                                  ? "Rejected"
+                                  : "Pending approval"
                             }
                           >
                             <Icon
@@ -182,15 +181,15 @@ export default function MembersTable({
                                 role?.approved
                                   ? "success.main"
                                   : role?.rejected
-                                  ? "error.main"
-                                  : "warning.main"
+                                    ? "error.main"
+                                    : "warning.main"
                               }
                               variant={
                                 role?.approved
                                   ? "eva:checkmark-outline"
                                   : role?.rejected
-                                  ? "eva:close-outline"
-                                  : "eva:refresh-fill"
+                                    ? "eva:close-outline"
+                                    : "eva:refresh-fill"
                               }
                             />
                           </Tooltip>

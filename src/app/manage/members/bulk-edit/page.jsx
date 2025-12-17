@@ -1,6 +1,8 @@
+import { notFound } from "next/navigation";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { notFound } from "next/navigation";
+
 import BulkEditForm from "components/members/BulkEditForm";
 
 export const metadata = {

@@ -1,14 +1,14 @@
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
-import { getUserProfile } from "utils/fetchData";
-
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
 import ButtonLink from "components/Link";
-import UserImage from "components/users/UserImage";
 import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
+import UserImage from "components/users/UserImage";
+import { getUserProfile } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -30,11 +30,11 @@ export default async function CCApplicantDetails(props) {
     GET_ALL_RECRUITMENTS,
     {
       year: year,
-    }
+    },
   );
 
   let currentApplicant = ccApplications.find(
-    (applicant) => applicant.uid === id
+    (applicant) => applicant.uid === id,
   );
 
   // get target user
@@ -50,7 +50,7 @@ export default async function CCApplicantDetails(props) {
   // get list of memberRoles.roles along with member.cid
   memberships = memberRoles.reduce(
     (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-    []
+    [],
   );
 
   return (

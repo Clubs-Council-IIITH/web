@@ -1,15 +1,14 @@
 "use client";
 
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Button,
   Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   Typography,
 } from "@mui/material";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -53,7 +52,7 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
         {eventTitle} - Bill
         {/* Buttons */}
         {isMobile ? ( // Mobile layout
-          (<Box
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -84,7 +83,7 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
             >
               <Icon variant="close" />
             </IconButton>
-          </Box>) // Desktop layout
+          </Box> // Desktop layout
         ) : (
           <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
             {/* Download Button */}

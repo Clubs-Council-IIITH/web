@@ -1,17 +1,18 @@
+import { Container } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Container } from "@mui/material";
-
-import Content from "./content.mdx";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 import {
-  executiveBoardWords,
   advisorWords,
-  techTeamWords,
+  executiveBoardWords,
   extendedMembersWords,
+  techTeamWords,
 } from "constants/ccMembersFilterWords";
+
+import Content from "./content.mdx";
 
 export const metadata = {
   title: "About | Clubs Council @ IIIT-H",

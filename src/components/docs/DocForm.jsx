@@ -1,31 +1,31 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
+
+import { Controller, useForm } from "react-hook-form";
 
 import {
   Box,
-  TextField,
   Button,
-  Typography,
-  Grid,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField,
+  Typography,
 } from "@mui/material";
 
+import ConfirmDialog from "components/ConfirmDialog";
+import FileUpload from "components/FileUpload";
 import Icon from "components/Icon";
 import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
-import ConfirmDialog from "components/ConfirmDialog";
-
 import { uploadPDFFile } from "utils/files";
 
 import { createStorageFile } from "actions/storagefiles/create/server_action";
-import { updateStorageFile } from "actions/storagefiles/update/server_action";
 import { deleteStorageFile } from "actions/storagefiles/delete/server_action";
+import { updateStorageFile } from "actions/storagefiles/update/server_action";
 
 const maxFileSizeMB = 20;
 
@@ -83,7 +83,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
       // check all fields
       if (!data.title || !data.file) {
         throw new Error(
-          "Please fill all the required Fields before submitting."
+          "Please fill all the required Fields before submitting.",
         );
       }
 
@@ -93,7 +93,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
         data.title +
           "_v" +
           (newFile ? 1 : handleVersionNumbering(editFile)).toString(),
-        maxFileSizeMB
+        maxFileSizeMB,
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");

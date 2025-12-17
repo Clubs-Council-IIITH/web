@@ -1,4 +1,4 @@
-import { Box, Fade, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Fade } from "@mui/material";
 
 export default function Loading() {
   return (

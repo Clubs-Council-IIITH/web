@@ -1,13 +1,14 @@
 import Link from "next/link";
 
+import { Box, Card, CardActionArea, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
-
-import { Card, Box, Typography, CardActionArea } from "@mui/material";
 
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
 import { getUserNameFromUID } from "utils/users";
+
 import { techMembersGithubIds } from "constants/techmembersGithubIds";
 
 export default async function TechMemberCard({ uid, poc, roles }) {

@@ -1,22 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useState } from "react";
-
-import { useForm, Controller } from "react-hook-form";
-
-import { useToast } from "components/Toast";
-
-import { Button, Grid, TextField, Typography } from "@mui/material";
 import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
+import { Controller, useForm } from "react-hook-form";
 
-import FileUpload from "components/FileUpload";
+import { Button, Grid, TextField, Typography } from "@mui/material";
+
 import ConfirmDialog from "components/ConfirmDialog";
-
+import FileUpload from "components/FileUpload";
+import { useToast } from "components/Toast";
 import { uploadImageFile } from "utils/files";
 
 import { updateUserDataAction } from "actions/users/save/server_action";
@@ -77,7 +74,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
         data.img = await uploadImageFile(
           formData.img[0],
           `profile_${defaultValues.uid}`,
-          profile_warnSizeMB
+          profile_warnSizeMB,
         );
       } else {
         data.img = null;

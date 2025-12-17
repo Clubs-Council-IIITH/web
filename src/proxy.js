@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { match } from "path-to-regexp";
-import { jwtDecode as jwt_decode } from "jwt-decode";
 
-import routes from "acl/routes";
+import { jwtDecode as jwt_decode } from "jwt-decode";
+import { match } from "path-to-regexp";
+
 import clubRedirects from "acl/clubRedirects";
+import routes from "acl/routes";
 
 const redirect = (url, contentSecurityPolicyHeaderValue) => {
   const redirectRes = NextResponse.redirect(url);

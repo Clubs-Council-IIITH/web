@@ -48,7 +48,7 @@ function CarouselItem({ item }) {
   const [size, setSize] = useState("40%");
   useEffect(
     () => setSize(isDesktop ? "40%" : isMobile ? "120%" : "60%"),
-    [isDesktop, isMobile]
+    [isDesktop, isMobile],
   );
 
   return (

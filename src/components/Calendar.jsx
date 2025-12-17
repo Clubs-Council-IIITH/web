@@ -1,17 +1,19 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import stc from "string-to-color";
-import FullCalendar from "@fullcalendar/react";
+
 import dayGridPlugin from "@fullcalendar/daygrid";
 import listPlugin from "@fullcalendar/list";
+import FullCalendar from "@fullcalendar/react";
+import stc from "string-to-color";
 import tippy from "tippy.js";
-import "tippy.js/dist/tippy.css"; // Optional for styling
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { useAuth } from "components/AuthProvider";
+
+import "tippy.js/dist/tippy.css"; // Optional for styling
 
 function eventDataTransform(event, role, uid) {
   if (!event?.status) {

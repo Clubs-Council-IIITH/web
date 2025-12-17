@@ -1,32 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
 
-import Icon from "components/Icon";
-import { useToast } from "components/Toast";
-import MemberListItem from "components/members/MemberListItem";
+import { Controller, useForm } from "react-hook-form";
 
 import {
   Box,
-  TextField,
+  Button,
   Checkbox,
-  Tabs,
-  Tab,
-  Fade,
+  Chip,
   CircularProgress,
-  Typography,
+  Divider,
+  Fade,
+  FormControl,
   FormControlLabel,
   FormHelperText,
-  FormControl,
   InputLabel,
-  Select,
   MenuItem,
-  Chip,
-  Divider,
-  Button,
+  Select,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
 } from "@mui/material";
+
+import Icon from "components/Icon";
+import MemberListItem from "components/members/MemberListItem";
+import { useToast } from "components/Toast";
 
 import { eventProgress } from "actions/events/progress/server_action";
 import { rejectEventAction } from "actions/events/reject/server_action";

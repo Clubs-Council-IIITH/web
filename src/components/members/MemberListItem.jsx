@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ListItem, ListItemText, ListItemAvatar } from "@mui/material";
-import UserImage from "components/users/UserImage";
+import { useEffect, useState } from "react";
+
+import { ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 
 import { useToast } from "components/Toast";
+import UserImage from "components/users/UserImage";
 
 import { getUsers } from "actions/users/get/server_action";
 

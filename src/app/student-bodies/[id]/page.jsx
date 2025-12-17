@@ -4,9 +4,8 @@
 
 import { permanentRedirect } from "next/navigation";
 
-import { getClub } from "utils/fetchData";
-
 import Club from "app/clubs/[id]/page";
+import { getClub } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;

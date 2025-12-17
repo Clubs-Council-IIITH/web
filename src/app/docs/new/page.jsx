@@ -1,7 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-
-import { redirect } from "next/navigation";
 
 import DocForm from "components/docs/DocForm";
 

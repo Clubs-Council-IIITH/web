@@ -1,16 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo } from "react";
+import Image from "next/image";
 
-import { Chip, Box, Typography, FormHelperText } from "@mui/material";
+import { ErrorCode, useDropzone } from "react-dropzone";
+import { Controller } from "react-hook-form";
+
+import { Box, Chip, FormHelperText, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-import { Controller } from "react-hook-form";
-import { useDropzone, ErrorCode } from "react-dropzone";
-
-import { getFile } from "utils/files";
 import { useToast } from "components/Toast";
+import { getFile } from "utils/files";
 
 export default function FileUpload({
   control,
@@ -24,9 +24,13 @@ export default function FileUpload({
 }) {
   return (
     <>
-      <Typography variant="caption" gutterBottom sx={{
-        color: "text.secondary"
-      }}>
+      <Typography
+        variant="caption"
+        gutterBottom
+        sx={{
+          color: "text.secondary",
+        }}
+      >
         {label}
       </Typography>
       <Controller
@@ -186,16 +190,21 @@ function DropZone({
             ))
           )
         ) : (
-          <Box sx={{
-            p: 3
-          }}>
+          <Box
+            sx={{
+              p: 3,
+            }}
+          >
             <Typography gutterBottom variant="h5">
               Select (or drop) file
             </Typography>
 
-            <Typography variant="body2" sx={{
-              color: "text.secondary"
-            }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "text.secondary",
+              }}
+            >
               Drag-and-drop file here or click to browse local files.
             </Typography>
           </Box>

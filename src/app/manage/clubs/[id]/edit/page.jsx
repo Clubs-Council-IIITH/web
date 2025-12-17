@@ -31,7 +31,7 @@ export default async function EditClub(props) {
         clubInput: {
           cid: id === encodeURIComponent("~mine") ? userMeta.uid : id,
         },
-      }
+      },
     );
     club = fetchedClub;
   } catch (error) {

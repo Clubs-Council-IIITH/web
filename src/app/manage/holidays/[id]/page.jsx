@@ -22,7 +22,7 @@ export default async function EditHoliday(props) {
       GET_HOLIDAY,
       {
         id: id,
-      }
+      },
     );
     holiday = fetchedHoliday;
   } catch (error) {

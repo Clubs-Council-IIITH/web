@@ -1,33 +1,35 @@
 "use client";
 
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
+
+import dayjs from "dayjs";
+import minMax from "dayjs/plugin/minMax";
+import { Controller, useForm } from "react-hook-form";
+
 import {
   Box,
   Button,
-  Grid,
-  Typography,
   Checkbox,
+  Chip,
+  CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  FormHelperText,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
+  Grid,
+  InputLabel,
   MenuItem,
-  CircularProgress,
-  Chip,
+  Select,
+  Typography,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+
+import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
 
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { membersDataDownload } from "actions/members/data/server_action";
-
-import minMax from "dayjs/plugin/minMax";
 dayjs.extend(minMax);
 
 const allowed_roles = ["cc", "club", "slo", "slc"];
@@ -95,7 +97,7 @@ function DataClubSelect({
                     if (index > -1) value.splice(index, 1);
                     onChange(
                       // On autofill we get a stringified value.
-                      typeof value === "string" ? value.split(",") : value
+                      typeof value === "string" ? value.split(",") : value,
                     );
                   }
                 }}
@@ -202,7 +204,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `members_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD"
+              "YYYY-MM-DD",
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -463,7 +465,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       value={value}
                       maxDate={dayjs.min(
                         dayjs(new Date()),
-                        dayjs(dateRolesStart).add(4, "year")
+                        dayjs(dateRolesStart).add(4, "year"),
                       )}
                       minDate={dateRolesStart}
                       disableFuture={true}
@@ -529,7 +531,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                 newValue.push(event.target.value);
                               } else {
                                 const index = newValue.indexOf(
-                                  event.target.value
+                                  event.target.value,
                                 );
                                 if (index > -1) {
                                   newValue.splice(index, 1);
@@ -581,7 +583,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                 newValue.push(event.target.value);
                               } else {
                                 const index = newValue.indexOf(
-                                  event.target.value
+                                  event.target.value,
                                 );
                                 if (index > -1) {
                                   newValue.splice(index, 1);
@@ -661,7 +663,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value
+                                    event.target.value,
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);

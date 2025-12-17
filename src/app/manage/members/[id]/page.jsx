@@ -1,14 +1,15 @@
-import { getClient } from "gql/client";
-import { GET_MEMBER } from "gql/queries/members";
-import { GET_USER } from "gql/queries/auth";
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
-import UserImage from "components/users/UserImage";
-import MemberPositions from "components/members/MemberPositions";
-import MemberActionsList from "components/members/MemberActionsList";
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_MEMBER } from "gql/queries/members";
+
 import ClubButton from "components/clubs/ClubButton";
+import MemberActionsList from "components/members/MemberActionsList";
+import MemberPositions from "components/members/MemberPositions";
+import UserImage from "components/users/UserImage";
 import { getUserNameFromUID } from "utils/users";
 
 export const metadata = {

@@ -1,8 +1,10 @@
 "use client";
 
 import { Chip, Grid } from "@mui/material";
-import { audienceLabels } from "utils/formatEvent";
+
 import { useMode } from "contexts/ModeContext";
+
+import { audienceLabels } from "utils/formatEvent";
 
 const customSortOrder = [
   "UG 1",
@@ -23,7 +25,7 @@ export default function AudienceChips({ audience }) {
       {audienceLabels(audience)
         ?.sort(
           (a, b) =>
-            customSortOrder.indexOf(a.name) - customSortOrder.indexOf(b.name)
+            customSortOrder.indexOf(a.name) - customSortOrder.indexOf(b.name),
         )
         ?.map(({ name, color }) => (
           <Grid key={name}>

@@ -1,9 +1,10 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
 import { redirect } from "next/navigation";
-import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_EVENTS, GET_FULL_EVENT } from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -57,19 +58,28 @@ export default async function EditEvent(props) {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
-    return (user?.role === "club" && user?.uid !== event.clubid && redirect("/404"), (<Container>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
-        Edit Event Details
-      </Typography>
-      <EventForm
-        id={id}
-        defaultValues={transformEvent(event)}
-        existingEvents={events.filter((e) => e._id !== id)}
-        action="edit"
-      />
-    </Container>));
+    return (
+      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+      (
+        <Container>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
+            Edit Event Details
+          </Typography>
+          <EventForm
+            id={id}
+            defaultValues={transformEvent(event)}
+            existingEvents={events.filter((e) => e._id !== id)}
+            action="edit"
+          />
+        </Container>
+      )
+    );
   } catch (error) {
     redirect("/404");
   }

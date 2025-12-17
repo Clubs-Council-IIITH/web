@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-import { Box, Card, CardActionArea, Typography, Stack } from "@mui/material";
+import { Box, Card, CardActionArea, Stack, Typography } from "@mui/material";
 
 import EventPoster from "components/events/EventPoster";
 import ButtonLink from "components/Link";

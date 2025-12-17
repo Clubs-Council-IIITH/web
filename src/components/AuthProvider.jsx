@@ -1,8 +1,8 @@
 "use client";
 
-import { hasCookie } from "cookies-next";
-
 import { createContext, useContext } from "react";
+
+import { hasCookie } from "cookies-next";
 
 const AuthContext = createContext({
   user: null,

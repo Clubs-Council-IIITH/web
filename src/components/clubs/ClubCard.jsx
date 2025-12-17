@@ -1,10 +1,11 @@
 import {
   Box,
-  Typography,
   Card,
-  CardContent,
   CardActionArea,
+  CardContent,
+  Typography,
 } from "@mui/material";
+
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubLogo from "components/clubs/ClubLogo";
 import ButtonLink from "components/Link";

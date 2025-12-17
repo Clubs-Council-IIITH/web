@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
+import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import { GET_ALL_EVENTS } from "gql/queries/events";
 import { GET_HOLIDAYS } from "gql/queries/holidays";
-import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 
 import FullCalendar from "components/Calendar";
 

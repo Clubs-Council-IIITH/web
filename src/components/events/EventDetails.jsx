@@ -1,15 +1,13 @@
 import dynamic from "next/dynamic";
 
-import { Divider, Card, Stack, Box, Grid, Typography } from "@mui/material";
-
-import { locationLabel } from "utils/formatEvent";
+import { Box, Card, Divider, Grid, Stack, Typography } from "@mui/material";
 
 import ClubButton from "components/clubs/ClubButton";
-import EventPoster from "components/events/EventPoster";
 import AudienceChips from "components/events/AudienceChips";
 import EventFallbackPoster from "components/events/EventFallbackPoster";
-
+import EventPoster from "components/events/EventPoster";
 import Icon from "components/Icon";
+import { locationLabel } from "utils/formatEvent";
 
 const DateTime = dynamic(() => import("components/DateTime"));
 const AddToCalendarBtn = dynamic(
@@ -21,7 +19,9 @@ export const getEventLocation = (event) => {
     if (event.location.length > 0) {
       return event.location
         .map((l) =>
-          l === "other" ? event.otherLocation || "Other" : locationLabel(l).name
+          l === "other"
+            ? event.otherLocation || "Other"
+            : locationLabel(l).name,
         )
         .join(", ");
     } else {

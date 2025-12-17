@@ -16,8 +16,8 @@ export default function Card(theme) {
       defaultProps: {
         slotProps: {
           title: { variant: "h6" },
-          subheader: { variant: "body2" }
-        }
+          subheader: { variant: "body2" },
+        },
       },
       styleOverrides: {
         root: {

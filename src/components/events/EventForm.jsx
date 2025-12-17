@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo,useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import dayjs, { isDayjs } from "dayjs";
@@ -8,7 +8,7 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
-import { Controller, useController,useForm, useWatch } from "react-hook-form";
+import { Controller, useController, useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
@@ -277,7 +277,7 @@ export default function EventForm({
     // upload poster
     const poster_filename = ("poster_" + data.name + "_" + data.clubid).replace(
       ".",
-      "_"
+      "_",
     );
     try {
       if (typeof formData.poster === "string") {
@@ -286,7 +286,7 @@ export default function EventForm({
         data.poster = await uploadImageFile(
           formData.poster[0],
           poster_filename,
-          poster_warnSizeMB
+          poster_warnSizeMB,
         );
       } else {
         data.poster = null;
@@ -303,7 +303,7 @@ export default function EventForm({
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString()
+      new Date(d).toISOString(),
     );
 
     // convert budget to array of objects with only required attributes
@@ -766,7 +766,7 @@ function SubmitButton({
             mode === "submit"
               ? () =>
                   handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true })
+                    onSubmit(data, { shouldSubmit: true }),
                   )()
               : undefined
           }
@@ -1147,7 +1147,7 @@ function EventDatetimeInput({
                   events={filterEvents(
                     existingEvents,
                     startDateInput,
-                    endDateInput
+                    endDateInput,
                   )}
                   clubs={clubs}
                 />
@@ -1225,7 +1225,7 @@ function EventDescriptionInput({ control }) {
           multiline
           onBlur={(e) => {
             field.onChange(
-              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, "")
+              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
             );
           }}
         />
@@ -1316,14 +1316,19 @@ function EventVenueInput({
       <Grid size={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
-          (startDateInput && endDateInput ? (<EventLocationInput
-            control={control}
-            startDateInput={startDateInput}
-            endDateInput={endDateInput}
-            disabled={disabled}
-            eventid={eventid}
-          />) : (<FormHelperText>Enter start and end dates to get available venues
-                        </FormHelperText>))
+          startDateInput && endDateInput ? (
+            <EventLocationInput
+              control={control}
+              startDateInput={startDateInput}
+              endDateInput={endDateInput}
+              disabled={disabled}
+              eventid={eventid}
+            />
+          ) : (
+            <FormHelperText>
+              Enter start and end dates to get available venues
+            </FormHelperText>
+          )
         ) : null}
       </Grid>
       <Grid size={12}>
@@ -1526,7 +1531,7 @@ function EventLocationInput({
           rooms.push({ location: "other", available: true });
         } else {
           rooms = rooms.map((r) =>
-            r.location === "other" ? { ...r, available: true } : r
+            r.location === "other" ? { ...r, available: true } : r,
           );
         }
         setAvailableRooms(rooms);
@@ -1586,7 +1591,7 @@ function EventLocationInput({
                       {locationLabel(location?.location)?.name}
                       {location?.location !== "other" &&
                         locationAlternateInput?.includes(
-                          location?.location
+                          location?.location,
                         ) && (
                           <span style={{ marginLeft: "8px", color: "#999" }}>
                             (already selected)

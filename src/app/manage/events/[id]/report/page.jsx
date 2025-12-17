@@ -1,10 +1,13 @@
-import { getClient } from "gql/client";
-import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
-import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { getFullUser } from "actions/users/get/full/server_action";
-import { EventReportDetails } from "components/events/report/EventReportDetails";
-import { GET_USER } from "gql/queries/auth";
 import { redirect } from "next/navigation";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
+
+import { EventReportDetails } from "components/events/report/EventReportDetails";
+
+import { getFullUser } from "actions/users/get/full/server_action";
 
 export default async function EventReport(props) {
   const params = await props.params;

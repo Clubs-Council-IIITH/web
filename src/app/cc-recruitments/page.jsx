@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
-import { getClient } from "gql/client";
-import { GET_USER } from "gql/queries/auth";
-import { GET_USER_PROFILE } from "gql/queries/users";
-import { HAVE_APPLIED } from "gql/queries/recruitment";
-
-import RecruitmentForm from "components/cc-recruitments/RecruitmentForm";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { HAVE_APPLIED } from "gql/queries/recruitment";
+import { GET_USER_PROFILE } from "gql/queries/users";
+
+import RecruitmentForm from "components/cc-recruitments/RecruitmentForm";
 
 export const metadata = {
   title: "New Application | Clubs Council @ IIIT-H",

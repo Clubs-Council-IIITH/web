@@ -1,38 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useEffect, useState } from "react";
-
-import { useForm, Controller } from "react-hook-form";
-
-import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
+import { Controller, useForm } from "react-hook-form";
 
 import {
   Button,
-  Typography,
-  IconButton,
-  Tooltip,
   FormControl,
+  IconButton,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
   Stack,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-import Icon from "components/Icon";
-import ConfirmDialog from "components/ConfirmDialog";
-
-import { getUsers } from "actions/users/get/server_action";
-import { createMemberAction } from "actions/members/create/server_action";
-import { getActiveClubIds } from "actions/clubs/ids/server_action";
-
 import { DataGrid } from "@mui/x-data-grid";
+
+import { useAuth } from "components/AuthProvider";
+import ConfirmDialog from "components/ConfirmDialog";
+import Icon from "components/Icon";
+import { useToast } from "components/Toast";
+
+import { getActiveClubIds } from "actions/clubs/ids/server_action";
+import { createMemberAction } from "actions/members/create/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 import { editMemberAction } from "actions/members/edit/server_action";
+import { getUsers } from "actions/users/get/server_action";
 
 export default function BulkEdit({ mode = "add" }) {
   const router = useRouter();
@@ -367,8 +364,8 @@ export default function BulkEdit({ mode = "add" }) {
           mb={1}
         >
           <u>NOTE</u>: <br />
-          - If you change the role to a new one, the current role&apos;s end year
-          will be set to the new role&apos;s start year.
+          - If you change the role to a new one, the current role&apos;s end
+          year will be set to the new role&apos;s start year.
           <br />
           - Any invalid entries marked in red will be skipped during submission.
           <br />- Edited entries will be sent to the top.

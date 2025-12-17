@@ -1,27 +1,30 @@
 "use client";
 
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useForm, useWatch, Controller } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
+
+import dayjs from "dayjs";
+import { Controller, useForm, useWatch } from "react-hook-form";
+
 import {
   Box,
   Button,
-  Grid,
-  Typography,
   Checkbox,
+  CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  FormHelperText,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
+  Grid,
+  InputLabel,
   MenuItem,
-  CircularProgress,
+  Select,
+  Typography,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+
+import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
 
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { eventsDataDownload } from "actions/events/data/server_action";
@@ -244,7 +247,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD"
+              "YYYY-MM-DD",
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -279,7 +282,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD")
+        dayjs(date).format("YYYY-MM-DD"),
       ),
       fields: formData.fields,
       status: formData.status || "approved",
@@ -468,7 +471,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value
+                                    event.target.value,
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);

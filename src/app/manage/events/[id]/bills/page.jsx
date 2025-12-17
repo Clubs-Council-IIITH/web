@@ -1,11 +1,12 @@
-import { getClient } from "gql/client";
-
 import { redirect } from "next/navigation";
 
-import BillUpload from "components/events/bills/BillUpload";
-import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
+import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
+
+import BillUpload from "components/events/bills/BillUpload";
 
 export const metadata = {
   title: "Bill Upload | Life @ IIIT-H",

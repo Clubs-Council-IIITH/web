@@ -1,6 +1,7 @@
 "use client";
 
 import { Chip } from "@mui/material";
+
 import { useMode } from "contexts/ModeContext";
 
 export default function Tag({ label, color, icon, sx = {} }) {

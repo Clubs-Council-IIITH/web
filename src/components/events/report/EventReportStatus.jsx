@@ -1,7 +1,7 @@
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-
-import { Box, Button, Typography, Stack, Divider } from "@mui/material";
 
 export default async function EventReportStatus(event, user) {
   if (
@@ -14,9 +14,13 @@ export default async function EventReportStatus(event, user) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" gutterBottom sx={{
-        textTransform: "uppercase"
-      }}>
+      <Typography
+        variant="subtitle2"
+        gutterBottom
+        sx={{
+          textTransform: "uppercase",
+        }}
+      >
         Event Report
       </Typography>
       {!event.eventReportSubmitted ? (
@@ -24,8 +28,9 @@ export default async function EventReportStatus(event, user) {
           sx={{
             mt: 2,
             display: "flex",
-            flexDirection: "column"
-          }}>
+            flexDirection: "column",
+          }}
+        >
           No event report submitted.
           {event?.clubid === user?.uid ? (
             <Button
@@ -43,9 +48,11 @@ export default async function EventReportStatus(event, user) {
           )}
         </Box>
       ) : (
-        <Box sx={{
-          mt: 2
-        }}>
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
           <Stack spacing={2} direction="row" sx={{ mt: 2 }}>
             <Button
               component={ButtonLink}

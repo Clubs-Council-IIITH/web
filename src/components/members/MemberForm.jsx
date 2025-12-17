@@ -1,42 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useState, useEffect } from "react";
-
-import { useForm, useWatch, Controller } from "react-hook-form";
-
-import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
+import { Controller, useForm, useWatch } from "react-hook-form";
 
 import {
   Button,
-  Switch,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Switch,
   TextField,
   Typography,
-  FormHelperText,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  InputLabel,
-  Stack,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import Icon from "components/Icon";
-import UserImage from "components/users/UserImage";
+import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
-
+import Icon from "components/Icon";
 import MemberPositions from "components/members/MemberPositions";
+import { useToast } from "components/Toast";
+import UserImage from "components/users/UserImage";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
-import { getUsers } from "actions/users/get/server_action";
 import { createMemberAction } from "actions/members/create/server_action";
 import { editMemberAction } from "actions/members/edit/server_action";
+import { getUsers } from "actions/users/get/server_action";
 
 export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const router = useRouter();

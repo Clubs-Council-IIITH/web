@@ -20,7 +20,7 @@ export default async function RecruitmentSchedule() {
     getStaticFile("recruitmentCalendar.json"),
     {
       next: { revalidate: 3600 }, // 1 hour
-    }
+    },
   );
 
   let recruitmentScheduleJSON = await recruitmentSchedule.json();
@@ -54,13 +54,13 @@ export default async function RecruitmentSchedule() {
               xs: 12,
               md: 6,
               lg: 3,
-              xl: 3
+              xl: 3,
             }}
             key={month}
           >
             <RecruitmentCard
               clubs={recruitmentScheduleJSON.filter(
-                (val) => val.month === month.toLowerCase()
+                (val) => val.month === month.toLowerCase(),
               )}
               month={month}
             />
@@ -78,7 +78,7 @@ function RecruitmentCard({ clubs, month = "January" }) {
         title={month}
         sx={{ backgroundColor: "#1EC3BD" }}
         slotProps={{
-          title: { textAlign: "center", mb: 2 }
+          title: { textAlign: "center", mb: 2 },
         }}
       />
       <CardContent>

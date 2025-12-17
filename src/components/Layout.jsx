@@ -4,29 +4,30 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import {
+  AppBar,
   Box,
+  Drawer as MUIDrawer,
+  IconButton,
   List,
   Stack,
-  AppBar,
   Toolbar,
-  IconButton,
   Typography,
-  Drawer as MUIDrawer,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 
-import { bgBlur } from "utils/cssStyles";
-import Logo from "components/Logo";
-import Icon from "components/Icon";
-import { DrawerItem, DrawerDropdown } from "components/DrawerItem";
 import { useMode } from "contexts/ModeContext";
+
+import { useAuth } from "components/AuthProvider";
+import { DrawerDropdown, DrawerItem } from "components/DrawerItem";
 import Footer from "components/Footer";
+import Icon from "components/Icon";
+import Logo from "components/Logo";
+import { ModeSwitch } from "components/ModeSwitch";
 import AccountPopover from "components/profile/AccountPopover";
 import ScrollbarWrapper from "components/ScrollbarWrapper";
-import { useAuth } from "components/AuthProvider";
-import { ModeSwitch } from "components/ModeSwitch";
+import { bgBlur } from "utils/cssStyles";
 
 // define top bar width
 const BAR_HEIGHT_MOBILE = 64;
@@ -398,7 +399,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
                 bgcolor: "background.default",
                 borderRightStyle: "dashed",
               },
-            }
+            },
           }}
         >
           {drawerContent}
@@ -413,7 +414,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
           slotProps={{
             paper: {
               sx: { width: DRAWER_WIDTH },
-            }
+            },
           }}
         >
           {drawerContent}

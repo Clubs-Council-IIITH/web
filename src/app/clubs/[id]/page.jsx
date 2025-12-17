@@ -1,19 +1,16 @@
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 
-import { getClub } from "utils/fetchData";
-
-import { Divider, Stack, Button, Box, Card, Typography } from "@mui/material";
-
-import Icon from "components/Icon";
-import ButtonLink from "components/Link";
+import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
 
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
-
 import EventsGrid from "components/events/EventsGrid";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import MembersGrid from "components/members/MembersGrid";
+import { getClub } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;

@@ -1,15 +1,16 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import { useTheme } from "@mui/material/styles";
+
 import {
-  Box,
   Alert,
-  Slide,
   AlertTitle,
+  Box,
+  Slide,
   Snackbar,
   useMediaQuery,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const ToastContext = createContext({
   open: false,
@@ -69,7 +70,7 @@ export default function Toast() {
         mr: isDesktop ? 3 : 0,
       }}
       slots={{
-        transition: Slide
+        transition: Slide,
       }}
     >
       <Alert variant="standard" onClose={handleClose} severity={severity}>

@@ -4,11 +4,10 @@ import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 
 import Gallery from "app/gallery/page";
 import Carousel from "components/carousel/Carousel";
-
 import EventsGrid from "components/events/EventsGrid";
-import Statistic from "components/Statistic";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import Statistic from "components/Statistic";
 
 // carousel images
 import carousel1 from "assets/carousel/1.jpg";
@@ -73,10 +72,10 @@ export default function Home() {
         IIIT H is where bright, committed, innovative people congregate to
         learn, live, play and work. Diverse in every sense of the word, our
         community is a fertile breeding ground for opportunity in the heart of
-        one of the leading tech hubs of the country. &quot;Work hard and play harder&quot;
-        is our unofficial motto and students choose their own extracurricular
-        pursuits, from a jaw dropping cauldron of ways to participate in music,
-        dance, sports, quizzes, etc.
+        one of the leading tech hubs of the country. &quot;Work hard and play
+        harder&quot; is our unofficial motto and students choose their own
+        extracurricular pursuits, from a jaw dropping cauldron of ways to
+        participate in music, dance, sports, quizzes, etc.
       </Typography>
       <Box
         sx={{

@@ -1,8 +1,9 @@
-import { getClient } from "gql/client";
-import { GET_MEMBER } from "gql/queries/members";
 import { notFound } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_MEMBER } from "gql/queries/members";
 
 import MemberForm from "components/members/MemberForm";
 
@@ -44,9 +45,13 @@ export default async function EditMember(props) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom sx={{
-          mb: 3
-        }}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            mb: 3,
+          }}
+        >
           Edit Member Details
         </Typography>
         <MemberForm defaultValues={transformMember(member)} action="edit" />

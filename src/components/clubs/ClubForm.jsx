@@ -1,28 +1,29 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { useToast } from "components/Toast";
-import { useAuth } from "components/AuthProvider";
-import { useMode } from "contexts/ModeContext";
+import { useRouter } from "next/navigation";
+
+import { Controller, useForm } from "react-hook-form";
 
 import {
   Button,
+  FormControl,
   Grid,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Typography,
-  InputAdornment,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 
-import Icon from "components/Icon";
-import FileUpload from "components/FileUpload";
-import ConfirmDialog from "components/ConfirmDialog";
+import { useMode } from "contexts/ModeContext";
 
+import { useAuth } from "components/AuthProvider";
+import ConfirmDialog from "components/ConfirmDialog";
+import FileUpload from "components/FileUpload";
+import Icon from "components/Icon";
+import { useToast } from "components/Toast";
 import { uploadImageFile } from "utils/files";
 import { socialsData } from "utils/socialsData";
 
@@ -139,7 +140,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.logo = await uploadImageFile(
           formData.logo[0],
           logo_filename,
-          logo_warnSizeMB
+          logo_warnSizeMB,
         );
       } else {
         data.logo = null;
@@ -161,7 +162,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.banner = await uploadImageFile(
           formData.banner[0],
           banner_filename,
-          banner_warnSizeMB
+          banner_warnSizeMB,
         );
       }
     } catch (error) {
@@ -184,7 +185,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.bannerSquare = await uploadImageFile(
           formData.bannerSquare[0],
           bannerSquare_filename,
-          bannerSquare_warnSizeMB
+          bannerSquare_warnSizeMB,
         );
       }
     } catch (error) {

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
-import Icon from "components/Icon";
 import ClubsGrid from "components/clubs/ClubsGrid";
+import Icon from "components/Icon";
 
 export const metadata = {
   title: "Clubs @ IIIT-H",

@@ -1,7 +1,8 @@
+import { Divider, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Divider, Typography } from "@mui/material";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 export const dynamic = "force-dynamic";

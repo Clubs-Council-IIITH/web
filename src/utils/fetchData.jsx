@@ -68,9 +68,10 @@ export const getUserProfile = cache(async (id) => {
 
 export const getCurrentUser = cache(async () => {
   try {
-    const {
-      data: { userMeta, userProfile } = {},
-    } = await getClient().query(GET_USER, { userInput: null });
+    const { data: { userMeta, userProfile } = {} } = await getClient().query(
+      GET_USER,
+      { userInput: null },
+    );
 
     if (userMeta === null || userProfile === null) return null;
 

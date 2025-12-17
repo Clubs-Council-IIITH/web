@@ -1,18 +1,20 @@
+import { headers } from "next/headers";
+
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
-import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
-import LocalizationWrapper from "components/LocalizationWrapper";
-import Progressbar from "components/Progressbar";
-import Toast, { ToastProvider } from "components/Toast";
-import { Navigation, Content } from "components/Layout";
 import { ModeProvider } from "contexts/ModeContext";
 import { getClient } from "gql/client";
-import { GET_CLUB } from "gql/queries/clubs";
 import { GET_USER } from "gql/queries/auth";
+import { GET_CLUB } from "gql/queries/clubs";
+
 import { AuthProvider } from "components/AuthProvider";
+import { Content, Navigation } from "components/Layout";
+import LocalizationWrapper from "components/LocalizationWrapper";
+import Progressbar from "components/Progressbar";
+import ThemeRegistry from "components/ThemeRegistry/ThemeRegistry";
 import { fontClass } from "components/ThemeRegistry/typography";
+import Toast, { ToastProvider } from "components/Toast";
 import TransitionProvider from "components/TransitionProvider";
-import { headers } from "next/headers";
 import { PUBLIC_URL } from "utils/files";
 
 const description =

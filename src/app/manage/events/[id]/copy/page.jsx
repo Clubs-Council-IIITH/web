@@ -1,9 +1,10 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_ALL_EVENTS } from "gql/queries/events";
-import { redirect, notFound } from "next/navigation";
-import { GET_USER } from "gql/queries/auth";
+import { notFound, redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_EVENTS, GET_FULL_EVENT } from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -69,21 +70,30 @@ export default async function CopyEvent(props) {
       public: false,
     });
 
-    return (user?.role === "club" &&
-      user?.uid !== event.clubid &&
-      !event?.collabclubs.includes(user?.uid) &&
-      redirect("/404"), (<Container>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
-        Create a New Event
-      </Typography>
-      <EventForm
-        defaultValues={transformEvent(event)}
-        existingEvents={events.filter((e) => e._id !== oldEventId)}
-        action="create"
-      />
-    </Container>));
+    return (
+      user?.role === "club" &&
+        user?.uid !== event.clubid &&
+        !event?.collabclubs.includes(user?.uid) &&
+        redirect("/404"),
+      (
+        <Container>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
+            Create a New Event
+          </Typography>
+          <EventForm
+            defaultValues={transformEvent(event)}
+            existingEvents={events.filter((e) => e._id !== oldEventId)}
+            action="create"
+          />
+        </Container>
+      )
+    );
   } catch (error) {
     notFound();
   }

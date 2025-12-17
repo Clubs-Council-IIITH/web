@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
+
+import { Controller, useForm } from "react-hook-form";
 
 import { Box, Button, Grid, Typography } from "@mui/material";
 
-import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
 import ConfirmDialog from "components/ConfirmDialog";
+import FileUpload from "components/FileUpload";
+import { useToast } from "components/Toast";
+import { uploadPDFFile } from "utils/files";
 
 import { eventBillUpload } from "actions/events/bills/bill-upload/server_action";
 
-import { uploadPDFFile } from "utils/files";
 import EventBudget from "../EventBudget";
 
 const maxFileSizeMB = 20;
@@ -60,7 +61,7 @@ export default function BillUpload(params) {
         data.file[0],
         false,
         eventCode + "_bill",
-        maxFileSizeMB
+        maxFileSizeMB,
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
@@ -145,7 +146,7 @@ export default function BillUpload(params) {
                   validate: {
                     validBillNumbers: (value) => {
                       const invalidItems = value.filter(
-                        (item) => item.billno && !validateBillno(item.billno)
+                        (item) => item.billno && !validateBillno(item.billno),
                       );
                       return (
                         invalidItems.length === 0 ||
@@ -222,7 +223,8 @@ export default function BillUpload(params) {
           </li>
           <li>
             <strong>Save:</strong> Click on save to submit the bill. Once
-            submitted, you won&apos;t be able to edit the bill until SLO rejects it.
+            submitted, you won&apos;t be able to edit the bill until SLO rejects
+            it.
           </li>
         </ul>
       </Typography>

@@ -1,4 +1,5 @@
 import { Container, Typography } from "@mui/material";
+
 import HolidayForm from "components/holidays/HolidayForm";
 
 export const metadata = {

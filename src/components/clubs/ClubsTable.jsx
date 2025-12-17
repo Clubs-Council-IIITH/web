@@ -7,9 +7,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import Tag from "components/Tag";
-
 import ClubLogo from "components/clubs/ClubLogo";
+import Tag from "components/Tag";
 
 export default function ClubsTable({ clubs }) {
   const router = useRouter();

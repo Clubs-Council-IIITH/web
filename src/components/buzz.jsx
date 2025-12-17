@@ -1,6 +1,7 @@
 "use client";
 
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
+
 import ClubBox from "components/clubs/ClubBox";
 
 const columns = [

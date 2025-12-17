@@ -1,25 +1,27 @@
 "use client";
 
-import {
-  Box,
-  Grid,
-  Typography,
-  Chip,
-  Button,
-  Divider,
-  CardActionArea,
-} from "@mui/material";
 import React from "react";
 import dynamic from "next/dynamic";
-import ButtonLink from "components/Link";
-import Icon from "components/Icon";
-import { locationLabel, audienceLabels } from "utils/formatEvent";
-import { DownloadEventReport } from "components/events/report/EventpdfDownloads";
-import { DownloadEventReportDocx } from "components/events/report/EventDocxDownloads";
-import MemberListItem from "components/members/MemberListItem";
+
+import {
+  Box,
+  Button,
+  CardActionArea,
+  Chip,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
+
 import EventBudget from "components/events/EventBudget";
 import EventSponsor from "components/events/EventSponsor";
+import { DownloadEventReportDocx } from "components/events/report/EventDocxDownloads";
+import { DownloadEventReport } from "components/events/report/EventpdfDownloads";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
+import MemberListItem from "components/members/MemberListItem";
 import { canEditReport } from "utils/eventReportAuth";
+import { audienceLabels, locationLabel } from "utils/formatEvent";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 

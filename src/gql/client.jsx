@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
-import { cacheExchange, createClient, fetchExchange } from "urql/core";
+
 import { registerUrql } from "@urql/next/rsc";
+import { cacheExchange, createClient, fetchExchange } from "urql/core";
 
 const GRAPHQL_ENDPOINT =
   process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";

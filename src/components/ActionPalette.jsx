@@ -1,4 +1,4 @@
-import { Box, Grid, Divider } from "@mui/material";
+import { Box, Divider, Grid } from "@mui/material";
 
 export default function ActionPalette({
   left = [],

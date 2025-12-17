@@ -47,8 +47,8 @@ export default function EventsDialog({
                       {event.status.state === "approved"
                         ? "Approved"
                         : event.status.state === "incomplete"
-                        ? "Draft"
-                        : "Under review"}
+                          ? "Draft"
+                          : "Under review"}
                     </span>
                   </>
                 }

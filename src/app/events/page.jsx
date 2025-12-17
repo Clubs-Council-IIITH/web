@@ -1,8 +1,8 @@
-import { getClient } from "gql/client";
-import { GET_ALL_EVENTS } from "gql/queries/events";
-import { GET_ALL_CLUBS } from "gql/queries/clubs";
-
 import { Box } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_ALL_CLUBS } from "gql/queries/clubs";
+import { GET_ALL_EVENTS } from "gql/queries/events";
 
 import EventsFilter from "components/events/EventsFilter";
 import PaginatedEventsGrid from "components/events/PaginatedEventGrid";

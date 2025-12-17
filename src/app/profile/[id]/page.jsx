@@ -1,15 +1,16 @@
 import { notFound, redirect } from "next/navigation";
+
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
-import { getUserProfile, getCurrentUser } from "utils/fetchData";
 
 import ActionPalette from "components/ActionPalette";
-import UserImage from "components/users/UserImage";
-import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
+import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
+import UserImage from "components/users/UserImage";
+import { getCurrentUser, getUserProfile } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -36,7 +37,7 @@ export default async function Profile(props) {
   if (user?.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } }
+      { clubInput: { cid: user.uid } },
     );
     club = targetClub;
   }
@@ -58,7 +59,7 @@ export default async function Profile(props) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      []
+      [],
     );
 
     if (memberships?.length > 0) {
@@ -136,7 +137,7 @@ export default async function Profile(props) {
 
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
-          (<>
+          <>
             <Grid
               container
               spacing={2}
@@ -153,8 +154,9 @@ export default async function Profile(props) {
               }}
               size={{
                 xs: 12,
-                lg: 9
-              }}>
+                lg: 9,
+              }}
+            >
               <Stack direction="column" spacing={2}>
                 <Typography
                   variant="subtitle2"
@@ -167,7 +169,7 @@ export default async function Profile(props) {
                 <UserMemberships rows={memberships} />
               </Stack>
             </Grid>
-          </>)
+          </>
         ) : null}
       </Grid>
     </Container>

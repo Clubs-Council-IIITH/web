@@ -1,7 +1,9 @@
+import { Container, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { Container, Typography } from "@mui/material";
+
 import CCRecruitmentsTable from "components/cc-recruitments/CCRecruitmentsTable";
 import YearSelector from "components/cc-recruitments/YearSelector";
 

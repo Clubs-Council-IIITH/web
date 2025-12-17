@@ -1,16 +1,15 @@
 import { Box, Card } from "@mui/material";
 
-import { getClub, getCurrentUser } from "utils/fetchData";
-
 import ActionPalette from "components/ActionPalette";
+import {
+  DeleteClub,
+  EditClub,
+  UnDeleteClub,
+} from "components/clubs/ClubActions";
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
-import {
-  EditClub,
-  DeleteClub,
-  UnDeleteClub,
-} from "components/clubs/ClubActions";
+import { getClub, getCurrentUser } from "utils/fetchData";
 
 export async function generateMetadata(props) {
   const params = await props.params;

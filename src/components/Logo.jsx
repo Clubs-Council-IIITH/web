@@ -1,4 +1,5 @@
 import { useTheme } from "@mui/material/styles";
+
 import LifeLogo from "components/svg/life-logo-full-color.svg";
 
 export default function Logo() {

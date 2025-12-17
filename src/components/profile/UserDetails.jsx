@@ -1,7 +1,7 @@
+import { Box, Stack, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-
-import { Box, Stack, Typography } from "@mui/material";
 
 export default async function UserDetails({ user }) {
   // get currently logged in user
@@ -11,16 +11,20 @@ export default async function UserDetails({ user }) {
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   return (
-    <Stack direction="column" spacing={3} sx={{
-      mx: 2
-    }}>
+    <Stack
+      direction="column"
+      spacing={3}
+      sx={{
+        mx: 2,
+      }}
+    >
       {currentUser?.uid ? (
         <Box>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
-              textTransform: "uppercase"
+              textTransform: "uppercase",
             }}
           >
             User ID
@@ -28,23 +32,29 @@ export default async function UserDetails({ user }) {
           <Typography
             sx={{
               fontWeight: 400,
-              fontFamily: "monospace"
-            }}>
+              fontFamily: "monospace",
+            }}
+          >
             {user.uid}
           </Typography>
         </Box>
       ) : null}
       <Box>
-        <Typography variant="subtitle2" gutterBottom sx={{
-          textTransform: "uppercase"
-        }}>
+        <Typography
+          variant="subtitle2"
+          gutterBottom
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
           Batch
         </Typography>
         <Typography
           sx={{
             fontWeight: 400,
-            textTransform: "uppercase"
-          }}>
+            textTransform: "uppercase",
+          }}
+        >
           {user.batch} · {user.stream}
         </Typography>
       </Box>
@@ -56,28 +66,36 @@ export default async function UserDetails({ user }) {
               variant="subtitle2"
               gutterBottom
               sx={{
-                textTransform: "uppercase"
+                textTransform: "uppercase",
               }}
             >
               Roll Number
             </Typography>
-            <Typography sx={{
-              fontWeight: 400
-            }}>{user.rollno || "Unknown"}</Typography>
+            <Typography
+              sx={{
+                fontWeight: 400,
+              }}
+            >
+              {user.rollno || "Unknown"}
+            </Typography>
           </Box>
           <Box>
             <Typography
               variant="subtitle2"
               gutterBottom
               sx={{
-                textTransform: "uppercase"
+                textTransform: "uppercase",
               }}
             >
               Phone Number
             </Typography>
-            <Typography sx={{
-              fontWeight: 400
-            }}>{user.phone || "Unknown"}</Typography>
+            <Typography
+              sx={{
+                fontWeight: 400,
+              }}
+            >
+              {user.phone || "Unknown"}
+            </Typography>
           </Box>
         </>
       ) : null}

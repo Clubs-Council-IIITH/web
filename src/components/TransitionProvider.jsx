@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+
 import { motion } from "motion/react";
 
 export default function TransitionProvider({ children }) {

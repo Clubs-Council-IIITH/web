@@ -1,7 +1,7 @@
+import { Box, Button, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
-
-import { Box, Button, Typography } from "@mui/material";
 
 import ClubLogo from "components/clubs/ClubLogo";
 import ButtonLink from "components/Link";

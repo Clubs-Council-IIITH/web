@@ -1,6 +1,6 @@
 import { getClient } from "gql/client";
-import { GET_ALL_EVENTS } from "gql/queries/events";
 import { GET_CLUB } from "gql/queries/clubs";
+import { GET_ALL_EVENTS } from "gql/queries/events";
 
 import { EventCards } from "./EventCards";
 

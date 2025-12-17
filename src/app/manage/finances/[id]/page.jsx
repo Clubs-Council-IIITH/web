@@ -1,13 +1,14 @@
+import { redirect } from "next/navigation";
+
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 
-import { Button, Container, Stack, Typography, Box } from "@mui/material";
-
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
 import FinanceHeader from "components/events/bills/FinanceHeader";
-import { redirect } from "next/navigation";
-import ButtonLink from "components/Link";
 import EventBudget from "components/events/EventBudget";
+import ButtonLink from "components/Link";
 
 export const metadata = {
   title: "Edit Bill Status",
@@ -33,16 +34,18 @@ export default async function EditFinance(props) {
           align="center"
           sx={{
             mt: 5,
-            px: 2
-          }}>
+            px: 2,
+          }}
+        >
           Error: {error.message.slice(10)}
         </Typography>
         <Stack
           direction="column"
           sx={{
             alignItems: "center",
-            mt: 2
-          }}>
+            mt: 2,
+          }}
+        >
           <Button
             variant="contained"
             color="primary"

@@ -5,12 +5,12 @@ import Image from "next/image";
 
 import {
   Box,
-  Grid,
-  Skeleton,
   Card,
   CardActionArea,
+  Grid,
   ImageList,
   ImageListItem,
+  Skeleton,
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -39,14 +39,15 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
             justifyContent: "center",
           }}
         >
-          <Grid container spacing={5} sx={{width: "100%"}}>
+          <Grid container spacing={5} sx={{ width: "100%" }}>
             {Array.from({ length: 12 }, (_, i) => (
               <Grid
                 key={i}
                 size={{
                   xs: 6,
-                  lg: 3
-                }}>
+                  lg: 3,
+                }}
+              >
                 <Skeleton
                   variant="rectangular"
                   width="100%"

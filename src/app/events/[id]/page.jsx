@@ -1,10 +1,9 @@
 import dayjs from "dayjs";
 
-import { getEvent } from "utils/fetchData";
-
 import { shortDescription } from "app/layout";
-import { getFile, PUBLIC_URL } from "utils/files";
 import EventDetails, { getEventLocation } from "components/events/EventDetails";
+import { getEvent } from "utils/fetchData";
+import { getFile, PUBLIC_URL } from "utils/files";
 
 export async function generateMetadata(props) {
   const params = await props.params;

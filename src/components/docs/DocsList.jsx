@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
+  Button,
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -12,19 +14,18 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Button,
-  Grid,
 } from "@mui/material";
-import DocItem from "./DocItem";
 
 import Icon from "components/Icon";
 import { formatDateTimeCustom } from "utils/formatTime";
+
+import DocItem from "./DocItem";
 
 export const formatDate = (dateString) => {
   return formatDateTimeCustom(
     dateString,
     "YYYY-MM-DD HH:mm:ss",
-    "hh:mm A, DD MMMM YYYY IST"
+    "hh:mm A, DD MMMM YYYY IST",
   );
 };
 
