@@ -8,6 +8,7 @@
     "start": "next start -p 80",
     "lint": "eslint .",
     "lint:fix": "eslint src --fix",
+    "prettier": "prettier --write \"src/**/*.{js,jsx,md,css,yaml}\"",
     "sitemap": "node ./sitemap-cc.js && node ./sitemap-life.js"
   },
   "dependencies": {

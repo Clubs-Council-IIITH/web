@@ -30,7 +30,7 @@ jobs:
         run: npm run lint:fix -- --quiet
 
       - name: Format with Prettier
-        run: prettier --write "**/*.{js,jsx,md,css,yaml}"
+        run: npm run prettier
 
       - name: Commit formatting changes
         uses: stefanzweifel/git-auto-commit-action@v5
