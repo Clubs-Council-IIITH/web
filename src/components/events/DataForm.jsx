@@ -2,7 +2,7 @@
 
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
   Box,
@@ -22,7 +22,6 @@ import {
 import ConfirmDialog from "components/ConfirmDialog";
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
-import { LoadingButton } from "@mui/lab";
 
 import { getAllClubIds } from "actions/clubs/all-ids/server_action";
 import { eventsDataDownload } from "actions/events/data/server_action";
@@ -41,10 +40,12 @@ function DataClubSelect({
     <>
       {loading ? (
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100%"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
         >
           <CircularProgress />
         </Box>
@@ -96,11 +97,22 @@ function DataClubSelect({
   );
 }
 
-function EventDatetimeInput({ control, watch, user }) {
-  const startDateInput = watch("datetimeperiod.0");
+function EventDatetimeInput({ control, user }) {
+  const startDateInput = useWatch({
+    control,
+    name: "datetimeperiod.0",
+  });
   return (
-    <Grid container item direction="row" xs={12} spacing={1} pt={1}>
-      <Grid item xs={6}>
+    <Grid
+      container
+      direction="row"
+      spacing={1}
+      sx={{
+        pt: 1,
+      }}
+      size={12}
+    >
+      <Grid size={6}>
         <Controller
           name="datetimeperiod.0"
           control={control}
@@ -138,7 +150,7 @@ function EventDatetimeInput({ control, watch, user }) {
           )}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid size={6}>
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -232,7 +244,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD",
+              "YYYY-MM-DD"
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -267,7 +279,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD"),
+        dayjs(date).format("YYYY-MM-DD")
       ),
       fields: formData.fields,
       status: formData.status || "approved",
@@ -278,22 +290,36 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Download Events Data
       </Typography>
-      <Grid container spacing={3} alignItems="flex-start">
-        <Grid container item>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
-            sx={{ mb: 1.5 }}
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 1.5,
+            }}
           >
             {admin_roles.includes(user?.role)
               ? "Select Club/Student Body"
               : "Selected Club/Student Body"}
           </Typography>
-          <Grid item xs={12}>
+          <Grid size={12}>
             {admin_roles.includes(user?.role) ? (
               <DataClubSelect
                 control={control}
@@ -319,24 +345,28 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             )}
           </Grid>
         </Grid>
-        <Grid container item>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
             gutterBottom
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+            }}
           >
             Date Range
           </Typography>
-          <EventDatetimeInput control={control} watch={watch} user={user} />
+          <EventDatetimeInput control={control} user={user} />
         </Grid>
         {admin_roles.includes(user?.role) ? (
-          <Grid container item>
+          <Grid size={12}>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
-              sx={{ mb: 1.5 }}
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 1.5,
+              }}
             >
               Events to Include
             </Typography>
@@ -356,12 +386,14 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             />
           </Grid>
         ) : null}
-        <Grid container item>
+        <Grid size={12}>
           <Typography
             variant="subtitle2"
-            textTransform="uppercase"
-            color="text.secondary"
             gutterBottom
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+            }}
           >
             Fields to Include
           </Typography>
@@ -372,7 +404,13 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             render={({ field, fieldState: { error } }) => (
               <FormControl component="fieldset" fullWidth error={error}>
                 <FormGroup row>
-                  <Grid container item spacing={1} ml={1}>
+                  <Grid
+                    container
+                    spacing={1}
+                    sx={{
+                      ml: 1,
+                    }}
+                  >
                     {[
                       { fieldValue: "code", fieldName: "Event Code" },
                       { fieldValue: "name", fieldName: "Event Name" },
@@ -408,7 +446,15 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                             },
                           ]),
                     ].map(({ fieldValue, fieldName }) => (
-                      <Grid item lg={2} md={3} sm={4} xs={6} key={fieldValue}>
+                      <Grid
+                        key={fieldValue}
+                        size={{
+                          lg: 2,
+                          md: 3,
+                          sm: 4,
+                          xs: 6,
+                        }}
+                      >
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -422,7 +468,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value,
+                                    event.target.value
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);
@@ -444,8 +490,16 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
           />
         </Grid>
       </Grid>
-      <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-        <Grid item xs={6}>
+      <Grid
+        container
+        direction="row"
+        spacing={1}
+        sx={{
+          pt: 3,
+        }}
+        size={12}
+      >
+        <Grid size={6}>
           <Button
             size="large"
             variant="outlined"
@@ -470,9 +524,9 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
             confirmText="Yes, discard my changes"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           {allowed_roles.includes(user?.role) && (
-            <LoadingButton
+            <Button
               loading={loading}
               type="submit"
               size="large"
@@ -481,7 +535,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               fullWidth
             >
               Download CSV
-            </LoadingButton>
+            </Button>
           )}
         </Grid>
       </Grid>

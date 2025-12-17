@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 
 import { Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 const columns = [
   {
@@ -13,15 +12,9 @@ const columns = [
     flex: 5,
     headerAlign: "center",
     align: "center",
-    valueGetter: (value, row, column, apiRef) => ({
-      firstName: row.firstName,
-      lastName: row.lastName,
-    }),
-    renderCell: ({ value }) => (
-      <Typography variant="body2">
-        {value.firstName} {value.lastName}
-      </Typography>
-    ),
+    valueGetter: (value, row, column, apiRef) =>
+      row.firstName + " " + row.lastName,
+    renderCell: ({ value }) => <Typography variant="body2">{value}</Typography>,
     display: "flex",
   },
   {
@@ -62,7 +55,7 @@ export default function CCRecruitmentsTable({ data, year }) {
       initialState={{
         pagination: { paginationModel: { pageSize: 25 } },
       }}
-      slots={{ toolbar: QuickSearchToolbar }}
+      showToolbar
       sx={{
         // disable cell selection style
         ".MuiDataGrid-cell:focus": {

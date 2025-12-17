@@ -29,19 +29,23 @@ export default async function ManageBills() {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Event Finances
         </Typography>
       </Stack>
-
       {user?.role === "slo" ? (
         <>
-          <Stack direction={"row"} spacing={2} alignItems="center">
-            <Typography variant="h4" gutterBottom mt={3}>
+          <Stack direction={"row"} spacing={2} sx={{
+            alignItems: "center"
+          }}>
+            <Typography variant="h4" gutterBottom sx={{
+              mt: 3
+            }}>
               Submitted
             </Typography>
             <Typography variant="body2" color="secondary">
@@ -54,18 +58,20 @@ export default async function ManageBills() {
           />{" "}
         </>
       ) : null}
-
-      <Typography variant="h4" gutterBottom mt={3}>
+      <Typography variant="h4" gutterBottom sx={{
+        mt: 3
+      }}>
         Pending
       </Typography>
       <FinancesTable
         events={filterEventsbyState(["not_submitted", "rejected"])}
         role={user?.role}
       />
-
       {user?.role !== "slo" ? (
         <>
-          <Typography variant="h4" gutterBottom mt={3}>
+          <Typography variant="h4" gutterBottom sx={{
+            mt: 3
+          }}>
             Submitted
           </Typography>
           <FinancesTable
@@ -74,8 +80,9 @@ export default async function ManageBills() {
           />{" "}
         </>
       ) : null}
-
-      <Typography variant="h4" gutterBottom mt={3}>
+      <Typography variant="h4" gutterBottom sx={{
+        mt: 3
+      }}>
         Accepted
       </Typography>
       <FinancesTable

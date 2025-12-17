@@ -5,17 +5,27 @@ import { GET_CLUB } from "gql/queries/clubs";
 import { EventCards } from "./EventCards";
 
 export default async function EventsGrid({
-  type = "all", // must be one of: {recent, club, all}
+  type = "recent", // must be one of: {recent, club}
   clubid = null,
   limit = undefined,
   filter = () => true,
   events = null,
 }) {
+  if (type === "club" && !clubid) {
+    throw new Error('clubid is required when type is "club"');
+  } else if (type === "recent" && clubid) {
+    clubid = null;
+  }
+
   let data;
   if (events) {
     data = { data: { events } };
   } else {
-    data = await getClient().query(...constructQuery({ type, clubid, limit }));
+    data = await getClient().query(GET_ALL_EVENTS, {
+      clubid,
+      limit: limit || 12,
+      public: true,
+    });
   }
   const uniqueClubIds = Array.from(
     new Set(data?.data?.events?.map((event) => event?.clubid)),
@@ -47,26 +57,4 @@ export default async function EventsGrid({
       noEventsMessage="No events found."
     />
   );
-}
-
-// construct graphql query based on type
-function constructQuery({ type, clubid, limit }) {
-  if (type === "recent") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid: null,
-        limit: limit || 12,
-      },
-    ];
-  } else if (type === "club") {
-    return [
-      GET_ALL_EVENTS,
-      {
-        clubid,
-      },
-    ];
-  } else {
-    throw new Error("Invalid event type");
-  }
 }

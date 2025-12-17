@@ -3,7 +3,7 @@ import { Container, Grid, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
-import { getUserProfile } from "utils/fetchData";
+import { getUserProfile, getCurrentUser } from "utils/fetchData";
 
 import ActionPalette from "components/ActionPalette";
 import UserImage from "components/users/UserImage";
@@ -11,7 +11,8 @@ import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
   const user = await getUserProfile(id);
 
@@ -20,11 +21,12 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function Profile({ params }) {
+export default async function Profile(props) {
+  const params = await props.params;
   const { id } = params;
 
   // get currently logged in user
-  const currentUser = await getUserProfile(null);
+  const currentUser = await getCurrentUser();
 
   // get target user
   const user = await getUserProfile(id);
@@ -34,7 +36,7 @@ export default async function Profile({ params }) {
   if (user?.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } },
+      { clubInput: { cid: user.uid } }
     );
     club = targetClub;
   }
@@ -56,7 +58,7 @@ export default async function Profile({ params }) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      [],
+      []
     );
 
     if (memberships?.length > 0) {
@@ -80,12 +82,20 @@ export default async function Profile({ params }) {
       (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
         <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
-      <Grid container spacing={2} mt={4}>
-        <Grid item xs={12}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          mt: 4,
+        }}
+      >
+        <Grid size={12}>
           <Stack
             direction={{ xs: "column", lg: "row" }}
-            alignItems="center"
             spacing={4}
+            sx={{
+              alignItems: "center",
+            }}
           >
             <UserImage
               image={user.img}
@@ -97,8 +107,8 @@ export default async function Profile({ params }) {
             <Stack direction="column" spacing={1}>
               <Typography
                 variant="h2"
-                textAlign={{ xs: "center", lg: "left" }}
                 sx={{
+                  textAlign: { xs: "center", lg: "left" },
                   fontSize: { xs: 25, lg: 38 },
                   wordBreak: "break-word",
                 }}
@@ -107,10 +117,10 @@ export default async function Profile({ params }) {
               </Typography>
               <Typography
                 variant="body1"
-                color="text.secondary"
-                fontFamily="monospace"
-                textAlign={{ xs: "center", lg: "left" }}
                 sx={{
+                  color: "text.secondary",
+                  fontFamily: "monospace",
+                  textAlign: { xs: "center", lg: "left" },
                   fontSize: { xs: 14, lg: 20 },
                 }}
               >
@@ -122,20 +132,38 @@ export default async function Profile({ params }) {
 
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
-          <>
-            <Grid item container xs spacing={2} mt={5}>
+          (<>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                mt: 5,
+              }}
+              size="grow"
+            >
               <UserDetails user={user} />
             </Grid>
-
-            <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
+            <Grid
+              sx={{
+                mt: { xs: 2, lg: 5 },
+              }}
+              size={{
+                xs: 12,
+                lg: 9
+              }}>
               <Stack direction="column" spacing={2}>
-                <Typography variant="subtitle2" textTransform="uppercase">
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
                   Memberships
                 </Typography>
                 <UserMemberships rows={memberships} />
               </Stack>
             </Grid>
-          </>
+          </>)
         ) : null}
       </Grid>
     </Container>

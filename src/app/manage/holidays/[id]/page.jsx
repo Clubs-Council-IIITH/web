@@ -10,7 +10,8 @@ export const metadata = {
   title: "Edit Holiday",
 };
 
-export default async function EditHoliday({ params }) {
+export default async function EditHoliday(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -20,10 +21,11 @@ export default async function EditHoliday({ params }) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
+        <Typography variant="h3" gutterBottom sx={{
+          mb: 3
+        }}>
           Edit Holiday Details
         </Typography>
-
         <HolidayForm id={id} defaultValues={holiday} action="edit" />
       </Container>
     );

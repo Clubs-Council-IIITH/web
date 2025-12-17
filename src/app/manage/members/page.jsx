@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
@@ -8,6 +6,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import { Box, Container, Typography, Button, Stack } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import MembersTable from "components/members/MembersTable";
 import MembersFilter from "components/members/MembersFilter";
 
@@ -15,7 +14,8 @@ export const metadata = {
   title: "Manage Members",
 };
 
-export default async function ManageMembers({ searchParams }) {
+export default async function ManageMembers(props) {
+  const searchParams = await props.searchParams;
   const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
@@ -35,22 +35,24 @@ export default async function ManageMembers({ searchParams }) {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
-      >
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Manage Members
         </Typography>
 
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          gap={2}
-        >
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2
+          }}>
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/members/bulk-add"
             variant="contained"
             startIcon={<Icon variant="playlist-add" />}
@@ -58,7 +60,7 @@ export default async function ManageMembers({ searchParams }) {
             Bulk Add
           </Button>
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/members/bulk-edit"
             variant="contained"
             startIcon={<Icon variant="edit" />}
@@ -67,7 +69,7 @@ export default async function ManageMembers({ searchParams }) {
             Bulk Edit
           </Button>
           <Button
-            component={Link}
+            component={ButtonLink}
             href="/manage/members/new"
             variant="contained"
             startIcon={<Icon variant="add" />}
@@ -77,27 +79,30 @@ export default async function ManageMembers({ searchParams }) {
           </Button>
         </Stack>
       </Stack>
-
       {/* only pending members */}
       {user?.role === "cc" ? <PendingMembersDataGrid /> : null}
-
       {/* all members */}
       <Box>
         <Box>
           {user?.role === "cc" ? (
             <>
               <Typography
-                color="text.secondary"
                 variant="subtitle2"
-                textTransform="uppercase"
                 gutterBottom
-                mb={2}
-              >
+                sx={{
+                  color: "text.secondary",
+                  textTransform: "uppercase",
+                  mb: 2
+                }}>
                 All Members
               </Typography>
-              <Box mt={2} mb={3}>
+              <Box
+                sx={{
+                  mt: 2,
+                  mb: 3
+                }}>
                 <MembersFilter
-                  name={targetName}
+                  // name={targetName}
                   club={targetClub}
                   state={targetState}
                   cc={true}
@@ -109,9 +114,13 @@ export default async function ManageMembers({ searchParams }) {
             <>
               {user?.role !== "cc" ? (
                 <>
-                  <Box mt={2} mb={3}>
+                  <Box
+                    sx={{
+                      mt: 2,
+                      mb: 3
+                    }}>
                     <MembersFilter
-                      name={targetName}
+                      // name={targetName}
                       club={targetClub}
                       state={targetState}
                       cc={false}
@@ -146,8 +155,7 @@ async function PendingMembersDataGrid() {
           userInput: {
             uid: member.uid,
           },
-        })
-        .toPromise(),
+        }),
     );
   });
   const users = await Promise.all(userPromises);
@@ -161,13 +169,16 @@ async function PendingMembersDataGrid() {
   return (
     <>
       {processedMembers.length > 0 ? (
-        <Box mb={3}>
+        <Box sx={{
+          mb: 3
+        }}>
           <Typography
-            color="text.secondary"
             variant="subtitle2"
-            textTransform="uppercase"
             gutterBottom
-          >
+            sx={{
+              color: "text.secondary",
+              textTransform: "uppercase"
+            }}>
             Pending Approval
           </Typography>
           <MembersTable
@@ -211,8 +222,7 @@ async function MembersDataGrid({
           userInput: {
             uid: member.uid,
           },
-        })
-        .toPromise(),
+        }),
     );
   });
   const users = await Promise.all(userPromises);

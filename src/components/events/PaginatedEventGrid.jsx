@@ -229,7 +229,6 @@ export default function PaginatedEventGrid({
         loading={loadingFuture}
         noEventsMessage="No events found."
       />
-
       {targetState?.includes("upcoming") && (
         <>
           <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
@@ -244,7 +243,6 @@ export default function PaginatedEventGrid({
           />
         </>
       )}
-
       {targetState?.includes("completed") && (
         <>
           <Divider textAlign="left" sx={{ mb: 2, mt: 3 }}>
@@ -255,9 +253,12 @@ export default function PaginatedEventGrid({
           {!loadingPast && !completedevents.length ? (
             <Typography
               variant="h4"
-              color="text.secondary"
-              sx={{ flexGrow: 1, textAlign: "center", mt: 5 }}
-            >
+              sx={{
+                color: "text.secondary",
+                flexGrow: 1,
+                textAlign: "center",
+                mt: 5
+              }}>
               No events found.
             </Typography>
           ) : (
@@ -269,7 +270,6 @@ export default function PaginatedEventGrid({
           )}
         </>
       )}
-
       {/* Load more section - either auto-trigger or button */}
       {hasMore && (
         <Box sx={{ textAlign: "center", mt: 2, mb: 2 }}>

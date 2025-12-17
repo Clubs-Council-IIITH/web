@@ -10,7 +10,8 @@ export const metadata = {
   title: "Important Documents | Life @ IIIT-H",
 };
 
-export default async function Docs({ params }) {
+export default async function Docs(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(

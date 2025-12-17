@@ -8,7 +8,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Tag from "components/Tag";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import ClubLogo from "components/clubs/ClubLogo";
 
@@ -31,6 +30,9 @@ export default function ClubsTable({ clubs }) {
         <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
       ),
       display: "flex",
+      disableExport: true,
+      disableColumnMenu: true,
+      sortable: false,
     },
     ...(isMobile
       ? []
@@ -75,9 +77,11 @@ export default function ClubsTable({ clubs }) {
             flex: 6,
             renderCell: ({ value }) => (
               <Box
-                textTransform="lowercase"
-                fontSize="0.9em"
-                fontFamily="monospace"
+                sx={{
+                  textTransform: "lowercase",
+                  fontSize: "0.9em",
+                  fontFamily: "monospace",
+                }}
               >
                 {value}
               </Box>
@@ -92,7 +96,15 @@ export default function ClubsTable({ clubs }) {
       flex: isMobile ? null : 2,
       valueGetter: (value, row, column, apiRef) =>
         value === "body" ? "Student Body" : value,
-      renderCell: ({ value }) => <Box textTransform="capitalize">{value}</Box>,
+      renderCell: ({ value }) => (
+        <Box
+          sx={{
+            textTransform: "capitalize",
+          }}
+        >
+          {value}
+        </Box>
+      ),
       display: "flex",
     },
     {
@@ -116,7 +128,7 @@ export default function ClubsTable({ clubs }) {
   return (
     <DataGrid
       autoHeight
-      getRowHeight={() => (isMobile ? "auto" : "none")}
+      getRowHeight={() => (isMobile ? "auto" : null)}
       rows={clubs}
       columns={columns}
       getRowId={(r) => r.cid}
@@ -136,7 +148,7 @@ export default function ClubsTable({ clubs }) {
           paginationModel: { pageSize: 25 },
         },
       }}
-      slots={{ toolbar: QuickSearchToolbar }}
+      showToolbar
       sx={{
         // disable cell selection style
         ".MuiDataGrid-cell:focus": {

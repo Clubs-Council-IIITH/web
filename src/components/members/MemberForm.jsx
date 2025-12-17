@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { useState, useEffect } from "react";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
@@ -24,7 +24,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -51,7 +50,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [positionEditing, setPositionEditing] = useState(false);
 
-  const { control, watch, setValue, handleSubmit } = useForm({ defaultValues });
+  const { control, setValue, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
 
   // different form submission handlers
@@ -68,7 +67,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           severity: "success",
         });
         router.push(`/manage/members?club=${data.cid}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -89,7 +87,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           severity: "success",
         });
         router.push(`/manage/members?club=${data.cid}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -159,85 +156,97 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
-        <Grid container item xs={12} md={7} xl={8} spacing={3}>
-          <Grid container item>
-            <Grid container item spacing={2}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8
+          }}>
               {user?.role === "cc" ? (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <MemberClubSelect
                     control={control}
-                    watch={watch}
                     edit={action === "edit"}
                   />
                 </Grid>
               ) : null}
-            </Grid>
-          </Grid>
 
-          <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2,
+                mt: 3,
+              }}
             >
               User
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <MemberUserInput
                   control={control}
-                  watch={watch}
                   setValue={setValue}
                   user={userMember}
                   setUser={setUserMember}
                 />
-              </Grid>
             </Grid>
-          </Grid>
 
-          <Grid container item>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2,
+                mt: 3,
+              }}
             >
               Positions
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <MemberPositionsTable
                   control={control}
-                  watch={watch}
                   positionEditing={positionEditing}
                   setPositionEditing={setPositionEditing}
                 />
-              </Grid>
-            </Grid>
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
-          <Grid container item>
+        <Grid
+          sx={{
+            alignItems: "flex-start",
+          }}
+          size={{
+            xs: "grow",
+            md: "grow"
+          }}>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+              }}
             >
               Other
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
-                <MemberPOCSwitch control={control} watch={watch} />
+            <Grid  spacing={2}>
+              <Grid size={12}>
+                <MemberPOCSwitch control={control} />
               </Grid>
             </Grid>
 
-            <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-              <Grid item xs={6}>
+            <Grid
+              container
+              direction="row"
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+              size={12}
+            >
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -259,8 +268,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   confirmText="Yes, discard my changes"
                 />
               </Grid>
-              <Grid item xs={6}>
-                <LoadingButton
+              <Grid size={6}>
+                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -270,9 +279,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
                   disabled={positionEditing || !userMember}
                 >
                   Save
-                </LoadingButton>
+                </Button>
               </Grid>
-            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -291,15 +299,19 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 }
 
 // find user by email
-function MemberUserInput({ control, watch, setValue, user, setUser }) {
+function MemberUserInput({ control, setValue, user, setUser }) {
   const { triggerToast } = useToast();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const uid = watch("uid");
-  const emailInput = watch("userSelector");
+  const uid = useWatch({
+    control,
+    name: "uid",
+  });
+
   useEffect(() => {
     (async () => {
+      // console.log("UID changed:", uid);
       if (uid) await getUser();
     })();
   }, [uid]);
@@ -320,7 +332,13 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
   };
 
   return user ? (
-    <Stack direction="row" alignItems="center" spacing={isMobile ? 2 : 4}>
+    <Stack
+      direction="row"
+      spacing={isMobile ? 2 : 4}
+      sx={{
+        alignItems: "center",
+      }}
+    >
       <UserImage
         image={user.img}
         name={user.firstName}
@@ -334,9 +352,9 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
         </Typography>
         <Typography
           variant="body2"
-          color="text.secondary"
-          fontFamily="monospace"
           sx={{
+            color: "text.secondary",
+            fontFamily: "monospace",
             wordBreak: "break-word",
             overflowWrap: "break-word",
           }}
@@ -349,6 +367,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
     <Controller
       name="userSelector"
       control={control}
+      defaultValue=""
       render={({ field }) => (
         <Stack direction="row" spacing={1}>
           <TextField
@@ -366,7 +385,7 @@ function MemberUserInput({ control, watch, setValue, user, setUser }) {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => setValue("uid", emailInput.split("@")[0])}
+            onClick={() => setValue("uid", field.value?.split("@")[0])}
           >
             <Icon variant="thumb-up-outline-rounded" />
           </Button>
@@ -431,7 +450,6 @@ function MemberClubSelect({ control, edit }) {
 // input event budget as a table
 function MemberPositionsTable({
   control,
-  watch,
   positionEditing,
   setPositionEditing,
 }) {
@@ -456,7 +474,7 @@ function MemberPositionsTable({
 }
 
 // switch for member POC status
-function MemberPOCSwitch({ control, watch }) {
+function MemberPOCSwitch({ control }) {
   // TODO: watch for uid & cid change, populate table with existing data
   // [AFTER create and edit member mutations have been merged into one]
 

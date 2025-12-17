@@ -6,7 +6,8 @@ import { shortDescription } from "app/layout";
 import { getFile, PUBLIC_URL } from "utils/files";
 import EventDetails, { getEventLocation } from "components/events/EventDetails";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
   const event = await getEvent(id);
@@ -38,7 +39,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function Event({ params }) {
+export default async function Event(props) {
+  const params = await props.params;
   const { id } = params;
   const event = await getEvent(id);
 

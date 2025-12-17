@@ -161,14 +161,14 @@ export default function UserMemberships({ rows = [] }) {
         <>
           <DataGrid
             autoHeight
-            getRowHeight={() => (isMobile ? "auto" : "none")}
+            getRowHeight={() => (isMobile ? "auto" : null)}
             rows={rows}
             columns={columns}
             disableRowSelectionOnClick
             getRowId={(row) => row.rid}
             initialState={{
               sorting: {
-                sortModel: [{ field: "endYear", sort: "asc" }],
+                sortModel: [{ field: "endYear", sort: "desc" }],
               },
               pagination: { paginationModel: { pageSize: 5 } },
             }}

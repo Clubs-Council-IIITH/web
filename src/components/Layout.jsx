@@ -211,7 +211,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   // nav items that only club accounts can see
   const clubItems = (
     <List disablePadding sx={{ p: 1 }}>
-      <Box px={4}>
+      <Box sx={{
+        px: 4
+      }}>
         <Typography variant="overline">Manage</Typography>
       </Box>
       <DrawerItem
@@ -227,7 +229,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   // nav items that only CC can see
   const ccItems = (
     <List disablePadding sx={{ p: 1 }}>
-      <Box px={4}>
+      <Box sx={{
+        px: 4
+      }}>
         <Typography variant="overline">Manage</Typography>
       </Box>
       <DrawerItem
@@ -258,7 +262,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   // nav items that only SLC can see
   const SLCItems = (
     <List disablePadding sx={{ p: 1 }}>
-      <Box px={4}>
+      <Box sx={{
+        px: 4
+      }}>
         <Typography variant="overline">Manage</Typography>
       </Box>
       <DrawerDropdown
@@ -282,7 +288,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   // nav items that only SLO can see
   const SLOItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
-      <Box px={4}>
+      <Box sx={{
+        px: 4
+      }}>
         <Typography variant="overline">Manage</Typography>
       </Box>
       {manageEventItems}
@@ -308,7 +316,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   // nav items with about info that everybody can see
   const aboutItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
-      <Box px={4}>
+      <Box sx={{
+        px: 4
+      }}>
         <Typography variant="overline">About</Typography>
       </Box>
       <DrawerItem
@@ -327,7 +337,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   // nav items with help info that everybody can see
   const helpItems = (
     <List disablePadding sx={{ p: 1, pt: 1 }}>
-      <Box px={4}>
+      <Box sx={{
+        px: 4
+      }}>
         <Typography variant="overline">Help</Typography>
       </Box>
       <DrawerItem
@@ -339,7 +351,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
   );
 
   const drawerContent = (
-    <ScrollbarWrapper>
+    <ScrollbarWrapper hideScrollbar={true}>
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
         <Logo />
       </Box>
@@ -414,16 +426,15 @@ export function Content({ children }) {
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
-    <ScrollbarWrapper>
+    <ScrollbarWrapper scrollbarColor={theme.palette.primary.main}>
       <Box
         sx={{
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary,
           display: "flex",
           overflow: "hidden",
-          width: "100%",
-        }}
-        bgcolor={theme.palette.background.default}
-        color={theme.palette.text.primary}
-      >
+          width: "100%"
+        }}>
         <Box
           component="main"
           sx={{
@@ -438,7 +449,9 @@ export function Content({ children }) {
             },
           }}
         >
-          <Box px={isDesktop ? 4 : 2}>
+          <Box sx={{
+            px: isDesktop ? 4 : 2
+          }}>
             {children}
             <Footer />
           </Box>

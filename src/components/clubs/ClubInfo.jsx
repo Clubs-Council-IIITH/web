@@ -12,7 +12,13 @@ export default function ClubInfo({ name, logo, tagline, description }) {
 
   return (
     <>
-      <Box display="flex" alignItems="center" mt={3} mb={2}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          mt: 3,
+          mb: 2
+        }}>
         <ClubLogo
           name={name}
           logo={logo}
@@ -24,15 +30,23 @@ export default function ClubInfo({ name, logo, tagline, description }) {
           <Typography variant={isDesktop ? "h3" : "h4"}>{name}</Typography>
           <Typography
             variant={isDesktop ? "subtitle1" : "subtitle2"}
-            color="text.disabled"
-            fontWeight={400}
-          >
+            sx={{
+              color: "text.disabled",
+              fontWeight: 400
+            }}>
             {tagline}
           </Typography>
         </Box>
       </Box>
-      <Box pt={2}>
-        <Typography variant="body1" mx={1} sx={{ whiteSpace: "pre-wrap" }}>
+      <Box sx={{
+        pt: 2
+      }}>
+        <Typography
+          variant="body1"
+          sx={{
+            mx: 1,
+            whiteSpace: "pre-wrap"
+          }}>
           {description}
         </Typography>
       </Box>

@@ -1,13 +1,13 @@
 "use client";
 
 import { Children, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { alpha, useTheme } from "@mui/material/styles";
 import { Box, ListItemText, ListItemButton, ListItemIcon } from "@mui/material";
 
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 export function isExternalLink(path) {
   return path.includes("http");
@@ -28,7 +28,7 @@ export function DrawerItem({ title, path, icon }) {
 
   return (
     <ListItemButton
-      component={Link}
+      component={ButtonLink}
       href={path}
       sx={{
         ...theme.typography.body2,
@@ -69,15 +69,15 @@ export function DrawerItem({ title, path, icon }) {
       >
         {icon && icon}
       </ListItemIcon>
-
       <ListItemText
         disableTypography
         primary={
           <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}>
             {title}
             {externalLink && <Icon variant="link" />}
           </Box>

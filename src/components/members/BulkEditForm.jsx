@@ -20,7 +20,6 @@ import {
   MenuItem,
   Stack,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -175,7 +174,9 @@ export default function BulkEdit({ mode = "add" }) {
       } else {
         failureCount++;
         failureMessages.push(
-          `- Failed to ${actionName} ${member.uid}: ${res.error.messages.join(", ")}`,
+          `- Failed to ${actionName} ${member.uid}: ${res.error.messages.join(
+            ", "
+          )}`
         );
       }
     }
@@ -184,12 +185,12 @@ export default function BulkEdit({ mode = "add" }) {
     let toastMessages = [];
     if (successCount > 0) {
       toastMessages.push(
-        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`,
+        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`
       );
     }
     if (failureCount > 0) {
       toastMessages.push(
-        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`,
+        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`
       );
       toastMessages = toastMessages.concat(failureMessages);
     }
@@ -208,7 +209,6 @@ export default function BulkEdit({ mode = "add" }) {
     });
 
     router.push(`/manage/members`);
-    router.refresh();
   }
 
   // transform data and mutate
@@ -264,8 +264,8 @@ export default function BulkEdit({ mode = "add" }) {
                 endYear: addNew
                   ? parseInt(member.startYear)
                   : member.endYear === "-"
-                    ? null
-                    : parseInt(member.endYear),
+                  ? null
+                  : parseInt(member.endYear),
               };
             }
             return role;
@@ -416,7 +416,7 @@ export default function BulkEdit({ mode = "add" }) {
           confirmProps={{ color: "primary" }}
           confirmText="Yes, discard my changes"
         />
-        <LoadingButton
+        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -426,7 +426,7 @@ export default function BulkEdit({ mode = "add" }) {
           sx={{ width: "25%" }}
         >
           Save
-        </LoadingButton>
+        </Button>
       </Stack>
       <ConfirmDialog
         open={expDialog}
@@ -543,8 +543,11 @@ function MembersTable({
   };
 
   const onDelete = (row) => {
-    // console.log("rows:", rows, "row:", row);
-    setRows(rows.filter((r) => r.id !== row.id));
+    const newRows = rows.filter((r) => r.id !== row.id);
+    setRows(newRows);
+
+    const allValid = newRows.every((r) => r.isValid);
+    setAllValid(allValid);
   };
 
   const columns = [
@@ -559,8 +562,8 @@ function MembersTable({
         row.role !== row.originalRole ||
         row.startYear !== row.originalStartYear ||
         row.endYear !== row.originalEndYear
-          ? 1
-          : 0,
+          ? "0" + row?.uid
+          : "1" + row?.uid,
     },
     {
       field: "uid",
@@ -740,6 +743,8 @@ function MembersTable({
         </Tooltip>
       ),
       display: "flex",
+      disableColumnMenu: true,
+      sortable: false,
     },
     ...(addMode
       ? [
@@ -758,6 +763,9 @@ function MembersTable({
               </IconButton>
             ),
             display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),
@@ -798,8 +806,7 @@ function MembersTable({
             sortModel: addMode
               ? []
               : [
-                  { field: "isEdited", sort: "desc" },
-                  { field: "uid", sort: "asc" },
+                  { field: "isEdited", sort: "asc" },
                 ],
           },
           columns: {

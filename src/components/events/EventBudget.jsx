@@ -90,8 +90,8 @@ export default function EventBudget({
           </Typography>
         ) : (
           <Typography
-            color="text.secondary"
             sx={{
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -212,6 +212,9 @@ export default function EventBudget({
               </IconButton>
             ),
             display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),
@@ -221,32 +224,37 @@ export default function EventBudget({
     <>
       {editable ? (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
-          <Icon variant="add" mr={1} />
+          <Icon variant="add" sx={{ mr: 1 }} />
           Add Item
         </Button>
       ) : null}
 
-      <DataGrid
-        autoHeight
-        getRowHeight={() => "auto"}
-        columns={columns}
-        rows={rows}
-        editMode="row"
-        processRowUpdate={onUpdate}
-        disableRowSelectionOnClick
-        onRowEditStart={() => setBudgetEditing(true)}
-        onRowEditStop={() => setBudgetEditing(false)}
-        onProcessRowUpdateError={(error) => {
-          console.error("Row update error:", error);
-          setError(error.message);
-        }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-        }}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DataGrid
+          getRowHeight={() => "auto"}
+          columns={columns}
+          rows={rows}
+          editMode="row"
+          processRowUpdate={onUpdate}
+          disableRowSelectionOnClick
+          onRowEditStart={() => setBudgetEditing(true)}
+          onRowEditStop={() => setBudgetEditing(false)}
+          onProcessRowUpdateError={(error) => {
+            console.error("Row update error:", error);
+            setError(error.message);
+          }}
+          pageSizeOptions={[5, 10, 15]}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
+          sx={{
+            // disable cell selection style
+            ".MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+          }}
+        />
+      </div>
 
       <Typography variant="caption" color="error">
         {error}

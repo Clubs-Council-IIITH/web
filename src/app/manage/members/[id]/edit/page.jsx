@@ -21,7 +21,8 @@ function transformMember(member) {
   };
 }
 
-export default async function EditMember({ params }) {
+export default async function EditMember(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -43,10 +44,11 @@ export default async function EditMember({ params }) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
+        <Typography variant="h3" gutterBottom sx={{
+          mb: 3
+        }}>
           Edit Member Details
         </Typography>
-
         <MemberForm defaultValues={transformMember(member)} action="edit" />
       </Container>
     );

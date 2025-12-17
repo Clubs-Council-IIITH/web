@@ -19,7 +19,6 @@ function transformEvent(event) {
       new Date(event?.datetimeperiod[0]),
       new Date(event?.datetimeperiod[1]),
     ],
-    // add mandatory ID field for DataGrid
     budget:
       event?.budget?.map((budget, key) => ({
         ...budget,
@@ -40,7 +39,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function EditEvent({ params }) {
+export default async function EditEvent(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -57,23 +57,19 @@ export default async function EditEvent({ params }) {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
-    return (
-      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
-      (
-        <Container>
-          <Typography variant="h3" gutterBottom mb={3}>
-            Edit Event Details
-          </Typography>
-
-          <EventForm
-            id={id}
-            defaultValues={transformEvent(event)}
-            existingEvents={events.filter((e) => e._id !== id)}
-            action="edit"
-          />
-        </Container>
-      )
-    );
+    return (user?.role === "club" && user?.uid !== event.clubid && redirect("/404"), (<Container>
+      <Typography variant="h3" gutterBottom sx={{
+        mb: 3
+      }}>
+        Edit Event Details
+      </Typography>
+      <EventForm
+        id={id}
+        defaultValues={transformEvent(event)}
+        existingEvents={events.filter((e) => e._id !== id)}
+        action="edit"
+      />
+    </Container>));
   } catch (error) {
     redirect("/404");
   }

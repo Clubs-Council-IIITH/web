@@ -15,7 +15,6 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 
 import Icon from "components/Icon";
 import { useToast } from "components/Toast";
@@ -84,7 +83,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
       // check all fields
       if (!data.title || !data.file) {
         throw new Error(
-          "Please fill all the required Fields before submitting.",
+          "Please fill all the required Fields before submitting."
         );
       }
 
@@ -94,7 +93,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
         data.title +
           "_v" +
           (newFile ? 1 : handleVersionNumbering(editFile)).toString(),
-        maxFileSizeMB,
+        maxFileSizeMB
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
@@ -167,7 +166,13 @@ export default function DocForm({ editFile = null, newFile = true }) {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
+      <Grid
+        container
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Typography variant="h5" sx={{ p: 2 }}>
           Upload File
         </Typography>
@@ -186,7 +191,12 @@ export default function DocForm({ editFile = null, newFile = true }) {
       </Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-          <Grid item xs={12} m={1}>
+          <Grid
+            sx={{
+              m: 1,
+            }}
+            size={12}
+          >
             <Controller
               name="title"
               control={control}
@@ -207,7 +217,13 @@ export default function DocForm({ editFile = null, newFile = true }) {
               )}
             />
           </Grid>
-          <Grid item xs={12} alignItems="center" m={1}>
+          <Grid
+            sx={{
+              alignItems: "center",
+              m: 1,
+            }}
+            size={12}
+          >
             <FileUpload
               name="file"
               label="File Upload"
@@ -217,8 +233,14 @@ export default function DocForm({ editFile = null, newFile = true }) {
               maxSizeMB={maxFileSizeMB}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Grid size={12}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 color="primary"
@@ -227,7 +249,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
                 Cancel
               </Button>
 
-              <LoadingButton
+              <Button
                 loading={loading}
                 // type="submit"
                 onClick={handleSubmitButton}
@@ -236,7 +258,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
                 disabled={loading || !fileDropzone}
               >
                 Save
-              </LoadingButton>
+              </Button>
             </Box>
           </Grid>
         </Grid>

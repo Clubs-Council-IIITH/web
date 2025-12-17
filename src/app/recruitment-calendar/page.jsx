@@ -21,7 +21,7 @@ export default async function RecruitmentSchedule() {
     getStaticFile("recruitmentCalendar.json"),
     {
       next: { revalidate: 3600 }, // 1 hour
-    },
+    }
   );
 
   let recruitmentScheduleJSON = await recruitmentSchedule.json();
@@ -48,13 +48,18 @@ export default async function RecruitmentSchedule() {
           Clubs Recruitment Calendar
         </Typography>
       </center>
-
       <Grid container spacing={2}>
         {months.map((month) => (
-          <Grid item xs={12} md={6} lg={3} xl={3}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+              lg: 3,
+              xl: 3
+            }}>
             <RecruitmentCard
               clubs={recruitmentScheduleJSON.filter(
-                (val) => val.month === month.toLowerCase(),
+                (val) => val.month === month.toLowerCase()
               )}
               month={month}
             />
@@ -83,8 +88,10 @@ function RecruitmentCard({ clubs, month = "January" }) {
         {clubs.length === 0 && (
           <Typography
             variant="body1"
-            color="text.secondary"
-            sx={{ textAlign: "center" }}
+            sx={{
+              color: "text.secondary",
+              textAlign: "center",
+            }}
           >
             No clubs are recruiting this month.
           </Typography>

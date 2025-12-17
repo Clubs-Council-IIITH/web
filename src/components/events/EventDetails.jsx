@@ -11,10 +11,9 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 
 import Icon from "components/Icon";
 
-const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
-const AddToCalendarBtn = dynamic(
-  () => import("components/events/AddToCalendarBtn"),
-  { ssr: false },
+const DateTime = dynamic(() => import("components/DateTime"));
+const AddToCalendarBtn = dynamic(() =>
+  import("components/events/AddToCalendarBtn")
 );
 
 export const getEventLocation = (event) => {
@@ -22,9 +21,7 @@ export const getEventLocation = (event) => {
     if (event.location.length > 0) {
       return event.location
         .map((l) =>
-          l === "other"
-            ? event.otherLocation || "Other"
-            : locationLabel(l).name,
+          l === "other" ? event.otherLocation || "Other" : locationLabel(l).name
         )
         .join(", ");
     } else {
@@ -38,7 +35,12 @@ export const getEventLocation = (event) => {
 export default function EventDetails({ event, showCode = false }) {
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
+      <Grid
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <Card variant="outlined">
           <Box sx={{ pt: "100%", position: "relative" }}>
             {event.poster ? (
@@ -59,46 +61,83 @@ export default function EventDetails({ event, showCode = false }) {
           </Box>
         </Card>
       </Grid>
-
-      <Grid item xs md>
-        <Stack direction="column" p={1}>
-          <Box display="flex">
+      <Grid
+        size={{
+          xs: "grow",
+          md: "grow",
+        }}
+      >
+        <Stack
+          direction="column"
+          sx={{
+            p: 1,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
             <Icon variant="calendar-today" sx={{ mr: 2, width: 16 }} />
             <Typography variant="body2">
               <DateTime dt={event.datetimeperiod[0]} />
             </Typography>
-            <Box mx={1}>-</Box>
+            <Box
+              sx={{
+                mx: 1,
+              }}
+            >
+              -
+            </Box>
             <Typography variant="body2">
               <DateTime dt={event.datetimeperiod[1]} />
             </Typography>
           </Box>
 
-          <Typography variant="h3" paragraph mt={1} mb={0}>
+          <Typography
+            variant="h3"
+            paragraph
+            sx={{
+              mt: 1,
+              mb: 0,
+            }}
+          >
             {event.name}
           </Typography>
           {showCode ? (
             <Typography
-              color="text.disabled"
               variant="subtitle2"
-              fontFamily="monospace"
-              mt={0}
-              mb={1.5}
+              sx={{
+                color: "text.disabled",
+                fontFamily: "monospace",
+                mt: 0,
+                mb: 1.5,
+              }}
             >
               #{event.code}
             </Typography>
           ) : null}
 
-          <Box my={1} />
+          <Box
+            sx={{
+              my: 1,
+            }}
+          />
 
           {event.collabclubs && event.collabclubs.length > 0 ? (
             <>
               <Typography variant="body2">
                 <strong>Collaborating Clubs</strong>
               </Typography>
-              <Box display="flex" flexWrap="wrap">
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                }}
+              >
                 <ClubButton clubid={event.clubid} />
                 {event.collabclubs.map((clubid) => (
-                  <ClubButton clubid={clubid} />
+                  <ClubButton clubid={clubid} key={clubid} />
                 ))}
               </Box>
             </>
@@ -106,17 +145,36 @@ export default function EventDetails({ event, showCode = false }) {
             <ClubButton clubid={event.clubid} />
           )}
 
-          <Box display="flex" mt={4} alignItems="center">
+          <Box
+            sx={{
+              display: "flex",
+              mt: 4,
+              alignItems: "center",
+            }}
+          >
             <Icon variant="location-on-outline-rounded" sx={{ mr: 2 }} />
             <Typography variant="body1">{getEventLocation(event)}</Typography>
           </Box>
 
-          <Box display="flex" mt={3} alignItems="center">
+          <Box
+            sx={{
+              display: "flex",
+              mt: 3,
+              alignItems: "center",
+            }}
+          >
             <Icon variant="group-outline-rounded" sx={{ mr: 2 }} />
             <AudienceChips audience={event.audience} />
           </Box>
 
-          <Box display="flex" mt={2} alignItems="center" ml={-0.5}>
+          <Box
+            sx={{
+              display: "flex",
+              mt: 2,
+              alignItems: "center",
+              ml: -0.5,
+            }}
+          >
             <AddToCalendarBtn event={event} />
           </Box>
 

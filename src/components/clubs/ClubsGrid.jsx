@@ -16,7 +16,14 @@ export default async function ClubsGrid({ category, staticClubs = [] }) {
         ?.filter((club) => club.category === category)
         ?.sort((a, b) => a.name.localeCompare(b.name))
         ?.map((club) => (
-          <Grid key={club._id} item xs={12} md={6} lg={4} xl={3}>
+          <Grid
+            key={club.cid}
+            size={{
+              xs: 12,
+              md: 6,
+              lg: 4,
+              xl: 3
+            }}>
             <ClubCard
               dim
               cid={club.cid}

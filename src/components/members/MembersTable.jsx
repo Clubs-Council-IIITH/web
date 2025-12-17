@@ -16,7 +16,6 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
-import QuickSearchToolbar from "components/QuickSearchToolbar";
 
 import { getFile } from "utils/files";
 import { getUserNameFromUID } from "utils/users";
@@ -40,6 +39,9 @@ export default function MembersTable({
         name: row.firstName,
         img: row.img,
       }),
+      disableExport: true,
+      disableColumnMenu: true,
+      sortable: false,
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
@@ -70,9 +72,11 @@ export default function MembersTable({
             flex: 8,
             renderCell: ({ value }) => (
               <Box
-                textTransform="lowercase"
-                fontSize="0.9em"
-                fontFamily="monospace"
+                sx={{
+                  textTransform: "lowercase",
+                  fontSize: "0.9em",
+                  fontFamily: "monospace",
+                }}
               >
                 {value || "Email Not Available"}
               </Box>
@@ -99,6 +103,9 @@ export default function MembersTable({
             headerName: "Positions",
             flex: 8,
             width: 300,
+            disableExport: true,
+            disableColumnMenu: true,
+            sortable: false,
             valueGetter: (value, row, column, apiRef) => row.roles,
             renderCell: ({ value }) => (
               <Box sx={{ width: "100%", height: "100%", p: 1 }}>
@@ -111,10 +118,12 @@ export default function MembersTable({
                   {value?.map((role, key) => (
                     <Box
                       key={key}
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      width="100%"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                      }}
                     >
                       <Typography
                         variant="body2"
@@ -137,20 +146,25 @@ export default function MembersTable({
                           {role?.name}
                         </span>
                         <Box
-                          color="grey.400"
-                          display="inline-block"
-                          mx={0.5}
-                          flexShrink={0}
+                          component="span"
+                          sx={{
+                            color: "grey.400",
+                            display: "inline-block",
+                            mx: 0.5,
+                            flexShrink: 0,
+                          }}
                         >
                           ({role?.startYear} - {role?.endYear || "present"})
                         </Box>
                       </Typography>
                       {showIcon && (
                         <Box
-                          display="flex"
-                          justifyContent="flex-end"
-                          ml={1}
-                          flexShrink={0}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            ml: 1,
+                            flexShrink: 0,
+                          }}
                         >
                           <Tooltip
                             arrow
@@ -158,8 +172,8 @@ export default function MembersTable({
                               role?.approved
                                 ? "Approved"
                                 : role?.rejected
-                                  ? "Rejected"
-                                  : "Pending approval"
+                                ? "Rejected"
+                                : "Pending approval"
                             }
                           >
                             <Icon
@@ -168,15 +182,15 @@ export default function MembersTable({
                                 role?.approved
                                   ? "success.main"
                                   : role?.rejected
-                                    ? "error.main"
-                                    : "warning.main"
+                                  ? "error.main"
+                                  : "warning.main"
                               }
                               variant={
                                 role?.approved
                                   ? "eva:checkmark-outline"
                                   : role?.rejected
-                                    ? "eva:close-outline"
-                                    : "eva:refresh-fill"
+                                  ? "eva:close-outline"
+                                  : "eva:refresh-fill"
                               }
                             />
                           </Tooltip>
@@ -213,7 +227,7 @@ export default function MembersTable({
         },
         pagination: { paginationModel: { pageSize: 25 } },
       }}
-      slots={{ toolbar: QuickSearchToolbar }}
+      showToolbar
       sx={{
         ".MuiDataGrid-cell:focus": {
           outline: "none",

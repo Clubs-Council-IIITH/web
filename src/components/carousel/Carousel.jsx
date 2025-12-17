@@ -83,7 +83,6 @@ function CarouselItem({ item }) {
           }}
         />
       </Box>
-
       <CardContent
         sx={{
           px: isDesktop ? 4 : 2,
@@ -109,9 +108,11 @@ function CarouselItem({ item }) {
         <Typography
           gutterBottom
           variant={isDesktop ? "h6" : "body2"}
-          fontWeight={400}
-          sx={{ color: "common.white", display: "flex" }}
-        >
+          sx={{
+            fontWeight: 400,
+            color: "common.white",
+            display: "flex"
+          }}>
           {description}
         </Typography>
       </CardContent>
