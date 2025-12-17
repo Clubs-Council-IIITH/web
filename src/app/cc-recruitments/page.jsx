@@ -36,9 +36,14 @@ export default async function NewApplication() {
   if (!currentUser) {
     return (
       <Container>
-        <Typography variant="h4" gutterBottom align="center" sx={{
-          mt: 3
-        }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          align="center"
+          sx={{
+            mt: 3,
+          }}
+        >
           You are not logged in. Please login to apply for Clubs Council
         </Typography>
       </Container>
@@ -59,21 +64,36 @@ export default async function NewApplication() {
     <Container>
       {haveAppliedForCC ? (
         <>
-          <Typography variant="h5" gutterBottom align="center" sx={{
-            mt: 6
-          }}>
+          <Typography
+            variant="h5"
+            gutterBottom
+            align="center"
+            sx={{
+              mt: 6,
+            }}
+          >
             You have already applied for Clubs Council Position. Thank you!
           </Typography>
-          <Typography variant="h6" gutterBottom align="center" sx={{
-            mt: 3
-          }}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            align="center"
+            sx={{
+              mt: 3,
+            }}
+          >
             You will be notified about the next stages of the process shortly.
           </Typography>
         </>
       ) : new Date() > deadline ? (
-        <Typography variant="h4" gutterBottom align="center" sx={{
-          mt: 3
-        }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          align="center"
+          sx={{
+            mt: 3,
+          }}
+        >
           This form is disabled now. <br /> <br />
           The deadline for the form submission was <br />
           {deadline.toLocaleString("en-IN", {
@@ -82,15 +102,24 @@ export default async function NewApplication() {
         </Typography>
       ) : (
         <>
-          <Typography variant="h3" gutterBottom align="center" sx={{
-            mb: 3
-          }}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            align="center"
+            sx={{
+              mb: 3,
+            }}
+          >
             Apply for Clubs Council
           </Typography>
 
-          <Typography variant="h5" gutterBottom sx={{
-            mb: 3
-          }}>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
             Instructions
           </Typography>
 
@@ -117,18 +146,27 @@ export default async function NewApplication() {
             </li>
           </ul>
 
-          <Typography variant="h5" gutterBottom sx={{
-            mb: 3
-          }}>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
             Application Form
           </Typography>
 
           <RecruitmentForm user={user} />
         </>
       )}
-      <Typography variant="body2" gutterBottom align="center" sx={{
-        mt: 10
-      }}>
+      <Typography
+        variant="body2"
+        gutterBottom
+        align="center"
+        sx={{
+          mt: 10,
+        }}
+      >
         Made with ❤️ by the SLC Tech Team. For any queries contact us at{" "}
         <a href="mailto:clubs@iiit.ac.in"> clubs@iiit.ac.in </a>
       </Typography>

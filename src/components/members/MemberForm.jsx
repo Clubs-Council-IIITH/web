@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 import { useForm, useWatch, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 
 import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
@@ -50,6 +51,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [positionEditing, setPositionEditing] = useState(false);
 
+  const { control, setValue, handleSubmit } = useForm({ defaultValues });
   const { control, setValue, handleSubmit } = useForm({ defaultValues });
   const { triggerToast } = useToast();
 
@@ -300,6 +302,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 
 // find user by email
 function MemberUserInput({ control, setValue, user, setUser }) {
+function MemberUserInput({ control, setValue, user, setUser }) {
   const { triggerToast } = useToast();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -339,6 +342,13 @@ function MemberUserInput({ control, setValue, user, setUser }) {
         alignItems: "center",
       }}
     >
+    <Stack
+      direction="row"
+      spacing={isMobile ? 2 : 4}
+      sx={{
+        alignItems: "center",
+      }}
+    >
       <UserImage
         image={user.img}
         name={user.firstName}
@@ -355,6 +365,8 @@ function MemberUserInput({ control, setValue, user, setUser }) {
           sx={{
             color: "text.secondary",
             fontFamily: "monospace",
+            color: "text.secondary",
+            fontFamily: "monospace",
             wordBreak: "break-word",
             overflowWrap: "break-word",
           }}
@@ -367,6 +379,7 @@ function MemberUserInput({ control, setValue, user, setUser }) {
     <Controller
       name="userSelector"
       control={control}
+      defaultValue=""
       defaultValue=""
       render={({ field }) => (
         <Stack direction="row" spacing={1}>
@@ -385,6 +398,7 @@ function MemberUserInput({ control, setValue, user, setUser }) {
           <Button
             color="primary"
             variant="contained"
+            onClick={() => setValue("uid", field.value?.split("@")[0])}
             onClick={() => setValue("uid", field.value?.split("@")[0])}
           >
             <Icon variant="thumb-up-outline-rounded" />
@@ -474,6 +488,7 @@ function MemberPositionsTable({
 }
 
 // switch for member POC status
+function MemberPOCSwitch({ control }) {
 function MemberPOCSwitch({ control }) {
   // TODO: watch for uid & cid change, populate table with existing data
   // [AFTER create and edit member mutations have been merged into one]

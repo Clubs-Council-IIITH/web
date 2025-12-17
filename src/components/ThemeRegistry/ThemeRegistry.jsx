@@ -26,7 +26,7 @@ export default function ThemeRegistry({ children }) {
         ? customShadows.dark
         : customShadows.light,
     }),
-    [prefersDarkMode]
+    [prefersDarkMode],
   );
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);

@@ -39,7 +39,6 @@
     "graphql-tag": "^2.12.6",
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.12.31",
-    "motion": "^12.23.26",
     "next": "^16.0.10",
     "next-mdx-remote": "^5.0.0",
     "nprogress": "^0.2.0",

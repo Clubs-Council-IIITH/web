@@ -144,9 +144,12 @@ export default async function NewCCTeam2425() {
       </center>
       <LocalUsersGrid users={new_team} />
       <center>
-        <Typography variant="h4" sx={{
-          mt: 3
-        }}>
+        <Typography
+          variant="h4"
+          sx={{
+            mt: 3,
+          }}
+        >
           New Advisors
         </Typography>
       </center>

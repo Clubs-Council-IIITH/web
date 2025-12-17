@@ -31,12 +31,20 @@ export default function GlobalError({ error, reset }) {
         py: 8,
       }}
     >
-      <Stack direction="column" spacing={4} sx={{
-        alignItems: "center"
-      }}>
-        <Stack direction="row" spacing={3} sx={{
-          alignItems: "center"
-        }}>
+      <Stack
+        direction="column"
+        spacing={4}
+        sx={{
+          alignItems: "center",
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={3}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Icon
             external
             variant="fluent-emoji-flat:crying-face"
@@ -47,9 +55,13 @@ export default function GlobalError({ error, reset }) {
           </Typography>
         </Stack>
 
-        <Stack direction="column" spacing={2} sx={{
-          alignItems: "center"
-        }}>
+        <Stack
+          direction="column"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Typography variant="body1">
             If you weren&apos;t expecting to see this,{" "}
             <Link href={BUG_REPORT_URL}>report it to our dev team</Link> along
@@ -81,9 +93,13 @@ export default function GlobalError({ error, reset }) {
           <AlertTitle>
             {error?.name} {error?.digest}
           </AlertTitle>
-          <Typography variant="body1" gutterBottom sx={{
-            mb: 2
-          }}>
+          <Typography
+            variant="body1"
+            gutterBottom
+            sx={{
+              mb: 2,
+            }}
+          >
             {error?.message}
           </Typography>
           <Typography variant="overline">Stacktrace</Typography>
@@ -93,8 +109,9 @@ export default function GlobalError({ error, reset }) {
               key={i}
               sx={{
                 fontFamily: "monospace",
-                ml: i > 0 ? 2 : 0
-              }}>
+                ml: i > 0 ? 2 : 0,
+              }}
+            >
               {line}
             </Typography>
           ))}

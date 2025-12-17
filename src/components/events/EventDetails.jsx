@@ -12,8 +12,8 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"));
-const AddToCalendarBtn = dynamic(() =>
-  import("components/events/AddToCalendarBtn")
+const AddToCalendarBtn = dynamic(
+  () => import("components/events/AddToCalendarBtn"),
 );
 
 export const getEventLocation = (event) => {
@@ -96,10 +96,12 @@ export default function EventDetails({ event, showCode = false }) {
 
           <Typography
             variant="h3"
+            paragraph
             sx={{
               mt: 1,
               mb: 0,
-            }}>
+            }}
+          >
             {event.name}
           </Typography>
           {showCode ? (

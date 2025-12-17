@@ -99,6 +99,12 @@ export default function EventsTable({
                   color: "text.disabled",
                 }}
               >
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.disabled",
+                }}
+              >
                 {value}
               </Typography>
             ),
@@ -219,6 +225,7 @@ export default function EventsTable({
       align: "center",
       headerAlign: "center",
       disableExport: true,
+      disableExport: true,
       valueGetter: (value, row, column, apiRef) => ({
         requested: row.location.length > 0,
         approved: row.status.room,
@@ -264,6 +271,7 @@ export default function EventsTable({
       flex: isMobile ? null : 3,
       align: "center",
       headerAlign: "center",
+      disableExport: true,
       disableExport: true,
       valueGetter: (value, row, column, apiRef) => ({
         state: row.status.state,
@@ -365,6 +373,11 @@ export default function EventsTable({
               textTransform: "uppercase",
               mb: 0,
             }}
+            sx={{
+              color: "text.secondary",
+              textTransform: "uppercase",
+              mb: 0,
+            }}
           >
             {query ? "All Events" : "Pending Events"}
           </Typography>
@@ -407,6 +420,44 @@ export default function EventsTable({
           />
         </Box>
       }
+
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DataGrid
+          getRowHeight={() => (isMobile ? "auto" : null)}
+          rows={events}
+          columns={
+            hideClub ? columns.filter((c) => c.field !== "club") : columns
+          }
+          getRowId={(r) => r._id}
+          onRowClick={(params) =>
+            router.push(`/manage/events/${params.row._id}`)
+          }
+          disableRowSelectionOnClick
+          initialState={{
+            sorting: {
+              sortModel: [{ field: "scheduled", sort: scheduleSort }],
+            },
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterLogicOperator: GridLogicOperator.Or,
+              },
+            },
+            pagination: { paginationModel: { pageSize: 25 } },
+          }}
+          showToolbar
+          sx={{
+            // disable cell selection style
+            ".MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+            // pointer cursor on ALL rows
+            "& .MuiDataGrid-row:hover": {
+              cursor: "pointer",
+            },
+          }}
+        />
+      </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <DataGrid

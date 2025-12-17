@@ -14,6 +14,8 @@ export const metadata = {
 
 export default async function EditClub(props) {
   const params = await props.params;
+export default async function EditClub(props) {
+  const params = await props.params;
   const { id } = params;
 
   let userMeta, club;

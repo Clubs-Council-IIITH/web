@@ -3,6 +3,7 @@
 import { Stack, Button, Switch, Typography } from "@mui/material";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import ButtonLink from "components/Link";
 
 export default function HolidaysTitleBar({ showPast, onToggle, children }) {
   return (
@@ -20,6 +21,7 @@ export default function HolidaysTitleBar({ showPast, onToggle, children }) {
         alignItems: "center"
       }}>
         <Button
+          component={ButtonLink}
           component={ButtonLink}
           href="/manage/holidays/new"
           variant="contained"

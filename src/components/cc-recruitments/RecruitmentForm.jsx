@@ -85,6 +85,9 @@ function MemberUserInput({ user = {} }) {
       sx={{
         alignItems: "center",
       }}
+      sx={{
+        alignItems: "center",
+      }}
     >
       <UserImage
         image={user.img}
@@ -103,6 +106,10 @@ function MemberUserInput({ user = {} }) {
             color: "text.secondary",
             fontFamily: "monospace",
           }}
+          sx={{
+            color: "text.secondary",
+            fontFamily: "monospace",
+          }}
         >
           {user.email}
         </Typography>
@@ -116,6 +123,7 @@ function MemberUserInput({ user = {} }) {
 export default function RecruitmentForm({ user = {} }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const defaultValues = {};
@@ -192,11 +200,27 @@ export default function RecruitmentForm({ user = {} }) {
             mt: 6,
           }}
         >
+        <Typography
+          variant="h5"
+          gutterBottom
+          align="center"
+          sx={{
+            mt: 6,
+          }}
+        >
           Thank you for your interest in applying for a Clubs Council Position.
           Your application has been successfully submitted. You will be notified
           about the next stages of the process shortly.
         </Typography>
       ) : !allowedBatches.includes(user.batch) ? (
+        <Typography
+          variant="h5"
+          gutterBottom
+          align="center"
+          sx={{
+            mt: 6,
+          }}
+        >
         <Typography
           variant="h5"
           gutterBottom
@@ -224,6 +248,11 @@ export default function RecruitmentForm({ user = {} }) {
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "text.secondary",
+                    mb: 2,
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -343,9 +372,15 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
               </Grid>
               <Grid container>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "text.secondary",
+                    mb: 2,
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -356,6 +391,13 @@ export default function RecruitmentForm({ user = {} }) {
                 </Typography>
                 <Grid container spacing={2} direction="column">
                   {roles.map((role, index) => (
+                    <Grid key={index}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: "bold",
+                        }}
+                      >
                     <Grid key={index}>
                       <Typography
                         variant="h6"
@@ -376,6 +418,17 @@ export default function RecruitmentForm({ user = {} }) {
                       ))}
                     </Grid>
                   ))}
+                  <Grid
+                    sx={{
+                      mt: 2,
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "bold",
+                      }}
+                    >
                   <Grid
                     sx={{
                       mt: 2,
@@ -476,6 +529,11 @@ export default function RecruitmentForm({ user = {} }) {
                           color: "text.secondary",
                           mb: 2,
                         }}
+                        sx={{
+                          textTransform: "uppercase",
+                          color: "text.secondary",
+                          mb: 2,
+                        }}
                       >
                         Why did you choose the team(s) you have chosen?
                       </Typography>
@@ -512,9 +570,15 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
               </Grid>
               <Grid container>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "text.secondary",
+                    mb: 2,
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -534,6 +598,11 @@ export default function RecruitmentForm({ user = {} }) {
                       <Typography
                         variant="subtitle2"
                         gutterBottom
+                        sx={{
+                          textTransform: "uppercase",
+                          color: "text.secondary",
+                          mb: 2,
+                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -588,6 +657,11 @@ export default function RecruitmentForm({ user = {} }) {
                           color: "text.secondary",
                           mb: 2,
                         }}
+                        sx={{
+                          textTransform: "uppercase",
+                          color: "text.secondary",
+                          mb: 2,
+                        }}
                       >
                         Why do you believe you are a good fit for the position
                         you are applying to?
@@ -637,6 +711,11 @@ export default function RecruitmentForm({ user = {} }) {
                           color: "text.secondary",
                           mb: 2,
                         }}
+                        sx={{
+                          textTransform: "uppercase",
+                          color: "text.secondary",
+                          mb: 2,
+                        }}
                       >
                         Have you been a part of any student-run bodies or clubs
                         in our campus? If yes, tell us about your experience.
@@ -680,6 +759,11 @@ export default function RecruitmentForm({ user = {} }) {
                       <Typography
                         variant="subtitle2"
                         gutterBottom
+                        sx={{
+                          textTransform: "uppercase",
+                          color: "text.secondary",
+                          mb: 2,
+                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -735,6 +819,11 @@ export default function RecruitmentForm({ user = {} }) {
                           color: "text.secondary",
                           mb: 2,
                         }}
+                        sx={{
+                          textTransform: "uppercase",
+                          color: "text.secondary",
+                          mb: 2,
+                        }}
                       >
                         Tell us more about your ideas and thoughts to improve
                         campus life (wrt. club activities) at IIIT Hyderabad.
@@ -785,6 +874,11 @@ export default function RecruitmentForm({ user = {} }) {
                             color: "text.secondary",
                             mb: 2,
                           }}
+                          sx={{
+                            textTransform: "uppercase",
+                            color: "text.secondary",
+                            mb: 2,
+                          }}
                         >
                           Share your design experience.
                         </Typography>
@@ -820,9 +914,15 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
               </Grid>
               <Grid container>
+              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "text.secondary",
+                    mb: 2,
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -851,6 +951,13 @@ export default function RecruitmentForm({ user = {} }) {
                     mb: 2,
                   }}
                 >
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  sx={{
+                    mb: 2,
+                  }}
+                >
                   <i>
                     You won&apos;t be able to edit your response after submission, so
                     have a look at it once more.
@@ -858,6 +965,13 @@ export default function RecruitmentForm({ user = {} }) {
                   The form responses will remain anonymous, and won&apos;t be shared
                   with anyone outside of Clubs Council.
                 </Typography>
+                <Typography
+                  variant="body2"
+                  gutterBottom
+                  sx={{
+                    mb: 2,
+                  }}
+                >
                 <Typography
                   variant="body2"
                   gutterBottom
@@ -906,6 +1020,8 @@ export default function RecruitmentForm({ user = {} }) {
               </Grid>
               <Grid size={6}>
                 <Button
+              <Grid size={6}>
+                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -919,6 +1035,7 @@ export default function RecruitmentForm({ user = {} }) {
                   }
                 >
                   Submit
+                </Button>
                 </Button>
               </Grid>
             </Grid>

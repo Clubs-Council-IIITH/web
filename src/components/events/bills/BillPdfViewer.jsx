@@ -117,8 +117,9 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
             variant="body1"
             sx={{
               mb: 5,
-              textAlign: "center"
-            }}>
+              textAlign: "center",
+            }}
+          >
             Your device does not support previewing this file. Please download
             it to view.
           </Typography>

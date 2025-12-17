@@ -87,8 +87,9 @@ export default function Home() {
           <Grid
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <Link href="/student-bodies" style={{ textDecoration: "none" }}>
               <Statistic
                 color="warning"
@@ -102,8 +103,9 @@ export default function Home() {
           <Grid
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <Link href="/clubs" style={{ textDecoration: "none" }}>
               <Statistic
                 color="info"

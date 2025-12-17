@@ -79,8 +79,9 @@ export default async function TechMemberCard({ uid, poc, roles }) {
           sx={{
             textTransform: "capitalize",
             fontWeight: "bold",
-            mb: 1
-          }}>
+            mb: 1,
+          }}
+        >
           {`${user.firstName} ${user.lastName}`.toLowerCase()}
         </Typography>
 
@@ -123,15 +124,17 @@ export default async function TechMemberCard({ uid, poc, roles }) {
             sx={{
               display: "flex",
               alignItems: "center",
-              mt: 1
-            }}>
+              mt: 1,
+            }}
+          >
             <Box sx={{ mr: 1.5 }}>
               <Link href={`/profile/${uid}`} passHref>
                 <Box
                   sx={{
                     p: 0.5,
-                    cursor: "pointer"
-                  }}>
+                    cursor: "pointer",
+                  }}
+                >
                   <Icon
                     variant="assignment-ind-outline"
                     color="primary.main"
@@ -153,8 +156,9 @@ export default async function TechMemberCard({ uid, poc, roles }) {
                 <Box
                   sx={{
                     p: 0.5,
-                    cursor: "pointer"
-                  }}>
+                    cursor: "pointer",
+                  }}
+                >
                   <Icon
                     variant="ri:github-fill"
                     external

@@ -78,9 +78,11 @@ export default async function EditFinance(props) {
           filename={eventBills?.filename}
         />
       ) : null}
-      <Box sx={{
-        mb: 5
-      }}>
+      <Box
+        sx={{
+          mb: 5,
+        }}
+      >
         <BillsStatusForm id={id} defaultValues={eventBills} />
       </Box>
       <EventBudget

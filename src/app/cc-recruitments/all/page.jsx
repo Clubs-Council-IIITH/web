@@ -20,10 +20,9 @@ export default async function AllRecruitmentsApplications(props) {
   );
   const userPromises =
     ccApplications?.map((applicant) =>
-      getClient()
-        .query(GET_USER_PROFILE, {
-          userInput: { uid: applicant.uid },
-        }),
+      getClient().query(GET_USER_PROFILE, {
+        userInput: { uid: applicant.uid },
+      }),
     ) || [];
 
   const users = await Promise.all(userPromises);

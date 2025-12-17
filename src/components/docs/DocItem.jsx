@@ -190,8 +190,9 @@ export default function DocItem({
             variant="body1"
             sx={{
               mb: 5,
-              textAlign: "center"
-            }}>
+              textAlign: "center",
+            }}
+          >
             Your device does not support previewing this file. Please{" "}
             <a href={fileUrl} download={buildFileName(file, version)}>
               download it

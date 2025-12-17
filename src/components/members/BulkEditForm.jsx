@@ -417,6 +417,7 @@ export default function BulkEdit({ mode = "add" }) {
           confirmText="Yes, discard my changes"
         />
         <Button
+        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -426,6 +427,7 @@ export default function BulkEdit({ mode = "add" }) {
           sx={{ width: "25%" }}
         >
           Save
+        </Button>
         </Button>
       </Stack>
       <ConfirmDialog
@@ -539,6 +541,11 @@ function MembersTable({
 
     const allValid = newRows.every((r) => r.isValid);
     setAllValid(allValid);
+    const newRows = rows.filter((r) => r.id !== row.id);
+    setRows(newRows);
+
+    const allValid = newRows.every((r) => r.isValid);
+    setAllValid(allValid);
   };
 
   useEffect(() => {
@@ -562,6 +569,8 @@ function MembersTable({
         row.role !== row.originalRole ||
         row.startYear !== row.originalStartYear ||
         row.endYear !== row.originalEndYear
+          ? "0" + row?.uid
+          : "1" + row?.uid,
           ? "0" + row?.uid
           : "1" + row?.uid,
     },
@@ -745,6 +754,8 @@ function MembersTable({
       display: "flex",
       disableColumnMenu: true,
       sortable: false,
+      disableColumnMenu: true,
+      sortable: false,
     },
     ...(addMode
       ? [
@@ -763,6 +774,9 @@ function MembersTable({
               </IconButton>
             ),
             display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
             disableColumnMenu: true,
             sortable: false,
             disableExport: true,

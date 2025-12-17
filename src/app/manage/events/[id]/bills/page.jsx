@@ -52,9 +52,13 @@ export default async function BillsUpload(props) {
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Upload Bill
       </Typography>
       <BillUpload

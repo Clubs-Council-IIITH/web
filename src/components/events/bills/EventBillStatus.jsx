@@ -3,6 +3,7 @@ import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
 import { billsStateLabel } from "utils/formatEvent";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import ButtonLink from "components/Link";
 import FinanceHeader from "components/events/bills/FinanceHeader";
 
 export default async function EventBillStatus(event, eventBills, userid) {
@@ -18,6 +19,13 @@ export default async function EventBillStatus(event, eventBills, userid) {
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+      <Typography
+        variant="subtitle2"
+        gutterBottom
+        sx={{
+          textTransform: "uppercase",
+        }}
+      >
       <Typography
         variant="subtitle2"
         gutterBottom
@@ -55,6 +63,12 @@ export default async function EventBillStatus(event, eventBills, userid) {
               -
             </Box>
           </Grid>
+          <Grid size="grow">
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
           <Grid size="grow">
             <Box
               sx={{
@@ -105,6 +119,12 @@ export default async function EventBillStatus(event, eventBills, userid) {
                         mt: 0,
                       }}
                     >
+                  <Grid size="grow">
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
                       {eventBills?.updatedTime == null
                         ? "Information not available"
                         : eventBills?.updatedTime}
@@ -144,6 +164,12 @@ export default async function EventBillStatus(event, eventBills, userid) {
                         mt: 0,
                       }}
                     >
+                  <Grid size="grow">
+                    <Box
+                      sx={{
+                        mt: 0,
+                      }}
+                    >
                       {eventBills?.sloComment == null
                         ? "-"
                         : eventBills?.sloComment}
@@ -159,6 +185,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   eventBills?.state === "not_submitted" ? (
                     <Button
                       component={ButtonLink}
+                      component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"
                       color="primary"
@@ -168,6 +195,7 @@ export default async function EventBillStatus(event, eventBills, userid) {
                     </Button>
                   ) : eventBills?.state === "rejected" ? (
                     <Button
+                      component={ButtonLink}
                       component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"

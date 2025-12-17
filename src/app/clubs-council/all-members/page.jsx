@@ -66,6 +66,7 @@ export default async function AllMembers() {
           })
           ?.map((year) => (
             <div key={year}>
+            <div key={year}>
               <Divider textAlign="left" sx={{ mb: 2 }}>
                 <Typography variant="h5" sx={{
                   textTransform: "uppercase"
@@ -74,6 +75,7 @@ export default async function AllMembers() {
                 </Typography>
               </Divider>
               <LocalUsersGrid users={targetMembers[year]} />
+            </div>
             </div>
           ))
       ) : (

@@ -139,8 +139,9 @@ export default async function CCApplicantDetails(props) {
           }}
           size={{
             xs: 12,
-            lg: 9
-          }}>
+            lg: 9,
+          }}
+        >
           <Stack direction="column" spacing={2}>
             <Typography
               variant="subtitle2"

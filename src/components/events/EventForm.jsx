@@ -264,7 +264,7 @@ export default function EventForm({
 
     data.collabclubs = collabEvent ? formData.collabclubs : [];
     data.collabclubs = data.collabclubs.filter(
-      (cid) => cid && cid !== data.clubid
+      (cid) => cid && cid !== data.clubid,
     );
 
     // set club ID for event based on user role
@@ -1622,6 +1622,7 @@ function EventLocationInput({
                 {...field}
                 label="Other Location"
                 variant="outlined"
+                value={field.value ?? ""}
                 fullWidth
                 error={invalid}
                 helperText={error?.message}
@@ -1718,6 +1719,7 @@ function EventLocationInput({
                   {...field}
                   label="Other Alternate Location"
                   variant="outlined"
+                  value={field.value ?? ""}
                   fullWidth
                   error={invalid}
                   helperText={error?.message}

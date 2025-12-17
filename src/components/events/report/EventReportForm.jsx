@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { useForm, useWatch, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 
 import {
   Box,
@@ -86,6 +87,7 @@ export default function EventReportForm({
     fetchClubs();
   }, []);
 
+  const { control, handleSubmit, watch } = useForm({
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       ...defaultValues,
@@ -224,10 +226,16 @@ export default function EventReportForm({
                   color: "text.secondary",
                   mb: 2,
                 }}
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2,
+                }}
               >
                 Details
               </Typography>
             </Grid>
+            <Grid size={12}>
             <Grid size={12}>
               <TextField
                 label="Name"
@@ -236,6 +244,12 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
             <Grid
               sx={{
                 mt: 2,
@@ -299,6 +313,12 @@ export default function EventReportForm({
               }}
               size={12}
             >
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <FormControl fullWidth disabled>
                 <InputLabel>Organized By</InputLabel>
                 <Select
@@ -331,6 +351,12 @@ export default function EventReportForm({
                 ></Select>
               </FormControl>
             </Grid>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
             <Grid
               sx={{
                 mt: 2,
@@ -370,6 +396,12 @@ export default function EventReportForm({
               }}
               size={12}
             >
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
               <Controller
                 name="mediaLink"
                 control={control}
@@ -395,6 +427,12 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
             <Grid
               sx={{
                 mt: 2,
@@ -433,10 +471,16 @@ export default function EventReportForm({
                   color: "text.secondary",
                   mb: 2,
                 }}
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2,
+                }}
               >
                 Attendance
               </Typography>
             </Grid>
+            <Grid size={12}>
             <Grid size={12}>
               <TextField
                 label="Expected Participation"
@@ -445,6 +489,13 @@ export default function EventReportForm({
                 fullWidth
               />
             </Grid>
+            <Grid
+              sx={{
+                mt: 2,
+                mb: 3,
+              }}
+              size={12}
+            >
             <Grid
               sx={{
                 mt: 2,
@@ -473,6 +524,7 @@ export default function EventReportForm({
             {defaultValues?.externalPopulation ? (
               <>
                 <Grid size={12}>
+                <Grid size={12}>
                   <TextField
                     label="Expected External Participation"
                     value={defaultValues?.population}
@@ -480,6 +532,12 @@ export default function EventReportForm({
                     fullWidth
                   />
                 </Grid>
+                <Grid
+                  sx={{
+                    mt: 2,
+                  }}
+                  size={12}
+                >
                 <Grid
                   sx={{
                     mt: 2,
@@ -509,6 +567,12 @@ export default function EventReportForm({
               </>
             ) : null}
 
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
             <Grid
               sx={{
                 mt: 2,
@@ -562,6 +626,12 @@ export default function EventReportForm({
                   }}
                   size={12}
                 >
+                <Grid
+                  sx={{
+                    mt: 2,
+                  }}
+                  size={12}
+                >
                   <Controller
                     name="prizesBreakdown"
                     control={control}
@@ -580,6 +650,12 @@ export default function EventReportForm({
                     )}
                   />
                 </Grid>
+                <Grid
+                  sx={{
+                    mt: 2,
+                  }}
+                  size={12}
+                >
                 <Grid
                   sx={{
                     mt: 2,
@@ -608,6 +684,12 @@ export default function EventReportForm({
                 </Grid>
               </>
             )}
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
             <Grid
               sx={{
                 mt: 2,
@@ -644,6 +726,16 @@ export default function EventReportForm({
               size={12}
             >
               <Grid size={6}>
+            <Grid
+              container
+              direction="row"
+              spacing={1}
+              sx={{
+                pt: 3,
+              }}
+              size={12}
+            >
+              <Grid size={6}>
                 <Button
                   size="large"
                   variant="outlined"
@@ -667,6 +759,8 @@ export default function EventReportForm({
               </Grid>
               <Grid size={6}>
                 <Button
+              <Grid size={6}>
+                <Button
                   loading={loading}
                   size="large"
                   variant="contained"
@@ -675,6 +769,7 @@ export default function EventReportForm({
                   onClick={() => handleSubmit((data) => onSubmit(data))()}
                 >
                   Save & Submit
+                </Button>
                 </Button>
               </Grid>
             </Grid>
@@ -693,6 +788,10 @@ function SubmittedBy({
   disabled = false,
 }) {
   const { triggerToast } = useToast();
+  const submittedBy = useWatch({
+    control,
+    name: "submittedBy",
+  });
   const submittedBy = useWatch({
     control,
     name: "submittedBy",
@@ -753,6 +852,14 @@ function SubmittedBy({
                   justifyContent: "center",
                 }}
               >
+              <Box
+                sx={{
+                  py: 25,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
@@ -769,6 +876,7 @@ function SubmittedBy({
               >
                 {members?.slice()?.map((member) => (
                   <MenuItem key={member._id} value={member.uid} component="div">
+                  <MenuItem key={member._id} value={member.uid} component="div">
                     <MemberListItem uid={member.uid} />
                   </MenuItem>
                 ))}
@@ -779,6 +887,11 @@ function SubmittedBy({
         )}
       />
       {disabled || members.length === 0 || !submittedBy || hasPhone ? null : (
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
         <Box
           sx={{
             mt: 2,

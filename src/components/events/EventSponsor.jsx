@@ -78,6 +78,7 @@ export default function EventSponsor({
           <Typography
             sx={{
               color: "text.secondary",
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -114,6 +115,7 @@ export default function EventSponsor({
         ) : (
           <Typography
             sx={{
+              color: "text.secondary",
               color: "text.secondary",
               px: "10px",
               py: "10px",
@@ -184,6 +186,9 @@ export default function EventSponsor({
             disableColumnMenu: true,
             sortable: false,
             disableExport: true,
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),
@@ -193,6 +198,7 @@ export default function EventSponsor({
     <>
       {editable ? (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
+          <Icon variant="add" sx={{ mr: 1 }} />
           <Icon variant="add" sx={{ mr: 1 }} />
           Add Item
         </Button>

@@ -8,6 +8,7 @@ import { extractFirstYear } from "components/members/MembersGrid";
 import SLCTechLogo from "components/SLCTechLogo";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import ButtonLink from "components/Link";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -78,6 +79,9 @@ export default async function TechTeam() {
         direction="column"
         spacing={2}
         sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -179,6 +183,7 @@ export default async function TechTeam() {
         <Button
           variant="none"
           color="secondary"
+          component={ButtonLink}
           component={ButtonLink}
           href="/tech-team/all-members"
         >

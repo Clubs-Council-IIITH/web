@@ -23,6 +23,8 @@ function transformMember(member) {
 
 export default async function EditMember(props) {
   const params = await props.params;
+export default async function EditMember(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
