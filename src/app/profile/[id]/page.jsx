@@ -4,7 +4,6 @@ import { Container, Grid, Stack, Typography } from "@mui/material";
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { getUserProfile, getCurrentUser } from "utils/fetchData";
-import { getUserProfile, getCurrentUser } from "utils/fetchData";
 
 import ActionPalette from "components/ActionPalette";
 import UserImage from "components/users/UserImage";
@@ -12,8 +11,6 @@ import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
 import UserMemberships from "components/profile/UserMemberships";
 
-export async function generateMetadata(props) {
-  const params = await props.params;
 export async function generateMetadata(props) {
   const params = await props.params;
   const { id } = params;
@@ -26,12 +23,9 @@ export async function generateMetadata(props) {
 
 export default async function Profile(props) {
   const params = await props.params;
-export default async function Profile(props) {
-  const params = await props.params;
   const { id } = params;
 
   // get currently logged in user
-  const currentUser = await getCurrentUser();
   const currentUser = await getCurrentUser();
 
   // get target user
@@ -96,20 +90,9 @@ export default async function Profile(props) {
         }}
       >
         <Grid size={12}>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          mt: 4,
-        }}
-      >
-        <Grid size={12}>
           <Stack
             direction={{ xs: "column", lg: "row" }}
             spacing={4}
-            sx={{
-              alignItems: "center",
-            }}
             sx={{
               alignItems: "center",
             }}
@@ -173,12 +156,6 @@ export default async function Profile(props) {
                 lg: 9
               }}>
               <Stack direction="column" spacing={2}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
                 <Typography
                   variant="subtitle2"
                   sx={{

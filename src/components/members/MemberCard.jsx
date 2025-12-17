@@ -1,5 +1,4 @@
 import ButtonLink from "components/Link";
-import ButtonLink from "components/Link";
 
 import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -50,7 +49,6 @@ export default async function MemberCard({ uid, poc, roles }) {
     >
       <CardActionArea
         component={clickable ? ButtonLink : "div"}
-        component={clickable ? ButtonLink : "div"}
         href={`/profile/${uid}`}
         disabled={userProfile === null}
         sx={{
@@ -75,8 +73,9 @@ export default async function MemberCard({ uid, poc, roles }) {
           sx={{
             textAlign: "center",
             textTransform: "capitalize",
-            mt: 3
-          }}>
+            mt: 3,
+          }}
+        >
           {`${user.firstName} ${user.lastName}`.toLowerCase()}
         </Typography>
 
@@ -85,19 +84,14 @@ export default async function MemberCard({ uid, poc, roles }) {
             sx={{
               display: "flex",
               alignItems: "center",
-              mt: 1
-            }}>
+              mt: 1,
+            }}
+          >
             <Icon
               variant="contact-emergency-rounded"
               color="error.main"
               mr={1}
             />
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontWeight: 400,
-              }}
-            >
             <Typography
               variant="subtitle2"
               sx={{
@@ -129,13 +123,6 @@ export default async function MemberCard({ uid, poc, roles }) {
                 textAlign: "center",
               }}
             >
-            <Box
-              key={key}
-              sx={{
-                mt: 0.5,
-                textAlign: "center",
-              }}
-            >
               <Typography
                 variant="body2"
                 sx={{ display: "inline-block", color: "text.secondary" }}
@@ -145,8 +132,6 @@ export default async function MemberCard({ uid, poc, roles }) {
               <Typography
                 variant="body2"
                 sx={{
-                  color: "grey.400",
-                  ml: 0.5,
                   color: "grey.400",
                   ml: 0.5,
                   display: "inline-block",

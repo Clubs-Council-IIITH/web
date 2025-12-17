@@ -53,7 +53,6 @@ export default async function ManageMembers(props) {
           }}>
           <Button
             component={ButtonLink}
-            component={ButtonLink}
             href="/manage/members/bulk-add"
             variant="contained"
             startIcon={<Icon variant="playlist-add" />}
@@ -61,7 +60,6 @@ export default async function ManageMembers(props) {
             Bulk Add
           </Button>
           <Button
-            component={ButtonLink}
             component={ButtonLink}
             href="/manage/members/bulk-edit"
             variant="contained"
@@ -71,7 +69,6 @@ export default async function ManageMembers(props) {
             Bulk Edit
           </Button>
           <Button
-            component={ButtonLink}
             component={ButtonLink}
             href="/manage/members/new"
             variant="contained"

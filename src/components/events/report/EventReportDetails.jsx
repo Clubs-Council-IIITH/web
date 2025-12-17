@@ -12,7 +12,6 @@ import {
 import React from "react";
 import dynamic from "next/dynamic";
 import ButtonLink from "components/Link";
-import ButtonLink from "components/Link";
 import Icon from "components/Icon";
 import { locationLabel, audienceLabels } from "utils/formatEvent";
 import { DownloadEventReport } from "components/events/report/EventpdfDownloads";
@@ -39,11 +38,6 @@ export function EventReportDetails({
         p: 2,
       }}
     >
-    <Box
-      sx={{
-        p: 2,
-      }}
-    >
       <Grid
         container
         sx={{
@@ -56,7 +50,6 @@ export function EventReportDetails({
         <Button
           color="primary"
           component={ButtonLink}
-          component={ButtonLink}
           href={`/manage/events/${event?._id}`}
           startIcon={<Icon variant="arrow-back" />}
         >
@@ -65,10 +58,8 @@ export function EventReportDetails({
           </Typography>
         </Button>
         <Grid sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
-        <Grid sx={{ display: "flex", gap: 2, alignSelf: "right" }}>
           {showEditReportButton && (
             <Button
-              component={ButtonLink}
               component={ButtonLink}
               href={`/manage/events/${event?._id}/report/edit`}
               variant="contained"
@@ -102,14 +93,6 @@ export function EventReportDetails({
             ml: 2,
           }}
         >
-        <Typography
-          variant="h3"
-          sx={{
-            mt: 1,
-            mb: 2,
-            ml: 2,
-          }}
-        >
           Event Report
         </Typography>
       </Grid>
@@ -118,25 +101,18 @@ export function EventReportDetails({
           size={{
             xs: 12,
             md: 4,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               textTransform: "uppercase",
             }}
-            sx={{
-              textTransform: "uppercase",
-            }}
           >
             Details
           </Typography>
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
           <Box
             sx={{
               mt: 2,
@@ -150,11 +126,6 @@ export function EventReportDetails({
               mt: 2,
             }}
           >
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
             <Typography variant="overline">Organized By</Typography>
             <Typography variant="body2">
               <span>
@@ -163,16 +134,11 @@ export function EventReportDetails({
               <br />
               {event?.collabclubs
                 ?.map(
-                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name,
                 )
                 .join(", ")}
             </Typography>
           </Box>
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
           <Box
             sx={{
               mt: 2,
@@ -189,11 +155,6 @@ export function EventReportDetails({
               mt: 2,
             }}
           >
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
             <Typography variant="overline">Report Submitted on</Typography>
             <Typography variant="body2">
               <DateTime dt={eventReport?.submittedTime} />
@@ -205,25 +166,18 @@ export function EventReportDetails({
           size={{
             xs: 12,
             md: 4,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               textTransform: "uppercase",
             }}
-            sx={{
-              textTransform: "uppercase",
-            }}
           >
             Attendance
           </Typography>
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
           <Box
             sx={{
               mt: 2,
@@ -243,23 +197,9 @@ export function EventReportDetails({
               mt: 2,
             }}
           >
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
             <Typography variant="overline">Mode</Typography>
             <Typography variant="body2">{event?.mode || "None"}</Typography>
           </Box>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              mt: 0.1,
-              mb: 4,
-            }}
-          >
-            <Grid size={4}>
           <Grid
             container
             spacing={2}
@@ -277,7 +217,6 @@ export function EventReportDetails({
               </Box>
             </Grid>
             <Grid size={4}>
-            <Grid size={4}>
               <Box>
                 <Typography variant="overline">Attended</Typography>
                 <Typography variant="body2">
@@ -294,14 +233,10 @@ export function EventReportDetails({
                 sx={{
                   textTransform: "uppercase",
                 }}
-                sx={{
-                  textTransform: "uppercase",
-                }}
               >
                 EXTERNAL ATTENDANCE
               </Typography>
               <Grid container spacing={2}>
-                <Grid size={4}>
                 <Grid size={4}>
                   <Box>
                     <Typography variant="overline">Estimated</Typography>
@@ -310,7 +245,6 @@ export function EventReportDetails({
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid size={4}>
                 <Grid size={4}>
                   <Box>
                     <Typography variant="overline">Attended</Typography>
@@ -328,14 +262,12 @@ export function EventReportDetails({
           size={{
             xs: 12,
             md: 4,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
-            sx={{
-              textTransform: "uppercase",
-            }}
             sx={{
               textTransform: "uppercase",
             }}
@@ -349,11 +281,6 @@ export function EventReportDetails({
                   mt: 2,
                 }}
               >
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
                 {eventReport?.prizes.map((prize, key) => (
                   <Chip
                     key={key}
@@ -362,11 +289,6 @@ export function EventReportDetails({
                   />
                 ))}
               </Box>
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
               <Box
                 sx={{
                   mt: 2,
@@ -393,11 +315,6 @@ export function EventReportDetails({
               mt: 2,
             }}
           >
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
             <Typography variant="overline">Winners</Typography>
             <Typography variant="body2">
               {eventReport?.winners
@@ -410,11 +327,6 @@ export function EventReportDetails({
                 : "None"}
             </Typography>
           </Box>
-          <Box
-            sx={{
-              mt: 2,
-            }}
-          >
           <Box
             sx={{
               mt: 2,
@@ -451,26 +363,8 @@ export function EventReportDetails({
             textTransform: "uppercase",
           }}
         >
-      <Grid
-        sx={{
-          mt: 3,
-        }}
-        size={12}
-      >
-        <Typography
-          variant="subtitle2"
-          gutterBottom
-          sx={{
-            textTransform: "uppercase",
-          }}
-        >
           Summary of the event held
         </Typography>
-        <Box
-          sx={{
-            mt: 2,
-          }}
-        >
         <Box
           sx={{
             mt: 2,
@@ -495,14 +389,12 @@ export function EventReportDetails({
             xs: 12,
             md: 12,
             lg: 6,
-            sm: 12
-          }}>
+            sm: 12,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
-            sx={{
-              textTransform: "uppercase",
-            }}
             sx={{
               textTransform: "uppercase",
             }}
@@ -522,21 +414,10 @@ export function EventReportDetails({
             >
               None requested
             </Box>
-            <Box
-              sx={{
-                mt: 2,
-              }}
-            >
-              None requested
-            </Box>
           )}
           <Typography
             variant="subtitle2"
             gutterBottom
-            sx={{
-              textTransform: "uppercase",
-              mt: 2,
-            }}
             sx={{
               textTransform: "uppercase",
               mt: 2,
@@ -560,13 +441,6 @@ export function EventReportDetails({
             >
               None requested
             </Box>
-            <Box
-              sx={{
-                mt: 2,
-              }}
-            >
-              None requested
-            </Box>
           )}
         </Grid>
 
@@ -575,14 +449,12 @@ export function EventReportDetails({
             xs: 12,
             lg: 2,
             md: 6,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
-            sx={{
-              textTransform: "uppercase",
-            }}
             sx={{
               textTransform: "uppercase",
             }}
@@ -591,11 +463,6 @@ export function EventReportDetails({
           </Typography>
           {event?.location?.length ? (
             <>
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
               <Box
                 sx={{
                   mt: 2,
@@ -618,11 +485,6 @@ export function EventReportDetails({
                   mt: 2,
                 }}
               >
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
                 <Typography variant="overline">Equipment</Typography>
                 <Typography variant="body2">
                   {event?.equipment
@@ -635,11 +497,6 @@ export function EventReportDetails({
                     : "None"}
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
               <Box
                 sx={{
                   mt: 2,
@@ -668,13 +525,6 @@ export function EventReportDetails({
             >
               None requested
             </Box>
-            <Box
-              sx={{
-                mt: 2,
-              }}
-            >
-              None requested
-            </Box>
           )}
         </Grid>
         <Grid
@@ -682,14 +532,12 @@ export function EventReportDetails({
             xs: 12,
             lg: 4,
             md: 6,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
-            sx={{
-              textTransform: "uppercase",
-            }}
             sx={{
               textTransform: "uppercase",
             }}
@@ -698,18 +546,11 @@ export function EventReportDetails({
           </Typography>
           <CardActionArea
             component={ButtonLink}
-            component={ButtonLink}
             href={`/profile/${eventReport?.submittedBy}`}
             sx={{ textDecoration: "none", maxWidth: "max-content" }}
           >
             <MemberListItem uid={eventReport?.submittedBy} />
           </CardActionArea>
-          <Typography
-            variant="body2"
-            sx={{
-              color: "text.secondary",
-            }}
-          >
           <Typography
             variant="body2"
             sx={{
@@ -724,20 +565,8 @@ export function EventReportDetails({
               color: "text.secondary",
             }}
           >
-          <Typography
-            variant="body2"
-            sx={{
-              color: "text.secondary",
-            }}
-          >
             Phone Number: {submittedUser?.data?.phone || "None"}
           </Typography>
-          <Grid
-            sx={{
-              mt: 2,
-            }}
-            size={12}
-          >
           <Grid
             sx={{
               mt: 2,
@@ -750,18 +579,9 @@ export function EventReportDetails({
               sx={{
                 textTransform: "uppercase",
               }}
-              sx={{
-                textTransform: "uppercase",
-              }}
             >
               Feedback
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                color: "text.secondary",
-              }}
-            >
             <Typography
               variant="body2"
               sx={{

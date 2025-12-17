@@ -1,6 +1,5 @@
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import ButtonLink from "components/Link";
 
 import { Box, Button, Typography, Stack, Divider } from "@mui/material";
 
@@ -31,7 +30,6 @@ export default async function EventReportStatus(event, user) {
           {event?.clubid === user?.uid ? (
             <Button
               component={ButtonLink}
-              component={ButtonLink}
               href={`/manage/events/${event._id}/report/new`}
               variant="contained"
               color="primary"
@@ -50,7 +48,6 @@ export default async function EventReportStatus(event, user) {
         }}>
           <Stack spacing={2} direction="row" sx={{ mt: 2 }}>
             <Button
-              component={ButtonLink}
               component={ButtonLink}
               href={`/manage/events/${event._id}/report`}
               variant="contained"

@@ -47,8 +47,6 @@ import MemberListItem from "components/members/MemberListItem";
 
 export async function generateMetadata(props) {
   const params = await props.params;
-export async function generateMetadata(props) {
-  const params = await props.params;
   const { id } = params;
 
   const event = await getFullEvent(id);
@@ -58,8 +56,6 @@ export async function generateMetadata(props) {
   };
 }
 
-export default async function ManageEventID(props) {
-  const params = await props.params;
 export default async function ManageEventID(props) {
   const params = await props.params;
   const { id } = params;

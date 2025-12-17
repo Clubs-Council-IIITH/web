@@ -45,7 +45,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
     <form onSubmit={handleSubmit(submitHandler)}>
       <Grid container spacing={2}>
         <Grid size={12}>
-        <Grid size={12}>
           <Controller
             name="sloComment"
             control={control}
@@ -67,7 +66,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
                 autoComplete="off"
                 error={invalid}
                 helperText={error?.message}
-                value={value || ""}
                 value={value || ""}
                 variant="outlined"
                 rows={4}
@@ -101,9 +99,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
             >
               Reject
             </Button>
-            </Button>
           </Grid>
-          <Grid size={4}>
           <Grid size={4}>
             <Button
               size="large"
@@ -127,8 +123,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
           </Grid>
           <Grid size={4}>
             <Button
-          <Grid size={4}>
-            <Button
               size="large"
               variant="contained"
               color="success"
@@ -140,7 +134,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               }}
             >
               Accept
-            </Button>
             </Button>
           </Grid>
         </Grid>

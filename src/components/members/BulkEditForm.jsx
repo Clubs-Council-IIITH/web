@@ -175,8 +175,8 @@ export default function BulkEdit({ mode = "add" }) {
         failureCount++;
         failureMessages.push(
           `- Failed to ${actionName} ${member.uid}: ${res.error.messages.join(
-            ", "
-          )}`
+            ", ",
+          )}`,
         );
       }
     }
@@ -185,12 +185,12 @@ export default function BulkEdit({ mode = "add" }) {
     let toastMessages = [];
     if (successCount > 0) {
       toastMessages.push(
-        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`
+        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`,
       );
     }
     if (failureCount > 0) {
       toastMessages.push(
-        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`
+        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`,
       );
       toastMessages = toastMessages.concat(failureMessages);
     }
@@ -264,8 +264,8 @@ export default function BulkEdit({ mode = "add" }) {
                 endYear: addNew
                   ? parseInt(member.startYear)
                   : member.endYear === "-"
-                  ? null
-                  : parseInt(member.endYear),
+                    ? null
+                    : parseInt(member.endYear),
               };
             }
             return role;
@@ -417,7 +417,6 @@ export default function BulkEdit({ mode = "add" }) {
           confirmText="Yes, discard my changes"
         />
         <Button
-        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -427,7 +426,6 @@ export default function BulkEdit({ mode = "add" }) {
           sx={{ width: "25%" }}
         >
           Save
-        </Button>
         </Button>
       </Stack>
       <ConfirmDialog
@@ -541,11 +539,6 @@ function MembersTable({
 
     const allValid = newRows.every((r) => r.isValid);
     setAllValid(allValid);
-    const newRows = rows.filter((r) => r.id !== row.id);
-    setRows(newRows);
-
-    const allValid = newRows.every((r) => r.isValid);
-    setAllValid(allValid);
   };
 
   useEffect(() => {
@@ -569,8 +562,6 @@ function MembersTable({
         row.role !== row.originalRole ||
         row.startYear !== row.originalStartYear ||
         row.endYear !== row.originalEndYear
-          ? "0" + row?.uid
-          : "1" + row?.uid,
           ? "0" + row?.uid
           : "1" + row?.uid,
     },
@@ -754,8 +745,6 @@ function MembersTable({
       display: "flex",
       disableColumnMenu: true,
       sortable: false,
-      disableColumnMenu: true,
-      sortable: false,
     },
     ...(addMode
       ? [
@@ -774,9 +763,6 @@ function MembersTable({
               </IconButton>
             ),
             display: "flex",
-            disableColumnMenu: true,
-            sortable: false,
-            disableExport: true,
             disableColumnMenu: true,
             sortable: false,
             disableExport: true,
@@ -817,11 +803,7 @@ function MembersTable({
             paginationModel: { pageSize: 10 },
           },
           sorting: {
-            sortModel: addMode
-              ? []
-              : [
-                  { field: "isEdited", sort: "asc" },
-                ],
+            sortModel: addMode ? [] : [{ field: "isEdited", sort: "asc" }],
           },
           columns: {
             columnVisibilityModel: {

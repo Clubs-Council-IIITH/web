@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import {GET_USER} from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_EVENT, GET_FULL_EVENT } from "gql/queries/events";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -49,7 +48,6 @@ export const getFullEvent = cache(async (id) => {
 });
 
 export const getUserProfile = cache(async (id) => {
-  const userInput = { uid: id };
   const userInput = { uid: id };
 
   try {

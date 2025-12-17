@@ -1,33 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { useToast } from "components/Toast";
+
 import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
+import { Controller,useForm } from "react-hook-form";
 
 import {
+  Box,
   Button,
+  Chip,
+  FormControl,
+  FormHelperText,
   Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
   TextField,
   Typography,
-  FormHelperText,
-  OutlinedInput,
-  FormControl,
-  Chip,
-  Box,
-  InputLabel,
-  Stack,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import UserImage from "components/users/UserImage";
 import ConfirmDialog from "components/ConfirmDialog";
+import { useToast } from "components/Toast";
+import UserImage from "components/users/UserImage";
 
 import { ccRecruitmentsApply } from "actions/cc-recruitments/apply/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
@@ -85,9 +86,6 @@ function MemberUserInput({ user = {} }) {
       sx={{
         alignItems: "center",
       }}
-      sx={{
-        alignItems: "center",
-      }}
     >
       <UserImage
         image={user.img}
@@ -106,10 +104,6 @@ function MemberUserInput({ user = {} }) {
             color: "text.secondary",
             fontFamily: "monospace",
           }}
-          sx={{
-            color: "text.secondary",
-            fontFamily: "monospace",
-          }}
         >
           {user.email}
         </Typography>
@@ -123,7 +117,6 @@ function MemberUserInput({ user = {} }) {
 export default function RecruitmentForm({ user = {} }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const defaultValues = {};
@@ -168,7 +161,7 @@ export default function RecruitmentForm({ user = {} }) {
 
     // Map the team names to their respective IDs at position 1
     data.teams = data.teams.map(
-      (team) => availableTeams.find((t) => t[0] === team)[1]
+      (team) => availableTeams.find((t) => t[0] === team)[1],
     );
 
     let res = await ccRecruitmentsApply(data);
@@ -200,27 +193,11 @@ export default function RecruitmentForm({ user = {} }) {
             mt: 6,
           }}
         >
-        <Typography
-          variant="h5"
-          gutterBottom
-          align="center"
-          sx={{
-            mt: 6,
-          }}
-        >
           Thank you for your interest in applying for a Clubs Council Position.
           Your application has been successfully submitted. You will be notified
           about the next stages of the process shortly.
         </Typography>
       ) : !allowedBatches.includes(user.batch) ? (
-        <Typography
-          variant="h5"
-          gutterBottom
-          align="center"
-          sx={{
-            mt: 6,
-          }}
-        >
         <Typography
           variant="h5"
           gutterBottom
@@ -242,17 +219,13 @@ export default function RecruitmentForm({ user = {} }) {
               size={{
                 xs: 12,
                 md: 12,
-                xl: 12
-              }}>
+                xl: 12,
+              }}
+            >
               <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "text.secondary",
-                    mb: 2,
-                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -266,16 +239,18 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <MemberUserInput user={user} />
                   </Grid>
                   <Grid
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <TextField
                       label="Roll No"
                       variant="outlined"
@@ -289,8 +264,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <TextField
                       label="Batch"
                       variant="outlined"
@@ -304,8 +280,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <TextField
                       label="Stream"
                       variant="outlined"
@@ -319,8 +296,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {user?.phone ? (
                       <TextField
                         label="Phone number"
@@ -343,7 +321,7 @@ export default function RecruitmentForm({ user = {} }) {
                                   value,
                                   {
                                     defaultCountry: "IN",
-                                  }
+                                  },
                                 );
                                 return (
                                   isValidPhoneNumber(value, "IN") ||
@@ -372,15 +350,9 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
               </Grid>
               <Grid container>
-              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "text.secondary",
-                    mb: 2,
-                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -391,13 +363,6 @@ export default function RecruitmentForm({ user = {} }) {
                 </Typography>
                 <Grid container spacing={2} direction="column">
                   {roles.map((role, index) => (
-                    <Grid key={index}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: "bold",
-                        }}
-                      >
                     <Grid key={index}>
                       <Typography
                         variant="h6"
@@ -429,17 +394,6 @@ export default function RecruitmentForm({ user = {} }) {
                         fontWeight: "bold",
                       }}
                     >
-                  <Grid
-                    sx={{
-                      mt: 2,
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: "bold",
-                      }}
-                    >
                       Note:
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
@@ -452,7 +406,6 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
                 <Grid
                   container
-                  
                   spacing={4}
                   sx={{
                     pt: 3,
@@ -462,8 +415,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <Controller
                       name="teams"
                       control={control}
@@ -518,17 +472,13 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
                         gutterBottom
-                        sx={{
-                          textTransform: "uppercase",
-                          color: "text.secondary",
-                          mb: 2,
-                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -570,15 +520,9 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
               </Grid>
               <Grid container>
-              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "text.secondary",
-                    mb: 2,
-                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -592,17 +536,13 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
                         gutterBottom
-                        sx={{
-                          textTransform: "uppercase",
-                          color: "text.secondary",
-                          mb: 2,
-                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -646,17 +586,13 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
                         gutterBottom
-                        sx={{
-                          textTransform: "uppercase",
-                          color: "text.secondary",
-                          mb: 2,
-                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -700,17 +636,13 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
                         gutterBottom
-                        sx={{
-                          textTransform: "uppercase",
-                          color: "text.secondary",
-                          mb: 2,
-                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -753,17 +685,13 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
                         gutterBottom
-                        sx={{
-                          textTransform: "uppercase",
-                          color: "text.secondary",
-                          mb: 2,
-                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -808,17 +736,13 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
                         gutterBottom
-                        sx={{
-                          textTransform: "uppercase",
-                          color: "text.secondary",
-                          mb: 2,
-                        }}
                         sx={{
                           textTransform: "uppercase",
                           color: "text.secondary",
@@ -863,17 +787,13 @@ export default function RecruitmentForm({ user = {} }) {
                       size={{
                         xs: 12,
                         md: 12,
-                        xl: 12
-                      }}>
+                        xl: 12,
+                      }}
+                    >
                       {isDesktop ? null : (
                         <Typography
                           variant="subtitle2"
                           gutterBottom
-                          sx={{
-                            textTransform: "uppercase",
-                            color: "text.secondary",
-                            mb: 2,
-                          }}
                           sx={{
                             textTransform: "uppercase",
                             color: "text.secondary",
@@ -914,15 +834,9 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
               </Grid>
               <Grid container>
-              <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
                   gutterBottom
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "text.secondary",
-                    mb: 2,
-                  }}
                   sx={{
                     textTransform: "uppercase",
                     color: "text.secondary",
@@ -951,13 +865,6 @@ export default function RecruitmentForm({ user = {} }) {
                     mb: 2,
                   }}
                 >
-                <Typography
-                  variant="body2"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                  }}
-                >
                   <i>
                     You won&apos;t be able to edit your response after submission, so
                     have a look at it once more.
@@ -965,13 +872,6 @@ export default function RecruitmentForm({ user = {} }) {
                   The form responses will remain anonymous, and won&apos;t be shared
                   with anyone outside of Clubs Council.
                 </Typography>
-                <Typography
-                  variant="body2"
-                  gutterBottom
-                  sx={{
-                    mb: 2,
-                  }}
-                >
                 <Typography
                   variant="body2"
                   gutterBottom
@@ -988,7 +888,6 @@ export default function RecruitmentForm({ user = {} }) {
             </Grid>
             <Grid
               container
-              
               direction="row"
               spacing={1}
               sx={{
@@ -1020,8 +919,6 @@ export default function RecruitmentForm({ user = {} }) {
               </Grid>
               <Grid size={6}>
                 <Button
-              <Grid size={6}>
-                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -1030,12 +927,11 @@ export default function RecruitmentForm({ user = {} }) {
                   fullWidth
                   onClick={() =>
                     handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true })
+                      onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
                 >
                   Submit
-                </Button>
                 </Button>
               </Grid>
             </Grid>

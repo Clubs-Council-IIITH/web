@@ -3,7 +3,6 @@ import { Box, Grid, Typography, Divider, Button, Stack } from "@mui/material";
 import { billsStateLabel } from "utils/formatEvent";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import ButtonLink from "components/Link";
 import FinanceHeader from "components/events/bills/FinanceHeader";
 
 export default async function EventBillStatus(event, eventBills, userid) {
@@ -26,13 +25,6 @@ export default async function EventBillStatus(event, eventBills, userid) {
           textTransform: "uppercase",
         }}
       >
-      <Typography
-        variant="subtitle2"
-        gutterBottom
-        sx={{
-          textTransform: "uppercase",
-        }}
-      >
         Financial Information
       </Typography>
       <Grid container spacing={2}>
@@ -40,8 +32,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
           <Grid
             size={{
               xs: 5,
-              lg: 3
-            }}>
+              lg: 3,
+            }}
+          >
             <Box
               sx={{
                 mt: 2,
@@ -53,8 +46,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
           <Grid
             size={{
               xs: 1,
-              lg: 0.1
-            }}>
+              lg: 0.1,
+            }}
+          >
             <Box
               sx={{
                 mt: 2,
@@ -63,12 +57,6 @@ export default async function EventBillStatus(event, eventBills, userid) {
               -
             </Box>
           </Grid>
-          <Grid size="grow">
-            <Box
-              sx={{
-                mt: 2,
-              }}
-            >
           <Grid size="grow">
             <Box
               sx={{
@@ -90,8 +78,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 5,
-                      lg: 3
-                    }}>
+                      lg: 3,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -103,8 +92,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 1,
-                      lg: 0.1
-                    }}>
+                      lg: 0.1,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -113,12 +103,6 @@ export default async function EventBillStatus(event, eventBills, userid) {
                       -
                     </Box>
                   </Grid>
-                  <Grid size="grow">
-                    <Box
-                      sx={{
-                        mt: 0,
-                      }}
-                    >
                   <Grid size="grow">
                     <Box
                       sx={{
@@ -135,8 +119,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 5,
-                      lg: 3
-                    }}>
+                      lg: 3,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -148,8 +133,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 1,
-                      lg: 0.1
-                    }}>
+                      lg: 0.1,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -158,12 +144,6 @@ export default async function EventBillStatus(event, eventBills, userid) {
                       -
                     </Box>
                   </Grid>
-                  <Grid size="grow">
-                    <Box
-                      sx={{
-                        mt: 0,
-                      }}
-                    >
                   <Grid size="grow">
                     <Box
                       sx={{
@@ -185,7 +165,6 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   eventBills?.state === "not_submitted" ? (
                     <Button
                       component={ButtonLink}
-                      component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"
                       color="primary"
@@ -195,7 +174,6 @@ export default async function EventBillStatus(event, eventBills, userid) {
                     </Button>
                   ) : eventBills?.state === "rejected" ? (
                     <Button
-                      component={ButtonLink}
                       component={ButtonLink}
                       href={`/manage/events/${event._id}/bills`}
                       variant="contained"

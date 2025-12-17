@@ -13,8 +13,6 @@ export const metadata = {
 
 export default async function EditHoliday(props) {
   const params = await props.params;
-export default async function EditHoliday(props) {
-  const params = await props.params;
   const { id } = params;
 
   let holiday;

@@ -20,7 +20,6 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import ButtonLink from "components/Link";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -56,8 +55,6 @@ export const metadata = {
   title: "Changelog | Life @ IIIT-H",
 };
 
-export default async function Changelog(props) {
-  const searchParams = await props.searchParams;
 export default async function Changelog(props) {
   const searchParams = await props.searchParams;
   const show_all = searchParams?.all === "true" ? true : false;
@@ -135,7 +132,6 @@ export default async function Changelog(props) {
           variant="none"
           color="secondary"
           component={ButtonLink}
-          component={ButtonLink}
           href="/tech-team/members"
         >
           <Typography variant="button" sx={{
@@ -168,7 +164,6 @@ export default async function Changelog(props) {
                   variant="none"
                   color="secondary"
                   component={ButtonLink}
-                  component={ButtonLink}
                   href="/changelog"
                 >
                   <Icon variant="chevron-left" />
@@ -182,7 +177,6 @@ export default async function Changelog(props) {
                 <Button
                   variant="none"
                   color="secondary"
-                  component={ButtonLink}
                   component={ButtonLink}
                   href="/changelog?all=true"
                 >

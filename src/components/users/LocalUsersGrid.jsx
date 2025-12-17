@@ -13,13 +13,6 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
         mb: 3,
       }}
     >
-    <Grid
-      container
-      spacing={techMembers ? 4 : 2}
-      sx={{
-        mb: 3,
-      }}
-    >
       {users?.map((member) => (
         <React.Fragment key={member.uid}>
           {techMembers ? (

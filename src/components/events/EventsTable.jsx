@@ -1,26 +1,27 @@
 "use client";
 
-import { useEffect,useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import {
+  Typography,
+  TextField,
   Box,
-  FormControlLabel,
+  Tooltip,
   Grid,
   Switch,
-  TextField,
-  Tooltip,
-  Typography,
+  FormControlLabel,
 } from "@mui/material";
+import ConfirmDialog from "components/ConfirmDialog";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import ConfirmDialog from "components/ConfirmDialog";
-import Icon from "components/Icon";
-import Tag from "components/Tag";
-import { stateLabel } from "utils/formatEvent";
 import { ISOtoHuman } from "utils/formatTime";
+import { stateLabel } from "utils/formatEvent";
+
+import Tag from "components/Tag";
+import Icon from "components/Icon";
 
 function FilterTextInputValue(props) {
   const { item, applyValue } = props;
@@ -93,12 +94,6 @@ export default function EventsTable({
             headerName: "Event Code",
             flex: 3,
             renderCell: ({ value }) => (
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "text.disabled",
-                }}
-              >
               <Typography
                 variant="body2"
                 sx={{
@@ -225,7 +220,6 @@ export default function EventsTable({
       align: "center",
       headerAlign: "center",
       disableExport: true,
-      disableExport: true,
       valueGetter: (value, row, column, apiRef) => ({
         requested: row.location.length > 0,
         approved: row.status.room,
@@ -236,8 +230,8 @@ export default function EventsTable({
             !value.requested
               ? "No venue requested"
               : !value.approved
-              ? "Venue requested, pending approval"
-              : "Venue approved"
+                ? "Venue requested, pending approval"
+                : "Venue approved"
           }
           arrow
         >
@@ -246,15 +240,15 @@ export default function EventsTable({
               color: !value.requested
                 ? "secondary.main"
                 : !value.approved
-                ? "warning.main"
-                : "success.main",
+                  ? "warning.main"
+                  : "success.main",
             }}
             variant={
               !value.requested
                 ? "remove-rounded"
                 : !value.approved
-                ? "refresh-rounded"
-                : "check"
+                  ? "refresh-rounded"
+                  : "check"
             }
           />
         </Tooltip>
@@ -271,7 +265,6 @@ export default function EventsTable({
       flex: isMobile ? null : 3,
       align: "center",
       headerAlign: "center",
-      disableExport: true,
       disableExport: true,
       valueGetter: (value, row, column, apiRef) => ({
         state: row.status.state,
@@ -373,11 +366,6 @@ export default function EventsTable({
               textTransform: "uppercase",
               mb: 0,
             }}
-            sx={{
-              color: "text.secondary",
-              textTransform: "uppercase",
-              mb: 0,
-            }}
           >
             {query ? "All Events" : "Pending Events"}
           </Typography>
@@ -395,7 +383,7 @@ export default function EventsTable({
                       setDialog(true);
                     } else {
                       setFilterMonth(
-                        e.target.checked ? ["pastEventsLimit"] : []
+                        e.target.checked ? ["pastEventsLimit"] : [],
                       );
                     }
                   }}
@@ -420,44 +408,6 @@ export default function EventsTable({
           />
         </Box>
       }
-
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <DataGrid
-          getRowHeight={() => (isMobile ? "auto" : null)}
-          rows={events}
-          columns={
-            hideClub ? columns.filter((c) => c.field !== "club") : columns
-          }
-          getRowId={(r) => r._id}
-          onRowClick={(params) =>
-            router.push(`/manage/events/${params.row._id}`)
-          }
-          disableRowSelectionOnClick
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "scheduled", sort: scheduleSort }],
-            },
-            filter: {
-              filterModel: {
-                items: [],
-                quickFilterLogicOperator: GridLogicOperator.Or,
-              },
-            },
-            pagination: { paginationModel: { pageSize: 25 } },
-          }}
-          showToolbar
-          sx={{
-            // disable cell selection style
-            ".MuiDataGrid-cell:focus": {
-              outline: "none",
-            },
-            // pointer cursor on ALL rows
-            "& .MuiDataGrid-row:hover": {
-              cursor: "pointer",
-            },
-          }}
-        />
-      </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <DataGrid

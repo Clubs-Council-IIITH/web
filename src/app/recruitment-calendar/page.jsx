@@ -1,15 +1,14 @@
 import {
   Box,
-  Typography,
   Card,
-  CardHeader,
   CardContent,
+  CardHeader,
   Grid,
+  Typography,
 } from "@mui/material";
+
 // import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
 import ClubButton from "components/clubs/ClubButton";
-
 import { getStaticFile } from "utils/files";
 
 export const metadata = {
@@ -92,10 +91,6 @@ function RecruitmentCard({ clubs, month = "January" }) {
         {clubs.length === 0 && (
           <Typography
             variant="body1"
-            sx={{
-              color: "text.secondary",
-              textAlign: "center",
-            }}
             sx={{
               color: "text.secondary",
               textAlign: "center",

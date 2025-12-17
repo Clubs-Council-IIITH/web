@@ -108,8 +108,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           size={{
             xs: 12,
             md: 7,
-            xl: 8
-          }}>
+            xl: 8,
+          }}
+        >
           <Grid container>
             <Grid
               container
@@ -127,7 +128,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                 />
               </Grid>
               <Grid size={6}>
-              <Grid size={6}>
                 <TextField
                   fullWidth
                   disabled
@@ -135,7 +135,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   value={defaultValues?.lastName}
                 />
               </Grid>
-              <Grid size={12}>
               <Grid size={12}>
                 <TextField
                   fullWidth
@@ -146,15 +145,12 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               </Grid>
               <Grid container spacing={1} size={12}>
                 <Grid>
-              <Grid container spacing={1} size={12}>
-                <Grid>
                   <TextField
                     disabled
                     label="Batch"
                     value={defaultValues?.batch?.toUpperCase()}
                   />
                 </Grid>
-                <Grid>
                 <Grid>
                   <TextField
                     disabled
@@ -166,7 +162,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
           <Grid container>
-          <Grid container>
             <Typography
               variant="subtitle2"
               gutterBottom
@@ -175,16 +170,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                 color: "text.secondary",
                 mb: defaultValues?.phone ? 2 : 1,
               }}
-              sx={{
-                textTransform: "uppercase",
-                color: "text.secondary",
-                mb: defaultValues?.phone ? 2 : 1,
-              }}
             >
               Details
             </Typography>
-            <Grid container spacing={2}>
-              <Grid size={12}>
             <Grid container spacing={2}>
               <Grid size={12}>
                 <Controller
@@ -232,8 +220,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           }}
           size={{
             xs: "grow",
-            md: "grow"
-          }}>
+            md: "grow",
+          }}
+        >
           <Grid container>
             <Typography
               variant="subtitle2"
@@ -242,15 +231,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                 textTransform: "uppercase",
                 color: "text.secondary",
               }}
-              sx={{
-                textTransform: "uppercase",
-                color: "text.secondary",
-              }}
             >
               Media
             </Typography>
-            <Grid container spacing={2}>
-              <Grid size={12}>
             <Grid container spacing={2}>
               <Grid size={12}>
                 <FileUpload
@@ -266,16 +249,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               </Grid>
             </Grid>
 
-            <Grid
-              container
-              direction="row"
-              spacing={1}
-              sx={{
-                pt: 3,
-              }}
-              size={12}
-            >
-              <Grid size={6}>
             <Grid
               container
               direction="row"
@@ -309,8 +282,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
               </Grid>
               <Grid size={6}>
                 <Button
-              <Grid size={6}>
-                <Button
                   loading={loading}
                   type="submit"
                   size="large"
@@ -319,7 +290,6 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   fullWidth
                 >
                   Save
-                </Button>
                 </Button>
               </Grid>
             </Grid>

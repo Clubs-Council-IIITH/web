@@ -14,19 +14,10 @@ export default function ActionPalette({
         width: "100%",
       }}
     >
-    <Box
-      sx={{
-        width: "100%",
-      }}
-    >
       <Grid
         container
         direction={{ xs: "column-reverse", md: "row" }}
         spacing={2}
-        sx={{
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
         sx={{
           alignItems: "center",
           justifyContent: "space-between",
@@ -42,11 +33,10 @@ export default function ActionPalette({
           }}
           size={{
             xs: 12,
-            md: 6
-          }}>
+            md: 6,
+          }}
+        >
           {left.map((Component, key) => (
-            <Grid key={key} size="auto">
-              <Component {...leftProps[key]} />
             <Grid key={key} size="auto">
               <Component {...leftProps[key]} />
             </Grid>
@@ -63,14 +53,14 @@ export default function ActionPalette({
           }}
           size={{
             xs: 12,
-            md: 6
-          }}>
+            md: 6,
+          }}
+        >
           {right.map((Component, key) => (
             <Grid key={key} size="auto">
-              <Component {...rightProps[key]}/>
+              <Component {...rightProps[key]} />
             </Grid>
           ))}
-          {downloadbtn ? <Grid>{downloadbtn}</Grid> : ""}
           {downloadbtn ? <Grid>{downloadbtn}</Grid> : ""}
         </Grid>
       </Grid>

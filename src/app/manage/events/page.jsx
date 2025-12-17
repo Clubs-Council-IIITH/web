@@ -12,7 +12,6 @@ import {
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import ButtonLink from "components/Link";
 import EventsTable from "components/events/EventsTable";
 
 export const metadata = {
@@ -61,7 +60,6 @@ export default async function ManageEvents() {
 
         {["cc", "club"].includes(userMeta?.role) ? (
           <Button
-            component={ButtonLink}
             component={ButtonLink}
             href="/manage/events/new"
             variant="contained"

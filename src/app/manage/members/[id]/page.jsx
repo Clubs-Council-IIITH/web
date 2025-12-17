@@ -17,8 +17,6 @@ export const metadata = {
 
 export default async function ManageMember(props) {
   const params = await props.params;
-export default async function ManageMember(props) {
-  const params = await props.params;
   const { id } = params;
   const [cid, uid] = id?.split(encodeURIComponent(":"));
 
@@ -73,13 +71,10 @@ export default async function ManageMember(props) {
             mt: 4,
           }}
         >
-          <Grid size={12} sx={{my: 2}}>
+          <Grid size={12} sx={{ my: 2 }}>
             <Stack
               direction={{ xs: "column", lg: "row" }}
               spacing={4}
-              sx={{
-                alignItems: "center",
-              }}
               sx={{
                 alignItems: "center",
               }}
@@ -101,10 +96,6 @@ export default async function ManageMember(props) {
                     color: "text.secondary",
                     fontFamily: "monospace",
                   }}
-                  sx={{
-                    color: "text.secondary",
-                    fontFamily: "monospace",
-                  }}
                 >
                   {user?.email || "Email Not Available"}
                 </Typography>
@@ -120,21 +111,9 @@ export default async function ManageMember(props) {
             size="grow"
           >
             <Grid size="grow">
-          <Grid
-            container
-            spacing={1}
-            sx={{
-              mt: 5,
-            }}
-            size="grow"
-          >
-            <Grid size="grow">
               <Typography
                 variant="subtitle2"
                 gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                }}
                 sx={{
                   textTransform: "uppercase",
                 }}
@@ -147,23 +126,13 @@ export default async function ManageMember(props) {
                   fontWeight: 300,
                 }}
               >
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 300,
-                }}
-              >
                 {member.poc ? "Yes" : "No"}
               </Typography>
             </Grid>
             <Grid size="grow">
-            <Grid size="grow">
               <Typography
                 variant="subtitle2"
                 gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                }}
                 sx={{
                   textTransform: "uppercase",
                 }}
@@ -180,19 +149,9 @@ export default async function ManageMember(props) {
             }}
           >
             <Grid size={12}>
-          <Grid
-            sx={{
-              mt: 3,
-              maxWidth: "100%",
-            }}
-          >
-            <Grid size={12}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                }}
                 sx={{
                   textTransform: "uppercase",
                 }}
@@ -220,7 +179,7 @@ export default async function ManageMember(props) {
             <Grid
               size={{
                 xs: 12,
-                md: 6
+                md: 6,
               }}
             >
               <Typography
@@ -229,19 +188,9 @@ export default async function ManageMember(props) {
                 sx={{
                   textTransform: "uppercase",
                 }}
-                sx={{
-                  textTransform: "uppercase",
-                }}
               >
                 Creation Time
               </Typography>
-              <Typography
-                variant="body"
-                sx={{
-                  color: "#777777",
-                  fontWeight: "100",
-                }}
-              >
               <Typography
                 variant="body"
                 sx={{
@@ -257,27 +206,18 @@ export default async function ManageMember(props) {
             <Grid
               size={{
                 xs: 12,
-                md: 6
-              }}>
+                md: 6,
+              }}
+            >
               <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
                   textTransform: "uppercase",
                 }}
-                sx={{
-                  textTransform: "uppercase",
-                }}
               >
                 Last Edited Time
               </Typography>
-              <Typography
-                variant="body"
-                sx={{
-                  color: "#777777",
-                  fontWeight: "100",
-                }}
-              >
               <Typography
                 variant="body"
                 sx={{

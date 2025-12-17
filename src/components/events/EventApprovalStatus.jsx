@@ -1,10 +1,8 @@
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import React from "react";
-import React from "react";
 import { Box, Grid, Typography, Divider } from "@mui/material";
 
-export default async function EventApprovalStatus({
 export default async function EventApprovalStatus({
   status,
   isStudentBodyEvent = false,
@@ -14,29 +12,7 @@ export default async function EventApprovalStatus({
   let deletedBy = "";
   let ccApprover = "";
   let slcApprover = "";
-}) {
-  // Fetch user data for approvers
-  let lastEditeduser = "";
-  let deletedBy = "";
-  let ccApprover = "";
-  let slcApprover = "";
 
-  if (status?.lastUpdatedBy != null) {
-    const client = getClient();
-    const { data } = await client.query({
-      query: GET_USER,
-      variables: { uid: status.lastUpdatedBy },
-    });
-    lastEditeduser = data?.user?.name || "";
-  }
-
-  if (status?.deletedBy != null) {
-    const client = await getClient();
-    const { data } = await client.query({
-      query: GET_USER,
-      variables: { uid: status.deletedBy },
-    });
-    deletedBy = data?.user?.name || "";
   if (status?.lastUpdatedBy != null) {
     const client = getClient();
     const { data } = await client.query({
@@ -90,6 +66,16 @@ export default async function EventApprovalStatus({
   if (status?.lastUpdatedBy != null) {
     timelineRows.push(["Last Edited By", lastEditeduser, false]);
   }
+
+  // Add the creationTime row
+  timelineRows.push([
+    "Event Created",
+    status?.creationTime == null
+      ? "Information not available"
+      : (status?.creationTime.includes(":") ? "Created on " : "") +
+        status?.creationTime,
+    status?.creationTime == null,
+  ]);
 
   // Handle deleted state
   if (status?.state && status?.state == "deleted") {
@@ -164,50 +150,13 @@ export default async function EventApprovalStatus({
           status?.sloApproverTime,
       status?.sloApproverTime == null,
     ]);
-
-    // Students Life Council Approval (only if not student body event)
-    if (!isStudentBodyEvent) {
-      timelineRows.push([
-        "Students Life Council Approval",
-        status?.slcApproverTime == null
-          ? "Information not available"
-          : (status?.slcApproverTime.includes(":") ? "Approved on " : "") +
-            status?.slcApproverTime,
-        status?.slcApproverTime == null,
-      ]);
-    }
-
-    // Students Life Council Approved By
-    if (status?.slcApprover != null && status?.slcApproverTime != null) {
-      timelineRows.push([
-        "Students Life Council Approved By",
-        slcApprover,
-        false,
-      ]);
-    }
-
-    // Students Life Office Approval (always shown)
-    timelineRows.push([
-      "Students Life Office Approval",
-      status?.sloApproverTime == null
-        ? "Information not available"
-        : (status?.sloApproverTime.includes(":") ? "Approved on " : "") +
-          status?.sloApproverTime,
-      status?.sloApproverTime == null,
-    ]);
   }
 
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
       <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
-      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
         TIMELINE{" "}
-        <Typography
-          component="span"
-          variant="caption"
-          sx={{ marginLeft: 1, color: "text.secondary" }}
-        >
         <Typography
           component="span"
           variant="caption"
@@ -231,33 +180,17 @@ export default async function EventApprovalStatus({
             <Box sx={{ color: "#555", fontWeight: 500 }}>{label}</Box>
             <Box sx={{ color: "#555" }}>-</Box>
             <Box
-      <Grid container direction="column" spacing={0.5}>
-        {timelineRows.map(([label, value, isUnavailable], i) => (
-          <Grid
-            key={i}
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "3fr 0.3fr 10fr",
-              borderBottom:
-                i === timelineRows.length - 1 ? "none" : "1px dashed #eee",
-              py: 1,
-            }}
-          >
-            <Box sx={{ color: "#555", fontWeight: 500 }}>{label}</Box>
-            <Box sx={{ color: "#555" }}>-</Box>
-            <Box
               sx={{
                 color: isUnavailable
                   ? "#5a5a5a"
                   : value?.includes("Not Approved")
-                  ? "red"
-                  : "inherit",
+                    ? "red"
+                    : "inherit",
               }}
             >
               {value}
             </Box>
           </Grid>
-        ))}
         ))}
       </Grid>
     </>
