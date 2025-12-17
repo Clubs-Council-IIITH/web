@@ -73,8 +73,9 @@ export default async function MemberCard({ uid, poc, roles }) {
           sx={{
             textAlign: "center",
             textTransform: "capitalize",
-            mt: 3
-          }}>
+            mt: 3,
+          }}
+        >
           {`${user.firstName} ${user.lastName}`.toLowerCase()}
         </Typography>
 
@@ -83,8 +84,9 @@ export default async function MemberCard({ uid, poc, roles }) {
             sx={{
               display: "flex",
               alignItems: "center",
-              mt: 1
-            }}>
+              mt: 1,
+            }}
+          >
             <Icon
               variant="contact-emergency-rounded"
               color="error.main"

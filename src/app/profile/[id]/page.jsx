@@ -36,7 +36,7 @@ export default async function Profile(props) {
   if (user?.role === "club") {
     const { data: { club: targetClub } = {} } = await getClient().query(
       GET_CLUB,
-      { clubInput: { cid: user.uid } }
+      { clubInput: { cid: user.uid } },
     );
     club = targetClub;
   }
@@ -58,7 +58,7 @@ export default async function Profile(props) {
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
       (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-      []
+      [],
     );
 
     if (memberships?.length > 0) {
@@ -132,7 +132,7 @@ export default async function Profile(props) {
 
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
-          (<>
+          <>
             <Grid
               container
               spacing={2}
@@ -149,8 +149,9 @@ export default async function Profile(props) {
               }}
               size={{
                 xs: 12,
-                lg: 9
-              }}>
+                lg: 9,
+              }}
+            >
               <Stack direction="column" spacing={2}>
                 <Typography
                   variant="subtitle2"
@@ -163,7 +164,7 @@ export default async function Profile(props) {
                 <UserMemberships rows={memberships} />
               </Stack>
             </Grid>
-          </>)
+          </>
         ) : null}
       </Grid>
     </Container>

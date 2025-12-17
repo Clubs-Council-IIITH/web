@@ -244,7 +244,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
               type: "text/csv;charset=utf-8;",
             });
             const csvFileName = `events_data_${dayjs(new Date()).format(
-              "YYYY-MM-DD"
+              "YYYY-MM-DD",
             )}.csv`;
             const downloadLink = document.createElement("a");
             const url = URL.createObjectURL(csvBlob);
@@ -279,7 +279,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
     const data = {
       clubid: admin_roles.includes(user?.role) ? formData.clubid : user?.uid,
       dateperiod: formData.datetimeperiod.map((date) =>
-        dayjs(date).format("YYYY-MM-DD")
+        dayjs(date).format("YYYY-MM-DD"),
       ),
       fields: formData.fields,
       status: formData.status || "approved",
@@ -468,7 +468,7 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                                   newValue.push(event.target.value);
                                 } else {
                                   const index = newValue.indexOf(
-                                    event.target.value
+                                    event.target.value,
                                   );
                                   if (index > -1) {
                                     newValue.splice(index, 1);

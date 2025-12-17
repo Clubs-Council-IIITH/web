@@ -57,19 +57,28 @@ export default async function EditEvent(props) {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
     });
-    return (user?.role === "club" && user?.uid !== event.clubid && redirect("/404"), (<Container>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
-        Edit Event Details
-      </Typography>
-      <EventForm
-        id={id}
-        defaultValues={transformEvent(event)}
-        existingEvents={events.filter((e) => e._id !== id)}
-        action="edit"
-      />
-    </Container>));
+    return (
+      user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
+      (
+        <Container>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
+            Edit Event Details
+          </Typography>
+          <EventForm
+            id={id}
+            defaultValues={transformEvent(event)}
+            existingEvents={events.filter((e) => e._id !== id)}
+            action="edit"
+          />
+        </Container>
+      )
+    );
   } catch (error) {
     redirect("/404");
   }

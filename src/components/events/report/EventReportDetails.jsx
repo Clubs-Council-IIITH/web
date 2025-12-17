@@ -101,8 +101,9 @@ export function EventReportDetails({
           size={{
             xs: 12,
             md: 4,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -133,7 +134,7 @@ export function EventReportDetails({
               <br />
               {event?.collabclubs
                 ?.map(
-                  (collab) => clubs?.find((club) => club?.cid === collab)?.name
+                  (collab) => clubs?.find((club) => club?.cid === collab)?.name,
                 )
                 .join(", ")}
             </Typography>
@@ -165,8 +166,9 @@ export function EventReportDetails({
           size={{
             xs: 12,
             md: 4,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -260,8 +262,9 @@ export function EventReportDetails({
           size={{
             xs: 12,
             md: 4,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -386,8 +389,9 @@ export function EventReportDetails({
             xs: 12,
             md: 12,
             lg: 6,
-            sm: 12
-          }}>
+            sm: 12,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -445,8 +449,9 @@ export function EventReportDetails({
             xs: 12,
             lg: 2,
             md: 6,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
@@ -527,8 +532,9 @@ export function EventReportDetails({
             xs: 12,
             lg: 4,
             md: 6,
-            sm: 6
-          }}>
+            sm: 6,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom

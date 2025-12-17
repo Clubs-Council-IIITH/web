@@ -77,7 +77,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
         data.img = await uploadImageFile(
           formData.img[0],
           `profile_${defaultValues.uid}`,
-          profile_warnSizeMB
+          profile_warnSizeMB,
         );
       } else {
         data.img = null;
@@ -108,8 +108,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           size={{
             xs: 12,
             md: 7,
-            xl: 8
-          }}>
+            xl: 8,
+          }}
+        >
           <Grid container>
             <Grid
               container
@@ -219,8 +220,9 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
           }}
           size={{
             xs: "grow",
-            md: "grow"
-          }}>
+            md: "grow",
+          }}
+        >
           <Grid container>
             <Typography
               variant="subtitle2"

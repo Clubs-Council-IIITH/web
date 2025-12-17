@@ -76,8 +76,8 @@ export default function ScrollbarWrapper({
         scrollbarColor: hideScrollbar
           ? "transparent transparent"
           : isScrolling
-          ? `${scrollbarColor} transparent`
-          : `${hiddenColor} transparent`,
+            ? `${scrollbarColor} transparent`
+            : `${hiddenColor} transparent`,
         transition: "scrollbar-color 0.3s ease",
       }}
       className={uniqueClass}

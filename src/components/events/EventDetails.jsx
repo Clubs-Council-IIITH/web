@@ -12,8 +12,8 @@ import EventFallbackPoster from "components/events/EventFallbackPoster";
 import Icon from "components/Icon";
 
 const DateTime = dynamic(() => import("components/DateTime"));
-const AddToCalendarBtn = dynamic(() =>
-  import("components/events/AddToCalendarBtn")
+const AddToCalendarBtn = dynamic(
+  () => import("components/events/AddToCalendarBtn"),
 );
 
 export const getEventLocation = (event) => {
@@ -21,7 +21,9 @@ export const getEventLocation = (event) => {
     if (event.location.length > 0) {
       return event.location
         .map((l) =>
-          l === "other" ? event.otherLocation || "Other" : locationLabel(l).name
+          l === "other"
+            ? event.otherLocation || "Other"
+            : locationLabel(l).name,
         )
         .join(", ");
     } else {

@@ -95,17 +95,17 @@ const nextConfig = {
     return config;
   },
   turbopack: {
-    root: '/',
+    root: "/",
     rules: {
-      '*.svg': {
+      "*.svg": {
         loaders: [
           {
-            loader: '@svgr/webpack',
+            loader: "@svgr/webpack",
             options: {
               svgoConfig: {
                 plugins: [
                   {
-                    name: 'preset-default',
+                    name: "preset-default",
                     params: {
                       overrides: {
                         // customize default plugin options
@@ -113,13 +113,13 @@ const nextConfig = {
                       },
                     },
                   },
-                  'removeDimensions',
+                  "removeDimensions",
                 ],
               },
             },
           },
         ],
-        as: '*.js',
+        as: "*.js",
       },
     },
   },

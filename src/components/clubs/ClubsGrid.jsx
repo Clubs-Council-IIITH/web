@@ -22,8 +22,9 @@ export default async function ClubsGrid({ category, staticClubs = [] }) {
               xs: 12,
               md: 6,
               lg: 4,
-              xl: 3
-            }}>
+              xl: 3,
+            }}
+          >
             <ClubCard
               dim
               cid={club.cid}

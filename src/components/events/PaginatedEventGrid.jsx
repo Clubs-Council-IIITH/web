@@ -257,8 +257,9 @@ export default function PaginatedEventGrid({
                 color: "text.secondary",
                 flexGrow: 1,
                 textAlign: "center",
-                mt: 5
-              }}>
+                mt: 5,
+              }}
+            >
               No events found.
             </Typography>
           ) : (

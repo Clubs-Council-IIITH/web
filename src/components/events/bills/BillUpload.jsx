@@ -60,7 +60,7 @@ export default function BillUpload(params) {
         data.file[0],
         false,
         eventCode + "_bill",
-        maxFileSizeMB
+        maxFileSizeMB,
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
@@ -111,7 +111,6 @@ export default function BillUpload(params) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid
-            
             sx={{
               alignItems: "center",
               m: 1,
@@ -146,7 +145,7 @@ export default function BillUpload(params) {
                   validate: {
                     validBillNumbers: (value) => {
                       const invalidItems = value.filter(
-                        (item) => item.billno && !validateBillno(item.billno)
+                        (item) => item.billno && !validateBillno(item.billno),
                       );
                       return (
                         invalidItems.length === 0 ||

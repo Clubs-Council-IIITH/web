@@ -15,26 +15,41 @@ export default async function BugReport() {
         },
       }}
     >
-      <Typography variant="h3" gutterBottom align="center" sx={{
-        mb: 3
-      }}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        align="center"
+        sx={{
+          mb: 3,
+        }}
+      >
         Bug Report & Feature Request
       </Typography>
-      <Typography variant="h5" gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Bug Report
       </Typography>
-      <Typography gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         We are sorry that you are facing issues with our platform. Please fill
         out any of the form below to help us understand the issue better, so
         that we can resolve it as soon as possible.
       </Typography>
-      <Typography gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         You can report a bug using any of the following methods: (in order of
         preference)
       </Typography>
@@ -70,14 +85,21 @@ export default async function BugReport() {
           (Public)
         </li>
       </ul>
-      <Typography variant="h5" gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Feature Request
       </Typography>
-      <Typography gutterBottom sx={{
-        mb: 3
-      }}>
+      <Typography
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         If you have any feature request, you can reach out to us using any of
         the following methods (not in any order):
       </Typography>

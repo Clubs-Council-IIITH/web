@@ -34,14 +34,14 @@ export default function MembersFilter({ club, state, cc = false }) {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   // show both current and past if no state is selected
   useEffect(() => {
     if (state.length === 0)
       router.push(
-        `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`
+        `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`,
       );
   }, [state]);
 
@@ -69,8 +69,9 @@ export default function MembersFilter({ club, state, cc = false }) {
           <Grid
             size={{
               xs: 12,
-              lg: club ? 8 : 12
-            }}>
+              lg: club ? 8 : 12,
+            }}
+          >
             <FormControl fullWidth>
               <InputLabel id="clubid">Filter by club</InputLabel>
               <Select
@@ -79,7 +80,7 @@ export default function MembersFilter({ club, state, cc = false }) {
                 fullWidth
                 onChange={(e) =>
                   router.push(
-                    `${pathname}?${createQueryString("club", e?.target?.value)}`
+                    `${pathname}?${createQueryString("club", e?.target?.value)}`,
                   )
                 }
                 value={club || ""}
@@ -100,8 +101,9 @@ export default function MembersFilter({ club, state, cc = false }) {
           <Grid
             size={{
               xs: "grow",
-              lg: "grow"
-            }}>
+              lg: "grow",
+            }}
+          >
             <ToggleButtonGroup
               fullWidth
               value={state}
@@ -115,8 +117,8 @@ export default function MembersFilter({ club, state, cc = false }) {
                 return router.push(
                   `${pathname}?${createQueryString(
                     e?.target?.value,
-                    !state.includes(e?.target?.value)
-                  )}`
+                    !state.includes(e?.target?.value),
+                  )}`,
                 );
               }}
             >

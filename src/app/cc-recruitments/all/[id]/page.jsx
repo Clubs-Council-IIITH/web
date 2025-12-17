@@ -30,11 +30,11 @@ export default async function CCApplicantDetails(props) {
     GET_ALL_RECRUITMENTS,
     {
       year: year,
-    }
+    },
   );
 
   let currentApplicant = ccApplications.find(
-    (applicant) => applicant.uid === id
+    (applicant) => applicant.uid === id,
   );
 
   // get target user
@@ -50,7 +50,7 @@ export default async function CCApplicantDetails(props) {
   // get list of memberRoles.roles along with member.cid
   memberships = memberRoles.reduce(
     (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),
-    []
+    [],
   );
 
   return (
@@ -139,8 +139,9 @@ export default async function CCApplicantDetails(props) {
           }}
           size={{
             xs: 12,
-            lg: 9
-          }}>
+            lg: 9,
+          }}
+        >
           <Stack direction="column" spacing={2}>
             <Typography
               variant="subtitle2"

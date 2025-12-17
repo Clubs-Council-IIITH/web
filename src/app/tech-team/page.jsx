@@ -82,13 +82,17 @@ export default async function TechTeam() {
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
-          padding: 2.5
-        }}>
+          padding: 2.5,
+        }}
+      >
         <SLCTechLogo height={120} width={500} />
       </Grid>
-      <Typography variant="h3" sx={{
-        mb: 2
-      }}>
+      <Typography
+        variant="h3"
+        sx={{
+          mb: 2,
+        }}
+      >
         About Us
       </Typography>
       <Typography variant="body">
@@ -102,8 +106,9 @@ export default async function TechTeam() {
         variant="h5"
         sx={{
           mb: 2,
-          mt: 2
-        }}>
+          mt: 2,
+        }}
+      >
         Who are we?
       </Typography>
       <Typography variant="body">
@@ -116,8 +121,9 @@ export default async function TechTeam() {
         variant="h5"
         sx={{
           mb: 2,
-          mt: 2
-        }}>
+          mt: 2,
+        }}
+      >
         What We Do
       </Typography>
       <Typography variant="body">
@@ -142,8 +148,9 @@ export default async function TechTeam() {
         variant="h5"
         sx={{
           mb: 2,
-          mt: 2
-        }}>
+          mt: 2,
+        }}
+      >
         Our Projects
       </Typography>
       <Typography variant="body" paragraph>
@@ -156,9 +163,13 @@ export default async function TechTeam() {
           Websites for NSS, Cultural Council, CLC, and other student bodies
         </li>
       </Typography>
-      <Typography variant="body1" paragraph sx={{
-        mt: 3
-      }}>
+      <Typography
+        variant="body1"
+        paragraph
+        sx={{
+          mt: 3,
+        }}
+      >
         With each project, we aim to uphold our core values of innovation,
         reliability, and teamwork. Together, we're shaping the future of our
         institution's digital landscape.
@@ -167,8 +178,9 @@ export default async function TechTeam() {
         direction="row"
         sx={{
           mb: 2,
-          mt: 5
-        }}>
+          mt: 5,
+        }}
+      >
         <Typography variant="h3">Our Perfect Visionary Crew</Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button
@@ -177,9 +189,12 @@ export default async function TechTeam() {
           component={ButtonLink}
           href="/tech-team/all-members"
         >
-          <Typography variant="button" sx={{
-            color: "text.primary"
-          }}>
+          <Typography
+            variant="button"
+            sx={{
+              color: "text.primary",
+            }}
+          >
             View all
           </Typography>
           <Icon variant="chevron-right" />
@@ -197,8 +212,9 @@ export default async function TechTeam() {
         variant="h3"
         sx={{
           mb: 2,
-          mt: 5
-        }}>
+          mt: 5,
+        }}
+      >
         Reach Out to Us
       </Typography>
       <Typography variant="body1" paragraph>

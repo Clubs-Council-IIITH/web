@@ -76,8 +76,9 @@ export function DrawerItem({ title, path, icon }) {
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between"
-            }}>
+              justifyContent: "space-between",
+            }}
+          >
             {title}
             {externalLink && <Icon variant="link" />}
           </Box>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Box, Grid, Typography, Stack, Button } from "@mui/material";
-import ButtonLink from 'components/Link';
+import ButtonLink from "components/Link";
 import Carousel from "components/carousel/Carousel";
 
 import EventsGrid from "components/events/EventsGrid";
@@ -86,8 +86,9 @@ export default function Home() {
           <Grid
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <Link href="/student-bodies" style={{ textDecoration: "none" }}>
               <Statistic
                 color="warning"
@@ -101,8 +102,9 @@ export default function Home() {
           <Grid
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <Link href="/clubs" style={{ textDecoration: "none" }}>
               <Statistic
                 color="info"

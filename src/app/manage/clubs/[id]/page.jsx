@@ -46,9 +46,11 @@ export default async function ManageClub(props) {
           height={480}
         />
       </Card>
-      <Box sx={{
-        my: 4
-      }}>
+      <Box
+        sx={{
+          my: 4,
+        }}
+      >
         <ClubInfo
           name={club.name}
           logo={club.logo}

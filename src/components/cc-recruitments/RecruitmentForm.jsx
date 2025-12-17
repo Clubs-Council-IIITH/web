@@ -160,7 +160,7 @@ export default function RecruitmentForm({ user = {} }) {
 
     // Map the team names to their respective IDs at position 1
     data.teams = data.teams.map(
-      (team) => availableTeams.find((t) => t[0] === team)[1]
+      (team) => availableTeams.find((t) => t[0] === team)[1],
     );
 
     let res = await ccRecruitmentsApply(data);
@@ -218,8 +218,9 @@ export default function RecruitmentForm({ user = {} }) {
               size={{
                 xs: 12,
                 md: 12,
-                xl: 12
-              }}>
+                xl: 12,
+              }}
+            >
               <Grid container>
                 <Typography
                   variant={isDesktop ? "subtitle2" : "subtitle1"}
@@ -237,16 +238,18 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <MemberUserInput user={user} />
                   </Grid>
                   <Grid
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <TextField
                       label="Roll No"
                       variant="outlined"
@@ -260,8 +263,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <TextField
                       label="Batch"
                       variant="outlined"
@@ -275,8 +279,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <TextField
                       label="Stream"
                       variant="outlined"
@@ -290,8 +295,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {user?.phone ? (
                       <TextField
                         label="Phone number"
@@ -314,7 +320,7 @@ export default function RecruitmentForm({ user = {} }) {
                                   value,
                                   {
                                     defaultCountry: "IN",
-                                  }
+                                  },
                                 );
                                 return (
                                   isValidPhoneNumber(value, "IN") ||
@@ -399,7 +405,6 @@ export default function RecruitmentForm({ user = {} }) {
                 </Grid>
                 <Grid
                   container
-                  
                   spacing={4}
                   sx={{
                     pt: 3,
@@ -409,8 +414,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     <Controller
                       name="teams"
                       control={control}
@@ -465,8 +471,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -528,8 +535,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -577,8 +585,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -626,8 +635,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -674,8 +684,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -724,8 +735,9 @@ export default function RecruitmentForm({ user = {} }) {
                     size={{
                       xs: 12,
                       md: 12,
-                      xl: 12
-                    }}>
+                      xl: 12,
+                    }}
+                  >
                     {isDesktop ? null : (
                       <Typography
                         variant="subtitle2"
@@ -774,8 +786,9 @@ export default function RecruitmentForm({ user = {} }) {
                       size={{
                         xs: 12,
                         md: 12,
-                        xl: 12
-                      }}>
+                        xl: 12,
+                      }}
+                    >
                       {isDesktop ? null : (
                         <Typography
                           variant="subtitle2"
@@ -874,7 +887,6 @@ export default function RecruitmentForm({ user = {} }) {
             </Grid>
             <Grid
               container
-              
               direction="row"
               spacing={1}
               sx={{
@@ -914,7 +926,7 @@ export default function RecruitmentForm({ user = {} }) {
                   fullWidth
                   onClick={() =>
                     handleSubmit((data) =>
-                      onSubmit(data, { shouldSubmit: true })
+                      onSubmit(data, { shouldSubmit: true }),
                     )()
                   }
                 >

@@ -175,8 +175,8 @@ export default function BulkEdit({ mode = "add" }) {
         failureCount++;
         failureMessages.push(
           `- Failed to ${actionName} ${member.uid}: ${res.error.messages.join(
-            ", "
-          )}`
+            ", ",
+          )}`,
         );
       }
     }
@@ -185,12 +185,12 @@ export default function BulkEdit({ mode = "add" }) {
     let toastMessages = [];
     if (successCount > 0) {
       toastMessages.push(
-        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`
+        `${successCount} out of ${finalMembers.length} member(s) ${actionName}ed successfully.`,
       );
     }
     if (failureCount > 0) {
       toastMessages.push(
-        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`
+        `${failureCount} out of ${finalMembers.length} member(s) failed to be ${actionName}ed.`,
       );
       toastMessages = toastMessages.concat(failureMessages);
     }
@@ -264,8 +264,8 @@ export default function BulkEdit({ mode = "add" }) {
                 endYear: addNew
                   ? parseInt(member.startYear)
                   : member.endYear === "-"
-                  ? null
-                  : parseInt(member.endYear),
+                    ? null
+                    : parseInt(member.endYear),
               };
             }
             return role;
@@ -803,11 +803,7 @@ function MembersTable({
             paginationModel: { pageSize: 10 },
           },
           sorting: {
-            sortModel: addMode
-              ? []
-              : [
-                  { field: "isEdited", sort: "asc" },
-                ],
+            sortModel: addMode ? [] : [{ field: "isEdited", sort: "asc" }],
           },
           columns: {
             columnVisibilityModel: {

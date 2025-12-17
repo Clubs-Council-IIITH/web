@@ -2,13 +2,7 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS, GET_PENDING_EVENTS } from "gql/queries/events";
 
-import {
-  Container,
-  Divider,
-  Typography,
-  Button,
-  Stack,
-} from "@mui/material";
+import { Container, Divider, Typography, Button, Stack } from "@mui/material";
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
@@ -52,8 +46,9 @@ export default async function ManageEvents() {
         sx={{
           alignItems: "center",
           justifyContent: "space-between",
-          mb: 3
-        }}>
+          mb: 3,
+        }}
+      >
         <Typography variant="h3" gutterBottom>
           Manage Events
         </Typography>

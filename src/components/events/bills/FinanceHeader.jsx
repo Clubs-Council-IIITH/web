@@ -43,8 +43,9 @@ export default function FinanceHeader({
           sx={{
             alignItems: "center",
             justifyContent: "space-between",
-            mb: 3
-          }}>
+            mb: 3,
+          }}
+        >
           <Typography variant="h3" gutterBottom={false}>
             Edit Bill Status Details
           </Typography>

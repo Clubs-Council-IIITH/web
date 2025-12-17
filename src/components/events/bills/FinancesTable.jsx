@@ -91,8 +91,8 @@ export default function FinancesTable({ events, role }) {
             value === "true"
               ? "success.main"
               : value === "old"
-              ? "warning.main"
-              : "error.main"
+                ? "warning.main"
+                : "error.main"
           }
         />
       ),

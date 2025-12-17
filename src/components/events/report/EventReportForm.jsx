@@ -209,8 +209,9 @@ export default function EventReportForm({
           size={{
             xs: 12,
             md: 7,
-            xl: 8
-          }}>
+            xl: 8,
+          }}
+        >
           <Grid container>
             <Grid
               container
@@ -247,8 +248,9 @@ export default function EventReportForm({
                   size={{
                     xs: 12,
                     md: 6,
-                    xl: 6
-                  }}>
+                    xl: 6,
+                  }}
+                >
                   <DateTimePicker
                     label="Starts Date"
                     viewRenderers={{
@@ -271,8 +273,9 @@ export default function EventReportForm({
                   size={{
                     xs: 12,
                     md: 6,
-                    xl: 6
-                  }}>
+                    xl: 6,
+                  }}
+                >
                   <DateTimePicker
                     label="End Date"
                     viewRenderers={{
@@ -319,7 +322,7 @@ export default function EventReportForm({
                         {selected
                           .map(
                             (clubId) =>
-                              clubs.find((club) => club.cid === clubId)?.name
+                              clubs.find((club) => club.cid === clubId)?.name,
                           )
                           .filter(Boolean)
                           .map((clubName) => (
@@ -418,8 +421,9 @@ export default function EventReportForm({
           }}
           size={{
             xs: "grow",
-            md: "grow"
-          }}>
+            md: "grow",
+          }}
+        >
           <Grid container>
             <Grid
               container

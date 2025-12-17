@@ -27,9 +27,13 @@ export default async function EditClub(props) {
     });
     return (
       <Container>
-        <Typography variant="h3" gutterBottom sx={{
-          mb: 3
-        }}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            mb: 3,
+          }}
+        >
           Edit Club Details
         </Typography>
         <ClubForm defaultValues={club} action="edit" />

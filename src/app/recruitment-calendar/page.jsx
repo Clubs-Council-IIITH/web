@@ -21,7 +21,7 @@ export default async function RecruitmentSchedule() {
     getStaticFile("recruitmentCalendar.json"),
     {
       next: { revalidate: 3600 }, // 1 hour
-    }
+    },
   );
 
   let recruitmentScheduleJSON = await recruitmentSchedule.json();
@@ -55,11 +55,12 @@ export default async function RecruitmentSchedule() {
               xs: 12,
               md: 6,
               lg: 3,
-              xl: 3
-            }}>
+              xl: 3,
+            }}
+          >
             <RecruitmentCard
               clubs={recruitmentScheduleJSON.filter(
-                (val) => val.month === month.toLowerCase()
+                (val) => val.month === month.toLowerCase(),
               )}
               month={month}
             />

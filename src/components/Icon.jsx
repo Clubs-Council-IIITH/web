@@ -13,7 +13,7 @@ const Icon = forwardRef(
       sx={{ width, height: width, ...sx }}
       {...other}
     />
-  )
+  ),
 );
 
 Icon.displayName = "Icon";

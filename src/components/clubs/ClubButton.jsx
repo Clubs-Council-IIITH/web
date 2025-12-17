@@ -15,8 +15,9 @@ export default async function ClubButton({ clubid }) {
     <Box
       sx={{
         mr: 1,
-        mt: 1
-      }}>
+        mt: 1,
+      }}
+    >
       <Button
         component={ButtonLink}
         href={`/${
@@ -36,9 +37,12 @@ export default async function ClubButton({ clubid }) {
             border: "2px solid lightgray",
           }}
         />
-        <Typography variant="body2" sx={{
-          color: "text.primary"
-        }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.primary",
+          }}
+        >
           {club.name}
         </Typography>
       </Button>

@@ -179,8 +179,9 @@ export default function HolidayForm({
           <Grid
             size={{
               xs: 12,
-              md: 6
-            }}>
+              md: 6,
+            }}
+          >
             <Controller
               name="date"
               control={control}

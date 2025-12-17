@@ -80,7 +80,7 @@ export default function EventsFilter({ name, club, state }) {
                       <Icon variant="search" />
                     </InputAdornment>
                   ),
-                }
+                },
               }}
             />
             <Button type="submit" variant="contained">
@@ -91,8 +91,9 @@ export default function EventsFilter({ name, club, state }) {
         <Grid
           size={{
             xs: 12,
-            lg: 8
-          }}>
+            lg: 8,
+          }}
+        >
           <FormControl fullWidth>
             <InputLabel id="clubid">Filter by Club/Student Body</InputLabel>
             <Select
@@ -125,8 +126,9 @@ export default function EventsFilter({ name, club, state }) {
         <Grid
           size={{
             xs: "grow",
-            lg: "grow"
-          }}>
+            lg: "grow",
+          }}
+        >
           <ToggleButtonGroup
             id="eventStatus"
             fullWidth

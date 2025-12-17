@@ -111,8 +111,9 @@ function CarouselItem({ item }) {
           sx={{
             fontWeight: 400,
             color: "common.white",
-            display: "flex"
-          }}>
+            display: "flex",
+          }}
+        >
           {description}
         </Typography>
       </CardContent>

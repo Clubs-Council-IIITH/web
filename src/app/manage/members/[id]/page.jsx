@@ -71,7 +71,7 @@ export default async function ManageMember(props) {
             mt: 4,
           }}
         >
-          <Grid size={12} sx={{my: 2}}>
+          <Grid size={12} sx={{ my: 2 }}>
             <Stack
               direction={{ xs: "column", lg: "row" }}
               spacing={4}
@@ -179,7 +179,7 @@ export default async function ManageMember(props) {
             <Grid
               size={{
                 xs: 12,
-                md: 6
+                md: 6,
               }}
             >
               <Typography
@@ -206,8 +206,9 @@ export default async function ManageMember(props) {
             <Grid
               size={{
                 xs: 12,
-                md: 6
-              }}>
+                md: 6,
+              }}
+            >
               <Typography
                 variant="subtitle2"
                 gutterBottom

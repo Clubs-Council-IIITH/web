@@ -21,12 +21,20 @@ export default function NotFound() {
         py: 8,
       }}
     >
-      <Stack direction="column" spacing={4} sx={{
-        alignItems: "center"
-      }}>
-        <Stack direction="row" spacing={3} sx={{
-          alignItems: "center"
-        }}>
+      <Stack
+        direction="column"
+        spacing={4}
+        sx={{
+          alignItems: "center",
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={3}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Icon
             external
             variant="fluent-emoji-flat:person-shrugging"
@@ -37,9 +45,13 @@ export default function NotFound() {
           </Typography>
         </Stack>
 
-        <Stack direction="column" spacing={2} sx={{
-          alignItems: "center"
-        }}>
+        <Stack
+          direction="column"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Typography variant="body1">
             Are you sure you're at the right place?
           </Typography>

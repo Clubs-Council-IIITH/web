@@ -10,8 +10,9 @@ export function EventCards({ events, loading, noEventsMessage }) {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          mt: 3
-        }}>
+          mt: 3,
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -26,8 +27,9 @@ export function EventCards({ events, loading, noEventsMessage }) {
             size={{
               xs: 6,
               md: 4,
-              lg: 3
-            }}>
+              lg: 3,
+            }}
+          >
             <EventCard
               _id={event._id}
               name={event.name}
@@ -45,8 +47,9 @@ export function EventCards({ events, loading, noEventsMessage }) {
             color: "text.secondary",
             flexGrow: 1,
             textAlign: "center",
-            mt: 5
-          }}>
+            mt: 5,
+          }}
+        >
           {noEventsMessage}
         </Typography>
       )}
@@ -62,8 +65,9 @@ export function LoadingIndicator() {
         justifyContent: "center",
         alignItems: "center",
         height: "100%",
-        mt: 3
-      }}>
+        mt: 3,
+      }}
+    >
       <CircularProgress />
     </Box>
   );

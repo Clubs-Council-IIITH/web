@@ -38,8 +38,9 @@ export default async function ManageMembers(props) {
         sx={{
           alignItems: "center",
           justifyContent: "space-between",
-          mb: 3
-        }}>
+          mb: 3,
+        }}
+      >
         <Typography variant="h3" gutterBottom>
           Manage Members
         </Typography>
@@ -49,8 +50,9 @@ export default async function ManageMembers(props) {
           sx={{
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 2
-          }}>
+            gap: 2,
+          }}
+        >
           <Button
             component={ButtonLink}
             href="/manage/members/bulk-add"
@@ -92,15 +94,17 @@ export default async function ManageMembers(props) {
                 sx={{
                   color: "text.secondary",
                   textTransform: "uppercase",
-                  mb: 2
-                }}>
+                  mb: 2,
+                }}
+              >
                 All Members
               </Typography>
               <Box
                 sx={{
                   mt: 2,
-                  mb: 3
-                }}>
+                  mb: 3,
+                }}
+              >
                 <MembersFilter
                   // name={targetName}
                   club={targetClub}
@@ -117,8 +121,9 @@ export default async function ManageMembers(props) {
                   <Box
                     sx={{
                       mt: 2,
-                      mb: 3
-                    }}>
+                      mb: 3,
+                    }}
+                  >
                     <MembersFilter
                       // name={targetName}
                       club={targetClub}
@@ -150,12 +155,11 @@ async function PendingMembersDataGrid() {
   const userPromises = [];
   pendingMembers?.forEach((member) => {
     userPromises.push(
-      getClient()
-        .query(GET_USER_PROFILE, {
-          userInput: {
-            uid: member.uid,
-          },
-        }),
+      getClient().query(GET_USER_PROFILE, {
+        userInput: {
+          uid: member.uid,
+        },
+      }),
     );
   });
   const users = await Promise.all(userPromises);
@@ -169,16 +173,19 @@ async function PendingMembersDataGrid() {
   return (
     <>
       {processedMembers.length > 0 ? (
-        <Box sx={{
-          mb: 3
-        }}>
+        <Box
+          sx={{
+            mb: 3,
+          }}
+        >
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               color: "text.secondary",
-              textTransform: "uppercase"
-            }}>
+              textTransform: "uppercase",
+            }}
+          >
             Pending Approval
           </Typography>
           <MembersTable
@@ -217,12 +224,11 @@ async function MembersDataGrid({
   const userPromises = [];
   targetMembers?.forEach((member) => {
     userPromises.push(
-      getClient()
-        .query(GET_USER_PROFILE, {
-          userInput: {
-            uid: member.uid,
-          },
-        }),
+      getClient().query(GET_USER_PROFILE, {
+        userInput: {
+          uid: member.uid,
+        },
+      }),
     );
   });
   const users = await Promise.all(userPromises);

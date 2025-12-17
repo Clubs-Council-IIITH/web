@@ -47,9 +47,12 @@ export default async function AllMembers() {
   return (
     <Container>
       <center>
-        <Typography variant="h3" sx={{
-          mb: 4
-        }}>
+        <Typography
+          variant="h3"
+          sx={{
+            mb: 4,
+          }}
+        >
           Executive Board & Extended Team
         </Typography>
       </center>
@@ -67,9 +70,12 @@ export default async function AllMembers() {
           ?.map((year) => (
             <div key={year}>
               <Divider textAlign="left" sx={{ mb: 2 }}>
-                <Typography variant="h5" sx={{
-                  textTransform: "uppercase"
-                }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
                   {year == -1 ? "Current Members" : year}
                 </Typography>
               </Divider>

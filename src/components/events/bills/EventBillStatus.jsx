@@ -32,8 +32,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
           <Grid
             size={{
               xs: 5,
-              lg: 3
-            }}>
+              lg: 3,
+            }}
+          >
             <Box
               sx={{
                 mt: 2,
@@ -45,8 +46,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
           <Grid
             size={{
               xs: 1,
-              lg: 0.1
-            }}>
+              lg: 0.1,
+            }}
+          >
             <Box
               sx={{
                 mt: 2,
@@ -76,8 +78,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 5,
-                      lg: 3
-                    }}>
+                      lg: 3,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -89,8 +92,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 1,
-                      lg: 0.1
-                    }}>
+                      lg: 0.1,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -115,8 +119,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 5,
-                      lg: 3
-                    }}>
+                      lg: 3,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,
@@ -128,8 +133,9 @@ export default async function EventBillStatus(event, eventBills, userid) {
                   <Grid
                     size={{
                       xs: 1,
-                      lg: 0.1
-                    }}>
+                      lg: 0.1,
+                    }}
+                  >
                     <Box
                       sx={{
                         mt: 0,

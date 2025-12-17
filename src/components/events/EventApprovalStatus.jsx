@@ -184,8 +184,8 @@ export default async function EventApprovalStatus({
                 color: isUnavailable
                   ? "#5a5a5a"
                   : value?.includes("Not Approved")
-                  ? "red"
-                  : "inherit",
+                    ? "red"
+                    : "inherit",
               }}
             >
               {value}

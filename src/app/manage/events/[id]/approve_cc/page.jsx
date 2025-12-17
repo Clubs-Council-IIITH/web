@@ -64,20 +64,30 @@ export default async function ApproveEventCC(props) {
 
   const clashFlag = clashingEvents?.length > 0;
 
-  return (user?.role !== "cc" && redirect("/404"), event?.status?.state !== "pending_cc" && redirect("/404"), (<Container>
-    <center>
-      <Typography variant="h3" gutterBottom sx={{
-        mb: 3
-      }}>
-        Approve or Reject Event | Clubs Council
-      </Typography>
-    </center>
-    <EventActionTabs
-      eventid={event._id}
-      members={currentccMembers}
-      clashFlag={clashFlag}
-    />
-  </Container>));
+  return (
+    user?.role !== "cc" && redirect("/404"),
+    event?.status?.state !== "pending_cc" && redirect("/404"),
+    (
+      <Container>
+        <center>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
+            Approve or Reject Event | Clubs Council
+          </Typography>
+        </center>
+        <EventActionTabs
+          eventid={event._id}
+          members={currentccMembers}
+          clashFlag={clashFlag}
+        />
+      </Container>
+    )
+  );
 }
 
 const filterRoles = (roles, filterWords) => {

@@ -160,56 +160,54 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           size={{
             xs: 12,
             md: 7,
-            xl: 8
-          }}>
-              {user?.role === "cc" ? (
-                <Grid size={12}>
-                  <MemberClubSelect
-                    control={control}
-                    edit={action === "edit"}
-                  />
-                </Grid>
-              ) : null}
-
-            <Typography
-              variant="subtitle2"
-              gutterBottom
-              sx={{
-                textTransform: "uppercase",
-                color: "text.secondary",
-                mb: 2,
-                mt: 3,
-              }}
-            >
-              User
-            </Typography>
-              <Grid size={12}>
-                <MemberUserInput
-                  control={control}
-                  setValue={setValue}
-                  user={userMember}
-                  setUser={setUserMember}
-                />
+            xl: 8,
+          }}
+        >
+          {user?.role === "cc" ? (
+            <Grid size={12}>
+              <MemberClubSelect control={control} edit={action === "edit"} />
             </Grid>
+          ) : null}
 
-            <Typography
-              variant="subtitle2"
-              gutterBottom
-              sx={{
-                textTransform: "uppercase",
-                color: "text.secondary",
-                mb: 2,
-                mt: 3,
-              }}
-            >
-              Positions
-            </Typography>
-              <Grid size={12}>
-                <MemberPositionsTable
-                  control={control}
-                  positionEditing={positionEditing}
-                  setPositionEditing={setPositionEditing}
-                />
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 2,
+              mt: 3,
+            }}
+          >
+            User
+          </Typography>
+          <Grid size={12}>
+            <MemberUserInput
+              control={control}
+              setValue={setValue}
+              user={userMember}
+              setUser={setUserMember}
+            />
+          </Grid>
+
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+              mb: 2,
+              mt: 3,
+            }}
+          >
+            Positions
+          </Typography>
+          <Grid size={12}>
+            <MemberPositionsTable
+              control={control}
+              positionEditing={positionEditing}
+              setPositionEditing={setPositionEditing}
+            />
           </Grid>
         </Grid>
 
@@ -219,68 +217,69 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           }}
           size={{
             xs: "grow",
-            md: "grow"
-          }}>
-            <Typography
-              variant="subtitle2"
-              gutterBottom
-              sx={{
-                textTransform: "uppercase",
-                color: "text.secondary",
-              }}
-            >
-              Other
-            </Typography>
-            <Grid  spacing={2}>
-              <Grid size={12}>
-                <MemberPOCSwitch control={control} />
-              </Grid>
+            md: "grow",
+          }}
+        >
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{
+              textTransform: "uppercase",
+              color: "text.secondary",
+            }}
+          >
+            Other
+          </Typography>
+          <Grid spacing={2}>
+            <Grid size={12}>
+              <MemberPOCSwitch control={control} />
             </Grid>
+          </Grid>
 
-            <Grid
-              container
-              direction="row"
-              spacing={1}
-              sx={{
-                pt: 3,
-              }}
-              size={12}
-            >
-              <Grid size={6}>
-                <Button
-                  size="large"
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  disabled={loading}
-                  onClick={() => setCancelDialog(true)}
-                >
-                  Cancel
-                </Button>
+          <Grid
+            container
+            direction="row"
+            spacing={1}
+            sx={{
+              pt: 3,
+            }}
+            size={12}
+          >
+            <Grid size={6}>
+              <Button
+                size="large"
+                variant="outlined"
+                color="primary"
+                fullWidth
+                disabled={loading}
+                onClick={() => setCancelDialog(true)}
+              >
+                Cancel
+              </Button>
 
-                <ConfirmDialog
-                  open={cancelDialog}
-                  title="Confirm cancellation"
-                  description="Are you sure you want to cancel? Any unsaved changes will be lost."
-                  onConfirm={() => router.back()}
-                  onClose={() => setCancelDialog(false)}
-                  confirmProps={{ color: "primary" }}
-                  confirmText="Yes, discard my changes"
-                />
-              </Grid>
-              <Grid size={6}>
-                <Button
-                  loading={loading}
-                  type="submit"
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  disabled={positionEditing || !userMember}
-                >
-                  Save
-                </Button>
-              </Grid>
+              <ConfirmDialog
+                open={cancelDialog}
+                title="Confirm cancellation"
+                description="Are you sure you want to cancel? Any unsaved changes will be lost."
+                onConfirm={() => router.back()}
+                onClose={() => setCancelDialog(false)}
+                confirmProps={{ color: "primary" }}
+                confirmText="Yes, discard my changes"
+              />
+            </Grid>
+            <Grid size={6}>
+              <Button
+                loading={loading}
+                type="submit"
+                size="large"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={positionEditing || !userMember}
+              >
+                Save
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

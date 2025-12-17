@@ -21,9 +21,13 @@ export default async function EditHoliday(props) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom sx={{
-          mb: 3
-        }}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            mb: 3,
+          }}
+        >
           Edit Holiday Details
         </Typography>
         <HolidayForm id={id} defaultValues={holiday} action="edit" />
