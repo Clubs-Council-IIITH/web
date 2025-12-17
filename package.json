@@ -29,7 +29,7 @@
     "@svgr/webpack": "^8.1.0",
     "@urql/next": "^2.0.0",
     "add-dependencies": "^1.1.0",
-    "add-to-calendar-button-react": "^2.13.3",
+    "add-to-calendar-button-react": "^2.13.4",
     "browser-image-resizer": "^2.4.1",
     "cookies-next": "^6.1.1",
     "dayjs": "^1.11.19",
