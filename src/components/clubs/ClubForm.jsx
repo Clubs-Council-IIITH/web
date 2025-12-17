@@ -139,7 +139,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.logo = await uploadImageFile(
           formData.logo[0],
           logo_filename,
-          logo_warnSizeMB,
+          logo_warnSizeMB
         );
       } else {
         data.logo = null;
@@ -161,7 +161,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.banner = await uploadImageFile(
           formData.banner[0],
           banner_filename,
-          banner_warnSizeMB,
+          banner_warnSizeMB
         );
       }
     } catch (error) {
@@ -184,7 +184,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
         data.bannerSquare = await uploadImageFile(
           formData.bannerSquare[0],
           bannerSquare_filename,
-          bannerSquare_warnSizeMB,
+          bannerSquare_warnSizeMB
         );
       }
     } catch (error) {

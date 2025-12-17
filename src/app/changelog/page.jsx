@@ -120,15 +120,11 @@ export default async function Changelog(props) {
         direction="row"
         sx={{
           pt: 2,
-          mb: 2,
-        }}
-      >
-        <Typography
-          variant="h3"
-          sx={{
-            mt: 3,
-          }}
-        >
+          mb: 2
+        }}>
+        <Typography variant="h3" sx={{
+          mt: 3
+        }}>
           Maintainers
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
@@ -138,12 +134,9 @@ export default async function Changelog(props) {
           component={ButtonLink}
           href="/tech-team/members"
         >
-          <Typography
-            variant="button"
-            sx={{
-              color: "text.primary",
-            }}
-          >
+          <Typography variant="button" sx={{
+            color: "text.primary"
+          }}>
             View all
           </Typography>
           <Icon variant="chevron-right" />
@@ -155,9 +148,8 @@ export default async function Changelog(props) {
         sx={{
           pt: 2,
           mb: 2,
-          mt: 3,
-        }}
-      >
+          mt: 3
+        }}>
         <Typography variant="h3">Changelog</Typography>
         {logsText.split("\n").length > limit ? (
           <>
@@ -165,9 +157,8 @@ export default async function Changelog(props) {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
-              }}
-            >
+                alignItems: "center"
+              }}>
               {show_all ? (
                 <Button
                   variant="none"
@@ -176,12 +167,9 @@ export default async function Changelog(props) {
                   href="/changelog"
                 >
                   <Icon variant="chevron-left" />
-                  <Typography
-                    variant="button"
-                    sx={{
-                      color: "text.primary",
-                    }}
-                  >
+                  <Typography variant="button" sx={{
+                    color: "text.primary"
+                  }}>
                     View less
                   </Typography>
                 </Button>
@@ -192,12 +180,9 @@ export default async function Changelog(props) {
                   component={ButtonLink}
                   href="/changelog?all=true"
                 >
-                  <Typography
-                    variant="button"
-                    sx={{
-                      color: "text.primary",
-                    }}
-                  >
+                  <Typography variant="button" sx={{
+                    color: "text.primary"
+                  }}>
                     View all
                   </Typography>
                   <Icon variant="chevron-right" />
@@ -217,9 +202,8 @@ export default async function Changelog(props) {
           variant="body2"
           sx={{
             color: "text.secondary",
-            mb: 2,
-          }}
-        >
+            mb: 2
+          }}>
           Showing {show_all ? logsText?.split("\n").length : limit} of{" "}
           {logsText?.split("\n").length} entries.
         </Typography>
@@ -256,9 +240,8 @@ const VersionHistory = () => {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
-          }}
-        >
+            alignItems: "center"
+          }}>
           <Typography sx={{ color: "text.primary" }}>
             View releases/version history
           </Typography>

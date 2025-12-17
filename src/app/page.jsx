@@ -1,12 +1,14 @@
 import Link from "next/link";
 
-import { Box, Grid, Typography, Stack, Button } from "@mui/material";
-import ButtonLink from "components/Link";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+
+import Gallery from "app/gallery/page";
 import Carousel from "components/carousel/Carousel";
 
 import EventsGrid from "components/events/EventsGrid";
 import Statistic from "components/Statistic";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 // carousel images
 import carousel1 from "assets/carousel/1.jpg";
@@ -21,7 +23,6 @@ import carousel9 from "assets/carousel/9.webp";
 import carousel10 from "assets/carousel/10.jpg";
 // import carousel11 from "assets/carousel/11.jpg";
 import carousel12 from "assets/carousel/12.jpg";
-import Gallery from "./gallery/page";
 
 export const metadata = {
   title: "Home | Life @ IIIT-H",
@@ -72,7 +73,7 @@ export default function Home() {
         IIIT H is where bright, committed, innovative people congregate to
         learn, live, play and work. Diverse in every sense of the word, our
         community is a fertile breeding ground for opportunity in the heart of
-        one of the leading tech hubs of the country. "Work hard and play harder"
+        one of the leading tech hubs of the country. &quot;Work hard and play harder&quot;
         is our unofficial motto and students choose their own extracurricular
         pursuits, from a jaw dropping cauldron of ways to participate in music,
         dance, sports, quizzes, etc.

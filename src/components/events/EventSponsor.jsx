@@ -78,6 +78,7 @@ export default function EventSponsor({
           <Typography
             sx={{
               color: "text.secondary",
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -114,6 +115,7 @@ export default function EventSponsor({
         ) : (
           <Typography
             sx={{
+              color: "text.secondary",
               color: "text.secondary",
               px: "10px",
               py: "10px",
@@ -184,6 +186,9 @@ export default function EventSponsor({
             disableColumnMenu: true,
             sortable: false,
             disableExport: true,
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),
@@ -194,37 +199,38 @@ export default function EventSponsor({
       {editable ? (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
           <Icon variant="add" sx={{ mr: 1 }} />
+          <Icon variant="add" sx={{ mr: 1 }} />
           Add Item
         </Button>
       ) : null}
 
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <DataGrid
-          autoHeight
-          getRowHeight={() => "auto"}
-          columns={columns}
-          rows={rows}
-          editMode="row"
-          processRowUpdate={onUpdate}
-          disableRowSelectionOnClick
-          onRowEditStart={() => setSponsorEditing(true)}
-          onRowEditStop={() => setSponsorEditing(false)}
-          onProcessRowUpdateError={(error) => {
-            console.error("Row update error:", error);
-            setError(error.message);
-          }}
-          pageSizeOptions={[5, 10, 15]}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 5 } },
-          }}
-          sx={{
-            // disable cell selection style
-            ".MuiDataGrid-cell:focus": {
-              outline: "none",
-            },
-          }}
+      <DataGrid
+        autoHeight
+        getRowHeight={() => "auto"}
+        columns={columns}
+        rows={rows}
+        editMode="row"
+        processRowUpdate={onUpdate}
+        disableRowSelectionOnClick
+        onRowEditStart={() => setSponsorEditing(true)}
+        onRowEditStop={() => setSponsorEditing(false)}
+        onProcessRowUpdateError={(error) => {
+          console.error("Row update error:", error);
+          setError(error.message);
+        }}
+        pageSizeOptions={[5, 10, 15]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        sx={{
+          // disable cell selection style
+          ".MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+        }}
         />
-      </div>
+        </div>
 
       <Typography variant="caption" color="error">
         {error}

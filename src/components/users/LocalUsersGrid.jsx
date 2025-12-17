@@ -20,9 +20,8 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
               size={{
                 xs: 12,
                 md: 6,
-                lg: 6,
-              }}
-            >
+                lg: 6
+              }}>
               <TechMemberCard
                 uid={member.uid}
                 poc={member.poc}
@@ -35,9 +34,8 @@ export default async function LocalUsersGrid({ users, techMembers = false }) {
                 xs: 12,
                 sm: 6,
                 md: 4,
-                lg: 2.4,
-              }}
-            >
+                lg: 2.4
+              }}>
               <MemberCard
                 uid={member.uid}
                 poc={member.poc}

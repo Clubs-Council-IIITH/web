@@ -53,7 +53,7 @@ export default function NotFound() {
           }}
         >
           <Typography variant="body1">
-            Are you sure you're at the right place?
+            Are you sure you&apos;re at the right place?
           </Typography>
           <Stack direction="row" spacing={1}>
             <Button

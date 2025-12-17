@@ -21,9 +21,7 @@ export const getEventLocation = (event) => {
     if (event.location.length > 0) {
       return event.location
         .map((l) =>
-          l === "other"
-            ? event.otherLocation || "Other"
-            : locationLabel(l).name,
+          l === "other" ? event.otherLocation || "Other" : locationLabel(l).name
         )
         .join(", ");
     } else {

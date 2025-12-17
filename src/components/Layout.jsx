@@ -391,12 +391,14 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <MUIDrawer
           open
           variant="permanent"
-          PaperProps={{
-            sx: {
-              width: DRAWER_WIDTH,
-              bgcolor: "background.default",
-              borderRightStyle: "dashed",
-            },
+          slotProps={{
+            paper: {
+              sx: {
+                width: DRAWER_WIDTH,
+                bgcolor: "background.default",
+                borderRightStyle: "dashed",
+              },
+            }
           }}
         >
           {drawerContent}
@@ -408,8 +410,10 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
           ModalProps={{
             keepMounted: true,
           }}
-          PaperProps={{
-            sx: { width: DRAWER_WIDTH },
+          slotProps={{
+            paper: {
+              sx: { width: DRAWER_WIDTH },
+            }
           }}
         >
           {drawerContent}

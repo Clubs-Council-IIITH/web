@@ -86,7 +86,7 @@ export default function DocItem({
         {/* Buttons and Dropdown */}
         {isMobile ? (
           // Render buttons below the title for mobile
-          <Box
+          (<Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -137,10 +137,10 @@ export default function DocItem({
             >
               <Icon variant="close" />
             </IconButton>
-          </Box>
+          </Box>)
         ) : (
           // Desktop layout
-          <Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
+          (<Box sx={{ display: "flex", gap: 2, ml: "auto" }}>
             {/* Dropdown */}
             <Box>
               <Select
@@ -173,7 +173,7 @@ export default function DocItem({
             <IconButton onClick={onClose} size="small">
               <Icon variant="close" />
             </IconButton>
-          </Box>
+          </Box>)
         )}
       </DialogTitle>
       <DialogContent

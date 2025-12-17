@@ -33,18 +33,16 @@ export default async function EditFinance(props) {
           align="center"
           sx={{
             mt: 5,
-            px: 2,
-          }}
-        >
+            px: 2
+          }}>
           Error: {error.message.slice(10)}
         </Typography>
         <Stack
           direction="column"
           sx={{
             alignItems: "center",
-            mt: 2,
-          }}
-        >
+            mt: 2
+          }}>
           <Button
             variant="contained"
             color="primary"

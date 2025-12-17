@@ -77,7 +77,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
         data.img = await uploadImageFile(
           formData.img[0],
           `profile_${defaultValues.uid}`,
-          profile_warnSizeMB,
+          profile_warnSizeMB
         );
       } else {
         data.img = null;

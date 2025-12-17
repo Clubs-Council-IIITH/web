@@ -44,13 +44,9 @@ export default async function EditMember(props) {
 
     return (
       <Container>
-        <Typography
-          variant="h3"
-          gutterBottom
-          sx={{
-            mb: 3,
-          }}
-        >
+        <Typography variant="h3" gutterBottom sx={{
+          mb: 3
+        }}>
           Edit Member Details
         </Typography>
         <MemberForm defaultValues={transformMember(member)} action="edit" />

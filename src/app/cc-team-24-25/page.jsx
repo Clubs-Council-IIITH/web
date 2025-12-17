@@ -136,13 +136,10 @@ export default async function NewCCTeam2425() {
   return (
     <Container>
       <center>
-        <Typography
-          variant="h3"
-          sx={{
-            mb: 3,
-          }}
-        >
-          New Clubs Council Team '24-'25 🎉
+        <Typography variant="h3" sx={{
+          mb: 3
+        }}>
+          New Clubs Council Team &apos;24-&apos;25 🎉
         </Typography>
       </center>
       <LocalUsersGrid users={new_team} />

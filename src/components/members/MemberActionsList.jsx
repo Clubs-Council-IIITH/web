@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect,useState } from "react";
 
 import ActionPalette from "components/ActionPalette";
 import {
-  EditMember,
-  DeleteMember,
   ApproveAllMember,
+  DeleteMember,
+  EditMember,
 } from "components/members/MemberActions";
 
 export default function MemberActionsList({

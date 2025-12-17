@@ -1,66 +1,64 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo,useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, useWatch, Controller, useController } from "react-hook-form";
+import dayjs, { isDayjs } from "dayjs";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+} from "libphonenumber-js";
+import { Controller, useController,useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
   Button,
   Chip,
-  IconButton,
-  Grid,
-  Fade,
   CircularProgress,
-  TextField,
-  Typography,
-  ToggleButtonGroup,
-  ToggleButton,
-  FormHelperText,
+  Fade,
   FormControl,
   FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Select,
   Switch,
-  MenuItem,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
+  Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import InfoIcon from "@mui/icons-material/Info";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-import {
-  isValidPhoneNumber,
-  parsePhoneNumberWithError,
-} from "libphonenumber-js";
-import dayjs, { isDayjs } from "dayjs";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoIcon from "@mui/icons-material/Info";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 import { useAuth } from "components/AuthProvider";
-import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
-import EventBudget from "components/events/EventBudget";
-import EventSponsor from "components/events/EventSponsor";
 import ConfirmDialog from "components/ConfirmDialog";
+import EventBudget from "components/events/EventBudget";
 import EventsDialog from "components/events/EventsDialog";
+import EventSponsor from "components/events/EventSponsor";
+import FileUpload from "components/FileUpload";
 import MemberListItem from "components/members/MemberListItem";
+import { useToast } from "components/Toast";
+import { uploadImageFile } from "utils/files";
+import { locationLabel } from "utils/formatEvent";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventAction } from "actions/events/create/server_action";
 import { editEventAction } from "actions/events/edit/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
 import { eventsVenues } from "actions/events/venues/server_action";
+import { currentMembersAction } from "actions/members/current/server_action";
 import { getFullUser } from "actions/users/get/full/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
-import { currentMembersAction } from "actions/members/current/server_action";
-
-import { uploadImageFile } from "utils/files";
 import { audienceMap } from "constants/events";
-import { locationLabel } from "utils/formatEvent";
 
 const admin_roles = ["cc", "slo"];
 const clubsAddPastEvents = true; // whether clubs can add past events - only for special cases (default: false)
@@ -279,7 +277,7 @@ export default function EventForm({
     // upload poster
     const poster_filename = ("poster_" + data.name + "_" + data.clubid).replace(
       ".",
-      "_",
+      "_"
     );
     try {
       if (typeof formData.poster === "string") {
@@ -288,7 +286,7 @@ export default function EventForm({
         data.poster = await uploadImageFile(
           formData.poster[0],
           poster_filename,
-          poster_warnSizeMB,
+          poster_warnSizeMB
         );
       } else {
         data.poster = null;
@@ -305,7 +303,7 @@ export default function EventForm({
 
     // convert dates to ISO strings
     data.datetimeperiod = formData.datetimeperiod.map((d) =>
-      new Date(d).toISOString(),
+      new Date(d).toISOString()
     );
 
     // convert budget to array of objects with only required attributes
@@ -768,7 +766,7 @@ function SubmitButton({
             mode === "submit"
               ? () =>
                   handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true }),
+                    onSubmit(data, { shouldSubmit: true })
                   )()
               : undefined
           }
@@ -914,6 +912,7 @@ function EventNameInput({ control, disabled = true }) {
           value: 150,
           message: "Event name must be at most 150 characters long!",
         },
+        required: "Event name is required!",
       }}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
@@ -1148,7 +1147,7 @@ function EventDatetimeInput({
                   events={filterEvents(
                     existingEvents,
                     startDateInput,
-                    endDateInput,
+                    endDateInput
                   )}
                   clubs={clubs}
                 />
@@ -1226,7 +1225,7 @@ function EventDescriptionInput({ control }) {
           multiline
           onBlur={(e) => {
             field.onChange(
-              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
+              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, "")
             );
           }}
         />
@@ -1317,19 +1316,14 @@ function EventVenueInput({
       <Grid size={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
-          startDateInput && endDateInput ? (
-            <EventLocationInput
-              control={control}
-              startDateInput={startDateInput}
-              endDateInput={endDateInput}
-              disabled={disabled}
-              eventid={eventid}
-            />
-          ) : (
-            <FormHelperText>
-              Enter start and end dates to get available venues
-            </FormHelperText>
-          )
+          (startDateInput && endDateInput ? (<EventLocationInput
+            control={control}
+            startDateInput={startDateInput}
+            endDateInput={endDateInput}
+            disabled={disabled}
+            eventid={eventid}
+          />) : (<FormHelperText>Enter start and end dates to get available venues
+                        </FormHelperText>))
         ) : null}
       </Grid>
       <Grid size={12}>
@@ -1532,7 +1526,7 @@ function EventLocationInput({
           rooms.push({ location: "other", available: true });
         } else {
           rooms = rooms.map((r) =>
-            r.location === "other" ? { ...r, available: true } : r,
+            r.location === "other" ? { ...r, available: true } : r
           );
         }
         setAvailableRooms(rooms);
@@ -1592,7 +1586,7 @@ function EventLocationInput({
                       {locationLabel(location?.location)?.name}
                       {location?.location !== "other" &&
                         locationAlternateInput?.includes(
-                          location?.location,
+                          location?.location
                         ) && (
                           <span style={{ marginLeft: "8px", color: "#999" }}>
                             (already selected)

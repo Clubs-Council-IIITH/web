@@ -71,13 +71,9 @@ export default async function EditEventReport(props) {
 
     return (
       <Container>
-        <Typography
-          variant="h3"
-          gutterBottom
-          sx={{
-            mb: 3,
-          }}
-        >
+        <Typography variant="h3" gutterBottom sx={{
+          mb: 3
+        }}>
           Edit Event Report
         </Typography>
         <EventReportForm

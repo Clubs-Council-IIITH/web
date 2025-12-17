@@ -63,7 +63,7 @@ export default function GlobalError({ error, reset }) {
           }}
         >
           <Typography variant="body1">
-            If you weren't expecting to see this,{" "}
+            If you weren&apos;t expecting to see this,{" "}
             <Link href={BUG_REPORT_URL}>report it to our dev team</Link> along
             with the error details below so we can get it fixed ASAP!
           </Typography>

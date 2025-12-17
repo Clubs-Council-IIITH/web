@@ -17,9 +17,8 @@ export default function ClubInfo({ name, logo, tagline, description }) {
           display: "flex",
           alignItems: "center",
           mt: 3,
-          mb: 2,
-        }}
-      >
+          mb: 2
+        }}>
         <ClubLogo
           name={name}
           logo={logo}
@@ -33,25 +32,21 @@ export default function ClubInfo({ name, logo, tagline, description }) {
             variant={isDesktop ? "subtitle1" : "subtitle2"}
             sx={{
               color: "text.disabled",
-              fontWeight: 400,
-            }}
-          >
+              fontWeight: 400
+            }}>
             {tagline}
           </Typography>
         </Box>
       </Box>
-      <Box
-        sx={{
-          pt: 2,
-        }}
-      >
+      <Box sx={{
+        pt: 2
+      }}>
         <Typography
           variant="body1"
           sx={{
             mx: 1,
-            whiteSpace: "pre-wrap",
-          }}
-        >
+            whiteSpace: "pre-wrap"
+          }}>
           {description}
         </Typography>
       </Box>

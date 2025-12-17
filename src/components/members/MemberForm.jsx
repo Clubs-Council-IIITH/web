@@ -308,13 +308,6 @@ function MemberUserInput({ control, setValue, user, setUser }) {
     name: "uid",
   });
 
-  useEffect(() => {
-    (async () => {
-      // console.log("UID changed:", uid);
-      if (uid) await getUser();
-    })();
-  }, [uid]);
-
   const getUser = async () => {
     let res = await getUsers(uid);
 
@@ -329,6 +322,13 @@ function MemberUserInput({ control, setValue, user, setUser }) {
       });
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      // console.log("UID changed:", uid);
+      if (uid) await getUser();
+    })();
+  }, [uid]);
 
   return user ? (
     <Stack

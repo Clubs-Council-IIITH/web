@@ -81,24 +81,23 @@ export default async function TechTeam() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           width: "100%",
-          padding: 2.5,
-        }}
-      >
+          padding: 2.5
+        }}>
         <SLCTechLogo height={120} width={500} />
       </Grid>
-      <Typography
-        variant="h3"
-        sx={{
-          mb: 2,
-        }}
-      >
+      <Typography variant="h3" sx={{
+        mb: 2
+      }}>
         About Us
       </Typography>
       <Typography variant="body">
         The SLC-CC Tech Team started as the CC Tech Team in 2021 with a clear
         mission: to design and maintain the official Clubs Council website.
-        Since the release of <i>Version 1 in 2022</i>, we've grown into a
+        Since the release of <i>Version 1 in 2022</i>, we&apos;ve grown into a
         dedicated technical powerhouse serving all clubs and student bodies
         across the institution.
       </Typography>
@@ -106,13 +105,12 @@ export default async function TechTeam() {
         variant="h5"
         sx={{
           mb: 2,
-          mt: 2,
-        }}
-      >
+          mt: 2
+        }}>
         Who are we?
       </Typography>
       <Typography variant="body">
-        We're a passionate team committed to empowering our institution through
+        We&apos;re a passionate team committed to empowering our institution through
         technology. From crafting dynamic websites to managing critical systems,
         we strive to ensure seamless digital experiences for the student
         community.
@@ -121,9 +119,8 @@ export default async function TechTeam() {
         variant="h5"
         sx={{
           mb: 2,
-          mt: 2,
-        }}
-      >
+          mt: 2
+        }}>
         What We Do
       </Typography>
       <Typography variant="body">
@@ -140,7 +137,7 @@ export default async function TechTeam() {
           of student activities and operations.
         </li>
         <li>
-          Collaborating with the institute's IT department to maintain essential
+          Collaborating with the institute&apos;s IT department to maintain essential
           infrastructure and resolve technical challenges.
         </li>
       </Typography>
@@ -148,13 +145,14 @@ export default async function TechTeam() {
         variant="h5"
         sx={{
           mb: 2,
-          mt: 2,
-        }}
-      >
+          mt: 2
+        }}>
         Our Projects
       </Typography>
-      <Typography variant="body" paragraph>
-        Here are some of the websites we've developed and currently maintain:
+      <Typography variant="body" sx={{
+        marginBottom: "16px"
+      }}>
+        Here are some of the websites we&apos;ve developed and currently maintain:
       </Typography>
       <Typography variant="body" component="ul" sx={{ marginLeft: 2 }}>
         <li>Life Website</li>
@@ -165,22 +163,20 @@ export default async function TechTeam() {
       </Typography>
       <Typography
         variant="body1"
-        paragraph
         sx={{
           mt: 3,
-        }}
-      >
+          marginBottom: "16px"
+        }}>
         With each project, we aim to uphold our core values of innovation,
-        reliability, and teamwork. Together, we're shaping the future of our
-        institution's digital landscape.
+        reliability, and teamwork. Together, we&apos;re shaping the future of our
+        institution&apos;s digital landscape.
       </Typography>
       <Stack
         direction="row"
         sx={{
           mb: 2,
-          mt: 5,
-        }}
-      >
+          mt: 5
+        }}>
         <Typography variant="h3">Our Perfect Visionary Crew</Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button
@@ -189,12 +185,9 @@ export default async function TechTeam() {
           component={ButtonLink}
           href="/tech-team/all-members"
         >
-          <Typography
-            variant="button"
-            sx={{
-              color: "text.primary",
-            }}
-          >
+          <Typography variant="button" sx={{
+            color: "text.primary"
+          }}>
             View all
           </Typography>
           <Icon variant="chevron-right" />
@@ -212,12 +205,13 @@ export default async function TechTeam() {
         variant="h3"
         sx={{
           mb: 2,
-          mt: 5,
-        }}
-      >
+          mt: 5
+        }}>
         Reach Out to Us
       </Typography>
-      <Typography variant="body1" paragraph>
+      <Typography variant="body1" sx={{
+        marginBottom: "16px"
+      }}>
         For any queries, suggestions, or collaborations, feel free to reach out
         to us at{" "}
         <a href="mailto:webadmin@students.iiit.ac.in" target="_blank">

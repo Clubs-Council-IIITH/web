@@ -1,14 +1,14 @@
+import { Box, Button, Container, Stack,Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import { Box, Container, Typography, Button, Stack } from "@mui/material";
-
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import MembersTable from "components/members/MembersTable";
 import MembersFilter from "components/members/MembersFilter";
+import MembersTable from "components/members/MembersTable";
 
 export const metadata = {
   title: "Manage Members",
@@ -16,7 +16,7 @@ export const metadata = {
 
 export default async function ManageMembers(props) {
   const searchParams = await props.searchParams;
-  const targetName = searchParams?.name;
+  // const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
     ...(searchParams?.current === "true" ? ["current"] : []),
@@ -38,9 +38,8 @@ export default async function ManageMembers(props) {
         sx={{
           alignItems: "center",
           justifyContent: "space-between",
-          mb: 3,
-        }}
-      >
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Manage Members
         </Typography>
@@ -50,9 +49,8 @@ export default async function ManageMembers(props) {
           sx={{
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 2,
-          }}
-        >
+            gap: 2
+          }}>
           <Button
             component={ButtonLink}
             href="/manage/members/bulk-add"
@@ -94,18 +92,17 @@ export default async function ManageMembers(props) {
                 sx={{
                   color: "text.secondary",
                   textTransform: "uppercase",
-                  mb: 2,
-                }}
-              >
+                  mb: 2
+                }}>
                 All Members
               </Typography>
               <Box
                 sx={{
                   mt: 2,
-                  mb: 3,
-                }}
-              >
+                  mb: 3
+                }}>
                 <MembersFilter
+                  // name={targetName}
                   // name={targetName}
                   club={targetClub}
                   state={targetState}
@@ -121,10 +118,10 @@ export default async function ManageMembers(props) {
                   <Box
                     sx={{
                       mt: 2,
-                      mb: 3,
-                    }}
-                  >
+                      mb: 3
+                    }}>
                     <MembersFilter
+                      // name={targetName}
                       // name={targetName}
                       club={targetClub}
                       state={targetState}
@@ -155,11 +152,12 @@ async function PendingMembersDataGrid() {
   const userPromises = [];
   pendingMembers?.forEach((member) => {
     userPromises.push(
-      getClient().query(GET_USER_PROFILE, {
-        userInput: {
-          uid: member.uid,
-        },
-      }),
+      getClient()
+        .query(GET_USER_PROFILE, {
+          userInput: {
+            uid: member.uid,
+          },
+        }),
     );
   });
   const users = await Promise.all(userPromises);
@@ -173,19 +171,16 @@ async function PendingMembersDataGrid() {
   return (
     <>
       {processedMembers.length > 0 ? (
-        <Box
-          sx={{
-            mb: 3,
-          }}
-        >
+        <Box sx={{
+          mb: 3
+        }}>
           <Typography
             variant="subtitle2"
             gutterBottom
             sx={{
               color: "text.secondary",
-              textTransform: "uppercase",
-            }}
-          >
+              textTransform: "uppercase"
+            }}>
             Pending Approval
           </Typography>
           <MembersTable
@@ -224,11 +219,12 @@ async function MembersDataGrid({
   const userPromises = [];
   targetMembers?.forEach((member) => {
     userPromises.push(
-      getClient().query(GET_USER_PROFILE, {
-        userInput: {
-          uid: member.uid,
-        },
-      }),
+      getClient()
+        .query(GET_USER_PROFILE, {
+          userInput: {
+            uid: member.uid,
+          },
+        }),
     );
   });
   const users = await Promise.all(userPromises);

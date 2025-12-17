@@ -121,9 +121,8 @@ export default function MemberPositions({
             sx={{
               color: "text.secondary",
               px: "10px",
-              py: "10px",
-            }}
-          >
+              py: "10px"
+            }}>
             <i>Double click to edit</i>
           </Typography>
         );

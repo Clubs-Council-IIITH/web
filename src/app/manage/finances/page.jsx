@@ -32,29 +32,20 @@ export default async function ManageBills() {
         sx={{
           alignItems: "center",
           justifyContent: "space-between",
-          mb: 3,
-        }}
-      >
+          mb: 3
+        }}>
         <Typography variant="h3" gutterBottom>
           Event Finances
         </Typography>
       </Stack>
       {user?.role === "slo" ? (
         <>
-          <Stack
-            direction={"row"}
-            spacing={2}
-            sx={{
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="h4"
-              gutterBottom
-              sx={{
-                mt: 3,
-              }}
-            >
+          <Stack direction={"row"} spacing={2} sx={{
+            alignItems: "center"
+          }}>
+            <Typography variant="h4" gutterBottom sx={{
+              mt: 3
+            }}>
               Submitted
             </Typography>
             <Typography variant="body2" color="secondary">
@@ -67,13 +58,9 @@ export default async function ManageBills() {
           />{" "}
         </>
       ) : null}
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{
-          mt: 3,
-        }}
-      >
+      <Typography variant="h4" gutterBottom sx={{
+        mt: 3
+      }}>
         Pending
       </Typography>
       <FinancesTable
@@ -82,13 +69,9 @@ export default async function ManageBills() {
       />
       {user?.role !== "slo" ? (
         <>
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{
-              mt: 3,
-            }}
-          >
+          <Typography variant="h4" gutterBottom sx={{
+            mt: 3
+          }}>
             Submitted
           </Typography>
           <FinancesTable
@@ -97,13 +80,9 @@ export default async function ManageBills() {
           />{" "}
         </>
       ) : null}
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{
-          mt: 3,
-        }}
-      >
+      <Typography variant="h4" gutterBottom sx={{
+        mt: 3
+      }}>
         Accepted
       </Typography>
       <FinancesTable

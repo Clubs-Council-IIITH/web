@@ -73,7 +73,7 @@ export default async function ManageEventID(props) {
       GET_EVENT_BILLS_STATUS,
       {
         eventid: id,
-      },
+      }
     );
     if (error && error.message.includes("Event not found"))
       return redirect("/404");
@@ -86,7 +86,7 @@ export default async function ManageEventID(props) {
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
-    { userInput: null },
+    { userInput: null }
   );
 
   const user = { ...userMeta, ...userProfile };
@@ -97,7 +97,7 @@ export default async function ManageEventID(props) {
       {
         eventId: id,
         filterByLocation: true,
-      },
+      }
     );
     clashFlag = clashingEvents && clashingEvents.length > 0;
   }
@@ -111,32 +111,121 @@ export default async function ManageEventID(props) {
     return redirect("/404");
   }
 
-  return (
-    user?.role === "club" &&
-      user?.uid !== event?.clubid &&
-      !event?.collabclubs.includes(user?.uid) &&
-      redirect("/404"),
-    (
-      <Box>
-        <ActionPalette
-          left={[EventStatus, BudgetStatus, VenueStatus]}
-          leftProps={[
-            { status: event?.status },
-            { status: event?.status, budget: event?.budget },
-            { status: event?.status, location: event?.location },
-          ]}
-          right={getActions(event, clashFlag, { ...userMeta, ...userProfile })}
-          downloadbtn={
-            <DownloadEvent
-              event={event}
-              clubs={allClubs}
-              pocProfile={pocProfile}
-              eventBills={eventBillsData?.eventBills || {}}
-            />
-          }
+  return (user?.role === "club" &&
+    user?.uid !== event?.clubid &&
+    !event?.collabclubs.includes(user?.uid) &&
+    redirect("/404"), (<Box>
+    <ActionPalette
+      left={[EventStatus, BudgetStatus, VenueStatus]}
+      leftProps={[
+        { status: event?.status },
+        { status: event?.status, budget: event?.budget },
+        { status: event?.status, location: event?.location },
+      ]}
+      right={getActions(event, clashFlag, { ...userMeta, ...userProfile })}
+      downloadbtn={
+        <DownloadEvent
+          event={event}
+          clubs={allClubs}
+          pocProfile={pocProfile}
+          eventBills={eventBillsData?.eventBills || {}}
         />
-        <EventDetails showCode event={event} />
-        <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+      }
+    />
+    <EventDetails showCode event={event} />
+    <Divider sx={{ borderStyle: "dashed", my: 2 }} />
+    <Typography
+      variant="subtitle2"
+      gutterBottom
+      sx={{
+        textTransform: "uppercase",
+      }}
+    >
+      Point of Contact
+    </Typography>
+    <CardActionArea
+      component={Link}
+      href={`/profile/${event?.poc}`}
+      sx={{ textDecoration: "none", maxWidth: "max-content" }}
+    >
+      <MemberListItem uid={event?.poc} />
+    </CardActionArea>
+    <Box
+      sx={{
+        my: 3,
+      }}
+    />
+    <Grid container spacing={6}>
+      <Grid
+        size={{
+          xs: 12,
+          lg: 7
+        }}>
+        <Grid>
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{
+              textTransform: "uppercase",
+            }}
+          >
+            Budget
+          </Typography>
+          {event?.budget?.length ? (
+            <EventBudget
+              rows={event?.budget?.map((b, key) => ({
+                ...b,
+                id: b?.id || key,
+              }))} // add ID to each budget item if it doesn't exist (MUI requirement)
+              editable={false}
+              billViewable={billViewable}
+            />
+          ) : (
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              None requested
+            </Box>
+          )}
+        </Grid>
+
+        <Grid sx={{ mt: 4 }}>
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{
+              textTransform: "uppercase",
+            }}
+          >
+            Sponsor
+          </Typography>
+          {event?.sponsor?.length ? (
+            <EventSponsor
+              rows={event?.sponsor?.map((b, key) => ({
+                ...b,
+                id: b?.id || key,
+              }))}
+              editable={false}
+            />
+          ) : (
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              Event has no sponsors
+            </Box>
+          )}
+        </Grid>
+      </Grid>
+
+      <Grid
+        size={{
+          xs: "grow",
+          lg: "grow"
+        }}>
         <Typography
           variant="subtitle2"
           gutterBottom
@@ -144,227 +233,131 @@ export default async function ManageEventID(props) {
             textTransform: "uppercase",
           }}
         >
-          Point of Contact
+          Venue
         </Typography>
-        <CardActionArea
-          component={Link}
-          href={`/profile/${event?.poc}`}
-          sx={{ textDecoration: "none", maxWidth: "max-content" }}
-        >
-          <MemberListItem uid={event?.poc} />
-        </CardActionArea>
-        <Box
-          sx={{
-            my: 3,
-          }}
-        />
-        <Grid container spacing={6}>
-          <Grid
-            size={{
-              xs: 12,
-              lg: 7,
-            }}
-          >
-            <Grid>
-              <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                }}
-              >
-                Budget
-              </Typography>
-              {event?.budget?.length ? (
-                <EventBudget
-                  rows={event?.budget?.map((b, key) => ({
-                    ...b,
-                    id: b?.id || key,
-                  }))} // add ID to each budget item if it doesn't exist (MUI requirement)
-                  editable={false}
-                  billViewable={billViewable}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  None requested
-                </Box>
-              )}
-            </Grid>
 
-            <Grid sx={{ mt: 4 }}>
-              <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                }}
-              >
-                Sponsor
-              </Typography>
-              {event?.sponsor?.length ? (
-                <EventSponsor
-                  rows={event?.sponsor?.map((b, key) => ({
-                    ...b,
-                    id: b?.id || key,
-                  }))}
-                  editable={false}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  Event has no sponsors
-                </Box>
-              )}
-            </Grid>
-          </Grid>
-
-          <Grid
-            size={{
-              xs: "grow",
-              lg: "grow",
-            }}
-          >
-            <Typography
-              variant="subtitle2"
-              gutterBottom
+        {/* show requested location details, if any */}
+        {event?.location?.length ? (
+          <>
+            <Box
               sx={{
-                textTransform: "uppercase",
+                mt: 2,
               }}
             >
-              Venue
-            </Typography>
+              {event?.location?.map((venue, key) => (
+                <Chip
+                  key={key}
+                  label={
+                    venue === "other"
+                      ? event.otherLocation || "Other"
+                      : locationLabel(venue)?.name || "Unknown"
+                  }
+                  sx={{ mr: 1, mb: 1, p: 1 }}
+                />
+              ))}
+            </Box>
 
-            {/* show requested location details, if any */}
-            {event?.location?.length ? (
-              <>
+            {event?.locationAlternate && event?.locationAlternate.length ? (
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
+                <Typography variant="overline">
+                  Alternate Locations
+                </Typography>
                 <Box
                   sx={{
-                    mt: 2,
+                    mt: 1,
                   }}
                 >
-                  {event?.location?.map((venue, key) => (
+                  {event?.locationAlternate?.map((venue, key) => (
                     <Chip
                       key={key}
                       label={
                         venue === "other"
-                          ? event.otherLocation || "Other"
+                          ? event.otherLocationAlternate || "Other"
                           : locationLabel(venue)?.name || "Unknown"
                       }
                       sx={{ mr: 1, mb: 1, p: 1 }}
                     />
                   ))}
                 </Box>
-
-                {event?.locationAlternate && event?.locationAlternate.length ? (
-                  <Box
-                    sx={{
-                      mt: 2,
-                    }}
-                  >
-                    <Typography variant="overline">
-                      Alternate Locations
-                    </Typography>
-                    <Box
-                      sx={{
-                        mt: 1,
-                      }}
-                    >
-                      {event?.locationAlternate?.map((venue, key) => (
-                        <Chip
-                          key={key}
-                          label={
-                            venue === "other"
-                              ? event.otherLocationAlternate || "Other"
-                              : locationLabel(venue)?.name || "Unknown"
-                          }
-                          sx={{ mr: 1, mb: 1, p: 1 }}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                ) : null}
-
-                <Box
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  <Typography variant="overline">Equipment</Typography>
-                  <Typography variant="body2">
-                    {event?.equipment || "None"}
-                  </Typography>
-                </Box>
-
-                <Box
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  <Typography variant="overline">
-                    Additional Information
-                  </Typography>
-                  <Typography variant="body2">
-                    {event?.additional || "None"}
-                  </Typography>
-                </Box>
-              </>
-            ) : (
-              <Box
-                sx={{
-                  mt: 2,
-                }}
-              >
-                None requested
               </Box>
-            )}
+            ) : null}
 
-            <Grid
-              container
-              spacing={2}
+            <Box
               sx={{
-                mt: 0.1,
+                mt: 2,
               }}
             >
-              <Grid size={4}>
-                <Box>
-                  <Typography variant="overline">Population</Typography>
-                  <Typography variant="body2">
-                    {event?.population || 0}
-                  </Typography>
-                </Box>
-              </Grid>
-              {event?.externalPopulation && event.externalPopulation > 0 ? (
-                <Grid size={4}>
-                  <Box>
-                    <Typography variant="overline">
-                      External Population
-                    </Typography>
-                    <Typography variant="body2">
-                      {event?.externalPopulation || 0}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ) : null}
-            </Grid>
+              <Typography variant="overline">Equipment</Typography>
+              <Typography variant="body2">
+                {event?.equipment || "None"}
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                mt: 2,
+              }}
+            >
+              <Typography variant="overline">
+                Additional Information
+              </Typography>
+              <Typography variant="body2">
+                {event?.additional || "None"}
+              </Typography>
+            </Box>
+          </>
+        ) : (
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
+            None requested
+          </Box>
+        )}
+
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            mt: 0.1,
+          }}
+        >
+          <Grid size={4}>
+            <Box>
+              <Typography variant="overline">Population</Typography>
+              <Typography variant="body2">
+                {event?.population || 0}
+              </Typography>
+            </Box>
           </Grid>
+          {event?.externalPopulation && event.externalPopulation > 0 ? (
+            <Grid size={4}>
+              <Box>
+                <Typography variant="overline">
+                  External Population
+                </Typography>
+                <Typography variant="body2">
+                  {event?.externalPopulation || 0}
+                </Typography>
+              </Box>
+            </Grid>
+          ) : null}
         </Grid>
-        {/* show Approval status */}
-        {EventApprovalStatus(event?.status, event?.clubCategory != "club")}
-        {/* show post event information */}
-        {["cc", "club", "slo"].includes(user?.role) &&
-          EventBillStatus(event, eventBillsData?.eventBills || null, user?.uid)}
-        {["cc", "club", "slo"].includes(user?.role) &&
-          EventReportStatus(event, user)}
-      </Box>
-    )
-  );
+      </Grid>
+    </Grid>
+    {/* show Approval status */}
+    {EventApprovalStatus(event?.status, event?.clubCategory != "club")}
+    {/* show post event information */}
+    {["cc", "club", "slo"].includes(user?.role) &&
+      EventBillStatus(event, eventBillsData?.eventBills || null, user?.uid)}
+    {["cc", "club", "slo"].includes(user?.role) &&
+      EventReportStatus(event, user)}
+  </Box>));
 }
 
 // set conditional actions based on event datetime, current status and user role

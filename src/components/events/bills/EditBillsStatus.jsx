@@ -58,11 +58,9 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
                 message: "Comment must be at least 2 characters long!",
               },
             }}
-            render={({
-              field: { value, ...rest },
-              fieldState: { error, invalid },
-            }) => (
+            render={({ field: {value, ...rest}, fieldState: { error, invalid } }) => (
               <TextField
+                {...rest}
                 {...rest}
                 label="Comment"
                 autoComplete="off"
@@ -79,6 +77,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
         </Grid>
         <Grid
           container
+          
           direction="row"
           spacing={1}
           sx={{

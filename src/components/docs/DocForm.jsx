@@ -83,7 +83,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
       // check all fields
       if (!data.title || !data.file) {
         throw new Error(
-          "Please fill all the required Fields before submitting.",
+          "Please fill all the required Fields before submitting."
         );
       }
 
@@ -93,7 +93,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
         data.title +
           "_v" +
           (newFile ? 1 : handleVersionNumbering(editFile)).toString(),
-        maxFileSizeMB,
+        maxFileSizeMB
       );
       if (!filename) {
         throw new Error("File upload failed, check Title and File validity");
