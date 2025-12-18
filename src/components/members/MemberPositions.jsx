@@ -3,23 +3,22 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
-  Tooltip,
   Button,
-  IconButton,
-  Typography,
   CircularProgress,
+  IconButton,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { DataGrid } from "@mui/x-data-grid";
 
-import Tag from "components/Tag";
-import Icon from "components/Icon";
-
-import { useToast } from "components/Toast";
 import { useAuth } from "components/AuthProvider";
+import Icon from "components/Icon";
+import Tag from "components/Tag";
+import { useToast } from "components/Toast";
 
 import { approveMemberAction } from "actions/members/approve/server_action";
 import { rejectMemberAction } from "actions/members/reject/server_action";
@@ -118,8 +117,8 @@ export default function MemberPositions({
           </Typography>
         ) : (
           <Typography
-            color="text.secondary"
             sx={{
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -210,6 +209,7 @@ export default function MemberPositions({
               rejected: row.rejected,
               rejectionTime: row.rejectionTime,
             }),
+            disableExport: true,
             renderCell: ({
               value: { approved, approvalTime, rejected, rejectionTime },
             }) => (
@@ -252,6 +252,9 @@ export default function MemberPositions({
                     rejected: row.rejected,
                     rid: row.rid,
                   }),
+                  disableExport: true,
+                  disableColumnMenu: true,
+                  sortable: false,
                   renderCell: ({ value: { approved, rejected, rid } }) => (
                     <>
                       {approved || rejected ? null : (

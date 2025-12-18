@@ -1,10 +1,10 @@
+import { Container, Divider, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Container, Divider, Typography } from "@mui/material";
-
-import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { extractFirstYear } from "components/members/MembersGrid";
+import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
@@ -47,7 +47,12 @@ export default async function TechTeam() {
   return (
     <Container>
       <center>
-        <Typography variant="h3" mb={4}>
+        <Typography
+          variant="h3"
+          sx={{
+            mb: 4,
+          }}
+        >
           Tech Team Members
         </Typography>
       </center>
@@ -65,7 +70,12 @@ export default async function TechTeam() {
           ?.map((year) => (
             <>
               <Divider textAlign="left" sx={{ mb: 2 }}>
-                <Typography variant="h5" textTransform="uppercase">
+                <Typography
+                  variant="h5"
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
                   {year == -1 ? "Current Members" : year}
                 </Typography>
               </Divider>

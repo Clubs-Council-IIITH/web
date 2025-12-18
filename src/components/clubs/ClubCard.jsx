@@ -1,14 +1,14 @@
-import Link from "next/link";
-
 import {
   Box,
-  Typography,
   Card,
-  CardContent,
   CardActionArea,
+  CardContent,
+  Typography,
 } from "@mui/material";
+
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubLogo from "components/clubs/ClubLogo";
+import ButtonLink from "components/Link";
 
 export default function ClubCard({
   dim,
@@ -23,12 +23,17 @@ export default function ClubCard({
   return (
     <Card variant="outlined" sx={{ position: "relative" }}>
       <CardActionArea
-        component={Link}
+        component={ButtonLink}
         href={
           url ? url : studentBody ? `/student-bodies/${cid}` : `/clubs/${cid}`
         }
       >
-        <Box backgroundColor="black" borderRadius={2}>
+        <Box
+          sx={{
+            backgroundColor: "black",
+            borderRadius: 2,
+          }}
+        >
           <ClubBanner
             dim={dim}
             name={name}
@@ -50,15 +55,21 @@ export default function ClubCard({
             border={3}
             mb={2}
           />
-          <Typography variant="h5" underline="none" color="common.white">
+          <Typography
+            variant="h5"
+            underline="none"
+            sx={{
+              color: "common.white",
+            }}
+          >
             {name}
           </Typography>
 
           <Typography
             variant="caption"
             component="div"
-            mt={1}
             sx={{
+              mt: 1,
               color: "text.disabled",
               display: "block",
               fontSize: 14,

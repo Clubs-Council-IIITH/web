@@ -2,7 +2,6 @@
 
 import Icon from "components/Icon";
 import Tag from "components/Tag";
-
 import { stateLabel } from "utils/formatEvent";
 
 export function EventStatus({ status, sx }) {

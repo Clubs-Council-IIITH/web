@@ -1,15 +1,16 @@
 "use client";
 
 import {
-  Dialog,
-  DialogTitle,
-  DialogActions,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
   List,
   ListItem,
   ListItemText,
 } from "@mui/material";
+
 import { ISOtoHuman } from "utils/formatTime";
 
 export default function EventsDialog({
@@ -29,27 +30,27 @@ export default function EventsDialog({
       >
         <List>
           {events.map((event) => (
-            <ListItem key={event.id}>
+            <ListItem key={event._id}>
               <ListItemText
                 primary={event.name}
                 secondary={
-                  <div>
-                    <div>
+                  <>
+                    <span style={{ display: "block" }}>
                       By {clubs.find((club) => club.cid === event.clubid)?.name}
-                    </div>
-                    <div>
+                    </span>
+                    <span style={{ display: "block" }}>
                       {ISOtoHuman(event.datetimeperiod[0])} to{" "}
                       {ISOtoHuman(event.datetimeperiod[1])}
-                    </div>
-                    <div>
+                    </span>
+                    <span style={{ display: "block" }}>
                       <b>Status:</b>{" "}
                       {event.status.state === "approved"
                         ? "Approved"
                         : event.status.state === "incomplete"
                           ? "Draft"
                           : "Under review"}
-                    </div>
-                  </div>
+                    </span>
+                  </>
                 }
               />
             </ListItem>

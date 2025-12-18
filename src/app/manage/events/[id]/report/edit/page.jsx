@@ -1,13 +1,14 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT } from "gql/queries/events";
-import { GET_EVENT_REPORT } from "gql/queries/events";
 import { redirect } from "next/navigation";
-import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
 
-import { canEditReport } from "utils/eventReportAuth";
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_FULL_EVENT } from "gql/queries/events";
+import { GET_EVENT_REPORT } from "gql/queries/events";
+
 import EventReportForm from "components/events/report/EventReportForm";
+import { canEditReport } from "utils/eventReportAuth";
 
 export const metadata = {
   title: "Edit Event Report",
@@ -33,7 +34,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function EditEventReport({ params }) {
+export default async function EditEventReport(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -70,10 +72,15 @@ export default async function EditEventReport({ params }) {
 
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            mb: 3,
+          }}
+        >
           Edit Event Report
         </Typography>
-
         <EventReportForm
           id={id}
           defaultValues={transformEvent(event)}

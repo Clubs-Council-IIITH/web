@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 export const GET_ACTIVE_CLUBS = gql`
   query ActiveClubs {
-    activeClubs {
+    allClubs(onlyActive: true) {
       _id
       cid
       state
@@ -45,7 +45,7 @@ export const GET_ALL_CLUB_IDS = gql`
 
 export const GET_ACTIVE_CLUB_IDS = gql`
   query ActiveClubs {
-    activeClubs {
+    allClubs(onlyActive: true) {
       _id
       cid
       name

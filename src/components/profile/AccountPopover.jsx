@@ -1,32 +1,33 @@
 // AccountPopover.js
 
 import React from "react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+
 import {
+  Avatar,
   Box,
   Button,
+  ClickAwayListener,
+  Divider,
   Fade,
   IconButton,
-  Avatar,
-  Popper,
   MenuItem,
-  Divider,
+  Popper,
   Stack,
-  Typography,
   Tooltip,
-  ClickAwayListener,
+  Typography,
 } from "@mui/material";
-import { useTheme, alpha } from "@mui/material/styles";
+import { alpha, useTheme } from "@mui/material/styles";
 
-import LoginLogo from "components/svg/login.svg";
-
-import Image from "next/image";
-import Link from "next/link";
-import Icon from "components/Icon";
-import { getFile } from "utils/files";
-import { login, logout } from "utils/auth";
-import { useAuth } from "components/AuthProvider";
 import { useMode2 } from "contexts/ModeContext";
-import { usePathname } from "next/navigation";
+
+import { useAuth } from "components/AuthProvider";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
+import LoginLogo from "components/svg/login.svg";
+import { login, logout } from "utils/auth";
+import { getFile } from "utils/files";
 
 export default function AccountPopover() {
   const pathname = usePathname();
@@ -189,7 +190,7 @@ export default function AccountPopover() {
                       <Stack sx={{ p: 1 }}>
                         {[...AUTHENTICATED_MENU_OPTIONS].map((option) => (
                           <MenuItem
-                            component={Link}
+                            component={ButtonLink}
                             key={option.label}
                             href={option.url}
                             sx={{

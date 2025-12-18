@@ -1,5 +1,6 @@
-import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { Container, Typography } from "@mui/material";
+
+import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 export const metadata = {
   title: "New CC Team 24-25",
@@ -136,14 +137,23 @@ export default async function NewCCTeam2425() {
   return (
     <Container>
       <center>
-        <Typography variant="h3" mb={3}>
-          New Clubs Council Team '24-'25 🎉
+        <Typography
+          variant="h3"
+          sx={{
+            mb: 3,
+          }}
+        >
+          New Clubs Council Team &apos;24-&apos;25 🎉
         </Typography>
       </center>
       <LocalUsersGrid users={new_team} />
-
       <center>
-        <Typography variant="h4" mt={3}>
+        <Typography
+          variant="h4"
+          sx={{
+            mt: 3,
+          }}
+        >
           New Advisors
         </Typography>
       </center>

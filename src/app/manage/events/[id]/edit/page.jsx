@@ -1,9 +1,10 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS } from "gql/queries/events";
 import { redirect } from "next/navigation";
-import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS } from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -19,7 +20,6 @@ function transformEvent(event) {
       new Date(event?.datetimeperiod[0]),
       new Date(event?.datetimeperiod[1]),
     ],
-    // add mandatory ID field for DataGrid
     budget:
       event?.budget?.map((budget, key) => ({
         ...budget,
@@ -40,7 +40,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function EditEvent({ params }) {
+export default async function EditEvent(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -62,10 +63,15 @@ export default async function EditEvent({ params }) {
       user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
       (
         <Container>
-          <Typography variant="h3" gutterBottom mb={3}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
             Edit Event Details
           </Typography>
-
           <EventForm
             id={id}
             defaultValues={transformEvent(event)}

@@ -3,18 +3,19 @@
 import Link from "next/link";
 
 import {
+  Alert,
+  AlertTitle,
   Button,
   Container,
   Stack,
   Typography,
-  Alert,
-  AlertTitle,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Icon from "components/Icon";
 import { BUG_REPORT_URL } from "components/Layout";
+import ButtonLink from "components/Link";
 
 export default function GlobalError({ error, reset }) {
   const theme = useTheme();
@@ -30,8 +31,20 @@ export default function GlobalError({ error, reset }) {
         py: 8,
       }}
     >
-      <Stack direction="column" spacing={4} alignItems="center">
-        <Stack direction="row" spacing={3} alignItems="center">
+      <Stack
+        direction="column"
+        spacing={4}
+        sx={{
+          alignItems: "center",
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={3}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Icon
             external
             variant="fluent-emoji-flat:crying-face"
@@ -42,9 +55,15 @@ export default function GlobalError({ error, reset }) {
           </Typography>
         </Stack>
 
-        <Stack direction="column" spacing={2} alignItems="center">
+        <Stack
+          direction="column"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+          }}
+        >
           <Typography variant="body1">
-            If you weren't expecting to see this,{" "}
+            If you weren&apos;t expecting to see this,{" "}
             <Link href={BUG_REPORT_URL}>report it to our dev team</Link> along
             with the error details below so we can get it fixed ASAP!
           </Typography>
@@ -53,7 +72,7 @@ export default function GlobalError({ error, reset }) {
             <Button
               variant="outlined"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href="/"
               startIcon={<Icon variant="home-outline" />}
             >
@@ -74,16 +93,24 @@ export default function GlobalError({ error, reset }) {
           <AlertTitle>
             {error?.name} {error?.digest}
           </AlertTitle>
-          <Typography variant="body1" gutterBottom mb={2}>
+          <Typography
+            variant="body1"
+            gutterBottom
+            sx={{
+              mb: 2,
+            }}
+          >
             {error?.message}
           </Typography>
           <Typography variant="overline">Stacktrace</Typography>
           {error?.stack.split("\n").map((line, i) => (
             <Typography
               variant="body2"
-              fontFamily="monospace"
               key={i}
-              ml={i > 0 ? 2 : 0}
+              sx={{
+                fontFamily: "monospace",
+                ml: i > 0 ? 2 : 0,
+              }}
             >
               {line}
             </Typography>

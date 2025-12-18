@@ -1,15 +1,14 @@
 "use client";
 
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Button,
   Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   Typography,
 } from "@mui/material";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -73,7 +72,6 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
             >
               Download
             </Button>
-
             <IconButton
               onClick={onClose}
               size="small"
@@ -104,7 +102,6 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
           </Box>
         )}
       </DialogTitle>
-
       <DialogContent
         sx={{
           display: "flex",
@@ -115,7 +112,13 @@ export default function BillPdfViewer({ eventTitle, pdfUrl, onClose, open }) {
         }}
       >
         {isMobile ? (
-          <Typography variant="body1" mb={5} sx={{ textAlign: "center" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              mb: 5,
+              textAlign: "center",
+            }}
+          >
             Your device does not support previewing this file. Please download
             it to view.
           </Typography>

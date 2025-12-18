@@ -1,67 +1,64 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, Controller, useController } from "react-hook-form";
+import dayjs, { isDayjs } from "dayjs";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+} from "libphonenumber-js";
+import { Controller, useController, useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
   Button,
   Chip,
-  IconButton,
-  Grid,
-  Fade,
   CircularProgress,
-  TextField,
-  Typography,
-  ToggleButtonGroup,
-  ToggleButton,
-  FormHelperText,
+  Fade,
   FormControl,
   FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Select,
   Switch,
-  MenuItem,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
+  Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { LoadingButton } from "@mui/lab";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import InfoIcon from "@mui/icons-material/Info";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-import {
-  isValidPhoneNumber,
-  parsePhoneNumberWithError,
-} from "libphonenumber-js";
-import dayjs, { isDayjs } from "dayjs";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoIcon from "@mui/icons-material/Info";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 import { useAuth } from "components/AuthProvider";
-import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
-import EventBudget from "components/events/EventBudget";
-import EventSponsor from "components/events/EventSponsor";
 import ConfirmDialog from "components/ConfirmDialog";
+import EventBudget from "components/events/EventBudget";
 import EventsDialog from "components/events/EventsDialog";
+import EventSponsor from "components/events/EventSponsor";
+import FileUpload from "components/FileUpload";
 import MemberListItem from "components/members/MemberListItem";
+import { useToast } from "components/Toast";
+import { uploadImageFile } from "utils/files";
+import { locationLabel } from "utils/formatEvent";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventAction } from "actions/events/create/server_action";
 import { editEventAction } from "actions/events/edit/server_action";
 import { eventProgress } from "actions/events/progress/server_action";
 import { eventsVenues } from "actions/events/venues/server_action";
+import { currentMembersAction } from "actions/members/current/server_action";
 import { getFullUser } from "actions/users/get/full/server_action";
 import { saveUserPhone } from "actions/users/save/phone/server_action";
-import { currentMembersAction } from "actions/members/current/server_action";
-
-import { uploadImageFile } from "utils/files";
 import { audienceMap } from "constants/events";
-import { locationLabel } from "utils/formatEvent";
 
 const admin_roles = ["cc", "slo"];
 const clubsAddPastEvents = true; // whether clubs can add past events - only for special cases (default: false)
@@ -105,7 +102,7 @@ export default function EventForm({
     })();
   }, []);
 
-  const { control, handleSubmit, watch, resetField, setValue } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     mode: "onChange",
     defaultValues,
   });
@@ -132,7 +129,6 @@ export default function EventForm({
               severity: "success",
             });
             router.push("/manage/events");
-            router.refresh();
           } else {
             // show error toast
             triggerToast({
@@ -155,7 +151,6 @@ export default function EventForm({
           severity: "success",
         });
         router.push(`/manage/events/${res.data._id}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -182,7 +177,6 @@ export default function EventForm({
               severity: "success",
             });
             router.push("/manage/events");
-            router.refresh();
           } else {
             // show error toast
             triggerToast({
@@ -202,7 +196,6 @@ export default function EventForm({
           severity: "success",
         });
         router.push(`/manage/events/${res.data._id}`);
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -270,6 +263,9 @@ export default function EventForm({
     };
 
     data.collabclubs = collabEvent ? formData.collabclubs : [];
+    data.collabclubs = data.collabclubs.filter(
+      (cid) => cid && cid !== data.clubid,
+    );
 
     // set club ID for event based on user role
     if (user?.role === "club") {
@@ -374,20 +370,40 @@ export default function EventForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={4} alignItems="flex-start">
-        <Grid container item xs={12} md={7} xl={8} spacing={3}>
-          <Grid container item>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Grid
+          container
+          spacing={2}
+          size={{
+            xs: 12,
+            md: 7,
+            xl: 8,
+          }}
+        >
+          <Grid container>
             <Grid
               container
-              item
-              sx={{ display: "flex", justifyContent: "space-between" }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
             >
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
-                color="text.secondary"
                 gutterBottom
-                mb={2}
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  alignSelf: "center",
+                  mb: 0,
+                }}
               >
                 Details
               </Typography>
@@ -420,9 +436,9 @@ export default function EventForm({
                 label="Collaboration Event"
               />
             </Grid>
-            <Grid container item spacing={2}>
+            <Grid container spacing={2}>
               {admin_roles.includes(user?.role) ? (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <EventClubSelect
                     control={control}
                     disabled={
@@ -435,7 +451,7 @@ export default function EventForm({
                 </Grid>
               ) : null}
               {collabEvent ? (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <EventCollabClubSelect
                     control={control}
                     disabled={
@@ -445,11 +461,10 @@ export default function EventForm({
                     }
                     defaultValue={defaultValues.collabclubs}
                     clubs={clubs}
-                    watch={watch}
                   />
                 </Grid>
               ) : null}
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <EventNameInput
                   control={control}
                   disabled={
@@ -459,10 +474,9 @@ export default function EventForm({
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <EventDatetimeInput
                   control={control}
-                  watch={watch}
                   setValue={setValue}
                   disabled={
                     !admin_roles.includes(user?.role) &&
@@ -474,17 +488,16 @@ export default function EventForm({
                   clubs={clubs}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <EventAudienceSelect control={control} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <EventDescriptionInput control={control} />
               </Grid>
               {user?.role === "club" ? (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <EventPOC
                     control={control}
-                    watch={watch}
                     cid={user?.uid}
                     hasPhone={hasPhone}
                     setHasPhone={setHasPhone}
@@ -496,10 +509,9 @@ export default function EventForm({
                   />
                 </Grid>
               ) : user?.role === "cc" ? (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <EventPOC
                     control={control}
-                    watch={watch}
                     cid={watch("clubid")}
                     hasPhone={hasPhone}
                     setHasPhone={setHasPhone}
@@ -507,96 +519,104 @@ export default function EventForm({
                 </Grid>
               ) : null}
               {/*
-              <Grid item xs={12}>
+              <Grid xs={12}>
                 <EventLinkInput control={control} />
               </Grid>
               */}
             </Grid>
           </Grid>
-          <Grid container item>
+          <Grid sx={{ width: "100%" }}>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
-              mb={2}
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                mb: 2,
+              }}
             >
               Budget
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
-                <EventBudgetTable
+            <EventBudgetTable
+              control={control}
+              disabled={
+                !admin_roles.includes(user?.role) &&
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete"
+              }
+              setBudgetEditing={setBudgetEditing}
+            />
+          </Grid>
+          <Grid sx={{ width: "100%" }}>
+            <Grid size={12}>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="haveSponsor"
+                    control={control}
+                    defaultValue={
+                      defaultValues?.sponsor &&
+                      defaultValues?.sponsor?.length > 0
+                    }
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e?.target?.checked)}
+                        disabled={
+                          !admin_roles.includes(user?.role) &&
+                          defaultValues?.status?.state != undefined &&
+                          defaultValues?.status?.state != "incomplete"
+                        }
+                        sx={{ m: 2 }}
+                      />
+                    )}
+                  />
+                }
+                label="Does event have any Sponsors?"
+              />
+            </Grid>
+            <Grid size={12}>
+              {haveSponsor ? (
+                <EventSponsorTable
                   control={control}
                   disabled={
                     !admin_roles.includes(user?.role) &&
                     defaultValues?.status?.state != undefined &&
                     defaultValues?.status?.state != "incomplete"
                   }
-                  setBudgetEditing={setBudgetEditing}
+                  setSponsorEditing={setSponsorEditing}
                 />
-              </Grid>
+              ) : null}
             </Grid>
-          </Grid>
-          <Grid container item>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="haveSponsor"
-                  control={control}
-                  defaultValue={
-                    defaultValues?.sponsor && defaultValues?.sponsor?.length > 0
-                  }
-                  render={({ field }) => (
-                    <Switch
-                      checked={field.value}
-                      onChange={(e) => field.onChange(e?.target?.checked)}
-                      inputProps={{ "aria-label": "controlled" }}
-                      disabled={
-                        !admin_roles.includes(user?.role) &&
-                        defaultValues?.status?.state != undefined &&
-                        defaultValues?.status?.state != "incomplete"
-                      }
-                      sx={{ m: 2 }}
-                    />
-                  )}
-                />
-              }
-              label="Does event have any Sponsors?"
-            />
-            {haveSponsor ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={12}>
-                  <EventSponsorTable
-                    control={control}
-                    disabled={
-                      !admin_roles.includes(user?.role) &&
-                      defaultValues?.status?.state != undefined &&
-                      defaultValues?.status?.state != "incomplete"
-                    }
-                    setSponsorEditing={setSponsorEditing}
-                  />
-                </Grid>
-              </Grid>
-            ) : null}
           </Grid>
         </Grid>
 
-        <Grid container item xs md spacing={3} alignItems="flex-start">
-          <Grid container item>
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+          size={{
+            xs: "grow",
+            md: "grow",
+          }}
+        >
+          <Grid container>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+              }}
             >
               Venue
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid size={12}>
                 <EventVenueInput
                   control={control}
-                  watch={watch}
-                  resetField={resetField}
                   defaultValues={defaultValues}
                   disabled={
                     !admin_roles.includes(user?.role) &&
@@ -609,17 +629,19 @@ export default function EventForm({
             </Grid>
           </Grid>
 
-          <Grid container item>
+          <Grid container>
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
-              color="text.secondary"
               gutterBottom
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+              }}
             >
               Media
             </Typography>
-            <Grid container item spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid size={12}>
                 <FileUpload
                   type="image"
                   name="poster"
@@ -634,8 +656,16 @@ export default function EventForm({
             </Grid>
           </Grid>
 
-          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-            <Grid item xs={6}>
+          <Grid
+            container
+            direction="row"
+            spacing={1}
+            sx={{
+              pt: 3,
+            }}
+            size={12}
+          >
+            <Grid size={6}>
               <Button
                 size="large"
                 variant="outlined"
@@ -657,91 +687,30 @@ export default function EventForm({
                 confirmText="Yes, discard my changes"
               />
             </Grid>
-            <Grid item xs={6}>
-              {admin_roles.includes(user?.role) ||
-              (user?.role === "club" &&
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete") ? (
-                <Tooltip
-                  title={
-                    budgetEditing || sponsorEditing
-                      ? "Cannot save while editing budget or sponsor details"
-                      : ""
-                  }
-                  disableHoverListener={!(budgetEditing || sponsorEditing)}
-                >
-                  <span>
-                    <LoadingButton
-                      loading={loading}
-                      type="submit"
-                      size="large"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      disabled={budgetEditing || sponsorEditing}
-                    >
-                      Save
-                    </LoadingButton>
-                  </span>
-                </Tooltip>
-              ) : (
-                <Tooltip
-                  title={
-                    budgetEditing || sponsorEditing
-                      ? "Cannot save while editing budget or sponsor details"
-                      : ""
-                  }
-                  disableHoverListener={!(budgetEditing || sponsorEditing)}
-                >
-                  <span>
-                    <LoadingButton
-                      loading={loading}
-                      type="submit"
-                      size="large"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      disabled={budgetEditing || sponsorEditing}
-                    >
-                      Save as draft
-                    </LoadingButton>
-                  </span>
-                </Tooltip>
-              )}
+            <Grid size={6}>
+              <SubmitButton
+                mode="draft"
+                loading={loading}
+                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
+                defaultValues={defaultValues}
+                user={user}
+                disabled={budgetEditing || sponsorEditing}
+                admin_roles={admin_roles}
+              />
             </Grid>
-            {admin_roles.includes(user?.role) ||
-            (user?.role === "club" &&
-              defaultValues?.status?.state != undefined &&
-              defaultValues?.status?.state != "incomplete") ? null : (
-              <Grid item xs={12}>
-                <Tooltip
-                  title={
-                    budgetEditing || sponsorEditing
-                      ? "Cannot save while editing budget or sponsor details"
-                      : ""
-                  }
-                  disableHoverListener={!(budgetEditing || sponsorEditing)}
-                >
-                  <span>
-                    <LoadingButton
-                      loading={loading}
-                      size="large"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      onClick={() =>
-                        handleSubmit((data) =>
-                          onSubmit(data, { shouldSubmit: true }),
-                        )()
-                      }
-                      disabled={budgetEditing || sponsorEditing}
-                    >
-                      Save & Submit
-                    </LoadingButton>
-                  </span>
-                </Tooltip>
-              </Grid>
-            )}
+            <Grid size={12}>
+              <SubmitButton
+                mode="submit"
+                loading={loading}
+                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
+                defaultValues={defaultValues}
+                user={user}
+                disabled={budgetEditing || sponsorEditing}
+                admin_roles={admin_roles}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -756,6 +725,61 @@ export default function EventForm({
         cancelText="Continue"
       />
     </form>
+  );
+}
+function SubmitButton({
+  mode = "draft", // "draft" or "submit"
+  loading,
+  handleSubmit,
+  onSubmit,
+  defaultValues = {},
+  user = {},
+  disabled = true,
+  admin_roles = [],
+}) {
+  const privileged =
+    admin_roles.includes(user?.role) ||
+    (user?.role === "club" &&
+      defaultValues?.status?.state !== undefined &&
+      defaultValues?.status?.state !== "incomplete");
+
+  // hide "Save & Submit" for privileged users (matches original logic)
+  if (mode === "submit" && privileged) return null;
+
+  const tooltipText = disabled
+    ? "Cannot save while editing budget or sponsor details"
+    : "";
+
+  const label =
+    mode === "submit" ? "Save & Submit" : privileged ? "Save" : "Save as draft";
+
+  const variant =
+    mode === "submit" ? "contained" : privileged ? "contained" : "outlined";
+
+  return (
+    <Tooltip title={tooltipText} disableHoverListener={!tooltipText}>
+      <span>
+        <Button
+          loading={loading}
+          type={mode === "draft" ? "submit" : undefined}
+          onClick={
+            mode === "submit"
+              ? () =>
+                  handleSubmit((data) =>
+                    onSubmit(data, { shouldSubmit: true }),
+                  )()
+              : undefined
+          }
+          size="large"
+          variant={variant}
+          color="primary"
+          fullWidth
+          disabled={disabled}
+        >
+          {label}
+        </Button>
+      </span>
+    </Tooltip>
   );
 }
 
@@ -794,12 +818,14 @@ function EventClubSelect({ control, disabled = true, clubs = [] }) {
 
 function EventCollabClubSelect({
   control,
-  watch,
   defaultValue,
   disabled = true,
   clubs = [],
 }) {
-  const selectedClub = watch("clubid");
+  const selectedClub = useWatch({
+    control,
+    name: "clubid",
+  });
   const [open, setOpen] = useState(false);
 
   return (
@@ -886,6 +912,7 @@ function EventNameInput({ control, disabled = true }) {
           value: 150,
           message: "Event name must be at most 150 characters long!",
         },
+        required: "Event name is required!",
       }}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
@@ -926,15 +953,16 @@ function filterEvents(events, startTime, endTime) {
 // event datetime range input
 function EventDatetimeInput({
   control,
-  watch,
   setValue,
   disabled = true,
   role = "public",
   existingEvents = [],
   clubs = [],
 }) {
-  const startDateInput = watch("datetimeperiod.0");
-  const endDateInput = watch("datetimeperiod.1");
+  const [startDateInput, endDateInput] = useWatch({
+    control,
+    name: ["datetimeperiod.0", "datetimeperiod.1"],
+  });
   const [error, setError] = useState(null);
   const [eventsDialogOpen, setEventsDialogOpen] = useState(false);
 
@@ -961,9 +989,20 @@ function EventDatetimeInput({
       setValue("datetimeperiod.1", null);
   }, [startDateInput]);
 
+  const resetLocations = () => {
+    setValue("location", []);
+    setValue("locationAlternate", []);
+  };
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6} xl={4}>
+      <Grid
+        size={{
+          xs: 12,
+          md: 6,
+          xl: 4,
+        }}
+      >
         <Controller
           name="datetimeperiod.0"
           control={control}
@@ -979,7 +1018,7 @@ function EventDatetimeInput({
             },
           }}
           render={({
-            field: { value, ...rest },
+            field: { value, onChange, ...rest },
             fieldState: { error, invalid },
           }) => (
             <DateTimePicker
@@ -1000,6 +1039,10 @@ function EventDatetimeInput({
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
+              onChange={(newValue) => {
+                onChange(newValue);
+                resetLocations();
+              }}
               disabled={disabled}
               format="DD/MM/YYYY hh:mm A"
               {...rest}
@@ -1007,7 +1050,13 @@ function EventDatetimeInput({
           )}
         />
       </Grid>
-      <Grid item xs={12} md={6} xl={4}>
+      <Grid
+        size={{
+          xs: 12,
+          md: 6,
+          xl: 4,
+        }}
+      >
         <Controller
           name="datetimeperiod.1"
           control={control}
@@ -1023,7 +1072,7 @@ function EventDatetimeInput({
             },
           }}
           render={({
-            field: { value, ...rest },
+            field: { value, onChange, ...rest },
             fieldState: { error, invalid },
           }) => (
             <DateTimePicker
@@ -1053,6 +1102,10 @@ function EventDatetimeInput({
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
+              onChange={(newValue) => {
+                onChange(newValue);
+                resetLocations();
+              }}
               disabled={!startDateInput || disabled}
               format="DD/MM/YYYY hh:mm A"
               {...rest}
@@ -1064,12 +1117,19 @@ function EventDatetimeInput({
         <>
           {existingEvents?.length ? (
             filterEvents(existingEvents, startDateInput, endDateInput) ? (
-              <Grid item xs={8} xl={4}>
+              <Grid
+                size={{
+                  xs: 8,
+                  xl: 4,
+                }}
+              >
                 <Box
-                  display="flex"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  height="100%"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
                 >
                   <Button
                     variant="outlined"
@@ -1202,28 +1262,30 @@ function EventDescriptionInput({ control }) {
 // conditional event venue selector
 function EventVenueInput({
   control,
-  watch,
   defaultValues,
-  resetField,
   disabled = true,
   eventid = null,
 }) {
-  const modeInput = watch("mode");
-  const locationInput = watch("location");
-  const startDateInput = watch("datetimeperiod.0");
-  const endDateInput = watch("datetimeperiod.1");
-  const externalAllowed = watch("externalAllowed");
-
-  // reset location if datetime changes
-  useEffect(() => resetField("location"), [startDateInput, endDateInput]);
-  useEffect(
-    () => resetField("locationAlternate"),
-    [startDateInput, endDateInput],
-  );
+  const [
+    modeInput,
+    locationInput,
+    startDateInput,
+    endDateInput,
+    externalAllowed,
+  ] = useWatch({
+    control,
+    name: [
+      "mode",
+      "location",
+      "datetimeperiod.0",
+      "datetimeperiod.1",
+      "externalAllowed",
+    ],
+  });
 
   return (
-    <Grid container item spacing={2}>
-      <Grid item xs={12}>
+    <Grid container spacing={2}>
+      <Grid size={12}>
         <Controller
           name="mode"
           control={control}
@@ -1250,15 +1312,13 @@ function EventVenueInput({
           )}
         />
       </Grid>
-
       {/* show venue selector if event is hybrid or offline*/}
-      <Grid item xs={12}>
+      <Grid size={12}>
         {["hybrid", "offline"].includes(modeInput) ? (
           // show venue selector if start and end dates are set
           startDateInput && endDateInput ? (
             <EventLocationInput
               control={control}
-              watch={watch}
               startDateInput={startDateInput}
               endDateInput={endDateInput}
               disabled={disabled}
@@ -1271,8 +1331,7 @@ function EventVenueInput({
           )
         ) : null}
       </Grid>
-
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Controller
           name="population"
           control={control}
@@ -1292,16 +1351,17 @@ function EventVenueInput({
               autoComplete="off"
               variant="outlined"
               fullWidth
-              InputProps={{
-                inputProps: { min: 1 },
-              }}
               disabled={false}
               {...field}
+              slotProps={{
+                input: {
+                  inputProps: { min: 1 },
+                },
+              }}
             />
           )}
         />
       </Grid>
-
       <FormControlLabel
         control={
           <Controller
@@ -1313,19 +1373,17 @@ function EventVenueInput({
             }
             render={({ field }) => (
               <Switch
-                checked={field.value}
+                checked={field.value || false}
                 onChange={(e) => field.onChange(e?.target?.checked)}
-                inputProps={{ "aria-label": "controlled" }}
-                sx={{ m: 2 }}
+                sx={{ m: 1 }}
               />
             )}
           />
         }
-        label="External Particpants"
+        label="External Participants (Non-IIIT)"
       />
-
       {externalAllowed ? (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Controller
             name="externalPopulation"
             control={control}
@@ -1347,7 +1405,7 @@ function EventVenueInput({
                 return true;
               },
             }}
-            defaultValue={0}
+            defaultValue={defaultValues.externalPopulation || 0}
             render={({ field, fieldState: { error, invalid } }) => (
               <TextField
                 type="number"
@@ -1357,21 +1415,22 @@ function EventVenueInput({
                 autoComplete="off"
                 variant="outlined"
                 fullWidth
-                InputProps={{
-                  inputProps: { min: 1 },
-                }}
                 disabled={false}
                 {...field}
+                slotProps={{
+                  input: {
+                    inputProps: { min: 1 },
+                  },
+                }}
               />
             )}
           />
         </Grid>
       ) : null}
-
       {/* show location details input if venue is requested */}
       {locationInput?.length ? (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Controller
               name="equipment"
               control={control}
@@ -1398,7 +1457,7 @@ function EventVenueInput({
               )}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Controller
               name="additional"
               control={control}
@@ -1434,15 +1493,16 @@ function EventVenueInput({
 // select location from available rooms
 function EventLocationInput({
   control,
-  watch,
   startDateInput,
   endDateInput,
   disabled = true,
   eventid = null,
 }) {
   const { triggerToast } = useToast();
-  const locationInput = watch("location");
-  const locationAlternateInput = watch("locationAlternate");
+  const [locationInput, locationAlternateInput] = useWatch({
+    control,
+    name: ["location", "locationAlternate"],
+  });
 
   const [availableRooms, setAvailableRooms] = useState([]);
   useEffect(() => {
@@ -1481,7 +1541,7 @@ function EventLocationInput({
 
   return (
     <Grid container spacing={1}>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Controller
           name="location"
           control={control}
@@ -1550,9 +1610,8 @@ function EventLocationInput({
           )}
         />
       </Grid>
-
       {Array.isArray(locationInput) && locationInput.includes("other") && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Controller
             name="otherLocation"
             control={control}
@@ -1562,11 +1621,13 @@ function EventLocationInput({
                   ? "Please specify the 'other' location."
                   : true,
             }}
+            defaultValue=""
             render={({ field, fieldState: { error, invalid } }) => (
               <TextField
                 {...field}
                 label="Other Location"
                 variant="outlined"
+                value={field.value ?? ""}
                 fullWidth
                 error={invalid}
                 helperText={error?.message}
@@ -1577,8 +1638,7 @@ function EventLocationInput({
           />
         </Grid>
       )}
-
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Controller
           name="locationAlternate"
           control={control}
@@ -1646,10 +1706,9 @@ function EventLocationInput({
           )}
         />
       </Grid>
-
       {Array.isArray(locationAlternateInput) &&
         locationAlternateInput.includes("other") && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Controller
               name="otherLocationAlternate"
               control={control}
@@ -1659,11 +1718,13 @@ function EventLocationInput({
                     ? "Please specify the 'other' alternate location."
                     : true,
               }}
+              defaultValue=""
               render={({ field, fieldState: { error, invalid } }) => (
                 <TextField
                   {...field}
                   label="Other Alternate Location"
                   variant="outlined"
+                  value={field.value ?? ""}
                   fullWidth
                   error={invalid}
                   helperText={error?.message}
@@ -1722,16 +1783,12 @@ function EventSponsorTable({
 }
 
 // input event POC
-function EventPOC({
-  control,
-  watch,
-  cid,
-  hasPhone,
-  setHasPhone,
-  disabled = false,
-}) {
+function EventPOC({ control, cid, hasPhone, setHasPhone, disabled = false }) {
   const { triggerToast } = useToast();
-  const poc = watch("poc");
+  const poc = useWatch({
+    control,
+    name: "poc",
+  });
 
   // fetch list of current members
   const [members, setMembers] = useState([]);
@@ -1790,7 +1847,14 @@ function EventPOC({
                 fullWidth
               />
             ) : loading ? (
-              <Box py={25} width="100%" display="flex" justifyContent="center">
+              <Box
+                sx={{
+                  py: 25,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
                 <Fade in>
                   <CircularProgress color="primary" />
                 </Fade>
@@ -1815,7 +1879,11 @@ function EventPOC({
                   }}
                 >
                   {members?.slice()?.map((member) => (
-                    <MenuItem key={member._id} value={member.uid}>
+                    <MenuItem
+                      key={member._id}
+                      value={member.uid}
+                      component="div"
+                    >
                       <MemberListItem uid={member.uid} />
                     </MenuItem>
                   ))}
@@ -1826,12 +1894,16 @@ function EventPOC({
           </FormControl>
         )}
       />
-
       {disabled || members.length === 0 || !poc || hasPhone ? null : (
-        <Box mt={2}>
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
           <Controller
             name="poc_phone"
             control={control}
+            defaultValue=""
             rules={{
               validate: {
                 checkPhoneNumber: (value) => {

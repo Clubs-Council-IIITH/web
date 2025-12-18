@@ -1,22 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ListItem, ListItemText, ListItemAvatar } from "@mui/material";
-import UserImage from "components/users/UserImage";
+import { useEffect, useState } from "react";
+
+import { ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 
 import { useToast } from "components/Toast";
+import UserImage from "components/users/UserImage";
 
 import { getUsers } from "actions/users/get/server_action";
 
 export default function MemberListItem({ uid, showEmail = true }) {
   const { triggerToast } = useToast();
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      if (uid) await getUser();
-    })();
-  }, [uid]);
 
   const getUser = async () => {
     const res = await getUsers(uid);
@@ -32,6 +27,12 @@ export default function MemberListItem({ uid, showEmail = true }) {
       });
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (uid) await getUser();
+    })();
+  }, [uid]);
 
   return user ? (
     <ListItem>

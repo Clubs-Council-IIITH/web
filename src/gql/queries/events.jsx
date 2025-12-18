@@ -244,6 +244,7 @@ export const GET_FULL_EVENT = gql`
         budget
         lastUpdatedTime
         lastUpdatedBy
+        creationTime
         submissionTime
         ccApprover
         ccApproverTime

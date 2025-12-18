@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-import { DataGrid } from "@mui/x-data-grid";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { DataGrid } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
 import { fCurrency } from "utils/formatCurrency";
@@ -30,7 +30,9 @@ export default function EventSponsor({
 
   // data manipulation functions
   const onAdd = () => {
-    setRows([...rows, { id: rows?.length || 0, ...emptySponsorItem }]);
+    const maxId = rows.length > 0 ? Math.max(...rows.map((r) => r.id)) : -1;
+    const newId = maxId + 1;
+    setRows([...rows, { id: newId, ...emptySponsorItem }]);
   };
   const onUpdate = (row) => {
     row.amount = Math.max(row.amount, 0);
@@ -74,8 +76,9 @@ export default function EventSponsor({
           </Typography>
         ) : (
           <Typography
-            color="text.secondary"
             sx={{
+              color: "text.secondary",
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -111,8 +114,9 @@ export default function EventSponsor({
           </Typography>
         ) : (
           <Typography
-            color="text.secondary"
             sx={{
+              color: "text.secondary",
+              color: "text.secondary",
               px: "10px",
               py: "10px",
             }}
@@ -179,6 +183,12 @@ export default function EventSponsor({
               </IconButton>
             ),
             display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
+            disableColumnMenu: true,
+            sortable: false,
+            disableExport: true,
           },
         ]
       : []),
@@ -188,32 +198,39 @@ export default function EventSponsor({
     <>
       {editable ? (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
-          <Icon variant="add" mr={1} />
+          <Icon variant="add" sx={{ mr: 1 }} />
+          <Icon variant="add" sx={{ mr: 1 }} />
           Add Item
         </Button>
       ) : null}
 
-      <DataGrid
-        autoHeight
-        getRowHeight={() => "auto"}
-        columns={columns}
-        rows={rows}
-        editMode="row"
-        processRowUpdate={onUpdate}
-        disableRowSelectionOnClick
-        onRowEditStart={() => setSponsorEditing(true)}
-        onRowEditStop={() => setSponsorEditing(false)}
-        onProcessRowUpdateError={(error) => {
-          console.error("Row update error:", error);
-          setError(error.message);
-        }}
-        sx={{
-          // disable cell selection style
-          ".MuiDataGrid-cell:focus": {
-            outline: "none",
-          },
-        }}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DataGrid
+          autoHeight
+          getRowHeight={() => "auto"}
+          columns={columns}
+          rows={rows}
+          editMode="row"
+          processRowUpdate={onUpdate}
+          disableRowSelectionOnClick
+          onRowEditStart={() => setSponsorEditing(true)}
+          onRowEditStop={() => setSponsorEditing(false)}
+          onProcessRowUpdateError={(error) => {
+            console.error("Row update error:", error);
+            setError(error.message);
+          }}
+          pageSizeOptions={[5, 10, 15]}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
+          sx={{
+            // disable cell selection style
+            ".MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+          }}
+        />
+      </div>
 
       <Typography variant="caption" color="error">
         {error}

@@ -1,281 +1,199 @@
+import React from "react";
+
+import { Box, Divider, Grid, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 
-import { Box, Grid, Typography, Divider } from "@mui/material";
-
-export default async function EventApprovalStatus(
+export default async function EventApprovalStatus({
   status,
   isStudentBodyEvent = false,
-) {
-  let lastEditeduser = null;
-  let ccApprover = null;
-  let slcApprover = null;
-  let deletedBy = null;
+}) {
+  // Fetch user data for approvers
+  let lastEditeduser = "";
+  let deletedBy = "";
+  let ccApprover = "";
+  let slcApprover = "";
 
-  if (status?.lastUpdatedBy) {
-    try {
-      const { data: { userProfile } = {} } = await getClient().query(GET_USER, {
-        userInput: {
-          uid: status?.lastUpdatedBy,
-        },
-      });
-      lastEditeduser = userProfile?.firstName + " " + userProfile?.lastName;
-    } catch (error) {
-      console.error(error);
-    }
+  if (status?.lastUpdatedBy != null) {
+    const client = getClient();
+    const { data } = await client.query({
+      query: GET_USER,
+      variables: { uid: status.lastUpdatedBy },
+    });
+    lastEditeduser = data?.user?.name || "";
   }
 
-  if (status?.ccApprover) {
-    try {
-      const { data: { userProfile } = {} } = await getClient().query(GET_USER, {
-        userInput: {
-          uid: status?.ccApprover,
-        },
-      });
-      ccApprover = userProfile?.firstName + " " + userProfile?.lastName;
-    } catch (error) {
-      console.error(error);
-    }
+  if (status?.deletedBy != null) {
+    const client = await getClient();
+    const { data } = await client.query({
+      query: GET_USER,
+      variables: { uid: status.deletedBy },
+    });
+    deletedBy = data?.user?.name || "";
   }
 
-  if (status?.slcApprover) {
-    try {
-      const { data: { userProfile } = {} } = await getClient().query(GET_USER, {
-        userInput: {
-          uid: status?.slcApprover,
-        },
-      });
-      slcApprover = userProfile?.firstName + " " + userProfile?.lastName;
-    } catch (error) {
-      console.error(error);
-    }
+  if (status?.ccApprover != null) {
+    const client = await getClient();
+    const { data } = await client.query({
+      query: GET_USER,
+      variables: { uid: status.ccApprover },
+    });
+    ccApprover = data?.user?.name || "";
   }
 
-  if (status?.deletedBy) {
-    try {
-      const { data: { userProfile } = {} } = await getClient().query(GET_USER, {
-        userInput: {
-          uid: status?.deletedBy,
-        },
-      });
-      deletedBy = userProfile?.firstName + " " + userProfile?.lastName;
-    } catch (error) {
-      console.error(error);
+  if (status?.slcApprover != null) {
+    const client = await getClient();
+    const { data } = await client.query({
+      query: GET_USER,
+      variables: { uid: status.slcApprover },
+    });
+    slcApprover = data?.user?.name || "";
+  }
+
+  // Build timeline rows based on conditions
+  const timelineRows = [];
+
+  // Always show Last Edited
+  timelineRows.push([
+    "Last Edited",
+    status?.lastUpdatedTime == null
+      ? "Information not available"
+      : (status?.lastUpdatedTime.includes(":") ? "Edited on " : "") +
+        status?.lastUpdatedTime,
+    status?.lastUpdatedTime == null,
+  ]);
+
+  // Show Last Edited By if available
+  if (status?.lastUpdatedBy != null) {
+    timelineRows.push(["Last Edited By", lastEditeduser, false]);
+  }
+
+  // Add the creationTime row
+  timelineRows.push([
+    "Event Created",
+    status?.creationTime == null
+      ? "Information not available"
+      : (status?.creationTime.includes(":") ? "Created on " : "") +
+        status?.creationTime,
+    status?.creationTime == null,
+  ]);
+
+  // Handle deleted state
+  if (status?.state && status?.state == "deleted") {
+    timelineRows.push([
+      "Event Deletion",
+      status?.deletedTime == null
+        ? "Information not available"
+        : (status?.deletedTime.includes(":") ? "Deleted on " : "") +
+          status?.deletedTime,
+      status?.deletedTime == null,
+    ]);
+
+    if (status?.deletedTime != null && status?.deletedBy != null) {
+      timelineRows.push(["Event Deleted By", deletedBy, false]);
     }
+  }
+  // Handle non-incomplete states
+  else if (status?.state && status?.state !== "incomplete") {
+    timelineRows.push([
+      "Event Submission",
+      status?.submissionTime == null
+        ? "Information not available"
+        : (status?.submissionTime.includes(":") ? "Submitted on " : "") +
+          status?.submissionTime,
+      status?.submissionTime == null,
+    ]);
+
+    // Clubs Council Approval (only if not student body event)
+    if (!isStudentBodyEvent) {
+      timelineRows.push([
+        "Clubs Council Approval",
+        status?.ccApproverTime == null
+          ? "Information not available"
+          : (status?.ccApproverTime.includes(":") ? "Approved on " : "") +
+            status?.ccApproverTime,
+        status?.ccApproverTime == null,
+      ]);
+    }
+
+    // Clubs Council Approved By
+    if (status?.ccApprover != null && status?.ccApproverTime != null) {
+      timelineRows.push(["Clubs Council Approved By", ccApprover, false]);
+    }
+
+    // Students Life Council Approval (only if not student body event)
+    if (!isStudentBodyEvent) {
+      timelineRows.push([
+        "Students Life Council Approval",
+        status?.slcApproverTime == null
+          ? "Information not available"
+          : (status?.slcApproverTime.includes(":") ? "Approved on " : "") +
+            status?.slcApproverTime,
+        status?.slcApproverTime == null,
+      ]);
+    }
+
+    // Students Life Council Approved By
+    if (status?.slcApprover != null && status?.slcApproverTime != null) {
+      timelineRows.push([
+        "Students Life Council Approved By",
+        slcApprover,
+        false,
+      ]);
+    }
+
+    // Students Life Office Approval (always shown)
+    timelineRows.push([
+      "Students Life Office Approval",
+      status?.sloApproverTime == null
+        ? "Information not available"
+        : (status?.sloApproverTime.includes(":") ? "Approved on " : "") +
+          status?.sloApproverTime,
+      status?.sloApproverTime == null,
+    ]);
   }
 
   return (
     <>
       <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-      <Typography variant="subtitle2" gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
         TIMELINE{" "}
-        <Typography variant="caption" gutterBottom sx={{ marginLeft: 1 }}>
+        <Typography
+          component="span"
+          variant="caption"
+          sx={{ marginLeft: 1, color: "text.secondary" }}
+        >
           (Times in IST)
         </Typography>
       </Typography>
-
-      <Grid container spacing={2}>
-        <Grid container item spacing={2}>
-          <Grid item xs={5} lg={3}>
-            <Box mt={2}>Last Edited</Box>
-          </Grid>
-          <Grid item xs={1} lg={0.1}>
-            <Box mt={2}>-</Box>
-          </Grid>
-          <Grid item xs>
+      <Grid container direction="column" spacing={0.5}>
+        {timelineRows.map(([label, value, isUnavailable], i) => (
+          <Grid
+            key={i}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "3fr 0.3fr 10fr",
+              borderBottom:
+                i === timelineRows.length - 1 ? "none" : "1px dashed #eee",
+              py: 1,
+            }}
+          >
+            <Box sx={{ color: "#555", fontWeight: 500 }}>{label}</Box>
+            <Box sx={{ color: "#555" }}>-</Box>
             <Box
-              mt={2}
               sx={{
-                color: status?.lastUpdatedTime == null ? "#5a5a5a" : "inherit",
+                color: isUnavailable
+                  ? "#5a5a5a"
+                  : value?.includes("Not Approved")
+                    ? "red"
+                    : "inherit",
               }}
             >
-              {status?.lastUpdatedTime == null
-                ? "Information not available"
-                : (status?.lastUpdatedTime.includes(":") ? "Edited on " : "") +
-                  status?.lastUpdatedTime}
+              {value}
             </Box>
           </Grid>
-        </Grid>
-        {status?.lastUpdatedBy != null ? (
-          <Grid container item spacing={2}>
-            <Grid item xs={5} lg={3}>
-              <Box mt={0}>Last Edited By</Box>
-            </Grid>
-            <Grid item xs={1} lg={0.1}>
-              <Box mt={0}>-</Box>
-            </Grid>
-            <Grid item xs>
-              <Box mt={0}>{lastEditeduser}</Box>
-            </Grid>
-          </Grid>
-        ) : null}
-        {status?.state && status?.state == "deleted" ? (
-          <>
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={1}>Event Deletion</Box>
-              </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={1}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box
-                  mt={1}
-                  sx={{
-                    color: status?.deletedTime == null ? "#5a5a5a" : "inherit",
-                  }}
-                >
-                  {status?.deletedTime == null
-                    ? "Information not available"
-                    : (status?.deletedTime.includes(":") ? "Deleted on " : "") +
-                      status?.deletedTime}
-                </Box>
-              </Grid>
-            </Grid>
-            {status?.deletedTime != null && status?.deletedBy != null ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={5} lg={3}>
-                  <Box mt={0}>Event Deleted By</Box>
-                </Grid>
-                <Grid item xs={1} lg={0.1}>
-                  <Box mt={0}>-</Box>
-                </Grid>
-                <Grid item xs>
-                  <Box mt={0}>{deletedBy}</Box>
-                </Grid>
-              </Grid>
-            ) : null}
-          </>
-        ) : status?.state && status?.state !== "incomplete" ? (
-          <>
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={1}>Event Submission</Box>
-              </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={1}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box
-                  mt={1}
-                  sx={{
-                    color:
-                      status?.submissionTime == null ? "#5a5a5a" : "inherit",
-                  }}
-                >
-                  {status?.submissionTime == null
-                    ? "Information not available"
-                    : (status?.submissionTime.includes(":")
-                        ? "Submitted on "
-                        : "") + status?.submissionTime}
-                </Box>
-              </Grid>
-            </Grid>
-
-            {!isStudentBodyEvent ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={5} lg={3}>
-                  <Box mt={1}>Clubs Council Approval</Box>
-                </Grid>
-                <Grid item xs={1} lg={0.1}>
-                  <Box mt={1}>-</Box>
-                </Grid>
-                <Grid item xs>
-                  <Box
-                    mt={1}
-                    sx={{
-                      color:
-                        status?.ccApproverTime == null ? "#5a5a5a" : "inherit",
-                    }}
-                  >
-                    {status?.ccApproverTime == null
-                      ? "Information not available"
-                      : (status?.ccApproverTime.includes(":")
-                          ? "Approved on "
-                          : "") + status?.ccApproverTime}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-
-            {status?.ccApprover != null && status?.ccApproverTime != null ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={5} lg={3}>
-                  <Box mt={0}>Clubs Council Approved By</Box>
-                </Grid>
-                <Grid item xs={1} lg={0.1}>
-                  <Box mt={0}>-</Box>
-                </Grid>
-                <Grid item xs>
-                  <Box mt={0}>{ccApprover}</Box>
-                </Grid>
-              </Grid>
-            ) : null}
-
-            {!isStudentBodyEvent ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={5} lg={3}>
-                  <Box mt={1}>Students Life Council Approval</Box>
-                </Grid>
-                <Grid item xs={1} lg={0.1}>
-                  <Box mt={1}>-</Box>
-                </Grid>
-                <Grid item xs>
-                  <Box
-                    mt={1}
-                    sx={{
-                      color:
-                        status?.slcApproverTime == null ? "#5a5a5a" : "inherit",
-                    }}
-                  >
-                    {status?.slcApproverTime == null
-                      ? "Information not available"
-                      : (status?.slcApproverTime.includes(":")
-                          ? "Approved on "
-                          : "") + status?.slcApproverTime}
-                  </Box>
-                </Grid>
-              </Grid>
-            ) : null}
-            {status?.slcApprover != null && status?.slcApproverTime != null ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={5} lg={3}>
-                  <Box mt={0}>Students Life Council Approved By</Box>
-                </Grid>
-                <Grid item xs={1} lg={0.1}>
-                  <Box mt={0}>-</Box>
-                </Grid>
-                <Grid item xs>
-                  <Box mt={0}>{slcApprover}</Box>
-                </Grid>
-              </Grid>
-            ) : null}
-
-            <Grid container item spacing={2}>
-              <Grid item xs={5} lg={3}>
-                <Box mt={1}>Students Life Office Approval</Box>
-              </Grid>
-              <Grid item xs={1} lg={0.1}>
-                <Box mt={1}>-</Box>
-              </Grid>
-              <Grid item xs>
-                <Box
-                  mt={1}
-                  sx={{
-                    color:
-                      status?.sloApproverTime == null ? "#5a5a5a" : "inherit",
-                  }}
-                >
-                  {status?.sloApproverTime == null
-                    ? "Information not available"
-                    : (status?.sloApproverTime.includes(":")
-                        ? "Approved on "
-                        : "") + status?.sloApproverTime}
-                </Box>
-              </Grid>
-            </Grid>
-          </>
-        ) : null}
+        ))}
       </Grid>
     </>
   );

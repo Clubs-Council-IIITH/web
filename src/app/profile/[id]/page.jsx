@@ -1,62 +1,36 @@
-import { getClient } from "gql/client";
-import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
-import { GET_USER } from "gql/queries/auth";
-import { GET_USER_PROFILE } from "gql/queries/users";
 import { notFound, redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
+import { getClient } from "gql/client";
+import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
+
 import ActionPalette from "components/ActionPalette";
-import UserImage from "components/users/UserImage";
-import UserDetails from "components/profile/UserDetails";
 import { EditUser } from "components/profile/UserActions";
+import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
+import UserImage from "components/users/UserImage";
+import { getCurrentUser, getUserProfile } from "utils/fetchData";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
+  const user = await getUserProfile(id);
 
-  try {
-    const { data: { userProfile, userMeta } = {} } = await getClient().query(
-      GET_USER_PROFILE,
-      {
-        userInput: {
-          uid: id,
-        },
-      },
-    );
-    const user = { ...userMeta, ...userProfile };
-
-    if (userProfile === null || userMeta === null) {
-      notFound();
-    }
-
-    return {
-      title: `${user.firstName} ${user.lastName}`,
-    };
-  } catch (error) {
-    notFound();
-  }
+  return {
+    title: `${user.firstName} ${user.lastName}`,
+  };
 }
 
-export default async function Profile({ params }) {
+export default async function Profile(props) {
+  const params = await props.params;
   const { id } = params;
 
   // get currently logged in user
-  const {
-    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
-  } = await getClient().query(GET_USER, { userInput: null });
-  const currentUser = { ...currentUserMeta, ...currentUserProfile };
+  const currentUser = await getCurrentUser();
 
   // get target user
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput: {
-        uid: id,
-      },
-    },
-  );
-  const user = { ...userMeta, ...userProfile };
+  const user = await getUserProfile(id);
 
   // if user is a club, display the club's logo as profile picture
   let club = null;
@@ -109,12 +83,20 @@ export default async function Profile({ params }) {
       (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
         <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
-      <Grid container spacing={2} mt={4}>
-        <Grid item xs={12}>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          mt: 4,
+        }}
+      >
+        <Grid size={12}>
           <Stack
             direction={{ xs: "column", lg: "row" }}
-            alignItems="center"
             spacing={4}
+            sx={{
+              alignItems: "center",
+            }}
           >
             <UserImage
               image={user.img}
@@ -126,8 +108,9 @@ export default async function Profile({ params }) {
             <Stack direction="column" spacing={1}>
               <Typography
                 variant="h2"
-                textAlign={{ xs: "center", lg: "left" }}
                 sx={{
+                  textAlign: { xs: "center", lg: "left" },
+                  textAlign: { xs: "center", lg: "left" },
                   fontSize: { xs: 25, lg: 38 },
                   wordBreak: "break-word",
                 }}
@@ -136,10 +119,13 @@ export default async function Profile({ params }) {
               </Typography>
               <Typography
                 variant="body1"
-                color="text.secondary"
-                fontFamily="monospace"
-                textAlign={{ xs: "center", lg: "left" }}
                 sx={{
+                  color: "text.secondary",
+                  fontFamily: "monospace",
+                  textAlign: { xs: "center", lg: "left" },
+                  color: "text.secondary",
+                  fontFamily: "monospace",
+                  textAlign: { xs: "center", lg: "left" },
                   fontSize: { xs: 14, lg: 20 },
                 }}
               >
@@ -152,13 +138,32 @@ export default async function Profile({ params }) {
         {/* Show user details only for students */}
         {user?.batch?.toLowerCase()?.includes("2k") ? ( // hacky way to exclude faculty and staff
           <>
-            <Grid item container xs spacing={2} mt={5}>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                mt: 5,
+              }}
+              size="grow"
+            >
               <UserDetails user={user} />
             </Grid>
-
-            <Grid item xs={12} lg={9} mt={{ xs: 2, lg: 5 }}>
+            <Grid
+              sx={{
+                mt: { xs: 2, lg: 5 },
+              }}
+              size={{
+                xs: 12,
+                lg: 9,
+              }}
+            >
               <Stack direction="column" spacing={2}>
-                <Typography variant="subtitle2" textTransform="uppercase">
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                >
                   Memberships
                 </Typography>
                 <UserMemberships rows={memberships} />

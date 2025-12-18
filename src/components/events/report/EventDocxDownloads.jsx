@@ -1,26 +1,28 @@
 "use client";
 
-import { Button } from "@mui/material";
-import { saveAs } from "file-saver";
 import {
+  AlignmentType,
   Document,
+  ExternalHyperlink,
+  HorizontalPositionRelativeFrom,
+  ImageRun,
   Packer,
   Paragraph,
-  TextRun,
   Table,
-  TableRow,
   TableCell,
-  WidthType,
-  AlignmentType,
-  ImageRun,
+  TableRow,
+  TextRun,
   UnderlineType,
-  HorizontalPositionRelativeFrom,
-  ExternalHyperlink,
+  WidthType,
 } from "docx";
-import { PUBLIC_URL } from "utils/files";
-import { formatDateTime } from "utils/formatTime";
-import { locationLabel, audienceLabels } from "utils/formatEvent";
+import { saveAs } from "file-saver";
+
+import { Button } from "@mui/material";
+
 import Icon from "components/Icon";
+import { PUBLIC_URL } from "utils/files";
+import { audienceLabels, locationLabel } from "utils/formatEvent";
+import { formatDateTime } from "utils/formatTime";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";

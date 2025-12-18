@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { DataGrid } from "@mui/x-data-grid";
-import { Typography, Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { DataGrid } from "@mui/x-data-grid";
 
 import { useToast } from "components/Toast";
 
@@ -161,14 +161,14 @@ export default function UserMemberships({ rows = [] }) {
         <>
           <DataGrid
             autoHeight
-            getRowHeight={() => (isMobile ? "auto" : "none")}
+            getRowHeight={() => (isMobile ? "auto" : null)}
             rows={rows}
             columns={columns}
             disableRowSelectionOnClick
             getRowId={(row) => row.rid}
             initialState={{
               sorting: {
-                sortModel: [{ field: "endYear", sort: "asc" }],
+                sortModel: [{ field: "endYear", sort: "desc" }],
               },
               pagination: { paginationModel: { pageSize: 5 } },
             }}

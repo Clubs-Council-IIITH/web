@@ -8,6 +8,7 @@ RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose
 FROM node:22-slim AS build
 ARG ENV=development
 ENV NEXT_PUBLIC_ENV=$ENV
+ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /web
 

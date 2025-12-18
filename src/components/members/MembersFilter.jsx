@@ -1,25 +1,24 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
   Container,
-  Grid,
   FormControl,
-  Select,
-  MenuItem,
+  Grid,
   InputLabel,
-  ToggleButtonGroup,
+  MenuItem,
+  Select,
   ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 
 import { useToast } from "components/Toast";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 
-export default function MembersFilter({ name, club, state, cc = false }) {
+export default function MembersFilter({ club, state, cc = false }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -43,7 +42,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
       router.push(
         `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`,
       );
-  }, [state]);
+  }, [state, club]);
 
   // fetch list of clubs
   const [clubs, setClubs] = useState([]);
@@ -66,7 +65,12 @@ export default function MembersFilter({ name, club, state, cc = false }) {
     <Container>
       <Grid container spacing={2}>
         {cc && (
-          <Grid item xs={12} lg={club ? 8 : 12}>
+          <Grid
+            size={{
+              xs: 12,
+              lg: club ? 8 : 12,
+            }}
+          >
             <FormControl fullWidth>
               <InputLabel id="clubid">Filter by club</InputLabel>
               <Select
@@ -78,7 +82,7 @@ export default function MembersFilter({ name, club, state, cc = false }) {
                     `${pathname}?${createQueryString("club", e?.target?.value)}`,
                   )
                 }
-                value={club}
+                value={club || ""}
               >
                 {clubs
                   ?.slice()
@@ -93,7 +97,12 @@ export default function MembersFilter({ name, club, state, cc = false }) {
           </Grid>
         )}
         {club ? (
-          <Grid item xs lg>
+          <Grid
+            size={{
+              xs: "grow",
+              lg: "grow",
+            }}
+          >
             <ToggleButtonGroup
               fullWidth
               value={state}

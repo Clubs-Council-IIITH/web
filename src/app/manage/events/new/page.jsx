@@ -1,11 +1,11 @@
 import { Container, Typography } from "@mui/material";
 
-import EventForm from "components/events/EventForm";
-
 import { getClient } from "gql/client";
 import { GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 import { GET_USER } from "gql/queries/auth";
 import { redirect } from "next/navigation";
+
+import EventForm from "components/events/EventForm";
 
 export const metadata = {
   title: "New Event",
@@ -52,10 +52,15 @@ export default async function NewEvent() {
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Create a New Event
       </Typography>
-
       <EventForm
         defaultValues={defaultValues}
         existingEvents={events}

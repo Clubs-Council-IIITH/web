@@ -3,6 +3,7 @@
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 
 import { useMode } from "contexts/ModeContext";
+
 import { locationLabel } from "utils/formatEvent";
 import { formatDateTime } from "utils/formatTime";
 

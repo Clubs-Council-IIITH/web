@@ -3,20 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useForm, Controller } from "react-hook-form";
+import dayjs from "dayjs";
+import { Controller, useForm } from "react-hook-form";
 
-import { LoadingButton } from "@mui/lab";
-import { DatePicker } from "@mui/x-date-pickers";
-import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { Box, Button, Grid, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import dayjs from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
-import { useToast } from "components/Toast";
 import ConfirmDialog from "components/ConfirmDialog";
+import { useToast } from "components/Toast";
+
 import { createHolidays } from "actions/holidays/create/server_action";
-import { editHolidays } from "actions/holidays/edit/server_action";
 import { deleteHolidays } from "actions/holidays/delete/server_action";
+import { editHolidays } from "actions/holidays/edit/server_action";
 
 export default function HolidayForm({
   id = null,
@@ -54,7 +54,6 @@ export default function HolidayForm({
           severity: "success",
         });
         router.push("/manage/holidays/");
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -81,7 +80,6 @@ export default function HolidayForm({
           severity: "success",
         });
         router.push("/manage/holidays/");
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -102,7 +100,6 @@ export default function HolidayForm({
           severity: "success",
         });
         router.push("/manage/holidays/");
-        router.refresh();
       } else {
         // show error toast
         triggerToast({
@@ -120,13 +117,14 @@ export default function HolidayForm({
   return (
     <Box>
       {/* Add delete button on right side */}
-
       {id ? (
         <Box
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="center"
-          pb={2}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            pb: 2,
+          }}
         >
           <Button
             variant="contained"
@@ -151,7 +149,7 @@ export default function HolidayForm({
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Controller
               name="name"
               control={control}
@@ -179,7 +177,12 @@ export default function HolidayForm({
               )}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+            }}
+          >
             <Controller
               name="date"
               control={control}
@@ -206,7 +209,7 @@ export default function HolidayForm({
               )}
             />
           </Grid>
-          {/* <Grid item xs={12}>
+          {/* <Grid xs={12}>
           <Controller
             name="description"
             control={control}
@@ -232,8 +235,16 @@ export default function HolidayForm({
             )}
           />
         </Grid> */}
-          <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-            <Grid item xs={6}>
+          <Grid
+            container
+            direction="row"
+            spacing={1}
+            sx={{
+              pt: 3,
+            }}
+            size={12}
+          >
+            <Grid size={6}>
               <Button
                 size="large"
                 variant="outlined"
@@ -255,8 +266,8 @@ export default function HolidayForm({
                 confirmText="Yes, discard my changes"
               />
             </Grid>
-            <Grid item xs={6}>
-              <LoadingButton
+            <Grid size={6}>
+              <Button
                 type="submit"
                 size="large"
                 variant="contained"
@@ -265,7 +276,7 @@ export default function HolidayForm({
                 loading={loading}
               >
                 Submit
-              </LoadingButton>
+              </Button>
             </Grid>
           </Grid>
         </Grid>

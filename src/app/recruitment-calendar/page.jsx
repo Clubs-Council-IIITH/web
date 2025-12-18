@@ -1,15 +1,14 @@
 import {
   Box,
-  Typography,
   Card,
-  CardHeader,
   CardContent,
+  CardHeader,
   Grid,
+  Typography,
 } from "@mui/material";
+
 // import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
 import ClubButton from "components/clubs/ClubButton";
-
 import { getStaticFile } from "utils/files";
 
 export const metadata = {
@@ -48,10 +47,17 @@ export default async function RecruitmentSchedule() {
           Clubs Recruitment Calendar
         </Typography>
       </center>
-
       <Grid container spacing={2}>
         {months.map((month) => (
-          <Grid item xs={12} md={6} lg={3} xl={3}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 6,
+              lg: 3,
+              xl: 3,
+            }}
+            key={month}
+          >
             <RecruitmentCard
               clubs={recruitmentScheduleJSON.filter(
                 (val) => val.month === month.toLowerCase(),
@@ -70,12 +76,14 @@ function RecruitmentCard({ clubs, month = "January" }) {
     <Card variant="outlined" sx={{ position: "relative" }}>
       <CardHeader
         title={month}
-        titleTypographyProps={{ textAlign: "center", mb: 2 }}
         sx={{ backgroundColor: "#1EC3BD" }}
+        slotProps={{
+          title: { textAlign: "center", mb: 2 },
+        }}
       />
       <CardContent>
         {clubs?.map((club) => (
-          <Box sx={{ mb: 1 }}>
+          <Box sx={{ mb: 1 }} key={club.cid}>
             {/* <ArrowForwardIosIcon sx={{ float: 'left', mt: 0.5, mr: 5, ml: 1, mb: 0.5 }} /> */}
             <ClubButton clubid={club.cid} />
           </Box>
@@ -83,8 +91,10 @@ function RecruitmentCard({ clubs, month = "January" }) {
         {clubs.length === 0 && (
           <Typography
             variant="body1"
-            color="text.secondary"
-            sx={{ textAlign: "center" }}
+            sx={{
+              color: "text.secondary",
+              textAlign: "center",
+            }}
           >
             No clubs are recruiting this month.
           </Typography>

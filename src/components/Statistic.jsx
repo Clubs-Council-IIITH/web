@@ -1,7 +1,8 @@
 "use client";
 
-import { alpha, useTheme } from "@mui/material/styles";
 import { Box, Card, Typography } from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+
 import Icon from "components/Icon";
 
 export default function Statistic({

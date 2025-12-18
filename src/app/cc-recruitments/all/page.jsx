@@ -1,7 +1,9 @@
+import { Container, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
-import { Container, Typography } from "@mui/material";
+
 import CCRecruitmentsTable from "components/cc-recruitments/CCRecruitmentsTable";
 import YearSelector from "components/cc-recruitments/YearSelector";
 
@@ -9,7 +11,8 @@ export const metadata = {
   title: "CC Recruitments",
 };
 
-export default async function AllRecruitmentsApplications({ searchParams }) {
+export default async function AllRecruitmentsApplications(props) {
+  const searchParams = await props.searchParams;
   const currentYear = new Date().getFullYear();
   const year = parseInt(searchParams?.year) || currentYear;
 
@@ -19,11 +22,9 @@ export default async function AllRecruitmentsApplications({ searchParams }) {
   );
   const userPromises =
     ccApplications?.map((applicant) =>
-      getClient()
-        .query(GET_USER_PROFILE, {
-          userInput: { uid: applicant.uid },
-        })
-        .toPromise(),
+      getClient().query(GET_USER_PROFILE, {
+        userInput: { uid: applicant.uid },
+      }),
     ) || [];
 
   const users = await Promise.all(userPromises);

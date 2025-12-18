@@ -1,4 +1,4 @@
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";

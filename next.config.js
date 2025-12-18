@@ -25,8 +25,8 @@
 
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -41,6 +41,10 @@ const nextConfig = {
         hostname: "life.iiit.ac.in",
       },
       {
+        protocol: "https",
+        hostname: "dev-clubs.iiit.ac.in",
+      },
+      {
         protocol: "http",
         hostname: "localhost",
       },
@@ -51,10 +55,6 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "nginx",
-      },
-      {
-        protocol: "http",
-        hostname: "dev.clubs.iiit.ac.in",
       },
     ],
   },
@@ -86,12 +86,45 @@ const nextConfig = {
     styledComponents: true,
     removeConsole: process.env.NODE_ENV === "production",
   },
+  reactCompiler: true,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
     return config;
+  },
+  turbopack: {
+    root: '/',
+    rules: {
+      '*.svg': {
+        loaders: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: 'preset-default',
+                    params: {
+                      overrides: {
+                        // customize default plugin options
+                        removeViewBox: false,
+                      },
+                    },
+                  },
+                  'removeDimensions',
+                ],
+              },
+            },
+          },
+        ],
+        as: '*.js',
+      },
+    },
+  },
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
   },
 };
 

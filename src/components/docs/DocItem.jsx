@@ -1,23 +1,22 @@
 "use client";
 
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Button,
   Box,
-  Typography,
-  Select,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   MenuItem,
+  Select,
+  Typography,
 } from "@mui/material";
-
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+import { formatDate } from "components/docs/DocsList";
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
-import { formatDate } from "components/docs/DocsList";
 
 const buildFileName = (file, version) => {
   return file.filename + "_v" + version.toString() + "." + file.filetype;
@@ -116,7 +115,6 @@ export default function DocItem({
                 })}
               </Select>
             </Box>
-
             {/* Download Button */}
             <Button
               variant="contained"
@@ -127,7 +125,6 @@ export default function DocItem({
             >
               Download
             </Button>
-
             <IconButton
               onClick={onClose}
               size="small"
@@ -163,7 +160,6 @@ export default function DocItem({
                 })}
               </Select>
             </Box>
-
             {/* Download Button */}
             <Button
               variant="contained"
@@ -173,14 +169,12 @@ export default function DocItem({
             >
               Download
             </Button>
-
             <IconButton onClick={onClose} size="small">
               <Icon variant="close" />
             </IconButton>
           </Box>
         )}
       </DialogTitle>
-
       <DialogContent
         sx={{
           display: "flex",
@@ -191,7 +185,13 @@ export default function DocItem({
         }}
       >
         {isMobile ? (
-          <Typography variant="body1" mb={5} sx={{ textAlign: "center" }}>
+          <Typography
+            variant="body1"
+            sx={{
+              mb: 5,
+              textAlign: "center",
+            }}
+          >
             Your device does not support previewing this file. Please{" "}
             <a href={fileUrl} download={buildFileName(file, version)}>
               download it

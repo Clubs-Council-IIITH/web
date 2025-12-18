@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { match } from "path-to-regexp";
-import { jwtDecode as jwt_decode } from "jwt-decode";
 
-import routes from "acl/routes";
+import { jwtDecode as jwt_decode } from "jwt-decode";
+import { match } from "path-to-regexp";
+
 import clubRedirects from "acl/clubRedirects";
+import routes from "acl/routes";
 
 const redirect = (url, contentSecurityPolicyHeaderValue) => {
   const redirectRes = NextResponse.redirect(url);
@@ -17,7 +18,7 @@ const redirect = (url, contentSecurityPolicyHeaderValue) => {
 };
 
 // TODO: make multiple middlewares (one for route acl, one for club redirects) and combine them
-export function middleware(req) {
+export function proxy(req) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const { pathname } = req.nextUrl;
   const cspHeader = `
@@ -127,10 +128,11 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
     {
-      source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
+      source:
+        "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },

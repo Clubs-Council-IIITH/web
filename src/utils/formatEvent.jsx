@@ -1,14 +1,14 @@
 import {
-  audienceMap,
   audienceColorMap,
-  stateMap,
-  stateShortMap,
-  stateColorMap,
-  locationMap,
-  stateIconMap,
+  audienceMap,
   billsStateColorMap,
   billsStateIconMap,
   billsStateMap,
+  locationMap,
+  stateColorMap,
+  stateIconMap,
+  stateMap,
+  stateShortMap,
 } from "constants/events";
 
 export function audienceLabels(audience) {

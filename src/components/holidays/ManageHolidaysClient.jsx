@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
+
 import { Container } from "@mui/material";
+
 import HolidaysTable from "components/holidays/HolidaysTable";
 import HolidaysTitleBar from "components/holidays/HolidaysToggleBar";
 

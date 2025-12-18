@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { Controller, useForm } from "react-hook-form";
 
-import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
+import { Box, Button, Grid, Typography } from "@mui/material";
+
 import ConfirmDialog from "components/ConfirmDialog";
+import FileUpload from "components/FileUpload";
+import { useToast } from "components/Toast";
+import { uploadPDFFile } from "utils/files";
 
 import { eventBillUpload } from "actions/events/bills/bill-upload/server_action";
 
-import { uploadPDFFile } from "utils/files";
 import EventBudget from "../EventBudget";
 
 const maxFileSizeMB = 20;
@@ -102,10 +102,22 @@ export default function BillUpload(params) {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between"></Grid>
+      <Grid
+        container
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      ></Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-          <Grid item xs={12} alignItems="center" m={1}>
+          <Grid
+            sx={{
+              alignItems: "center",
+              m: 1,
+            }}
+            size={12}
+          >
             <FileUpload
               name="file"
               label="File Upload"
@@ -114,10 +126,19 @@ export default function BillUpload(params) {
               maxFiles={1}
               maxSizeMB={maxFileSizeMB}
             />
-            <Typography variant="h4" mt={3}>
+            <Typography
+              variant="h4"
+              sx={{
+                mt: 3,
+              }}
+            >
               Breakdown and bill details
             </Typography>
-            <Box m={1}>
+            <Box
+              sx={{
+                m: 1,
+              }}
+            >
               <Controller
                 name="budget"
                 control={control}
@@ -147,8 +168,14 @@ export default function BillUpload(params) {
               />
             </Box>
           </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Grid size={12}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 color="primary"
@@ -157,7 +184,7 @@ export default function BillUpload(params) {
                 Cancel
               </Button>
 
-              <LoadingButton
+              <Button
                 loading={loading}
                 // type="submit"
                 onClick={handleSubmitButton}
@@ -166,16 +193,19 @@ export default function BillUpload(params) {
                 disabled={loading || !fileDropzone || budgetEditing}
               >
                 Save
-              </LoadingButton>
+              </Button>
             </Box>
           </Grid>
         </Grid>
       </form>
-
-      <Typography variant="h4" mt={3}>
+      <Typography
+        variant="h4"
+        sx={{
+          mt: 3,
+        }}
+      >
         Instructions
       </Typography>
-
       <Typography variant="body1">
         <ul>
           <li>
@@ -193,11 +223,11 @@ export default function BillUpload(params) {
           </li>
           <li>
             <strong>Save:</strong> Click on save to submit the bill. Once
-            submitted, you won't be able to edit the bill until SLO rejects it.
+            submitted, you won&apos;t be able to edit the bill until SLO rejects
+            it.
           </li>
         </ul>
       </Typography>
-
       <ConfirmDialog
         open={submitDialogOpen}
         title="Confirm submission"

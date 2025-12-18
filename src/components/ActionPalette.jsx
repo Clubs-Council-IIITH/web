@@ -1,4 +1,4 @@
-import { Box, Grid, Divider } from "@mui/material";
+import { Box, Divider, Grid } from "@mui/material";
 
 export default function ActionPalette({
   left = [],
@@ -9,47 +9,59 @@ export default function ActionPalette({
   rightJustifyMobile = "center",
 }) {
   return (
-    <Box width="100%">
+    <Box
+      sx={{
+        width: "100%",
+      }}
+    >
       <Grid
         container
         direction={{ xs: "column-reverse", md: "row" }}
-        alignItems="center"
-        justifyContent="space-between"
         spacing={2}
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
       >
         <Grid
-          item
           container
-          xs={12}
-          md={6}
           spacing={1}
-          justifyContent={{ xs: "center", md: "flex-start" }}
-          alignItems="center"
-          my={0.5}
+          sx={{
+            justifyContent: { xs: "center", md: "flex-start" },
+            alignItems: "center",
+            my: 0.5,
+          }}
+          size={{
+            xs: 12,
+            md: 6,
+          }}
         >
           {left.map((Component, key) => (
-            <Grid item xs="auto">
-              <Component {...leftProps[key]} key={key} />
+            <Grid key={key} size="auto">
+              <Component {...leftProps[key]} />
             </Grid>
           ))}
         </Grid>
 
         <Grid
-          item
           container
-          xs={12}
-          md={6}
           spacing={1}
-          justifyContent={{ xs: rightJustifyMobile, md: "flex-end" }}
-          alignItems="center"
-          my={0.5}
+          sx={{
+            justifyContent: { xs: rightJustifyMobile, md: "flex-end" },
+            alignItems: "center",
+            my: 0.5,
+          }}
+          size={{
+            xs: 12,
+            md: 6,
+          }}
         >
           {right.map((Component, key) => (
-            <Grid item>
-              <Component {...rightProps[key]} key={key} />
+            <Grid key={key} size="auto">
+              <Component {...rightProps[key]} />
             </Grid>
           ))}
-          {downloadbtn ? <Grid item>{downloadbtn}</Grid> : ""}
+          {downloadbtn ? <Grid>{downloadbtn}</Grid> : ""}
         </Grid>
       </Grid>
       <Divider sx={{ borderStyle: "dashed", mt: 2, mb: 2 }} />

@@ -1,21 +1,24 @@
-import { getClient } from "gql/client";
-import { GET_USER } from "gql/queries/auth";
-import { GET_MEMBERS } from "gql/queries/members";
-import { GET_EVENT_STATUS } from "gql/queries/events";
 import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { techTeamWords } from "constants/ccMembersFilterWords";
-import { extractFirstYear } from "components/members/MembersGrid";
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_EVENT_STATUS } from "gql/queries/events";
 import { GET_CLASHING_EVENTS } from "gql/queries/events";
+import { GET_MEMBERS } from "gql/queries/members";
+
 import EventActionTabs from "components/events/EventActionTabs";
+import { extractFirstYear } from "components/members/MembersGrid";
+
+import { techTeamWords } from "constants/ccMembersFilterWords";
 
 export const metadata = {
   title: "Approve/Reject Event | CC",
 };
 
-export default async function ApproveEventCC({ params }) {
+export default async function ApproveEventCC(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
@@ -69,11 +72,16 @@ export default async function ApproveEventCC({ params }) {
     (
       <Container>
         <center>
-          <Typography variant="h3" gutterBottom mb={3}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
             Approve or Reject Event | Clubs Council
           </Typography>
         </center>
-
         <EventActionTabs
           eventid={event._id}
           members={currentccMembers}

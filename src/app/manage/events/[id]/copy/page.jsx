@@ -1,9 +1,10 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
-import { redirect, notFound } from "next/navigation";
-import { GET_USER } from "gql/queries/auth";
+import { notFound, redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -41,7 +42,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function CopyEvent({ params }) {
+export default async function CopyEvent(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -84,10 +86,15 @@ export default async function CopyEvent({ params }) {
         redirect("/404"),
       (
         <Container>
-          <Typography variant="h3" gutterBottom mb={3}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              mb: 3,
+            }}
+          >
             Create a New Event
           </Typography>
-
           <EventForm
             defaultValues={transformEvent(event)}
             existingEvents={events.filter((e) => e._id !== oldEventId)}

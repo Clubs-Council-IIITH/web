@@ -1,8 +1,8 @@
-import { getClient } from "gql/client";
-import { GET_FILE } from "gql/queries/storagefiles";
-import { GET_USER } from "gql/queries/auth";
-
 import { redirect } from "next/navigation";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_FILE } from "gql/queries/storagefiles";
 
 import DocForm from "components/docs/DocForm";
 
@@ -10,7 +10,8 @@ export const metadata = {
   title: "Important Documents | Life @ IIIT-H",
 };
 
-export default async function Docs({ params }) {
+export default async function Docs(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(

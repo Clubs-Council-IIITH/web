@@ -1,19 +1,21 @@
+import { redirect } from "next/navigation";
+
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
-import Link from "next/link";
-
-import { Button, Container, Stack, Typography, Box } from "@mui/material";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
 import FinanceHeader from "components/events/bills/FinanceHeader";
-import { redirect } from "next/navigation";
-import EventBudget from "../../../../components/events/EventBudget";
+import EventBudget from "components/events/EventBudget";
+import ButtonLink from "components/Link";
 
 export const metadata = {
   title: "Edit Bill Status",
 };
 
-export default async function EditFinance({ params }) {
+export default async function EditFinance(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { event } = {} } = await getClient().query(GET_EVENT_BUDGET, {
@@ -27,14 +29,27 @@ export default async function EditFinance({ params }) {
   if (error && !error.message.includes("no bills status")) {
     return (
       <Container>
-        <Typography variant="h4" align="center" mt={5} px={2}>
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{
+            mt: 5,
+            px: 2,
+          }}
+        >
           Error: {error.message.slice(10)}
         </Typography>
-        <Stack direction="column" alignItems="center" mt={2}>
+        <Stack
+          direction="column"
+          sx={{
+            alignItems: "center",
+            mt: 2,
+          }}
+        >
           <Button
             variant="contained"
             color="primary"
-            component={Link}
+            component={ButtonLink}
             href={`/manage/finances`}
           >
             <Typography variant="button" color="opposite">
@@ -66,7 +81,11 @@ export default async function EditFinance({ params }) {
           filename={eventBills?.filename}
         />
       ) : null}
-      <Box mb={5}>
+      <Box
+        sx={{
+          mb: 5,
+        }}
+      >
         <BillsStatusForm id={id} defaultValues={eventBills} />
       </Box>
       <EventBudget

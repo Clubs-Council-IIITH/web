@@ -1,71 +1,66 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT, GET_EVENT_BILLS_STATUS } from "gql/queries/events";
-import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { GET_USER } from "gql/queries/auth";
-import { GET_CLASHING_EVENTS } from "gql/queries/events";
-import { getFullUser } from "actions/users/get/full/server_action";
+import { Link } from "next/link";
+import { redirect } from "next/navigation";
 
 import {
   Box,
+  CardActionArea,
   Chip,
+  Divider,
   Grid,
   Typography,
-  Divider,
-  CardActionArea,
 } from "@mui/material";
-import { Link } from "next/link";
-import { notFound, redirect } from "next/navigation";
-import ActionPalette from "components/ActionPalette";
 
-import EventDetails from "components/events/EventDetails";
-import EventBudget from "components/events/EventBudget";
-import EventSponsor from "components/events/EventSponsor";
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
+import { GET_CLASHING_EVENTS } from "gql/queries/events";
+
+import ActionPalette from "components/ActionPalette";
 import EventBillStatus from "components/events/bills/EventBillStatus";
-import EventReportStatus from "components/events/report/EventReportStatus";
-import EventApprovalStatus from "components/events/EventApprovalStatus";
-import { DownloadEvent } from "components/events/report/EventpdfDownloads";
 import {
-  EditEvent,
-  CopyEvent,
   ApproveEvent,
+  CopyEvent,
+  DeleteEvent,
+  EditEvent,
+  EditFinances,
   LocationClashApproval,
   ProgressEvent,
-  DeleteEvent,
-  SubmitEvent,
-  EditFinances,
   RequestReminder,
+  SubmitEvent,
 } from "components/events/EventActions";
+import EventApprovalStatus from "components/events/EventApprovalStatus";
+import EventBudget from "components/events/EventBudget";
+import EventDetails from "components/events/EventDetails";
+import EventSponsor from "components/events/EventSponsor";
 import {
-  EventStatus,
   BudgetStatus,
+  EventStatus,
   VenueStatus,
 } from "components/events/EventStates";
-
-import { locationLabel } from "utils/formatEvent";
+import { DownloadEvent } from "components/events/report/EventpdfDownloads";
+import EventReportStatus from "components/events/report/EventReportStatus";
 import MemberListItem from "components/members/MemberListItem";
+import { getFullEvent } from "utils/fetchData";
+import { locationLabel } from "utils/formatEvent";
 
-export async function generateMetadata({ params }) {
+import { getFullUser } from "actions/users/get/full/server_action";
+
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
-  try {
-    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-      eventid: id,
-    });
-
-    return {
-      title: event.name,
-    };
-  } catch (error) {
-    notFound();
-  }
+  const event = await getFullEvent(id);
+  return {
+    title: event.name,
+    description: event.description || "No description provided.",
+  };
 }
 
-export default async function ManageEventID({ params }) {
+export default async function ManageEventID(props) {
+  const params = await props.params;
   const { id } = params;
-
-  const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-    eventid: id,
-  });
+  const event = await getFullEvent(id);
 
   let eventBillsData = null;
 
@@ -87,7 +82,7 @@ export default async function ManageEventID({ params }) {
   }
 
   const {
-    data: { activeClubs },
+    data: { allClubs },
   } = await getClient().query(GET_ACTIVE_CLUBS);
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -135,7 +130,7 @@ export default async function ManageEventID({ params }) {
           downloadbtn={
             <DownloadEvent
               event={event}
-              clubs={activeClubs}
+              clubs={allClubs}
               pocProfile={pocProfile}
               eventBills={eventBillsData?.eventBills || {}}
             />
@@ -143,7 +138,13 @@ export default async function ManageEventID({ params }) {
         />
         <EventDetails showCode event={event} />
         <Divider sx={{ borderStyle: "dashed", my: 2 }} />
-        <Typography variant="subtitle2" textTransform="uppercase" gutterBottom>
+        <Typography
+          variant="subtitle2"
+          gutterBottom
+          sx={{
+            textTransform: "uppercase",
+          }}
+        >
           Point of Contact
         </Typography>
         <CardActionArea
@@ -153,14 +154,25 @@ export default async function ManageEventID({ params }) {
         >
           <MemberListItem uid={event?.poc} />
         </CardActionArea>
-        <Box my={3} />
+        <Box
+          sx={{
+            my: 3,
+          }}
+        />
         <Grid container spacing={6}>
-          <Grid item xs={12} lg={7}>
+          <Grid
+            size={{
+              xs: 12,
+              lg: 7,
+            }}
+          >
             <Grid>
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
                 gutterBottom
+                sx={{
+                  textTransform: "uppercase",
+                }}
               >
                 Budget
               </Typography>
@@ -174,15 +186,23 @@ export default async function ManageEventID({ params }) {
                   billViewable={billViewable}
                 />
               ) : (
-                <Box mt={2}>None requested</Box>
+                <Box
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  None requested
+                </Box>
               )}
             </Grid>
 
             <Grid sx={{ mt: 4 }}>
               <Typography
                 variant="subtitle2"
-                textTransform="uppercase"
                 gutterBottom
+                sx={{
+                  textTransform: "uppercase",
+                }}
               >
                 Sponsor
               </Typography>
@@ -195,16 +215,29 @@ export default async function ManageEventID({ params }) {
                   editable={false}
                 />
               ) : (
-                <Box mt={2}>Event has no sponsors</Box>
+                <Box
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  Event has no sponsors
+                </Box>
               )}
             </Grid>
           </Grid>
 
-          <Grid item xs lg>
+          <Grid
+            size={{
+              xs: "grow",
+              lg: "grow",
+            }}
+          >
             <Typography
               variant="subtitle2"
-              textTransform="uppercase"
               gutterBottom
+              sx={{
+                textTransform: "uppercase",
+              }}
             >
               Venue
             </Typography>
@@ -212,7 +245,11 @@ export default async function ManageEventID({ params }) {
             {/* show requested location details, if any */}
             {event?.location?.length ? (
               <>
-                <Box mt={2}>
+                <Box
+                  sx={{
+                    mt: 2,
+                  }}
+                >
                   {event?.location?.map((venue, key) => (
                     <Chip
                       key={key}
@@ -227,11 +264,19 @@ export default async function ManageEventID({ params }) {
                 </Box>
 
                 {event?.locationAlternate && event?.locationAlternate.length ? (
-                  <Box mt={2}>
+                  <Box
+                    sx={{
+                      mt: 2,
+                    }}
+                  >
                     <Typography variant="overline">
                       Alternate Locations
                     </Typography>
-                    <Box mt={1}>
+                    <Box
+                      sx={{
+                        mt: 1,
+                      }}
+                    >
                       {event?.locationAlternate?.map((venue, key) => (
                         <Chip
                           key={key}
@@ -247,14 +292,22 @@ export default async function ManageEventID({ params }) {
                   </Box>
                 ) : null}
 
-                <Box mt={2}>
+                <Box
+                  sx={{
+                    mt: 2,
+                  }}
+                >
                   <Typography variant="overline">Equipment</Typography>
                   <Typography variant="body2">
                     {event?.equipment || "None"}
                   </Typography>
                 </Box>
 
-                <Box mt={2}>
+                <Box
+                  sx={{
+                    mt: 2,
+                  }}
+                >
                   <Typography variant="overline">
                     Additional Information
                   </Typography>
@@ -264,11 +317,23 @@ export default async function ManageEventID({ params }) {
                 </Box>
               </>
             ) : (
-              <Box mt={2}>None requested</Box>
+              <Box
+                sx={{
+                  mt: 2,
+                }}
+              >
+                None requested
+              </Box>
             )}
 
-            <Grid container spacing={2} mt={0.1}>
-              <Grid item xs={4}>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                mt: 0.1,
+              }}
+            >
+              <Grid size={4}>
                 <Box>
                   <Typography variant="overline">Population</Typography>
                   <Typography variant="body2">
@@ -277,7 +342,7 @@ export default async function ManageEventID({ params }) {
                 </Box>
               </Grid>
               {event?.externalPopulation && event.externalPopulation > 0 ? (
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <Box>
                     <Typography variant="overline">
                       External Population
@@ -291,10 +356,8 @@ export default async function ManageEventID({ params }) {
             </Grid>
           </Grid>
         </Grid>
-
         {/* show Approval status */}
         {EventApprovalStatus(event?.status, event?.clubCategory != "club")}
-
         {/* show post event information */}
         {["cc", "club", "slo"].includes(user?.role) &&
           EventBillStatus(event, eventBillsData?.eventBills || null, user?.uid)}

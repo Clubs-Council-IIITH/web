@@ -1,32 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
 
-import Icon from "components/Icon";
-import { useToast } from "components/Toast";
-import MemberListItem from "components/members/MemberListItem";
+import { Controller, useForm } from "react-hook-form";
 
-import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  TextField,
+  Button,
   Checkbox,
-  Tabs,
-  Tab,
-  Fade,
+  Chip,
   CircularProgress,
-  Typography,
+  Divider,
+  Fade,
+  FormControl,
   FormControlLabel,
   FormHelperText,
-  FormControl,
   InputLabel,
-  Select,
   MenuItem,
-  Chip,
-  Divider,
+  Select,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
 } from "@mui/material";
+
+import Icon from "components/Icon";
+import MemberListItem from "components/members/MemberListItem";
+import { useToast } from "components/Toast";
 
 import { eventProgress } from "actions/events/progress/server_action";
 import { rejectEventAction } from "actions/events/reject/server_action";
@@ -41,6 +42,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
     defaultValues: {
       SLC: false,
       SLO: false,
+      approver: "",
     },
   });
 
@@ -83,7 +85,6 @@ function EventApproveForm({ eventid, members, clashFlag }) {
     if (res.ok) {
       triggerToast("Event approved", "success");
       router.push(`/manage/events/${eventid}`);
-      router.refresh();
     } else {
       triggerToast({
         ...res.error,
@@ -124,10 +125,12 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                   </InputLabel>
                   {slcMembers.length === 0 ? (
                     <Box
-                      py={25}
-                      width="100%"
-                      display="flex"
-                      justifyContent="center"
+                      sx={{
+                        py: 25,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
                     >
                       <Fade in>
                         <CircularProgress color="primary" />
@@ -137,7 +140,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                     <Select
                       multiple
                       labelId="poc"
-                      label="Point of Contact *"
+                      label="SLC Members to Send Email"
                       fullWidth
                       {...field}
                       MenuProps={{
@@ -164,7 +167,11 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                       )}
                     >
                       {slcMembers?.slice()?.map((member) => (
-                        <MenuItem key={member.uid} value={member.uid}>
+                        <MenuItem
+                          key={member.uid}
+                          value={member.uid}
+                          component="div"
+                        >
                           <MemberListItem uid={member.uid} />
                         </MenuItem>
                       ))}
@@ -203,10 +210,12 @@ function EventApproveForm({ eventid, members, clashFlag }) {
               <InputLabel id="approver-label">Approver</InputLabel>
               {members.length === 0 ? (
                 <Box
-                  py={25}
-                  width="100%"
-                  display="flex"
-                  justifyContent="center"
+                  sx={{
+                    py: 25,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
                   <Fade in>
                     <CircularProgress color="primary" />
@@ -215,7 +224,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
               ) : (
                 <Select
                   labelId="poc"
-                  label="Point of Contact *"
+                  label="Approver"
                   fullWidth
                   {...field}
                   MenuProps={{
@@ -223,7 +232,11 @@ function EventApproveForm({ eventid, members, clashFlag }) {
                   }}
                 >
                   {members?.slice()?.map((member) => (
-                    <MenuItem key={member.uid} value={member.uid}>
+                    <MenuItem
+                      key={member.uid}
+                      value={member.uid}
+                      component="div"
+                    >
                       <MemberListItem uid={member.uid} />
                     </MenuItem>
                   ))}
@@ -234,7 +247,7 @@ function EventApproveForm({ eventid, members, clashFlag }) {
           )}
         />
         <p></p> {/* For New line */}
-        <LoadingButton
+        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -244,11 +257,10 @@ function EventApproveForm({ eventid, members, clashFlag }) {
           disabled={clashFlag}
         >
           Approve
-        </LoadingButton>
+        </Button>
         <Typography
           variant="caption"
-          color={clashFlag ? "error" : "textSecondary"}
-          ml={1}
+          sx={{ ml: 1, color: clashFlag ? "error.main" : "text.secondary" }}
         >
           {clashFlag
             ? "(Location of this event is clashing with some other approved event in the same time period. Please edit or reject.)"
@@ -281,7 +293,6 @@ function EventRejectForm({ eventid }) {
     if (res.ok) {
       triggerToast("Event rejected", "success");
       router.push(`/manage/events/${eventid}`);
-      router.refresh();
     } else {
       triggerToast({
         ...res.error,
@@ -320,8 +331,8 @@ function EventRejectForm({ eventid }) {
         )}
       />
 
-      <Box mt={2}>
-        <LoadingButton
+      <Box sx={{ mt: 2 }}>
+        <Button
           loading={loading}
           type="submit"
           size="large"
@@ -330,8 +341,8 @@ function EventRejectForm({ eventid }) {
           startIcon={<Icon variant="close"></Icon>}
         >
           Reject
-        </LoadingButton>
-        <Typography variant="caption" color="textSecondary" ml={1}>
+        </Button>
+        <Typography variant="caption" sx={{ ml: 1, color: "text.secondary" }}>
           (This action cannot be undone.)
         </Typography>
       </Box>

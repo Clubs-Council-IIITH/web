@@ -1,26 +1,25 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
   Button,
   Container,
-  TextField,
-  Grid,
   FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  ToggleButtonGroup,
+  Grid,
   InputAdornment,
-  ToggleButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 
-import { useToast } from "components/Toast";
 import Icon from "components/Icon";
+import { useToast } from "components/Toast";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 
@@ -53,7 +52,7 @@ export default function EventsFilter({ name, club, state }) {
   return (
     <Container>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Stack
             component="form"
             direction="row"
@@ -73,12 +72,14 @@ export default function EventsFilter({ name, club, state }) {
               fullWidth
               onChange={(e) => setTargetName(e?.target?.value)}
               value={targetName}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Icon variant="search" />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon variant="search" />
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
             <Button type="submit" variant="contained">
@@ -86,7 +87,12 @@ export default function EventsFilter({ name, club, state }) {
             </Button>
           </Stack>
         </Grid>
-        <Grid item xs={12} lg={8}>
+        <Grid
+          size={{
+            xs: 12,
+            lg: 8,
+          }}
+        >
           <FormControl fullWidth>
             <InputLabel id="clubid">Filter by Club/Student Body</InputLabel>
             <Select
@@ -116,7 +122,12 @@ export default function EventsFilter({ name, club, state }) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs lg>
+        <Grid
+          size={{
+            xs: "grow",
+            lg: "grow",
+          }}
+        >
           <ToggleButtonGroup
             id="eventStatus"
             fullWidth

@@ -1,6 +1,7 @@
 import { getClient } from "gql/client";
-import { GET_ALL_FILES } from "gql/queries/storagefiles";
 import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_FILES } from "gql/queries/storagefiles";
+
 import DocsList from "components/docs/DocsList";
 
 export const metadata = {

@@ -1,8 +1,7 @@
 "use client";
 
-// import { use, useEffect } from "react";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
-// import QuickSearchToolbar from "components/QuickSearchToolbar";
+
 import ClubBox from "components/clubs/ClubBox";
 
 const columns = [
@@ -25,6 +24,7 @@ const columns = [
       <>{value.clubdata ? <ClubBox club={value.clubdata} /> : value.name}</>
     ),
     display: "flex",
+    disableExport: true,
   },
   {
     field: "date",
@@ -72,7 +72,6 @@ export default function BuzzSchedule({ events, allClubs }) {
           },
         },
       }}
-      // slots={{ toolbar: QuickSearchToolbar }}
       sx={{
         mt: 5,
         // disable cell selection style

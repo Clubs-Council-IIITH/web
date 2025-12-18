@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 
-import { Button, Box } from "@mui/material";
-import Icon from "components/Icon";
+import { Box, Button } from "@mui/material";
 
-import { socialsData } from "utils/socialsData";
 import { useMode } from "contexts/ModeContext";
+
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
+import { socialsData } from "utils/socialsData";
 
 export default function ClubSocials({ socials = {}, email = null }) {
   const [processedSocials, setProcessedSocials] = useState({});
@@ -37,7 +38,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
     <Box>
       {email ? (
         <Button
-          component={Link}
+          component={ButtonLink}
           href={`mailto:${email}`}
           target="_blank"
           rel="noreferrer"
@@ -47,7 +48,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
             color: "text.secondary",
           }}
         >
-          <Icon external variant={"mdi:email"} mr={1} />
+          <Icon external variant={"mdi:email"} sx={{ mr: 1 }} />
           {email}
         </Button>
       ) : null}
@@ -55,7 +56,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
         ?.filter((k) => socials[k])
         ?.map((item, index) => (
           <Button
-            component={Link}
+            component={ButtonLink}
             href={socials[item]}
             target="_blank"
             rel="noreferrer"
@@ -68,7 +69,7 @@ export default function ClubSocials({ socials = {}, email = null }) {
                 : socialsData[item].color,
             }}
           >
-            <Icon external variant={socialsData[item].icon} mr={1} />
+            <Icon external variant={socialsData[item].icon} sx={{ mr: 1 }} />
             {processedSocials[item]}
           </Button>
         ))}

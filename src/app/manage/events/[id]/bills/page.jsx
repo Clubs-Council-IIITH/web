@@ -1,17 +1,19 @@
-import { getClient } from "gql/client";
-
 import { redirect } from "next/navigation";
 
-import BillUpload from "components/events/bills/BillUpload";
-import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
+import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
+
+import BillUpload from "components/events/bills/BillUpload";
 
 export const metadata = {
   title: "Bill Upload | Life @ IIIT-H",
 };
 
-export default async function BillsUpload({ params }) {
+export default async function BillsUpload(props) {
+  const params = await props.params;
   const { id } = params;
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
@@ -51,7 +53,13 @@ export default async function BillsUpload({ params }) {
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Upload Bill
       </Typography>
       <BillUpload

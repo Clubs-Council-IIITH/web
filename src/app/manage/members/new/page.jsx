@@ -17,10 +17,15 @@ export default function NewMember() {
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom mb={3}>
+      <Typography
+        variant="h3"
+        gutterBottom
+        sx={{
+          mb: 3,
+        }}
+      >
         Add a New Member
       </Typography>
-
       <MemberForm defaultValues={defaultValues} action="create" />
     </Container>
   );

@@ -1,8 +1,10 @@
 import { Container, Typography } from "@mui/material";
-import BuzzSchedule from "components/buzz";
-import { getStaticFile } from "utils/files";
+
 import { getClient } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
+
+import BuzzSchedule from "components/buzz";
+import { getStaticFile } from "utils/files";
 
 export const metadata = {
   title: "Buzz Schedule | Felicity @ IIIT-H",

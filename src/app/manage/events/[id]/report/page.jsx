@@ -1,12 +1,16 @@
-import { getClient } from "gql/client";
-import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
-import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { getFullUser } from "actions/users/get/full/server_action";
-import { EventReportDetails } from "components/events/report/EventReportDetails";
-import { GET_USER } from "gql/queries/auth";
 import { redirect } from "next/navigation";
 
-export default async function EventReport({ params }) {
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
+
+import { EventReportDetails } from "components/events/report/EventReportDetails";
+
+import { getFullUser } from "actions/users/get/full/server_action";
+
+export default async function EventReport(props) {
+  const params = await props.params;
   const { id } = params;
 
   try {
@@ -36,7 +40,7 @@ export default async function EventReport({ params }) {
     );
 
     const {
-      data: { activeClubs },
+      data: { allClubs },
     } = await getClient().query(GET_ACTIVE_CLUBS);
 
     const submittedUserProfile = await getFullUser(eventReport?.submittedBy);
@@ -49,7 +53,7 @@ export default async function EventReport({ params }) {
         event={event}
         eventReport={eventReport}
         submittedUser={submittedUserProfile}
-        clubs={activeClubs}
+        clubs={allClubs}
         user={user}
       />
     );

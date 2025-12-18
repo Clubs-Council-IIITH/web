@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
-
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@mui/material";
 
-import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
-
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import { useToast } from "components/Toast";
 
 import { deleteClubAction } from "actions/clubs/delete/server_action";
@@ -19,7 +17,7 @@ export function EditClub({ sx }) {
 
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/manage/clubs/${id}/edit`}
       variant="contained"
       color="warning"
@@ -48,7 +46,6 @@ export function DeleteClub({ sx }) {
         severity: "success",
       });
       router.push("/manage/clubs");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({

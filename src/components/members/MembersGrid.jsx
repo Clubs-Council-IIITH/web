@@ -1,7 +1,8 @@
+import { Divider, Typography } from "@mui/material";
+
 import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
-import { Divider, Typography } from "@mui/material";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 
 export const dynamic = "force-dynamic";
@@ -32,16 +33,21 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
       ?.filter((year) => (onlyCurrent ? year === currentYear : true))
       ?.sort((a, b) => parseInt(b) - parseInt(a))
       ?.map((year) => (
-        <>
+        <div key={year}>
           {!onlyCurrent ? (
             <Divider textAlign="left" sx={{ mb: 2 }}>
-              <Typography variant="h5" textTransform="uppercase">
+              <Typography
+                variant="h5"
+                sx={{
+                  textTransform: "uppercase",
+                }}
+              >
                 {year === currentYear ? "Current Members" : year}
               </Typography>
             </Divider>
           ) : null}
           <LocalUsersGrid users={targetMembers[year]} />
-        </>
+        </div>
       ))
   ) : (
     <center>

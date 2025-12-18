@@ -1,9 +1,10 @@
-import { getClient } from "gql/client";
-import { GET_FULL_EVENT } from "gql/queries/events";
 import { redirect } from "next/navigation";
-import { GET_USER } from "gql/queries/auth";
 
 import { Container, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_FULL_EVENT } from "gql/queries/events";
 
 import EventReportForm from "components/events/report/EventReportForm";
 
@@ -31,7 +32,8 @@ function transformEvent(event) {
   };
 }
 
-export default async function NewEventReport({ params }) {
+export default async function NewEventReport(props) {
+  const params = await props.params;
   const { id } = params;
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -53,10 +55,15 @@ export default async function NewEventReport({ params }) {
     }
     return (
       <Container>
-        <Typography variant="h3" gutterBottom mb={3}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            mb: 3,
+          }}
+        >
           Create Event Report
         </Typography>
-
         <EventReportForm
           id={id}
           defaultValues={transformEvent(event)}

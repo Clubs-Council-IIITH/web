@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingButton } from "@mui/lab";
+
+import { Controller, useForm } from "react-hook-form";
+
 import { Button, Grid, TextField } from "@mui/material";
-import { useToast } from "components/Toast";
+
 import ConfirmDialog from "components/ConfirmDialog";
+import { useToast } from "components/Toast";
+
 import { eventBillStatus } from "actions/events/bills/bill-status/server_action";
 
 export default function BillsStatusForm({ id = null, defaultValues = {} }) {
@@ -33,7 +36,6 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
         severity: "success",
       });
       router.push("/manage/finances/");
-      router.refresh();
     } else {
       triggerToast({
         ...res.error,
@@ -46,7 +48,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Controller
             name="sloComment"
             control={control}
@@ -60,13 +62,18 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
                 message: "Comment must be at least 2 characters long!",
               },
             }}
-            render={({ field, fieldState: { error, invalid } }) => (
+            render={({
+              field: { value, ...rest },
+              fieldState: { error, invalid },
+            }) => (
               <TextField
-                {...field}
+                {...rest}
+                {...rest}
                 label="Comment"
                 autoComplete="off"
                 error={invalid}
                 helperText={error?.message}
+                value={value || ""}
                 variant="outlined"
                 rows={4}
                 fullWidth
@@ -75,9 +82,17 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
             )}
           />
         </Grid>
-        <Grid container item direction="row" xs={12} spacing={1} pt={3}>
-          <Grid item xs={4}>
-            <LoadingButton
+        <Grid
+          container
+          direction="row"
+          spacing={1}
+          sx={{
+            pt: 3,
+          }}
+          size={12}
+        >
+          <Grid size={4}>
+            <Button
               size="large"
               variant="contained"
               color="error"
@@ -89,9 +104,9 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               }}
             >
               Reject
-            </LoadingButton>
+            </Button>
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <Button
               size="large"
               variant="outlined"
@@ -112,8 +127,8 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               confirmText="Yes, discard my changes"
             />
           </Grid>
-          <Grid item xs={4}>
-            <LoadingButton
+          <Grid size={4}>
+            <Button
               size="large"
               variant="contained"
               color="success"
@@ -125,7 +140,7 @@ export default function BillsStatusForm({ id = null, defaultValues = {} }) {
               }}
             >
               Accept
-            </LoadingButton>
+            </Button>
           </Grid>
         </Grid>
       </Grid>

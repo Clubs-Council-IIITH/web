@@ -2,10 +2,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import Icon from "components/Icon";
+
 import { Button, Stack, Typography } from "@mui/material";
+
 import BillPdfViewer from "components/events/bills/BillPdfViewer";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import { getFile } from "utils/files";
 
 export default function FinanceHeader({
@@ -40,9 +42,11 @@ export default function FinanceHeader({
       {!onlyButton ? (
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={3}
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 3,
+          }}
         >
           <Typography variant="h3" gutterBottom={false}>
             Edit Bill Status Details
@@ -53,7 +57,7 @@ export default function FinanceHeader({
             <Button
               variant="contained"
               color="primary"
-              component={Link}
+              component={ButtonLink}
               href={`/manage/events/${id}`}
               startIcon={<Icon variant="north-west" />}
             >
@@ -66,7 +70,6 @@ export default function FinanceHeader({
       ) : (
         ViewButton
       )}
-
       <BillPdfViewer
         eventTitle={eventTitle}
         pdfUrl={fileUrl}

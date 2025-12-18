@@ -1,38 +1,22 @@
 import Link from "next/link";
-import { permanentRedirect, notFound } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
-import { getClient } from "gql/client";
-import { GET_CLUB } from "gql/queries/clubs";
-
-import { Divider, Stack, Button, Box, Card, Typography } from "@mui/material";
-
-import Icon from "components/Icon";
+import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
 
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
-
 import EventsGrid from "components/events/EventsGrid";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import MembersGrid from "components/members/MembersGrid";
+import { getClub } from "utils/fetchData";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const { id } = params;
 
-  let club;
-
-  try {
-    const { data: { club: fetchedClub } = {} } = await getClient().query(
-      GET_CLUB,
-      {
-        clubInput: { cid: id },
-      },
-    );
-
-    club = fetchedClub;
-  } catch (error) {
-    notFound();
-    return;
-  }
+  const club = await getClub(id);
 
   if (club?.category == "body")
     return permanentRedirect(`/student-bodies/${id}`);
@@ -42,12 +26,10 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function Club({ params }) {
+export default async function Club(props) {
+  const params = await props.params;
   const { id } = params;
-
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: id },
-  });
+  const club = await getClub(id);
 
   return (
     <Box>
@@ -60,7 +42,11 @@ export default async function Club({ params }) {
           priority={true}
         />
       </Card>
-      <Box my={4}>
+      <Box
+        sx={{
+          my: 4,
+        }}
+      >
         <ClubInfo
           name={club.name}
           logo={club.logo}
@@ -69,23 +55,46 @@ export default async function Club({ params }) {
         />
       </Box>
       <ClubSocials socials={club.socials} email={club.email} />
-
       <Divider sx={{ borderStyle: "dashed", mt: 3 }} />
-
-      <Stack direction="column" mx={2}>
-        <Box my={4}>
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Box display="flex" alignItems="center">
-              <Icon variant="local-activity-outline-rounded" mr={1} />
+      <Stack
+        direction="column"
+        sx={{
+          mx: 2,
+        }}
+      >
+        <Box
+          sx={{
+            my: 4,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="local-activity-outline-rounded" sx={{ mr: 1 }} />
               <Typography variant="h4">Events</Typography>
             </Box>
             <Button
               variant="none"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href={`/events?club=${id}`}
             >
-              <Typography variant="button" color="text.primary">
+              <Typography
+                variant="button"
+                sx={{
+                  color: "text.primary",
+                }}
+              >
                 View all
               </Typography>
               <Icon variant="chevron-right" />
@@ -94,21 +103,41 @@ export default async function Club({ params }) {
           <EventsGrid type="club" clubid={id} limit={4} />
         </Box>
 
-        <Box my={4}>
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Box display="flex" alignItems="center">
-              <Icon variant="group-outline-rounded" mr={1} />
+        <Box
+          sx={{
+            my: 4,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="group-outline-rounded" sx={{ mr: 1 }} />
               <Typography variant="h4">Members</Typography>
             </Box>
             <Button
               variant="none"
               color="secondary"
-              component={Link}
+              component={ButtonLink}
               href={`/${
                 club?.category == "body" ? "student-bodies" : "clubs"
               }/${id}/members`}
             >
-              <Typography variant="button" color="text.primary">
+              <Typography
+                variant="button"
+                sx={{
+                  color: "text.primary",
+                }}
+              >
                 View all
               </Typography>
               <Icon variant="chevron-right" />

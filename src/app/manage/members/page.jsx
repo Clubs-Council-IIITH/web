@@ -1,29 +1,29 @@
-import Link from "next/link";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import { Box, Container, Typography, Button, Stack } from "@mui/material";
-
 import Icon from "components/Icon";
-import MembersTable from "components/members/MembersTable";
+import ButtonLink from "components/Link";
 import MembersFilter from "components/members/MembersFilter";
+import MembersTable from "components/members/MembersTable";
 
 export const metadata = {
   title: "Manage Members",
 };
 
-export default async function ManageMembers({ searchParams }) {
-  const targetName = searchParams?.name;
+export default async function ManageMembers(props) {
+  const searchParams = await props.searchParams;
+  // const targetName = searchParams?.name;
   const targetClub = searchParams?.club;
   const targetState = [
     ...(searchParams?.current === "true" ? ["current"] : []),
     ...(searchParams?.past === "true" ? ["past"] : []),
   ];
-  const onlyCurrent = searchParams?.current === "true" ? true : false;
-  const onlyPast = searchParams?.past === "true" ? true : false;
+  const onlyCurrent = searchParams?.current === "true";
+  const onlyPast = searchParams?.past === "true";
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
@@ -35,44 +35,79 @@ export default async function ManageMembers({ searchParams }) {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3,
+        }}
       >
         <Typography variant="h3" gutterBottom>
           Manage Members
         </Typography>
 
-        <Button
-          component={Link}
-          href="/manage/members/new"
-          variant="contained"
-          startIcon={<Icon variant="add" />}
+        <Stack
+          direction="row"
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
         >
-          New Member
-        </Button>
+          <Button
+            component={ButtonLink}
+            href="/manage/members/bulk-add"
+            variant="contained"
+            startIcon={<Icon variant="playlist-add" />}
+          >
+            Bulk Add
+          </Button>
+          <Button
+            component={ButtonLink}
+            href="/manage/members/bulk-edit"
+            variant="contained"
+            startIcon={<Icon variant="edit" />}
+            color="warning"
+          >
+            Bulk Edit
+          </Button>
+          <Button
+            component={ButtonLink}
+            href="/manage/members/new"
+            variant="contained"
+            startIcon={<Icon variant="add" />}
+            color="secondary"
+          >
+            New Member
+          </Button>
+        </Stack>
       </Stack>
-
       {/* only pending members */}
       {user?.role === "cc" ? <PendingMembersDataGrid /> : null}
-
       {/* all members */}
       <Box>
         <Box>
           {user?.role === "cc" ? (
             <>
               <Typography
-                color="text.secondary"
                 variant="subtitle2"
-                textTransform="uppercase"
                 gutterBottom
-                mb={2}
+                sx={{
+                  color: "text.secondary",
+                  textTransform: "uppercase",
+                  mb: 2,
+                }}
               >
                 All Members
               </Typography>
-              <Box mt={2} mb={3}>
+              <Box
+                sx={{
+                  mt: 2,
+                  mb: 3,
+                }}
+              >
                 <MembersFilter
-                  name={targetName}
+                  // name={targetName}
+                  // name={targetName}
                   club={targetClub}
                   state={targetState}
                   cc={true}
@@ -84,9 +119,15 @@ export default async function ManageMembers({ searchParams }) {
             <>
               {user?.role !== "cc" ? (
                 <>
-                  <Box mt={2} mb={3}>
+                  <Box
+                    sx={{
+                      mt: 2,
+                      mb: 3,
+                    }}
+                  >
                     <MembersFilter
-                      name={targetName}
+                      // name={targetName}
+                      // name={targetName}
                       club={targetClub}
                       state={targetState}
                       cc={false}
@@ -116,13 +157,11 @@ async function PendingMembersDataGrid() {
   const userPromises = [];
   pendingMembers?.forEach((member) => {
     userPromises.push(
-      getClient()
-        .query(GET_USER_PROFILE, {
-          userInput: {
-            uid: member.uid,
-          },
-        })
-        .toPromise(),
+      getClient().query(GET_USER_PROFILE, {
+        userInput: {
+          uid: member.uid,
+        },
+      }),
     );
   });
   const users = await Promise.all(userPromises);
@@ -136,12 +175,18 @@ async function PendingMembersDataGrid() {
   return (
     <>
       {processedMembers.length > 0 ? (
-        <Box mb={3}>
+        <Box
+          sx={{
+            mb: 3,
+          }}
+        >
           <Typography
-            color="text.secondary"
             variant="subtitle2"
-            textTransform="uppercase"
             gutterBottom
+            sx={{
+              color: "text.secondary",
+              textTransform: "uppercase",
+            }}
           >
             Pending Approval
           </Typography>
@@ -181,13 +226,11 @@ async function MembersDataGrid({
   const userPromises = [];
   targetMembers?.forEach((member) => {
     userPromises.push(
-      getClient()
-        .query(GET_USER_PROFILE, {
-          userInput: {
-            uid: member.uid,
-          },
-        })
-        .toPromise(),
+      getClient().query(GET_USER_PROFILE, {
+        userInput: {
+          uid: member.uid,
+        },
+      }),
     );
   });
   const users = await Promise.all(userPromises);

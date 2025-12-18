@@ -1,8 +1,9 @@
 "use client";
 
-import PropTypes from "prop-types";
 import { forwardRef } from "react";
+
 import { Icon as Iconify } from "@iconify/react";
+
 import { Box } from "@mui/material";
 
 const Icon = forwardRef(
@@ -18,10 +19,5 @@ const Icon = forwardRef(
 );
 
 Icon.displayName = "Icon";
-Icon.propTypes = {
-  sx: PropTypes.object,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  icon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};
 
 export default Icon;

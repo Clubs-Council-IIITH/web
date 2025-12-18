@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+
 import { Box, Modal } from "@mui/material";
 
 export default function ImageModal({ images, id = null, onClose = () => {} }) {

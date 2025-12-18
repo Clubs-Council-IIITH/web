@@ -1,12 +1,11 @@
-import Link from "next/link";
+import { Button, Container, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
-import { Container, Typography, Button, Stack } from "@mui/material";
-
-import Icon from "components/Icon";
 import ClubsTable from "components/clubs/ClubsTable";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 export const metadata = {
   title: "Manage Clubs",
@@ -20,16 +19,18 @@ export default async function ManageClubs() {
     <Container>
       <Stack
         direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={3}
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3,
+        }}
       >
         <Typography variant="h3" gutterBottom>
           Manage Clubs & Student Bodies
         </Typography>
 
         <Button
-          component={Link}
+          component={ButtonLink}
           href="/manage/clubs/new"
           variant="contained"
           startIcon={<Icon variant="add" />}
@@ -37,7 +38,6 @@ export default async function ManageClubs() {
           New Club/Body
         </Button>
       </Stack>
-
       <ClubsTable clubs={clubs} />
     </Container>
   );

@@ -1,26 +1,28 @@
-import { getClient } from "gql/client";
-import { GET_MEMBERS } from "gql/queries/members";
-import { getNginxFile } from "utils/files";
-
-import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
+
 import {
-  Container,
-  Box,
-  Typography,
-  Stack,
-  Button,
   Accordion,
-  AccordionSummary,
   AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Container,
   List,
   ListItem,
   ListItemText,
+  Stack,
+  Typography,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
+import { getClient } from "gql/client";
+import { GET_MEMBERS } from "gql/queries/members";
+
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
+import { getNginxFile } from "utils/files";
+
 import { techTeamWords } from "constants/ccMembersFilterWords";
 
 import Status from "./status.mdx";
@@ -55,7 +57,8 @@ export const metadata = {
   title: "Changelog | Life @ IIIT-H",
 };
 
-export default async function Changelog({ searchParams }) {
+export default async function Changelog(props) {
+  const searchParams = await props.searchParams;
   const show_all = searchParams?.all === "true" ? true : false;
 
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
@@ -115,41 +118,72 @@ export default async function Changelog({ searchParams }) {
         <Status status={await status.json()} version={2.2} />
         <VersionHistory />
       </Box>
-
-      <Stack direction="row" pt={2} mb={2}>
-        <Typography variant="h3" mt={3}>
+      <Stack
+        direction="row"
+        sx={{
+          pt: 2,
+          mb: 2,
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{
+            mt: 3,
+          }}
+        >
           Maintainers
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Button
           variant="none"
           color="secondary"
-          component={Link}
+          component={ButtonLink}
           href="/tech-team/members"
         >
-          <Typography variant="button" color="text.primary">
+          <Typography
+            variant="button"
+            sx={{
+              color: "text.primary",
+            }}
+          >
             View all
           </Typography>
           <Icon variant="chevron-right" />
         </Button>
       </Stack>
       {techMembers?.length ? <LocalUsersGrid users={techMembers} /> : null}
-
-      <Stack direction="row" pt={2} mb={2} mt={3}>
+      <Stack
+        direction="row"
+        sx={{
+          pt: 2,
+          mb: 2,
+          mt: 3,
+        }}
+      >
         <Typography variant="h3">Changelog</Typography>
         {logsText.split("\n").length > limit ? (
           <>
             <Box sx={{ flexGrow: 1 }} />
-            <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               {show_all ? (
                 <Button
                   variant="none"
                   color="secondary"
-                  component={Link}
+                  component={ButtonLink}
                   href="/changelog"
                 >
                   <Icon variant="chevron-left" />
-                  <Typography variant="button" color="text.primary">
+                  <Typography
+                    variant="button"
+                    sx={{
+                      color: "text.primary",
+                    }}
+                  >
                     View less
                   </Typography>
                 </Button>
@@ -157,10 +191,15 @@ export default async function Changelog({ searchParams }) {
                 <Button
                   variant="none"
                   color="secondary"
-                  component={Link}
+                  component={ButtonLink}
                   href="/changelog?all=true"
                 >
-                  <Typography variant="button" color="text.primary">
+                  <Typography
+                    variant="button"
+                    sx={{
+                      color: "text.primary",
+                    }}
+                  >
                     View all
                   </Typography>
                   <Icon variant="chevron-right" />
@@ -170,15 +209,19 @@ export default async function Changelog({ searchParams }) {
           </>
         ) : null}
       </Stack>
-
       <MDXRemote
         source={
           show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
         }
       />
-
       {logsText.split("\n").length > limit ? (
-        <Typography variant="body2" color="text.secondary" mb={2}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            mb: 2,
+          }}
+        >
           Showing {show_all ? logsText?.split("\n").length : limit} of{" "}
           {logsText?.split("\n").length} entries.
         </Typography>
@@ -212,7 +255,12 @@ const VersionHistory = () => {
         id="panel1-header"
         style={{ marginLeft: "5px", cursor: "pointer", color: "#444" }}
       >
-        <Box display="flex" alignItems="center">
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Typography sx={{ color: "text.primary" }}>
             View releases/version history
           </Typography>

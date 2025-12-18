@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormControl, Select, MenuItem } from "@mui/material";
+
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 export default function YearSelector({ currentYear, selectedYear }) {
   const router = useRouter();

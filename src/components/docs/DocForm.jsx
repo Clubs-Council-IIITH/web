@@ -1,32 +1,31 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
+
+import { Controller, useForm } from "react-hook-form";
 
 import {
   Box,
-  TextField,
   Button,
-  Typography,
-  Grid,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 
+import ConfirmDialog from "components/ConfirmDialog";
+import FileUpload from "components/FileUpload";
 import Icon from "components/Icon";
 import { useToast } from "components/Toast";
-import FileUpload from "components/FileUpload";
-import ConfirmDialog from "components/ConfirmDialog";
-
 import { uploadPDFFile } from "utils/files";
 
 import { createStorageFile } from "actions/storagefiles/create/server_action";
-import { updateStorageFile } from "actions/storagefiles/update/server_action";
 import { deleteStorageFile } from "actions/storagefiles/delete/server_action";
+import { updateStorageFile } from "actions/storagefiles/update/server_action";
 
 const maxFileSizeMB = 20;
 
@@ -167,7 +166,13 @@ export default function DocForm({ editFile = null, newFile = true }) {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
+      <Grid
+        container
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Typography variant="h5" sx={{ p: 2 }}>
           Upload File
         </Typography>
@@ -186,7 +191,12 @@ export default function DocForm({ editFile = null, newFile = true }) {
       </Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
-          <Grid item xs={12} m={1}>
+          <Grid
+            sx={{
+              m: 1,
+            }}
+            size={12}
+          >
             <Controller
               name="title"
               control={control}
@@ -207,7 +217,13 @@ export default function DocForm({ editFile = null, newFile = true }) {
               )}
             />
           </Grid>
-          <Grid item xs={12} alignItems="center" m={1}>
+          <Grid
+            sx={{
+              alignItems: "center",
+              m: 1,
+            }}
+            size={12}
+          >
             <FileUpload
               name="file"
               label="File Upload"
@@ -217,8 +233,14 @@ export default function DocForm({ editFile = null, newFile = true }) {
               maxSizeMB={maxFileSizeMB}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Grid size={12}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: 2,
+              }}
+            >
               <Button
                 variant="outlined"
                 color="primary"
@@ -227,7 +249,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
                 Cancel
               </Button>
 
-              <LoadingButton
+              <Button
                 loading={loading}
                 // type="submit"
                 onClick={handleSubmitButton}
@@ -236,7 +258,7 @@ export default function DocForm({ editFile = null, newFile = true }) {
                 disabled={loading || !fileDropzone}
               >
                 Save
-              </LoadingButton>
+              </Button>
             </Box>
           </Grid>
         </Grid>

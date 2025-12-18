@@ -1,12 +1,12 @@
 "use client";
 
 import {
+  Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Button,
+  DialogTitle,
   Typography,
 } from "@mui/material";
 
@@ -32,7 +32,12 @@ export default function ConfirmDialog({
       <DialogActions>
         {addCancel ? (
           <Button onClick={onClose}>
-            <Typography variant="button" color="text.disabled">
+            <Typography
+              variant="button"
+              sx={{
+                color: "text.disabled",
+              }}
+            >
               {cancelText}
             </Typography>
           </Button>

@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
-
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@mui/material";
 
-import Icon from "components/Icon";
 import ConfirmDialog from "components/ConfirmDialog";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import { useToast } from "components/Toast";
 
 import { deleteEventAction } from "actions/events/delete/server_action";
@@ -20,7 +19,7 @@ export function EditEvent({ sx }) {
 
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/manage/events/${id}/edit`}
       variant="contained"
       color="warning"
@@ -37,7 +36,7 @@ export function EditFinances({ sx }) {
 
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/manage/finances/${id}`}
       variant="contained"
       color="warning"
@@ -54,7 +53,7 @@ export function CopyEvent({ sx }) {
 
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/manage/events/${id}/copy`}
       variant="contained"
       color="grey"
@@ -83,7 +82,6 @@ export function DeleteEvent({ sx }) {
         severity: "success",
       });
       router.push("/manage/events");
-      router.refresh();
     } else {
       // show error toast
       triggerToast({
@@ -240,7 +238,7 @@ export function ProgressEvent({ sx }) {
   const { id } = useParams();
   return (
     <Button
-      component={Link}
+      component={ButtonLink}
       href={`/manage/events/${id}/approve_cc`}
       variant="contained"
       color="secondary"
