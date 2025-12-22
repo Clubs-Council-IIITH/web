@@ -62,8 +62,13 @@ export default async function CopyEvent(props) {
     delete event._id;
     delete event.code;
     delete event.budget;
-    delete event.location;
+    delete event.sponsor;
     delete event.status;
+    delete event.location;
+    delete event.otherLocation;
+    delete event.locationAlternate;
+    delete event.otherLocationAlternate;
+    delete event.eventReportSubmitted;
 
     const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
       clubid: null,
