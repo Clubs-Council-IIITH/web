@@ -39,10 +39,6 @@ export default async function ManageEvents() {
     { clubid: userMeta?.role === "club" ? userMeta.uid : null },
   );
 
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, { 
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,
-  });
-
   return (
     <Container>
       <Stack
@@ -63,7 +59,6 @@ export default async function ManageEvents() {
             href="/manage/events/new"
             variant="contained"
             startIcon={<Icon variant="add" />}
-            disabled={!isEventReportsSubmitted}
           >
             New Event
           </Button>

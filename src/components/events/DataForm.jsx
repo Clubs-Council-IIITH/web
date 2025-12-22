@@ -428,8 +428,10 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                       { fieldValue: "population", fieldName: "Audience Count" },
                       { fieldValue: "mode", fieldName: "Mode" },
                       { fieldValue: "location", fieldName: "Venue" },
+                      { fieldValue: "equipment", fieldName: "Equipment" },
                       { fieldValue: "budget", fieldName: "Budget" },
                       { fieldValue: "poster", fieldName: "Poster URL" },
+
                       ...(status != "approved"
                         ? [
                             {

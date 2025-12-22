@@ -15,6 +15,7 @@ import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
 import { GET_CLASHING_EVENTS } from "gql/queries/events";
+import { GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
 
 import ActionPalette from "components/ActionPalette";
 import EventBillStatus from "components/events/bills/EventBillStatus";
@@ -112,6 +113,10 @@ export default async function ManageEventID(props) {
     return redirect("/404");
   }
 
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+  });
+
   return (
     user?.role === "club" &&
       user?.uid !== event?.clubid &&
@@ -127,6 +132,9 @@ export default async function ManageEventID(props) {
             { status: event?.status, location: event?.location },
           ]}
           right={getActions(event, clashFlag, { ...userMeta, ...userProfile })}
+          rightProps={[
+            { isReportSubmitted: isEventReportsSubmitted },
+          ]}
           downloadbtn={
             <DownloadEvent
               event={event}

@@ -43,12 +43,8 @@ export default async function NewEvent() {
   });
 
   const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, {
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,      
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
   });
-
-  if (!isEventReportsSubmitted) {
-    redirect("/manage/events");
-  }
 
   return (
     <Container>
@@ -65,6 +61,7 @@ export default async function NewEvent() {
         defaultValues={defaultValues}
         existingEvents={events}
         action="create"
+        isReportSubmitted={isEventReportsSubmitted}
       />
     </Container>
   );

@@ -61,10 +61,6 @@ export default async function CopyEvent(props) {
       clubid: userMeta?.role === "club" ? userMeta.uid : null,      
   });
 
-  if (!isEventReportsSubmitted) {
-    redirect("/manage/events");
-  }
-
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
@@ -99,6 +95,7 @@ export default async function CopyEvent(props) {
             defaultValues={transformEvent(event)}
             existingEvents={events.filter((e) => e._id !== oldEventId)}
             action="create"
+            isReportSubmitted={isEventReportsSubmitted}
           />
         </Container>
       )
