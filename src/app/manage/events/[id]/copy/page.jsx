@@ -31,7 +31,9 @@ function transformEvent(event) {
     // parse datetime strings to date objects
     datetimeperiod: transformDateTime(event?.datetimeperiod),
     budget: [],
+    sponsor: [],
     location: [],
+    locationAlternate: [],
     // parse population as int
     population: parseInt(event?.population || 0),
     // default fallbacks for text fields
