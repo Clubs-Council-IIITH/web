@@ -75,6 +75,44 @@ export const GET_ALL_EVENTS = gql`
   }
 `;
 
+export const GET_ALL_EVENTS_FOR_CALENDAR = gql`
+  query CalendarEvents($clubid: String) {
+    calendarEvents(clubid: $clubid) {
+      _id
+      name
+      code
+      datetimeperiod
+      clubid
+      status {
+        state
+      }
+    }
+  }
+`;
+
+export const GET_UNFINISHED_EVENTS = gql`
+  query Events(
+    $clubid: String
+    $public: Boolean
+    $excludeCompleted: Boolean = true
+  ) {
+    events(
+      clubid: $clubid
+      public: $public
+      excludeCompleted: $excludeCompleted
+    ) {
+      _id
+      name
+      code
+      clubid
+      datetimeperiod
+      status {
+        state
+      }
+    }
+  }
+`;
+
 export const GET_ALL_PUBLIC_EVENTS = gql`
   query Events($clubid: String, $limit: Int) {
     events(clubid: $clubid, public: true, limit: $limit) {
@@ -278,5 +316,11 @@ export const GET_EVENT_REPORT = gql`
       submittedBy
       submittedTime
     }
+  }
+`;
+
+export const GET_REPORTS_SUBMISSION_STATUS = gql`
+  query IsEventReportsSubmitted($clubid: String!) {
+    isEventReportsSubmitted(clubid: $clubid)
   }
 `;

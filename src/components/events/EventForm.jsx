@@ -71,6 +71,7 @@ export default function EventForm({
   defaultValues = {},
   action = "log",
   existingEvents = [],
+  isReportSubmitted = true,
 }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -83,6 +84,7 @@ export default function EventForm({
   const [budgetEditing, setBudgetEditing] = useState(false);
   const [sponsorEditing, setSponsorEditing] = useState(false);
   const [hasPhone, setHasPhone] = useState(true);
+  const [reportConfirmOpen, setReportConfirmOpen] = useState(false);
 
   const { triggerToast } = useToast();
   // fetch list of clubs
@@ -364,6 +366,19 @@ export default function EventForm({
         return;
       }
     }
+    
+    const isSubmit = opts?.shouldSubmit === true;
+
+    if (
+      isSubmit &&
+      user?.role === "club" &&
+      isReportSubmitted === false
+    ) {
+      setReportConfirmOpen(true);
+      setLoading(false);
+      return;
+    }
+
     // mutate
     submitHandlers[action](data, opts);
   }
@@ -724,9 +739,28 @@ export default function EventForm({
         confirmText="Go Back"
         cancelText="Continue"
       />
+      <ConfirmDialog
+        open={reportConfirmOpen}
+        title="Previous report not submitted"
+        description="You haven't submitted the previous event report. Do you want to save this event as a draft instead?"
+        confirmText="Save as Draft"
+        cancelText="Cancel"
+        confirmProps={{ color: "primary" }}
+        onConfirm={() => {
+          setReportConfirmOpen(false);
+
+          // save as draft
+          handleSubmit((data) => onSubmit(data))();
+        }}
+        onClose={() => {
+          setReportConfirmOpen(false);
+        }}
+      />
     </form>
   );
 }
+
+
 function SubmitButton({
   mode = "draft", // "draft" or "submit"
   loading,
