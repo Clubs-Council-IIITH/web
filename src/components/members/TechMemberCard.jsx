@@ -129,7 +129,11 @@ export default async function TechMemberCard({ uid, poc, roles }) {
             }}
           >
             <Box sx={{ mr: 1.5 }}>
-              <Link href={`/profile/${uid}`} passHref>
+              <Link
+                href={`/profile/${uid}`}
+                passHref
+                aria-label={"Profile link of " + user.firstName}
+              >
                 <Box
                   sx={{
                     p: 0.5,
@@ -153,6 +157,7 @@ export default async function TechMemberCard({ uid, poc, roles }) {
                 passHref
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={"GitHub profile of " + user.firstName}
               >
                 <Box
                   sx={{

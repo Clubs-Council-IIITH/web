@@ -57,31 +57,28 @@ export default function AccountPopover() {
   if (!isAuthenticated) {
     return (
       <Tooltip title={"Login"} placement="bottom" enterDelay={300}>
-        <span>
-          <Button
-            onClick={() => login(pathname)}
-            sx={{
-              borderRadius: "100%",
-              px: 1.5,
-              pt: 1.25,
-              pb: 0.75,
-              minWidth: "auto",
-              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.5),
-              "&:hover": {
-                bgcolor: (theme) =>
-                  alpha(theme.palette.background.neutral, 0.8),
-              },
+        <Button
+          onClick={() => login(pathname)}
+          sx={{
+            borderRadius: "100%",
+            px: 1.5,
+            pt: 1.25,
+            pb: 0.75,
+            minWidth: "auto",
+            bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.5),
+            "&:hover": {
+              bgcolor: (theme) => alpha(theme.palette.background.neutral, 0.8),
+            },
+          }}
+        >
+          <div
+            style={{
+              color: theme.palette.mode === "light" ? "#000" : "#fff",
             }}
           >
-            <div
-              style={{
-                color: theme.palette.mode === "light" ? "#000" : "#fff",
-              }}
-            >
-              <LoginLogo alt="Login" height={20} width={20} />
-            </div>
-          </Button>
-        </span>
+            <LoginLogo alt="Login" height={20} width={20} />
+          </div>
+        </Button>
       </Tooltip>
     );
   }
