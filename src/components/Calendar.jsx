@@ -74,7 +74,7 @@ export default function Calendar({ events, holidays, allClubs }) {
     return eventDataTransform(event, user?.role, user?.uid);
   };
 
-  const allEvents = events?.filter(
+  const allEvents = (events ?? [])?.filter(
     (event) => event?.status?.state !== "deleted",
   );
   const mergedEvents = [...allEvents, ...holidays];
