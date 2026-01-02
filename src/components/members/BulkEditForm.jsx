@@ -30,6 +30,7 @@ import { createMemberAction } from "actions/members/create/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 import { editMemberAction } from "actions/members/edit/server_action";
 import { getUsers } from "actions/users/get/server_action";
+import { parseMy, fmtMy, gteMy, eqMy } from "../../utils/membersDates";
 
 export default function BulkEdit({ mode = "add" }) {
   const router = useRouter();
@@ -283,8 +284,13 @@ export default function BulkEdit({ mode = "add" }) {
                   : Array.isArray(member.startMy)
                     ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
                     : parseMy(member.startMy),
+                // When role changes, set current role's end to the user-provided end
                 endMy: addNew
-                  ? parseMy(member.startMy)
+                  ? (member.endMy === "-" || member.endMy === "" || member.endMy == null
+                      ? null
+                      : Array.isArray(member.endMy)
+                        ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]
+                        : parseMy(member.endMy))
                   : member.endMy === "-" || member.endMy === ""
                     ? null
                     : Array.isArray(member.endMy)
@@ -302,9 +308,16 @@ export default function BulkEdit({ mode = "add" }) {
           if (addNew) {
             newRoles.push({
               name: member.role,
-              startMy: Array.isArray(member.startMy)
-                ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
-                : parseMy(member.startMy),
+              // New role starts at the current role's end date (if provided),
+              // otherwise fall back to the provided new start
+              startMy:
+                member.endMy === "-" || member.endMy === "" || member.endMy == null
+                  ? (Array.isArray(member.startMy)
+                      ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
+                      : parseMy(member.startMy))
+                  : (Array.isArray(member.endMy)
+                      ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]
+                      : parseMy(member.endMy)),
               endMy:
                 member.endMy === "-" || member.endMy === "" || member.endMy == null
                   ? null
@@ -402,8 +415,8 @@ export default function BulkEdit({ mode = "add" }) {
           mb={1}
         >
           <u>NOTE</u>: <br />
-          - If you change the role to a new one, the current role&apos;s end
-          date will be set to the new role&apos;s start date.
+          - If you change the role to a new one, the new role&apos;s start
+          date will be set to the current role&apos;s end date.
           <br />
           - Any invalid entries marked in red will be skipped during submission.
           <br />- Edited entries will be sent to the top.
@@ -531,15 +544,24 @@ function MembersTable({
     }
 
     row.startMy = parseMy(row.startMy);
-    const now = [new Date().getMonth() + 1, new Date().getFullYear()];
-    row.startMy = clampMy(row.startMy, [1, minYear], now);
-
+    const minStartY = Array.isArray(row.originalStartMy)
+      ? parseInt(row.originalStartMy[1])
+      : row.startMy[1];
+    if (row.startMy[1] < minStartY) {
+      row.startMy = [row.startMy[0], minStartY];
+    }
     if (row.endMy === null || row.endMy === "" || row.endMy === "-") {
       row.endMy = null;
     } else {
       const endParsed = parseMy(row.endMy);
-      const clampedEnd = clampMy(endParsed, row.startMy, now);
-      row.endMy = gteMy(clampedEnd, row.startMy) ? clampedEnd : null;
+      const endClamped = [endParsed[0], Math.max(minStartY, endParsed[1])];
+      if (gteMy(endClamped, row.startMy)) {
+        row.endMy = endClamped;
+      } else {
+        row.isValid = false;
+        row.error = "End date must be after start date";
+        row.endMy = null;
+      }
     }
 
     // if role is bigger than 99 error out
@@ -713,8 +735,11 @@ function MembersTable({
           ? [parseInt(row.startMy[0]) || now.getMonth() + 1, parseInt(row.startMy[1]) || now.getFullYear()]
           : [now.getMonth() + 1, now.getFullYear()];
 
+        const minStartYear = Array.isArray(row.originalStartMy)
+          ? parseInt(row.originalStartMy[1])
+          : current[1];
+
         const clampMonth = (m) => Math.min(12, Math.max(1, m));
-        const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
 
         const onMonthChange = (e) => {
           let mm = parseInt(e.target.value);
@@ -726,7 +751,7 @@ function MembersTable({
         const onYearChange = (e) => {
           let yy = parseInt(e.target.value);
           if (isNaN(yy)) return; // ignore non-numeric input
-          yy = clampYear(yy);
+          yy = Math.max(minStartYear, yy);
           api.setEditCellValue({ id, field: "startMy", value: [current[0], yy] }, e);
         };
 
@@ -743,8 +768,7 @@ function MembersTable({
             />
             <input
               type="number"
-              min={2010}
-              max={new Date().getFullYear()}
+              min={minStartYear}
               defaultValue={current[1]}
               placeholder="YYYY"
               onChange={onYearChange}
@@ -790,8 +814,11 @@ function MembersTable({
           ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || now.getFullYear()]
           : ["", ""]; // blank inputs indicate present/null
 
+        const minStartYear = Array.isArray(row.originalStartMy)
+          ? parseInt(row.originalStartMy[1])
+          : now.getFullYear();
+
         const clampMonth = (m) => Math.min(12, Math.max(1, m));
-        const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
 
         const onMonthChange = (e) => {
           const raw = e.target.value;
@@ -814,7 +841,7 @@ function MembersTable({
           }
           let yy = parseInt(raw);
           if (isNaN(yy)) return; // ignore non-numeric input
-          yy = clampYear(yy);
+          yy = Math.max(minStartYear, yy);
           const mm = isSet ? (parseInt(row.endMy[0]) || 1) : 1;
           api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
         };
@@ -832,8 +859,7 @@ function MembersTable({
             />
             <input
               type="number"
-              min={2010}
-              max={new Date().getFullYear()}
+              min={minStartYear}
               defaultValue={isSet ? current[1] : ""}
               placeholder="YYYY"
               onChange={onYearChange}
@@ -953,46 +979,3 @@ function MembersTable({
   );
 }
 
-// Helpers for [month, year] arrays
-function parseMy(v) {
-  if (v == null || v === "")
-    return [new Date().getMonth() + 1, new Date().getFullYear()];
-  if (Array.isArray(v) && v.length === 2)
-    return [parseInt(v[0]), parseInt(v[1])];
-  if (typeof v === "string") {
-    const s = v.trim();
-    const parts = s.includes("-") ? s.split("-") : s.split("/");
-    if (parts.length === 2) {
-      const mm = parseInt(parts[0]);
-      const yy = parseInt(parts[1]);
-      if (!isNaN(mm) && !isNaN(yy)) return [mm, yy];
-    }
-  }
-  return [new Date().getMonth() + 1, new Date().getFullYear()];
-}
-
-function fmtMy(my) {
-  if (!Array.isArray(my) || my.length !== 2) return "";
-  return `${String(my[0]).padStart(2, "0")}-${my[1]}`;
-}
-
-function clampMy([m, y], [minM, minY], [maxM, maxY]) {
-  if (y < minY) return [minM, minY];
-  if (y > maxY) return [maxM, maxY];
-  let mm = Math.min(12, Math.max(1, parseInt(m)));
-  if (y === minY && mm < minM) mm = minM;
-  if (y === maxY && mm > maxM) mm = maxM;
-  return [mm, y];
-}
-
-function gteMy(a, b) {
-  if (a == null || b == null) return false;
-  if (a[1] !== b[1]) return a[1] > b[1];
-  return a[0] >= b[0];
-}
-
-function eqMy(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return a == null && b == null;
-  return Array.isArray(a) && Array.isArray(b) && a[0] === b[0] && a[1] === b[1];
-}

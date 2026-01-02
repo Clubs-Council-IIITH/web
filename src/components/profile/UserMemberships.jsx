@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { fmtMy, myComparator } from "../../utils/membersDates";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -243,19 +244,3 @@ export default function UserMemberships({ rows = [] }) {
   );
 }
 
-function fmtMy(my) {
-  if (!Array.isArray(my) || my.length !== 2) return "";
-  return `${String(my[0]).padStart(2, "0")}-${my[1]}`;
-}
-
-function myComparator(a, b) {
-  // a, b are formatted strings or '-'
-  const toKey = (s) => {
-    if (!s || s === "-") return Number.POSITIVE_INFINITY; // ongoing first when desc
-    const [m, y] = s.split("-").map((x) => parseInt(x));
-    return y * 12 + m;
-  };
-  const ka = toKey(a);
-  const kb = toKey(b);
-  return ka - kb;
-}

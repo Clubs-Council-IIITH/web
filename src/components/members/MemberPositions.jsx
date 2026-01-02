@@ -54,12 +54,10 @@ export default function MemberPositions({
     endMy: null,
   };
 
-  // data manipulation functions
   const onAdd = () => {
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
-    // normalize startMy
     let sm, sy;
     if (Array.isArray(row.startMy)) {
       sm = parseInt(row.startMy[0]);
@@ -72,7 +70,6 @@ export default function MemberPositions({
     sy = Math.min(new Date().getFullYear(), Math.max(minYear, sy || minYear));
     row.startMy = [sm, sy];
 
-    // normalize endMy
     let em = null,
       ey = null;
     if (Array.isArray(row.endMy)) {
@@ -82,7 +79,6 @@ export default function MemberPositions({
       ey = Math.min(new Date().getFullYear(), Math.max(minYear, ey || minYear));
       row.endMy = [em, ey];
     }
-    // ordering: if end < start, clear end (compare year, then month)
     if (row.endMy) {
       if (
         row.endMy[1] < row.startMy[1] ||
@@ -261,7 +257,7 @@ export default function MemberPositions({
         const isSet = Array.isArray(row.endMy);
         const current = isSet
           ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || now.getFullYear()]
-          : ["", ""]; // blank inputs indicate present/null
+          : ["", ""];
 
         const clampMonth = (m) => Math.min(12, Math.max(1, m));
         const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
