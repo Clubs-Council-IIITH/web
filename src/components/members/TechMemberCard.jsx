@@ -97,28 +97,35 @@ export default async function TechMemberCard({ uid, poc, roles }) {
 
         {roles
           ?.sort((a, b) => {
-            // Sort roles logic
-            if (a.endYear === null && b.endYear !== null) {
-              return -1;
-            } else if (a.endYear !== null && b.endYear === null) {
-              return 1;
-            } else {
-              return b.endYear - a.endYear;
-            }
+            const aEnd = a?.endMy;
+            const bEnd = b?.endMy;
+            if (aEnd == null && bEnd != null) return -1;
+            if (aEnd != null && bEnd == null) return 1;
+            if (aEnd == null && bEnd == null) return 0;
+            if (bEnd[1] !== aEnd[1]) return bEnd[1] - aEnd[1];
+            return bEnd[0] - aEnd[0];
           })
-          .map((role, key) => (
-            <Typography key={key} variant="body1" sx={{ mb: 0.5 }}>
-              <Box
-                component="span"
-                sx={{ color: "text.primary", fontWeight: 500 }}
-              >
-                {role.name}
-              </Box>{" "}
-              <Box component="span" sx={{ color: "text.secondary" }}>
-                ({role.startYear} - {role.endYear || "present"})
-              </Box>
-            </Typography>
-          ))}
+          .map((role, key) => {
+            const fmt = (my) =>
+              Array.isArray(my) && my.length === 2
+                ? `${String(my[0]).padStart(2, "0")}-${my[1]}`
+                : null;
+            const start = fmt(role?.startMy);
+            const end = fmt(role?.endMy) || "present";
+            return (
+              <Typography key={key} variant="body1" sx={{ mb: 0.5 }}>
+                <Box
+                  component="span"
+                  sx={{ color: "text.primary", fontWeight: 500 }}
+                >
+                  {role.name}
+                </Box>{" "}
+                <Box component="span" sx={{ color: "text.secondary" }}>
+                  ({start} - {end})
+                </Box>
+              </Typography>
+            );
+          })}
 
         <Box>
           <Box

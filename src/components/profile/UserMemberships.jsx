@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { fmtMy, myComparator } from "../../utils/membersDates";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -139,18 +140,21 @@ export default function UserMemberships({ rows = [] }) {
       display: "flex",
     },
     {
-      field: "startYear",
-      headerName: "Start Year",
+      field: "startMy",
+      headerName: "Start (MM-YYYY)",
       headerAlign: "center",
       align: "center",
+      valueGetter: (value, row) =>
+        Array.isArray(row.startMy) ? fmtMy(row.startMy) : "",
       flex: isMobile ? null : 3,
     },
     {
-      field: "endYear",
-      headerName: "End Year",
+      field: "endMy",
+      headerName: "End (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
+      valueGetter: (value, row) => (row.endMy ? fmtMy(row.endMy) : "-"),
+      sortComparator: (a, b) => myComparator(a, b),
       flex: isMobile ? null : 3,
     },
   ];
@@ -168,7 +172,7 @@ export default function UserMemberships({ rows = [] }) {
             getRowId={(row) => row.rid}
             initialState={{
               sorting: {
-                sortModel: [{ field: "endYear", sort: "desc" }],
+                sortModel: [{ field: "endMy", sort: "desc" }],
               },
               pagination: { paginationModel: { pageSize: 5 } },
             }}
@@ -239,3 +243,4 @@ export default function UserMemberships({ rows = [] }) {
     </>
   );
 }
+

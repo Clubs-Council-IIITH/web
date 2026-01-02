@@ -48,10 +48,10 @@ export default async function TechTeam() {
   const finaltargetMembers = targetMembers[-1]
     ? targetMembers[-1]?.sort((a, b) => {
         const roleNameA = a.roles
-          .find((role) => role.endYear === null)
+          .find((role) => role.endMy === null)
           ?.name?.toLowerCase();
         const roleNameB = b.roles
-          .find((role) => role.endYear === null)
+          .find((role) => role.endMy === null)
           ?.name?.toLowerCase();
 
         if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {

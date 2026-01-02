@@ -30,6 +30,7 @@ import { createMemberAction } from "actions/members/create/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 import { editMemberAction } from "actions/members/edit/server_action";
 import { getUsers } from "actions/users/get/server_action";
+import { parseMy, fmtMy, gteMy, eqMy } from "../../utils/membersDates";
 
 export default function BulkEdit({ mode = "add" }) {
   const router = useRouter();
@@ -94,19 +95,26 @@ export default function BulkEdit({ mode = "add" }) {
       if (res.ok) {
         setFullMembers(res.data);
         const existing = res.data.map((member, index) => {
-          const latestRole = member.roles
-            ?.filter((role) => role.endYear === null)
-            ?.sort((a, b) => b.startYear - a.startYear)[0];
+          const ongoing = member.roles?.filter((r) => r.endMy === null) || [];
+          const latestRole = ongoing
+            ?.slice()
+            ?.sort((a, b) => {
+              const [am, ay] = a.startMy || [1, 2000];
+              const [bm, by] = b.startMy || [1, 2000];
+              if (by !== ay) return by - ay;
+              return bm - am;
+            })[0];
           return {
             id: index,
             uid: member.uid,
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
-            startYear: latestRole?.startYear || new Date().getFullYear(),
-            originalStartYear:
-              latestRole?.startYear || new Date().getFullYear(),
-            endYear: latestRole?.endYear,
-            originalEndYear: latestRole?.endYear,
+            startMy:
+              latestRole?.startMy || [new Date().getMonth() + 1, new Date().getFullYear()],
+            originalStartMy:
+              latestRole?.startMy || [new Date().getMonth() + 1, new Date().getFullYear()],
+            endMy: latestRole?.endMy ?? null,
+            originalEndMy: latestRole?.endMy ?? null,
             isPoc: member.poc,
             isValid: true,
             error: null,
@@ -222,8 +230,15 @@ export default function BulkEdit({ mode = "add" }) {
           roles: [
             {
               name: member.role,
-              startYear: parseInt(member.startYear),
-              endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+              startMy: Array.isArray(member.startMy)
+                ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
+                : parseMy(member.startMy),
+              endMy:
+                member.endMy === "-" || member.endMy === "" || member.endMy == null
+                  ? null
+                  : Array.isArray(member.endMy)
+                    ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]
+                    : parseMy(member.endMy),
             },
           ],
           poc: member.isPoc,
@@ -240,16 +255,23 @@ export default function BulkEdit({ mode = "add" }) {
         const fullMember = fullMembers.find((m) => m.uid === member.uid);
         if (!fullMember) return;
         const latestRole = fullMember.roles
-          ?.filter((role) => role.endYear === null)
-          ?.sort((a, b) => b.startYear - a.startYear)[0];
+          ?.filter((role) => role.endMy === null)
+          ?.sort((a, b) => {
+            const [am, ay] = a.startMy || [1, 2000];
+            const [bm, by] = b.startMy || [1, 2000];
+            if (by !== ay) return by - ay;
+            return bm - am;
+          })[0];
 
         // check if role has changed
         if (
           member.role !== latestRole.name ||
           member.isPoc !== fullMember.poc ||
-          member.startYear !== latestRole.startYear ||
-          (member.endYear === "-" ? null : member.endYear) !==
-            latestRole.endYear
+          !eqMy(member.startMy, latestRole.startMy) ||
+          !eqMy(
+            member.endMy === "-" || member.endMy === "" ? null : member.endMy,
+            latestRole.endMy,
+          )
         ) {
           // construct new roles with old roles and new roles appended, but make the lastRow's end year as currentYear
           const addNew = member.role !== latestRole.name;
@@ -257,12 +279,26 @@ export default function BulkEdit({ mode = "add" }) {
             if (role.name === latestRole.name) {
               return {
                 name: role.name,
-                startYear: addNew ? role.startYear : member.startYear,
-                endYear: addNew
-                  ? parseInt(member.startYear)
-                  : member.endYear === "-"
+                startMy: addNew
+                  ? role.startMy
+                  : Array.isArray(member.startMy)
+                    ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
+                    : parseMy(member.startMy),
+                // When role changes, set current role's end to the user-provided end
+                endMy: addNew
+                  ? (member.endMy === "-" || member.endMy === "" || member.endMy == null
+                      ? null
+                      : Array.isArray(member.endMy)
+                        ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]
+                        : parseMy(member.endMy))
+                  : member.endMy === "-" || member.endMy === ""
                     ? null
-                    : parseInt(member.endYear),
+                    : Array.isArray(member.endMy)
+                      ? [
+                          parseInt(member.endMy[0]),
+                          parseInt(member.endMy[1]),
+                        ]
+                      : parseMy(member.endMy),
               };
             }
             return role;
@@ -272,8 +308,22 @@ export default function BulkEdit({ mode = "add" }) {
           if (addNew) {
             newRoles.push({
               name: member.role,
-              startYear: parseInt(member.startYear),
-              endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+              // New role starts at the current role's end date (if provided),
+              // otherwise fall back to the provided new start
+              startMy:
+                member.endMy === "-" || member.endMy === "" || member.endMy == null
+                  ? (Array.isArray(member.startMy)
+                      ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
+                      : parseMy(member.startMy))
+                  : (Array.isArray(member.endMy)
+                      ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]
+                      : parseMy(member.endMy)),
+              endMy:
+                member.endMy === "-" || member.endMy === "" || member.endMy == null
+                  ? null
+                  : Array.isArray(member.endMy)
+                    ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]
+                    : parseMy(member.endMy),
             });
           }
 
@@ -349,8 +399,9 @@ export default function BulkEdit({ mode = "add" }) {
           <u>NOTE</u>:<br />
           - Please ensure that the members being added do not already exist in
           the selected club/body.
-          <br />- The default start year for all members will be set as{" "}
-          {new Date().getFullYear()}.
+          <br />- The default start date for all members will be set as {`${String(
+            new Date().getMonth() + 1,
+          ).padStart(2, "0")}-${new Date().getFullYear()}`}.
           <br />- Any invalid entries marked in red will be skipped during
           submission.
         </Typography>
@@ -364,8 +415,8 @@ export default function BulkEdit({ mode = "add" }) {
           mb={1}
         >
           <u>NOTE</u>: <br />
-          - If you change the role to a new one, the current role&apos;s end
-          year will be set to the new role&apos;s start year.
+          - If you change the role to a new one, the new role&apos;s start
+          date will be set to the current role&apos;s end date.
           <br />
           - Any invalid entries marked in red will be skipped during submission.
           <br />- Edited entries will be sent to the top.
@@ -458,10 +509,10 @@ function MembersTable({
     uid: null,
     role: null,
     originalRole: null,
-    startYear: new Date().getFullYear(),
-    originalStartYear: new Date().getFullYear(),
-    endYear: null,
-    originalEndYear: null,
+    startMy: [new Date().getMonth() + 1, new Date().getFullYear()],
+    originalStartMy: [new Date().getMonth() + 1, new Date().getFullYear()],
+    endMy: null,
+    originalEndMy: null,
     isPoc: false,
     isValid: false,
     error: "Incomplete entry",
@@ -492,23 +543,25 @@ function MembersTable({
       }
     }
 
-    row.startYear =
-      parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
-    row.startYear =
-      row.startYear > new Date().getFullYear()
-        ? new Date().getFullYear()
-        : row.startYear;
-
-    const rawEnd = row.endYear;
-    if (rawEnd === null || rawEnd === "" || rawEnd === "-") {
-      row.endYear = rawEnd;
+    row.startMy = parseMy(row.startMy);
+    const minStartY = Array.isArray(row.originalStartMy)
+      ? parseInt(row.originalStartMy[1])
+      : row.startMy[1];
+    if (row.startMy[1] < minStartY) {
+      row.startMy = [row.startMy[0], minStartY];
+    }
+    if (row.endMy === null || row.endMy === "" || row.endMy === "-") {
+      row.endMy = null;
     } else {
-      const parsed = Number.parseInt(rawEnd, 10);
-      const clamped = isNaN(parsed) ? minYear : Math.max(parsed, minYear);
-      row.endYear =
-        clamped > new Date().getFullYear()
-          ? ""
-          : Math.max(clamped, row.startYear);
+      const endParsed = parseMy(row.endMy);
+      const endClamped = [endParsed[0], Math.max(minStartY, endParsed[1])];
+      if (gteMy(endClamped, row.startMy)) {
+        row.endMy = endClamped;
+      } else {
+        row.isValid = false;
+        row.error = "End date must be after start date";
+        row.endMy = null;
+      }
     }
 
     // if role is bigger than 99 error out
@@ -557,8 +610,8 @@ function MembersTable({
       sortable: true,
       valueGetter: (value, row) =>
         row.role !== row.originalRole ||
-        row.startYear !== row.originalStartYear ||
-        row.endYear !== row.originalEndYear
+        !eqMy(row.startMy, row.originalStartMy) ||
+        !eqMy(row.endMy, row.originalEndMy)
           ? "0" + row?.uid
           : "1" + row?.uid,
     },
@@ -575,8 +628,8 @@ function MembersTable({
             color={
               addMode ||
               p.row.role !== p.row.originalRole ||
-              p.row.startYear !== p.row.originalStartYear ||
-              p.row.endYear !== p.row.originalEndYear
+              !eqMy(p.row.startMy, p.row.originalStartMy) ||
+              !eqMy(p.row.endMy, p.row.originalEndMy)
                 ? "text.primary"
                 : "text.secondary"
             }
@@ -645,19 +698,19 @@ function MembersTable({
       display: "flex",
     },
     {
-      field: "startYear",
-      headerName: "Start Year",
+      field: "startMy",
+      headerName: "Start (MM-YYYY)",
       flex: isMobile ? null : 2,
       editable: true,
       valueGetter: (value, row) =>
         row?.role === row?.originalRole
-          ? row.startYear
-          : new Date().getFullYear(),
+          ? fmtMy(row.startMy)
+          : fmtMy([new Date().getMonth() + 1, new Date().getFullYear()]),
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
-            p.row?.startYear === p.row?.originalStartYear ||
+            eqMy(p.row?.startMy, p.row?.originalStartMy) ||
             p.row?.role !== p.row?.originalRole
               ? "text.secondary"
               : "text.primary"
@@ -675,19 +728,68 @@ function MembersTable({
           {p.value}
         </Typography>
       ),
+      renderEditCell: (params) => {
+        const { api, id, row } = params;
+        const now = new Date();
+        const current = Array.isArray(row.startMy)
+          ? [parseInt(row.startMy[0]) || now.getMonth() + 1, parseInt(row.startMy[1]) || now.getFullYear()]
+          : [now.getMonth() + 1, now.getFullYear()];
+
+        const minStartYear = Array.isArray(row.originalStartMy)
+          ? parseInt(row.originalStartMy[1])
+          : current[1];
+
+        const clampMonth = (m) => Math.min(12, Math.max(1, m));
+
+        const onMonthChange = (e) => {
+          let mm = parseInt(e.target.value);
+          if (isNaN(mm)) return; // ignore non-numeric input
+          mm = clampMonth(mm);
+          api.setEditCellValue({ id, field: "startMy", value: [mm, current[1]] }, e);
+        };
+
+        const onYearChange = (e) => {
+          let yy = parseInt(e.target.value);
+          if (isNaN(yy)) return; // ignore non-numeric input
+          yy = Math.max(minStartYear, yy);
+          api.setEditCellValue({ id, field: "startMy", value: [current[0], yy] }, e);
+        };
+
+        return (
+          <Stack direction="row" spacing={1} sx={{ width: "100%", alignItems: "center" }}>
+            <input
+              type="number"
+              min={1}
+              max={12}
+              defaultValue={current[0]}
+              placeholder="MM"
+              onChange={onMonthChange}
+              style={{ width: "45%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+            <input
+              type="number"
+              min={minStartYear}
+              defaultValue={current[1]}
+              placeholder="YYYY"
+              onChange={onYearChange}
+              style={{ width: "55%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+          </Stack>
+        );
+      },
       display: "flex",
     },
     {
-      field: "endYear",
-      headerName: "End Year",
-      valueGetter: (value, row) => row.endYear || "-",
+      field: "endMy",
+      headerName: "End (MM-YYYY)",
+      valueGetter: (value, row) => (row.endMy ? fmtMy(row.endMy) : "-"),
       flex: isMobile ? null : 2,
       editable: true,
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
-            p.row?.endYear === p.row?.originalEndYear
+            eqMy(p.row?.endMy, p.row?.originalEndMy)
               ? "text.secondary"
               : "text.primary"
           }
@@ -704,6 +806,68 @@ function MembersTable({
           {p.value}
         </Typography>
       ),
+      renderEditCell: (params) => {
+        const { api, id, row } = params;
+        const now = new Date();
+        const isSet = Array.isArray(row.endMy);
+        const current = isSet
+          ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || now.getFullYear()]
+          : ["", ""]; // blank inputs indicate present/null
+
+        const minStartYear = Array.isArray(row.originalStartMy)
+          ? parseInt(row.originalStartMy[1])
+          : now.getFullYear();
+
+        const clampMonth = (m) => Math.min(12, Math.max(1, m));
+
+        const onMonthChange = (e) => {
+          const raw = e.target.value;
+          if (raw === "" || raw == null) {
+            api.setEditCellValue({ id, field: "endMy", value: null }, e);
+            return;
+          }
+          let mm = parseInt(raw);
+          if (isNaN(mm)) return; // ignore non-numeric input
+          mm = clampMonth(mm);
+          const yy = isSet ? (parseInt(row.endMy[1]) || now.getFullYear()) : now.getFullYear();
+          api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
+        };
+
+        const onYearChange = (e) => {
+          const raw = e.target.value;
+          if (raw === "" || raw == null) {
+            api.setEditCellValue({ id, field: "endMy", value: null }, e);
+            return;
+          }
+          let yy = parseInt(raw);
+          if (isNaN(yy)) return; // ignore non-numeric input
+          yy = Math.max(minStartYear, yy);
+          const mm = isSet ? (parseInt(row.endMy[0]) || 1) : 1;
+          api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
+        };
+
+        return (
+          <Stack direction="row" spacing={1} sx={{ width: "100%", alignItems: "center" }}>
+            <input
+              type="number"
+              min={1}
+              max={12}
+              defaultValue={isSet ? current[0] : ""}
+              placeholder="MM"
+              onChange={onMonthChange}
+              style={{ width: "45%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+            <input
+              type="number"
+              min={minStartYear}
+              defaultValue={isSet ? current[1] : ""}
+              placeholder="YYYY"
+              onChange={onYearChange}
+              style={{ width: "55%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+          </Stack>
+        );
+      },
       display: "flex",
     },
     {
@@ -805,8 +969,8 @@ function MembersTable({
           columns: {
             columnVisibilityModel: {
               // Hide the 'isEdited' column, it's only for sorting
-              isEdited: false, // Hide the year columns in add mode
-              ...(addMode ? { startYear: false, endYear: false } : {}),
+              isEdited: false,
+              ...(addMode ? { startMy: false, endMy: false } : {}),
             },
           },
         }}
@@ -814,3 +978,4 @@ function MembersTable({
     </>
   );
 }
+

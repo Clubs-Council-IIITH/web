@@ -104,15 +104,19 @@ export default async function MemberCard({ uid, poc, roles }) {
 
         {roles
           ?.sort((a, b) => {
-            // Place roles with endYear=null at the top
-            if (a.endYear === null && b.endYear !== null) {
-              return -1;
-            } else if (a.endYear !== null && b.endYear === null) {
-              return 1;
-            } else {
-              // Sort based on endYear in descending order
-              return b.endYear - a.endYear;
+            // Place current roles (endMy=null) at the top
+            if (a.endMy === null && b.endMy !== null) return -1;
+            if (a.endMy !== null && b.endMy === null) return 1;
+            // Sort by end date desc: compare year then month
+            if (a.endMy && b.endMy) {
+              const ay = a.endMy[1];
+              const am = a.endMy[0];
+              const by = b.endMy[1];
+              const bm = b.endMy[0];
+              if (by !== ay) return by - ay;
+              return bm - am;
             }
+            return 0;
           })
           .map((role, key) => (
             <Box
@@ -136,7 +140,17 @@ export default async function MemberCard({ uid, poc, roles }) {
                   display: "inline-block",
                 }}
               >
-                ({role.startYear} - {role.endYear || "present"})
+                (
+                  {Array.isArray(role.startMy)
+                    ? `${String(role.startMy[0]).padStart(2, "0")}-${role.startMy[1]}`
+                    : ""}
+                  {" "}-
+                  {role.endMy === null
+                    ? " present"
+                    : Array.isArray(role.endMy)
+                      ? `${String(role.endMy[0]).padStart(2, "0")}-${role.endMy[1]}`
+                      : ""}
+                )
               </Typography>
             </Box>
           ))}

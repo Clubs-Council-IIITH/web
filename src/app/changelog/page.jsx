@@ -232,15 +232,15 @@ export default async function Changelog(props) {
 
 const filterRoles = (roles, filterWords) => {
   let filteredRoles = roles?.filter((role) => {
-    const { name, endYear } = role;
+    const { name, endMy } = role;
     const lowercaseName = name.toLowerCase();
     return filterWords.some(
-      (word) => lowercaseName.includes(word) && endYear === null,
+      (word) => lowercaseName.includes(word) && endMy === null,
     );
   });
   if (filteredRoles?.length > 0)
     return roles?.filter((role) => {
-      const { name, endYear } = role;
+      const { name } = role;
       const lowercaseName = name.toLowerCase();
       return filterWords.some((word) => lowercaseName.includes(word));
     });
