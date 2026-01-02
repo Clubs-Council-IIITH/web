@@ -92,7 +92,11 @@ function Bar({ onOpenDrawer }) {
             alignItems: "center",
           }}
         >
-          <ModeSwitch checked={isDark} onChange={handleChange} />
+          <ModeSwitch
+            checked={isDark}
+            onChange={handleChange}
+            slotProps={{ input: { "aria-label": "Toggle dark mode" } }}
+          />
           <AccountPopover />
         </Stack>
       </Toolbar>

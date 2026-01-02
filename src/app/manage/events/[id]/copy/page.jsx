@@ -4,7 +4,11 @@ import { Container, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { GET_ALL_EVENTS, GET_FULL_EVENT } from "gql/queries/events";
+import {
+  GET_FULL_EVENT,
+  GET_REPORTS_SUBMISSION_STATUS,
+  GET_UNFINISHED_EVENTS,
+} from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -31,7 +35,9 @@ function transformEvent(event) {
     // parse datetime strings to date objects
     datetimeperiod: transformDateTime(event?.datetimeperiod),
     budget: [],
+    sponsor: [],
     location: [],
+    locationAlternate: [],
     // parse population as int
     population: parseInt(event?.population || 0),
     // default fallbacks for text fields
@@ -51,6 +57,22 @@ export default async function CopyEvent(props) {
   );
   const user = { ...userMeta, ...userProfile };
 
+  const { data: { events } = {} } = await getClient().query(
+    GET_UNFINISHED_EVENTS,
+    {
+      clubid: null,
+      public: false,
+      excludeCompleted: true,
+    },
+  );
+
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    },
+  );
+
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
       eventid: id,
@@ -62,13 +84,13 @@ export default async function CopyEvent(props) {
     delete event._id;
     delete event.code;
     delete event.budget;
-    delete event.location;
+    delete event.sponsor;
     delete event.status;
-
-    const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-      clubid: null,
-      public: false,
-    });
+    delete event.location;
+    delete event.otherLocation;
+    delete event.locationAlternate;
+    delete event.otherLocationAlternate;
+    delete event.eventReportSubmitted;
 
     return (
       user?.role === "club" &&
@@ -90,6 +112,7 @@ export default async function CopyEvent(props) {
             defaultValues={transformEvent(event)}
             existingEvents={events.filter((e) => e._id !== oldEventId)}
             action="create"
+            isReportSubmitted={isEventReportsSubmitted}
           />
         </Container>
       )

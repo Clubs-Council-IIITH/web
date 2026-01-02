@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 
 import ConfirmDialog from "components/ConfirmDialog";
 import Icon from "components/Icon";
@@ -116,10 +116,14 @@ export function DeleteEvent({ sx }) {
   );
 }
 
-export function SubmitEvent({ sx }) {
+export function SubmitEvent({ sx, isReportSubmitted = true }) {
   const router = useRouter();
   const { id } = useParams();
   const { triggerToast } = useToast();
+
+  const tooltipText = !isReportSubmitted
+    ? "You haven't submitted the previous event report"
+    : "";
 
   const submitEvent = async () => {
     let res = await eventProgress({
@@ -144,15 +148,20 @@ export function SubmitEvent({ sx }) {
   };
 
   return (
-    <Button
-      variant="contained"
-      color="info"
-      startIcon={<Icon variant="thumb-up-outline-rounded" />}
-      onClick={submitEvent}
-      sx={sx}
-    >
-      Submit
-    </Button>
+    <Tooltip title={tooltipText} disableHoverListener={!tooltipText}>
+      <span>
+        <Button
+          variant="contained"
+          color="info"
+          startIcon={<Icon variant="thumb-up-outline-rounded" />}
+          onClick={submitEvent}
+          disabled={!isReportSubmitted}
+          sx={sx}
+        >
+          Submit
+        </Button>
+      </span>
+    </Tooltip>
   );
 }
 

@@ -1,7 +1,13 @@
+import { redirect } from "next/navigation";
+
 import { Container, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
-import { GET_ALL_EVENTS } from "gql/queries/events";
+import { GET_USER } from "gql/queries/auth";
+import {
+  GET_REPORTS_SUBMISSION_STATUS,
+  GET_UNFINISHED_EVENTS,
+} from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -30,10 +36,25 @@ export default async function NewEvent() {
     poc: "",
   };
 
-  const { data: { events } = {} } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: null,
-    public: false,
+  const { data: { events } = {} } = await getClient().query(
+    GET_UNFINISHED_EVENTS,
+    {
+      clubid: null,
+      public: false,
+      excludeCompleted: true,
+    },
+  );
+
+  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+    userInput: null,
   });
+
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    },
+  );
 
   return (
     <Container>
@@ -50,6 +71,7 @@ export default async function NewEvent() {
         defaultValues={defaultValues}
         existingEvents={events}
         action="create"
+        isReportSubmitted={isEventReportsSubmitted}
       />
     </Container>
   );
