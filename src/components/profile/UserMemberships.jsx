@@ -139,18 +139,21 @@ export default function UserMemberships({ rows = [] }) {
       display: "flex",
     },
     {
-      field: "startYear",
-      headerName: "Start Year",
+      field: "startMy",
+      headerName: "Start (MM-YYYY)",
       headerAlign: "center",
       align: "center",
+      valueGetter: (value, row) =>
+        Array.isArray(row.startMy) ? fmtMy(row.startMy) : "",
       flex: isMobile ? null : 3,
     },
     {
-      field: "endYear",
-      headerName: "End Year",
+      field: "endMy",
+      headerName: "End (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
+      valueGetter: (value, row) => (row.endMy ? fmtMy(row.endMy) : "-"),
+      sortComparator: (a, b) => myComparator(a, b),
       flex: isMobile ? null : 3,
     },
   ];
@@ -168,7 +171,7 @@ export default function UserMemberships({ rows = [] }) {
             getRowId={(row) => row.rid}
             initialState={{
               sorting: {
-                sortModel: [{ field: "endYear", sort: "desc" }],
+                sortModel: [{ field: "endMy", sort: "desc" }],
               },
               pagination: { paginationModel: { pageSize: 5 } },
             }}
@@ -238,4 +241,21 @@ export default function UserMemberships({ rows = [] }) {
       )}
     </>
   );
+}
+
+function fmtMy(my) {
+  if (!Array.isArray(my) || my.length !== 2) return "";
+  return `${String(my[0]).padStart(2, "0")}-${my[1]}`;
+}
+
+function myComparator(a, b) {
+  // a, b are formatted strings or '-'
+  const toKey = (s) => {
+    if (!s || s === "-") return Number.POSITIVE_INFINITY; // ongoing first when desc
+    const [m, y] = s.split("-").map((x) => parseInt(x));
+    return y * 12 + m;
+  };
+  const ka = toKey(a);
+  const kb = toKey(b);
+  return ka - kb;
 }

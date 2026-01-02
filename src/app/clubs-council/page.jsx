@@ -110,7 +110,7 @@ export default async function ClubsCouncil() {
 const filterRoles = (roles, filterWords, unfilterWords = []) => {
   // Filter roles that meet the filterWords criteria and are not in the unfilterWords list
   let filteredRoles = roles?.filter((role) => {
-    const { name, endYear } = role;
+    const { name, endMy } = role;
     const lowercaseName = name.toLowerCase();
     const matchesFilterWords = filterWords.some((word) =>
       lowercaseName.includes(word),
@@ -118,7 +118,7 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
     const matchesUnfilterWords = unfilterWords.some((word) =>
       lowercaseName.includes(word),
     );
-    return matchesFilterWords && !matchesUnfilterWords && endYear === null;
+    return matchesFilterWords && !matchesUnfilterWords && endMy === null;
   });
 
   // If any roles are filtered, return those that match filterWords and not unfilterWords
@@ -136,14 +136,16 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
         return matchesFilterWords && !matchesUnfilterWords;
       })
       ?.sort((a, b) => {
-        // Place roles with endYear=null at the top
-        if (a.endYear === null && b.endYear !== null) {
+        // Place roles with endMy=null at the top
+        if (a.endMy === null && b.endMy !== null) {
           return -1;
-        } else if (a.endYear !== null && b.endYear === null) {
+        } else if (a.endMy !== null && b.endMy === null) {
           return 1;
         } else {
-          // Sort based on endYear in descending order
-          return b.endYear - a.endYear;
+          // Sort based on end date (year, then month) in descending order
+          if (a.endMy == null && b.endMy == null) return 0;
+          if (b.endMy[1] !== a.endMy[1]) return b.endMy[1] - a.endMy[1];
+          return b.endMy[0] - a.endMy[0];
         }
       });
   } else {

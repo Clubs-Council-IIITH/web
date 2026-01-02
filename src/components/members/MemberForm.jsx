@@ -126,13 +126,17 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 
     // convert roles to array of objects with only required attributes
     // remove roles items without a name (they're invalid)
-    data.roles = formData.roles
-      .filter((i) => i?.name)
-      .map((i) => ({
-        name: i.name,
-        startYear: parseInt(i.startYear),
-        endYear: i.endYear === "-" ? null : parseInt(i.endYear),
-      }));
+      data.roles = formData.roles
+        .filter((i) => i?.name)
+        .map((i) => ({
+          name: i.name,
+          startMy: Array.isArray(i.startMy)
+            ? [parseInt(i.startMy[0]), parseInt(i.startMy[1])]
+            : [new Date().getMonth() + 1, new Date().getFullYear()],
+          endMy: Array.isArray(i.endMy)
+            ? [parseInt(i.endMy[0]), parseInt(i.endMy[1])]
+            : null,
+        }));
 
     // // Check if roles increases the character limit of 99
     if (data.roles.some((role) => role.name.length > 99)) {

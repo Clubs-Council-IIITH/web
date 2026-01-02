@@ -153,7 +153,17 @@ export default function MembersTable({
                             flexShrink: 0,
                           }}
                         >
-                          ({role?.startYear} - {role?.endYear || "present"})
+                          (
+                            {Array.isArray(role?.startMy)
+                              ? `${String(role.startMy[0]).padStart(2, "0")}-${role.startMy[1]}`
+                              : ""}
+                            {" "}-
+                            {role?.endMy === null
+                              ? " present"
+                              : Array.isArray(role?.endMy)
+                                ? `${String(role.endMy[0]).padStart(2, "0")}-${role.endMy[1]}`
+                                : ""}
+                          )
                         </Box>
                       </Typography>
                       {showIcon && (

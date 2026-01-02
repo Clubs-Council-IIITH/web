@@ -61,7 +61,7 @@ export default async function MembersGrid({ clubid, onlyCurrent = false }) {
 export function extractLatestYear(member) {
   return Math.max(
     ...member.roles.map((r) =>
-      !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
+      !r.endMy ? new Date().getFullYear() + 1 : r.endMy?.[1],
     ),
   );
 }
@@ -69,5 +69,7 @@ export function extractLatestYear(member) {
 // get the first year a member was in the club
 // if member is still present, return -1
 export function extractFirstYear(member) {
-  return Math.min(...member.roles.map((r) => (!r.endYear ? -1 : r.startYear)));
+  return Math.min(
+    ...member.roles.map((r) => (!r.endMy ? -1 : r.startMy?.[1])),
+  );
 }

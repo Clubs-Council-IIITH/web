@@ -50,8 +50,8 @@ export default function MemberPositions({
   // position item template
   const emptyPositionItem = {
     name: null,
-    startYear: new Date().getFullYear(),
-    endYear: null,
+    startMy: [new Date().getMonth() + 1, new Date().getFullYear()],
+    endMy: null,
   };
 
   // data manipulation functions
@@ -59,17 +59,38 @@ export default function MemberPositions({
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
-    row.startYear =
-      parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
-    row.startYear =
-      row.startYear > new Date().getFullYear()
-        ? new Date().getFullYear()
-        : row.startYear;
+    // normalize startMy
+    let sm, sy;
+    if (Array.isArray(row.startMy)) {
+      sm = parseInt(row.startMy[0]);
+      sy = parseInt(row.startMy[1]);
+    } else {
+      sm = new Date().getMonth() + 1;
+      sy = new Date().getFullYear();
+    }
+    sm = Math.min(12, Math.max(1, sm || 1));
+    sy = Math.min(new Date().getFullYear(), Math.max(minYear, sy || minYear));
+    row.startMy = [sm, sy];
 
-    row.endYear =
-      parseInt(row.endYear) > minYear ? parseInt(row.endYear) : minYear;
-    row.endYear = row.endYear > new Date().getFullYear() ? "" : row.endYear;
-    row.endYear = row.endYear >= row.startYear ? row.endYear : "";
+    // normalize endMy
+    let em = null,
+      ey = null;
+    if (Array.isArray(row.endMy)) {
+      em = parseInt(row.endMy[0]);
+      ey = parseInt(row.endMy[1]);
+      em = Math.min(12, Math.max(1, em || 1));
+      ey = Math.min(new Date().getFullYear(), Math.max(minYear, ey || minYear));
+      row.endMy = [em, ey];
+    }
+    // ordering: if end < start, clear end (compare year, then month)
+    if (row.endMy) {
+      if (
+        row.endMy[1] < row.startMy[1] ||
+        (row.endMy[1] === row.startMy[1] && row.endMy[0] < row.startMy[0])
+      ) {
+        row.endMy = null;
+      }
+    }
 
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
@@ -130,50 +151,170 @@ export default function MemberPositions({
       display: "flex",
     },
     {
-      field: "startYear",
-      headerName: "Start Year",
+      field: "startMy",
+      headerName: "Start (MM-YYYY)",
       flex: isMobile ? null : 2,
       editable: editable,
-      renderCell: (p) => (
-        <Typography
-          variant="body2"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: "5px",
-            py: "10px",
-            justifyContent: "center",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
-        >
-          {p.value}
-        </Typography>
-      ),
+      valueGetter: (value, row) => row.startMy,
+      renderCell: (p) => {
+        const v = p.value;
+        const text = Array.isArray(v)
+          ? `${String(v[0]).padStart(2, "0")}-${v[1]}`
+          : "";
+        return (
+          <Typography
+            variant="body2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              px: "5px",
+              py: "10px",
+              justifyContent: "center",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+            }}
+          >
+            {text}
+          </Typography>
+        );
+      },
+      renderEditCell: (params) => {
+        const { api, id, row } = params;
+        const now = new Date();
+        const current = Array.isArray(row.startMy)
+          ? [parseInt(row.startMy[0]) || now.getMonth() + 1, parseInt(row.startMy[1]) || now.getFullYear()]
+          : [now.getMonth() + 1, now.getFullYear()];
+
+        const clampMonth = (m) => Math.min(12, Math.max(1, m));
+        const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
+
+        const onMonthChange = (e) => {
+          let mm = parseInt(e.target.value);
+          if (isNaN(mm)) return; // ignore non-numeric input
+          mm = clampMonth(mm);
+          api.setEditCellValue({ id, field: "startMy", value: [mm, current[1]] }, e);
+        };
+
+        const onYearChange = (e) => {
+          let yy = parseInt(e.target.value);
+          if (isNaN(yy)) return; // ignore non-numeric input
+          yy = clampYear(yy);
+          api.setEditCellValue({ id, field: "startMy", value: [current[0], yy] }, e);
+        };
+
+        return (
+          <Box sx={{ display: "flex", gap: 1, width: "100%", alignItems: "center" }}>
+            <input
+              type="number"
+              min={1}
+              max={12}
+              defaultValue={current[0]}
+              placeholder="MM"
+              onChange={onMonthChange}
+              style={{ width: "45%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+            <input
+              type="number"
+              min={2010}
+              max={new Date().getFullYear()}
+              defaultValue={current[1]}
+              placeholder="YYYY"
+              onChange={onYearChange}
+              style={{ width: "55%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+          </Box>
+        );
+      },
       display: "flex",
     },
     {
-      field: "endYear",
-      headerName: "End Year",
-      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
+      field: "endMy",
+      headerName: "End (MM-YYYY)",
+      valueGetter: (value, row) => row.endMy || null,
       flex: isMobile ? null : 2,
       editable: editable,
-      renderCell: (p) => (
-        <Typography
-          variant="body2"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: "5px",
-            py: "10px",
-            justifyContent: "center",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
-        >
-          {p.value}
-        </Typography>
-      ),
+      renderCell: (p) => {
+        const v = p.value;
+        const text = Array.isArray(v)
+          ? `${String(v[0]).padStart(2, "0")}-${v[1]}`
+          : "-";
+        return (
+          <Typography
+            variant="body2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              px: "5px",
+              py: "10px",
+              justifyContent: "center",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+            }}
+          >
+            {text}
+          </Typography>
+        );
+      },
+      renderEditCell: (params) => {
+        const { api, id, row } = params;
+        const now = new Date();
+        const isSet = Array.isArray(row.endMy);
+        const current = isSet
+          ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || now.getFullYear()]
+          : ["", ""]; // blank inputs indicate present/null
+
+        const clampMonth = (m) => Math.min(12, Math.max(1, m));
+        const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
+
+        const onMonthChange = (e) => {
+          const raw = e.target.value;
+          if (raw === "" || raw == null) {
+            api.setEditCellValue({ id, field: "endMy", value: null }, e);
+            return;
+          }
+          let mm = parseInt(raw);
+          if (isNaN(mm)) return; // ignore non-numeric input
+          mm = clampMonth(mm);
+          const yy = isSet ? (parseInt(row.endMy[1]) || now.getFullYear()) : now.getFullYear();
+          api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
+        };
+
+        const onYearChange = (e) => {
+          const raw = e.target.value;
+          if (raw === "" || raw == null) {
+            api.setEditCellValue({ id, field: "endMy", value: null }, e);
+            return;
+          }
+          let yy = parseInt(raw);
+          if (isNaN(yy)) return; // ignore non-numeric input
+          yy = clampYear(yy);
+          const mm = isSet ? (parseInt(row.endMy[0]) || 1) : 1;
+          api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
+        };
+
+        return (
+          <Box sx={{ display: "flex", gap: 1, width: "100%", alignItems: "center" }}>
+            <input
+              type="number"
+              min={1}
+              max={12}
+              defaultValue={isSet ? current[0] : ""}
+              placeholder="MM"
+              onChange={onMonthChange}
+              style={{ width: "45%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+            <input
+              type="number"
+              min={2010}
+              max={new Date().getFullYear()}
+              defaultValue={isSet ? current[1] : ""}
+              placeholder="YYYY"
+              onChange={onYearChange}
+              style={{ width: "55%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            />
+          </Box>
+        );
+      },
       display: "flex",
     },
     // if editing, show delete button
