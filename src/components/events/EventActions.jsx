@@ -149,7 +149,7 @@ export function SubmitEvent({ sx, isReportSubmitted = true }) {
 
   return (
     <Tooltip title={tooltipText} disableHoverListener={!tooltipText}>
-      <span >
+      <span>
         <Button
           variant="contained"
           color="info"

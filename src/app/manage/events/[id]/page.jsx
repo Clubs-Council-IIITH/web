@@ -113,9 +113,12 @@ export default async function ManageEventID(props) {
     return redirect("/404");
   }
 
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, {
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
       clubid: userMeta?.role === "club" ? userMeta.uid : null,
-  });
+    },
+  );
 
   return (
     user?.role === "club" &&
@@ -132,9 +135,7 @@ export default async function ManageEventID(props) {
             { status: event?.status, location: event?.location },
           ]}
           right={getActions(event, clashFlag, { ...userMeta, ...userProfile })}
-          rightProps={[
-            { isReportSubmitted: isEventReportsSubmitted },
-          ]}
+          rightProps={[{ isReportSubmitted: isEventReportsSubmitted }]}
           downloadbtn={
             <DownloadEvent
               event={event}

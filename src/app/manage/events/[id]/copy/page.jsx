@@ -4,7 +4,11 @@ import { Container, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { GET_FULL_EVENT, GET_UNFINISHED_EVENTS, GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
+import {
+  GET_FULL_EVENT,
+  GET_REPORTS_SUBMISSION_STATUS,
+  GET_UNFINISHED_EVENTS,
+} from "gql/queries/events";
 
 import EventForm from "components/events/EventForm";
 
@@ -53,15 +57,21 @@ export default async function CopyEvent(props) {
   );
   const user = { ...userMeta, ...userProfile };
 
-  const { data: { events } = {} } = await getClient().query(GET_UNFINISHED_EVENTS, {
-    clubid: null,
-    public: false,
-    excludeCompleted: true,
-  });
+  const { data: { events } = {} } = await getClient().query(
+    GET_UNFINISHED_EVENTS,
+    {
+      clubid: null,
+      public: false,
+      excludeCompleted: true,
+    },
+  );
 
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, { 
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,      
-  });
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    },
+  );
 
   try {
     const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {

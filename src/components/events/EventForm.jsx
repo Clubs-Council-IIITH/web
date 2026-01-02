@@ -366,14 +366,10 @@ export default function EventForm({
         return;
       }
     }
-    
+
     const isSubmit = opts?.shouldSubmit === true;
 
-    if (
-      isSubmit &&
-      user?.role === "club" &&
-      isReportSubmitted === false
-    ) {
+    if (isSubmit && user?.role === "club" && isReportSubmitted === false) {
       setReportConfirmOpen(true);
       setLoading(false);
       return;
@@ -759,7 +755,6 @@ export default function EventForm({
     </form>
   );
 }
-
 
 function SubmitButton({
   mode = "draft", // "draft" or "submit"
