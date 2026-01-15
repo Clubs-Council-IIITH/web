@@ -130,8 +130,10 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
       .filter((i) => i?.name)
       .map((i) => ({
         name: i.name,
-        startYear: parseInt(i.startYear),
-        endYear: i.endYear === "-" ? null : parseInt(i.endYear),
+        startYear: i.startYear ? parseInt(i.startYear) : null,
+        endYear: i.endYear ? parseInt(i.endYear) : null,
+        startMonth: i.startMonth ? parseInt(i.startMonth) : null,
+        endMonth: i.endMonth ? parseInt(i.endMonth) : null,
       }));
 
     // // Check if roles increases the character limit of 99

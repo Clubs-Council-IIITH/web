@@ -23,6 +23,8 @@ import { useToast } from "components/Toast";
 import { approveMemberAction } from "actions/members/approve/server_action";
 import { rejectMemberAction } from "actions/members/reject/server_action";
 
+import { fmtMonthYear } from "utils/membersDates";
+
 const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
@@ -50,26 +52,27 @@ export default function MemberPositions({
   // position item template
   const emptyPositionItem = {
     name: null,
-    startYear: new Date().getFullYear(),
+    startYear:new Date().getFullYear(),
     endYear: null,
+    startMonth: new Date().getMonth() + 1,
+    endMonth: null,
   };
 
-  // data manipulation functions
   const onAdd = () => {
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
-    row.startYear =
-      parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
-    row.startYear =
-      row.startYear > new Date().getFullYear()
-        ? new Date().getFullYear()
-        : row.startYear;
+    [row.startYear, row.startMonth] =
+      parseInt(row.startYear) > minYear && 1 <= parseInt(row.startMonth) <= 12 ? [parseInt(row.startYear),parseInt(row.startMonth)] : [minYear,1];
+    [row.startYear, row.startMonth] =
+      row.startYear > new Date().getFullYear() ||(row.startYear == new Date().getFullYear() && row.startMonth > new Date().getMonth() + 1)
+        ? [new Date().getFullYear(),new Date.getMonth() + 1]
+        : [row.startYear,row.startMonth];
 
-    row.endYear =
-      parseInt(row.endYear) > minYear ? parseInt(row.endYear) : minYear;
-    row.endYear = row.endYear > new Date().getFullYear() ? "" : row.endYear;
-    row.endYear = row.endYear >= row.startYear ? row.endYear : "";
+    [row.endYear,row.endMonth] =
+      parseInt(row.endYear) > minYear && 1 <= parseFloat(row.endMonth) <= 12 ? [parseInt(row.endYear),parseInt(row.endMonth)] : ["",""];
+    [row.endYear,row.endMonth] = row.endYear > new Date().getFullYear() || (row.endYear == new Date().getFullYear() && row.endMonth > new Date().getMonth()) ? ["",""] : [row.endYear,row.endMonth];
+    [row.endYear,row.endMonth] = row.endYear > row.startYear || (row.endYear == row.startYear && row.endMonth > row.startMonth) ? [row.endYear,row.endMonth] : ["",""];
 
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
@@ -130,52 +133,110 @@ export default function MemberPositions({
       display: "flex",
     },
     {
-      field: "startYear",
-      headerName: "Start Year",
-      flex: isMobile ? null : 2,
-      editable: editable,
+      field: "start",
+      headerName: "Start (MM-YYYY)",
+      flex: 2,
+      editable: false,
+      valueGetter: (value, row) => fmtMonthYear(row?.startMonth, row?.startYear),
       renderCell: (p) => (
-        <Typography
-          variant="body2"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: "5px",
-            py: "10px",
-            justifyContent: "center",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
-        >
-          {p.value}
-        </Typography>
+        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
       ),
       display: "flex",
     },
     {
-      field: "endYear",
-      headerName: "End Year",
-      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
-      flex: isMobile ? null : 2,
-      editable: editable,
+      field: "end",
+      headerName: "End (MM-YYYY)",
+      flex: 2,
+      editable: false,
+      valueGetter: (value, row) => fmtMonthYear(row?.endMonth,row?.endYear),
       renderCell: (p) => (
-        <Typography
-          variant="body2"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: "5px",
-            py: "10px",
-            justifyContent: "center",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
-        >
-          {p.value}
-        </Typography>
+        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
       ),
       display: "flex",
     },
+    // Editing fields for startMonth/startYear and endMonth/endYear (hidden in view, shown in edit mode)
+    ...(editable ? [
+      {
+        field: "startMonth",
+        headerName: "Start Month",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.startMonth,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={1}
+            max={12}
+            defaultValue={params.row.startMonth}
+            placeholder="MM"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startMonth", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+      {
+        field: "startYear",
+        headerName: "Start Year",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.startYear,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={2010}
+            max={new Date().getFullYear()}
+            defaultValue={params.row.startYear}
+            placeholder="YYYY"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startYear", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+      {
+        field: "endMonth",
+        headerName: "End Month",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.endMonth,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={1}
+            max={12}
+            defaultValue={params.row.endMonth ?? ""}
+            placeholder="MM"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endMonth", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+      {
+        field: "endYear",
+        headerName: "End Year",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.endYear,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={2010}
+            max={new Date().getFullYear()}
+            defaultValue={params.row.endYear ?? ""}
+            placeholder="YYYY"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endYear", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+    ] : []),
     // if editing, show delete button
     ...(editable
       ? [
