@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { fmtMy, myComparator } from "../../utils/membersDates";
+import { compareMonthYear, fmtMonthYear} from "../../utils/membersDates";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -140,21 +140,20 @@ export default function UserMemberships({ rows = [] }) {
       display: "flex",
     },
     {
-      field: "startMy",
+      field: "start",
       headerName: "Start (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (value, row) =>
-        Array.isArray(row.startMy) ? fmtMy(row.startMy) : "",
+      valueGetter: (value, row) => fmtMonthYear(row.startMonth,row.startYear),
       flex: isMobile ? null : 3,
     },
     {
-      field: "endMy",
+      field: "end",
       headerName: "End (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (value, row) => (row.endMy ? fmtMy(row.endMy) : "-"),
-      sortComparator: (a, b) => myComparator(a, b),
+      valueGetter: (value, row) => fmtMonthYear(row.endMonth,row.endYear),
+      sortComparator: (a, b) => compareMonthYear(a, b),
       flex: isMobile ? null : 3,
     },
   ];

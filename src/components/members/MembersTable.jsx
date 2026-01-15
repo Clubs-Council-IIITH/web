@@ -18,6 +18,7 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { getUserNameFromUID } from "utils/users";
+import { fmtMonthYear } from "utils/membersDates";
 
 export default function MembersTable({
   members,
@@ -154,15 +155,9 @@ export default function MembersTable({
                           }}
                         >
                           (
-                            {Array.isArray(role?.startMy)
-                              ? `${String(role.startMy[0]).padStart(2, "0")}-${role.startMy[1]}`
-                              : ""}
+                            {fmtMonthYear(role?.startMonth,role?.startYear)}
                             {" "}-
-                            {role?.endMy === null
-                              ? " present"
-                              : Array.isArray(role?.endMy)
-                                ? `${String(role.endMy[0]).padStart(2, "0")}-${role.endMy[1]}`
-                                : ""}
+                            {fmtMonthYear(role?.endMonth,role?.endYear)}
                           )
                         </Box>
                       </Typography>

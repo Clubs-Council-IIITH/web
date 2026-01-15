@@ -114,7 +114,7 @@ export default async function ManageMembers(props) {
               </Box>
             </>
           ) : null}
-          {user?.role === "club" || user?.role === "cc" ? (
+          {user?.role === "club" || targetClub ? (
             <>
               {user?.role !== "cc" ? (
                 <>
@@ -147,8 +147,7 @@ export default async function ManageMembers(props) {
 }
 
 async function PendingMembersDataGrid() {
-  const res = await getClient().query(GET_PENDING_MEMBERS);
-  const pendingMembers = res?.data?.pendingMembers ?? [];
+    const { data: { pendingMembers } = {} } = await getClient().query(GET_PENDING_MEMBERS);
 
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
@@ -205,13 +204,13 @@ async function MembersDataGrid({
   onlyPast = false,
 }) {
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: club ? { cid: club } : null,
+    clubInput: { cid: club },
   });
 
   const currentYear = (new Date().getFullYear() + 1).toString();
 
   // filter only the required members (current | past | both)
-  const targetMembers = (Array.isArray(members) ? members : []).filter((member) => {
+  const targetMembers = members?.filter((member) => {
     const latestYear = extractLatestYear(member).toString();
     const isCurrent = onlyCurrent && latestYear === currentYear;
     const isPast = onlyPast && latestYear !== currentYear;
@@ -245,8 +244,9 @@ async function MembersDataGrid({
 // get the last year a member was in the club
 // if member is still present, return current year + 1
 function extractLatestYear(member) {
-  const years = Array.isArray(member?.roles)
-    ? member.roles.map((r) => (!r.endMy ? new Date().getFullYear() + 1 : r.endMy?.[1]))
-    : [new Date().getFullYear() + 1];
-  return Math.max(...years);
+  return Math.max(
+      ...member.roles.map((r)=>
+        !r.endYear ? new Date.getFullYear()+1 : r.endYear,
+    ),
+  );
 }

@@ -91,7 +91,8 @@ export const GET_MEMBERSHIPS = gql`
       cid
       poc
       roles {
-        startMy
+        startYear
+        startMonth
         deleted
         name
         rid

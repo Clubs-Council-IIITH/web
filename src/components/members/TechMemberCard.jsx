@@ -8,6 +8,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
 import { getUserNameFromUID } from "utils/users";
+import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 
 import { techMembersGithubIds } from "constants/techmembersGithubIds";
 
@@ -96,22 +97,10 @@ export default async function TechMemberCard({ uid, poc, roles }) {
         />
 
         {roles
-          ?.sort((a, b) => {
-            const aEnd = a?.endMy;
-            const bEnd = b?.endMy;
-            if (aEnd == null && bEnd != null) return -1;
-            if (aEnd != null && bEnd == null) return 1;
-            if (aEnd == null && bEnd == null) return 0;
-            if (bEnd[1] !== aEnd[1]) return bEnd[1] - aEnd[1];
-            return bEnd[0] - aEnd[0];
-          })
+          ?.sort((a, b) => {sortMonthYear(a,b)})
           .map((role, key) => {
-            const fmt = (my) =>
-              Array.isArray(my) && my.length === 2
-                ? `${String(my[0]).padStart(2, "0")}-${my[1]}`
-                : null;
-            const start = fmt(role?.startMy);
-            const end = fmt(role?.endMy) || "present";
+            const start = fmtMonthYear(role?.startYear,role?.startMonth);
+            const end = fmtMonthYear(role?.endYear,role?.endMonth);
             return (
               <Typography key={key} variant="body1" sx={{ mb: 0.5 }}>
                 <Box

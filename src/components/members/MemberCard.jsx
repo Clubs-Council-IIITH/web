@@ -6,7 +6,9 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import UserImage from "components/users/UserImage";
+
 import { getUserNameFromUID } from "utils/users";
+import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 
 export default async function MemberCard({ uid, poc, roles }) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
@@ -103,21 +105,7 @@ export default async function MemberCard({ uid, poc, roles }) {
         ) : null}
 
         {roles
-          ?.sort((a, b) => {
-            // Place current roles (endMy=null) at the top
-            if (a.endMy === null && b.endMy !== null) return -1;
-            if (a.endMy !== null && b.endMy === null) return 1;
-            // Sort by end date desc: compare year then month
-            if (a.endMy && b.endMy) {
-              const ay = a.endMy[1];
-              const am = a.endMy[0];
-              const by = b.endMy[1];
-              const bm = b.endMy[0];
-              if (by !== ay) return by - ay;
-              return bm - am;
-            }
-            return 0;
-          })
+          ?.sort((a, b) => { sortMonthYear(a,b) })
           .map((role, key) => (
             <Box
               key={key}
@@ -141,15 +129,9 @@ export default async function MemberCard({ uid, poc, roles }) {
                 }}
               >
                 (
-                  {Array.isArray(role.startMy)
-                    ? `${String(role.startMy[0]).padStart(2, "0")}-${role.startMy[1]}`
-                    : ""}
+                  {fmtMonthYear(role.startMonth, role.startYear)}
                   {" "}-
-                  {role.endMy === null
-                    ? " present"
-                    : Array.isArray(role.endMy)
-                      ? `${String(role.endMy[0]).padStart(2, "0")}-${role.endMy[1]}`
-                      : ""}
+                  {fmtMonthYear(role.endMonth, role.endYear)}
                 )
               </Typography>
             </Box>

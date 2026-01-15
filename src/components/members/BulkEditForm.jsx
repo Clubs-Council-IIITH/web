@@ -99,8 +99,8 @@ export default function BulkEdit({ mode = "add" }) {
           const latestRole = ongoing
             ?.slice()
             ?.sort((a, b) => {
-              const [am, ay] = a.startMy || [1, 2000];
-              const [bm, by] = b.startMy || [1, 2000];
+              const [am, ay] = [a.startMonth,a.startYear] || [1, 2010];
+              const [bm, by] = [b.startMonth,b.startYear] || [1, 2010];
               if (by !== ay) return by - ay;
               return bm - am;
             })[0];
@@ -109,11 +109,16 @@ export default function BulkEdit({ mode = "add" }) {
             uid: member.uid,
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
-            startMy:
-              latestRole?.startMy || [new Date().getMonth() + 1, new Date().getFullYear()],
-            originalStartMy:
-              latestRole?.startMy || [new Date().getMonth() + 1, new Date().getFullYear()],
-            endMy: latestRole?.endMy ?? null,
+            startYear:
+              latestRole?.startYear || new Date().getFullYear(),
+            startMonth:
+              startYear == new Date().getFullYear() ? new Date().getMonth()+1 : latestRole?.startMonth,
+            originalStartYear:
+              latestRole?.startYear || new Date().getFullYear(),
+            originalStartMonth:
+              startYear == new Date().getFullYear() ? new Date().getMonth()+1 : latestRole?.startMonth,
+            endYear: latestRole?.endYear ?? null,
+            endMonth: latestRole?.endYear ? latestRole?.endMonth : null,
             originalEndMy: latestRole?.endMy ?? null,
             isPoc: member.poc,
             isValid: true,
@@ -234,7 +239,7 @@ export default function BulkEdit({ mode = "add" }) {
                 ? [parseInt(member.startMy[0]), parseInt(member.startMy[1])]
                 : parseMy(member.startMy),
               endMy:
-                member.endMy === "-" || member.endMy === "" || member.endMy == null
+                member.endMy === "-" || member.endMy == null
                   ? null
                   : Array.isArray(member.endMy)
                     ? [parseInt(member.endMy[0]), parseInt(member.endMy[1])]

@@ -23,6 +23,8 @@ import { useToast } from "components/Toast";
 import { approveMemberAction } from "actions/members/approve/server_action";
 import { rejectMemberAction } from "actions/members/reject/server_action";
 
+import { fmtMonthYear } from "utils/membersDates";
+
 const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
@@ -50,43 +52,27 @@ export default function MemberPositions({
   // position item template
   const emptyPositionItem = {
     name: null,
-    startMy: [new Date().getMonth() + 1, new Date().getFullYear()],
-    endMy: null,
+    startYear:new Date().getFullYear(),
+    endYear: null,
+    startMonth: new Date().getMonth() + 1,
+    endMonth: null,
   };
 
   const onAdd = () => {
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
   const onUpdate = (row) => {
-    let sm, sy;
-    if (Array.isArray(row.startMy)) {
-      sm = parseInt(row.startMy[0]);
-      sy = parseInt(row.startMy[1]);
-    } else {
-      sm = new Date().getMonth() + 1;
-      sy = new Date().getFullYear();
-    }
-    sm = Math.min(12, Math.max(1, sm || 1));
-    sy = Math.min(new Date().getFullYear(), Math.max(minYear, sy || minYear));
-    row.startMy = [sm, sy];
+    [row.startYear, row.startMonth] =
+      parseInt(row.startYear) > minYear && 1 <= parseInt(row.startMonth) <= 12 ? [parseInt(row.startYear),parseInt(row.startMonth)] : [minYear,1];
+    [row.startYear, row.startMonth] =
+      row.startYear > new Date().getFullYear() ||(row.startYear == new Date().getFullYear() && row.startMonth > new Date().getMonth() + 1)
+        ? [new Date().getFullYear(),new Date.getMonth() + 1]
+        : [row.startYear,row.startMonth];
 
-    let em = null,
-      ey = null;
-    if (Array.isArray(row.endMy)) {
-      em = parseInt(row.endMy[0]);
-      ey = parseInt(row.endMy[1]);
-      em = Math.min(12, Math.max(1, em || 1));
-      ey = Math.min(new Date().getFullYear(), Math.max(minYear, ey || minYear));
-      row.endMy = [em, ey];
-    }
-    if (row.endMy) {
-      if (
-        row.endMy[1] < row.startMy[1] ||
-        (row.endMy[1] === row.startMy[1] && row.endMy[0] < row.startMy[0])
-      ) {
-        row.endMy = null;
-      }
-    }
+    [row.endYear,row.endMonth] =
+      parseInt(row.endYear) > minYear && 1 <= parseFloat(row.endMonth) <= 12 ? [parseInt(row.endYear),parseInt(row.endMonth)] : ["",""];
+    [row.endYear,row.endMonth] = row.endYear > new Date().getFullYear() || (row.endYear == new Date().getFullYear() && row.endMonth > new Date().getMonth()) ? ["",""] : [row.endYear,row.endMonth];
+    [row.endYear,row.endMonth] = row.endYear > row.startYear || (row.endYear == row.startYear && row.endMonth > row.startMonth) ? [row.endYear,row.endMonth] : ["",""];
 
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
@@ -147,172 +133,110 @@ export default function MemberPositions({
       display: "flex",
     },
     {
-      field: "startMy",
+      field: "start",
       headerName: "Start (MM-YYYY)",
-      flex: isMobile ? null : 2,
-      editable: editable,
-      valueGetter: (value, row) => row.startMy,
-      renderCell: (p) => {
-        const v = p.value;
-        const text = Array.isArray(v)
-          ? `${String(v[0]).padStart(2, "0")}-${v[1]}`
-          : "";
-        return (
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              px: "5px",
-              py: "10px",
-              justifyContent: "center",
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-            }}
-          >
-            {text}
-          </Typography>
-        );
-      },
-      renderEditCell: (params) => {
-        const { api, id, row } = params;
-        const now = new Date();
-        const current = Array.isArray(row.startMy)
-          ? [parseInt(row.startMy[0]) || now.getMonth() + 1, parseInt(row.startMy[1]) || now.getFullYear()]
-          : [now.getMonth() + 1, now.getFullYear()];
-
-        const clampMonth = (m) => Math.min(12, Math.max(1, m));
-        const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
-
-        const onMonthChange = (e) => {
-          let mm = parseInt(e.target.value);
-          if (isNaN(mm)) return; // ignore non-numeric input
-          mm = clampMonth(mm);
-          api.setEditCellValue({ id, field: "startMy", value: [mm, current[1]] }, e);
-        };
-
-        const onYearChange = (e) => {
-          let yy = parseInt(e.target.value);
-          if (isNaN(yy)) return; // ignore non-numeric input
-          yy = clampYear(yy);
-          api.setEditCellValue({ id, field: "startMy", value: [current[0], yy] }, e);
-        };
-
-        return (
-          <Box sx={{ display: "flex", gap: 1, width: "100%", alignItems: "center" }}>
-            <input
-              type="number"
-              min={1}
-              max={12}
-              defaultValue={current[0]}
-              placeholder="MM"
-              onChange={onMonthChange}
-              style={{ width: "45%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-            />
-            <input
-              type="number"
-              min={2010}
-              max={new Date().getFullYear()}
-              defaultValue={current[1]}
-              placeholder="YYYY"
-              onChange={onYearChange}
-              style={{ width: "55%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-            />
-          </Box>
-        );
-      },
+      flex: 2,
+      editable: false,
+      valueGetter: (value, row) => fmtMonthYear(row?.startMonth, row?.startYear),
+      renderCell: (p) => (
+        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
+      ),
       display: "flex",
     },
     {
-      field: "endMy",
+      field: "end",
       headerName: "End (MM-YYYY)",
-      valueGetter: (value, row) => row.endMy || null,
-      flex: isMobile ? null : 2,
-      editable: editable,
-      renderCell: (p) => {
-        const v = p.value;
-        const text = Array.isArray(v)
-          ? `${String(v[0]).padStart(2, "0")}-${v[1]}`
-          : "-";
-        return (
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              px: "5px",
-              py: "10px",
-              justifyContent: "center",
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
-            }}
-          >
-            {text}
-          </Typography>
-        );
-      },
-      renderEditCell: (params) => {
-        const { api, id, row } = params;
-        const now = new Date();
-        const isSet = Array.isArray(row.endMy);
-        const current = isSet
-          ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || now.getFullYear()]
-          : ["", ""];
-
-        const clampMonth = (m) => Math.min(12, Math.max(1, m));
-        const clampYear = (y) => Math.min(new Date().getFullYear(), Math.max(2010, y));
-
-        const onMonthChange = (e) => {
-          const raw = e.target.value;
-          if (raw === "" || raw == null) {
-            api.setEditCellValue({ id, field: "endMy", value: null }, e);
-            return;
-          }
-          let mm = parseInt(raw);
-          if (isNaN(mm)) return; // ignore non-numeric input
-          mm = clampMonth(mm);
-          const yy = isSet ? (parseInt(row.endMy[1]) || now.getFullYear()) : now.getFullYear();
-          api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
-        };
-
-        const onYearChange = (e) => {
-          const raw = e.target.value;
-          if (raw === "" || raw == null) {
-            api.setEditCellValue({ id, field: "endMy", value: null }, e);
-            return;
-          }
-          let yy = parseInt(raw);
-          if (isNaN(yy)) return; // ignore non-numeric input
-          yy = clampYear(yy);
-          const mm = isSet ? (parseInt(row.endMy[0]) || 1) : 1;
-          api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
-        };
-
-        return (
-          <Box sx={{ display: "flex", gap: 1, width: "100%", alignItems: "center" }}>
-            <input
-              type="number"
-              min={1}
-              max={12}
-              defaultValue={isSet ? current[0] : ""}
-              placeholder="MM"
-              onChange={onMonthChange}
-              style={{ width: "45%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-            />
-            <input
-              type="number"
-              min={2010}
-              max={new Date().getFullYear()}
-              defaultValue={isSet ? current[1] : ""}
-              placeholder="YYYY"
-              onChange={onYearChange}
-              style={{ width: "55%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-            />
-          </Box>
-        );
-      },
+      flex: 2,
+      editable: false,
+      valueGetter: (value, row) => fmtMonthYear(row?.endMonth,row?.endYear),
+      renderCell: (p) => (
+        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
+      ),
       display: "flex",
     },
+    // Editing fields for startMonth/startYear and endMonth/endYear (hidden in view, shown in edit mode)
+    ...(editable ? [
+      {
+        field: "startMonth",
+        headerName: "Start Month",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.startMonth,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={1}
+            max={12}
+            defaultValue={params.row.startMonth}
+            placeholder="MM"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startMonth", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+      {
+        field: "startYear",
+        headerName: "Start Year",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.startYear,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={2010}
+            max={new Date().getFullYear()}
+            defaultValue={params.row.startYear}
+            placeholder="YYYY"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startYear", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+      {
+        field: "endMonth",
+        headerName: "End Month",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.endMonth,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={1}
+            max={12}
+            defaultValue={params.row.endMonth ?? ""}
+            placeholder="MM"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endMonth", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+      {
+        field: "endYear",
+        headerName: "End Year",
+        flex: 1,
+        editable: true,
+        hide: true,
+        valueGetter: (value, row) => row.endYear,
+        renderEditCell: (params) => (
+          <input
+            type="number"
+            min={2010}
+            max={new Date().getFullYear()}
+            defaultValue={params.row.endYear ?? ""}
+            placeholder="YYYY"
+            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endYear", value: parseInt(e.target.value) }, e)}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        ),
+        display: "flex",
+      },
+    ] : []),
     // if editing, show delete button
     ...(editable
       ? [

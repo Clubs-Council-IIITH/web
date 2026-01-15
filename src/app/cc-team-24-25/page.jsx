@@ -13,8 +13,10 @@ const new_team = [
     roles: [
       {
         name: "Executive Secretary",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -24,8 +26,10 @@ const new_team = [
     roles: [
       {
         name: "Executive Secretary",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -35,8 +39,10 @@ const new_team = [
     roles: [
       {
         name: "Joint Secretary",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -46,8 +52,10 @@ const new_team = [
     roles: [
       {
         name: "Joint Secretary",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -57,8 +65,10 @@ const new_team = [
     roles: [
       {
         name: "Joint Secretary",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -68,8 +78,10 @@ const new_team = [
     roles: [
       {
         name: "Joint Secretary",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -82,8 +94,10 @@ const advisors = [
     roles: [
       {
         name: "Advisor",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -93,8 +107,10 @@ const advisors = [
     roles: [
       {
         name: "Advisor",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -104,8 +120,10 @@ const advisors = [
     roles: [
       {
         name: "Advisor",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -115,8 +133,10 @@ const advisors = [
     roles: [
       {
         name: "Advisor",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
@@ -126,8 +146,10 @@ const advisors = [
     roles: [
       {
         name: "Advisor",
-        startMy: [1, 2024],
-        endMy: null,
+        startYear: 2024,
+        endYear: null,
+        startMonth: 1,
+        endMonth: null,
       },
     ],
   },
