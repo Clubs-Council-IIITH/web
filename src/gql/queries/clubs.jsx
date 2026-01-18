@@ -96,7 +96,8 @@ export const GET_MEMBERSHIPS = gql`
         deleted
         name
         rid
-        endMy
+        endYear
+        endMonth
       }
     }
   }

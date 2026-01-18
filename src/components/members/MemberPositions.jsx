@@ -61,23 +61,41 @@ export default function MemberPositions({
   const onAdd = () => {
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
+
   const onUpdate = (row) => {
-    [row.startYear, row.startMonth] =
-      parseInt(row.startYear) > minYear && 1 <= parseInt(row.startMonth) <= 12 ? [parseInt(row.startYear),parseInt(row.startMonth)] : [minYear,1];
-    [row.startYear, row.startMonth] =
-      row.startYear > new Date().getFullYear() ||(row.startYear == new Date().getFullYear() && row.startMonth > new Date().getMonth() + 1)
-        ? [new Date().getFullYear(),new Date.getMonth() + 1]
-        : [row.startYear,row.startMonth];
+    // sanitize start
+    const syRaw = parseInt(row.startYear, 10);
+    const smRaw = parseInt(row.startMonth, 10);
+    row.startYear = Number.isNaN(syRaw) ? minYear : Math.max(minYear, syRaw);
+    row.startMonth = Number.isNaN(smRaw)
+      ? 1
+      : Math.min(12, Math.max(1, smRaw));
 
-    [row.endYear,row.endMonth] =
-      parseInt(row.endYear) > minYear && 1 <= parseFloat(row.endMonth) <= 12 ? [parseInt(row.endYear),parseInt(row.endMonth)] : ["",""];
-    [row.endYear,row.endMonth] = row.endYear > new Date().getFullYear() || (row.endYear == new Date().getFullYear() && row.endMonth > new Date().getMonth()) ? ["",""] : [row.endYear,row.endMonth];
-    [row.endYear,row.endMonth] = row.endYear > row.startYear || (row.endYear == row.startYear && row.endMonth > row.startMonth) ? [row.endYear,row.endMonth] : ["",""];
+    // sanitize end (nullable)
+    const eyRaw = parseInt(row.endYear, 10);
+    const emRaw = parseInt(row.endMonth, 10);
+    row.endYear = Number.isNaN(eyRaw) ? null : Math.max(minYear, eyRaw);
+    row.endMonth = row.endYear == null
+      ? null
+      : Number.isNaN(emRaw)
+        ? null
+        : Math.min(12, Math.max(1, emRaw));
 
-    const newRows = rows.map((r) => {
-      if (r.id === row.id) return row;
-      return r;
-    });
+    // validate ordering: only compare months if both present
+    const valid =
+      row.endYear == null ||
+      row.endYear > row.startYear ||
+      (row.endYear === row.startYear && (
+        row.endMonth != null && row.startMonth != null
+          ? row.endMonth > row.startMonth
+          : true
+      ));
+    if (!valid) {
+      row.endYear = null;
+      row.endMonth = null;
+    }
+
+    const newRows = rows.map((r) => (r.id === row.id ? row : r));
     setRows(newRows);
     return row;
   };
@@ -132,28 +150,43 @@ export default function MemberPositions({
       },
       display: "flex",
     },
-    {
-      field: "start",
-      headerName: "Start (MM-YYYY)",
-      flex: 2,
-      editable: false,
-      valueGetter: (value, row) => fmtMonthYear(row?.startMonth, row?.startYear),
-      renderCell: (p) => (
-        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
-      ),
-      display: "flex",
-    },
-    {
-      field: "end",
-      headerName: "End (MM-YYYY)",
-      flex: 2,
-      editable: false,
-      valueGetter: (value, row) => fmtMonthYear(row?.endMonth,row?.endYear),
-      renderCell: (p) => (
-        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
-      ),
-      display: "flex",
-    },
+    ...(editable
+      ? []
+      : [
+          {
+            field: "start",
+            headerName: "Start (MM-YYYY)",
+            flex: 2,
+            editable: false,
+            valueGetter: (value, row) =>
+              fmtMonthYear(row?.startMonth, row?.startYear),
+            renderCell: (p) => (
+              <Typography
+                variant="body2"
+                sx={{ px: "5px", py: "10px", textAlign: "center" }}
+              >
+                {p.value}
+              </Typography>
+            ),
+            display: "flex",
+          },
+          {
+            field: "end",
+            headerName: "End (MM-YYYY)",
+            flex: 2,
+            editable: false,
+            valueGetter: (value, row) => fmtMonthYear(row?.endMonth, row?.endYear),
+            renderCell: (p) => (
+              <Typography
+                variant="body2"
+                sx={{ px: "5px", py: "10px", textAlign: "center" }}
+              >
+                {p.value}
+              </Typography>
+            ),
+            display: "flex",
+          },
+        ]),
     // Editing fields for startMonth/startYear and endMonth/endYear (hidden in view, shown in edit mode)
     ...(editable ? [
       {
@@ -170,7 +203,17 @@ export default function MemberPositions({
             max={12}
             defaultValue={params.row.startMonth}
             placeholder="MM"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startMonth", value: parseInt(e.target.value) }, e)}
+            onChange={(e) => {
+              const v = e.target.value;
+              params.api.setEditCellValue(
+                {
+                  id: params.id,
+                  field: "startMonth",
+                  value: v === "" ? "" : parseInt(v, 10),
+                },
+                e,
+              );
+            }}
             style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
           />
         ),
@@ -190,7 +233,17 @@ export default function MemberPositions({
             max={new Date().getFullYear()}
             defaultValue={params.row.startYear}
             placeholder="YYYY"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startYear", value: parseInt(e.target.value) }, e)}
+            onChange={(e) => {
+              const v = e.target.value;
+              params.api.setEditCellValue(
+                {
+                  id: params.id,
+                  field: "startYear",
+                  value: v === "" ? "" : parseInt(v, 10),
+                },
+                e,
+              );
+            }}
             style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
           />
         ),
@@ -210,7 +263,17 @@ export default function MemberPositions({
             max={12}
             defaultValue={params.row.endMonth ?? ""}
             placeholder="MM"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endMonth", value: parseInt(e.target.value) }, e)}
+            onChange={(e) => {
+              const v = e.target.value;
+              params.api.setEditCellValue(
+                {
+                  id: params.id,
+                  field: "endMonth",
+                  value: v === "" ? "" : parseInt(v, 10),
+                },
+                e,
+              );
+            }}
             style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
           />
         ),
@@ -230,7 +293,17 @@ export default function MemberPositions({
             max={new Date().getFullYear()}
             defaultValue={params.row.endYear ?? ""}
             placeholder="YYYY"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endYear", value: parseInt(e.target.value) }, e)}
+            onChange={(e) => {
+              const v = e.target.value;
+              params.api.setEditCellValue(
+                {
+                  id: params.id,
+                  field: "endYear",
+                  value: v === "" ? "" : parseInt(v, 10),
+                },
+                e,
+              );
+            }}
             style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
           />
         ),

@@ -171,7 +171,7 @@ export default function UserMemberships({ rows = [] }) {
             getRowId={(row) => row.rid}
             initialState={{
               sorting: {
-                sortModel: [{ field: "endMy", sort: "desc" }],
+                sortModel: [{ field: "end", sort: "desc" }],
               },
               pagination: { paginationModel: { pageSize: 5 } },
             }}

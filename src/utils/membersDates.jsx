@@ -1,8 +1,9 @@
 
 // Format month/year from separate fields
+// Editing flows should initialize month separately where needed
 export function fmtMonthYear(month, year) {
   if (!year) return "present";
-  if (!month) return `${year}`;
+  if (month == null || month === undefined || month === "") return `${year}`;
   return `${String(month).padStart(2, "0")}-${year}`;
 }
 

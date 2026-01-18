@@ -45,7 +45,11 @@ export default function MembersTable({
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
-            <Image alt={value.name} src={getFile(value.img)} fill={true} />
+            <Image
+              alt={value.name || "User Image"}
+              src={getFile(value.img)}
+              fill={true}
+            />
           ) : null}
         </Avatar>
       ),

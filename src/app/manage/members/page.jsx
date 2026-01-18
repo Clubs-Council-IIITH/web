@@ -246,7 +246,7 @@ async function MembersDataGrid({
 function extractLatestYear(member) {
   return Math.max(
       ...member.roles.map((r)=>
-        !r.endYear ? new Date.getFullYear()+1 : r.endYear,
+        !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
     ),
   );
 }
