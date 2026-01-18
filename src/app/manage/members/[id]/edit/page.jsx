@@ -18,6 +18,7 @@ function transformMember(member) {
       member?.roles?.map((role, key) => ({
         ...role,
         id: role?.rid || key,
+        isValid: true,
       })) || [],
   };
 }

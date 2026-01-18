@@ -35,64 +35,109 @@ const showActions = (rows, user) => {
   } else return false;
 };
 
+// Helper to format row data into YYYY-MM for the input field
+const getMonthValue = (month, year) => {
+  if (!month || !year) return "";
+  return `${year}-${String(month).padStart(2, "0")}`;
+};
+
 export default function MemberPositions({
   editable,
   rows = [],
   setRows = console.log,
   member = {},
-  positionEditing = false,
   setPositionEditing = console.log,
 }) {
   const { user } = useAuth();
+  const { triggerToast } = useToast();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const minYear = 2010;
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const maxDateStr = `${currentYear}-${String(currentMonth).padStart(2, "0")}`;
 
-  // position item template
   const emptyPositionItem = {
     name: null,
-    startYear:new Date().getFullYear(),
+    startYear: currentYear,
     endYear: null,
-    startMonth: new Date().getMonth() + 1,
+    startMonth: currentMonth,
     endMonth: null,
+    isValid: false,      // Default to invalid
+    error: "Role name is required", // Default error
   };
 
   const onAdd = () => {
+    // Add new item with default invalid state
     setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
   };
-  const onUpdate = (row) => {
-    [row.startYear, row.startMonth] =
-      parseInt(row.startYear) > minYear && 1 <= parseInt(row.startMonth) <= 12 ? [parseInt(row.startYear),parseInt(row.startMonth)] : [minYear,1];
-    [row.startYear, row.startMonth] =
-      row.startYear > new Date().getFullYear() ||(row.startYear == new Date().getFullYear() && row.startMonth > new Date().getMonth() + 1)
-        ? [new Date().getFullYear(),new Date.getMonth() + 1]
-        : [row.startYear,row.startMonth];
 
-    [row.endYear,row.endMonth] =
-      parseInt(row.endYear) > minYear && 1 <= parseFloat(row.endMonth) <= 12 ? [parseInt(row.endYear),parseInt(row.endMonth)] : ["",""];
-    [row.endYear,row.endMonth] = row.endYear > new Date().getFullYear() || (row.endYear == new Date().getFullYear() && row.endMonth > new Date().getMonth()) ? ["",""] : [row.endYear,row.endMonth];
-    [row.endYear,row.endMonth] = row.endYear > row.startYear || (row.endYear == row.startYear && row.endMonth > row.startMonth) ? [row.endYear,row.endMonth] : ["",""];
+  const onUpdate = (newRow) => {
+    // Clone row to avoid direct mutation
+    const row = { ...newRow };
 
-    const newRows = rows.map((r) => {
-      if (r.id === row.id) return row;
-      return r;
-    });
+    // Reset validation state
+    row.isValid = true;
+    row.error = null;
+
+    if (!row.name || row.name.trim() === "") {
+      row.isValid = false;
+      row.error = "Role name is required";
+    }
+
+    // Clamp Start Year/Month to minYear and 1-12
+    [row.startYear, row.startMonth] =
+      row.startYear > minYear && row.startMonth >= 1 && row.startMonth <= 12
+        ? [row.startYear, row.startMonth]
+        : [minYear, 1];
+
+    // Clamp Start to not exceed Current Date
+    [row.startYear, row.startMonth] =
+      row.startYear > currentYear ||
+      (row.startYear === currentYear && row.startMonth > currentMonth)
+        ? [currentYear, currentMonth]
+        : [row.startYear, row.startMonth];
+
+    // Clamp End Year/Month to minYear and 1-12
+    [row.endYear, row.endMonth] =
+      row.endYear > minYear && row.endMonth >= 1 && row.endMonth <= 12
+        ? [row.endYear, row.endMonth]
+        : [null, null];
+
+    // Clamp End to not exceed Current Date
+    [row.endYear, row.endMonth] =
+      row.endYear > currentYear ||
+      (row.endYear === currentYear && row.endMonth > currentMonth)
+        ? [null, null]
+        : [row.endYear, row.endMonth];
+
+    // Validate Logic: End > Start ---
+    if (row.endYear && row.endMonth) {
+      const isEndBeforeStart =
+        row.endYear < row.startYear ||
+        (row.endYear === row.startYear && row.endMonth < row.startMonth);
+
+      if (isEndBeforeStart) {
+        row.isValid = false;
+        row.error = "End date cannot be before start date";
+      }
+    }
+
+    const newRows = rows.map((r) => (r.id === row.id ? row : r));
     setRows(newRows);
+
+    const isAllValid = newRows.every((r) => r.isValid);
+    setPositionEditing(!isAllValid);
     return row;
   };
+
   const onDelete = (row) => {
     setRows(rows.filter((r) => r.id !== row.id));
   };
 
-  // if editing, set position editing to true
-  const onEdit = () => {
-    setPositionEditing(true);
-  };
-  // if not editing, set position editing to false
-  const onEditStop = () => {
-    setPositionEditing(false);
-  };
+  const onEdit = () => setPositionEditing(true);
+  const onEditStop = () => setPositionEditing(false);
 
   const columns = [
     {
@@ -108,9 +153,6 @@ export default function MemberPositions({
             sx={{
               wordBreak: "break-word",
               overflowWrap: "break-word",
-              msHyphens: "auto",
-              MozHyphens: "auto",
-              WebkitHyphens: "auto",
               hyphens: "auto",
               px: "10px",
               py: "10px",
@@ -119,171 +161,178 @@ export default function MemberPositions({
             {p.value}
           </Typography>
         ) : (
-          <Typography
-            sx={{
-              color: "text.secondary",
-              px: "10px",
-              py: "10px",
-            }}
-          >
+          <Typography sx={{ color: "text.secondary", px: "10px", py: "10px" }}>
             <i>Double click to edit</i>
           </Typography>
         );
       },
+      renderEditCell: (params) => (
+        <input
+          type="text"
+          value={params.value || ""}
+          placeholder="Role Name (Required)"
+          onChange={(e) => params.api.setEditCellValue({ id: params.id, field: params.field, value: e.target.value })}
+          style={{
+            width: "100%",
+            padding: "8px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontFamily: "inherit"
+          }}
+          autoFocus
+        />
+      ),
       display: "flex",
     },
     {
       field: "start",
-      headerName: "Start (MM-YYYY)",
+      headerName: "Start (YYYY-MM)",
       flex: 2,
-      editable: false,
-      valueGetter: (value, row) => fmtMonthYear(row?.startMonth, row?.startYear),
-      renderCell: (p) => (
-        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
+      editable: editable,
+      valueGetter: (value, row) => getMonthValue(row?.startMonth, row?.startYear),
+      valueSetter: (value, row) => {
+        if (!value) return row;
+        const [y, m] = value.split("-");
+        return { ...row, startYear: parseInt(y), startMonth: parseInt(m) };
+      },
+      renderCell: (params) => (
+        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>
+          {fmtMonthYear(params.row?.startMonth, params.row?.startYear)}
+        </Typography>
+      ),
+      renderEditCell: (params) => (
+        <input
+          type="month"
+          value={params.value || ""}
+          max={maxDateStr}
+          min={`${minYear}-01`}
+          onChange={(e) =>
+            params.api.setEditCellValue({
+              id: params.id,
+              field: params.field,
+              value: e.target.value,
+            })
+          }
+          style={{
+            width: "100%",
+            padding: 8,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            fontFamily: "inherit",
+          }}
+        />
       ),
       display: "flex",
     },
     {
       field: "end",
-      headerName: "End (MM-YYYY)",
+      headerName: "End (YYYY-MM)",
       flex: 2,
-      editable: false,
-      valueGetter: (value, row) => fmtMonthYear(row?.endMonth,row?.endYear),
-      renderCell: (p) => (
-        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>{p.value}</Typography>
+      editable: editable,
+      valueGetter: (value, row) => getMonthValue(row?.endMonth, row?.endYear),
+      valueSetter: (value, row) => {
+        if (!value) return { ...row, endYear: null, endMonth: null };
+        const [y, m] = value.split("-");
+        return { ...row, endYear: parseInt(y), endMonth: parseInt(m) };
+      },
+      renderCell: (params) => (
+        <Typography variant="body2" sx={{ px: "5px", py: "10px", textAlign: "center" }}>
+          {fmtMonthYear(params.row?.endMonth, params.row?.endYear)}
+        </Typography>
+      ),
+      renderEditCell: (params) => (
+        <input
+          type="month"
+          value={params.value || ""}
+          max={maxDateStr}
+          min={`${minYear}-01`}
+          onChange={(e) =>
+            params.api.setEditCellValue({
+              id: params.id,
+              field: params.field,
+              value: e.target.value,
+            })
+          }
+          style={{
+            width: "100%",
+            padding: 8,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            fontFamily: "inherit",
+          }}
+        />
       ),
       display: "flex",
     },
-    // Editing fields for startMonth/startYear and endMonth/endYear (hidden in view, shown in edit mode)
-    ...(editable ? [
-      {
-        field: "startMonth",
-        headerName: "Start Month",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.startMonth,
-        renderEditCell: (params) => (
-          <input
-            type="number"
-            min={1}
-            max={12}
-            defaultValue={params.row.startMonth}
-            placeholder="MM"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startMonth", value: parseInt(e.target.value) }, e)}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        ),
-        display: "flex",
-      },
-      {
-        field: "startYear",
-        headerName: "Start Year",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.startYear,
-        renderEditCell: (params) => (
-          <input
-            type="number"
-            min={2010}
-            max={new Date().getFullYear()}
-            defaultValue={params.row.startYear}
-            placeholder="YYYY"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "startYear", value: parseInt(e.target.value) }, e)}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        ),
-        display: "flex",
-      },
-      {
-        field: "endMonth",
-        headerName: "End Month",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.endMonth,
-        renderEditCell: (params) => (
-          <input
-            type="number"
-            min={1}
-            max={12}
-            defaultValue={params.row.endMonth ?? ""}
-            placeholder="MM"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endMonth", value: parseInt(e.target.value) }, e)}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        ),
-        display: "flex",
-      },
-      {
-        field: "endYear",
-        headerName: "End Year",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.endYear,
-        renderEditCell: (params) => (
-          <input
-            type="number"
-            min={2010}
-            max={new Date().getFullYear()}
-            defaultValue={params.row.endYear ?? ""}
-            placeholder="YYYY"
-            onChange={e => params.api.setEditCellValue({ id: params.id, field: "endYear", value: parseInt(e.target.value) }, e)}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        ),
-        display: "flex",
-      },
-    ] : []),
-    // if editing, show delete button
     ...(editable
       ? [
-          {
-            field: "action",
-            align: "center",
-            headerName: "",
-            width: 50,
-            renderCell: (p) => (
-              <IconButton onClick={() => onDelete(p)} size="small">
-                <Icon
-                  color="error.main"
-                  variant="delete-forever-outline"
-                  sx={{ height: 16, width: 16 }}
-                />
-              </IconButton>
-            ),
-            display: "flex",
-          },
-        ]
+        {
+          field: "isValid",
+          type: "boolean",
+          headerName: "Valid?",
+          align: "center",
+          width: 80,
+          renderCell: (p) => (
+            <Tooltip title={p.row.error || "Valid"} disableHoverListener={p.row.isValid}>
+                <span>
+                  <Icon
+                    color={p.row.isValid ? "success.main" : "error.main"}
+                    variant={p.row.isValid ? "check-circle" : "cancel"}
+                    sx={{ height: 20, width: 20 }}
+                  />
+                </span>
+            </Tooltip>
+          ),
+          display: "flex",
+          disableColumnMenu: true,
+          sortable: false,
+        },
+        {
+          field: "action",
+          align: "center",
+          headerName: "",
+          width: 50,
+          renderCell: (p) => (
+            <IconButton onClick={() => onDelete(p.row)} size="small">
+              <Icon
+                color="error.main"
+                variant="delete-forever-outline"
+                sx={{ height: 16, width: 16 }}
+              />
+            </IconButton>
+          ),
+          display: "flex",
+          disableColumnMenu: true,
+          sortable: false,
+        },
+      ]
       : [
-          {
-            field: "approved",
-            headerName: "Status",
-            align: "center",
-            headerAlign: "center",
-            flex: isMobile ? null : 2,
-            valueGetter: (value, row, column, apiRef) => ({
-              approved: row.approved,
-              approvalTime: row.approvalTime,
-              rejected: row.rejected,
-              rejectionTime: row.rejectionTime,
-            }),
-            disableExport: true,
-            renderCell: ({
-              value: { approved, approvalTime, rejected, rejectionTime },
-            }) => (
-              <Tooltip
-                title={
-                  approved
-                    ? approvalTime || "No Information Available"
-                    : rejected
-                      ? rejectionTime || "No Information Available"
-                      : null
-                }
-                placement="left-start"
-              >
+        {
+          field: "approved",
+          headerName: "Status",
+          align: "center",
+          headerAlign: "center",
+          flex: isMobile ? null : 2,
+          valueGetter: (value, row) => ({
+            approved: row.approved,
+            approvalTime: row.approvalTime,
+            rejected: row.rejected,
+            rejectionTime: row.rejectionTime,
+          }),
+          disableExport: true,
+          renderCell: ({
+                         value: { approved, approvalTime, rejected, rejectionTime },
+                       }) => (
+            <Tooltip
+              title={
+                approved
+                  ? approvalTime || "No Information Available"
+                  : rejected
+                    ? rejectionTime || "No Information Available"
+                    : null
+              }
+              placement="left-start"
+            >
                 <span>
                   <Tag
                     label={
@@ -295,43 +344,41 @@ export default function MemberPositions({
                     sx={{ my: 2 }}
                   />
                 </span>
-              </Tooltip>
-            ),
-            display: "flex",
-          },
-
-          // if not editing and if user is cc, show approve button
-          ...(showActions(rows, user)
-            ? [
-                {
-                  field: "actions",
-                  align: "center",
-                  headerName: "",
-                  width: 100,
-                  valueGetter: (value, row, column, apiRef) => ({
-                    approved: row.approved,
-                    rejected: row.rejected,
-                    rid: row.rid,
-                  }),
-                  disableExport: true,
-                  disableColumnMenu: true,
-                  sortable: false,
-                  renderCell: ({ value: { approved, rejected, rid } }) => (
+            </Tooltip>
+          ),
+          display: "flex",
+        },
+        ...(showActions(rows, user)
+          ? [
+            {
+              field: "actions",
+              align: "center",
+              headerName: "",
+              width: 100,
+              valueGetter: (value, row) => ({
+                approved: row.approved,
+                rejected: row.rejected,
+                rid: row.rid,
+              }),
+              disableExport: true,
+              disableColumnMenu: true,
+              sortable: false,
+              renderCell: ({ value: { approved, rejected, rid } }) => (
+                <>
+                  {approved || rejected ? null : (
                     <>
-                      {approved || rejected ? null : (
-                        <>
-                          <ApproveButton rid={rid} member={member} />
-                          <Box sx={{ mx: 1 }} />
-                          <RejectButton rid={rid} member={member} />
-                        </>
-                      )}
+                      <ApproveButton rid={rid} member={member} />
+                      <Box sx={{ mx: 1 }} />
+                      <RejectButton rid={rid} member={member} />
                     </>
-                  ),
-                  display: "flex",
-                },
-              ]
-            : []),
-        ]),
+                  )}
+                </>
+              ),
+              display: "flex",
+            },
+          ]
+          : []),
+      ]),
   ];
 
   return (
@@ -350,12 +397,17 @@ export default function MemberPositions({
         columns={columns}
         editMode="row"
         processRowUpdate={onUpdate}
+        onProcessRowUpdateError={(error) =>
+          triggerToast({
+            ...error,
+            severity: "error",
+          })
+        }
         disableRowSelectionOnClick
         experimentalFeatures={{ newEditingApi: true }}
         onRowEditStart={onEdit}
         onRowEditStop={onEditStop}
         sx={{
-          // disable cell selection style
           ".MuiDataGrid-cell:focus": {
             outline: "none",
           },
@@ -372,7 +424,6 @@ export default function MemberPositions({
 function ApproveButton({ member, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
-
   const [loading, setLoading] = useState(false);
 
   const onApprove = async (rid) => {
@@ -381,11 +432,8 @@ function ApproveButton({ member, rid }) {
       uid: member.uid,
       rid: rid,
     };
-
     let res = await approveMemberAction(data);
-
     if (res.ok) {
-      // show success toast & refresh server
       triggerToast({
         title: "Success!",
         messages: ["Membership approved."],
@@ -394,11 +442,7 @@ function ApproveButton({ member, rid }) {
       setLoading(false);
       router.refresh();
     } else {
-      // show error toast
-      triggerToast({
-        ...res.error,
-        severity: "error",
-      });
+      triggerToast({ ...res.error, severity: "error" });
     }
   };
 
@@ -430,7 +474,6 @@ function ApproveButton({ member, rid }) {
 function RejectButton({ member, rid }) {
   const router = useRouter();
   const { triggerToast } = useToast();
-
   const [loading, setLoading] = useState(false);
 
   const onReject = async (rid) => {
@@ -439,11 +482,8 @@ function RejectButton({ member, rid }) {
       uid: member.uid,
       rid: rid,
     };
-
     let res = await rejectMemberAction(data);
-
     if (res.ok) {
-      // show success toast & refresh server
       triggerToast({
         title: "Success in Rejecting!",
         messages: ["Membership rejected."],
@@ -452,11 +492,7 @@ function RejectButton({ member, rid }) {
       setLoading(false);
       router.refresh();
     } else {
-      // show error toast
-      triggerToast({
-        ...res.error,
-        severity: "error",
-      });
+      triggerToast({ ...res.error, severity: "error" });
     }
   };
 

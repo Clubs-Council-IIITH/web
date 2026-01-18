@@ -189,25 +189,6 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             />
           </Grid>
 
-          <Typography
-            variant="subtitle2"
-            gutterBottom
-            sx={{
-              textTransform: "uppercase",
-              color: "text.secondary",
-              mb: 2,
-              mt: 3,
-            }}
-          >
-            Positions
-          </Typography>
-          <Grid size={12}>
-            <MemberPositionsTable
-              control={control}
-              positionEditing={positionEditing}
-              setPositionEditing={setPositionEditing}
-            />
-          </Grid>
         </Grid>
 
         <Grid
@@ -281,6 +262,25 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             </Grid>
           </Grid>
         </Grid>
+      </Grid>
+      <Grid>
+        <Typography
+          variant="subtitle2"
+          gutterBottom
+          sx={{
+            textTransform: "uppercase",
+            color: "text.secondary",
+            mb: 2,
+            mt: 4,
+          }}
+        >
+          Positions
+        </Typography>
+        <MemberPositionsTable
+          control={control}
+          positionEditing={positionEditing}
+          setPositionEditing={setPositionEditing}
+        />
       </Grid>
       <ConfirmDialog
         open={mobileDialog}

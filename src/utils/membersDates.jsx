@@ -3,7 +3,7 @@
 export function fmtMonthYear(month, year) {
   if (!year) return "present";
   if (!month) return `${year}`;
-  return `${String(month).padStart(2, "0")}-${year}`;
+  return `${year}-${String(month).padStart(2, "0")}`;
 }
 
 // Sorts dates

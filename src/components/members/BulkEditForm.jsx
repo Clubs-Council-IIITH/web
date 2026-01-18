@@ -55,6 +55,7 @@ export default function BulkEdit({ mode = "add" }) {
   const [fullMembers, setFullMembers] = useState([]);
 
   const disableClubSelector = user?.role === "club";
+  const [currentMonth, currentYear] = [new Date().getMonth() + 1, new Date().getFullYear()];
 
   const fetchClubs = async () => {
     setClubsLoading(true);
@@ -110,13 +111,13 @@ export default function BulkEdit({ mode = "add" }) {
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
             startYear:
-              latestRole?.startYear || new Date().getFullYear(),
+              latestRole?.startYear || currentYear,
             startMonth:
-              startYear == new Date().getFullYear() ? new Date().getMonth()+1 : latestRole?.startMonth,
+              currentYear ? currentMonth : latestRole?.startMonth,
             originalStartYear:
-              latestRole?.startYear || new Date().getFullYear(),
+              latestRole?.startYear || currentYear,
             originalStartMonth:
-              startYear == new Date().getFullYear() ? new Date().getMonth()+1 : latestRole?.startMonth,
+              currentYear ? currentMonth : latestRole?.startMonth,
             endYear: latestRole?.endYear ?? null,
             endMonth: latestRole?.endYear ? latestRole?.endMonth : null,
             originalEndMy: latestRole?.endMy ?? null,
@@ -404,9 +405,7 @@ export default function BulkEdit({ mode = "add" }) {
           <u>NOTE</u>:<br />
           - Please ensure that the members being added do not already exist in
           the selected club/body.
-          <br />- The default start date for all members will be set as {`${String(
-            new Date().getMonth() + 1,
-          ).padStart(2, "0")}-${new Date().getFullYear()}`}.
+          <br />- The default start date for all members will be set as {`${currentYear}-${String(currentMonth).padStart(2, "0")}`}.
           <br />- Any invalid entries marked in red will be skipped during
           submission.
         </Typography>
@@ -508,14 +507,16 @@ function MembersTable({
 
   const minYear = 2010;
   const addMode = mode === "add";
+  const [currentMonth, currentYear] = [new Date().getMonth() + 1, new Date().getFullYear()];
+
 
   // position item template
   const emptyPositionItem = {
     uid: null,
     role: null,
     originalRole: null,
-    startMy: [new Date().getMonth() + 1, new Date().getFullYear()],
-    originalStartMy: [new Date().getMonth() + 1, new Date().getFullYear()],
+    startMy: [currentMonth, currentYear],
+    originalStartMy: [currentMonth, currentYear],
     endMy: null,
     originalEndMy: null,
     isPoc: false,
@@ -704,13 +705,13 @@ function MembersTable({
     },
     {
       field: "startMy",
-      headerName: "Start (MM-YYYY)",
+      headerName: "Start (YYYY-MM)",
       flex: isMobile ? null : 2,
       editable: true,
       valueGetter: (value, row) =>
         row?.role === row?.originalRole
           ? fmtMy(row.startMy)
-          : fmtMy([new Date().getMonth() + 1, new Date().getFullYear()]),
+          : fmtMy([currentMonth, currentYear]),
       renderCell: (p) => (
         <Typography
           variant="body2"
@@ -735,10 +736,9 @@ function MembersTable({
       ),
       renderEditCell: (params) => {
         const { api, id, row } = params;
-        const now = new Date();
         const current = Array.isArray(row.startMy)
-          ? [parseInt(row.startMy[0]) || now.getMonth() + 1, parseInt(row.startMy[1]) || now.getFullYear()]
-          : [now.getMonth() + 1, now.getFullYear()];
+          ? [parseInt(row.startMy[0]) || currentMonth, parseInt(row.startMy[1]) || currentYear]
+          : [currentMonth, currentYear];
 
         const minStartYear = Array.isArray(row.originalStartMy)
           ? parseInt(row.originalStartMy[1])
@@ -786,7 +786,7 @@ function MembersTable({
     },
     {
       field: "endMy",
-      headerName: "End (MM-YYYY)",
+      headerName: "End (YYYY-MM)",
       valueGetter: (value, row) => (row.endMy ? fmtMy(row.endMy) : "-"),
       flex: isMobile ? null : 2,
       editable: true,
@@ -813,15 +813,14 @@ function MembersTable({
       ),
       renderEditCell: (params) => {
         const { api, id, row } = params;
-        const now = new Date();
         const isSet = Array.isArray(row.endMy);
         const current = isSet
-          ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || now.getFullYear()]
+          ? [parseInt(row.endMy[0]) || 1, parseInt(row.endMy[1]) || currentYear]
           : ["", ""]; // blank inputs indicate present/null
 
         const minStartYear = Array.isArray(row.originalStartMy)
           ? parseInt(row.originalStartMy[1])
-          : now.getFullYear();
+          : currentYear;
 
         const clampMonth = (m) => Math.min(12, Math.max(1, m));
 
@@ -834,7 +833,7 @@ function MembersTable({
           let mm = parseInt(raw);
           if (isNaN(mm)) return; // ignore non-numeric input
           mm = clampMonth(mm);
-          const yy = isSet ? (parseInt(row.endMy[1]) || now.getFullYear()) : now.getFullYear();
+          const yy = isSet ? (parseInt(row.endMy[1]) || currentYear) : currentYear;
           api.setEditCellValue({ id, field: "endMy", value: [mm, yy] }, e);
         };
 
@@ -983,4 +982,3 @@ function MembersTable({
     </>
   );
 }
-
