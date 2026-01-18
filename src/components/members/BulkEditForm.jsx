@@ -52,6 +52,9 @@ export default function BulkEdit({ mode = "add" }) {
   const [clubsLoading, setClubsLoading] = useState(true);
   const [existingMembers, setExistingMembers] = useState([]);
   const [fullMembers, setFullMembers] = useState([]);
+  const [monthDialog, setMonthDialog] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState(null);
+  const [pendingMode, setPendingMode] = useState(null);
 
   const disableClubSelector = user?.role === "club";
 
@@ -105,8 +108,12 @@ export default function BulkEdit({ mode = "add" }) {
             startYear: latestRole?.startYear || new Date().getFullYear(),
             originalStartYear:
               latestRole?.startYear || new Date().getFullYear(),
+            startMonth: latestRole?.startMonth ?? null,
+            originalStartMonth: latestRole?.startMonth ?? null,
             endYear: latestRole?.endYear,
             originalEndYear: latestRole?.endYear,
+            endMonth: latestRole?.endMonth ?? null,
+            originalEndMonth: latestRole?.endMonth ?? null,
             isPoc: member.poc,
             isValid: true,
             error: null,
@@ -213,6 +220,16 @@ export default function BulkEdit({ mode = "add" }) {
     add: (formData) => {
       setLoading(true);
       const newMembers = formData.newMembers;
+      const hasMissingMonths = newMembers.some(
+        (m) => m.isValid && (m.startMonth == null || (m.endYear !== null && m.endYear !== "" && m.endYear !== "-" && m.endMonth == null))
+      );
+      if (hasMissingMonths) {
+        setLoading(false);
+        setPendingFormData(formData);
+        setPendingMode("add");
+        setMonthDialog(true);
+        return;
+      }
 
       const finalMembers = newMembers
         .filter((member) => member.isValid)
@@ -223,7 +240,12 @@ export default function BulkEdit({ mode = "add" }) {
             {
               name: member.role,
               startYear: parseInt(member.startYear),
+              startMonth: member.startMonth == null ? null : parseInt(member.startMonth),
               endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+              endMonth:
+                member.endYear === "-" || member.endYear === null || member.endYear === ""
+                  ? null
+                  : (member.endMonth == null || member.endMonth === "-" ? null : parseInt(member.endMonth)),
             },
           ],
           poc: member.isPoc,
@@ -233,6 +255,17 @@ export default function BulkEdit({ mode = "add" }) {
     edit: (formData) => {
       setLoading(true);
       const updatedMembers = formData.newMembers;
+
+      const hasMissingMonths = updatedMembers.some(
+        (m) => m.startMonth == null || (m.endYear !== null && m.endYear !== "" && m.endYear !== "-" && m.endMonth == null)
+      );
+      if (hasMissingMonths) {
+        setLoading(false);
+        setPendingFormData(formData);
+        setPendingMode("edit");
+        setMonthDialog(true);
+        return;
+      }
 
       // use existing members, see the ones where the role names are different from fullMembers and construct the full roles
       const finalMembers = [];
@@ -248,8 +281,10 @@ export default function BulkEdit({ mode = "add" }) {
           member.role !== latestRole.name ||
           member.isPoc !== fullMember.poc ||
           member.startYear !== latestRole.startYear ||
+          member.startMonth !== (latestRole.startMonth ?? null) ||
           (member.endYear === "-" ? null : member.endYear) !==
             latestRole.endYear
+          || (member.endMonth === "-" ? null : member.endMonth) !== (latestRole.endMonth ?? null)
         ) {
           // construct new roles with old roles and new roles appended, but make the lastRow's end year as currentYear
           const addNew = member.role !== latestRole.name;
@@ -258,11 +293,19 @@ export default function BulkEdit({ mode = "add" }) {
               return {
                 name: role.name,
                 startYear: addNew ? role.startYear : member.startYear,
+                startMonth: addNew ? role.startMonth : (member.startMonth == null ? null : parseInt(member.startMonth)),
                 endYear: addNew
                   ? parseInt(member.startYear)
                   : member.endYear === "-"
                     ? null
                     : parseInt(member.endYear),
+                endMonth: addNew
+                  ? (member.startMonth == null ? null : parseInt(member.startMonth))
+                  : (member.endYear === "-" || member.endYear === null || member.endYear === "")
+                    ? null
+                    : (member.endMonth == null || member.endMonth === "-"
+                        ? (member.startMonth == null ? null : parseInt(member.startMonth))
+                        : parseInt(member.endMonth)),
               };
             }
             return role;
@@ -273,7 +316,14 @@ export default function BulkEdit({ mode = "add" }) {
             newRoles.push({
               name: member.role,
               startYear: parseInt(member.startYear),
+              startMonth: member.startMonth == null ? null : parseInt(member.startMonth),
               endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+              endMonth:
+                member.endYear === "-" || member.endYear === null || member.endYear === ""
+                  ? null
+                  : (member.endMonth == null || member.endMonth === "-"
+                      ? (member.startMonth == null ? null : parseInt(member.startMonth))
+                      : parseInt(member.endMonth)),
             });
           }
 
@@ -435,6 +485,97 @@ export default function BulkEdit({ mode = "add" }) {
         confirmText="Go Back"
         cancelText="Continue"
       />
+      <ConfirmDialog
+        open={monthDialog}
+        title={"Missing Month(s)"}
+        description={"Start month and/or end month has not been initialized for one or more entries. If you proceed, missing months will be set to 1 (January) where required. Would you like to proceed or edit the month(s)?"}
+        onConfirm={async () => {
+          setMonthDialog(false);
+          if (!pendingFormData) return;
+          setLoading(true);
+          if (pendingMode === "add") {
+            const newMembers = pendingFormData.newMembers;
+            const finalMembers = newMembers
+              .filter((member) => member.isValid)
+              .map((member) => ({
+                uid: member.uid,
+                cid: selectedClub,
+                roles: [
+                  {
+                    name: member.role,
+                    startYear: parseInt(member.startYear),
+                    startMonth: 1,
+                    endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+                    endMonth:
+                      member.endYear === "-" || member.endYear === null || member.endYear === ""
+                        ? null
+                        : 1,
+                  },
+                ],
+                poc: member.isPoc,
+              }));
+            await submit(finalMembers, createMemberAction, "add");
+          } else if (pendingMode === "edit") {
+            const updatedMembers = pendingFormData.newMembers;
+            const finalMembers = [];
+            updatedMembers.forEach((member) => {
+              const fullMember = fullMembers.find((m) => m.uid === member.uid);
+              if (!fullMember) return;
+              const latestRole = fullMember.roles
+                ?.filter((role) => role.endYear === null)
+                ?.sort((a, b) => b.startYear - a.startYear)[0];
+
+              if (
+                member.role !== latestRole.name ||
+                member.isPoc !== fullMember.poc ||
+                member.startYear !== latestRole.startYear ||
+                (member.endYear === "-" ? null : member.endYear) !== latestRole.endYear
+              ) {
+                const addNew = member.role !== latestRole.name;
+                const newRoles = fullMember.roles.map((role) => {
+                  if (role.name === latestRole.name) {
+                    return {
+                      name: role.name,
+                      startYear: addNew ? role.startYear : member.startYear,
+                      startMonth: addNew ? (role.startMonth ?? 1) : 1,
+                      endYear: addNew
+                        ? parseInt(member.startYear)
+                        : member.endYear === "-" ? null : parseInt(member.endYear),
+                      endMonth: addNew
+                        ? 1
+                        : (member.endYear === "-" || member.endYear === null || member.endYear === "") ? null : 1,
+                    };
+                  }
+                  return role;
+                });
+
+                if (addNew) {
+                  newRoles.push({
+                    name: member.role,
+                    startYear: parseInt(member.startYear),
+                    startMonth: 1,
+                    endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+                    endMonth:
+                      member.endYear === "-" || member.endYear === null || member.endYear === "" ? null : 1,
+                  });
+                }
+
+                finalMembers.push({
+                  uid: member.uid,
+                  cid: selectedClub,
+                  roles: newRoles,
+                  poc: member.isPoc,
+                });
+              }
+            });
+            await submit(finalMembers, editMemberAction, "edit");
+          }
+        }}
+        onClose={() => setMonthDialog(false)}
+        confirmProps={{ color: "primary" }}
+        confirmText={"Proceed"}
+        cancelText={"Edit Months"}
+      />
     </form>
   );
 }
@@ -460,8 +601,12 @@ function MembersTable({
     originalRole: null,
     startYear: new Date().getFullYear(),
     originalStartYear: new Date().getFullYear(),
+    startMonth: new Date().getMonth() + 1,
+    originalStartMonth: new Date().getMonth() + 1,
     endYear: null,
     originalEndYear: null,
+    endMonth: null,
+    originalEndMonth: null,
     isPoc: false,
     isValid: false,
     error: "Incomplete entry",
@@ -499,6 +644,9 @@ function MembersTable({
         ? new Date().getFullYear()
         : row.startYear;
 
+    const smRaw = parseInt(row.startMonth, 10);
+    row.startMonth = Number.isNaN(smRaw) ? null : Math.min(12, Math.max(1, smRaw));
+
     const rawEnd = row.endYear;
     if (rawEnd === null || rawEnd === "" || rawEnd === "-") {
       row.endYear = rawEnd;
@@ -511,10 +659,25 @@ function MembersTable({
           : Math.max(clamped, row.startYear);
     }
 
+    const emRaw = parseInt(row.endMonth, 10);
+    if (row.endYear === null || row.endYear === "" || row.endYear === "-") {
+      row.endMonth = null;
+    } else {
+      row.endMonth = Number.isNaN(emRaw) ? null : Math.min(12, Math.max(1, emRaw));
+    }
+
     // if role is bigger than 99 error out
     if (row.role === null || row.role.length === 0 || row.role.length >= 99) {
       row.isValid = false;
       row.error = "Role name should not be null and be less than 99 characters";
+    }
+
+    if (
+      row.endYear !== null && row.endYear !== "" && row.endYear !== "-" &&
+      row.endYear === row.startYear && row.endMonth != null && row.startMonth != null &&
+      row.endMonth < row.startMonth
+    ) {
+      row.endMonth = row.startMonth;
     }
 
     const newRows = rows.map((r) => {
@@ -645,6 +808,23 @@ function MembersTable({
       display: "flex",
     },
     {
+      field: "startMonth",
+      headerName: "Start Month",
+      flex: isMobile ? null : 2,
+      editable: true,
+      valueGetter: (value, row) => row.startMonth,
+      renderCell: (p) => (
+        <Typography
+          variant="body2"
+          color={p.row?.startMonth === p.row?.originalStartMonth ? "text.secondary" : "text.primary"}
+          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
+        >
+          {p.value ?? "-"}
+        </Typography>
+      ),
+      display: "flex",
+    },
+    {
       field: "startYear",
       headerName: "Start Year",
       flex: isMobile ? null : 2,
@@ -673,6 +853,23 @@ function MembersTable({
           }}
         >
           {p.value}
+        </Typography>
+      ),
+      display: "flex",
+    },
+    {
+      field: "endMonth",
+      headerName: "End Month",
+      flex: isMobile ? null : 2,
+      editable: true,
+      valueGetter: (value, row) => row.endMonth ?? "-",
+      renderCell: (p) => (
+        <Typography
+          variant="body2"
+          color={p.row?.endMonth === p.row?.originalEndMonth ? "text.secondary" : "text.primary"}
+          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
+        >
+          {p.value ?? "-"}
         </Typography>
       ),
       display: "flex",

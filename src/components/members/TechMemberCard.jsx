@@ -8,6 +8,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
 import { getUserNameFromUID } from "utils/users";
+import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 
 import { techMembersGithubIds } from "constants/techmembersGithubIds";
 
@@ -96,29 +97,24 @@ export default async function TechMemberCard({ uid, poc, roles }) {
         />
 
         {roles
-          ?.sort((a, b) => {
-            // Sort roles logic
-            if (a.endYear === null && b.endYear !== null) {
-              return -1;
-            } else if (a.endYear !== null && b.endYear === null) {
-              return 1;
-            } else {
-              return b.endYear - a.endYear;
-            }
-          })
-          .map((role, key) => (
-            <Typography key={key} variant="body1" sx={{ mb: 0.5 }}>
-              <Box
-                component="span"
-                sx={{ color: "text.primary", fontWeight: 500 }}
-              >
-                {role.name}
-              </Box>{" "}
-              <Box component="span" sx={{ color: "text.secondary" }}>
-                ({role.startYear} - {role.endYear || "present"})
-              </Box>
-            </Typography>
-          ))}
+          ?.sort((a, b) => {sortMonthYear(a,b)})
+          .map((role, key) => {
+            const start = fmtMonthYear(role?.startMonth,role?.startYear);
+            const end = fmtMonthYear(role?.endMonth,role?.endYear);
+            return (
+              <Typography key={key} variant="body1" sx={{ mb: 0.5 }}>
+                <Box
+                  component="span"
+                  sx={{ color: "text.primary", fontWeight: 500 }}
+                >
+                  {role.name}
+                </Box>{" "}
+                <Box component="span" sx={{ color: "text.secondary" }}>
+                  ({start} - {end})
+                </Box>
+              </Typography>
+            );
+          })}
 
         <Box>
           <Box

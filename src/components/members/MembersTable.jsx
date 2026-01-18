@@ -18,6 +18,7 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { getUserNameFromUID } from "utils/users";
+import { fmtMonthYear } from "utils/membersDates";
 
 export default function MembersTable({
   members,
@@ -44,7 +45,11 @@ export default function MembersTable({
       renderCell: ({ value }) => (
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
-            <Image alt={value.name} src={getFile(value.img)} fill={true} />
+            <Image
+              alt={value.name || "User Image"}
+              src={getFile(value.img)}
+              fill={true}
+            />
           ) : null}
         </Avatar>
       ),
@@ -153,7 +158,11 @@ export default function MembersTable({
                             flexShrink: 0,
                           }}
                         >
-                          ({role?.startYear} - {role?.endYear || "present"})
+                          (
+                            {fmtMonthYear(role?.startMonth,role?.startYear)}
+                            {" "}-
+                            {fmtMonthYear(role?.endMonth,role?.endYear)}
+                          )
                         </Box>
                       </Typography>
                       {showIcon && (

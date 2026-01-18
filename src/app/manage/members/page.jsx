@@ -107,7 +107,6 @@ export default async function ManageMembers(props) {
               >
                 <MembersFilter
                   // name={targetName}
-                  // name={targetName}
                   club={targetClub}
                   state={targetState}
                   cc={true}
@@ -126,7 +125,6 @@ export default async function ManageMembers(props) {
                     }}
                   >
                     <MembersFilter
-                      // name={targetName}
                       // name={targetName}
                       club={targetClub}
                       state={targetState}
@@ -149,8 +147,7 @@ export default async function ManageMembers(props) {
 }
 
 async function PendingMembersDataGrid() {
-  const { data: { pendingMembers } = {} } =
-    await getClient().query(GET_PENDING_MEMBERS);
+    const { data: { pendingMembers } = {} } = await getClient().query(GET_PENDING_MEMBERS);
 
   // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
   // concurrently fetch user profile for each member
@@ -248,8 +245,8 @@ async function MembersDataGrid({
 // if member is still present, return current year + 1
 function extractLatestYear(member) {
   return Math.max(
-    ...member.roles.map((r) =>
-      !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
+      ...member.roles.map((r)=>
+        !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
     ),
   );
 }
