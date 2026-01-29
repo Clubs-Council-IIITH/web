@@ -19,6 +19,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
+import { fmtMonthYear } from "utils/membersDates";
 
 import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
@@ -30,6 +31,11 @@ import { createMemberAction } from "actions/members/create/server_action";
 import { currentMembersAction } from "actions/members/current/server_action";
 import { editMemberAction } from "actions/members/edit/server_action";
 import { getUsers } from "actions/users/get/server_action";
+
+const [currentYear, currentMonth] = [
+  new Date().getFullYear(),
+  new Date().getMonth() + 1,
+];
 
 export default function BulkEdit({ mode = "add" }) {
   const router = useRouter();
@@ -105,9 +111,9 @@ export default function BulkEdit({ mode = "add" }) {
             uid: member.uid,
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
-            startYear: latestRole?.startYear || new Date().getFullYear(),
+            startYear: latestRole?.startYear || currentYear,
             originalStartYear:
-              latestRole?.startYear || new Date().getFullYear(),
+              latestRole?.startYear || currentYear,
             startMonth: latestRole?.startMonth ?? null,
             originalStartMonth: latestRole?.startMonth ?? null,
             endYear: latestRole?.endYear,
@@ -400,7 +406,7 @@ export default function BulkEdit({ mode = "add" }) {
           - Please ensure that the members being added do not already exist in
           the selected club/body.
           <br />- The default start year for all members will be set as{" "}
-          {new Date().getFullYear()}.
+          {currentYear}.
           <br />- Any invalid entries marked in red will be skipped during
           submission.
         </Typography>
@@ -525,25 +531,41 @@ export default function BulkEdit({ mode = "add" }) {
                 ?.filter((role) => role.endYear === null)
                 ?.sort((a, b) => b.startYear - a.startYear)[0];
 
-              if (
+              // Planned values: set missing months to 1 when proceeding
+              const plannedStartMonth =
+                member.startMonth == null ? 1 : parseInt(member.startMonth, 10);
+              const plannedEndYear =
+                member.endYear === "-" ? null : (member.endYear == null || member.endYear === "" ? null : parseInt(member.endYear, 10));
+              const plannedEndMonth =
+                plannedEndYear == null
+                  ? null
+                  : (member.endMonth == null || member.endMonth === "-" ? 1 : parseInt(member.endMonth, 10));
+
+              const missingStartMonth = latestRole?.startMonth == null;
+              const missingEndMonth = plannedEndYear != null && (latestRole?.endMonth == null || member.endMonth == null || member.endMonth === "-");
+
+              const dataChanged =
                 member.role !== latestRole.name ||
                 member.isPoc !== fullMember.poc ||
                 member.startYear !== latestRole.startYear ||
-                (member.endYear === "-" ? null : member.endYear) !== latestRole.endYear
-              ) {
+                (plannedEndYear !== latestRole.endYear) ||
+                missingStartMonth ||
+                missingEndMonth;
+
+              if (dataChanged) {
                 const addNew = member.role !== latestRole.name;
                 const newRoles = fullMember.roles.map((role) => {
                   if (role.name === latestRole.name) {
                     return {
                       name: role.name,
                       startYear: addNew ? role.startYear : member.startYear,
-                      startMonth: addNew ? (role.startMonth ?? 1) : 1,
+                      startMonth: addNew ? role.startMonth : plannedStartMonth,
                       endYear: addNew
-                        ? parseInt(member.startYear)
-                        : member.endYear === "-" ? null : parseInt(member.endYear),
+                        ? parseInt(member.startYear, 10)
+                        : plannedEndYear,
                       endMonth: addNew
-                        ? 1
-                        : (member.endYear === "-" || member.endYear === null || member.endYear === "") ? null : 1,
+                        ? plannedStartMonth
+                        : plannedEndMonth,
                     };
                   }
                   return role;
@@ -552,11 +574,10 @@ export default function BulkEdit({ mode = "add" }) {
                 if (addNew) {
                   newRoles.push({
                     name: member.role,
-                    startYear: parseInt(member.startYear),
-                    startMonth: 1,
-                    endYear: member.endYear === "-" ? null : parseInt(member.endYear),
-                    endMonth:
-                      member.endYear === "-" || member.endYear === null || member.endYear === "" ? null : 1,
+                    startYear: parseInt(member.startYear, 10),
+                    startMonth: plannedStartMonth,
+                    endYear: plannedEndYear,
+                    endMonth: plannedEndMonth,
                   });
                 }
 
@@ -599,10 +620,10 @@ function MembersTable({
     uid: null,
     role: null,
     originalRole: null,
-    startYear: new Date().getFullYear(),
-    originalStartYear: new Date().getFullYear(),
-    startMonth: new Date().getMonth() + 1,
-    originalStartMonth: new Date().getMonth() + 1,
+    startYear: currentYear,
+    originalStartYear: currentYear,
+    startMonth: currentMonth,
+    originalStartMonth: currentMonth,
     endYear: null,
     originalEndYear: null,
     endMonth: null,
@@ -640,8 +661,8 @@ function MembersTable({
     row.startYear =
       parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
     row.startYear =
-      row.startYear > new Date().getFullYear()
-        ? new Date().getFullYear()
+      row.startYear > currentYear
+        ? currentYear
         : row.startYear;
 
     const smRaw = parseInt(row.startMonth, 10);
@@ -654,7 +675,7 @@ function MembersTable({
       const parsed = Number.parseInt(rawEnd, 10);
       const clamped = isNaN(parsed) ? minYear : Math.max(parsed, minYear);
       row.endYear =
-        clamped > new Date().getFullYear()
+        clamped > currentYear
           ? ""
           : Math.max(clamped, row.startYear);
     }
@@ -808,99 +829,100 @@ function MembersTable({
       display: "flex",
     },
     {
-      field: "startMonth",
-      headerName: "Start Month",
-      flex: isMobile ? null : 2,
+      field: "start",
+      headerName: "Start (YYYY-MM)",
+      flex: isMobile ? null : 3,
       editable: true,
-      valueGetter: (value, row) => row.startMonth,
-      renderCell: (p) => (
-        <Typography
-          variant="body2"
-          color={p.row?.startMonth === p.row?.originalStartMonth ? "text.secondary" : "text.primary"}
-          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
-        >
-          {p.value ?? "-"}
-        </Typography>
-      ),
-      display: "flex",
-    },
-    {
-      field: "startYear",
-      headerName: "Start Year",
-      flex: isMobile ? null : 2,
-      editable: true,
-      valueGetter: (value, row) =>
-        row?.role === row?.originalRole
-          ? row.startYear
-          : new Date().getFullYear(),
+      valueGetter: (value, row) => fmtMonthYear(row.startMonth, row.startYear),
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
-            p.row?.startYear === p.row?.originalStartYear ||
-            p.row?.role !== p.row?.originalRole
+            p.row?.startMonth === p.row?.originalStartMonth &&
+            p.row?.startYear === p.row?.originalStartYear
               ? "text.secondary"
               : "text.primary"
           }
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: "5px",
-            py: "10px",
-            justifyContent: "center",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
+          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
         >
           {p.value}
         </Typography>
       ),
+      renderEditCell: (params) => {
+        const { row, api, id } = params;
+        const defaultValue = fmtMonthYear(row?.startMonth, row?.startYear);
+        const onChange = (e) => {
+          const v = e.target.value;
+          if (!v) return;
+          const [y, m] = v.split("-");
+          api.setEditCellValue({ id, field: "startYear", value: parseInt(y, 10) });
+          api.setEditCellValue({ id, field: "startMonth", value: parseInt(m, 10) });
+        };
+        return (
+          <input
+            type="month"
+            defaultValue={defaultValue}
+            onChange={onChange}
+            required
+            min={`2010-01`}
+            max={`${currentYear}-${currentMonth+1}`}
+            onBlur={() => {
+              api.stopRowEditMode({ id });
+            }}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        );
+      },
       display: "flex",
     },
     {
-      field: "endMonth",
-      headerName: "End Month",
-      flex: isMobile ? null : 2,
+      field: "end",
+      headerName: "End (YYYY-MM)",
+      flex: isMobile ? null : 3,
       editable: true,
-      valueGetter: (value, row) => row.endMonth ?? "-",
-      renderCell: (p) => (
-        <Typography
-          variant="body2"
-          color={p.row?.endMonth === p.row?.originalEndMonth ? "text.secondary" : "text.primary"}
-          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
-        >
-          {p.value ?? "-"}
-        </Typography>
-      ),
-      display: "flex",
-    },
-    {
-      field: "endYear",
-      headerName: "End Year",
-      valueGetter: (value, row) => row.endYear || "-",
-      flex: isMobile ? null : 2,
-      editable: true,
+      valueGetter: (value, row) => fmtMonthYear(row.endMonth, row.endYear),
       renderCell: (p) => (
         <Typography
           variant="body2"
           color={
+            p.row?.endMonth === p.row?.originalEndMonth &&
             p.row?.endYear === p.row?.originalEndYear
               ? "text.secondary"
               : "text.primary"
           }
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            px: "5px",
-            py: "10px",
-            justifyContent: "center",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-          }}
+          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
         >
           {p.value}
         </Typography>
       ),
+      renderEditCell: (params) => {
+        const { row, api, id } = params;
+        const defaultValue = fmtMonthYear(row?.endMonth, row?.endYear);
+        const onChange = (e) => {
+          const v = e.target.value;
+          if (!v) {
+            api.setEditCellValue({ id, field: "endYear", value: null });
+            api.setEditCellValue({ id, field: "endMonth", value: null });
+            return;
+          }
+          const [y, m] = v.split("-");
+          api.setEditCellValue({ id, field: "endYear", value: parseInt(y, 10) });
+          api.setEditCellValue({ id, field: "endMonth", value: parseInt(m, 10) });
+        };
+        return (
+          <input
+            type="month"
+            defaultValue={defaultValue}
+            onChange={onChange}
+            min={`2010-01`}
+            max={`${currentYear}-${currentMonth+1}`}
+            onBlur={() => {
+              api.stopRowEditMode({ id });
+            }}
+            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+        );
+      },
       display: "flex",
     },
     {
@@ -978,6 +1000,7 @@ function MembersTable({
         getRowHeight={() => "auto"}
         rows={rows}
         columns={columns}
+        editMode="row"
         processRowUpdate={onUpdate}
         onProcessRowUpdateError={(error) =>
           triggerToast({
@@ -986,6 +1009,7 @@ function MembersTable({
           })
         }
         disableRowSelectionOnClick
+        experimentalFeatures={{ newEditingApi: true }}
         sx={{
           ".MuiDataGrid-cell:focus": {
             outline: "none",

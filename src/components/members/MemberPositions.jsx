@@ -35,6 +35,11 @@ const showActions = (rows, user) => {
   } else return false;
 };
 
+const [currentMonth, currentYear] = [
+  new Date().getMonth() + 1,
+  new Date().getFullYear(),
+];
+
 export default function MemberPositions({
   editable,
   rows = [],
@@ -52,9 +57,9 @@ export default function MemberPositions({
   // position item template
   const emptyPositionItem = {
     name: null,
-    startYear:new Date().getFullYear(),
+    startYear: currentYear,
     endYear: null,
-    startMonth: new Date().getMonth() + 1,
+    startMonth: currentMonth,
     endMonth: null,
   };
 
@@ -64,36 +69,25 @@ export default function MemberPositions({
 
   const onUpdate = (row) => {
     // sanitize start
-    const syRaw = parseInt(row.startYear, 10);
-    const smRaw = parseInt(row.startMonth, 10);
-    row.startYear = Number.isNaN(syRaw) ? minYear : Math.max(minYear, syRaw);
-    row.startMonth = Number.isNaN(smRaw)
-      ? 1
-      : Math.min(12, Math.max(1, smRaw));
-
-    // sanitize end (nullable)
-    const eyRaw = parseInt(row.endYear, 10);
-    const emRaw = parseInt(row.endMonth, 10);
-    row.endYear = Number.isNaN(eyRaw) ? null : Math.max(minYear, eyRaw);
-    row.endMonth = row.endYear == null
-      ? null
-      : Number.isNaN(emRaw)
-        ? null
-        : Math.min(12, Math.max(1, emRaw));
-
-    // validate ordering: only compare months if both present
-    const valid =
-      row.endYear == null ||
-      row.endYear > row.startYear ||
-      (row.endYear === row.startYear && (
-        row.endMonth != null && row.startMonth != null
-          ? row.endMonth > row.startMonth
-          : true
-      ));
-    if (!valid) {
-      row.endYear = null;
-      row.endMonth = null;
+    if (!row.startMonth && row.startYear) {
+      row.startMonth = 1; // ensure month exists
     }
+
+    // sanitize end
+    if (row.endYear && !row.endMonth) {
+      row.endMonth = 1; // ensure month exists
+    }
+
+    // validate ordering
+    if (row.endYear) {
+      const startVal = row.startYear * 12 + row.startMonth;
+      const endVal = row.endYear * 12 + row.endMonth;
+
+      if (endVal <= startVal) {
+        row.endYear = null;
+        row.endMonth = null;
+      }
+  }
 
     const newRows = rows.map((r) => (r.id === row.id ? row : r));
     setRows(newRows);
@@ -150,166 +144,101 @@ export default function MemberPositions({
       },
       display: "flex",
     },
-    ...(editable
-      ? []
-      : [
-          {
-            field: "start",
-            headerName: "Start (MM-YYYY)",
-            flex: 2,
-            editable: false,
-            valueGetter: (value, row) =>
-              fmtMonthYear(row?.startMonth, row?.startYear),
-            renderCell: (p) => (
-              <Typography
-                variant="body2"
-                sx={{ px: "5px", py: "10px", textAlign: "center" }}
-              >
-                {p.value}
-              </Typography>
-            ),
-            display: "flex",
-          },
-          {
-            field: "end",
-            headerName: "End (MM-YYYY)",
-            flex: 2,
-            editable: false,
-            valueGetter: (value, row) => fmtMonthYear(row?.endMonth, row?.endYear),
-            renderCell: (p) => (
-              <Typography
-                variant="body2"
-                sx={{ px: "5px", py: "10px", textAlign: "center" }}
-              >
-                {p.value}
-              </Typography>
-            ),
-            display: "flex",
-          },
-        ]),
-    // Editing fields for startMonth/startYear and endMonth/endYear (hidden in view, shown in edit mode)
-    ...(editable ? [
-      {
-        field: "startMonth",
-        headerName: "Start Month",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.startMonth,
-        renderEditCell: (params) => (
+    {
+      field: "start",
+      headerName: "Start (YYYY-MM)",
+      flex: 2,
+      editable: editable,
+
+      valueGetter: (value, row) =>
+        fmtMonthYear(row?.startMonth, row?.startYear),
+
+      renderEditCell: (params) => {
+        const { row, api, id } = params;
+
+        const defaultValue =fmtMonthYear(row?.startMonth, row?.startYear);
+
+        return (
           <input
-            type="number"
-            min={1}
-            max={12}
-            defaultValue={params.row.startMonth}
-            placeholder="MM"
+            type="month"
+            defaultValue={defaultValue}
+
             onChange={(e) => {
               const v = e.target.value;
-              params.api.setEditCellValue(
-                {
-                  id: params.id,
-                  field: "startMonth",
-                  value: v === "" ? "" : parseInt(v, 10),
-                },
-                e,
-              );
+              if (!v) return;
+
+              const [y, m] = v.split("-");
+
+              api.setEditCellValue({ id, field: "startYear", value: parseInt(y, 10) });
+              api.setEditCellValue({ id, field: "startMonth", value: parseInt(m, 10) });
             }}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+
+            onBlur={() => {
+              api.stopRowEditMode({ id });
+            }}
+
+            min="2010-01"
+            max={`${currentYear}-${currentMonth+1}`}
+            style={{
+              width: "100%",
+              padding: 6,
+              borderRadius: 6,
+              border: "1px solid #ccc",
+            }}
           />
-        ),
-        display: "flex",
+        );
       },
-      {
-        field: "startYear",
-        headerName: "Start Year",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.startYear,
-        renderEditCell: (params) => (
+    },
+    {
+      field: "end",
+      headerName: "End (YYYY-MM)",
+      flex: 2,
+      editable: editable,
+
+      valueGetter: (value, row) =>
+        fmtMonthYear(row?.endMonth, row?.endYear),
+
+      renderEditCell: (params) => {
+        const { row, api, id } = params;
+
+        const defaultValue = fmtMonthYear(row?.endMonth, row?.endYear);
+
+        return (
           <input
-            type="number"
-            min={2010}
-            max={new Date().getFullYear()}
-            defaultValue={params.row.startYear}
-            placeholder="YYYY"
+            type="month"
+            defaultValue={defaultValue}
+
             onChange={(e) => {
               const v = e.target.value;
-              params.api.setEditCellValue(
-                {
-                  id: params.id,
-                  field: "startYear",
-                  value: v === "" ? "" : parseInt(v, 10),
-                },
-                e,
-              );
+
+              if (!v) {
+                api.setEditCellValue({ id, field: "endYear", value: null });
+                api.setEditCellValue({ id, field: "endMonth", value: null });
+                return;
+              }
+
+              const [y, m] = v.split("-");
+
+              api.setEditCellValue({ id, field: "endYear", value: parseInt(y, 10) });
+              api.setEditCellValue({ id, field: "endMonth", value: parseInt(m, 10) });
             }}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        ),
-        display: "flex",
-      },
-      {
-        field: "endMonth",
-        headerName: "End Month",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.endMonth,
-        renderEditCell: (params) => (
-          <input
-            type="number"
-            min={1}
-            max={12}
-            defaultValue={params.row.endMonth ?? ""}
-            placeholder="MM"
-            onChange={(e) => {
-              const v = e.target.value;
-              params.api.setEditCellValue(
-                {
-                  id: params.id,
-                  field: "endMonth",
-                  value: v === "" ? "" : parseInt(v, 10),
-                },
-                e,
-              );
+
+            onBlur={() => {
+              api.stopRowEditMode({ id });
             }}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        ),
-        display: "flex",
-      },
-      {
-        field: "endYear",
-        headerName: "End Year",
-        flex: 1,
-        editable: true,
-        hide: true,
-        valueGetter: (value, row) => row.endYear,
-        renderEditCell: (params) => (
-          <input
-            type="number"
-            min={2010}
-            max={new Date().getFullYear()}
-            defaultValue={params.row.endYear ?? ""}
-            placeholder="YYYY"
-            onChange={(e) => {
-              const v = e.target.value;
-              params.api.setEditCellValue(
-                {
-                  id: params.id,
-                  field: "endYear",
-                  value: v === "" ? "" : parseInt(v, 10),
-                },
-                e,
-              );
+
+            min="2010-01"
+            max={`${currentYear}-${currentMonth+1}`}
+            style={{
+              width: "100%",
+              padding: 6,
+              borderRadius: 6,
+              border: "1px solid #ccc",
             }}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
           />
-        ),
-        display: "flex",
+        );
       },
-    ] : []),
+    },
     // if editing, show delete button
     ...(editable
       ? [
