@@ -112,14 +112,13 @@ export default function BulkEdit({ mode = "add" }) {
             role: latestRole?.name || "",
             originalRole: latestRole?.name || "",
             startYear: latestRole?.startYear || currentYear,
-            originalStartYear:
-              latestRole?.startYear || currentYear,
-            startMonth: latestRole?.startMonth ?? null,
-            originalStartMonth: latestRole?.startMonth ?? null,
+            originalStartYear: latestRole?.startYear || currentYear,
+            startMonth: latestRole?.startMonth || null,
+            originalStartMonth: latestRole?.startMonth || null,
             endYear: latestRole?.endYear,
             originalEndYear: latestRole?.endYear,
-            endMonth: latestRole?.endMonth ?? null,
-            originalEndMonth: latestRole?.endMonth ?? null,
+            endMonth: latestRole?.endMonth || null,
+            originalEndMonth: latestRole?.endMonth || null,
             isPoc: member.poc,
             isValid: true,
             error: null,
@@ -643,6 +642,7 @@ function MembersTable({
   const onUpdate = async (row) => {
     if (!row.uid) return;
     row.isValid = true;
+
     if (addMode) {
       let res = await getUsers(row.uid);
 
@@ -658,34 +658,9 @@ function MembersTable({
       }
     }
 
-    row.startYear =
-      parseInt(row.startYear) > minYear ? parseInt(row.startYear) : minYear;
-    row.startYear =
-      row.startYear > currentYear
-        ? currentYear
-        : row.startYear;
-
-    const smRaw = parseInt(row.startMonth, 10);
-    row.startMonth = Number.isNaN(smRaw) ? null : Math.min(12, Math.max(1, smRaw));
-
-    const rawEnd = row.endYear;
-    if (rawEnd === null || rawEnd === "" || rawEnd === "-") {
-      row.endYear = rawEnd;
-    } else {
-      const parsed = Number.parseInt(rawEnd, 10);
-      const clamped = isNaN(parsed) ? minYear : Math.max(parsed, minYear);
-      row.endYear =
-        clamped > currentYear
-          ? ""
-          : Math.max(clamped, row.startYear);
-    }
-
-    const emRaw = parseInt(row.endMonth, 10);
-    if (row.endYear === null || row.endYear === "" || row.endYear === "-") {
-      row.endMonth = null;
-    } else {
-      row.endMonth = Number.isNaN(emRaw) ? null : Math.min(12, Math.max(1, emRaw));
-    }
+    // clamp years and months
+    row.startYear = Math.min(Math.max(row.startYear, minYear), currentYear);
+    if (row.endYear) row.endYear = row.endYear > currentYear ? "" : Math.max(row.endYear, row.startYear);
 
     // if role is bigger than 99 error out
     if (row.role === null || row.role.length === 0 || row.role.length >= 99) {
@@ -693,10 +668,10 @@ function MembersTable({
       row.error = "Role name should not be null and be less than 99 characters";
     }
 
+    // make sure row.endYear and row.endMonth are not before startYear and startMonth
     if (
-      row.endYear !== null && row.endYear !== "" && row.endYear !== "-" &&
-      row.endYear === row.startYear && row.endMonth != null && row.startMonth != null &&
-      row.endMonth < row.startMonth
+      row.endYear && row.endYear === row.startYear &&
+      row.endMonth && row.startMonth && row.endMonth < row.startMonth
     ) {
       row.endMonth = row.startMonth;
     }
@@ -741,10 +716,9 @@ function MembersTable({
       sortable: true,
       valueGetter: (value, row) =>
         row.role !== row.originalRole ||
-        row.startYear !== row.originalStartYear ||
-        row.endYear !== row.originalEndYear
-          ? "0" + row?.uid
-          : "1" + row?.uid,
+        row.startYear !== row.originalStartYear || row.startMonth !== row.originalStartMonth ||
+        row.endYear !== row.originalEndYear || row.endMonth !== row.originalEndMonth
+          ? ("0" + row?.uid) : ("1" + row?.uid)
     },
     {
       field: "uid",
@@ -834,6 +808,16 @@ function MembersTable({
       flex: isMobile ? null : 3,
       editable: true,
       valueGetter: (value, row) => fmtMonthYear(row.startMonth, row.startYear),
+      valueSetter: (value, row) => {
+        if (!value) return row;
+        const [y, m] = value.split("-");
+        const y_num = parseInt(y, 10);
+        const m_num = Math.min(12, Math.max(1, parseInt(m, 10)));
+        if (isNaN(y_num) || isNaN(m_num)) {
+          return row;
+        }
+        return {...row, startYear: y_num, startMonth: m_num};
+      },
       renderCell: (p) => (
         <Typography
           variant="body2"
@@ -845,29 +829,28 @@ function MembersTable({
           }
           sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
         >
-          {p.value}
+          {fmtMonthYear(p.row.startMonth, p.row.startYear)}
         </Typography>
       ),
       renderEditCell: (params) => {
         const { row, api, id } = params;
-        const defaultValue = fmtMonthYear(row?.startMonth, row?.startYear);
-        const onChange = (e) => {
-          const v = e.target.value;
-          if (!v) return;
-          const [y, m] = v.split("-");
-          api.setEditCellValue({ id, field: "startYear", value: parseInt(y, 10) });
-          api.setEditCellValue({ id, field: "startMonth", value: parseInt(m, 10) });
-        };
+        const defaultValue = fmtMonthYear(row?.startMonth, row?.startYear, true);
         return (
           <input
             type="month"
             defaultValue={defaultValue}
-            onChange={onChange}
+            onChange={(e) =>
+              params.api.setEditCellValue({
+                id: params.id,
+                field: params.field,
+                value: e.target.value
+              })
+            }
             required
             min={`2010-01`}
             max={`${currentYear}-${currentMonth+1}`}
             onBlur={() => {
-              api.stopRowEditMode({ id });
+              api.stopCellEditMode({ id, field });
             }}
             style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
           />
@@ -881,6 +864,16 @@ function MembersTable({
       flex: isMobile ? null : 3,
       editable: true,
       valueGetter: (value, row) => fmtMonthYear(row.endMonth, row.endYear),
+      valueSetter: (value, row) => {
+        if (!value) return {...row, endYear: null, endMonth: null};
+        const [y, m] = value.split("-");
+        const y_num = parseInt(y, 10);
+        const m_num = Math.min(12, Math.max(1, parseInt(m, 10)));
+        if (isNaN(y_num) || isNaN(m_num)) {
+          return {...row, endYear: null, endMonth: null};
+        }
+        return {...row, endYear: y_num, endMonth: m_num};
+      },
       renderCell: (p) => (
         <Typography
           variant="body2"
@@ -890,39 +883,38 @@ function MembersTable({
               ? "text.secondary"
               : "text.primary"
           }
-          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            px: "5px",
+            py: "10px",
+            justifyContent: "center",
+          }}
         >
-          {p.value}
+          {fmtMonthYear(p.row.endMonth, p.row.endYear)}
         </Typography>
       ),
-      renderEditCell: (params) => {
-        const { row, api, id } = params;
-        const defaultValue = fmtMonthYear(row?.endMonth, row?.endYear);
-        const onChange = (e) => {
-          const v = e.target.value;
-          if (!v) {
-            api.setEditCellValue({ id, field: "endYear", value: null });
-            api.setEditCellValue({ id, field: "endMonth", value: null });
-            return;
+      renderEditCell: (params) => (
+        <input
+          type="month"
+          defaultValue={fmtMonthYear(params.row.endMonth, params.row.endYear, true)}
+          onChange={(e) =>
+            params.api.setEditCellValue({
+              id: params.id,
+              field: params.field,
+              value: e.target.value,
+            })
           }
-          const [y, m] = v.split("-");
-          api.setEditCellValue({ id, field: "endYear", value: parseInt(y, 10) });
-          api.setEditCellValue({ id, field: "endMonth", value: parseInt(m, 10) });
-        };
-        return (
-          <input
-            type="month"
-            defaultValue={defaultValue}
-            onChange={onChange}
-            min={`2010-01`}
-            max={`${currentYear}-${currentMonth+1}`}
-            onBlur={() => {
-              api.stopRowEditMode({ id });
-            }}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
-          />
-        );
-      },
+          min={`2010-01`}
+          max={`${currentYear}-${currentMonth + 1}`}
+          style={{
+            width: "100%",
+            padding: 6,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+          }}
+        />
+      ),
       display: "flex",
     },
     {
@@ -1000,7 +992,6 @@ function MembersTable({
         getRowHeight={() => "auto"}
         rows={rows}
         columns={columns}
-        editMode="row"
         processRowUpdate={onUpdate}
         onProcessRowUpdateError={(error) =>
           triggerToast({
@@ -1027,7 +1018,7 @@ function MembersTable({
             columnVisibilityModel: {
               // Hide the 'isEdited' column, it's only for sorting
               isEdited: false, // Hide the year columns in add mode
-              ...(addMode ? { startYear: false, endYear: false } : {}),
+              ...(addMode ? { start: false, end: false } : {}),
             },
           },
         }}
