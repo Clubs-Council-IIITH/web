@@ -74,16 +74,6 @@ export default async function BugReport() {
           </Link>{" "}
           (Requires a GitHub account)
         </li>
-        <li>
-          <Link
-            href="https://forms.office.com/r/xs3v1sV7gX"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Microsoft Form
-          </Link>{" "}
-          (Public)
-        </li>
       </ul>
       <Typography
         variant="h5"
@@ -111,15 +101,6 @@ export default async function BugReport() {
             rel="noreferrer"
           >
             GitHub Issues
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="https://forms.office.com/r/MTVxxp69Qr"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Microsoft Form
           </Link>
         </li>
         {/* <li>

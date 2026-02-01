@@ -7,6 +7,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 
 import Icon from "components/Icon";
 import UserImage from "components/users/UserImage";
+import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 import { getUserNameFromUID } from "utils/users";
 import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 

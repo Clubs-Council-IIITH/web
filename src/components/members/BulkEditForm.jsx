@@ -25,6 +25,7 @@ import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
 import Icon from "components/Icon";
 import { useToast } from "components/Toast";
+import { fmtMonthYear } from "utils/membersDates";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createMemberAction } from "actions/members/create/server_action";
@@ -226,7 +227,13 @@ export default function BulkEdit({ mode = "add" }) {
       setLoading(true);
       const newMembers = formData.newMembers;
       const hasMissingMonths = newMembers.some(
-        (m) => m.isValid && (m.startMonth == null || (m.endYear !== null && m.endYear !== "" && m.endYear !== "-" && m.endMonth == null))
+        (m) =>
+          m.isValid &&
+          (m.startMonth == null ||
+            (m.endYear !== null &&
+              m.endYear !== "" &&
+              m.endYear !== "-" &&
+              m.endMonth == null)),
       );
       if (hasMissingMonths) {
         setLoading(false);
@@ -245,12 +252,17 @@ export default function BulkEdit({ mode = "add" }) {
             {
               name: member.role,
               startYear: parseInt(member.startYear),
-              startMonth: member.startMonth == null ? null : parseInt(member.startMonth),
+              startMonth:
+                member.startMonth == null ? null : parseInt(member.startMonth),
               endYear: member.endYear === "-" ? null : parseInt(member.endYear),
               endMonth:
-                member.endYear === "-" || member.endYear === null || member.endYear === ""
+                member.endYear === "-" ||
+                member.endYear === null ||
+                member.endYear === ""
                   ? null
-                  : (member.endMonth == null || member.endMonth === "-" ? null : parseInt(member.endMonth)),
+                  : member.endMonth == null || member.endMonth === "-"
+                    ? null
+                    : parseInt(member.endMonth),
             },
           ],
           poc: member.isPoc,
@@ -262,7 +274,12 @@ export default function BulkEdit({ mode = "add" }) {
       const updatedMembers = formData.newMembers;
 
       const hasMissingMonths = updatedMembers.some(
-        (m) => m.startMonth == null || (m.endYear !== null && m.endYear !== "" && m.endYear !== "-" && m.endMonth == null)
+        (m) =>
+          m.startMonth == null ||
+          (m.endYear !== null &&
+            m.endYear !== "" &&
+            m.endYear !== "-" &&
+            m.endMonth == null),
       );
       if (hasMissingMonths) {
         setLoading(false);
@@ -288,8 +305,9 @@ export default function BulkEdit({ mode = "add" }) {
           member.startYear !== latestRole.startYear ||
           member.startMonth !== (latestRole.startMonth ?? null) ||
           (member.endYear === "-" ? null : member.endYear) !==
-            latestRole.endYear
-          || (member.endMonth === "-" ? null : member.endMonth) !== (latestRole.endMonth ?? null)
+            latestRole.endYear ||
+          (member.endMonth === "-" ? null : member.endMonth) !==
+            (latestRole.endMonth ?? null)
         ) {
           // construct new roles with old roles and new roles appended, but make the lastRow's end year as currentYear
           const addNew = member.role !== latestRole.name;
@@ -298,19 +316,29 @@ export default function BulkEdit({ mode = "add" }) {
               return {
                 name: role.name,
                 startYear: addNew ? role.startYear : member.startYear,
-                startMonth: addNew ? role.startMonth : (member.startMonth == null ? null : parseInt(member.startMonth)),
+                startMonth: addNew
+                  ? role.startMonth
+                  : member.startMonth == null
+                    ? null
+                    : parseInt(member.startMonth),
                 endYear: addNew
                   ? parseInt(member.startYear)
                   : member.endYear === "-"
                     ? null
                     : parseInt(member.endYear),
                 endMonth: addNew
-                  ? (member.startMonth == null ? null : parseInt(member.startMonth))
-                  : (member.endYear === "-" || member.endYear === null || member.endYear === "")
+                  ? member.startMonth == null
                     ? null
-                    : (member.endMonth == null || member.endMonth === "-"
-                        ? (member.startMonth == null ? null : parseInt(member.startMonth))
-                        : parseInt(member.endMonth)),
+                    : parseInt(member.startMonth)
+                  : member.endYear === "-" ||
+                      member.endYear === null ||
+                      member.endYear === ""
+                    ? null
+                    : member.endMonth == null || member.endMonth === "-"
+                      ? member.startMonth == null
+                        ? null
+                        : parseInt(member.startMonth)
+                      : parseInt(member.endMonth),
               };
             }
             return role;
@@ -321,14 +349,19 @@ export default function BulkEdit({ mode = "add" }) {
             newRoles.push({
               name: member.role,
               startYear: parseInt(member.startYear),
-              startMonth: member.startMonth == null ? null : parseInt(member.startMonth),
+              startMonth:
+                member.startMonth == null ? null : parseInt(member.startMonth),
               endYear: member.endYear === "-" ? null : parseInt(member.endYear),
               endMonth:
-                member.endYear === "-" || member.endYear === null || member.endYear === ""
+                member.endYear === "-" ||
+                member.endYear === null ||
+                member.endYear === ""
                   ? null
-                  : (member.endMonth == null || member.endMonth === "-"
-                      ? (member.startMonth == null ? null : parseInt(member.startMonth))
-                      : parseInt(member.endMonth)),
+                  : member.endMonth == null || member.endMonth === "-"
+                    ? member.startMonth == null
+                      ? null
+                      : parseInt(member.startMonth)
+                    : parseInt(member.endMonth),
             });
           }
 
@@ -493,7 +526,9 @@ export default function BulkEdit({ mode = "add" }) {
       <ConfirmDialog
         open={monthDialog}
         title={"Missing Month(s)"}
-        description={"Start month and/or end month has not been initialized for one or more entries. If you proceed, missing months will be set to 1 (January) where required. Would you like to proceed or edit the month(s)?"}
+        description={
+          "Start month and/or end month has not been initialized for one or more entries. If you proceed, missing months will be set to 1 (January) where required. Would you like to proceed or edit the month(s)?"
+        }
         onConfirm={async () => {
           setMonthDialog(false);
           if (!pendingFormData) return;
@@ -510,9 +545,12 @@ export default function BulkEdit({ mode = "add" }) {
                     name: member.role,
                     startYear: parseInt(member.startYear),
                     startMonth: 1,
-                    endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+                    endYear:
+                      member.endYear === "-" ? null : parseInt(member.endYear),
                     endMonth:
-                      member.endYear === "-" || member.endYear === null || member.endYear === ""
+                      member.endYear === "-" ||
+                      member.endYear === null ||
+                      member.endYear === ""
                         ? null
                         : 1,
                   },
@@ -534,20 +572,30 @@ export default function BulkEdit({ mode = "add" }) {
               const plannedStartMonth =
                 member.startMonth == null ? 1 : parseInt(member.startMonth, 10);
               const plannedEndYear =
-                member.endYear === "-" ? null : (member.endYear == null || member.endYear === "" ? null : parseInt(member.endYear, 10));
+                member.endYear === "-"
+                  ? null
+                  : member.endYear == null || member.endYear === ""
+                    ? null
+                    : parseInt(member.endYear, 10);
               const plannedEndMonth =
                 plannedEndYear == null
                   ? null
-                  : (member.endMonth == null || member.endMonth === "-" ? 1 : parseInt(member.endMonth, 10));
+                  : member.endMonth == null || member.endMonth === "-"
+                    ? 1
+                    : parseInt(member.endMonth, 10);
 
               const missingStartMonth = latestRole?.startMonth == null;
-              const missingEndMonth = plannedEndYear != null && (latestRole?.endMonth == null || member.endMonth == null || member.endMonth === "-");
+              const missingEndMonth =
+                plannedEndYear != null &&
+                (latestRole?.endMonth == null ||
+                  member.endMonth == null ||
+                  member.endMonth === "-");
 
               const dataChanged =
                 member.role !== latestRole.name ||
                 member.isPoc !== fullMember.poc ||
                 member.startYear !== latestRole.startYear ||
-                (plannedEndYear !== latestRole.endYear) ||
+                plannedEndYear !== latestRole.endYear ||
                 missingStartMonth ||
                 missingEndMonth;
 
@@ -562,9 +610,7 @@ export default function BulkEdit({ mode = "add" }) {
                       endYear: addNew
                         ? parseInt(member.startYear, 10)
                         : plannedEndYear,
-                      endMonth: addNew
-                        ? plannedStartMonth
-                        : plannedEndMonth,
+                      endMonth: addNew ? plannedStartMonth : plannedEndMonth,
                     };
                   }
                   return role;
@@ -660,7 +706,9 @@ function MembersTable({
 
     // clamp years and months
     row.startYear = Math.min(Math.max(row.startYear, minYear), currentYear);
-    if (row.endYear) row.endYear = row.endYear > currentYear ? "" : Math.max(row.endYear, row.startYear);
+    if (row.endYear)
+      row.endYear =
+        row.endYear > currentYear ? "" : Math.max(row.endYear, row.startYear);
 
     // if role is bigger than 99 error out
     if (row.role === null || row.role.length === 0 || row.role.length >= 99) {
@@ -670,8 +718,11 @@ function MembersTable({
 
     // make sure row.endYear and row.endMonth are not before startYear and startMonth
     if (
-      row.endYear && row.endYear === row.startYear &&
-      row.endMonth && row.startMonth && row.endMonth < row.startMonth
+      row.endYear &&
+      row.endYear === row.startYear &&
+      row.endMonth &&
+      row.startMonth &&
+      row.endMonth < row.startMonth
     ) {
       row.endMonth = row.startMonth;
     }
@@ -716,9 +767,12 @@ function MembersTable({
       sortable: true,
       valueGetter: (value, row) =>
         row.role !== row.originalRole ||
-        row.startYear !== row.originalStartYear || row.startMonth !== row.originalStartMonth ||
-        row.endYear !== row.originalEndYear || row.endMonth !== row.originalEndMonth
-          ? ("0" + row?.uid) : ("1" + row?.uid)
+        row.startYear !== row.originalStartYear ||
+        row.startMonth !== row.originalStartMonth ||
+        row.endYear !== row.originalEndYear ||
+        row.endMonth !== row.originalEndMonth
+          ? "0" + row?.uid
+          : "1" + row?.uid,
     },
     {
       field: "uid",
@@ -807,7 +861,8 @@ function MembersTable({
       headerName: "Start (YYYY-MM)",
       flex: isMobile ? null : 3,
       editable: true,
-      valueGetter: (value, row) => fmtMonthYear(row.startMonth, row.startYear) ?? "",
+      valueGetter: (value, row) =>
+        fmtMonthYear(row.startMonth, row.startYear) ?? "",
       valueSetter: (value, row) => {
         if (!value) return row;
         const [y, m] = value.split("-");
@@ -816,7 +871,7 @@ function MembersTable({
         if (isNaN(y_num) || isNaN(m_num)) {
           return row;
         }
-        return {...row, startYear: y_num, startMonth: m_num};
+        return { ...row, startYear: y_num, startMonth: m_num };
       },
       renderCell: (p) => (
         <Typography
@@ -827,14 +882,21 @@ function MembersTable({
               ? "text.secondary"
               : "text.primary"
           }
-          sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            px: "5px",
+            py: "10px",
+            justifyContent: "center",
+          }}
         >
           {fmtMonthYear(p.row.startMonth, p.row.startYear) ?? ""}
         </Typography>
       ),
       renderEditCell: (params) => {
         const { row, api, id, field } = params;
-        const defaultValue = fmtMonthYear(row?.startMonth, row?.startYear, true) ?? "";
+        const defaultValue =
+          fmtMonthYear(row?.startMonth, row?.startYear, true) ?? "";
         return (
           <input
             type="month"
@@ -843,7 +905,7 @@ function MembersTable({
               params.api.setEditCellValue({
                 id: id,
                 field: field,
-                value: e.target.value
+                value: e.target.value,
               })
             }
             required
@@ -865,16 +927,17 @@ function MembersTable({
       headerName: "End (YYYY-MM)",
       flex: isMobile ? null : 3,
       editable: true,
-      valueGetter: (value, row) => fmtMonthYear(row.endMonth, row.endYear) ?? "",
+      valueGetter: (value, row) =>
+        fmtMonthYear(row.endMonth, row.endYear) ?? "",
       valueSetter: (value, row) => {
-        if (!value) return {...row, endYear: null, endMonth: null};
+        if (!value) return { ...row, endYear: null, endMonth: null };
         const [y, m] = value.split("-");
         const y_num = parseInt(y, 10);
         const m_num = Math.min(12, Math.max(1, parseInt(m, 10)));
         if (isNaN(y_num) || isNaN(m_num)) {
-          return {...row, endYear: null, endMonth: null};
+          return { ...row, endYear: null, endMonth: null };
         }
-        return {...row, endYear: y_num, endMonth: m_num};
+        return { ...row, endYear: y_num, endMonth: m_num };
       },
       renderCell: (p) => (
         <Typography
@@ -899,7 +962,9 @@ function MembersTable({
       renderEditCell: (params) => (
         <input
           type="month"
-          defaultValue={fmtMonthYear(params.row.endMonth, params.row.endYear, true) ?? ""}
+          defaultValue={
+            fmtMonthYear(params.row.endMonth, params.row.endYear, true) ?? ""
+          }
           onChange={(e) =>
             params.api.setEditCellValue({
               id: params.id,

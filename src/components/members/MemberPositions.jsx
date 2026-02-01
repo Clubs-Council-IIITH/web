@@ -19,6 +19,7 @@ import { useAuth } from "components/AuthProvider";
 import Icon from "components/Icon";
 import Tag from "components/Tag";
 import { useToast } from "components/Toast";
+import { fmtMonthYear } from "utils/membersDates";
 
 import { approveMemberAction } from "actions/members/approve/server_action";
 import { rejectMemberAction } from "actions/members/reject/server_action";
@@ -178,7 +179,10 @@ export default function MemberPositions({
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              params.api.stopCellEditMode({ id: params.id, field: params.field });
+              params.api.stopCellEditMode({
+                id: params.id,
+                field: params.field,
+              });
             }
           }}
           style={{
@@ -210,7 +214,11 @@ export default function MemberPositions({
       renderEditCell: (params) => (
         <input
           type="month"
-          defaultValue={fmtMonthYear(params.row.startMonth, params.row.startYear, true)}
+          defaultValue={fmtMonthYear(
+            params.row.startMonth,
+            params.row.startYear,
+            true,
+          )}
           ref={(input) => input && input.focus()}
           onChange={(e) => {
             // This triggers valueSetter automatically
@@ -258,7 +266,11 @@ export default function MemberPositions({
       renderEditCell: (params) => (
         <input
           type="month"
-          defaultValue={fmtMonthYear(params.row.endMonth, params.row.endYear, true)}
+          defaultValue={fmtMonthYear(
+            params.row.endMonth,
+            params.row.endYear,
+            true,
+          )}
           ref={(input) => input && input.focus()}
           onChange={(e) => {
             params.api.setEditCellValue({
