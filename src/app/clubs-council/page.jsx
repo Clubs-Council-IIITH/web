@@ -4,6 +4,7 @@ import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
+import { sortMonthYear } from "utils/membersDates";
 
 import {
   advisorWords,
@@ -112,7 +113,7 @@ export default async function ClubsCouncil() {
 const filterRoles = (roles, filterWords, unfilterWords = []) => {
   // Filter roles that meet the filterWords criteria and are not in the unfilterWords list
   let filteredRoles = roles?.filter((role) => {
-    const { name, endMonth ,endYear } = role;
+    const { name, endMonth, endYear } = role;
     const lowercaseName = name.toLowerCase();
     const matchesFilterWords = filterWords.some((word) =>
       lowercaseName.includes(word),
@@ -120,7 +121,12 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
     const matchesUnfilterWords = unfilterWords.some((word) =>
       lowercaseName.includes(word),
     );
-    return matchesFilterWords && !matchesUnfilterWords && endYear === null && endMonth === null;
+    return (
+      matchesFilterWords &&
+      !matchesUnfilterWords &&
+      endYear === null &&
+      endMonth === null
+    );
   });
 
   // If any roles are filtered, return those that match filterWords and not unfilterWords

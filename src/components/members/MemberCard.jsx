@@ -6,7 +6,7 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import UserImage from "components/users/UserImage";
-
+import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 import { getUserNameFromUID } from "utils/users";
 import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 
@@ -130,7 +130,7 @@ export default async function MemberCard({ uid, poc, roles }) {
               >
                 (
                   {fmtMonthYear(role.startMonth, role.startYear)}
-                  {" "}-
+                  {" "}-{" "}
                   {fmtMonthYear(role.endMonth, role.endYear)}
                 )
               </Typography>
