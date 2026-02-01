@@ -4,6 +4,7 @@ import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
+import { sortMonthYear } from "utils/membersDates";
 
 import {
   advisorWords,
@@ -14,7 +15,6 @@ import {
 
 import Content from "./content.mdx";
 
-import { sortMonthYear } from "utils/membersDates";
 
 export const metadata = {
   title: "About | Clubs Council @ IIIT-H",
