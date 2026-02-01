@@ -203,7 +203,14 @@ export default function EventBudget({
             headerName: "",
             width: isMobile ? 20 : 50,
             renderCell: (p) => (
-              <IconButton onClick={() => onDelete(p)} size="small">
+              <IconButton
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(p.row);
+                }}
+                size="small"
+              >
                 <Icon
                   color="error.main"
                   variant="delete-forever-outline"

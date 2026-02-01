@@ -44,6 +44,8 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
   const [userMember, setUserMember] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
+  const [monthDialog, setMonthDialog] = useState(false);
+  const [pendingData, setPendingData] = useState(null);
   const [mobileDialog, setMobileDialog] = useState(isMobile);
   const [positionEditing, setPositionEditing] = useState(false);
 
@@ -126,13 +128,57 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
 
     // convert roles to array of objects with only required attributes
     // remove roles items without a name (they're invalid)
+    const now = new Date();
+    const nowY = now.getFullYear();
     data.roles = formData.roles
       .filter((i) => i?.name)
-      .map((i) => ({
-        name: i.name,
-        startYear: parseInt(i.startYear),
-        endYear: i.endYear === "-" ? null : parseInt(i.endYear),
-      }));
+      .map((i) => {
+        let sy = parseInt(i.startYear);
+        if (!Number.isInteger(sy)) sy = nowY;
+        let smVal = i.startMonth;
+        let sm = smVal != null ? parseInt(smVal) : null;
+        if (sm != null && !Number.isInteger(sm)) sm = null;
+
+        let ey = i.endYear != null ? parseInt(i.endYear) : null;
+        let emVal = i.endMonth;
+        let em = ey != null ? (emVal != null ? parseInt(emVal) : null) : null;
+        if (em != null && !Number.isInteger(em)) em = null;
+
+        return {
+          name: i.name,
+          startYear: sy,
+          startMonth: sm,
+          endYear: ey,
+          endMonth: em,
+        };
+      });
+
+    // If editing legacy data and any role still has no startMonth or has endYear without endMonth, prompt user
+    if (action === "edit") {
+      const missingStartMonth = data.roles.some((r) => r.startMonth == null);
+      const missingEndMonth = data.roles.some(
+        (r) => r.endYear != null && r.endMonth == null,
+      );
+      if (missingStartMonth || missingEndMonth) {
+        setLoading(false);
+        setPendingData(data);
+        setMonthDialog(true);
+        return;
+      }
+    }
+
+    // For creation, ensure startMonth is provided for all roles
+    if (action === "create") {
+      const missingStartMonth = data.roles.some((r) => r.startMonth == null);
+      if (missingStartMonth) {
+        setLoading(false);
+        return triggerToast({
+          title: "Error!",
+          messages: ["Start month is required for all roles."],
+          severity: "error",
+        });
+      }
+    }
 
     // // Check if roles increases the character limit of 99
     if (data.roles.some((role) => role.name.length > 99)) {
@@ -280,6 +326,30 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           </Grid>
         </Grid>
       </Grid>
+      <ConfirmDialog
+        open={monthDialog}
+        title="Missing Month(s)"
+        description="Start month and/or end month has not been provided for one or more roles. If you proceed, missing months will be considered as 1 (January). Would you like to proceed or edit the month(s)?"
+        onConfirm={async () => {
+          setMonthDialog(false);
+          if (!pendingData) return;
+          setLoading(true);
+          const fixed = {
+            ...pendingData,
+            roles: pendingData.roles.map((r) => ({
+              ...r,
+              startMonth: r.startMonth == null ? 1 : r.startMonth,
+              endMonth:
+                r.endYear != null && r.endMonth == null ? 1 : r.endMonth,
+            })),
+          };
+          await submitHandlers[action](fixed);
+        }}
+        onClose={() => setMonthDialog(false)}
+        confirmProps={{ color: "primary" }}
+        confirmText="Proceed"
+        cancelText="Edit Months"
+      />
       <ConfirmDialog
         open={mobileDialog}
         title="Mobile View"
@@ -461,7 +531,6 @@ function MemberPositionsTable({
           editable
           rows={value}
           setRows={onChange}
-          positionEditing={positionEditing}
           setPositionEditing={setPositionEditing}
         />
       )}

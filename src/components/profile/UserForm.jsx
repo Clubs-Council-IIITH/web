@@ -121,7 +121,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   fullWidth
                   disabled
                   label="First Name"
-                  value={defaultValues?.firstName}
+                  value={defaultValues?.firstName ?? ""}
                 />
               </Grid>
               <Grid size={6}>
@@ -129,7 +129,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   fullWidth
                   disabled
                   label="Last Name"
-                  value={defaultValues?.lastName}
+                  value={defaultValues?.lastName ?? ""}
                 />
               </Grid>
               <Grid size={12}>
@@ -137,7 +137,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   fullWidth
                   disabled
                   label="Email"
-                  value={defaultValues?.email}
+                  value={defaultValues?.email ?? ""}
                 />
               </Grid>
               <Grid container spacing={1} size={12}>
@@ -145,14 +145,14 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   <TextField
                     disabled
                     label="Batch"
-                    value={defaultValues?.batch?.toUpperCase()}
+                    value={defaultValues?.batch?.toUpperCase() ?? ""}
                   />
                 </Grid>
                 <Grid>
                   <TextField
                     disabled
                     label="Stream"
-                    value={defaultValues?.stream?.toUpperCase()}
+                    value={defaultValues?.stream?.toUpperCase() ?? ""}
                   />
                 </Grid>
               </Grid>
@@ -196,6 +196,7 @@ export default function UserForm({ defaultValues = {}, action = "log" }) {
                   render={({ field, fieldState: { error, invalid } }) => (
                     <TextField
                       {...field}
+                      value={field.value ?? ""}
                       error={invalid}
                       helperText={error?.message}
                       label="Phone Number"

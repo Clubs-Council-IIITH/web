@@ -6,7 +6,9 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import UserImage from "components/users/UserImage";
+
 import { getUserNameFromUID } from "utils/users";
+import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 
 export default async function MemberCard({ uid, poc, roles }) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(
@@ -103,17 +105,7 @@ export default async function MemberCard({ uid, poc, roles }) {
         ) : null}
 
         {roles
-          ?.sort((a, b) => {
-            // Place roles with endYear=null at the top
-            if (a.endYear === null && b.endYear !== null) {
-              return -1;
-            } else if (a.endYear !== null && b.endYear === null) {
-              return 1;
-            } else {
-              // Sort based on endYear in descending order
-              return b.endYear - a.endYear;
-            }
-          })
+          ?.sort((a, b) => { sortMonthYear(a,b) })
           .map((role, key) => (
             <Box
               key={key}
@@ -136,7 +128,11 @@ export default async function MemberCard({ uid, poc, roles }) {
                   display: "inline-block",
                 }}
               >
-                ({role.startYear} - {role.endYear || "present"})
+                (
+                  {fmtMonthYear(role.startMonth, role.startYear)}
+                  {" "}-
+                  {fmtMonthYear(role.endMonth, role.endYear)}
+                )
               </Typography>
             </Box>
           ))}

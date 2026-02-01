@@ -10,7 +10,9 @@ export const GET_MEMBERS = gql`
       roles {
         name
         startYear
+        startMonth
         endYear
+        endMonth
         approved
         rejected
         deleted
@@ -29,7 +31,9 @@ export const GET_CURRENT_MEMBERS = gql`
       roles {
         name
         startYear
+        startMonth
         endYear
+        endMonth
         approved
         rejected
         deleted
@@ -49,7 +53,9 @@ export const GET_PENDING_MEMBERS = gql`
         rid
         name
         startYear
+        startMonth
         endYear
+        endMonth
         approved
         rejected
         deleted
@@ -67,9 +73,11 @@ export const GET_MEMBER = gql`
       poc
       roles {
         startYear
+        startMonth
         rid
         name
         endYear
+        endMonth
         deleted
         approved
         approvalTime

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { compareMonthYear, fmtMonthYear} from "utils/membersDates";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -139,18 +140,20 @@ export default function UserMemberships({ rows = [] }) {
       display: "flex",
     },
     {
-      field: "startYear",
-      headerName: "Start Year",
+      field: "start",
+      headerName: "Start (MM-YYYY)",
       headerAlign: "center",
       align: "center",
+      valueGetter: (_, row) => fmtMonthYear(row?.startMonth, row?.startYear),
       flex: isMobile ? null : 3,
     },
     {
-      field: "endYear",
-      headerName: "End Year",
+      field: "end",
+      headerName: "End (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (value, row, column, apiRef) => row.endYear || "-",
+      valueGetter: (_, row) => fmtMonthYear(row?.endMonth, row?.endYear),
+      sortComparator: (a, b) => compareMonthYear(a, b),
       flex: isMobile ? null : 3,
     },
   ];
@@ -168,7 +171,7 @@ export default function UserMemberships({ rows = [] }) {
             getRowId={(row) => row.rid}
             initialState={{
               sorting: {
-                sortModel: [{ field: "endYear", sort: "desc" }],
+                sortModel: [{ field: "end", sort: "desc" }],
               },
               pagination: { paginationModel: { pageSize: 5 } },
             }}
@@ -239,3 +242,4 @@ export default function UserMemberships({ rows = [] }) {
     </>
   );
 }
+
