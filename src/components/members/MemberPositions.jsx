@@ -63,7 +63,11 @@ export default function MemberPositions({
   };
 
   const onAdd = () => {
-    setRows([...rows, { id: rows?.length || 0, ...emptyPositionItem }]);
+    const maxId = rows.length > 0 ? Math.max(...rows.map((r) => r.id)) : -1;
+    const newId = maxId + 1;
+    setRows([...rows, { id: newId, ...emptyPositionItem }]);
+    const isAllValid = rows.every((r) => r.isValid);
+    setPositionEditing(!isAllValid);
   };
 
   const onUpdate = (newRow) => {
@@ -105,15 +109,17 @@ export default function MemberPositions({
     }
 
     const newRows = rows.map((r) => (r.id === row.id ? row : r));
-    setRows(newRows);
     const isAllValid = newRows.every((r) => r.isValid);
     setPositionEditing(!isAllValid);
-
+    setRows(newRows);
     return row;
   };
 
   const onDelete = (row) => {
-    setRows(rows.filter((r) => r.id !== row.id));
+    const newRows = rows.filter((r) => r.id !== row.id);
+    const isAllValid = newRows.every((r) => r.isValid);
+    setPositionEditing(newRows.length === 0 || !isAllValid);
+    setRows(newRows);
   };
 
   const onEdit = () => setPositionEditing(true);
@@ -301,7 +307,13 @@ export default function MemberPositions({
           headerName: "",
           width: 50,
           renderCell: (p) => (
-            <IconButton onClick={() => onDelete(p.row)} size="small">
+            <IconButton onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(p.row)
+              }}
+              size="small"
+            >
               <Icon
                 color="error.main"
                 variant="delete-forever-outline"
@@ -404,6 +416,7 @@ export default function MemberPositions({
         rows={rows}
         columns={columns}
         processRowUpdate={onUpdate}
+        experimentalFeatures={{ newEditingApi: true }}
         onProcessRowUpdateError={(error) =>
           triggerToast({
             ...error,

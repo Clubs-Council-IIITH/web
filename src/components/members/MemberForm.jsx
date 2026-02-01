@@ -531,7 +531,6 @@ function MemberPositionsTable({
           editable
           rows={value}
           setRows={onChange}
-          positionEditing={positionEditing}
           setPositionEditing={setPositionEditing}
         />
       )}

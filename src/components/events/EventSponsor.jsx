@@ -174,7 +174,14 @@ export default function EventSponsor({
             headerName: "",
             width: isMobile ? 20 : 50,
             renderCell: (p) => (
-              <IconButton onClick={() => onDelete(p)} size="small">
+              <IconButton
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(p.row);
+                }}
+                size="small"
+              >
                 <Icon
                   color="error.main"
                   variant="delete-forever-outline"
@@ -198,7 +205,6 @@ export default function EventSponsor({
     <>
       {editable ? (
         <Button size="small" variant="outlined" onClick={onAdd} sx={{ mb: 1 }}>
-          <Icon variant="add" sx={{ mr: 1 }} />
           <Icon variant="add" sx={{ mr: 1 }} />
           Add Item
         </Button>
