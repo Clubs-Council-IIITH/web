@@ -6,8 +6,8 @@ import { GET_USER_PROFILE } from "gql/queries/users";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import UserImage from "components/users/UserImage";
-import { getUserNameFromUID } from "utils/users";
 import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
+import { getUserNameFromUID } from "utils/users";
 
 export default async function MemberCard({ uid, poc, roles }) {
   const { data: { userProfile, userMeta } = {} } = await getClient().query(

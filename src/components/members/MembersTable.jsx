@@ -17,8 +17,8 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
 import { getFile } from "utils/files";
-import { getUserNameFromUID } from "utils/users";
 import { fmtMonthYear } from "utils/membersDates";
+import { getUserNameFromUID } from "utils/users";
 
 export default function MembersTable({
   members,
