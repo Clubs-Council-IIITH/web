@@ -144,7 +144,7 @@ export default function UserMemberships({ rows = [] }) {
       headerName: "Start (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (params) => fmtMonthYear(params.row.startMonth, params.row.startYear),
+      valueGetter: (_, row) => fmtMonthYear(row?.startMonth, row?.startYear),
       flex: isMobile ? null : 3,
     },
     {
@@ -152,7 +152,7 @@ export default function UserMemberships({ rows = [] }) {
       headerName: "End (MM-YYYY)",
       headerAlign: "center",
       align: "center",
-      valueGetter: (params) => fmtMonthYear(params.row.endMonth, params.row.endYear),
+      valueGetter: (_, row) => fmtMonthYear(row?.endMonth, row?.endYear),
       sortComparator: (a, b) => compareMonthYear(a, b),
       flex: isMobile ? null : 3,
     },
