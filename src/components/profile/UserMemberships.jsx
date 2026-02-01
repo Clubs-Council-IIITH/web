@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { compareMonthYear, fmtMonthYear} from "utils/membersDates";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { useToast } from "components/Toast";
+import { compareMonthYear, fmtMonthYear } from "utils/membersDates";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 
@@ -242,4 +242,3 @@ export default function UserMemberships({ rows = [] }) {
     </>
   );
 }
-

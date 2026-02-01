@@ -1,16 +1,15 @@
-
 // Format month/year from separate fields
 // Editing flows should initialize month separately where needed
 export function fmtMonthYear(month, year, forceMonth = false) {
   if (!year) return "present";
-  if (month == null || month === "") return forceMonth ? `${year}-01` : `${year}`;
+  if (month == null || month === "")
+    return forceMonth ? `${year}-01` : `${year}`;
   const mm = String(month).padStart(2, "0");
   return `${year}-${mm}`;
 }
 
 // Sorts dates
-export function sortMonthYear(a,b)
-{
+export function sortMonthYear(a, b) {
   const aEnd = a?.endYear;
   const bEnd = b?.endYear;
   if (aEnd == null && bEnd != null) return -1;
@@ -21,11 +20,18 @@ export function sortMonthYear(a,b)
 }
 
 // Clamp month/year values
-export function clampMonthYear(month, year, minMonth, minYear, maxMonth, maxYear) {
+export function clampMonthYear(
+  month,
+  year,
+  minMonth,
+  minYear,
+  maxMonth,
+  maxYear,
+) {
   if (year < minYear) return [1, minYear];
   if (year > maxYear) return [1, maxYear];
-  if (month < 1) return [1,year];
-  if (month > 12) return [12,year];
+  if (month < 1) return [1, year];
+  if (month > 12) return [12, year];
   return [month, year];
 }
 
