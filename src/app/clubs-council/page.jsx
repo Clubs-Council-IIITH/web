@@ -137,7 +137,7 @@ const filterRoles = (roles, filterWords, unfilterWords = []) => {
         );
         return matchesFilterWords && !matchesUnfilterWords;
       })
-      ?.sort((a, b) => {sortMonthYear(a,b)});
+      ?.sort((a, b) => sortMonthYear(a, b));
   } else {
     return filteredRoles;
   }

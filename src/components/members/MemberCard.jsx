@@ -105,7 +105,7 @@ export default async function MemberCard({ uid, poc, roles }) {
         ) : null}
 
         {roles
-          ?.sort((a, b) => { sortMonthYear(a,b) })
+          ?.sort((a, b) => sortMonthYear(a, b))
           .map((role, key) => (
             <Box
               key={key}

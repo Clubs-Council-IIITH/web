@@ -159,9 +159,9 @@ export default function MembersTable({
                           }}
                         >
                           (
-                            {fmtMonthYear(role?.startMonth,role?.startYear)}
+                            {fmtMonthYear(role?.startMonth, role?.startYear)}
                             {" "}-
-                            {fmtMonthYear(role?.endMonth,role?.endYear)}
+                            {fmtMonthYear(role?.endMonth, role?.endYear)}
                           )
                         </Box>
                       </Typography>

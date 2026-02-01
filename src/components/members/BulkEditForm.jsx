@@ -848,7 +848,9 @@ function MembersTable({
             }
             required
             min={`2010-01`}
-            max={`${currentYear}-${currentMonth+1}`}
+            max={currentMonth === 12
+                ? `${currentYear + 1}-01`
+                : `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`}
             onBlur={() => {
               api.stopCellEditMode({ id, field });
             }}
@@ -906,7 +908,9 @@ function MembersTable({
             })
           }
           min={`2010-01`}
-          max={`${currentYear}-${currentMonth + 1}`}
+          max={currentMonth === 12
+              ? `${currentYear + 1}-01`
+              : `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`}
           style={{
             width: "100%",
             padding: 6,

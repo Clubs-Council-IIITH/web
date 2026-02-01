@@ -97,10 +97,10 @@ export default async function TechMemberCard({ uid, poc, roles }) {
         />
 
         {roles
-          ?.sort((a, b) => {sortMonthYear(a,b)})
+          ?.sort((a, b) => sortMonthYear(a, b))
           .map((role, key) => {
-            const start = fmtMonthYear(role?.startMonth,role?.startYear);
-            const end = fmtMonthYear(role?.endMonth,role?.endYear);
+            const start = fmtMonthYear(role?.startMonth, role?.startYear);
+            const end = fmtMonthYear(role?.endMonth, role?.endYear);
             return (
               <Typography key={key} variant="body1" sx={{ mb: 0.5 }}>
                 <Box
