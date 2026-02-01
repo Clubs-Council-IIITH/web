@@ -19,7 +19,6 @@ import { useAuth } from "components/AuthProvider";
 import Icon from "components/Icon";
 import Tag from "components/Tag";
 import { useToast } from "components/Toast";
-import { fmtMonthYear } from "utils/membersDates";
 
 import { approveMemberAction } from "actions/members/approve/server_action";
 import { rejectMemberAction } from "actions/members/reject/server_action";

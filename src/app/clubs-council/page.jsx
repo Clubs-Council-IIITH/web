@@ -4,7 +4,6 @@ import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
-import { sortMonthYear } from "utils/membersDates";
 
 import {
   advisorWords,

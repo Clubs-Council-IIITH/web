@@ -19,7 +19,6 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
-import { fmtMonthYear } from "utils/membersDates";
 
 import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
