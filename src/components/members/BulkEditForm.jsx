@@ -807,7 +807,7 @@ function MembersTable({
       headerName: "Start (YYYY-MM)",
       flex: isMobile ? null : 3,
       editable: true,
-      valueGetter: (value, row) => fmtMonthYear(row.startMonth, row.startYear),
+      valueGetter: (value, row) => fmtMonthYear(row.startMonth, row.startYear) ?? "",
       valueSetter: (value, row) => {
         if (!value) return row;
         const [y, m] = value.split("-");
@@ -829,20 +829,20 @@ function MembersTable({
           }
           sx={{ display: "flex", alignItems: "center", px: "5px", py: "10px", justifyContent: "center" }}
         >
-          {fmtMonthYear(p.row.startMonth, p.row.startYear)}
+          {fmtMonthYear(p.row.startMonth, p.row.startYear) ?? ""}
         </Typography>
       ),
       renderEditCell: (params) => {
-        const { row, api, id } = params;
-        const defaultValue = fmtMonthYear(row?.startMonth, row?.startYear, true);
+        const { row, api, id, field } = params;
+        const defaultValue = fmtMonthYear(row?.startMonth, row?.startYear, true) ?? "";
         return (
           <input
             type="month"
             defaultValue={defaultValue}
             onChange={(e) =>
               params.api.setEditCellValue({
-                id: params.id,
-                field: params.field,
+                id: id,
+                field: field,
                 value: e.target.value
               })
             }
@@ -863,7 +863,7 @@ function MembersTable({
       headerName: "End (YYYY-MM)",
       flex: isMobile ? null : 3,
       editable: true,
-      valueGetter: (value, row) => fmtMonthYear(row.endMonth, row.endYear),
+      valueGetter: (value, row) => fmtMonthYear(row.endMonth, row.endYear) ?? "",
       valueSetter: (value, row) => {
         if (!value) return {...row, endYear: null, endMonth: null};
         const [y, m] = value.split("-");
@@ -891,13 +891,13 @@ function MembersTable({
             justifyContent: "center",
           }}
         >
-          {fmtMonthYear(p.row.endMonth, p.row.endYear)}
+          {fmtMonthYear(p.row.endMonth, p.row.endYear) ?? ""}
         </Typography>
       ),
       renderEditCell: (params) => (
         <input
           type="month"
-          defaultValue={fmtMonthYear(params.row.endMonth, params.row.endYear, true)}
+          defaultValue={fmtMonthYear(params.row.endMonth, params.row.endYear, true) ?? ""}
           onChange={(e) =>
             params.api.setEditCellValue({
               id: params.id,
