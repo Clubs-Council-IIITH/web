@@ -437,7 +437,7 @@ export default function BulkEdit({ mode = "add" }) {
           - Please ensure that the members being added do not already exist in
           the selected club/body.
           <br />- The default start year for all members will be set as{" "}
-          {currentYear}.
+          {currentYear}{"-"}{currentMonth}.
           <br />- Any invalid entries marked in red will be skipped during
           submission.
         </Typography>
