@@ -83,11 +83,6 @@ export default function MemberPositions({
     // Ensure years are within bounds, but leave months as they are
     if (row.startYear < minYear) row.startYear = minYear;
 
-    if (row.startMonth < 1 || row.startMonth > 12) {
-      row.isValid = false;
-      row.error = "Start month must be between 1 and 12";
-    }
-
     // Only clamp if the month is actually set
     if (row.startMonth && (row.startYear > currentYear || (row.startYear === currentYear && row.startMonth > currentMonth))) {
       row.startYear = currentYear;
