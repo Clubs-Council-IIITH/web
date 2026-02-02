@@ -104,9 +104,7 @@ export default async function MemberCard({ uid, poc, roles }) {
         ) : null}
 
         {roles
-          ?.sort((a, b) => {
-            sortMonthYear(a, b);
-          })
+          ?.sort((a, b) => sortMonthYear(a, b))
           .map((role, key) => (
             <Box
               key={key}
@@ -129,8 +127,11 @@ export default async function MemberCard({ uid, poc, roles }) {
                   display: "inline-block",
                 }}
               >
-                ({fmtMonthYear(role.startMonth, role.startYear)} -
-                {fmtMonthYear(role.endMonth, role.endYear)})
+                (
+                  {fmtMonthYear(role.startMonth, role.startYear)}
+                  {" "}-{" "}
+                  {fmtMonthYear(role.endMonth, role.endYear)}
+                )
               </Typography>
             </Box>
           ))}
