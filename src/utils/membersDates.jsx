@@ -9,8 +9,7 @@ export function fmtMonthYear(month, year, forceMonth = false) {
 }
 
 // Sorts dates
-export function sortMonthYear(a,b)
-{
+export function sortMonthYear(a, b) {
   const aEnd = a?.endYear;
   const bEnd = b?.endYear;
   if (aEnd == null && bEnd == null) return 0;

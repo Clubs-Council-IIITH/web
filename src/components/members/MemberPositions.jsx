@@ -24,7 +24,6 @@ import { fmtMonthYear } from "utils/membersDates";
 import { approveMemberAction } from "actions/members/approve/server_action";
 import { rejectMemberAction } from "actions/members/reject/server_action";
 
-
 const showActions = (rows, user) => {
   if (user?.role !== "cc") return false;
   if (rows.length > 0) {
@@ -84,7 +83,11 @@ export default function MemberPositions({
     if (row.startYear < minYear) row.startYear = minYear;
 
     // Only clamp if the month is actually set
-    if (row.startMonth && (row.startYear > currentYear || (row.startYear === currentYear && row.startMonth > currentMonth))) {
+    if (
+      row.startMonth &&
+      (row.startYear > currentYear ||
+        (row.startYear === currentYear && row.startMonth > currentMonth))
+    ) {
       row.startYear = currentYear;
       row.startMonth = currentMonth;
     }
@@ -291,82 +294,83 @@ export default function MemberPositions({
     },
     ...(editable
       ? [
-        {
-          field: "isValid",
-          type: "boolean",
-          headerName: "Valid?",
-          align: "center",
-          width: 80,
-          renderCell: (p) => (
-            <Tooltip
-              title={p.row.error || "Valid"}
-              disableHoverListener={p.row.isValid}
-            >
-              <span>
+          {
+            field: "isValid",
+            type: "boolean",
+            headerName: "Valid?",
+            align: "center",
+            width: 80,
+            renderCell: (p) => (
+              <Tooltip
+                title={p.row.error || "Valid"}
+                disableHoverListener={p.row.isValid}
+              >
+                <span>
+                  <Icon
+                    color={p.row.isValid ? "success.main" : "error.main"}
+                    variant={p.row.isValid ? "check-circle" : "cancel"}
+                    sx={{ height: 20, width: 20 }}
+                  />
+                </span>
+              </Tooltip>
+            ),
+            display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+          },
+          {
+            field: "action",
+            align: "center",
+            headerName: "",
+            width: 50,
+            renderCell: (p) => (
+              <IconButton
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(p.row);
+                }}
+                size="small"
+              >
                 <Icon
-                  color={p.row.isValid ? "success.main" : "error.main"}
-                  variant={p.row.isValid ? "check-circle" : "cancel"}
-                  sx={{ height: 20, width: 20 }}
+                  color="error.main"
+                  variant="delete-forever-outline"
+                  sx={{ height: 16, width: 16 }}
                 />
-              </span>
-            </Tooltip>
-          ),
-          display: "flex",
-          disableColumnMenu: true,
-          sortable: false,
-        },
-        {
-          field: "action",
-          align: "center",
-          headerName: "",
-          width: 50,
-          renderCell: (p) => (
-            <IconButton onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(p.row)
-              }}
-              size="small"
-            >
-              <Icon
-                color="error.main"
-                variant="delete-forever-outline"
-                sx={{ height: 16, width: 16 }}
-              />
-            </IconButton>
-          ),
-          display: "flex",
-          disableColumnMenu: true,
-          sortable: false,
-        },
-      ]
+              </IconButton>
+            ),
+            display: "flex",
+            disableColumnMenu: true,
+            sortable: false,
+          },
+        ]
       : [
-        {
-          field: "approved",
-          headerName: "Status",
-          align: "center",
-          headerAlign: "center",
-          flex: isMobile ? null : 2,
-          valueGetter: (value, row) => ({
-            approved: row.approved,
-            approvalTime: row.approvalTime,
-            rejected: row.rejected,
-            rejectionTime: row.rejectionTime,
-          }),
-          disableExport: true,
-          renderCell: ({
-                         value: { approved, approvalTime, rejected, rejectionTime },
-                       }) => (
-            <Tooltip
-              title={
-                approved
-                  ? approvalTime || "No Information Available"
-                  : rejected
-                    ? rejectionTime || "No Information Available"
-                    : null
-              }
-              placement="left-start"
-            >
+          {
+            field: "approved",
+            headerName: "Status",
+            align: "center",
+            headerAlign: "center",
+            flex: isMobile ? null : 2,
+            valueGetter: (value, row) => ({
+              approved: row.approved,
+              approvalTime: row.approvalTime,
+              rejected: row.rejected,
+              rejectionTime: row.rejectionTime,
+            }),
+            disableExport: true,
+            renderCell: ({
+              value: { approved, approvalTime, rejected, rejectionTime },
+            }) => (
+              <Tooltip
+                title={
+                  approved
+                    ? approvalTime || "No Information Available"
+                    : rejected
+                      ? rejectionTime || "No Information Available"
+                      : null
+                }
+                placement="left-start"
+              >
                 <span>
                   <Tag
                     label={
@@ -378,41 +382,41 @@ export default function MemberPositions({
                     sx={{ my: 2 }}
                   />
                 </span>
-            </Tooltip>
-          ),
-          display: "flex",
-        },
-        ...(showActions(rows, user)
-          ? [
-            {
-              field: "actions",
-              align: "center",
-              headerName: "",
-              width: 100,
-              valueGetter: (value, row) => ({
-                approved: row.approved,
-                rejected: row.rejected,
-                rid: row.rid,
-              }),
-              disableExport: true,
-              disableColumnMenu: true,
-              sortable: false,
-              renderCell: ({ value: { approved, rejected, rid } }) => (
-                <>
-                  {approved || rejected ? null : (
+              </Tooltip>
+            ),
+            display: "flex",
+          },
+          ...(showActions(rows, user)
+            ? [
+                {
+                  field: "actions",
+                  align: "center",
+                  headerName: "",
+                  width: 100,
+                  valueGetter: (value, row) => ({
+                    approved: row.approved,
+                    rejected: row.rejected,
+                    rid: row.rid,
+                  }),
+                  disableExport: true,
+                  disableColumnMenu: true,
+                  sortable: false,
+                  renderCell: ({ value: { approved, rejected, rid } }) => (
                     <>
-                      <ApproveButton rid={rid} member={member} />
-                      <Box sx={{ mx: 1 }} />
-                      <RejectButton rid={rid} member={member} />
+                      {approved || rejected ? null : (
+                        <>
+                          <ApproveButton rid={rid} member={member} />
+                          <Box sx={{ mx: 1 }} />
+                          <RejectButton rid={rid} member={member} />
+                        </>
+                      )}
                     </>
-                  )}
-                </>
-              ),
-              display: "flex",
-            },
-          ]
-          : []),
-      ]),
+                  ),
+                  display: "flex",
+                },
+              ]
+            : []),
+        ]),
   ];
 
   return (

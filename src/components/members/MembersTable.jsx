@@ -158,11 +158,8 @@ export default function MembersTable({
                             flexShrink: 0,
                           }}
                         >
-                          (
-                            {fmtMonthYear(role?.startMonth, role?.startYear)}
-                            {" "}-{" "}
-                            {fmtMonthYear(role?.endMonth, role?.endYear)}
-                          )
+                          ({fmtMonthYear(role?.startMonth, role?.startYear)} -{" "}
+                          {fmtMonthYear(role?.endMonth, role?.endYear)})
                         </Box>
                       </Typography>
                       {showIcon && (

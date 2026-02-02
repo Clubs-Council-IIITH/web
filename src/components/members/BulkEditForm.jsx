@@ -437,7 +437,9 @@ export default function BulkEdit({ mode = "add" }) {
           - Please ensure that the members being added do not already exist in
           the selected club/body.
           <br />- The default start year for all members will be set as{" "}
-          {currentYear}{"-"}{currentMonth}.
+          {currentYear}
+          {"-"}
+          {currentMonth}.
           <br />- Any invalid entries marked in red will be skipped during
           submission.
         </Typography>
@@ -909,13 +911,20 @@ function MembersTable({
             }
             required
             min={`2010-01`}
-            max={currentMonth === 12
+            max={
+              currentMonth === 12
                 ? `${currentYear + 1}-01`
-                : `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`}
+                : `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`
+            }
             onBlur={() => {
               api.stopCellEditMode({ id, field });
             }}
-            style={{ width: "100%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+            style={{
+              width: "100%",
+              padding: 6,
+              borderRadius: 6,
+              border: "1px solid #ccc",
+            }}
           />
         );
       },
@@ -972,9 +981,11 @@ function MembersTable({
             })
           }
           min={`2010-01`}
-          max={currentMonth === 12
+          max={
+            currentMonth === 12
               ? `${currentYear + 1}-01`
-              : `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`}
+              : `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`
+          }
           style={{
             width: "100%",
             padding: 6,

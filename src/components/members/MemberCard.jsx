@@ -127,11 +127,8 @@ export default async function MemberCard({ uid, poc, roles }) {
                   display: "inline-block",
                 }}
               >
-                (
-                  {fmtMonthYear(role.startMonth, role.startYear)}
-                  {" "}-{" "}
-                  {fmtMonthYear(role.endMonth, role.endYear)}
-                )
+                ({fmtMonthYear(role.startMonth, role.startYear)} -{" "}
+                {fmtMonthYear(role.endMonth, role.endYear)})
               </Typography>
             </Box>
           ))}
