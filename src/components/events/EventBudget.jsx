@@ -68,6 +68,7 @@ export default function EventBudget({
     {
       field: "description",
       headerName: "Description",
+      type: "longText",
       width: 200,
       flex: isMobile ? null : 4,
       editable: editable,

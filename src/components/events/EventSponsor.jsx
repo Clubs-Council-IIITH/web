@@ -92,6 +92,7 @@ export default function EventSponsor({
     {
       field: "comment",
       headerName: "Comments",
+      type: "longText",
       width: 200,
       flex: isMobile ? null : 1.75,
       editable: editable,
