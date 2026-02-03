@@ -174,7 +174,7 @@ export default function EventsTable({
             field: "club",
             headerName: "Club ID",
             flex: 3,
-            valueGetter: (value, row, column, apiRef) => row.clubid,
+            valueGetter: (value, row) => row.clubid,
             renderCell: ({ value }) => (
               <Typography
                 variant="body2"
@@ -195,8 +195,8 @@ export default function EventsTable({
             flex: 3,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value, row, column, apiRef) => row.datetimeperiod[0],
-            valueFormatter: (value, row, column, apiRef) => ISOtoHuman(value),
+            valueGetter: (value, row) => row.datetimeperiod[0],
+            valueFormatter: (value, row) => ISOtoHuman(value),
             renderCell: ({ formattedValue }) => (
               <Typography
                 variant="body2"
@@ -219,7 +219,7 @@ export default function EventsTable({
       align: "center",
       headerAlign: "center",
       disableExport: true,
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         requested: row.location.length > 0,
         approved: row.status.room,
       }),
@@ -265,7 +265,7 @@ export default function EventsTable({
       align: "center",
       headerAlign: "center",
       disableExport: true,
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         state: row.status.state,
         start: row.datetimeperiod[0],
         end: row.datetimeperiod[1],

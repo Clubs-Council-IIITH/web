@@ -35,7 +35,7 @@ export default function MembersTable({
       field: "img",
       headerName: "",
       flex: 1,
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         name: row.firstName,
         img: row.img,
       }),
@@ -58,7 +58,7 @@ export default function MembersTable({
     {
       field: "name",
       headerName: "Name",
-      valueGetter: (value, row, column, apiRef) => {
+      valueGetter: (value, row) => {
         if (!row.firstName && !row.lastName) {
           const { firstName, lastName } = getUserNameFromUID(row.uid);
           return `${firstName} ${lastName}`;
@@ -110,7 +110,7 @@ export default function MembersTable({
             disableExport: true,
             disableColumnMenu: true,
             sortable: false,
-            valueGetter: (value, row, column, apiRef) => row.roles,
+            valueGetter: (value, row) => row.roles,
             renderCell: ({ value }) => (
               <Box sx={{ width: "100%", height: "100%", p: 1 }}>
                 <Stack
