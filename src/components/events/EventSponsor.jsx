@@ -92,6 +92,7 @@ export default function EventSponsor({
     {
       field: "comment",
       headerName: "Comments",
+      type: "longText",
       width: 200,
       flex: isMobile ? null : 1.75,
       editable: editable,
@@ -170,8 +171,8 @@ export default function EventSponsor({
       ? [
           {
             field: "action",
+            type: "actions",
             align: "center",
-            headerName: "",
             width: isMobile ? 20 : 50,
             renderCell: (p) => (
               <IconButton

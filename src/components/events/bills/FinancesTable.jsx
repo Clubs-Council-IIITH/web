@@ -21,7 +21,7 @@ export default function FinancesTable({ events, role }) {
       field: "name",
       headerName: "Name",
       flex: 5,
-      valueGetter: (value, row, column, apiRef) => row?.eventname,
+      valueGetter: (value, row) => row?.eventname,
       renderCell: ({ value }) => (
         <Typography
           variant="body2"
@@ -48,7 +48,7 @@ export default function FinancesTable({ events, role }) {
             field: "club",
             headerName: "Club",
             flex: 3,
-            valueGetter: (value, row, column, apiRef) => row?.clubid,
+            valueGetter: (value, row) => row?.clubid,
             renderCell: ({ value }) => (
               <Typography variant="body2">{value}</Typography>
             ),
@@ -61,7 +61,7 @@ export default function FinancesTable({ events, role }) {
       flex: 3,
       align: "center",
       headerAlign: "center",
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         state: row?.billsStatus?.state,
         status: billsStateLabel(row?.billsStatus?.state),
       }),
@@ -81,7 +81,7 @@ export default function FinancesTable({ events, role }) {
       flex: 3,
       align: "center",
       headerAlign: "center",
-      valueGetter: (value, row, column, apiRef) => row?.eventReportSubmitted,
+      valueGetter: (value, row) => row?.eventReportSubmitted,
       renderCell: ({ value }) => (
         <Icon
           variant={

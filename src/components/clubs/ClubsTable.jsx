@@ -21,7 +21,7 @@ export default function ClubsTable({ clubs }) {
       field: "img",
       headerName: "",
       flex: isMobile ? null : 1,
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         name: row.name,
         logo: row.logo,
       }),
@@ -93,7 +93,7 @@ export default function ClubsTable({ clubs }) {
       field: "category",
       headerName: "Category",
       flex: isMobile ? null : 2,
-      valueGetter: (value, row, column, apiRef) =>
+      valueGetter: (value) =>
         value === "body" ? "Student Body" : value,
       renderCell: ({ value }) => (
         <Box

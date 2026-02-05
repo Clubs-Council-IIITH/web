@@ -1037,8 +1037,8 @@ function MembersTable({
       ? [
           {
             field: "action",
+            type: "actions",
             align: "center",
-            headerName: "",
             width: 50,
             renderCell: (p) => (
               <IconButton onClick={() => onDelete(p)} size="small">
