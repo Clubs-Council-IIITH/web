@@ -93,8 +93,7 @@ export default function ClubsTable({ clubs }) {
       field: "category",
       headerName: "Category",
       flex: isMobile ? null : 2,
-      valueGetter: (value) =>
-        value === "body" ? "Student Body" : value,
+      valueGetter: (value) => (value === "body" ? "Student Body" : value),
       renderCell: ({ value }) => (
         <Box
           sx={{

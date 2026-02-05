@@ -12,8 +12,7 @@ const columns = [
     flex: 5,
     headerAlign: "center",
     align: "center",
-    valueGetter: (value, row) =>
-      row.firstName + " " + row.lastName,
+    valueGetter: (value, row) => row.firstName + " " + row.lastName,
     renderCell: ({ value }) => <Typography variant="body2">{value}</Typography>,
     display: "flex",
   },
