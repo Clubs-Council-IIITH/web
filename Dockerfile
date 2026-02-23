@@ -34,7 +34,7 @@ ENV NEXT_PUBLIC_ENV=$ENV
 
 WORKDIR /web
 
-COPY --from=prod_dep /cache/node_modules ./node_modules
+COPY --from=prod_dep /cache/ .
 COPY entrypoint.sh /cache/
 COPY . .
 
