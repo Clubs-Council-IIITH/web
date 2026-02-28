@@ -7,6 +7,7 @@ import AudienceChips from "components/events/AudienceChips";
 import EventFallbackPoster from "components/events/EventFallbackPoster";
 import EventPoster from "components/events/EventPoster";
 import Icon from "components/Icon";
+import Markdown from "components/Markdown";
 import { locationLabel } from "utils/formatEvent";
 
 const DateTime = dynamic(() => import("components/DateTime"));
@@ -180,9 +181,13 @@ export default function EventDetails({ event, showCode = false }) {
 
           <Divider sx={{ borderStyle: "dashed", my: 3 }} />
 
-          <Typography variant="body" sx={{ whiteSpace: "pre-wrap" }}>
-            {event.description || "No description available."}
-          </Typography>
+          {typeof event.description === "string" ? (
+            <Markdown source={event.description} />
+          ) : (
+            event.description || (
+              <Typography variant="body1">No description available.</Typography>
+            )
+          )}
         </Stack>
       </Grid>
     </Grid>

@@ -5,6 +5,7 @@ import { AddToCalendarButton } from "add-to-calendar-button-react";
 import { useMode } from "contexts/ModeContext";
 
 import { locationLabel } from "utils/formatEvent";
+import { stripMarkdown } from "utils/markdown";
 import { formatDateTime } from "utils/formatTime";
 
 export default function AddToCalendarBtn({ event }) {
@@ -16,7 +17,7 @@ export default function AddToCalendarBtn({ event }) {
   return (
     <AddToCalendarButton
       name={event.name}
-      description={event.description || " "}
+      description={stripMarkdown(event.description) || " "}
       options={["Google", "Microsoft365", "Apple", "iCal"]}
       location={
         ["offline", "hybrid"].includes(event.mode)

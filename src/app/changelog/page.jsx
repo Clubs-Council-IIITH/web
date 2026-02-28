@@ -1,16 +1,9 @@
-import { Suspense } from "react";
-import { MDXRemote } from "next-mdx-remote-client/rsc";
-
-import remarkGfm from "remark-gfm";
-import remarkMdxRemoveExpressions from "remark-mdx-remove-expressions";
-
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
   Button,
-  CircularProgress,
   Container,
   List,
   ListItem,
@@ -25,6 +18,7 @@ import { GET_MEMBERS } from "gql/queries/members";
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import Markdown from "components/Markdown";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { getNginxFile } from "utils/files";
 
@@ -214,30 +208,12 @@ export default async function Changelog(props) {
           </>
         ) : null}
       </Stack>
-      <Suspense
-        fallback={
-          <Stack direction="row" spacing={1} alignItems="center">
-            <CircularProgress size={16} />
-            <Typography variant="body2">Loading changelog...</Typography>
-          </Stack>
+      <Markdown
+        source={
+          show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
         }
-      >
-        <MDXRemote
-          source={
-            show_all
-              ? logsText
-              : logsText?.split("\n").slice(0, limit).join("\n")
-          }
-          options={{
-            mdxOptions: {
-              remarkPlugins: [
-                remarkMdxRemoveExpressions,
-                remarkGfm,
-              ],
-            },
-          }}
-        />
-      </Suspense>
+        fallbackVariant="body2"
+      />
       {logsText.split("\n").length > limit ? (
         <Typography
           variant="body2"

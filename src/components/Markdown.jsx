@@ -52,6 +52,22 @@ export default async function Markdown({ source, fallbackVariant = "body1" }) {
         "& p": { mb: 1.5 },
         "& a": { color: "primary.main" },
         "& ul, & ol": { ml: 2, mb: 1.5 },
+        "& table": {
+          width: "100%",
+          borderCollapse: "collapse",
+          mb: 2,
+          mt: 2,
+        },
+        "& th, & td": {
+          border: "1px solid",
+          borderColor: "divider",
+          padding: "8px 12px",
+          textAlign: "left",
+        },
+        "& th": {
+          backgroundColor: "action.hover",
+          fontWeight: "bold",
+        },
       }}
     >
       <Suspense
