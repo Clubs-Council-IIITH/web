@@ -18,7 +18,7 @@ import { GET_MEMBERS } from "gql/queries/members";
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
-import Markdown from "components/Markdown";
+import Markdown from "components/markdown/MarkdownRenderer";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { getNginxFile } from "utils/files";
 

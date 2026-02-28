@@ -7,7 +7,7 @@ import AudienceChips from "components/events/AudienceChips";
 import EventFallbackPoster from "components/events/EventFallbackPoster";
 import EventPoster from "components/events/EventPoster";
 import Icon from "components/Icon";
-import Markdown from "components/Markdown";
+import Markdown from "components/markdown/MarkdownRenderer";
 import { locationLabel } from "utils/formatEvent";
 
 const DateTime = dynamic(() => import("components/DateTime"));

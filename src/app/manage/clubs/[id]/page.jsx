@@ -9,7 +9,7 @@ import {
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
-import Markdown from "components/Markdown";
+import Markdown from "components/markdown/MarkdownRenderer";
 import { getClub, getCurrentUser } from "utils/fetchData";
 
 export async function generateMetadata(props) {
