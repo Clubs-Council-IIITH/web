@@ -61,6 +61,7 @@ export default function EventsTable({
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Toggle state for Last 4 Months
+  const [deleteToggle, setDeleteToggle] = useState([]);
   const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
   const [events, setEvents] = useState(initialEvents || []);
   const [dialog, setDialog] = useState(false);
@@ -77,12 +78,13 @@ export default function EventsTable({
       let params = {
         targetClub: clubid,
         pastEventsLimit: filterMonth.includes("pastEventsLimit") ? 4 : null,
+        deletedEvents: deleteToggle.includes("toggleDeletedEvents"),
       };
       const result = await query(params);
       setEvents(result || []);
     }
     fetchEvents();
-  }, [query, clubid, filterMonth, initialEvents]);
+  }, [query, clubid, filterMonth, deleteToggle, initialEvents]);
 
   const columns = [
     ...(isMobile
@@ -369,29 +371,46 @@ export default function EventsTable({
             {query ? "All Events" : "Pending Events"}
           </Typography>
           {query && (
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={filterMonth.includes("pastEventsLimit")}
-                  onChange={(e) => {
-                    // Only show dialog when switching from ON to OFF
-                    if (
-                      filterMonth.includes("pastEventsLimit") &&
-                      !e.target.checked
-                    ) {
-                      setDialog(true);
-                    } else {
-                      setFilterMonth(
-                        e.target.checked ? ["pastEventsLimit"] : [],
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={filterMonth.includes("pastEventsLimit")}
+                    onChange={(e) => {
+                      // Only show dialog when switching from ON to OFF
+                      if (
+                        filterMonth.includes("pastEventsLimit") &&
+                        !e.target.checked
+                      ) {
+                        setDialog(true);
+                      } else {
+                        setFilterMonth(
+                          e.target.checked ? ["pastEventsLimit"] : [],
+                        );
+                      }
+                    }}
+                    color="primary"
+                  />
+                }
+                label="Last 4 Months"
+                sx={{ marginLeft: 1 }}
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={deleteToggle.includes("toggleDeletedEvents")}
+                    onChange={(e) => {
+                      setDeleteToggle(
+                        e.target.checked ? ["toggleDeletedEvents"] : [],
                       );
-                    }
-                  }}
-                  color="primary"
-                />
-              }
-              label="Last 4 Months"
-              sx={{ marginLeft: 1 }}
-            />
+                    }}
+                    color="primary"
+                  />
+                }
+                label="Show Only Deleted Events"
+                sx={{ marginLeft: 1 }}
+              />
+            </Box>
           )}
           <ConfirmDialog
             open={dialog}
