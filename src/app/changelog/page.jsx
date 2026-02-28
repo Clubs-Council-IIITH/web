@@ -1,4 +1,7 @@
-import { MDXRemote } from "next-mdx-remote/rsc";
+import { Suspense } from "react";
+import { MDXRemote } from "next-mdx-remote-client/rsc";
+
+import remarkMdxRemoveExpressions from "remark-mdx-remove-expressions";
 
 import {
   Accordion,
@@ -209,11 +212,18 @@ export default async function Changelog(props) {
           </>
         ) : null}
       </Stack>
-      <MDXRemote
-        source={
-          show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
-        }
-      />
+      <Suspense fallback={<Typography variant="body2">Loading changelog...</Typography>}>
+        <MDXRemote
+          source={
+            show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
+          }
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkMdxRemoveExpressions],
+            },
+          }}
+        />
+      </Suspense>
       {logsText.split("\n").length > limit ? (
         <Typography
           variant="body2"
