@@ -6,6 +6,7 @@ import { permanentRedirect } from "next/navigation";
 
 import Club from "app/clubs/[id]/page";
 import { getClub } from "utils/fetchData";
+import { stripMarkdown } from "utils/markdown";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -16,6 +17,7 @@ export async function generateMetadata(props) {
 
   return {
     title: club.name,
+    description: stripMarkdown(club.description),
   };
 }
 

@@ -4,6 +4,7 @@ import { shortDescription } from "app/layout";
 import EventDetails, { getEventLocation } from "components/events/EventDetails";
 import { getEvent } from "utils/fetchData";
 import { getFile, PUBLIC_URL } from "utils/files";
+import { stripMarkdown } from "utils/markdown";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -19,7 +20,7 @@ export async function generateMetadata(props) {
 
   return {
     title: `${event.name} | Life @ IIITH`,
-    description: event.description ? event.description : shortDescription,
+    description: event.description ? stripMarkdown(event.description) : shortDescription,
     openGraph: {
       title: `${event.name} (Time: ${time}, Location: ${getEventLocation(
         event,

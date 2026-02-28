@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 
 import {
+  Box,
   Button,
   FormControl,
   Grid,
@@ -23,6 +24,7 @@ import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
 import FileUpload from "components/FileUpload";
 import Icon from "components/Icon";
+import MarkdownEditorModal from "components/markdown/MarkdownEditorModal";
 import { useToast } from "components/Toast";
 import { uploadImageFile } from "utils/files";
 import { socialsData } from "utils/socialsData";
@@ -255,7 +257,7 @@ export default function ClubForm({ defaultValues = {}, action = "log" }) {
                 <ClubTaglineInput control={control} />
               </Grid>
               <Grid size={12}>
-                <ClubDescriptionInput control={control} />
+                <ClubDescriptionInput control={control} defaultValue={defaultValues.description} />
               </Grid>
             </Grid>
           </Grid>
@@ -563,7 +565,9 @@ function ClubTaglineInput({ control }) {
 }
 
 // club description input
-function ClubDescriptionInput({ control }) {
+function ClubDescriptionInput({ control, defaultValue }) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <Controller
       name="description"
@@ -575,17 +579,40 @@ function ClubDescriptionInput({ control }) {
         },
       }}
       render={({ field, fieldState: { error, invalid } }) => (
-        <TextField
-          {...field}
-          label="Description"
-          autoComplete="off"
-          error={invalid}
-          helperText={error?.message}
-          variant="outlined"
-          rows={8}
-          fullWidth
-          multiline
-        />
+        <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 1 }}>
+          <TextField
+            {...field}
+            label="Description"
+            autoComplete="off"
+            error={invalid}
+            helperText={error?.message}
+            variant="outlined"
+            rows={8}
+            fullWidth
+            multiline
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }}
+          />
+          <Box sx={{ alignSelf: "flex-end" }}>
+            <Button variant="outlined" color="primary" onClick={() => setModalOpen(true)}>
+              Edit with Markdown Editor
+            </Button>
+          </Box>
+          {modalOpen && (
+            <MarkdownEditorModal
+              open={modalOpen}
+              onClose={() => setModalOpen(false)}
+              content={field.value || ""}
+              oldContent={defaultValue}
+              onSave={(newContent) =>
+                field.onChange(newContent.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""))
+              }
+            />
+          )}
+        </Box>
       )}
     />
   );
