@@ -43,17 +43,21 @@ export default function ClubInfo({ name, logo, tagline, description }) {
       <Box
         sx={{
           pt: 2,
+          mx: 1,
         }}
       >
-        <Typography
-          variant="body1"
-          sx={{
-            mx: 1,
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {description}
-        </Typography>
+        {typeof description === "string" ? (
+          <Typography
+            variant="body1"
+            sx={{
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {description}
+          </Typography>
+        ) : (
+          description
+        )}
       </Box>
     </>
   );

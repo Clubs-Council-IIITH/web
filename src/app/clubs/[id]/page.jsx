@@ -9,6 +9,7 @@ import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import Markdown from "components/Markdown";
 import MembersGrid from "components/members/MembersGrid";
 import { getClub } from "utils/fetchData";
 
@@ -51,7 +52,7 @@ export default async function Club(props) {
           name={club.name}
           logo={club.logo}
           tagline={club.tagline}
-          description={club.description}
+          description={<Markdown source={club.description} />}
         />
       </Box>
       <ClubSocials socials={club.socials} email={club.email} />

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 
+import remarkGfm from "remark-gfm";
 import remarkMdxRemoveExpressions from "remark-mdx-remove-expressions";
 
 import {
@@ -9,6 +10,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  CircularProgress,
   Container,
   List,
   ListItem,
@@ -213,7 +215,12 @@ export default async function Changelog(props) {
         ) : null}
       </Stack>
       <Suspense
-        fallback={<Typography variant="body2">Loading changelog...</Typography>}
+        fallback={
+          <Stack direction="row" spacing={1} alignItems="center">
+            <CircularProgress size={16} />
+            <Typography variant="body2">Loading changelog...</Typography>
+          </Stack>
+        }
       >
         <MDXRemote
           source={
@@ -223,7 +230,10 @@ export default async function Changelog(props) {
           }
           options={{
             mdxOptions: {
-              remarkPlugins: [remarkMdxRemoveExpressions],
+              remarkPlugins: [
+                remarkMdxRemoveExpressions,
+                remarkGfm,
+              ],
             },
           }}
         />

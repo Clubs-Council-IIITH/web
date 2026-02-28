@@ -9,6 +9,7 @@ import {
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
+import Markdown from "components/Markdown";
 import { getClub, getCurrentUser } from "utils/fetchData";
 
 export async function generateMetadata(props) {
@@ -54,7 +55,7 @@ export default async function ManageClub(props) {
           name={club.name}
           logo={club.logo}
           tagline={club.tagline}
-          description={club.description}
+          description={<Markdown source={club.description} />}
         />
       </Box>
       <ClubSocials socials={club.socials} email={club.email} />
