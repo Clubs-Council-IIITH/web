@@ -18,6 +18,8 @@ export default async function Markdown({ source, fallbackVariant = "body1" }) {
       source: source,
       options: {
         mdxOptions: {
+          disableImports: true,
+          disableExports: true,
           remarkPlugins: [
             remarkMdxRemoveExpressions,
             remarkGfm,

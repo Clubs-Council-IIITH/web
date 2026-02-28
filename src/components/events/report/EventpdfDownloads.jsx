@@ -19,8 +19,8 @@ import {
   locationLabel,
   stateLabel,
 } from "utils/formatEvent";
-import { stripMarkdown } from "utils/markdown";
 import { formatDateTime, ISOtoHuman } from "utils/formatTime";
+import { stripMarkdown } from "utils/markdown";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";
@@ -203,12 +203,9 @@ export function DownloadEventReport({
                         (item) => `
                     <tr>
                         <td>${
-                          (item?.description
-                            ? stripMarkdown(item?.description).replace(
-                                /\n/g,
-                                "<br />",
-                              )
-                            : null) || "Unknown"
+                          item?.description
+                            ? item.description.replace(/\n/g, "<br />")
+                            : "Unknown"
                         }</td>
                         <td class="adv">${item?.amount || "Unknown"}</td>
                         <td class="adv">${
@@ -636,12 +633,9 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
                             (item) => `
                         <tr>
                             <td>${
-                              (item?.description
-                                ? stripMarkdown(item?.description).replace(
-                                    /\n/g,
-                                    "<br />",
-                                  )
-                                : null) || "Unknown"
+                              item?.description
+                                ? item.description.replace(/\n/g, "<br />")
+                                : "Unknown"
                             }</td>
                             <td class="adv">${item?.amount || "Unknown"}</td>
                             <td class="adv">${

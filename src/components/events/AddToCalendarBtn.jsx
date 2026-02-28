@@ -5,8 +5,8 @@ import { AddToCalendarButton } from "add-to-calendar-button-react";
 import { useMode } from "contexts/ModeContext";
 
 import { locationLabel } from "utils/formatEvent";
-import { stripMarkdown } from "utils/markdown";
 import { formatDateTime } from "utils/formatTime";
+import { stripMarkdown } from "utils/markdown";
 
 export default function AddToCalendarBtn({ event }) {
   const { isDark } = useMode();
