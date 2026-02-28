@@ -212,10 +212,14 @@ export default async function Changelog(props) {
           </>
         ) : null}
       </Stack>
-      <Suspense fallback={<Typography variant="body2">Loading changelog...</Typography>}>
+      <Suspense
+        fallback={<Typography variant="body2">Loading changelog...</Typography>}
+      >
         <MDXRemote
           source={
-            show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
+            show_all
+              ? logsText
+              : logsText?.split("\n").slice(0, limit).join("\n")
           }
           options={{
             mdxOptions: {
