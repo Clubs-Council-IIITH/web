@@ -6,6 +6,7 @@ import { Box, Modal } from "@mui/material";
 
 export default function ImageModal({ images, id = null, onClose = () => {} }) {
   return (
+  
     <Modal
       open={id !== null}
       onClose={() => onClose()}
@@ -13,6 +14,7 @@ export default function ImageModal({ images, id = null, onClose = () => {} }) {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}
     >
+     
       <Box
         component="div"
         sx={{
@@ -31,7 +33,7 @@ export default function ImageModal({ images, id = null, onClose = () => {} }) {
         }}
       >
         <Image
-          src={images[id]}
+          src={id!=null ? images[id].url: null}
           width={0}
           height={0}
           sizes="100vw"

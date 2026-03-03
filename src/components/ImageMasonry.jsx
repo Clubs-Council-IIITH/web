@@ -28,10 +28,14 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const handleImageLoad = () => {
     setLoadedImages((prev) => prev + 1);
   };
+  const print_images=(images)=>{
+    console.log(images)
+  }
 
   return (
     <>
-      {loadedImages !== totalImages && (
+    
+      {/*loadedImages !== totalImages && (
         <Box
           sx={{
             width: "100%",
@@ -62,8 +66,8 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
             ))}
           </Grid>
         </Box>
-      )}
-      {loadedImages === totalImages && (
+      )*/} 
+      {/*loadedImages == totalImages &&*/ (
         <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
           {images.slice(0, limit).map((url, id) => {
             return (
@@ -87,14 +91,16 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
                   <CardActionArea
                     onClick={() => {
                       setOpenImage(id);
+                      print_images(images);
                     }}
                     sx={{ lineHeight: 0 }}
                   >
                     <Image
-                      src={url}
-                      width={0}
-                      height={0}
+                      src={url.url}
+                      width={url.width}
+                      height={url.height}
                       sizes="100vw"
+                      
                       alt={`Gallery Image ${id}`}
                       style={{
                         width: "100%",
@@ -115,8 +121,8 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
         id={openImage}
         onClose={() => setOpenImage(null)}
       />
-      {/* Hidden Pre-loading for the images */}
-      {images.slice(0, limit).map((url, i) => (
+     {/* //{ Hidden Pre-loading for the images } 
+      images.slice(0, limit).map((url, i) => (
         <Image
           key={i}
           src={url}
@@ -130,7 +136,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
           priority={true}
           style={{ display: "none" }}
         />
-      ))}
+      ))*/}
     </>
   );
 }
