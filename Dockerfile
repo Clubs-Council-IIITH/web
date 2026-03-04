@@ -28,6 +28,7 @@ CMD [ "npm", "run", "dev" ]
 # production build stage
 FROM node:22-slim AS prod-build
 ENV NEXT_PUBLIC_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=0
 
 WORKDIR /web
 
@@ -39,6 +40,7 @@ RUN npm run build
 # production stage
 FROM prod-build AS prod
 ENV NEXT_PUBLIC_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /web
 
