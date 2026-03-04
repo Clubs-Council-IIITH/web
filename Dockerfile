@@ -1,20 +1,18 @@
-# cache dependencies
-FROM node:22-slim AS node_cache
+# development dependencies
+FROM node:22-slim AS dev_dep
 WORKDIR /cache/
 COPY package*.json .
-
-# development dependencies
-FROM node_cache AS dev_dep
 RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose
 
 # production dependencies
-FROM node_cache AS prod_dep
+FROM node:22-slim AS prod_dep
+WORKDIR /cache/
+COPY package*.json .
 RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose --omit=dev
 
 # development stage
 FROM node:22-slim AS dev
-ARG ENV=development
-ENV NEXT_PUBLIC_ENV=$ENV
+ENV NEXT_PUBLIC_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /web
@@ -27,19 +25,30 @@ RUN chmod +x /cache/entrypoint.sh
 ENTRYPOINT [ "/cache/entrypoint.sh" ]
 CMD [ "npm", "run", "dev" ]
 
-# production stage
-FROM node:22-slim AS prod
-ARG ENV=production
-ENV NEXT_PUBLIC_ENV=$ENV
+# production build stage
+FROM node:22-slim AS prod-build
+ENV NEXT_PUBLIC_ENV=production
 
 WORKDIR /web
 
-COPY --from=prod_dep /cache/ .
-COPY entrypoint.sh /cache/
+COPY --from=prod_dep /cache/node_modules ./node_modules
 COPY . .
 
-RUN chmod +x /cache/entrypoint.sh
 RUN npm run build
 
-ENTRYPOINT [ "/cache/entrypoint.sh" ]
-CMD [ "npm", "start" ]
+# production stage
+FROM prod-build AS prod
+ENV NEXT_PUBLIC_ENV=production
+
+WORKDIR /web
+
+COPY --from=prod-build /web/.next ./.next
+COPY --from=prod-build /web/public ./public
+COPY --from=prod-build /web/next.config.js ./next.config.js
+COPY --from=prod-build /web/node_modules ./node_modules
+COPY --from=prod-build /web/package.json ./package.json
+
+RUN chown -R node:node /web
+
+USER node
+ENTRYPOINT [ "npm", "start" ]
