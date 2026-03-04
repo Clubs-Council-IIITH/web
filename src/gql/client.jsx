@@ -43,3 +43,5 @@ export const getClient = () => {
     },
   };
 };
+
+export { default as combineQuery } from 'graphql-combine-query';

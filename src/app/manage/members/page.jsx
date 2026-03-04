@@ -1,6 +1,6 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -25,10 +25,11 @@ export default async function ManageMembers(props) {
   const onlyCurrent = searchParams?.current === "true";
   const onlyPast = searchParams?.past === "true";
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_USER, { userInput: null });
+
+  const { data = {} } = await getClient().query(document, variables);
+  const { userMeta, userProfile } = data;
   const user = { ...userMeta, ...userProfile };
 
   return (
@@ -147,28 +148,29 @@ export default async function ManageMembers(props) {
 }
 
 async function PendingMembersDataGrid() {
-  const { data: { pendingMembers } = {} } =
-    await getClient().query(GET_PENDING_MEMBERS);
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_PENDING_MEMBERS);
 
-  // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
-  // concurrently fetch user profile for each member
-  const userPromises = [];
-  pendingMembers?.forEach((member) => {
-    userPromises.push(
-      getClient().query(GET_USER_PROFILE, {
-        userInput: {
-          uid: member.uid,
-        },
-      }),
-    );
-  });
-  const users = await Promise.all(userPromises);
-  const processedMembers = pendingMembers.map((member, index) => ({
+  const { data: { pendingMembers } = {} } = await getClient().query(document, variables);
+
+  let usersResponse = {};
+  if (pendingMembers && pendingMembers.length > 0) {
+    const { document, variables } = combineQuery('CompositePendingMembers')
+      .addN(
+        GET_USER_PROFILE,
+        pendingMembers.map(member => ({ userInput: { uid: member.uid } }))
+      );
+
+    const { data } = await getClient().query(document, variables);
+    usersResponse = data;
+  }
+
+  const processedMembers = pendingMembers?.map((member, index) => ({
     ...member,
-    ...users[index].data.userProfile,
-    ...users[index].data.userMeta,
+    ...usersResponse?.[`userProfile_${index}`],
+    ...usersResponse?.[`userMeta_${index}`],
     mid: `${member.cid}:${member.uid}`,
-  }));
+  })) || [];
 
   return (
     <>
@@ -204,9 +206,12 @@ async function MembersDataGrid({
   onlyCurrent = false,
   onlyPast = false,
 }) {
-  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: { cid: club },
-  });
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_MEMBERS, {
+      clubInput: { cid: club }
+    });
+
+  const { data: { members } = {} } = await getClient().query(document, variables);
 
   const currentYear = (new Date().getFullYear() + 1).toString();
 
@@ -219,25 +224,24 @@ async function MembersDataGrid({
     return (!onlyCurrent && !onlyPast) || isCurrent || isPast;
   });
 
-  // TODO: convert MembersTable to a server component and fetch user profile for each row (for lazy-loading perf improvement)
-  // concurrently fetch user profile for each member
-  const userPromises = [];
-  targetMembers?.forEach((member) => {
-    userPromises.push(
-      getClient().query(GET_USER_PROFILE, {
-        userInput: {
-          uid: member.uid,
-        },
-      }),
-    );
-  });
-  const users = await Promise.all(userPromises);
-  const processedMembers = targetMembers.map((member, index) => ({
+  let usersResponse = {};
+  if (targetMembers && targetMembers.length > 0) {
+    const { document, variables } = combineQuery('CompositeTargetMembers')
+      .addN(
+        GET_USER_PROFILE,
+        targetMembers.map(member => ({ userInput: { uid: member.uid } }))
+      );
+
+    const { data } = await getClient().query(document, variables);
+    usersResponse = data;
+  }
+
+  const processedMembers = targetMembers?.map((member, index) => ({
     ...member,
-    ...users[index].data.userProfile,
-    ...users[index].data.userMeta,
+    ...usersResponse?.[`userProfile_${index}`],
+    ...usersResponse?.[`userMeta_${index}`],
     mid: `${member.cid}:${member.uid}`,
-  }));
+  })) || [];
 
   return <MembersTable members={processedMembers} />;
 }

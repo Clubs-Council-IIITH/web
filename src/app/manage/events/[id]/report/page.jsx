@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";
@@ -14,15 +14,16 @@ export default async function EventReport(props) {
   const { id } = params;
 
   try {
-    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-      eventid: id,
-    });
+    const { document, variables } = combineQuery('CombinedQuery')
+      .add(GET_FULL_EVENT, { eventid: id })
+      .add(GET_USER, { userInput: null })
+      .add(GET_EVENT_REPORT, { eventid: id })
+      .add(GET_ACTIVE_CLUBS);
 
-    const { data: { userMeta, userProfile } = {} } = await getClient().query(
-      GET_USER,
-      { userInput: null },
-    );
+    const { data } = await getClient().query(document, variables);
+    const { event, userMeta, userProfile, eventReport, allClubs } = data;
     const user = { ...userMeta, ...userProfile };
+
     user?.role === "club" &&
       user?.uid !== event.clubid &&
       !event?.collabclubs.includes(user?.uid) &&
@@ -31,17 +32,6 @@ export default async function EventReport(props) {
     if (!event || !event?.eventReportSubmitted) {
       return redirect("/404");
     }
-
-    const { data: { eventReport } = {} } = await getClient().query(
-      GET_EVENT_REPORT,
-      {
-        eventid: id,
-      },
-    );
-
-    const {
-      data: { allClubs },
-    } = await getClient().query(GET_ACTIVE_CLUBS);
 
     const submittedUserProfile = await getFullUser(eventReport?.submittedBy);
     if (!submittedUserProfile || !eventReport) {

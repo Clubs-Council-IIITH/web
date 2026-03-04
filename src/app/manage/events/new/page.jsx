@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import {
   GET_REPORTS_SUBMISSION_STATUS,
@@ -36,25 +36,23 @@ export default async function NewEvent() {
     poc: "",
   };
 
-  const { data: { events } = {} } = await getClient().query(
-    GET_UNFINISHED_EVENTS,
-    {
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_UNFINISHED_EVENTS, {
       clubid: null,
       public: false,
-      excludeCompleted: true,
-    },
-  );
+      excludeCompleted: true
+    })
+    .add(GET_USER, { userInput: null });
 
-  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
-    userInput: null,
-  });
+  const { data = {} } = await getClient().query(document, variables);
+  const { userMeta, userProfile, events } = data;
 
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
-    GET_REPORTS_SUBMISSION_STATUS,
-    {
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,
-    },
-  );
+  const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
+    .add(GET_REPORTS_SUBMISSION_STATUS, {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null
+    });
+
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
 
   return (
     <Container>

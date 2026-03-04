@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 
@@ -16,33 +16,27 @@ export default async function BillsUpload(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_USER, { userInput: null })
+    .add(GET_EVENT_BILLS_STATUS, { eventid: id })
+    .add(GET_EVENT_BUDGET, { eventid: id });
+
+  const { data = {}, error } = await getClient().query(document, variables);
+  const { userMeta, userProfile, eventBills, event } = data;
   const user = { ...userMeta, ...userProfile };
+
+  if (error && error.message.includes("Event not found")) {
+    return redirect("/404");
+  }
 
   if (user.role !== "club") {
     return redirect("/404");
   }
 
-  const { error, data = {} } = await getClient().query(GET_EVENT_BILLS_STATUS, {
-    eventid: id,
-  });
-  if (error && error.message.includes("Event not found")) {
-    return redirect("/404");
-  }
-  const eventBills = data?.eventBills;
-
-  const { data: { event } = {} } = await getClient().query(GET_EVENT_BUDGET, {
-    eventid: id,
-  });
-
-  if (
-    !event ||
-    !["rejected", "not_submitted"].includes(eventBills?.state) ||
-    user?.uid !== event.clubid ||
-    event.status.state !== "approved"
+  if ( !event ||
+       !["rejected", "not_submitted"].includes(eventBills?.state) ||
+       user?.uid !== event.clubid ||
+       event.status.state !== "approved"
   ) {
     return (
       <Typography variant="h3">

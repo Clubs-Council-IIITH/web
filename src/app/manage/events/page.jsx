@@ -1,6 +1,6 @@
 import { Button, Container, Divider, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import {
   GET_ALL_EVENTS,
@@ -19,11 +19,14 @@ export const metadata = {
 async function getalleventsquery(querystring) {
   "use server";
 
-  const { data = {}, error } = await getClient().query(GET_ALL_EVENTS, {
-    clubid: querystring["targetClub"],
-    public: false,
-    pastEventsLimit: querystring["pastEventsLimit"],
-  });
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_ALL_EVENTS, {
+      clubid: querystring["targetClub"],
+      public: false,
+      pastEventsLimit: querystring["pastEventsLimit"],
+    });
+
+  const { data = {}, error } = await getClient().query(document, variables);
 
   if (error) {
     console.error(error);
@@ -34,14 +37,19 @@ async function getalleventsquery(querystring) {
 }
 
 export default async function ManageEvents() {
-  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
-    userInput: null,
-  });
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_USER, {
+      userInput: null,
+    });
 
-  const { data: { pendingEvents } = {} } = await getClient().query(
-    GET_PENDING_EVENTS,
-    { clubid: userMeta?.role === "club" ? userMeta.uid : null },
-  );
+  const { data: { userMeta } = {} } = await getClient().query(document, variables);
+
+  const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
+    .add(GET_PENDING_EVENTS,
+      { clubid: userMeta?.role === "club" ? userMeta.uid : null }
+    );
+
+  const { data: { pendingEvents } = {} } = await getClient().query(curDocument, curVariables);
 
   return (
     <Container>

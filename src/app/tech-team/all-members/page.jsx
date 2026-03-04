@@ -1,6 +1,6 @@
 import { Container, Divider, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import { extractFirstYear } from "components/members/MembersGrid";
@@ -13,11 +13,14 @@ export const metadata = {
 };
 
 export default async function TechTeam() {
-  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: {
-      cid: "clubs",
-    },
-  });
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_MEMBERS, {
+      clubInput: {
+        cid: "clubs",
+      }
+    });
+
+  const { data: { members } = {} } = await getClient().query(document, variables);
 
   const techMembers = members
     ?.map((member) => {
@@ -35,13 +38,13 @@ export default async function TechTeam() {
   // construct dict of { year: [members] } where each year is a key
   const targetMembers = techMembers
     ? techMembers.reduce((acc, member) => {
-        const latestYear = extractFirstYear(member);
-        if (!acc[latestYear]) {
-          acc[latestYear] = [];
-        }
-        acc[latestYear].push(member);
-        return acc;
-      }, {})
+      const latestYear = extractFirstYear(member);
+      if (!acc[latestYear]) {
+        acc[latestYear] = [];
+      }
+      acc[latestYear].push(member);
+      return acc;
+    }, {})
     : {};
 
   return (

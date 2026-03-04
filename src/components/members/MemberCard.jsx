@@ -1,6 +1,6 @@
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 import Icon from "components/Icon";
@@ -10,14 +10,14 @@ import { fmtMonthYear, sortMonthYear } from "utils/membersDates";
 import { getUserNameFromUID } from "utils/users";
 
 export default async function MemberCard({ uid, poc, roles }) {
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_USER_PROFILE, {
       userInput: {
         uid: uid,
       },
-    },
-  );
+    });
+
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(document, variables);
 
   if (userMeta === null) {
     return null;

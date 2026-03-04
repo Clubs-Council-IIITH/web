@@ -1,12 +1,15 @@
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 
 import EventPoster from "components/events/EventPoster";
 
 export default async function EventFallbackPoster({ clubid, width, height }) {
-  const { data: { club } = {} } = await getClient().query(GET_CLUB, {
-    clubInput: { cid: clubid },
-  });
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_CLUB, {
+      clubInput: { cid: clubid }
+    });
+
+  const { data: { club } = {} } = await getClient().query(document, variables);
 
   return (
     <EventPoster

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { HAVE_APPLIED } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -16,23 +16,25 @@ export const metadata = {
 const deadline = new Date("2025-04-30T17:00:00+05:30");
 
 async function getUser(currentUser) {
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
-      userInput: {
-        uid: currentUser.uid,
-      },
-    },
-  );
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_USER_PROFILE,
+      {
+        userInput: { uid: currentUser.uid },
+      });
+
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(document, variables);
   const user = { ...userMeta, ...userProfile };
   return user;
 }
 
 export default async function NewApplication() {
-  const {
-    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
-  } = await getClient().query(GET_USER, { userInput: null });
-  const currentUser = { ...currentUserMeta, ...currentUserProfile };
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_USER, { userInput: null })
+    .add(HAVE_APPLIED, { userInput: null });
+
+  const { data = {} } = await getClient().query(document, variables);
+  const { userMeta, userProfile, haveAppliedForCC } = data;
+  const currentUser = { ...userMeta, ...userProfile };
 
   if (!currentUser) {
     return (
@@ -55,11 +57,7 @@ export default async function NewApplication() {
     return redirect("/cc-recruitments/all");
   }
 
-  const { data: { haveAppliedForCC } = {} } = await getClient().query(
-    HAVE_APPLIED,
-    { userInput: null },
-  );
-  const user = await getUser(await currentUser);
+  const user = await getUser(currentUser);
 
   return (
     <Container>

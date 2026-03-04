@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBER } from "gql/queries/members";
 
@@ -22,18 +22,20 @@ export default async function ManageMember(props) {
   const [cid, uid] = id?.split(encodeURIComponent(":"));
 
   try {
-    const {
-      data: { member, userMeta, userProfile },
-    } = await getClient().query(GET_MEMBER, {
-      memberInput: {
-        cid: cid,
-        uid: uid,
-        rid: null,
-      },
-      userInput: {
-        uid: uid,
-      },
-    });
+    const { document, variables } = combineQuery('CombinedQuery')
+      .add(GET_MEMBER, {
+        memberInput: {
+          cid: cid,
+          uid: uid,
+          rid: null,
+        },
+        userInput: {
+          uid: uid
+        }
+      });
+
+    const { data = {} } = await getClient().query(document, variables);
+    const { member, userMeta, userProfile } = data;
 
     if (userMeta === null) {
       notFound();
@@ -52,9 +54,10 @@ export default async function ManageMember(props) {
     }
 
     // fetch currently logged in user
-    const {
-      data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
-    } = await getClient().query(GET_USER, { userInput: null });
+    const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
+      .add(GET_USER, { userInput: null });
+
+    const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(curDocument, curVariables);
     const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
     return (

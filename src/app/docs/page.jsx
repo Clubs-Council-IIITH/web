@@ -1,4 +1,4 @@
-import { getClient } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_FILES } from "gql/queries/storagefiles";
 
@@ -9,17 +9,13 @@ export const metadata = {
 };
 
 export default async function Docs() {
-  const { data: { storagefiles } = {} } = await getClient().query(
-    GET_ALL_FILES,
-    {
-      filetype: "pdf",
-    },
-  );
+  // using graphQl-combine to merge get_all_files and get_user requests
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_ALL_FILES, { filetype: "pdf" })
+    .add(GET_USER, { userInput: null });
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { data: { storagefiles, userMeta, userProfile } = {} } = await getClient().query(document, variables);
+
   const user = { ...userMeta, ...userProfile };
   const isPriviliged = user?.role == "cc" ? true : false;
 

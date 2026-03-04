@@ -1,6 +1,6 @@
 import { Button, Container, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import ClubsTable from "components/clubs/ClubsTable";
@@ -12,8 +12,10 @@ export const metadata = {
 };
 
 export default async function ManageClubs() {
-  const { data: { allClubs: clubs } = {} } =
-    await getClient().query(GET_ALL_CLUBS);
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_ALL_CLUBS);
+
+  const { data: { allClubs: clubs } = {} } = await getClient().query(document, variables);
 
   return (
     <Container>

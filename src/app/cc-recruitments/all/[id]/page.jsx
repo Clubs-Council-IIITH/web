@@ -1,6 +1,6 @@
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 
@@ -26,27 +26,24 @@ export default async function CCApplicantDetails(props) {
   const { id } = params;
   const year = parseInt(searchParams?.year) || new Date().getFullYear();
 
-  const { data: { ccApplications } = {} } = await getClient().query(
-    GET_ALL_RECRUITMENTS,
-    {
-      year: year,
-    },
-  );
+  // get target user
+  const user = await getUserProfile(id);
+
+  // using graphQl-combine to merge get_all_recruitments and get_memberships requests
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_ALL_RECRUITMENTS, { year: year })
+    .add(GET_MEMBERSHIPS, { uid: user.uid });
+
+  const { data = {} } = await getClient().query(document, variables);
+  // mount combined data
+  const { ccApplications, memberRoles } = data;
 
   let currentApplicant = ccApplications.find(
     (applicant) => applicant.uid === id,
   );
 
-  // get target user
-  const user = await getUserProfile(id);
-
   // get memberships if user is a person
   let memberships = [];
-  const {
-    data: { memberRoles },
-  } = await getClient().query(GET_MEMBERSHIPS, {
-    uid: user.uid,
-  });
   // get list of memberRoles.roles along with member.cid
   memberships = memberRoles.reduce(
     (cv, m) => cv.concat(m.roles.map((r) => ({ ...r, cid: m.cid }))),

@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
@@ -71,36 +71,37 @@ export default async function ManageEventID(props) {
     new Date(event?.datetimeperiod[1]) < new Date() &&
     event?.budget?.length
   ) {
-    const { error, data = {} } = await getClient().query(
-      GET_EVENT_BILLS_STATUS,
-      {
+    const { document: billsDoc, variables: billsVars } = combineQuery('CombinedQuery')
+      .add(GET_EVENT_BILLS_STATUS, {
         eventid: id,
-      },
-    );
+      });
+
+    const { error, data = {} } = await getClient().query(billsDoc, billsVars);
+
     if (error && error.message.includes("Event not found"))
       return redirect("/404");
     eventBillsData = data;
   }
 
-  const {
-    data: { allClubs },
-  } = await getClient().query(GET_ACTIVE_CLUBS);
+  // using graphQl-combine to merge get_active_clubs and get_user requests
+  const { document, variables } = combineQuery('CombinedQuery')
+    .add(GET_ACTIVE_CLUBS)
+    .add(GET_USER, { userInput: null });
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { data: combinedData = {} } = await getClient().query(document, variables);
+  const { allClubs, userMeta, userProfile } = combinedData;
 
   const user = { ...userMeta, ...userProfile };
   let clashFlag = false;
   if (["cc", "slo"].includes(user?.role)) {
-    const { data: { clashingEvents } = {} } = await getClient().query(
-      GET_CLASHING_EVENTS,
-      {
+
+    const { document: clashingDoc, variables: clashingVars } = combineQuery('CombinedQuery')
+      .add(GET_CLASHING_EVENTS, {
         eventId: id,
         filterByLocation: true,
-      },
-    );
+      });
+
+    const { data: { clashingEvents } = {} } = await getClient().query(clashingDoc, clashingVars);
     clashFlag = clashingEvents && clashingEvents.length > 0;
   }
 
@@ -113,18 +114,19 @@ export default async function ManageEventID(props) {
     return redirect("/404");
   }
 
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
-    GET_REPORTS_SUBMISSION_STATUS,
-    {
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,
-    },
-  );
+  const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
+    .add(GET_REPORTS_SUBMISSION_STATUS,
+      {
+        clubid: userMeta?.role === "club" ? userMeta.uid : null,
+      });
+
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
 
   return (
     user?.role === "club" &&
-      user?.uid !== event?.clubid &&
-      !event?.collabclubs.includes(user?.uid) &&
-      redirect("/404"),
+    user?.uid !== event?.clubid &&
+    !event?.collabclubs.includes(user?.uid) &&
+    redirect("/404"),
     (
       <Box>
         <ActionPalette

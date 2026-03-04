@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
+
 import { GET_HOLIDAY } from "gql/queries/holidays";
 
 import HolidayForm from "components/holidays/HolidayForm";
@@ -18,13 +19,15 @@ export default async function EditHoliday(props) {
   let holiday;
 
   try {
-    const { data: { holiday: fetchedHoliday } = {} } = await getClient().query(
-      GET_HOLIDAY,
-      {
-        id: id,
-      },
-    );
+    const { document, variables } = combineQuery('CombinedQuery')
+      .add(GET_HOLIDAY,
+        {
+          id: id,
+        });
+
+    const { data: { holiday: fetchedHoliday } = {} } = await getClient().query(document, variables);
     holiday = fetchedHoliday;
+
   } catch (error) {
     notFound();
   }

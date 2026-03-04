@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_FULL_EVENT } from "gql/queries/events";
 import { GET_EVENT_REPORT } from "gql/queries/events";
@@ -37,16 +37,17 @@ function transformEvent(event) {
 export default async function EditEventReport(props) {
   const params = await props.params;
   const { id } = params;
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
-  const user = { ...userMeta, ...userProfile };
-
   try {
-    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-      eventid: id,
-    });
+    // using graphQl-combine to merge get_user, get_full_event and get_event_report requests
+    const { document, variables } = combineQuery('CombinedQuery')
+      .add(GET_USER, { userInput: null })
+      .add(GET_FULL_EVENT, { eventid: id })
+      .add(GET_EVENT_REPORT, { eventid: id });
+
+    const { data = {} } = await getClient().query(document, variables);
+    const { userMeta, userProfile, event, eventReport } = data;
+    const user = { ...userMeta, ...userProfile };
+
     if (
       !event ||
       (user?.uid !== event.clubid && !["cc", "slo"].includes(user?.role)) ||
@@ -56,12 +57,6 @@ export default async function EditEventReport(props) {
     } else if (!event?.eventReportSubmitted) {
       return redirect(`/manage/events/${event?._id}/report/new`);
     }
-    const { data: { eventReport } = {} } = await getClient().query(
-      GET_EVENT_REPORT,
-      {
-        eventid: id,
-      },
-    );
 
     const AllowEditReport = canEditReport(event, eventReport, user);
     if (!eventReport) {

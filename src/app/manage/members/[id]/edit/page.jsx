@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_MEMBER } from "gql/queries/members";
 
 import MemberForm from "components/members/MemberForm";
@@ -28,8 +28,8 @@ export default async function EditMember(props) {
   const { id } = params;
 
   try {
-    const { data: { member, userMeta, userProfile } = {} } =
-      await getClient().query(GET_MEMBER, {
+    const { document, variables } = combineQuery('CombinedQuery')
+      .add(GET_MEMBER, {
         memberInput: {
           cid: id?.split(encodeURIComponent(":"))[0],
           uid: id?.split(encodeURIComponent(":"))[1],
@@ -39,6 +39,9 @@ export default async function EditMember(props) {
           uid: id?.split(encodeURIComponent(":"))[1],
         },
       });
+
+    const { data: { member, userMeta, userProfile } = {} } = await getClient().query(document, variables);
+
 
     if (userMeta === null || userProfile === null) {
       notFound();

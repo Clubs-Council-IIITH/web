@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import {
   GET_FULL_EVENT,
@@ -51,32 +51,30 @@ function transformEvent(event) {
 export default async function CopyEvent(props) {
   const params = await props.params;
   const { id } = params;
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
-  const user = { ...userMeta, ...userProfile };
-
-  const { data: { events } = {} } = await getClient().query(
-    GET_UNFINISHED_EVENTS,
-    {
-      clubid: null,
-      public: false,
-      excludeCompleted: true,
-    },
-  );
-
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
-    GET_REPORTS_SUBMISSION_STATUS,
-    {
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,
-    },
-  );
 
   try {
-    const { data: { event } = {} } = await getClient().query(GET_FULL_EVENT, {
-      eventid: id,
-    });
+    const { document, variables } = combineQuery('CombinedQuery')
+      .add(GET_USER, { userInput: null })
+      .add(GET_UNFINISHED_EVENTS,
+        {
+          clubid: null,
+          public: false,
+          excludeCompleted: true,
+        })
+      .add(GET_FULL_EVENT, { eventid: id })
+      ;
+
+    const { data } = await getClient().query(document, variables);
+    const { userMeta, userProfile, events, event } = data;
+    const user = { ...userMeta, ...userProfile };
+
+    const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
+      .add(GET_REPORTS_SUBMISSION_STATUS,
+        {
+          clubid: userMeta?.role === "club" ? userMeta.uid : null,
+        });
+
+    const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
 
     let oldEventId = event._id;
 
@@ -94,9 +92,9 @@ export default async function CopyEvent(props) {
 
     return (
       user?.role === "club" &&
-        user?.uid !== event.clubid &&
-        !event?.collabclubs.includes(user?.uid) &&
-        redirect("/404"),
+      user?.uid !== event.clubid &&
+      !event?.collabclubs.includes(user?.uid) &&
+      redirect("/404"),
       (
         <Container>
           <Typography
