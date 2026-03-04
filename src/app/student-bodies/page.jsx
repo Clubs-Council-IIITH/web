@@ -7,6 +7,9 @@ export const metadata = {
   title: "Student Bodies @ IIIT-H",
 };
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export default async function StudentBodies() {
   const cc = {
     cid: "clubs",

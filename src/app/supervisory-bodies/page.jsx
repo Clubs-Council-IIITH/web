@@ -8,6 +8,9 @@ export const metadata = {
   title: "Supervisory Bodies @ IIIT-H",
 };
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export default async function SupervisoryBodies() {
   const sacMembers = await fetch(getStaticFile("sacMembers.json"), {
     next: { revalidate: 40 * 60 }, // 40 minutes

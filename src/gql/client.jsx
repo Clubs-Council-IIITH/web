@@ -16,7 +16,7 @@ const makeClient = async () => {
     url: GRAPHQL_ENDPOINT,
     exchanges: [cacheExchange, fetchExchange],
     fetchOptions: {
-      cache: "no-store",
+      cache: "force-cache",
       credentials: "include",
       headers: {
         "content-type": "application/json",
@@ -28,18 +28,36 @@ const makeClient = async () => {
 
 const { getClient: _rscGetClient } = registerUrql(makeClient);
 
-export const getClient = () => {
+export const getClient = (useCookies = true) => {
   return {
-    query: async (document, variables) => {
+    query: async (document, variables, options = {}) => {
       const client = await _rscGetClient();
-      const result = client.query(document, variables);
-      // urql query returns an object with toPromise method
-      return result.toPromise ? await result.toPromise() : await result;
+      
+      let cookieHeader;
+      if (useCookies) {
+        const cookieList = (await cookies()).getAll();
+        cookieHeader = cookieList.map((c) => `${c.name}=${c.value}`).join("; ");
+      }
+
+      return await client
+        .query(document, variables, {
+          requestPolicy: options.requestPolicy || 'cache-first',
+          ...options,
+          fetchOptions: {
+            cache: "force-cache",
+            ...options.fetchOptions,
+            headers: {
+              "content-type": "application/json",
+              ...(cookieHeader ? { cookie: cookieHeader } : {}),
+              ...options.fetchOptions?.headers,
+            },
+          },
+        })
+        .toPromise();
     },
-    mutation: async (document, variables) => {
+    mutation: async (document, variables, options = {}) => {
       const client = await _rscGetClient();
-      const result = client.mutation(document, variables);
-      return result.toPromise ? await result.toPromise() : await result;
+      return await client.mutation(document, variables, options).toPromise();
     },
   };
 };
