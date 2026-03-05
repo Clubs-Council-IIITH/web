@@ -53,17 +53,14 @@ export default async function CopyEvent(props) {
   const { id } = params;
 
   try {
-    const { document, variables } = combineQuery('CombinedQuery')
+    const { document, variables } = combineQuery("CombinedQuery")
       .add(GET_USER, { userInput: null })
-      .add(GET_UNFINISHED_EVENTS,
-        {
-          clubid: null,
-          public: false,
-          excludeCompleted: true,
-        })
-      .add(GET_FULL_EVENT, { eventid: id })
-      ;
-
+      .add(GET_UNFINISHED_EVENTS, {
+        clubid: null,
+        public: false,
+        excludeCompleted: true,
+      })
+      .add(GET_FULL_EVENT, { eventid: id });
     const { data } = await getClient().query(document, variables);
     const { userMeta, userProfile, events, event } = data;
     const user = { ...userMeta, ...userProfile };

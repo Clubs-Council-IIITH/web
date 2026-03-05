@@ -82,18 +82,19 @@ export default async function ManageEventID(props) {
     eventBillsData = data;
   }
 
-  // using graphQl-combine to merge get_active_clubs and get_user requests
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery("CombinedQuery")
     .add(GET_ACTIVE_CLUBS)
     .add(GET_USER, { userInput: null });
 
-  const { data: combinedData = {} } = await getClient().query(document, variables);
+  const { data: combinedData = {} } = await getClient().query(
+    document,
+    variables,
+  );
   const { allClubs, userMeta, userProfile } = combinedData;
 
   const user = { ...userMeta, ...userProfile };
   let clashFlag = false;
   if (["cc", "slo"].includes(user?.role)) {
-
     const { data: { clashingEvents } = {} } = await getClient().query(
       GET_CLASHING_EVENTS,
       {

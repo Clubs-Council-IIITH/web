@@ -29,7 +29,7 @@ async function getUser(currentUser) {
 }
 
 export default async function NewApplication() {
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery("CombinedQuery")
     .add(GET_USER, { userInput: null })
     .add(HAVE_APPLIED, { userInput: null });
 

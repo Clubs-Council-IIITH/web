@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 import { Container, Typography } from "@mui/material";
 
 import { getClient, combineQuery } from "gql/client";
@@ -36,7 +34,7 @@ export default async function NewEvent() {
     poc: "",
   };
 
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery("CombinedQuery")
     .add(GET_UNFINISHED_EVENTS, {
       clubid: null,
       public: false,
