@@ -23,8 +23,7 @@ export default async function TechTeam() {
   }, {
     requestPolicy: 'cache-first',
     fetchOptions: {
-      cache: 'force-cache',
-      next: { revalidate: 40 } 
+      cache: 'force-cache'
     }
   });
   const members = data?.members || [];
