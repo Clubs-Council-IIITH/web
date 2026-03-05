@@ -12,8 +12,8 @@ export const metadata = {
   title: "Tech Members | SLC @ IIIT-H",
 };
 
-export const dynamic = "force-static";
-export const revalidate = 40;
+// export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export default async function TechTeam() {
   const { data, error } = await getClient(false).query(GET_MEMBERS, {
@@ -23,7 +23,8 @@ export default async function TechTeam() {
   }, {
     requestPolicy: 'cache-first',
     fetchOptions: {
-      cache: 'force-cache'
+      cache: 'force-cache',
+      next: { revalidate: 3600 } 
     }
   });
   const members = data?.members || [];

@@ -19,6 +19,8 @@ export default async function ClubsGrid({ category, staticClubs = [] }) {
   );
 
   const allClubs = data?.allClubs || [];
+  if (error) {console.error("GraphQL Error:", error.message);
+  }
 
   return (
     <Grid container spacing={2}>

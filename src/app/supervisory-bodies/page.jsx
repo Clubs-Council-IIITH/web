@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export const dynamic = "force-static";
-export const revalidate = 3600;
+export const revalidate = 2400;
 
 export default async function SupervisoryBodies() {
   const sacMembers = await fetch(getStaticFile("sacMembers.json"), {

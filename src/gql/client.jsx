@@ -6,11 +6,14 @@ import { cacheExchange, createClient, fetchExchange } from "urql/core";
 const GRAPHQL_ENDPOINT =
   process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";
 
-const makeClient = async () => {
-  const cookieList = (await cookies()).getAll();
-  const cookieHeader = cookieList.length
-    ? cookieList.map((c) => `${c.name}=${c.value}`).join("; ")
-    : undefined;
+const makeClient = async (useCookies = true) => {
+  let cookieHeader = undefined;
+  if (useCookies) {
+    const cookieList = (await cookies()).getAll();
+    if (cookieList.length > 0) {
+      cookieHeader = cookieList.map((c) => `${c.name}=${c.value}`).join("; ");
+    }
+  }
 
   return createClient({
     url: GRAPHQL_ENDPOINT,
@@ -31,7 +34,7 @@ const { getClient: _rscGetClient } = registerUrql(makeClient);
 export const getClient = (useCookies = true) => {
   return {
     query: async (document, variables, options = {}) => {
-      const client = await _rscGetClient();
+      const client = await _rscGetClient(useCookies);
       
       let cookieHeader;
       if (useCookies) {
@@ -56,7 +59,7 @@ export const getClient = (useCookies = true) => {
         .toPromise();
     },
     mutation: async (document, variables, options = {}) => {
-      const client = await _rscGetClient();
+      const client = await _rscGetClient(useCookies);
       return await client.mutation(document, variables, options).toPromise();
     },
   };
