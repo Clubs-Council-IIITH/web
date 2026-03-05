@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
@@ -20,14 +20,11 @@ export const metadata = {
 };
 
 export default async function ClubsCouncil() {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_MEMBERS, {
-      clubInput: {
-        cid: "clubs",
-      }
-    });
-
-  const { data: { members } = {} } = await getClient().query(document, variables);
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: "clubs",
+    },
+  });
 
   const executiveMembers = members
     ?.map((member) => {

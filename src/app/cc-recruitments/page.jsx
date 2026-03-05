@@ -16,13 +16,14 @@ export const metadata = {
 const deadline = new Date("2025-04-30T17:00:00+05:30");
 
 async function getUser(currentUser) {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_USER_PROFILE,
-      {
-        userInput: { uid: currentUser.uid },
-      });
-
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(document, variables);
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(
+    GET_USER_PROFILE,
+    {
+      userInput: {
+        uid: currentUser.uid,
+      },
+    },
+  );
   const user = { ...userMeta, ...userProfile };
   return user;
 }

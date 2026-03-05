@@ -1,15 +1,15 @@
 import { Grid } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 
 import ClubCard from "components/clubs/ClubCard";
 
 export default async function ClubsGrid({ category, staticClubs = [] }) {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_ACTIVE_CLUBS, {});
-
-  const { data: { allClubs } = {} } = await getClient().query(document, variables);
+  const { data: { allClubs } = {} } = await getClient().query(
+    GET_ACTIVE_CLUBS,
+    {},
+  );
 
   return (
     <Grid container spacing={2}>

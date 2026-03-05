@@ -1,6 +1,6 @@
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import Icon from "components/Icon";
@@ -16,14 +16,11 @@ export const metadata = {
 };
 
 export default async function TechTeam() {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_MEMBERS, {
-      clubInput: {
-        cid: "clubs",
-      }
-    });
-
-  const { data: { members } = {} } = await getClient().query(document, variables);
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: "clubs",
+    },
+  });
 
   const techMembers = members
     ?.map((member) => {
@@ -39,39 +36,39 @@ export default async function TechTeam() {
   // construct dict of { year: [members] } where each year is a key
   const targetMembers = techMembers
     ? techMembers.reduce((acc, member) => {
-      const latestYear = extractFirstYear(member);
-      if (!acc[latestYear]) {
-        acc[latestYear] = [];
-      }
-      acc[latestYear].push(member);
-      return acc;
-    }, {})
+        const latestYear = extractFirstYear(member);
+        if (!acc[latestYear]) {
+          acc[latestYear] = [];
+        }
+        acc[latestYear].push(member);
+        return acc;
+      }, {})
     : {};
 
   const finaltargetMembers = targetMembers[-1]
     ? targetMembers[-1]?.sort((a, b) => {
-      const roleNameA = a.roles
-        .find((role) => role.endYear === null && role.endMonth === null)
-        ?.name?.toLowerCase();
-      const roleNameB = b.roles
-        .find((role) => role.endYear === null && role.endMonth === null)
-        ?.name?.toLowerCase();
+        const roleNameA = a.roles
+          .find((role) => role.endYear === null && role.endMonth === null)
+          ?.name?.toLowerCase();
+        const roleNameB = b.roles
+          .find((role) => role.endYear === null && role.endMonth === null)
+          ?.name?.toLowerCase();
 
-      if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
-        return -1;
-      }
-      if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
-        return 1;
-      }
-      if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
-        return 1;
-      }
-      if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
-        return -1;
-      }
+        if (roleNameA.includes("lead") && !roleNameB.includes("lead")) {
+          return -1;
+        }
+        if (roleNameB.includes("lead") && !roleNameA.includes("lead")) {
+          return 1;
+        }
+        if (roleNameA.includes("advisor") && !roleNameB.includes("advisor")) {
+          return 1;
+        }
+        if (roleNameB.includes("advisor") && !roleNameA.includes("advisor")) {
+          return -1;
+        }
 
-      return 0;
-    })
+        return 0;
+      })
     : [];
 
   return (

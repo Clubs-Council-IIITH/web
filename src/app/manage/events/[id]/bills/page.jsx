@@ -33,10 +33,11 @@ export default async function BillsUpload(props) {
     return redirect("/404");
   }
 
-  if ( !event ||
-       !["rejected", "not_submitted"].includes(eventBills?.state) ||
-       user?.uid !== event.clubid ||
-       event.status.state !== "approved"
+  if (
+    !event ||
+    !["rejected", "not_submitted"].includes(eventBills?.state) ||
+    user?.uid !== event.clubid ||
+    event.status.state !== "approved"
   ) {
     return (
       <Typography variant="h3">

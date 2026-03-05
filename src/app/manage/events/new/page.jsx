@@ -47,12 +47,12 @@ export default async function NewEvent() {
   const { data = {} } = await getClient().query(document, variables);
   const { userMeta, userProfile, events } = data;
 
-  const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
-    .add(GET_REPORTS_SUBMISSION_STATUS, {
-      clubid: userMeta?.role === "club" ? userMeta.uid : null
-    });
-
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    },
+  );
 
   return (
     <Container>

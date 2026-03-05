@@ -25,11 +25,10 @@ export default async function ManageMembers(props) {
   const onlyCurrent = searchParams?.current === "true";
   const onlyPast = searchParams?.past === "true";
 
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_USER, { userInput: null });
-
-  const { data = {} } = await getClient().query(document, variables);
-  const { userMeta, userProfile } = data;
+  const { data: { userMeta, userProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null },
+  );
   const user = { ...userMeta, ...userProfile };
 
   return (
@@ -148,10 +147,8 @@ export default async function ManageMembers(props) {
 }
 
 async function PendingMembersDataGrid() {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_PENDING_MEMBERS);
-
-  const { data: { pendingMembers } = {} } = await getClient().query(document, variables);
+  const { data: { pendingMembers } = {} } =
+    await getClient().query(GET_PENDING_MEMBERS);
 
   let usersResponse = {};
   if (pendingMembers && pendingMembers.length > 0) {
@@ -206,12 +203,9 @@ async function MembersDataGrid({
   onlyCurrent = false,
   onlyPast = false,
 }) {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_MEMBERS, {
-      clubInput: { cid: club }
-    });
-
-  const { data: { members } = {} } = await getClient().query(document, variables);
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: { cid: club },
+  });
 
   const currentYear = (new Date().getFullYear() + 1).toString();
 

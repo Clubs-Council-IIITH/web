@@ -18,10 +18,9 @@ export default async function EditProfile(props) {
   const { id } = params;
 
   // get currently logged in user
-  const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
-    .add(GET_USER, { userInput: null });
-
-  const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(curDocument, curVariables);
+  const {
+    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
+  } = await getClient().query(GET_USER, { userInput: null });
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   // get target user

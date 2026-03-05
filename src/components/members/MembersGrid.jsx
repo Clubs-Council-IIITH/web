@@ -1,6 +1,6 @@
 import { Divider, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import LocalUsersGrid from "components/users/LocalUsersGrid";
@@ -8,14 +8,11 @@ import LocalUsersGrid from "components/users/LocalUsersGrid";
 export const dynamic = "force-dynamic";
 
 export default async function MembersGrid({ clubid, onlyCurrent = false }) {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_MEMBERS, {
-      clubInput: {
-        cid: clubid,
-      }
-    });
-
-  const { data: { members } = {} } = await getClient().query(document, variables);
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: clubid,
+    },
+  });
 
   const currentYear = (new Date().getFullYear() + 1).toString();
 

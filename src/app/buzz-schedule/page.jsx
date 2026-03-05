@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_ALL_CLUBS } from "gql/queries/clubs";
 
 import BuzzSchedule from "components/buzz";
@@ -16,9 +16,7 @@ export default async function Managebuzz() {
   });
   const events = await event.json();
 
-  const { document, variables } = combineQuery('CombinedQuery').add(GET_ALL_CLUBS);
-
-  const { data: { allClubs } = {} } = await getClient().query(document, variables);
+  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUBS);
 
   return (
     <Container>

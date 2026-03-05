@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { Container, Grid, Stack, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
 
 import ActionPalette from "components/ActionPalette";
@@ -35,11 +35,10 @@ export default async function Profile(props) {
   // if user is a club, display the club's logo as profile picture
   let club = null;
   if (user?.role === "club") {
-    const { document, variables } = combineQuery('CombinedQuery')
-      .add(GET_CLUB,
-        { clubInput: { cid: user.uid } });
-
-    const { data: { club: targetClub } = {} } = await getClient().query(document, variables);
+    const { data: { club: targetClub } = {} } = await getClient().query(
+      GET_CLUB,
+      { clubInput: { cid: user.uid } },
+    );
     club = targetClub;
   }
 
@@ -51,12 +50,11 @@ export default async function Profile(props) {
   // get memberships if user is a person
   let memberships = [];
   if (fetchMemberships) {
-    const { document, variables } = combineQuery('CombinedQuery')
-      .add(GET_MEMBERSHIPS, {
-        uid: user.uid
-      });
-
-    const { data: { memberRoles } = {} } = await getClient().query(document, variables);
+    const {
+      data: { memberRoles },
+    } = await getClient().query(GET_MEMBERSHIPS, {
+      uid: user.uid,
+    });
 
     // get list of memberRoles.roles along with member.cid
     memberships = memberRoles.reduce(
@@ -82,7 +80,7 @@ export default async function Profile(props) {
         2. if current user is viewing their own profile and is not a club
       */}
       {currentUser?.role === "cc" ||
-        (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
+      (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
         <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
       <Grid

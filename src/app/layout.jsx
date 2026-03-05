@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
 import { ModeProvider } from "contexts/ModeContext";
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 
@@ -65,20 +65,17 @@ export default async function RootLayout({ children }) {
   const nonce = (await headers()).get("x-nonce") || "";
 
   // fetch currently logged in user
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_USER, { userInput: null });
-
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(document, variables);
+  const { data: { userMeta, userProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null },
+  );
   const user = { ...userMeta, ...userProfile };
 
   // if user is a club, display the club's logo as profile img
   if (user?.role === "club") {
-    const { document, variables } = combineQuery('CombinedQuery')
-      .add(GET_CLUB, {
-        clubInput: { cid: user?.uid }
-      });
-
-    const { data: { club } = {} } = await getClient().query(document, variables);
+    const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+      clubInput: { cid: user?.uid },
+    });
     user.img = club?.logo;
   }
 

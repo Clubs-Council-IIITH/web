@@ -1,4 +1,4 @@
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_HOLIDAYS } from "gql/queries/holidays";
 
 import ManageHolidaysClient from "components/holidays/ManageHolidaysClient";
@@ -8,10 +8,7 @@ export const metadata = {
 };
 
 export default async function ManageHolidays() {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_HOLIDAYS);
-
-  const { data: { holidays } = {} } = await getClient().query(document, variables);
+  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
 
   return <ManageHolidaysClient holidays={holidays} />;
 }

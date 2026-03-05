@@ -47,12 +47,12 @@ export default async function ApproveEventCC(props) {
   // construct dict of { year: [members] } where each year is a key
   const currentccMembers = ccMembers
     ? ccMembers.filter((member) => {
-      const latestYear = extractFirstYear(member);
-      if (latestYear === -1) {
-        return true;
-      }
-      return false;
-    })
+        const latestYear = extractFirstYear(member);
+        if (latestYear === -1) {
+          return true;
+        }
+        return false;
+      })
     : [];
 
   const clashFlag = clashingEvents?.length > 0;

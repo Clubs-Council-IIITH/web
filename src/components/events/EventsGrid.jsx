@@ -1,4 +1,4 @@
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_ALL_EVENTS } from "gql/queries/events";
 
@@ -21,13 +21,11 @@ export default async function EventsGrid({
   if (events) {
     data = { data: { events } };
   } else {
-    const { document, variables } = combineQuery('CombinedQuery')
-      .add(GET_ALL_EVENTS, {
-        clubid,
-        limit: limit || 12,
-        public: true,
-      });
-    data = await getClient().query(document, variables);
+    data = await getClient().query(GET_ALL_EVENTS, {
+      clubid,
+      limit: limit || 12,
+      public: true,
+    });
   }
   const uniqueClubIds = Array.from(
     new Set(data?.data?.events?.map((event) => event?.clubid)),
@@ -35,11 +33,9 @@ export default async function EventsGrid({
   const clubDataMap = {};
   await Promise.all(
     uniqueClubIds.map(async (clubid) => {
-      const { document, variables } = combineQuery('CombinedQuery')
-        .add(GET_CLUB, {
-          clubInput: { cid: clubid },
-        });
-      const { data: { club } = {} } = await getClient().query(document, variables);
+      const { data: { club } = {} } = await getClient().query(GET_CLUB, {
+        clubInput: { cid: clubid },
+      });
       clubDataMap[clubid] = club;
     }),
   );

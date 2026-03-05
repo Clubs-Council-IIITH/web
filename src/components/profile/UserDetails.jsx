@@ -1,15 +1,13 @@
 import { Box, Stack, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 
 export default async function UserDetails({ user }) {
   // get currently logged in user
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_USER, { userInput: null });
-
-  const { data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {} } = await getClient().query(document, variables);
-
+  const {
+    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
+  } = await getClient().query(GET_USER, { userInput: null });
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   return (
@@ -61,7 +59,7 @@ export default async function UserDetails({ user }) {
         </Typography>
       </Box>
       {["cc", "slo", "slc"].includes(currentUser?.role) ||
-        (currentUser?.uid === user?.uid && user?.role !== "club") ? (
+      (currentUser?.uid === user?.uid && user?.role !== "club") ? (
         <>
           <Box>
             <Typography

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 
@@ -19,24 +19,20 @@ export default async function EditClub(props) {
   let userMeta, club;
 
   try {
-    const { document, variables } = combineQuery('CombinedQuery')
-      .add(GET_USER, {
-        userInput: null
+    const { data: { userMeta: fetchedUserMeta } = {} } =
+      await getClient().query(GET_USER, {
+        userInput: null,
       });
-
-    const { data: { userMeta: fetchedUserMeta } = {} } = await getClient().query(document, variables);
     userMeta = fetchedUserMeta;
 
-    const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
-      .add(GET_CLUB,
-        {
-          clubInput: {
-            cid: id === encodeURIComponent("~mine") ? userMeta.uid : id,
-          },
-        });
-
-    const { data: { club: fetchedClub } = {} } = await getClient().query(curDocument, curVariables);
-
+    const { data: { club: fetchedClub } = {} } = await getClient().query(
+      GET_CLUB,
+      {
+        clubInput: {
+          cid: id === encodeURIComponent("~mine") ? userMeta.uid : id,
+        },
+      },
+    );
     club = fetchedClub;
   } catch (error) {
     notFound();

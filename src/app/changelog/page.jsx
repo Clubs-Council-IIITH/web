@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_MEMBERS } from "gql/queries/members";
 
 import Icon from "components/Icon";
@@ -61,14 +61,11 @@ export default async function Changelog(props) {
   const searchParams = await props.searchParams;
   const show_all = searchParams?.all === "true" ? true : false;
 
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_MEMBERS, {
-      clubInput: {
-        cid: "clubs",
-      }
-    });
-
-  const { data: { members } = {} } = await getClient().query(document, variables);
+  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+    clubInput: {
+      cid: "clubs",
+    },
+  });
 
   const techMembers = members
     ?.map((member) => {

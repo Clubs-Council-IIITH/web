@@ -71,13 +71,12 @@ export default async function ManageEventID(props) {
     new Date(event?.datetimeperiod[1]) < new Date() &&
     event?.budget?.length
   ) {
-    const { document: billsDoc, variables: billsVars } = combineQuery('CombinedQuery')
-      .add(GET_EVENT_BILLS_STATUS, {
+    const { error, data = {} } = await getClient().query(
+      GET_EVENT_BILLS_STATUS,
+      {
         eventid: id,
-      });
-
-    const { error, data = {} } = await getClient().query(billsDoc, billsVars);
-
+      },
+    );
     if (error && error.message.includes("Event not found"))
       return redirect("/404");
     eventBillsData = data;
@@ -95,13 +94,13 @@ export default async function ManageEventID(props) {
   let clashFlag = false;
   if (["cc", "slo"].includes(user?.role)) {
 
-    const { document: clashingDoc, variables: clashingVars } = combineQuery('CombinedQuery')
-      .add(GET_CLASHING_EVENTS, {
+    const { data: { clashingEvents } = {} } = await getClient().query(
+      GET_CLASHING_EVENTS,
+      {
         eventId: id,
         filterByLocation: true,
-      });
-
-    const { data: { clashingEvents } = {} } = await getClient().query(clashingDoc, clashingVars);
+      },
+    );
     clashFlag = clashingEvents && clashingEvents.length > 0;
   }
 
@@ -114,19 +113,18 @@ export default async function ManageEventID(props) {
     return redirect("/404");
   }
 
-  const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
-    .add(GET_REPORTS_SUBMISSION_STATUS,
-      {
-        clubid: userMeta?.role === "club" ? userMeta.uid : null,
-      });
-
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    },
+  );
 
   return (
     user?.role === "club" &&
-    user?.uid !== event?.clubid &&
-    !event?.collabclubs.includes(user?.uid) &&
-    redirect("/404"),
+      user?.uid !== event?.clubid &&
+      !event?.collabclubs.includes(user?.uid) &&
+      redirect("/404"),
     (
       <Box>
         <ActionPalette

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 import Icon from "components/Icon";
@@ -13,14 +13,14 @@ import { getUserNameFromUID } from "utils/users";
 import { techMembersGithubIds } from "constants/techmembersGithubIds";
 
 export default async function TechMemberCard({ uid, poc, roles }) {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_USER_PROFILE, {
+  const { data: { userProfile, userMeta } = {} } = await getClient().query(
+    GET_USER_PROFILE,
+    {
       userInput: {
         uid: uid,
       },
-    });
-
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(document, variables);
+    },
+  );
 
   if (userMeta === null) {
     return null;
@@ -149,7 +149,7 @@ export default async function TechMemberCard({ uid, poc, roles }) {
                 href={`https://github.com/${
                   techMembersGithubIds.find((member) => member.uid === uid)
                     ?.github
-                  }`}
+                }`}
                 passHref
                 target="_blank"
                 rel="noopener noreferrer"

@@ -63,13 +63,12 @@ export default async function EditEvent(props) {
     const { userMeta, userProfile, events, event } = data;
     const user = { ...userMeta, ...userProfile };
 
-    const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
-      .add(GET_REPORTS_SUBMISSION_STATUS,
-        {
-          clubid: userMeta?.role === "club" ? userMeta.uid : null,
-        });
-
-    const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
+    const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+      GET_REPORTS_SUBMISSION_STATUS,
+      {
+        clubid: userMeta?.role === "club" ? userMeta.uid : null,
+      },
+    );
 
     return (
       user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),

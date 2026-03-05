@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 
 import BulkEditForm from "components/members/BulkEditForm";
@@ -10,12 +10,9 @@ export const metadata = {
 };
 
 export default async function BulkEditPage() {
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_USER, {
-      userInput: null,
-    });
-
-  const { data: { userMeta } = {} } = await getClient().query(document, variables);
+  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+    userInput: null,
+  });
   const user = userMeta;
 
   if (user?.role !== "cc" && user?.role !== "club") {

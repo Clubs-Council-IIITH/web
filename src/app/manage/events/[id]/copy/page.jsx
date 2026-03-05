@@ -68,13 +68,12 @@ export default async function CopyEvent(props) {
     const { userMeta, userProfile, events, event } = data;
     const user = { ...userMeta, ...userProfile };
 
-    const { document: curDocument, variables: curVariables } = combineQuery('CombinedQuery')
-      .add(GET_REPORTS_SUBMISSION_STATUS,
-        {
-          clubid: userMeta?.role === "club" ? userMeta.uid : null,
-        });
-
-    const { data: { isEventReportsSubmitted } = {} } = await getClient().query(curDocument, curVariables);
+    const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+      GET_REPORTS_SUBMISSION_STATUS,
+      {
+        clubid: userMeta?.role === "club" ? userMeta.uid : null,
+      },
+    );
 
     let oldEventId = event._id;
 
@@ -92,9 +91,9 @@ export default async function CopyEvent(props) {
 
     return (
       user?.role === "club" &&
-      user?.uid !== event.clubid &&
-      !event?.collabclubs.includes(user?.uid) &&
-      redirect("/404"),
+        user?.uid !== event.clubid &&
+        !event?.collabclubs.includes(user?.uid) &&
+        redirect("/404"),
       (
         <Container>
           <Typography

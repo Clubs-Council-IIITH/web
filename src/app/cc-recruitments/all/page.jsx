@@ -16,10 +16,10 @@ export default async function AllRecruitmentsApplications(props) {
   const currentYear = new Date().getFullYear();
   const year = parseInt(searchParams?.year) || currentYear;
 
-  const { document, variables } = combineQuery('CombinedQuery')
-    .add(GET_ALL_RECRUITMENTS, { year });
-
-  const { data: { ccApplications } = {} } = await getClient().query(document, variables);
+  const { data: { ccApplications } = {} } = await getClient().query(
+    GET_ALL_RECRUITMENTS,
+    { year },
+  );
 
   let usersResponse = {};
   if (ccApplications && ccApplications.length > 0) {
