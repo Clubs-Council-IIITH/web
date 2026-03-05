@@ -23,6 +23,7 @@ async function getalleventsquery(querystring) {
     clubid: querystring["targetClub"],
     public: false,
     pastEventsLimit: querystring["pastEventsLimit"],
+    deletedEvents: querystring["deletedEvents"],
   });
 
   if (error) {
