@@ -23,16 +23,20 @@ export const dynamic = "force-static";
 export const revalidate = 3600;
 
 export default async function ClubsCouncil() {
-  const { data: { members } = {} } = await getClient(false).query(GET_MEMBERS, {
-    clubInput: {
-      cid: "clubs",
+  const { data: { members } = {} } = await getClient(false).query(
+    GET_MEMBERS,
+    {
+      clubInput: {
+        cid: "clubs",
+      },
     },
-  }, {
-    requestPolicy: 'cache-first',
-    fetchOptions: { cache: 'force-cache',
-      next: { revalidate: 3600 } 
-    }
-  });
+    {
+      requestPolicy: "cache-first",
+      fetchOptions: {
+        cache: "force-cache",
+      },
+    },
+  );
 
   const executiveMembers = members
     ?.map((member) => {
