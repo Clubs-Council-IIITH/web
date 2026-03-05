@@ -41,8 +41,8 @@ export const getClient = (useCookies = true) => {
 
       return await client
         .query(document, variables, {
-          requestPolicy: options.requestPolicy || 'cache-first',
           ...options,
+          requestPolicy: options.requestPolicy ?? "cache-first",
           fetchOptions: {
             cache: "force-cache",
             ...options.fetchOptions,
