@@ -14,13 +14,23 @@ import { techTeamWords } from "constants/ccMembersFilterWords";
 export const metadata = {
   title: "SLC Tech Team @ IIIT-H",
 };
+// export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export default async function TechTeam() {
-  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: {
-      cid: "clubs",
-    },
+  const { data, error } = await getClient(false).query(GET_MEMBERS, {
+    clubInput: { cid: "clubs" },
+  }, {
+    requestPolicy: 'cache-first',
+    fetchOptions: {
+      cache: 'force-cache',
+      next: { revalidate: 3600 } 
+    }
   });
+
+  const members = data?.members || [];
+  
+  if (error) {console.error("GraphQL Error:", error.message);}
 
   const techMembers = members
     ?.map((member) => {

@@ -6,10 +6,21 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import ClubCard from "components/clubs/ClubCard";
 
 export default async function ClubsGrid({ category, staticClubs = [] }) {
-  const { data: { allClubs } = {} } = await getClient().query(
+  const { data, error } = await getClient(false).query(
     GET_ACTIVE_CLUBS,
     {},
+    {
+      requestPolicy: 'cache-first',
+      fetchOptions: {
+        cache: 'force-cache',
+        next: { revalidate: 3600 }
+      }
+    }
   );
+
+  const allClubs = data?.allClubs || [];
+  if (error) {console.error("GraphQL Error:", error.message);
+  }
 
   return (
     <Grid container spacing={2}>
