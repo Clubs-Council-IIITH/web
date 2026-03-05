@@ -40,12 +40,12 @@ export default async function NewEvent() {
     .add(GET_UNFINISHED_EVENTS, {
       clubid: null,
       public: false,
-      excludeCompleted: true
+      excludeCompleted: true,
     })
     .add(GET_USER, { userInput: null });
 
   const { data = {} } = await getClient().query(document, variables);
-  const { userMeta, userProfile, events } = data;
+  const { events, userMeta } = data;
 
   const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
     GET_REPORTS_SUBMISSION_STATUS,
