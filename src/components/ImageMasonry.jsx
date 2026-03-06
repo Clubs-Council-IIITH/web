@@ -35,39 +35,8 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   return (
     <>
     
-      {/*loadedImages !== totalImages && (
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Grid container spacing={5} sx={{ width: "100%" }}>
-            {Array.from({ length: 12 }, (_, i) => (
-              <Grid
-                key={i}
-                size={{
-                  xs: 6,
-                  lg: 3,
-                }}
-              >
-                <Skeleton
-                  variant="rectangular"
-                  width="100%"
-                  height={0}
-                  animation="wave"
-                  sx={{
-                    paddingTop: "75%",
-                    borderRadius: 2,
-                  }}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      )*/} 
-      {/*loadedImages == totalImages &&*/ (
+    
+      { (
         <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
           {images.slice(0, limit).map((url, id) => {
             return (
@@ -121,22 +90,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
         id={openImage}
         onClose={() => setOpenImage(null)}
       />
-     {/* //{ Hidden Pre-loading for the images } 
-      images.slice(0, limit).map((url, i) => (
-        <Image
-          key={i}
-          src={url}
-          width={0}
-          height={0}
-          sizes="100vw"
-          alt={`hidden-img-${i}`}
-          onLoad={() => {
-            handleImageLoad();
-          }}
-          priority={true}
-          style={{ display: "none" }}
-        />
-      ))*/}
+    
     </>
   );
 }
