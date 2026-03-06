@@ -1,8 +1,3 @@
-import { Suspense } from "react";
-import { MDXRemote } from "next-mdx-remote-client/rsc";
-
-import remarkMdxRemoveExpressions from "remark-mdx-remove-expressions";
-
 import {
   Accordion,
   AccordionDetails,
@@ -23,6 +18,7 @@ import { GET_MEMBERS } from "gql/queries/members";
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import Markdown from "components/markdown/MarkdownRenderer";
 import LocalUsersGrid from "components/users/LocalUsersGrid";
 import { getNginxFile } from "utils/files";
 
@@ -212,22 +208,12 @@ export default async function Changelog(props) {
           </>
         ) : null}
       </Stack>
-      <Suspense
-        fallback={<Typography variant="body2">Loading changelog...</Typography>}
-      >
-        <MDXRemote
-          source={
-            show_all
-              ? logsText
-              : logsText?.split("\n").slice(0, limit).join("\n")
-          }
-          options={{
-            mdxOptions: {
-              remarkPlugins: [remarkMdxRemoveExpressions],
-            },
-          }}
-        />
-      </Suspense>
+      <Markdown
+        source={
+          show_all ? logsText : logsText?.split("\n").slice(0, limit).join("\n")
+        }
+        fallbackVariant="body2"
+      />
       {logsText.split("\n").length > limit ? (
         <Typography
           variant="body2"
