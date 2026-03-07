@@ -1,6 +1,6 @@
 import { Container, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS_BILLS_STATUS } from "gql/queries/events";
 
@@ -11,13 +11,14 @@ export const metadata = {
 };
 
 export default async function ManageBills() {
-  const response = await getClient().query(GET_ALL_EVENTS_BILLS_STATUS);
-  const allEventsBills = response?.data?.allEventsBills || [];
+  // using graphQl-combine to merge get_all_events_bills_status and get_user requests
+  const { document, variables } = combineQuery("CombinedQuery")
+    .add(GET_ALL_EVENTS_BILLS_STATUS)
+    .add(GET_USER, { userInput: null });
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { data = {} } = await getClient().query(document, variables);
+  const { allEventsBills = [], userMeta, userProfile } = data;
+
   const user = { ...userMeta, ...userProfile };
 
   const filterEventsbyState = (states) =>

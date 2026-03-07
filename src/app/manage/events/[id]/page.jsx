@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
@@ -82,14 +82,15 @@ export default async function ManageEventID(props) {
     eventBillsData = data;
   }
 
-  const {
-    data: { allClubs },
-  } = await getClient().query(GET_ACTIVE_CLUBS);
+  const { document, variables } = combineQuery("CombinedQuery")
+    .add(GET_ACTIVE_CLUBS)
+    .add(GET_USER, { userInput: null });
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
+  const { data: combinedData = {} } = await getClient().query(
+    document,
+    variables,
   );
+  const { allClubs, userMeta, userProfile } = combinedData;
 
   const user = { ...userMeta, ...userProfile };
   let clashFlag = false;

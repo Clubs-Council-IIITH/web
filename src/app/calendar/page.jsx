@@ -1,4 +1,4 @@
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import { GET_ALL_EVENTS_FOR_CALENDAR } from "gql/queries/events";
 import { GET_HOLIDAYS } from "gql/queries/holidays";
@@ -10,16 +10,13 @@ export const metadata = {
 };
 
 export default async function Calendar() {
-  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS);
+  const { document, variables } = combineQuery("CombinedQuery")
+    .add(GET_ALL_CLUB_IDS)
+    .add(GET_ALL_EVENTS_FOR_CALENDAR, { clubid: null })
+    .add(GET_HOLIDAYS);
 
-  const { data: { calendarEvents } = {} } = await getClient().query(
-    GET_ALL_EVENTS_FOR_CALENDAR,
-    {
-      clubid: null,
-    },
-  );
-
-  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
+  const { data = {} } = await getClient().query(document, variables);
+  const { allClubs, calendarEvents, holidays } = data;
 
   return (
     <FullCalendar

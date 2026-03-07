@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_EVENT_STATUS } from "gql/queries/events";
 import { GET_CLASHING_EVENTS } from "gql/queries/events";
@@ -21,27 +21,18 @@ export default async function ApproveEventCC(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_EVENT_STATUS, {
-    eventid: id,
-  });
-  const { data: { clashingEvents } = {} } = await getClient().query(
-    GET_CLASHING_EVENTS,
-    {
-      eventId: id,
-    },
-  );
+  const { document, variables } = combineQuery("CombinedQuery")
+    .add(GET_EVENT_STATUS, { eventid: id })
+    .add(GET_CLASHING_EVENTS, { eventId: id })
+    .add(GET_USER, { userInput: null })
+    .add(GET_MEMBERS, {
+      clubInput: { cid: "clubs" },
+    });
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { data = {} } = await getClient().query(document, variables);
+  const { event, clashingEvents, userMeta, userProfile, members } = data;
   const user = { ...userMeta, ...userProfile };
 
-  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: {
-      cid: "clubs",
-    },
-  });
   const ccMembers = members
     ?.map((member) => {
       const { roles } = member;
