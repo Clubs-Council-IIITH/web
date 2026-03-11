@@ -55,6 +55,7 @@ export default function EventsTable({
   clubid,
   scheduleSort = "asc",
   hideClub = false,
+  role = false,
 }) {
   const router = useRouter();
   const theme = useTheme();
@@ -395,21 +396,23 @@ export default function EventsTable({
                 label="Last 4 Months"
                 sx={{ marginLeft: 1 }}
               />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={deleteToggle.includes("toggleDeletedEvents")}
-                    onChange={(e) => {
-                      setDeleteToggle(
-                        e.target.checked ? ["toggleDeletedEvents"] : [],
-                      );
-                    }}
-                    color="primary"
-                  />
-                }
-                label="Show Only Deleted Events"
-                sx={{ marginLeft: 1 }}
-              />
+              {role && (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={deleteToggle.includes("toggleDeletedEvents")}
+                      onChange={(e) => {
+                        setDeleteToggle(
+                          e.target.checked ? ["toggleDeletedEvents"] : [],
+                        );
+                      }}
+                      color="primary"
+                    />
+                  }
+                  label="Show Only Deleted Events"
+                  sx={{ marginLeft: 1 }}
+                />
+              )}
             </Box>
           )}
           <ConfirmDialog
