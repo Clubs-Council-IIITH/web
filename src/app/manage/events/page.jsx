@@ -23,6 +23,7 @@ async function getalleventsquery(querystring) {
     clubid: querystring["targetClub"],
     public: false,
     pastEventsLimit: querystring["pastEventsLimit"],
+    deletedEvents: querystring["deletedEvents"],
   });
 
   if (error) {
@@ -86,6 +87,7 @@ export default async function ManageEvents() {
         clubid={userMeta?.role === "club" ? userMeta.uid : null}
         scheduleSort="desc"
         hideClub={userMeta?.role === "club"} // hide club column if accessed by a club
+        canViewDeletedEvents={userMeta?.role === "slo"}
       />
     </Container>
   );
