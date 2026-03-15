@@ -23,7 +23,7 @@ export default async function ApproveEventCC(props) {
 
   const { document, variables } = combineQuery("CombinedQuery")
     .add(GET_EVENT_STATUS, { eventid: id })
-    .add(GET_CLASHING_EVENTS, { eventId: id })
+    .add(GET_CLASHING_EVENTS, { eventId: id, filterByLocation: true })
     .add(GET_USER, { userInput: null })
     .add(GET_MEMBERS, {
       clubInput: { cid: "clubs" },
