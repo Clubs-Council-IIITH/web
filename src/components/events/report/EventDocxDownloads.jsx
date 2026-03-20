@@ -23,6 +23,7 @@ import Icon from "components/Icon";
 import { PUBLIC_URL } from "utils/files";
 import { audienceLabels, locationLabel } from "utils/formatEvent";
 import { formatDateTime } from "utils/formatTime";
+import { stripMarkdown } from "utils/markdown";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";
@@ -351,7 +352,7 @@ export function DownloadEventReportDocx({
                           children: [
                             new TableCell({
                               children: [
-                                new Paragraph(item?.description || "Unknown"),
+                                new Paragraph(stripMarkdown(item?.description) || "Unknown"),
                               ],
                               width: {
                                 size: 50,

@@ -20,6 +20,7 @@ import {
   stateLabel,
 } from "utils/formatEvent";
 import { formatDateTime, ISOtoHuman } from "utils/formatTime";
+import { stripMarkdown } from "utils/markdown";
 
 const LifeLogo = "/assets/life-logo-full-color-light.png";
 const IIITLogo = "/assets/iiit-logo-color.png";
@@ -202,8 +203,9 @@ export function DownloadEventReport({
                         (item) => `
                     <tr>
                         <td>${
-                          item?.description?.replace(/\n/g, "<br />") ||
-                          "Unknown"
+                          item?.description
+                            ? item.description.replace(/\n/g, "<br />")
+                            : "Unknown"
                         }</td>
                         <td class="adv">${item?.amount || "Unknown"}</td>
                         <td class="adv">${
@@ -607,7 +609,7 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
             }</p>
             <p><strong>Description:</strong> ${
               (event?.description
-                ? event?.description.replace(/\n/g, "<br />")
+                ? stripMarkdown(event?.description).replace(/\n/g, "<br />")
                 : null) || "N/A"
             }</p>
         </div>
@@ -631,9 +633,9 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
                             (item) => `
                         <tr>
                             <td>${
-                              (item?.description
-                                ? item?.description.replace(/\n/g, "<br />")
-                                : null) || "Unknown"
+                              item?.description
+                                ? item.description.replace(/\n/g, "<br />")
+                                : "Unknown"
                             }</td>
                             <td class="adv">${item?.amount || "Unknown"}</td>
                             <td class="adv">${

@@ -9,8 +9,10 @@ import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
+import Markdown from "components/markdown/MarkdownRenderer";
 import MembersGrid from "components/members/MembersGrid";
 import { getClub } from "utils/fetchData";
+import { stripMarkdown } from "utils/markdown";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -23,6 +25,7 @@ export async function generateMetadata(props) {
 
   return {
     title: club.name,
+    description: stripMarkdown(club.description),
   };
 }
 
@@ -51,7 +54,7 @@ export default async function Club(props) {
           name={club.name}
           logo={club.logo}
           tagline={club.tagline}
-          description={club.description}
+          description={<Markdown source={club.description} />}
         />
       </Box>
       <ClubSocials socials={club.socials} email={club.email} />
@@ -128,9 +131,8 @@ export default async function Club(props) {
               variant="none"
               color="secondary"
               component={ButtonLink}
-              href={`/${
-                club?.category == "body" ? "student-bodies" : "clubs"
-              }/${id}/members`}
+              href={`/${club?.category == "body" ? "student-bodies" : "clubs"
+                }/${id}/members`}
             >
               <Typography
                 variant="button"
