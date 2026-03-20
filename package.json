@@ -27,7 +27,7 @@
     "@mui/material-nextjs": "^7.3.8",
     "@mui/x-data-grid": "^8.27.3",
     "@mui/x-date-pickers": "^8.27.2",
-    "@next/mdx": "16.1.6",
+    "@next/mdx": "16.2.0",
     "@svgr/webpack": "^8.1.0",
     "@urql/next": "^2.0.0",
     "add-dependencies": "^1.1.0",
@@ -42,7 +42,7 @@
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.12.38",
     "motion": "^12.34.3",
-    "next": "16.1.6",
+    "next": "16.2.0",
     "next-mdx-remote-client": "^2.1.9",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^8.3.0",
@@ -65,7 +65,7 @@
   "devDependencies": {
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "^3.8.1",
     "sitemap": "^8.0.2"
