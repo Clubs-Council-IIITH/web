@@ -24,7 +24,7 @@ export default async function EditProfile(props) {
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   // get target user
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedUserProfileQuery')
     .add(GET_USER_PROFILE, {
       userInput: {
         uid: id

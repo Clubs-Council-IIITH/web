@@ -39,7 +39,7 @@ export default async function EditEventReport(props) {
   const { id } = params;
   try {
     // using graphQl-combine to merge get_user, get_full_event and get_event_report requests
-    const { document, variables } = combineQuery('CombinedQuery')
+    const { document, variables } = combineQuery('CombinedEventReportQuery')
       .add(GET_USER, { userInput: null })
       .add(GET_FULL_EVENT, { eventid: id })
       .add(GET_EVENT_REPORT, { eventid: id });

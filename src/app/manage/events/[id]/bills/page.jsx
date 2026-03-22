@@ -16,7 +16,7 @@ export default async function BillsUpload(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedBillsQuery')
     .add(GET_USER, { userInput: null })
     .add(GET_EVENT_BILLS_STATUS, { eventid: id })
     .add(GET_EVENT_BUDGET, { eventid: id });

@@ -15,7 +15,7 @@ export default async function Docs(props) {
   const { id } = params;
 
   // using graphQl-combine to merge get_user and get_file requests
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedDocDetailsQuery')
     .add(GET_USER, { userInput: null })
     .add(GET_FILE, { fileId: id });
 

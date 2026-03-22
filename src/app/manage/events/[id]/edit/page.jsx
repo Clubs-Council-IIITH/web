@@ -49,7 +49,7 @@ export default async function EditEvent(props) {
   const { id } = params;
 
   try {
-    const { document, variables } = combineQuery('CombinedQuery')
+    const { document, variables } = combineQuery('CombinedEditEventQuery')
       .add(GET_USER, { userInput: null })
       .add(GET_UNFINISHED_EVENTS,
         {

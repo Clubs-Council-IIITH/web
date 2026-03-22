@@ -21,7 +21,7 @@ export default async function ApproveEventCC(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedApproveEventQuery')
     .add(GET_EVENT_STATUS, { eventid: id })
     .add(GET_CLASHING_EVENTS, { eventId: id })
     .add(GET_USER, { userInput: null })

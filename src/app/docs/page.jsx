@@ -10,7 +10,7 @@ export const metadata = {
 
 export default async function Docs() {
   // using graphQl-combine to merge get_all_files and get_user requests
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedDocsQuery')
     .add(GET_ALL_FILES, { filetype: "pdf" })
     .add(GET_USER, { userInput: null });
 

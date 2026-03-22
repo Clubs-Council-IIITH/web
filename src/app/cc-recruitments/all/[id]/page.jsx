@@ -29,8 +29,7 @@ export default async function CCApplicantDetails(props) {
   // get target user
   const user = await getUserProfile(id);
 
-  // using graphQl-combine to merge get_all_recruitments and get_memberships requests
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedCCApplicantDetailsQuery')
     .add(GET_ALL_RECRUITMENTS, { year: year })
     .add(GET_MEMBERSHIPS, { uid: user.uid });
 

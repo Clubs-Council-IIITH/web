@@ -37,7 +37,7 @@ export default async function NewEventReport(props) {
   const { id } = params;
 
   try {
-    const { document, variables } = combineQuery('CombinedQuery')
+    const { document, variables } = combineQuery('CombinedEventReportQuery')
       .add(GET_USER, { userInput: null })
       .add(GET_FULL_EVENT, { eventid: id });
 

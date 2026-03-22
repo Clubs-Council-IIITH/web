@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function Calendar() {
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedCalendarQuery')
     .add(GET_ALL_CLUB_IDS)
     .add(GET_ALL_EVENTS_FOR_CALENDAR, { clubid: null })
     .add(GET_HOLIDAYS);

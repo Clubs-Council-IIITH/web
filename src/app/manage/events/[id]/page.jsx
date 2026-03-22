@@ -83,7 +83,7 @@ export default async function ManageEventID(props) {
   }
 
   // using graphQl-combine to merge get_active_clubs and get_user requests
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedEventDetailsQuery')
     .add(GET_ACTIVE_CLUBS)
     .add(GET_USER, { userInput: null });
 

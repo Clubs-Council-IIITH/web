@@ -36,7 +36,7 @@ export default async function NewEvent() {
     poc: "",
   };
 
-  const { document, variables } = combineQuery('CombinedQuery')
+  const { document, variables } = combineQuery('CombinedEventQuery')
     .add(GET_UNFINISHED_EVENTS, {
       clubid: null,
       public: false,
