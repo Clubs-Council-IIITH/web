@@ -152,22 +152,24 @@ async function PendingMembersDataGrid() {
 
   let usersResponse = {};
   if (pendingMembers && pendingMembers.length > 0) {
-    const { document, variables } = combineQuery('CompositePendingMembers')
-      .addN(
-        GET_USER_PROFILE,
-        pendingMembers.map(member => ({ userInput: { uid: member.uid } }))
-      );
+    const { document, variables } = combineQuery(
+      "CompositePendingMembers",
+    ).addN(
+      GET_USER_PROFILE,
+      pendingMembers.map((member) => ({ userInput: { uid: member.uid } })),
+    );
 
     const { data } = await getClient().query(document, variables);
     usersResponse = data;
   }
 
-  const processedMembers = pendingMembers?.map((member, index) => ({
-    ...member,
-    ...usersResponse?.[`userProfile_${index}`],
-    ...usersResponse?.[`userMeta_${index}`],
-    mid: `${member.cid}:${member.uid}`,
-  })) || [];
+  const processedMembers =
+    pendingMembers?.map((member, index) => ({
+      ...member,
+      ...usersResponse?.[`userProfile_${index}`],
+      ...usersResponse?.[`userMeta_${index}`],
+      mid: `${member.cid}:${member.uid}`,
+    })) || [];
 
   return (
     <>
@@ -220,22 +222,22 @@ async function MembersDataGrid({
 
   let usersResponse = {};
   if (targetMembers && targetMembers.length > 0) {
-    const { document, variables } = combineQuery('CompositeTargetMembers')
-      .addN(
-        GET_USER_PROFILE,
-        targetMembers.map(member => ({ userInput: { uid: member.uid } }))
-      );
+    const { document, variables } = combineQuery("CompositeTargetMembers").addN(
+      GET_USER_PROFILE,
+      targetMembers.map((member) => ({ userInput: { uid: member.uid } })),
+    );
 
     const { data } = await getClient().query(document, variables);
     usersResponse = data;
   }
 
-  const processedMembers = targetMembers?.map((member, index) => ({
-    ...member,
-    ...usersResponse?.[`userProfile_${index}`],
-    ...usersResponse?.[`userMeta_${index}`],
-    mid: `${member.cid}:${member.uid}`,
-  })) || [];
+  const processedMembers =
+    targetMembers?.map((member, index) => ({
+      ...member,
+      ...usersResponse?.[`userProfile_${index}`],
+      ...usersResponse?.[`userMeta_${index}`],
+      mid: `${member.cid}:${member.uid}`,
+    })) || [];
 
   return <MembersTable members={processedMembers} />;
 }

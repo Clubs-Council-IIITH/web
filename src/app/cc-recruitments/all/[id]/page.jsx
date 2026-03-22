@@ -29,7 +29,7 @@ export default async function CCApplicantDetails(props) {
   // get target user
   const user = await getUserProfile(id);
 
-  const { document, variables } = combineQuery('CombinedCCApplicantDetailsQuery')
+  const { document, variables } = combineQuery("CombinedCCApplicantDetailsQuery")
     .add(GET_ALL_RECRUITMENTS, { year: year })
     .add(GET_MEMBERSHIPS, { uid: user.uid });
 

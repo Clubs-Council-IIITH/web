@@ -23,11 +23,14 @@ export default async function AllRecruitmentsApplications(props) {
 
   let usersResponse = {};
   if (ccApplications && ccApplications.length > 0) {
-    const { document, variables } = combineQuery('CompositeApplicantProfiles')
-      .addN(
-        GET_USER_PROFILE,
-        ccApplications.map(applicant => ({ userInput: { uid: applicant.uid } }))
-      );
+    const { document, variables } = combineQuery(
+      "CompositeApplicantProfiles",
+    ).addN(
+      GET_USER_PROFILE,
+      ccApplications.map((applicant) => ({
+        userInput: { uid: applicant.uid },
+      })),
+    );
 
     const { data = {} } = await getClient().query(document, variables);
     usersResponse = data;

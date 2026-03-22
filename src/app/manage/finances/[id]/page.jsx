@@ -18,8 +18,7 @@ export default async function EditFinance(props) {
   const params = await props.params;
   const { id } = params;
 
-  // using graphQl-combine to merge get_event_budget and get_event_bills_status requests
-  const { document, variables } = combineQuery('CombinedEventFinanceQuery')
+  const { document, variables } = combineQuery("CombinedEventFinanceQuery")
     .add(GET_EVENT_BUDGET, { eventid: id })
     .add(GET_EVENT_BILLS_STATUS, { eventid: id });
 

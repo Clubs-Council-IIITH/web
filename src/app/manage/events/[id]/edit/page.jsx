@@ -49,14 +49,13 @@ export default async function EditEvent(props) {
   const { id } = params;
 
   try {
-    const { document, variables } = combineQuery('CombinedEditEventQuery')
+    const { document, variables } = combineQuery("CombinedEditEventQuery")
       .add(GET_USER, { userInput: null })
-      .add(GET_UNFINISHED_EVENTS,
-        {
-          clubid: null,
-          public: false,
-          excludeCompleted: true,
-        })
+      .add(GET_UNFINISHED_EVENTS, {
+        clubid: null,
+        public: false,
+        excludeCompleted: true,
+      })
       .add(GET_FULL_EVENT, { eventid: id });
 
     const { data = {} } = await getClient().query(document, variables);

@@ -9,12 +9,12 @@ export const metadata = {
 };
 
 export default async function Docs() {
-  // using graphQl-combine to merge get_all_files and get_user requests
-  const { document, variables } = combineQuery('CombinedDocsQuery')
+  const { document, variables } = combineQuery("CombinedDocsQuery")
     .add(GET_ALL_FILES, { filetype: "pdf" })
     .add(GET_USER, { userInput: null });
 
-  const { data: { storagefiles, userMeta, userProfile } = {} } = await getClient().query(document, variables);
+  const { data: { storagefiles, userMeta, userProfile } = {} } =
+    await getClient().query(document, variables);
 
   const user = { ...userMeta, ...userProfile };
   const isPriviliged = user?.role == "cc" ? true : false;

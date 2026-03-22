@@ -14,12 +14,12 @@ export default async function Docs(props) {
   const params = await props.params;
   const { id } = params;
 
-  // using graphQl-combine to merge get_user and get_file requests
-  const { document, variables } = combineQuery('CombinedDocDetailsQuery')
+  const { document, variables } = combineQuery("CombinedDocDetailsQuery")
     .add(GET_USER, { userInput: null })
     .add(GET_FILE, { fileId: id });
 
-  const { data: { userMeta, userProfile, storagefile } = {} } = await getClient().query(document, variables);
+  const { data: { userMeta, userProfile, storagefile } = {} } =
+    await getClient().query(document, variables);
 
   const user = { ...userMeta, ...userProfile };
 

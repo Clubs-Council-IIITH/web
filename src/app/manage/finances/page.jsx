@@ -12,7 +12,7 @@ export const metadata = {
 
 export default async function ManageBills() {
   // using graphQl-combine to merge get_all_events_bills_status and get_user requests
-  const { document, variables } = combineQuery('CombinedFinancesQuery')
+  const { document, variables } = combineQuery("CombinedFinancesQuery")
     .add(GET_ALL_EVENTS_BILLS_STATUS)
     .add(GET_USER, { userInput: null });
 
