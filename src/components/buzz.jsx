@@ -16,7 +16,7 @@ const columns = [
     headerName: "Club",
     minWidth: 350,
     // flex: 5,
-    valueGetter: (value, row, column, apiRef) => ({
+    valueGetter: (value, row) => ({
       name: row.club,
       clubdata: row.clubdata,
     }),
