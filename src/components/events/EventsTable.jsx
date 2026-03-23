@@ -61,8 +61,8 @@ export default function EventsTable({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Toggle state for Last 4 Months
   const [deleteToggle, setDeleteToggle] = useState([]);
+  // Toggle state for Last 4 Months
   const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
   const [events, setEvents] = useState(initialEvents || []);
   const [dialog, setDialog] = useState(false);
@@ -79,7 +79,7 @@ export default function EventsTable({
       let params = {
         targetClub: clubid,
         pastEventsLimit: filterMonth.includes("pastEventsLimit") ? 4 : null,
-        deletedEvents: deleteToggle.includes("toggleDeletedEvents"),
+        hideDeleted: deleteToggle.includes("toggleDeletedEvents"),
       };
       const result = await query(params);
       setEvents(result || []);
@@ -409,7 +409,7 @@ export default function EventsTable({
                       color="primary"
                     />
                   }
-                  label="Show Only Deleted Events"
+                  label="Hide Deleted Events"
                   sx={{ marginLeft: 1 }}
                 />
               )}
