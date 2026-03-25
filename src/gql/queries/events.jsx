@@ -41,7 +41,7 @@ export const GET_ALL_EVENTS = gql`
     $public: Boolean
     $timings: [DateTime!]
     $pastEventsLimit: Int
-    $deletedEvents: Boolean
+    $hideDeleted: Boolean
   ) {
     events(
       clubid: $clubid
@@ -52,7 +52,7 @@ export const GET_ALL_EVENTS = gql`
       public: $public
       timings: $timings
       pastEventsLimit: $pastEventsLimit
-      deletedEvents: $deletedEvents
+      hideDeleted: $hideDeleted
     ) {
       _id
       name
