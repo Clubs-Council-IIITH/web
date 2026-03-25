@@ -50,7 +50,7 @@ COPY --from=prod-build /web/next.config.js ./next.config.js
 COPY --from=prod-build /web/node_modules ./node_modules
 COPY --from=prod-build /web/package.json ./package.json
 
-RUN chown -R node:node /web
+# RUN chown -R node:node /web
+# USER node
 
-USER node
 ENTRYPOINT [ "npm", "start" ]
