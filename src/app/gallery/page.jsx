@@ -9,32 +9,17 @@ export const metadata = {
   title: "Gallery | Life @ IIIT-H",
 };
 
-async function returnImageObject(name){
-
-  const dimensions = await imageSizeFromFile(`public/gallery_images/${name}`);
-
-  return {url:`/gallery_images/${name}`,  width:dimensions.width, height: dimensions.height};
-
-
-
-}
 export default async function Gallery({ limit = undefined }) {
-  const imagePath= path.join(process.cwd(), 'public/gallery_images');
-  const file_names = await fs.readdir(imagePath )
-  const galleryItems = await Promise.all( file_names.map(returnImageObject));
-  console.log(galleryItems);
-  // const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
-  //   next: { revalidate: 1200 }, // 20 minutes
-  // });
+  const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
+    next: { revalidate: 1200 }, // 20 minutes
+  });
 
-  // const galleryJSON = await response.json();
-  // const galleryItems = galleryJSON["gallery"].map(
-  //   (item) => ({url:`${FILESERVER_URL}${item.url}`, height:item.height, width:item.width}),
-  // );
 
-  // for(let i in galleryItems){
+  const galleryJSON = await response.json();
+  const galleryItems = galleryJSON["gallery"].map(
+    (item) => ({url:`${FILESERVER_URL}${item.url}`, height:item.height, width:item.width}),
+  );
 
-  // }
 
 
   return <ImageMasonry images={galleryItems} limit={limit} />;
