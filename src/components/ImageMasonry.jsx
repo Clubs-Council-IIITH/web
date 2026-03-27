@@ -35,9 +35,6 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   }
   useEffect(()=>{
     if(loadedImages<totalImages){
-      console.log(`${loadedImages}`);
-      console.log(images[loadedImages].height);
-      console.log(images[loadedImages].url);
       const timer = setTimeout(()=>{
         setLoadedImages((prev)=>Math.min(prev+20, totalImages));
         
@@ -85,7 +82,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
                       width={url.width|0}
                       height={url.height|0}
                       sizes="100vw"
-                      loading={"eager"}
+                      loading={id < loadedImages?"eager":"lazy"}
                       alt={`Gallery Image ${id}`}
                       style={{
                         width: "100%",
@@ -101,17 +98,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
           })}
         </ImageList>
       )}
-      {/* <div style={{display:"none"}} aria-hidden="true">
-        {images.slice(loadedImages, loadedImages+20>totalImages?totalImages:loadedImages+20).map((url, id)=>(
-  
-         <img key={`preload-${url.url}`} src={url.url} loading="eager"></img>
 
-
-
-
-        ))}
-
-      </div> */}
       <ImageModal
         images={images}
         id={openImage}
