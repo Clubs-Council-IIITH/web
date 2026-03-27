@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, CircularProgress, Fade } from "@mui/material";
 
 export default function Loading() {
