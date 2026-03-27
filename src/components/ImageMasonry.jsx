@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import {
@@ -16,6 +16,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import ImageModal from "components/ImageModal";
+import { SettingsEthernet } from "@mui/icons-material";
 
 export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const theme = useTheme();
@@ -24,6 +25,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const [openImage, setOpenImage] = useState(null);
   const [loadedImages, setLoadedImages] = useState(0);
   const totalImages = limit ? Math.min(images.length, limit) : images.length;
+ 
 
   const handleImageLoad = () => {
     setLoadedImages((prev) => prev + 1);
@@ -31,6 +33,20 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const print_images=(images)=>{
     console.log(images)
   }
+  useEffect(()=>{
+    if(loadedImages<totalImages){
+      console.log(`${loadedImages}`);
+      console.log(images[loadedImages].height);
+      console.log(images[loadedImages].url);
+      const timer = setTimeout(()=>{
+        setLoadedImages((prev)=>Math.min(prev+20, totalImages));
+        
+      }, 1000);
+
+
+    }
+  }, [loadedImages, totalImages]);
+
 
   return (
     <>
@@ -38,7 +54,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
     
       { (
         <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
-          {images.slice(0, limit).map((url, id) => {
+          {images.slice(0, totalImages).map((url, id) => {d
             return (
               <ImageListItem key={id}>
                 <Card
@@ -66,10 +82,10 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
                   >
                     <Image
                       src={url.url}
-                      width={url.width}
-                      height={url.height}
+                      width={url.width|0}
+                      height={url.height|0}
                       sizes="100vw"
-                      
+                      loading={"eager"}
                       alt={`Gallery Image ${id}`}
                       style={{
                         width: "100%",
@@ -85,6 +101,17 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
           })}
         </ImageList>
       )}
+      {/* <div style={{display:"none"}} aria-hidden="true">
+        {images.slice(loadedImages, loadedImages+20>totalImages?totalImages:loadedImages+20).map((url, id)=>(
+  
+         <img key={`preload-${url.url}`} src={url.url} loading="eager"></img>
+
+
+
+
+        ))}
+
+      </div> */}
       <ImageModal
         images={images}
         id={openImage}

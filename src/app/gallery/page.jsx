@@ -19,19 +19,22 @@ async function returnImageObject(name){
 
 }
 export default async function Gallery({ limit = undefined }) {
-  // const imagePath= path.join(process.cwd(), 'public/gallery_images');
-  // const file_names = await fs.readdir(imagePath )
-  // const galleryItems = await Promise.all( file_names.map(returnImageObject));
-  // console.log(galleryItems);
-   const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
-    next: { revalidate: 1200 }, // 20 minutes
-  });
+  const imagePath= path.join(process.cwd(), 'public/gallery_images');
+  const file_names = await fs.readdir(imagePath )
+  const galleryItems = await Promise.all( file_names.map(returnImageObject));
+  console.log(galleryItems);
+  // const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
+  //   next: { revalidate: 1200 }, // 20 minutes
+  // });
 
-  const galleryJSON = await response.json();
-  const galleryItems = galleryJSON["gallery"].map(
-    (item) => ({url:`${FILESERVER_URL}${item.url}`, height:item.height|0, width:item.width|0}),
-  );
+  // const galleryJSON = await response.json();
+  // const galleryItems = galleryJSON["gallery"].map(
+  //   (item) => ({url:`${FILESERVER_URL}${item.url}`, height:item.height, width:item.width}),
+  // );
 
+  // for(let i in galleryItems){
+
+  // }
 
 
   return <ImageMasonry images={galleryItems} limit={limit} />;
