@@ -17,7 +17,7 @@ export default async function EventReport(props) {
     const { document, variables } = combineQuery("CombinedEventReportQuery")
       .add(GET_FULL_EVENT, { eventid: id })
       .add(GET_USER, { userInput: null })
-      .add(GET_EVENT_REPORT, { eventid: id })
+      .add(GET_EVENT_REPORT, { eventidReport: id })
       .add(GET_ACTIVE_CLUBS);
 
     const { data } = await getClient().query(document, variables);

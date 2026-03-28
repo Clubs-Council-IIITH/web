@@ -19,7 +19,7 @@ export default async function EditFinance(props) {
   const { id } = params;
 
   const { document, variables } = combineQuery("CombinedEventFinanceQuery")
-    .add(GET_EVENT_BUDGET, { eventid: id })
+    .add(GET_EVENT_BUDGET, { eventidBudget: id })
     .add(GET_EVENT_BILLS_STATUS, { eventid: id });
 
   const { data = {}, error } = await getClient().query(document, variables);

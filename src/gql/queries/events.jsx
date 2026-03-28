@@ -260,8 +260,8 @@ export const GET_FULL_EVENT = gql`
 `;
 
 export const GET_EVENT_BUDGET = gql`
-  query Event($eventid: String!) {
-    event(eventid: $eventid) {
+  query Event($eventidBudget: String!) {
+    event(eventid: $eventidBudget) {
       _id
       code
       budget {
@@ -301,8 +301,8 @@ export const DOWNLOAD_EVENTS_DATA = gql`
 `;
 
 export const GET_EVENT_REPORT = gql`
-  query EventReport($eventid: String!) {
-    eventReport(eventid: $eventid) {
+  query EventReport($eventidReport: String!) {
+    eventReport(eventid: $eventidReport) {
       eventid
       summary
       attendance

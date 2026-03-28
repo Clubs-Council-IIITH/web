@@ -42,7 +42,7 @@ export default async function EditEventReport(props) {
     const { document, variables } = combineQuery("CombinedEventReportQuery")
       .add(GET_USER, { userInput: null })
       .add(GET_FULL_EVENT, { eventid: id })
-      .add(GET_EVENT_REPORT, { eventid: id });
+      .add(GET_EVENT_REPORT, { eventidReport: id });
 
     const { data = {} } = await getClient().query(document, variables);
     const { userMeta, userProfile, event, eventReport } = data;

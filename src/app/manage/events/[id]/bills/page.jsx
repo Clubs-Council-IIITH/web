@@ -19,7 +19,7 @@ export default async function BillsUpload(props) {
   const { document, variables } = combineQuery("CombinedBillsQuery")
     .add(GET_USER, { userInput: null })
     .add(GET_EVENT_BILLS_STATUS, { eventid: id })
-    .add(GET_EVENT_BUDGET, { eventid: id });
+    .add(GET_EVENT_BUDGET, { eventidBudget: id });
 
   const { data = {}, error } = await getClient().query(document, variables);
   const { userMeta, userProfile, eventBills, event } = data;
