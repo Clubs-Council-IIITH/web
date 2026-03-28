@@ -55,12 +55,14 @@ export default function EventsTable({
   clubid,
   scheduleSort = "asc",
   hideClub = false,
+  canViewDeletedEvents = false,
 }) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Toggle state for Last 4 Months
+  const [deleteToggle, setDeleteToggle] = useState([]);
   const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
   const [events, setEvents] = useState(initialEvents || []);
   const [dialog, setDialog] = useState(false);
@@ -77,12 +79,13 @@ export default function EventsTable({
       let params = {
         targetClub: clubid,
         pastEventsLimit: filterMonth.includes("pastEventsLimit") ? 4 : null,
+        deletedEvents: deleteToggle.includes("toggleDeletedEvents"),
       };
       const result = await query(params);
       setEvents(result || []);
     }
     fetchEvents();
-  }, [query, clubid, filterMonth, initialEvents]);
+  }, [query, clubid, filterMonth, deleteToggle, initialEvents]);
 
   const columns = [
     ...(isMobile
@@ -174,7 +177,7 @@ export default function EventsTable({
             field: "club",
             headerName: "Club ID",
             flex: 3,
-            valueGetter: (value, row, column, apiRef) => row.clubid,
+            valueGetter: (value, row) => row.clubid,
             renderCell: ({ value }) => (
               <Typography
                 variant="body2"
@@ -195,8 +198,8 @@ export default function EventsTable({
             flex: 3,
             align: "center",
             headerAlign: "center",
-            valueGetter: (value, row, column, apiRef) => row.datetimeperiod[0],
-            valueFormatter: (value, row, column, apiRef) => ISOtoHuman(value),
+            valueGetter: (value, row) => row.datetimeperiod[0],
+            valueFormatter: (value, row) => ISOtoHuman(value),
             renderCell: ({ formattedValue }) => (
               <Typography
                 variant="body2"
@@ -219,7 +222,7 @@ export default function EventsTable({
       align: "center",
       headerAlign: "center",
       disableExport: true,
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         requested: row.location.length > 0,
         approved: row.status.room,
       }),
@@ -265,7 +268,7 @@ export default function EventsTable({
       align: "center",
       headerAlign: "center",
       disableExport: true,
-      valueGetter: (value, row, column, apiRef) => ({
+      valueGetter: (value, row) => ({
         state: row.status.state,
         start: row.datetimeperiod[0],
         end: row.datetimeperiod[1],
@@ -369,29 +372,48 @@ export default function EventsTable({
             {query ? "All Events" : "Pending Events"}
           </Typography>
           {query && (
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={filterMonth.includes("pastEventsLimit")}
-                  onChange={(e) => {
-                    // Only show dialog when switching from ON to OFF
-                    if (
-                      filterMonth.includes("pastEventsLimit") &&
-                      !e.target.checked
-                    ) {
-                      setDialog(true);
-                    } else {
-                      setFilterMonth(
-                        e.target.checked ? ["pastEventsLimit"] : [],
-                      );
-                    }
-                  }}
-                  color="primary"
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={filterMonth.includes("pastEventsLimit")}
+                    onChange={(e) => {
+                      // Only show dialog when switching from ON to OFF
+                      if (
+                        filterMonth.includes("pastEventsLimit") &&
+                        !e.target.checked
+                      ) {
+                        setDialog(true);
+                      } else {
+                        setFilterMonth(
+                          e.target.checked ? ["pastEventsLimit"] : [],
+                        );
+                      }
+                    }}
+                    color="primary"
+                  />
+                }
+                label="Last 4 Months"
+                sx={{ marginLeft: 1 }}
+              />
+              {canViewDeletedEvents && (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={deleteToggle.includes("toggleDeletedEvents")}
+                      onChange={(e) => {
+                        setDeleteToggle(
+                          e.target.checked ? ["toggleDeletedEvents"] : [],
+                        );
+                      }}
+                      color="primary"
+                    />
+                  }
+                  label="Show Only Deleted Events"
+                  sx={{ marginLeft: 1 }}
                 />
-              }
-              label="Last 4 Months"
-              sx={{ marginLeft: 1 }}
-            />
+              )}
+            </Box>
           )}
           <ConfirmDialog
             open={dialog}

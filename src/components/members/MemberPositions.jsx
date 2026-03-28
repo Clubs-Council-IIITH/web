@@ -390,8 +390,8 @@ export default function MemberPositions({
             ? [
                 {
                   field: "actions",
+                  type: "actions",
                   align: "center",
-                  headerName: "",
                   width: 100,
                   valueGetter: (value, row) => ({
                     approved: row.approved,

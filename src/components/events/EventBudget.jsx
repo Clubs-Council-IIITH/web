@@ -68,6 +68,7 @@ export default function EventBudget({
     {
       field: "description",
       headerName: "Description",
+      type: "longText",
       width: 200,
       flex: isMobile ? null : 4,
       editable: editable,
@@ -199,8 +200,8 @@ export default function EventBudget({
       ? [
           {
             field: "action",
+            type: "actions",
             align: "center",
-            headerName: "",
             width: isMobile ? 20 : 50,
             renderCell: (p) => (
               <IconButton
