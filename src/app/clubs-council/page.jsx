@@ -19,12 +19,24 @@ export const metadata = {
   title: "About | Clubs Council @ IIIT-H",
 };
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export default async function ClubsCouncil() {
-  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: {
-      cid: "clubs",
+  const { data: { members } = {} } = await getClient(false).query(
+    GET_MEMBERS,
+    {
+      clubInput: {
+        cid: "clubs",
+      },
     },
-  });
+    {
+      requestPolicy: "cache-first",
+      fetchOptions: {
+        cache: "force-cache",
+      },
+    },
+  );
 
   const executiveMembers = members
     ?.map((member) => {

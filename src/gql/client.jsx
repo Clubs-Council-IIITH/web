@@ -6,17 +6,20 @@ import { cacheExchange, createClient, fetchExchange } from "urql/core";
 const GRAPHQL_ENDPOINT =
   process.env.GRAPHQL_ENDPOINT || "http://gateway/graphql";
 
-const makeClient = async () => {
-  const cookieList = (await cookies()).getAll();
-  const cookieHeader = cookieList.length
-    ? cookieList.map((c) => `${c.name}=${c.value}`).join("; ")
-    : undefined;
+const makeClient = async (useCookies = true) => {
+  let cookieHeader = undefined;
+  if (useCookies) {
+    const cookieList = (await cookies()).getAll();
+    if (cookieList.length > 0) {
+      cookieHeader = cookieList.map((c) => `${c.name}=${c.value}`).join("; ");
+    }
+  }
 
   return createClient({
     url: GRAPHQL_ENDPOINT,
     exchanges: [cacheExchange, fetchExchange],
     fetchOptions: {
-      cache: "no-store",
+      cache: "force-cache",
       credentials: "include",
       headers: {
         "content-type": "application/json",
@@ -28,18 +31,36 @@ const makeClient = async () => {
 
 const { getClient: _rscGetClient } = registerUrql(makeClient);
 
-export const getClient = () => {
+export const getClient = (useCookies = true) => {
   return {
-    query: async (document, variables) => {
-      const client = await _rscGetClient();
-      const result = client.query(document, variables);
-      // urql query returns an object with toPromise method
-      return result.toPromise ? await result.toPromise() : await result;
+    query: async (document, variables, options = {}) => {
+      const client = await _rscGetClient(useCookies);
+      
+      let cookieHeader;
+      if (useCookies) {
+        const cookieList = (await cookies()).getAll();
+        cookieHeader = cookieList.map((c) => `${c.name}=${c.value}`).join("; ");
+      }
+
+      return await client
+        .query(document, variables, {
+          ...options,
+          requestPolicy: options.requestPolicy ?? "cache-first",
+          fetchOptions: {
+            cache: "force-cache",
+            ...options.fetchOptions,
+            headers: {
+              "content-type": "application/json",
+              ...(cookieHeader ? { cookie: cookieHeader } : {}),
+              ...options.fetchOptions?.headers,
+            },
+          },
+        })
+        .toPromise();
     },
-    mutation: async (document, variables) => {
-      const client = await _rscGetClient();
-      const result = client.mutation(document, variables);
-      return result.toPromise ? await result.toPromise() : await result;
+    mutation: async (document, variables, options = {}) => {
+      const client = await _rscGetClient(useCookies);
+      return await client.mutation(document, variables, options).toPromise();
     },
   };
 };

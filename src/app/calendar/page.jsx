@@ -9,17 +9,28 @@ export const metadata = {
   title: "Calendar | Life @ IIIT-H",
 };
 
-export default async function Calendar() {
-  const { data: { allClubs } = {} } = await getClient().query(GET_ALL_CLUB_IDS);
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
-  const { data: { calendarEvents } = {} } = await getClient().query(
+export default async function Calendar() {
+  const { data: { allClubs } = {} } = await getClient(false).query(GET_ALL_CLUB_IDS, {}, {
+    requestPolicy: 'cache-first', fetchOptions: { cache: 'force-cache', next: { revalidate: 3600} }
+  });
+
+  const { data: { calendarEvents } = {} } = await getClient(false).query(
     GET_ALL_EVENTS_FOR_CALENDAR,
     {
       clubid: null,
-    },
+    }, { requestPolicy: 'cache-first', fetchOptions: {cache: 'force-cache', next: { revalidate: 3600} }},
   );
 
-  const { data: { holidays } = {} } = await getClient().query(GET_HOLIDAYS);
+  const { data: { holidays } = {} } = await getClient(false).query(GET_HOLIDAYS, {}, { 
+      requestPolicy: 'cache-first',
+      fetchOptions: {cache: 'force-cache',
+        next: { revalidate: 3600 }
+      } 
+    }
+  );
 
   return (
     <FullCalendar
