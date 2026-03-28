@@ -13,6 +13,7 @@
     "sitemap": "node ./sitemap-cc.js && node ./sitemap-life.js"
   },
   "dependencies": {
+    "graphql-combine-query": "^1.2.4",
     "@emotion/cache": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fullcalendar/core": "^6.1.20",

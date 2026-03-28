@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { Container } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -24,14 +24,17 @@ export default async function EditProfile(props) {
   const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   // get target user
-  const { data: { userProfile, userMeta } = {} } = await getClient().query(
-    GET_USER_PROFILE,
-    {
+  const { document, variables } = combineQuery("CombinedUserProfileQuery")
+    .add(GET_USER_PROFILE, {
       userInput: {
         uid: id,
       },
-    },
-  );
+    })
+    .add(GET_MEMBERSHIPS, { uid: id });
+
+  const { data = {} } = await getClient().query(document, variables);
+  const { userProfile, userMeta, memberRoles } = data;
+
   const user = { ...userMeta, ...userProfile };
 
   let isClub = user?.role === "club";
@@ -46,11 +49,6 @@ export default async function EditProfile(props) {
     redirect("/404");
 
   // get memberships of the user
-  const {
-    data: { memberRoles },
-  } = await getClient().query(GET_MEMBERSHIPS, {
-    uid: id,
-  });
   if (memberRoles?.length === 0) notFound();
   else {
     if (isClub) isClub = false;
