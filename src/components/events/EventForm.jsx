@@ -1248,7 +1248,7 @@ function EventDescriptionInput({ control, defaultValue }) {
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 1 }}>
           <TextField
             {...field}
-            label="Description"
+            label="Public Description"
             autoComplete="off"
             error={invalid}
             helperText={error?.message}
