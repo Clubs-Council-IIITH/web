@@ -22,7 +22,7 @@ export default function MarkdownEditorModal({ open, onClose, content, oldContent
   const [contentState, setContentState] = useState(content);
 
   const handleSave = () => {
-    onSave(content);
+    onSave(contentState);
     onClose();
   };
 
