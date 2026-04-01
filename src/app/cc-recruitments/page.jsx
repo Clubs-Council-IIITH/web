@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Container, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { HAVE_APPLIED } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
@@ -29,13 +29,10 @@ async function getUser(currentUser) {
 }
 
 export default async function NewApplication() {
-  const { document, variables } = combineQuery("CombinedApplicationQuery")
-    .add(GET_USER, { userInput: null })
-    .add(HAVE_APPLIED, { userInput: null });
-
-  const { data = {} } = await getClient().query(document, variables);
-  const { userMeta, userProfile, haveAppliedForCC } = data;
-  const currentUser = { ...userMeta, ...userProfile };
+  const {
+    data: { userMeta: currentUserMeta, userProfile: currentUserProfile } = {},
+  } = await getClient().query(GET_USER, { userInput: null });
+  const currentUser = { ...currentUserMeta, ...currentUserProfile };
 
   if (!currentUser) {
     return (
@@ -58,7 +55,11 @@ export default async function NewApplication() {
     return redirect("/cc-recruitments/all");
   }
 
-  const user = await getUser(currentUser);
+  const { data: { haveAppliedForCC } = {} } = await getClient().query(
+    HAVE_APPLIED,
+    { userInput: null },
+  );
+  const user = await getUser(await currentUser);
 
   return (
     <Container>
