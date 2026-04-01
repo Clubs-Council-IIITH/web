@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";
@@ -18,13 +18,12 @@ export default async function EditFinance(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { event } = {} } = await getClient().query(GET_EVENT_BUDGET, {
-    eventid: id,
-  });
+  const { document, variables } = combineQuery("CombinedEventFinanceQuery")
+    .add(GET_EVENT_BUDGET, { eventidBudget: id })
+    .add(GET_EVENT_BILLS_STATUS, { eventid: id });
 
-  const { data, error } = await getClient().query(GET_EVENT_BILLS_STATUS, {
-    eventid: id,
-  });
+  const { data = {}, error } = await getClient().query(document, variables);
+  const { event, eventBills: eventBillsRaw } = data;
 
   if (error && !error.message.includes("no bills status")) {
     return (
@@ -66,7 +65,7 @@ export default async function EditFinance(props) {
     sloComment: null,
   };
 
-  const eventBills = data?.eventBills || defaultValues;
+  const eventBills = eventBillsRaw || defaultValues;
 
   if (eventBills.state === "not_submitted" || eventBills.state === "rejected") {
     redirect("/404");

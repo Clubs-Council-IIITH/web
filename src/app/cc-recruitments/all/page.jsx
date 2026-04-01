@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
@@ -20,19 +20,27 @@ export default async function AllRecruitmentsApplications(props) {
     GET_ALL_RECRUITMENTS,
     { year },
   );
-  const userPromises =
-    ccApplications?.map((applicant) =>
-      getClient().query(GET_USER_PROFILE, {
-        userInput: { uid: applicant.uid },
-      }),
-    ) || [];
 
-  const users = await Promise.all(userPromises);
+  let usersResponse = {};
+  if (ccApplications && ccApplications.length > 0) {
+    const { document, variables } = combineQuery(
+      "CompositeApplicantProfiles",
+    ).addN(
+      GET_USER_PROFILE,
+      ccApplications.map((applicant) => ({
+        userInput: { uid: applicant.uid },
+      })),
+    );
+
+    const { data = {} } = await getClient().query(document, variables);
+    usersResponse = data;
+  }
+
   const processedApplicants =
     ccApplications?.map((applicant, index) => ({
       ...applicant,
-      ...users[index]?.data?.userProfile,
-      ...users[index]?.data?.userMeta,
+      ...usersResponse?.[`userProfile_${index}`],
+      ...usersResponse?.[`userMeta_${index}`],
     })) || [];
 
   return (

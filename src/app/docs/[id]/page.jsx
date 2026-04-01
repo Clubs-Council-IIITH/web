@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { getClient } from "gql/client";
+import { getClient, combineQuery } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_FILE } from "gql/queries/storagefiles";
 
@@ -14,17 +14,16 @@ export default async function Docs(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
+  const { document, variables } = combineQuery("CombinedDocDetailsQuery")
+    .add(GET_USER, { userInput: null })
+    .add(GET_FILE, { fileId: id });
+
+  const { data: { userMeta, userProfile, storagefile } = {} } =
+    await getClient().query(document, variables);
+
   const user = { ...userMeta, ...userProfile };
 
   if (user?.role !== "cc") redirect("/404");
-
-  const { data: { storagefile } = {} } = await getClient().query(GET_FILE, {
-    fileId: id,
-  });
 
   return <DocForm editFile={storagefile} newFile={false} />;
 }
