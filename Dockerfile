@@ -1,17 +1,17 @@
 # development dependencies
-FROM node:22-slim AS dev_dep
+FROM node:24-slim AS dev_dep
 WORKDIR /cache/
 COPY package*.json .
 RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose
 
 # production dependencies
-FROM node:22-slim AS prod_dep
+FROM node:24-slim AS prod_dep
 WORKDIR /cache/
 COPY package*.json .
 RUN npm install --prefer-offline --no-audit --progress=true --loglevel verbose --omit=dev
 
 # development stage
-FROM node:22-slim AS dev
+FROM node:24-slim AS dev
 ENV NEXT_PUBLIC_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -26,7 +26,7 @@ ENTRYPOINT [ "/cache/entrypoint.sh" ]
 CMD [ "npm", "run", "dev" ]
 
 # production build stage
-FROM node:22-slim AS prod-build
+FROM node:24-slim AS prod-build
 ENV NEXT_PUBLIC_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=0
 
