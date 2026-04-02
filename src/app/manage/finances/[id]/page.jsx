@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_EVENT_BILLS_STATUS, GET_EVENT_BUDGET } from "gql/queries/events";
 
 import BillsStatusForm from "components/events/bills/EditBillsStatus";

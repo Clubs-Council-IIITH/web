@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";

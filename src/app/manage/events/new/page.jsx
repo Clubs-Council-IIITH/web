@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import {
   GET_REPORTS_SUBMISSION_STATUS,

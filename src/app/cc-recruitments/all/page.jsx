@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 import { GET_USER_PROFILE } from "gql/queries/users";
 

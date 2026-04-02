@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_EVENT_REPORT, GET_FULL_EVENT } from "gql/queries/events";

@@ -1,6 +1,6 @@
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_MEMBERSHIPS } from "gql/queries/clubs";
 import { GET_ALL_RECRUITMENTS } from "gql/queries/recruitment";
 
@@ -29,7 +29,9 @@ export default async function CCApplicantDetails(props) {
   // get target user
   const user = await getUserProfile(id);
 
-  const { document, variables } = combineQuery("CombinedCCApplicantDetailsQuery")
+  const { document, variables } = combineQuery(
+    "CombinedCCApplicantDetailsQuery",
+  )
     .add(GET_ALL_RECRUITMENTS, { year: year })
     .add(GET_MEMBERSHIPS, { uid: user.uid });
 

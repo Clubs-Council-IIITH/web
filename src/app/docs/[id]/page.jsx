@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_FILE } from "gql/queries/storagefiles";
 

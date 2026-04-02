@@ -1,6 +1,6 @@
 import { Container, Stack, Typography } from "@mui/material";
 
-import { getClient, combineQuery } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_EVENTS_BILLS_STATUS } from "gql/queries/events";
 
