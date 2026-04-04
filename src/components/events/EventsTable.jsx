@@ -61,7 +61,8 @@ export default function EventsTable({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [deleteToggle, setDeleteToggle] = useState([]);
+  // Toggle state for Deleted Events
+  const [deleteToggle, setDeleteToggle] = useState(true);
   // Toggle state for Last 4 Months
   const [filterMonth, setFilterMonth] = useState(["pastEventsLimit"]);
   const [events, setEvents] = useState(initialEvents || []);
@@ -79,7 +80,7 @@ export default function EventsTable({
       let params = {
         targetClub: clubid,
         pastEventsLimit: filterMonth.includes("pastEventsLimit") ? 4 : null,
-        hideDeleted: deleteToggle.includes("toggleDeletedEvents"),
+        hideDeleted: deleteToggle,
       };
       const result = await query(params);
       setEvents(result || []);
@@ -400,11 +401,9 @@ export default function EventsTable({
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={deleteToggle.includes("toggleDeletedEvents")}
+                      checked={deleteToggle}
                       onChange={(e) => {
-                        setDeleteToggle(
-                          e.target.checked ? ["toggleDeletedEvents"] : [],
-                        );
+                        setDeleteToggle(e.target.checked);
                       }}
                       color="primary"
                     />
