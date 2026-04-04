@@ -12,7 +12,7 @@ export default async function Gallery({ limit = undefined }) {
 
 
   const galleryJSON = await response.json();
- galleryJSON["gallery"].map((item) => ({
+ let galleryItems=galleryJSON["gallery"].map((item) => ({
     url: `${FILESERVER_URL}${item.url}`,
     height: item.height,
     width: item.width,
