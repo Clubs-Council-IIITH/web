@@ -1,8 +1,4 @@
 import ImageMasonry from "components/ImageMasonry";
-import path from "path"
-import {promises as fs} from 'fs'
-import { imageSizeFromFile } from 'image-size/fromFile'
-import { Height } from "@mui/icons-material";
 const FILESERVER_URL = process.env.FILESERVER_URL || "http://files";
 
 export const metadata = {
