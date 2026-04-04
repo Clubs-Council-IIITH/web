@@ -12,10 +12,11 @@ export default async function Gallery({ limit = undefined }) {
 
 
   const galleryJSON = await response.json();
-  const galleryItems = galleryJSON["gallery"].map(
-    (item) => ({url:`${FILESERVER_URL}${item.url}`, height:item.height, width:item.width}),
-  );
-
+ galleryJSON["gallery"].map((item) => ({
+    url: `${FILESERVER_URL}${item.url}`,
+    height: item.height,
+    width: item.width,
+  }));
 
 
   return <ImageMasonry images={galleryItems} limit={limit} />;
