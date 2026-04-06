@@ -16,7 +16,7 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import {
   GET_CLASHING_EVENTS,
   GET_EVENT_BILLS_STATUS,
-  GET_REPORTS_SUBMISSION_STATUS
+  GET_REPORTS_SUBMISSION_STATUS,
 } from "gql/queries/events";
 
 import ActionPalette from "components/ActionPalette";

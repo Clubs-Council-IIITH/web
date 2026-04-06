@@ -64,12 +64,9 @@ export default async function EditEvent(props) {
 
     let isEventReportsSubmitted = true;
     if (userMeta?.role === "club") {
-      const res = await getClient().query(
-        GET_REPORTS_SUBMISSION_STATUS,
-        {
-          clubid: userMeta.uid,
-        },
-      );
+      const res = await getClient().query(GET_REPORTS_SUBMISSION_STATUS, {
+        clubid: userMeta.uid,
+      });
       isEventReportsSubmitted = res.data?.isEventReportsSubmitted;
     }
 
