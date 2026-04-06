@@ -5,7 +5,6 @@ import { GET_USER } from "gql/queries/auth";
 import {
   GET_ALL_EVENTS,
   GET_PENDING_EVENTS,
-  GET_REPORTS_SUBMISSION_STATUS,
 } from "gql/queries/events";
 
 import EventsTable from "components/events/EventsTable";

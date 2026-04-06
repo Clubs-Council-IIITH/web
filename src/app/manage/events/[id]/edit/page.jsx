@@ -69,6 +69,9 @@ export default async function EditEvent(props) {
       },
     );
 
+    // isEventReportsSubmitted = event?.audience &&
+    //   event?.audience.includes("internal") ? true : isEventReportsSubmitted;
+
     return (
       user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),
       (
