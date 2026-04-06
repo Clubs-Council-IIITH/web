@@ -13,9 +13,11 @@ import {
 import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
-import { GET_CLASHING_EVENTS } from "gql/queries/events";
-import { GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
+import { 
+  GET_EVENT_BILLS_STATUS,
+  GET_CLASHING_EVENTS,
+  GET_REPORTS_SUBMISSION_STATUS
+} from "gql/queries/events";
 
 import ActionPalette from "components/ActionPalette";
 import EventBillStatus from "components/events/bills/EventBillStatus";
@@ -120,7 +122,7 @@ export default async function ManageEventID(props) {
       clubid: userMeta?.role === "club" ? userMeta.uid : null,
     },
   );
-
+  
   return (
     user?.role === "club" &&
       user?.uid !== event?.clubid &&
