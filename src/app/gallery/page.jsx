@@ -10,14 +10,11 @@ export default async function Gallery({ limit = undefined }) {
     next: { revalidate: 1200 }, // 20 minutes
   });
 
-
   const galleryJSON = await response.json();
- let galleryItems=galleryJSON["gallery"].map((item) => ({
+  const galleryItems = galleryJSON["gallery"].map((item) => ({
     url: `${FILESERVER_URL}${item.url}`,
     height: item.height,
     width: item.width,
   }));
-
-
   return <ImageMasonry images={galleryItems} limit={limit} />;
 }
