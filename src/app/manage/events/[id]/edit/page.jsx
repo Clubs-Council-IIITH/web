@@ -62,12 +62,16 @@ export default async function EditEvent(props) {
     const { userMeta, userProfile, events, event } = data;
     const user = { ...userMeta, ...userProfile };
 
-    const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
-      GET_REPORTS_SUBMISSION_STATUS,
-      {
-        clubid: userMeta?.role === "club" ? userMeta.uid : null,
-      },
-    );
+    let isEventReportsSubmitted = true;
+    if (userMeta?.role === "club") {
+      const res = await getClient().query(
+        GET_REPORTS_SUBMISSION_STATUS,
+        {
+          clubid: userMeta.uid,
+        },
+      );
+      isEventReportsSubmitted = res.data?.isEventReportsSubmitted;
+    }
 
     return (
       user?.role === "club" && user?.uid !== event.clubid && redirect("/404"),

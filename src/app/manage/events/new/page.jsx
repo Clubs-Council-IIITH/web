@@ -45,12 +45,16 @@ export default async function NewEvent() {
   const { data = {} } = await getClient().query(document, variables);
   const { events, userMeta } = data;
 
-  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
-    GET_REPORTS_SUBMISSION_STATUS,
-    {
-      clubid: userMeta?.role === "club" ? userMeta.uid : null,
-    },
-  );
+  let isEventReportsSubmitted = true;
+  if (userMeta?.role === "club") {
+    const res = await getClient().query(
+      GET_REPORTS_SUBMISSION_STATUS,
+      {
+        clubid: userMeta.uid,
+      },
+    );
+    isEventReportsSubmitted = res.data?.isEventReportsSubmitted;
+  }
 
   return (
     <Container>
