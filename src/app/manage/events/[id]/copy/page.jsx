@@ -72,9 +72,6 @@ export default async function CopyEvent(props) {
       },
     );
 
-    // isEventReportsSubmitted = event?.audience &&
-    //   event?.audience.includes("internal") ? true : isEventReportsSubmitted;
-
     let oldEventId = event._id;
 
     // Delete the fields that we don't want to copy
