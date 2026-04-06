@@ -13,9 +13,9 @@ import {
 import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { 
-  GET_EVENT_BILLS_STATUS,
+import {
   GET_CLASHING_EVENTS,
+  GET_EVENT_BILLS_STATUS,
   GET_REPORTS_SUBMISSION_STATUS
 } from "gql/queries/events";
 
@@ -116,16 +116,12 @@ export default async function ManageEventID(props) {
     return redirect("/404");
   }
 
-  let isEventReportsSubmitted = true;
-  if (userMeta?.role === "club") {
-    const res = await getClient().query(
-      GET_REPORTS_SUBMISSION_STATUS,
-      {
-        clubid: userMeta.uid,
-      },
-    );
-    isEventReportsSubmitted = res.data?.isEventReportsSubmitted;
-  }
+  const { data: { isEventReportsSubmitted } = {} } = await getClient().query(
+    GET_REPORTS_SUBMISSION_STATUS,
+    {
+      clubid: userMeta?.role === "club" ? userMeta.uid : null,
+    },
+  );
 
   return (
     user?.role === "club" &&
