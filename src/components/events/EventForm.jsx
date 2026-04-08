@@ -1102,7 +1102,7 @@ function EventDatetimeInput({
             validate: {
               checkDate: (value) => {
                 return (
-                  dayjs(value) >= dayjs(startDateInput) ||
+                  dayjs(value) > dayjs(startDateInput) ||
                   "Event must end after it starts!"
                 );
               },
