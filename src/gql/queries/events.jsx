@@ -41,7 +41,7 @@ export const GET_ALL_EVENTS = gql`
     $public: Boolean
     $timings: [DateTime!]
     $pastEventsLimit: Int
-    $deletedEvents: Boolean
+    $hideDeleted: Boolean
   ) {
     events(
       clubid: $clubid
@@ -52,7 +52,7 @@ export const GET_ALL_EVENTS = gql`
       public: $public
       timings: $timings
       pastEventsLimit: $pastEventsLimit
-      deletedEvents: $deletedEvents
+      hideDeleted: $hideDeleted
     ) {
       _id
       name
@@ -262,8 +262,8 @@ export const GET_FULL_EVENT = gql`
 `;
 
 export const GET_EVENT_BUDGET = gql`
-  query Event($eventid: String!) {
-    event(eventid: $eventid) {
+  query Event($eventidBudget: String!) {
+    event(eventid: $eventidBudget) {
       _id
       code
       budget {
@@ -303,8 +303,8 @@ export const DOWNLOAD_EVENTS_DATA = gql`
 `;
 
 export const GET_EVENT_REPORT = gql`
-  query EventReport($eventid: String!) {
-    eventReport(eventid: $eventid) {
+  query EventReport($eventidReport: String!) {
+    eventReport(eventid: $eventidReport) {
       eventid
       summary
       attendance
