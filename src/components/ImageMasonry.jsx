@@ -17,7 +17,6 @@ import { useTheme } from "@mui/material/styles";
 
 import ImageModal from "components/ImageModal";
 
-
 export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
@@ -25,17 +24,13 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
   const [openImage, setOpenImage] = useState(null);
 
   const totalImages = limit ? Math.min(images.length, limit) : images.length;
- 
-
-
 
   return (
     <>
-    
-    
-      { (
+      {
         <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
-          {images.slice(0, totalImages).map((item, id) => {d
+          {images.slice(0, totalImages).map((item, id) => {
+            d;
             return (
               <ImageListItem key={id}>
                 <Card
@@ -62,11 +57,11 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
                   >
                     <Image
                       src={item.url}
-                      width={item.width|0}
-                      height={item.height|0}
+                      width={item.width | 0}
+                      height={item.height | 0}
                       sizes="100vw"
-                      preload={id==1? true: false}
-                      loading={id ==1 ?"eager" :"lazy"}
+                      preload={id == 1 ? true : false}
+                      loading={id == 1 ? "eager" : "lazy"}
                       alt={`Gallery Image ${id}`}
                       style={{
                         width: "100%",
@@ -81,14 +76,13 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
             );
           })}
         </ImageList>
-      )}
+      }
 
       <ImageModal
         images={images}
         id={openImage}
         onClose={() => setOpenImage(null)}
       />
-    
     </>
   );
 }
