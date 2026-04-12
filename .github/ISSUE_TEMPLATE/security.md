@@ -2,6 +2,7 @@
 name: Security report
 about: Report a security vulnerability or issue.
 labels: security
+type: Bug
 assignees: rithikreddypalla
 ---
 
