@@ -605,7 +605,13 @@ export default function BulkEdit({ mode = "add" }) {
                       endMonth: addNew ? plannedStartMonth : plannedEndMonth,
                     };
                   }
-                  return role;
+                  return {
+                    name: role.name,
+                    startYear: role.startYear,
+                    startMonth: role.startMonth,
+                    endYear: role.endYear,
+                    endMonth: role.endMonth,
+                  };
                 });
 
                 if (addNew) {
