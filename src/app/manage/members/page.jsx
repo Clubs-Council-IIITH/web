@@ -9,138 +9,122 @@ import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import MembersFilter from "components/members/MembersFilter";
 import MembersTable from "components/members/MembersTable";
+export const metadata = { title: "Manage Members" };
 
-export const metadata = {
-  title: "Manage Members",
-};
+// Fetch and merge user profiles into member objects
+async function enrichMembers(members) {
+  if (!members?.length) return [];
 
-export default async function ManageMembers(props) {
-  const searchParams = await props.searchParams;
-  // const targetName = searchParams?.name;
-  const targetClub = searchParams?.club;
+  const { document, variables } = combineQuery("CompositeMembers").addN(
+    GET_USER_PROFILE,
+    members.map((m) => ({ userInput: { uid: m.uid } })),
+  );
+  const { data } = await getClient().query(document, variables);
+
+  return members.map((member, i) => ({
+    ...member,
+    ...data?.[`userProfile_${i}`],
+    ...data?.[`userMeta_${i}`],
+    mid: `${member.cid}:${member.uid}`,
+  }));
+}
+
+// Get the latest year a member was active (currentYear+1 if still active)
+function getLatestYear(member) {
+  const currentYear = new Date().getFullYear() + 1;
+  return Math.max(...member.roles.map((r) => r.endYear ?? currentYear));
+}
+
+export default async function ManageMembers({ searchParams }) {
+  const { club: targetClub, current, past } = await searchParams;
+  const onlyCurrent = current === "true";
+  const onlyPast = past === "true";
   const targetState = [
-    ...(searchParams?.current === "true" ? ["current"] : []),
-    ...(searchParams?.past === "true" ? ["past"] : []),
+    ...(onlyCurrent ? ["current"] : []),
+    ...(onlyPast ? ["past"] : []),
   ];
-  const onlyCurrent = searchParams?.current === "true";
-  const onlyPast = searchParams?.past === "true";
 
   const { data: { userMeta, userProfile } = {} } = await getClient().query(
     GET_USER,
     { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
+  const isCC = user?.role === "cc";
+  const isClub = user?.role === "club";
 
   return (
     <Container>
       <Stack
         direction="row"
-        sx={{
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 3,
-        }}
+        sx={{ alignItems: "center", justifyContent: "space-between", mb: 3 }}
       >
         <Typography variant="h3" gutterBottom>
           Manage Members
         </Typography>
-
-        <Stack
-          direction="row"
-          sx={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 2,
-          }}
-        >
-          <Button
-            component={ButtonLink}
-            href="/manage/members/bulk-add"
-            variant="contained"
-            startIcon={<Icon variant="playlist-add" />}
-          >
-            Bulk Add
-          </Button>
-          <Button
-            component={ButtonLink}
-            href="/manage/members/bulk-edit"
-            variant="contained"
-            startIcon={<Icon variant="edit" />}
-            color="warning"
-          >
-            Bulk Edit
-          </Button>
-          <Button
-            component={ButtonLink}
-            href="/manage/members/new"
-            variant="contained"
-            startIcon={<Icon variant="add" />}
-            color="secondary"
-          >
-            New Member
-          </Button>
+        <Stack direction="row" sx={{ alignItems: "center", gap: 2 }}>
+          {[
+            {
+              href: "/manage/members/bulk-add",
+              icon: "playlist-add",
+              label: "Bulk Add",
+              color: "primary",
+            },
+            {
+              href: "/manage/members/bulk-edit",
+              icon: "edit",
+              label: "Bulk Edit",
+              color: "warning",
+            },
+            {
+              href: "/manage/members/new",
+              icon: "add",
+              label: "New Member",
+              color: "secondary",
+            },
+          ].map(({ href, icon, label, color }) => (
+            <Button
+              key={href}
+              component={ButtonLink}
+              href={href}
+              variant="contained"
+              color={color}
+              startIcon={<Icon variant={icon} />}
+            >
+              {label}
+            </Button>
+          ))}
         </Stack>
       </Stack>
-      {/* only pending members */}
-      {user?.role === "cc" ? <PendingMembersDataGrid /> : null}
-      {/* all members */}
+
+      {isCC && <PendingMembersDataGrid />}
+
       <Box>
-        <Box>
-          {user?.role === "cc" ? (
-            <>
-              <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{
-                  color: "text.secondary",
-                  textTransform: "uppercase",
-                  mb: 2,
-                }}
-              >
-                All Members
-              </Typography>
-              <Box
-                sx={{
-                  mt: 2,
-                  mb: 3,
-                }}
-              >
-                <MembersFilter
-                  // name={targetName}
-                  club={targetClub}
-                  state={targetState}
-                  cc={true}
-                />
-              </Box>
-            </>
-          ) : null}
-          {user?.role === "club" || targetClub ? (
-            <>
-              {user?.role !== "cc" ? (
-                <>
-                  <Box
-                    sx={{
-                      mt: 2,
-                      mb: 3,
-                    }}
-                  >
-                    <MembersFilter
-                      // name={targetName}
-                      club={targetClub}
-                      state={targetState}
-                      cc={false}
-                    />
-                  </Box>
-                </>
-              ) : null}
-              <MembersDataGrid
-                club={user?.role === "club" ? user?.uid : targetClub}
-                onlyCurrent={onlyCurrent}
-                onlyPast={onlyPast}
-              />
-            </>
-          ) : null}
+        <Typography
+          variant="subtitle2"
+          gutterBottom
+          sx={{
+            color: "text.secondary",
+            textTransform: "uppercase",
+            mb: 2,
+          }}
+        >
+          All Members
+        </Typography>
+        <Box sx={{ mt: 2, mb: 3 }}>
+          <MembersFilter
+            club={targetClub || user?.uid}
+            state={targetState}
+            cc={isCC}
+          />
         </Box>
+
+        {(isClub || targetClub) && (
+          <MembersDataGrid
+            club={isClub ? user?.uid : targetClub}
+            onlyCurrent={onlyCurrent}
+            onlyPast={onlyPast}
+          />
+        )}
       </Box>
     </Container>
   );
@@ -149,55 +133,24 @@ export default async function ManageMembers(props) {
 async function PendingMembersDataGrid() {
   const { data: { pendingMembers } = {} } =
     await getClient().query(GET_PENDING_MEMBERS);
+  const processedMembers = await enrichMembers(pendingMembers);
 
-  let usersResponse = {};
-  if (pendingMembers && pendingMembers.length > 0) {
-    const { document, variables } = combineQuery(
-      "CompositePendingMembers",
-    ).addN(
-      GET_USER_PROFILE,
-      pendingMembers.map((member) => ({ userInput: { uid: member.uid } })),
-    );
-
-    const { data } = await getClient().query(document, variables);
-    usersResponse = data;
-  }
-
-  const processedMembers =
-    pendingMembers?.map((member, index) => ({
-      ...member,
-      ...usersResponse?.[`userProfile_${index}`],
-      ...usersResponse?.[`userMeta_${index}`],
-      mid: `${member.cid}:${member.uid}`,
-    })) || [];
-
-  return (
-    <>
-      {processedMembers.length > 0 ? (
-        <Box
-          sx={{
-            mb: 3,
-          }}
-        >
-          <Typography
-            variant="subtitle2"
-            gutterBottom
-            sx={{
-              color: "text.secondary",
-              textTransform: "uppercase",
-            }}
-          >
-            Pending Approval
-          </Typography>
-          <MembersTable
-            members={processedMembers}
-            showClub={true}
-            showIcon={false}
-          />
-        </Box>
-      ) : null}
-    </>
-  );
+  return processedMembers.length > 0 ? (
+    <Box sx={{ mb: 3 }}>
+      <Typography
+        variant="subtitle2"
+        gutterBottom
+        sx={{ color: "text.secondary", textTransform: "uppercase" }}
+      >
+        Pending Approval
+      </Typography>
+      <MembersTable
+        members={processedMembers}
+        showClub={true}
+        showIcon={false}
+      />
+    </Box>
+  ) : null;
 }
 
 async function MembersDataGrid({
@@ -208,46 +161,14 @@ async function MembersDataGrid({
   const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
     clubInput: { cid: club },
   });
+  const currentYear = new Date().getFullYear() + 1;
 
-  const currentYear = (new Date().getFullYear() + 1).toString();
-
-  // filter only the required members (current | past | both)
   const targetMembers = members?.filter((member) => {
-    const latestYear = extractLatestYear(member).toString();
-    const isCurrent = onlyCurrent && latestYear === currentYear;
-    const isPast = onlyPast && latestYear !== currentYear;
-
-    return (!onlyCurrent && !onlyPast) || isCurrent || isPast;
+    if (onlyCurrent === onlyPast) return true;
+    const isCurrent = getLatestYear(member) === currentYear;
+    return onlyCurrent ? isCurrent : !isCurrent;
   });
 
-  let usersResponse = {};
-  if (targetMembers && targetMembers.length > 0) {
-    const { document, variables } = combineQuery("CompositeTargetMembers").addN(
-      GET_USER_PROFILE,
-      targetMembers.map((member) => ({ userInput: { uid: member.uid } })),
-    );
-
-    const { data } = await getClient().query(document, variables);
-    usersResponse = data;
-  }
-
-  const processedMembers =
-    targetMembers?.map((member, index) => ({
-      ...member,
-      ...usersResponse?.[`userProfile_${index}`],
-      ...usersResponse?.[`userMeta_${index}`],
-      mid: `${member.cid}:${member.uid}`,
-    })) || [];
-
+  const processedMembers = await enrichMembers(targetMembers);
   return <MembersTable members={processedMembers} />;
-}
-
-// get the last year a member was in the club
-// if member is still present, return current year + 1
-function extractLatestYear(member) {
-  return Math.max(
-    ...member.roles.map((r) =>
-      !r.endYear ? new Date().getFullYear() + 1 : r.endYear,
-    ),
-  );
 }
