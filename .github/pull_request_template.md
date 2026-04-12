@@ -18,9 +18,22 @@ Please delete options that are not relevant.
 - [ ] 🎨 Style/UI change
 - [ ] ⚡ Performance improvement
 - [ ] 🔧 Refactoring
+- [ ] 📦 Dependency update
 
 ## 🚀 Changes Introduced
 - 
+
+## 📦 Dependency Details (Optional)
+<!-- Fill this section only if this PR involves dependency updates. -->
+
+- **Dependency**: 
+- **Version Change**: `x.x.x` → `y.y.y`
+- **Type**: <!-- [Security / Feature / Fix / Maintenance] -->
+- **Changelog**: [Link to Release Notes]()
+
+### ⚠️ Breaking Changes
+- [ ] No breaking changes detected.
+- [ ] Yes (please describe): 
 
 ## ✨ Expected Behaviour
 <!-- Describe what the final behaviour should be after this PR. -->
@@ -39,6 +52,8 @@ Please delete options that are not relevant.
 - [ ] I have performed a self-review of my own code
 - [ ] My changes generate no new warnings
 - [ ] Any dependent changes have been merged and published in downstream modules
+- [ ] Verified build succeeds (`npm run build`)
+- [ ] Verified dev server runs (`npm run dev`)
 
 ---
 
