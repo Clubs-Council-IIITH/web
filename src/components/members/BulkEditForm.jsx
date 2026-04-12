@@ -782,7 +782,7 @@ function MembersTable({
       flex: isMobile ? null : 4,
       editable: addMode,
       valueSetter: (value, row) => {
-        const uid = value.split("@")[0];
+        const uid = value?.split("@")[0];
         return { ...row, uid };
       },
       renderCell: (p) => {
