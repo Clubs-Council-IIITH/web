@@ -46,7 +46,6 @@ export default function BulkEdit({ mode = "add" }) {
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
   const [expDialog, setExpDialog] = useState(true);
-
   const { control, handleSubmit, reset } = useForm({
     defaultValues: { newMembers: [] },
   });
@@ -120,8 +119,10 @@ export default function BulkEdit({ mode = "add" }) {
             endMonth: latestRole?.endMonth || null,
             originalEndMonth: latestRole?.endMonth || null,
             isPoc: member.poc,
+            originalIsPoc: member.poc,
             isValid: true,
             error: null,
+            isEdited: false,
           };
         });
         setExistingMembers(existing);
@@ -270,7 +271,9 @@ export default function BulkEdit({ mode = "add" }) {
     },
     edit: (formData) => {
       setLoading(true);
-      const updatedMembers = formData.newMembers;
+      const updatedMembers = formData.newMembers.filter(
+        (member) => member.isEdited,
+      );
 
       const hasMissingMonths = updatedMembers.some(
         (m) =>
@@ -297,80 +300,68 @@ export default function BulkEdit({ mode = "add" }) {
           ?.filter((role) => role.endYear === null)
           ?.sort((a, b) => b.startYear - a.startYear)[0];
 
-        // check if role has changed
-        if (
-          member.role !== latestRole.name ||
-          member.isPoc !== fullMember.poc ||
-          member.startYear !== latestRole.startYear ||
-          member.startMonth !== (latestRole.startMonth ?? null) ||
-          (member.endYear === "-" ? null : member.endYear) !==
-            latestRole.endYear ||
-          (member.endMonth === "-" ? null : member.endMonth) !==
-            (latestRole.endMonth ?? null)
-        ) {
-          // construct new roles with old roles and new roles appended, but make the lastRow's end year as currentYear
-          const addNew = member.role !== latestRole.name;
-          const newRoles = fullMember.roles.map((role) => {
-            if (role.name === latestRole.name) {
-              return {
-                name: role.name,
-                startYear: addNew ? role.startYear : member.startYear,
-                startMonth: addNew
-                  ? role.startMonth
-                  : member.startMonth == null
-                    ? null
-                    : parseInt(member.startMonth),
-                endYear: addNew
-                  ? parseInt(member.startYear)
-                  : member.endYear === "-"
-                    ? null
-                    : parseInt(member.endYear),
-                endMonth: addNew
-                  ? member.startMonth == null
-                    ? null
-                    : parseInt(member.startMonth)
-                  : member.endYear === "-" ||
-                      member.endYear === null ||
-                      member.endYear === ""
-                    ? null
-                    : member.endMonth == null || member.endMonth === "-"
-                      ? member.startMonth == null
-                        ? null
-                        : parseInt(member.startMonth)
-                      : parseInt(member.endMonth),
-              };
-            }
-            return role;
-          });
-
-          // append the new role
-          if (addNew) {
-            newRoles.push({
-              name: member.role,
-              startYear: parseInt(member.startYear),
-              startMonth:
-                member.startMonth == null ? null : parseInt(member.startMonth),
-              endYear: member.endYear === "-" ? null : parseInt(member.endYear),
-              endMonth:
-                member.endYear === "-" ||
-                member.endYear === null ||
-                member.endYear === ""
+        // construct new roles with old roles and new roles appended, but make the lastRow's end year as currentYear
+        const addNew = member.role !== latestRole.name;
+        const newRoles = fullMember.roles.map((role) => {
+          if (role.name === latestRole.name) {
+            return {
+              name: role.name,
+              startYear: addNew ? role.startYear : member.startYear,
+              startMonth: addNew
+                ? role.startMonth
+                : member.startMonth == null
+                  ? null
+                  : parseInt(member.startMonth),
+              endYear: addNew
+                ? parseInt(member.startYear)
+                : member.endYear === "-"
+                  ? null
+                  : parseInt(member.endYear),
+              endMonth: addNew
+                ? member.startMonth == null
+                  ? null
+                  : parseInt(member.startMonth)
+                : member.endYear === "-" ||
+                    member.endYear === null ||
+                    member.endYear === ""
                   ? null
                   : member.endMonth == null || member.endMonth === "-"
                     ? member.startMonth == null
                       ? null
                       : parseInt(member.startMonth)
                     : parseInt(member.endMonth),
-            });
+            };
           }
+          return role;
+        });
 
-          finalMembers.push({
-            uid: member.uid,
-            cid: selectedClub,
-            roles: newRoles,
-            poc: member.isPoc,
+        // append the new role
+        if (addNew) {
+          newRoles.push({
+            name: member.role,
+            startYear: parseInt(member.startYear),
+            startMonth:
+              member.startMonth == null ? null : parseInt(member.startMonth),
+            endYear: member.endYear === "-" ? null : parseInt(member.endYear),
+            endMonth:
+              member.endYear === "-" ||
+              member.endYear === null ||
+              member.endYear === ""
+                ? null
+                : member.endMonth == null || member.endMonth === "-"
+                  ? member.startMonth == null
+                    ? null
+                    : parseInt(member.startMonth)
+                  : parseInt(member.endMonth),
           });
         }
+
+        finalMembers.push({
+          uid: member.uid,
+          cid: selectedClub,
+          roles: newRoles,
+          poc: member.isPoc,
+        });
       });
       void submit(finalMembers, editMemberAction, "edit");
     },
@@ -728,6 +719,14 @@ function MembersTable({
       row.endMonth = row.startMonth;
     }
 
+    row.isEdited =
+      row.role !== row.originalRole ||
+      row.isPoc !== row.originalIsPoc ||
+      row.startYear !== row.originalStartYear ||
+      row.startMonth !== row.originalStartMonth ||
+      row.endYear !== row.originalEndYear ||
+      row.endMonth !== row.originalEndMonth;
+
     const newRows = rows.map((r) => {
       if (r.id === row.id) return row;
       return r;
@@ -767,13 +766,7 @@ function MembersTable({
       filterable: false,
       sortable: true,
       valueGetter: (value, row) =>
-        row.role !== row.originalRole ||
-        row.startYear !== row.originalStartYear ||
-        row.startMonth !== row.originalStartMonth ||
-        row.endYear !== row.originalEndYear ||
-        row.endMonth !== row.originalEndMonth
-          ? "0" + row?.uid
-          : "1" + row?.uid,
+        row.isEdited ? "0" + row?.uid : "1" + row?.uid,
     },
     {
       field: "uid",
@@ -790,10 +783,7 @@ function MembersTable({
           <Typography
             variant="body2"
             color={
-              addMode ||
-              p.row.role !== p.row.originalRole ||
-              p.row.startYear !== p.row.originalStartYear ||
-              p.row.endYear !== p.row.originalEndYear
+              addMode || p.row.isEdited
                 ? "text.primary"
                 : "text.secondary"
             }
@@ -1100,7 +1090,8 @@ function MembersTable({
           columns: {
             columnVisibilityModel: {
               // Hide the 'isEdited' column, it's only for sorting
-              isEdited: false, // Hide the year columns in add mode
+              isEdited: false,
+              // Hide the year columns in add mode
               ...(addMode ? { start: false, end: false } : {}),
             },
           },
