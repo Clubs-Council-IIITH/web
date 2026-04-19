@@ -31,7 +31,7 @@ export default function ImageModal({ images, id = null, onClose = () => {} }) {
         }}
       >
         <Image
-          src={images[id]}
+          src={id != null ? images[id].url : null}
           width={0}
           height={0}
           sizes="100vw"

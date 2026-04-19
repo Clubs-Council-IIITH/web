@@ -123,7 +123,7 @@ export default function AccountPopover() {
         >
           {user?.img ? (
             <Image
-              alt={user?.firstName}
+              alt={user?.firstName || "User Avatar"}
               src={getFile(user?.img)}
               width={400}
               height={400}

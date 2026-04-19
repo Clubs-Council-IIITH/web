@@ -369,8 +369,16 @@ export default function EventForm({
     }
 
     const isSubmit = opts?.shouldSubmit === true;
+    const isInternalAudience =
+      Array.isArray(formData.audience) &&
+      formData.audience.includes("internal");
 
-    if (isSubmit && user?.role === "club" && isReportSubmitted === false) {
+    if (
+      isSubmit &&
+      user?.role === "club" &&
+      isReportSubmitted === false &&
+      !isInternalAudience
+    ) {
       setReportConfirmOpen(true);
       setLoading(false);
       return;
@@ -1095,7 +1103,7 @@ function EventDatetimeInput({
             validate: {
               checkDate: (value) => {
                 return (
-                  dayjs(value) >= dayjs(startDateInput) ||
+                  dayjs(value) > dayjs(startDateInput) ||
                   "Event must end after it starts!"
                 );
               },

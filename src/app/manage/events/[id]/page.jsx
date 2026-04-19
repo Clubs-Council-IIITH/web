@@ -10,12 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getClient } from "gql/client";
+import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { GET_EVENT_BILLS_STATUS } from "gql/queries/events";
-import { GET_CLASHING_EVENTS } from "gql/queries/events";
-import { GET_REPORTS_SUBMISSION_STATUS } from "gql/queries/events";
+import {
+  GET_CLASHING_EVENTS,
+  GET_EVENT_BILLS_STATUS,
+  GET_REPORTS_SUBMISSION_STATUS,
+} from "gql/queries/events";
 
 import ActionPalette from "components/ActionPalette";
 import EventBillStatus from "components/events/bills/EventBillStatus";
@@ -83,14 +85,15 @@ export default async function ManageEventID(props) {
     eventBillsData = data;
   }
 
-  const {
-    data: { allClubs },
-  } = await getClient().query(GET_ACTIVE_CLUBS);
+  const { document, variables } = combineQuery("CombinedEventDetailsQuery")
+    .add(GET_ACTIVE_CLUBS)
+    .add(GET_USER, { userInput: null });
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
+  const { data: combinedData = {} } = await getClient().query(
+    document,
+    variables,
   );
+  const { allClubs, userMeta, userProfile } = combinedData;
 
   const user = { ...userMeta, ...userProfile };
   let clashFlag = false;
