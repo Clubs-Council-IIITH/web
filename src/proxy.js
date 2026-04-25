@@ -37,7 +37,7 @@ export function proxy(req) {
     form-action 'self';
     frame-src ${
       pathname.includes("/docs") || process.env.NODE_ENV !== "production"
-        ? "http://localhost https://clubs.iiit.ac.in https://life.iiit.ac.in"
+        ? "http://localhost https://clubs.iiit.ac.in https://life.iiit.ac.in https://dev-clubs.iiit.ac.in"
         : "https://clubs.iiit.ac.in https://life.iiit.ac.in"
     };
     frame-ancestors 'self' https://*.iiit.ac.in https://iiit.ac.in;
