@@ -260,6 +260,26 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
 
   const privilegedItems = (
     <List disablePadding sx={{ p: 1, pt: 0 }}>
+      <DrawerDropdown
+        title="Inventory"
+        icon={<Icon variant="archive" />}
+      >
+        <DrawerItem
+          title="Recents"
+          path="/manage/inventory/recent"
+          icon={<Icon variant="history" />}
+        />
+        <DrawerItem
+          title="Items"
+          path="/manage/inventory/items"
+          icon={<Icon variant="warehouse" />}
+        />
+        <DrawerItem
+          title="Transactions"
+          path="/manage/inventory/transactions"
+          icon={<Icon variant="inbox" />}
+        />
+      </DrawerDropdown>
       <DrawerItem
         title="Important Docs"
         path="/docs"
@@ -373,11 +393,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         <Logo />
       </Box>
       {publicItems}
-      {["slo", "cc", "club"].includes(user.role) ? privilegedItems : null}
       {["club"].includes(user.role) ? clubItems : null}
       {["cc"].includes(user.role) ? ccItems : null}
       {["slc"].includes(user.role) ? SLCItems : null}
       {["slo"].includes(user.role) ? SLOItems : null}
+      {["slo", "cc", "club"].includes(user.role) ? privilegedItems : null}
       {aboutItems}
       {helpItems}
       <Box sx={{ flexGrow: 1 }} />
