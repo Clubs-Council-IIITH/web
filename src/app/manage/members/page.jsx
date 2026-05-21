@@ -49,7 +49,7 @@ export default async function ManageMembers({ searchParams }) {
     { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
-  const isCC = user?.role === "cc";
+  const isCC = user?.role === "cc" || user?.role === "slo";
   const isClub = user?.role === "club";
 
   return (
