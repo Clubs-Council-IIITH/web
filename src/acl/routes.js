@@ -18,12 +18,12 @@ const routes = {
   "/docs/:id": ["cc"],
   "/docs/new": ["cc"],
 
-  "/manage/members": ["cc", "club"],
-  "/manage/members/new": ["cc", "club"], // has to be higher to not conflict with :id
-  "/manage/members/bulk-add": ["cc", "club"],
-  "/manage/members/bulk-edit": ["cc", "club"],
-  "/manage/members/:id": ["cc", "club"],
-  "/manage/members/:id/edit": ["cc", "club"],
+  "/manage/members": ["cc", "club", "slo"],
+  "/manage/members/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
+  "/manage/members/bulk-add": ["cc", "club", "slo"],
+  "/manage/members/bulk-edit": ["cc", "club", "slo"],
+  "/manage/members/:id": ["cc", "club", "slo"],
+  "/manage/members/:id/edit": ["cc", "club", "slo"],
   "/manage/data-members": ["cc", "club", "slo"],
 
   "/manage/events": ["cc", "club", "slc", "slo"],
