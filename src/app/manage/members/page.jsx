@@ -49,7 +49,7 @@ export default async function ManageMembers({ searchParams }) {
     { userInput: null },
   );
   const user = { ...userMeta, ...userProfile };
-  const isCC = user?.role === "cc" || user?.role === "slo";
+  const isCC = ["cc", "slo"].includes(userMeta?.role);
   const isClub = user?.role === "club";
 
   return (
@@ -112,7 +112,7 @@ export default async function ManageMembers({ searchParams }) {
         </Typography>
         <Box sx={{ mt: 2, mb: 3 }}>
           <MembersFilter
-            club={targetClub || user?.uid}
+            club={targetClub || (userMeta?.role === "slo" ? undefined : user?.uid)}
             state={targetState}
             cc={isCC}
           />

@@ -15,7 +15,7 @@ export default async function BulkEditPage() {
   });
   const user = userMeta;
 
-  if (user?.role !== "cc" && user?.role !== "club" && user?.role !== "slo") {
+  if (!["cc", "club", "slo"].includes(userMeta?.role)) {
     notFound();
   }
 
