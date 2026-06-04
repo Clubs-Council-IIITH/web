@@ -112,7 +112,9 @@ export default async function ManageMembers({ searchParams }) {
         </Typography>
         <Box sx={{ mt: 2, mb: 3 }}>
           <MembersFilter
-            club={targetClub || (userMeta?.role === "slo" ? undefined : user?.uid)}
+            club={
+              targetClub || (userMeta?.role === "slo" ? undefined : user?.uid)
+            }
             state={targetState}
             cc={isCC}
           />

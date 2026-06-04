@@ -318,9 +318,9 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="group-outline-rounded" />}
       >
         <DrawerItem
-        title="Members List"
-        path="/manage/members"
-        icon={<Icon variant="group-outline-rounded" />}
+          title="Members List"
+          path="/manage/members"
+          icon={<Icon variant="group-outline-rounded" />}
         />
         <DrawerItem
           title="Data Download"
