@@ -38,7 +38,7 @@ export default function MembersFilter({ club, state, cc = false }) {
 
   // show both current and past if no state is selected
   useEffect(() => {
-    if (state.length === 0)
+    if (state.length === 0 && club)
       router.push(
         `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`,
       );
@@ -82,7 +82,9 @@ export default function MembersFilter({ club, state, cc = false }) {
                     `${pathname}?${createQueryString("club", e?.target?.value)}`,
                   )
                 }
-                value={club || ""}
+                value={
+                  clubs.some((c) => c.cid === club) ? club : ""
+                }
               >
                 {clubs
                   ?.slice()
