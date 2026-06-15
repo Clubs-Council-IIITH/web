@@ -13,6 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
+import {EventStatus} from "components/events/EventStates";
 
 /**
  * ItemsTable - Displays a table of inventory items with basic controls.
@@ -20,7 +21,7 @@ import { DataGrid } from "@mui/x-data-grid";
  * - Responsive design for mobile.
  * - Navigates to item details on row click.
  */
-export default function ItemsTable({ items: initialItems }) {
+export default function ItemsTable({ items: initialItems, isPending }) {
     const router = useRouter();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -34,15 +35,21 @@ export default function ItemsTable({ items: initialItems }) {
 
     // Table columns
     const columns = [
+        { field: "code", headerName: "Code", width: 120 },
         { field: "name", headerName: "Item Name", flex: 1 },
-        { field: "quantity", headerName: "Quantity", width: 120 },
-        { field: "status", headerName: "Status", width: 120 },
-        { field: "category", headerName: "Category", width: 120 },
-        { field: "location", headerName: "Location", width: 120 },
-        { field: "lastTransaction", headerName: "Last Transaction", width: 160 },
-        { field: "owner", headerName: "Owner", width: 120 },
-        { field: "description", headerName: "Description", flex: 2 },
+        { field: "brand", headerName: "Brand", flex: 1 },
+        { field: "quantity", headerName: "Quantity", width: 120 }
     ];
+
+    if(isPending===false)
+    {
+        columns.push(
+            { field: "owner", headerName: "Owner", flex: 1 },
+            { field: "status", headerName: "Status", width: 150, 
+                renderCell: (params) => <EventStatus status={params.value} /> 
+            }
+        );
+    }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: 600 }}>

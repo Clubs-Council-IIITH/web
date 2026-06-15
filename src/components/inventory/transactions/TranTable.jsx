@@ -18,7 +18,7 @@ import { DataGrid } from "@mui/x-data-grid";
  * - Responsive design for mobile.
  * - Navigates to transaction details on row click.
  */
-export default function TranTable({ transactions: initialTransactions }) {
+export default function TranTable({ transactions: initialTransactions, item }) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -32,14 +32,12 @@ export default function TranTable({ transactions: initialTransactions }) {
 
   // Table columns
   const columns = [
-    { field: "_id", headerName: "ID", width: 90 },
     { field: "itemName", headerName: "Item Name", flex: 1 },
-    { field: "type", headerName: "Type", width: 120 },
     { field: "quantity", headerName: "Quantity", width: 120 },
-    { field: "date", headerName: "Date", width: 160 },
+    { field: "brand", headerName: "Brand", width: 120 },
     { field: "user", headerName: "User", width: 120 },
+    { field: "borrow_date", headerName: "Borrowed on", width: 160 },
     { field: "status", headerName: "Status", width: 120 },
-    { field: "remarks", headerName: "Remarks", flex: 2 },
   ];
 
   return (

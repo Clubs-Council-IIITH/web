@@ -1,9 +1,15 @@
 
 
-import { Container, Stack, Typography, Card } from "@mui/material";
+import { Button, Container, Stack, Typography, Card } from "@mui/material";
+
 import { combineQuery, getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+// import { GET_ALL_ITEMS, GET_PENDING_ITEMS } from "gql/queries/inventory";
+
 import ItemsTable from "components/inventory/items/ItemsTable";
 import TranTable from "components/inventory/transactions/TranTable";
+import ButtonLink from "components/Link";
+import Icon from "components/Icon";
 
 
 export const metadata = {
@@ -11,23 +17,21 @@ export const metadata = {
 };
 
 export default async function ManageItems() {
+    // fetching user's metadata to determine role and permissions
+    const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+        userInput: null,
+      });
+
     // bring list of inventory items
-
-    // DASHBOARD:
-    // - (/inventory) Main inventory page: Two dashboards (for cc/slo all clubs visible, for club only to specific club)
-    // - Recent Transactions (top 10-20)
-    // - Items in storage (Top 10 arranged based on frequency of transactions) (View all button on top to take to seperate page)
-    // - Some statistics like "Number of items borrowed, Number of items in storage"
-    // Dummy data for demonstration
+    // const { data: { allItems } = {} } = await getClient().query(GET_ALL_ITEMS);
+    // const { data: { pendingItems } = {} } = await getClient().query(
+    // GET_PENDING_ITEMS
+    // );
+    
     const dummyItems = [
-        { _id: "1", name: "Projector", quantity: 3, status: "available", category: "Electronics", location: "Room 101", lastTransaction: "2026-05-10", owner: "CC", description: "Epson projector" },
-        { _id: "2", name: "Speaker", quantity: 5, status: "borrowed", category: "Audio", location: "Room 102", lastTransaction: "2026-05-11", owner: "SLC", description: "JBL speaker" },
+        { id: "1", name: "Projector", quantity: 3, status: "available", category: "Electronics", location: "Room 101", lastTransaction: "2026-05-10", owner: "CC", description: "Epson projector" },
+        { id: "2", name: "Speaker", quantity: 5, status: "borrowed", category: "Audio", location: "Room 102", lastTransaction: "2026-05-11", owner: "SLC", description: "JBL speaker" },
     ];
-    const dummyTransactions = [
-        { _id: "3", itemName: "Projector", type: "borrow", quantity: 1, date: "2026-05-11", user: "Alice", status: "approved", remarks: "For event" },
-        { _id: "4", itemName: "Speaker", type: "return", quantity: 2, date: "2026-05-12", user: "Bob", status: "pending", remarks: "Returned late" },
-    ];
-
     return (
         <Container>
             <Stack
@@ -41,8 +45,19 @@ export default async function ManageItems() {
                 <Typography variant="h3" gutterBottom>
                     Manage Items
                 </Typography>
+
+                {["cc", "slo"].includes(userMeta?.role) ? (
+                          <Button
+                            component={ButtonLink}
+                            href="/manage/inventory/items/new"
+                            variant="contained"
+                            startIcon={<Icon variant="add" />}
+                          >
+                            New Item
+                          </Button>
+                        ) : null}
             </Stack>
-            <div>
+            {dummyItems.length ? <div>
                 <Typography
                     variant="subtitle2"
                     gutterBottom
@@ -52,10 +67,13 @@ export default async function ManageItems() {
                         mb: 1,
                     }}
                 >
-                    Pending Items Additions
+                    Items for Approval
                 </Typography>
-                <TranTable transactions={dummyTransactions} />
-            </div>
+                <ItemsTable 
+                    items={dummyItems}
+                    isPending={true}
+                />
+            </div> : null}
             <div>
                 <Typography
                     variant="subtitle2"
@@ -68,7 +86,10 @@ export default async function ManageItems() {
                 >
                     Items in Storage
                 </Typography>
-                <ItemsTable items={dummyItems} />
+                <ItemsTable 
+                    items={dummyItems}
+                    isPending={false}
+                />
             </div>
         </Container>
     );
