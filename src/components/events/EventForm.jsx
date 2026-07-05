@@ -45,6 +45,7 @@ import EventBudget from "components/events/EventBudget";
 import EventsDialog from "components/events/EventsDialog";
 import EventSponsor from "components/events/EventSponsor";
 import FileUpload from "components/FileUpload";
+import MarkdownEditorModal from "components/markdown/MarkdownEditorModal";
 import MemberListItem from "components/members/MemberListItem";
 import { useToast } from "components/Toast";
 import { uploadImageFile } from "utils/files";
@@ -433,7 +434,7 @@ export default function EventForm({
                     control={control}
                     defaultValue={
                       defaultValues.collabclubs &&
-                      defaultValues.collabclubs.length
+                        defaultValues.collabclubs.length
                         ? true
                         : false
                     }
@@ -511,7 +512,7 @@ export default function EventForm({
                 <EventAudienceSelect control={control} />
               </Grid>
               <Grid size={12}>
-                <EventDescriptionInput control={control} />
+                <EventDescriptionInput control={control} defaultValue={defaultValues.description} />
               </Grid>
               {user?.role === "club" ? (
                 <Grid size={12}>
@@ -802,9 +803,9 @@ function SubmitButton({
           onClick={
             mode === "submit"
               ? () =>
-                  handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true }),
-                  )()
+                handleSubmit((data) =>
+                  onSubmit(data, { shouldSubmit: true }),
+                )()
               : undefined
           }
           size="large"
@@ -1117,9 +1118,9 @@ function EventDatetimeInput({
               minDateTime={
                 startDateInput
                   ? (startDateInput instanceof Date && !isDayjs(startDateInput)
-                      ? dayjs(startDateInput)
-                      : startDateInput
-                    ).add(1, "minute")
+                    ? dayjs(startDateInput)
+                    : startDateInput
+                  ).add(1, "minute")
                   : null
               }
               disablePast={!(clubsAddPastEvents || admin_roles.includes(role))}
@@ -1238,7 +1239,9 @@ function EventAudienceSelect({ control }) {
 }
 
 // event description input
-function EventDescriptionInput({ control }) {
+function EventDescriptionInput({ control, defaultValue }) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <Controller
       name="description"
@@ -1250,22 +1253,40 @@ function EventDescriptionInput({ control }) {
         },
       }}
       render={({ field, fieldState: { error, invalid } }) => (
-        <TextField
-          {...field}
-          label="Description"
-          autoComplete="off"
-          error={invalid}
-          helperText={error?.message}
-          variant="outlined"
-          rows={8}
-          fullWidth
-          multiline
-          onBlur={(e) => {
-            field.onChange(
-              e?.target?.value.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""),
-            );
-          }}
-        />
+        <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 1 }}>
+          <TextField
+            {...field}
+            label="Public Description"
+            autoComplete="off"
+            error={invalid}
+            helperText={error?.message}
+            variant="outlined"
+            rows={8}
+            fullWidth
+            multiline
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }}
+          />
+          <Box sx={{ alignSelf: "flex-end" }}>
+            <Button variant="outlined" color="primary" onClick={() => setModalOpen(true)}>
+              Edit with Markdown Editor
+            </Button>
+          </Box>
+          {modalOpen && (
+            <MarkdownEditorModal
+              open={modalOpen}
+              onClose={() => setModalOpen(false)}
+              content={field.value || ""}
+              oldContent={defaultValue}
+              onSave={(newContent) =>
+                field.onChange(newContent.replace(/^[\s\n\t]+|[\s\n\t]+$/g, ""))
+              }
+            />
+          )}
+        </Box>
       )}
     />
   );

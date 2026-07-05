@@ -6,6 +6,7 @@ import { useMode } from "contexts/ModeContext";
 
 import { locationLabel } from "utils/formatEvent";
 import { formatDateTime } from "utils/formatTime";
+import { stripMarkdown } from "utils/markdown";
 
 export default function AddToCalendarBtn({ event }) {
   const { isDark } = useMode();
@@ -16,7 +17,7 @@ export default function AddToCalendarBtn({ event }) {
   return (
     <AddToCalendarButton
       name={event.name}
-      description={event.description || " "}
+      description={stripMarkdown(event.description) || " "}
       options={["Google", "Microsoft365", "Apple", "iCal"]}
       location={
         ["offline", "hybrid"].includes(event.mode)
