@@ -29,7 +29,7 @@ query AllAchievements {
 }
 `
 export const GET_ACHIEVEMENT_BY_USER = gpl`
-query AllAchievements($uid: String!) {
+query AchievementsByUser($uid: String!) {
   achievementsByUser(uid: $uid) {
     _id
     name
@@ -55,6 +55,7 @@ query AllAchievements($uid: String!) {
     }
   }
 }`
+
 export const GET_ACHIEVEMENT_BY_ID= gpl`
 query AchievementById($achievementid: String!) {
   achievementById(achievementid: $achievementid) {

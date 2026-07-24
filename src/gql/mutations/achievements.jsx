@@ -2,7 +2,7 @@ import gpl from 'graphql-tag'
 
 
 export const CREATE_ACHIEVEMENT = gpl`
-    mutation CreateAchievement($details: CreateAchievementDetails!) {
+mutation CreateAchievement($details: CreateAchievementDetails!) {
   createAchievement(details: $details) {
     _id
     name
@@ -66,7 +66,7 @@ mutation EditAchievement($details: EditAchievementDetails!) {
 }
 `
 export const APPROVE_ACHIEVEMENT = gpl`
-mutation EditAchievement($achievementId: String!) {
+mutation ApproveAchievement($achievementId: String!) {
   approveAchievement(achievementId: $achievementId) {
     _id
     name
@@ -87,7 +87,7 @@ mutation EditAchievement($achievementId: String!) {
 }
 `
 export const REJECT_ACHIEVEMENT = gpl`
-mutation EditAchievement($achievementId: String!) {
+mutation RejectAchievement($achievementId: String!) {
   rejectAchievement(achievementId: $achievementId) {
     _id
     name
