@@ -38,19 +38,25 @@ import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import FileUpload from "components/FileUpload";
 import { useAuth } from "components/AuthProvider";
 import { useToast } from "components/Toast";
+import { uploadImageFile } from "utils/files";
+
+import { createAchievementAction } from "../../actions/achievements/create/server_action";
+import { editAchievementAction } from "../../actions/achievements/edit/server_action";
 
 const admin_roles=["slo", "slc", "cc"]
 const allowed_role=["slo","slc", "cc", "club"]
 
 export default function AchievementForm({
     id= null, 
+    action = "create",
     defaultValues={}
 }){
   const router = useRouter();
   const { user } = useAuth();
   const theme = useTheme();
-  
-    const { triggerToast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const { triggerToast } = useToast();
+
     // fetch list of clubs
     const [clubs, setClubs] = useState([]);
     useEffect(() => {
@@ -68,13 +74,94 @@ export default function AchievementForm({
       })();
     }, []);
   
-    const { control, handleSubmit, watch, setValue } = useForm({
+    const { control, handleSubmit, setValue } = useForm({
     mode: "onChange",
     defaultValues,
   });
 
+  const submitHandlers = {
+    log: console.log,
+    create: async (data, opts) => {
+      let res = await createAchievementAction(data);
+      console.log("CREATED ACHIEVEMENT: ",res);
+
+      if (res.ok) {
+        triggerToast({
+          title: "Success!",
+          messages:
+            user?.role === "cc"
+              ? ["Achievement created."]
+              : ["Achievement created & saved as a draft."],
+          severity: "success",
+        });
+        router.push(`/manage/achievements/${res.data._id}`);
+      } else {
+        triggerToast({
+          severity: "error",
+        });
+        setLoading(false);
+      }
+    },
+    edit: async (data, opts) => {
+      let res = await editAchievementAction(data);
+
+      if (res.ok) {
+        triggerToast({
+          title: "Success!",
+          messages: ["Achievement edited"],
+          severity: "success",
+        });
+        router.push(`/manage/achievements/${res.data._id}`);
+      } else {
+        triggerToast({
+          severity: "error",
+        });
+        setLoading(false);
+      }
+    },
+  }
+  async function onSubmit(formData, opts) {
+    setLoading(true);
+
+    const data = {
+      name: formData.name,
+      code: formData.code,
+      clubids: formData.clubs,
+      achievementType: formData.type,
+      content: formData.description,
+      blogLinks: formData.link,
+      userids: [],
+    }
+
+    // upload images
+    const image_links = []
+    for (const image of formData.images) { 
+      const filename = ("achievement_" + data.name + "_" + image.name
+      ).replaceAll(".", "_",);
+
+      const url = await uploadImageFile(
+        image,
+        filename,
+        80,
+      );
+
+      image_links.push(url);
+    }
+    console.log(image_links)
+
+    data.imageLinks = image_links;
+
+    // convert dates to ISO strings
+    data.dateperiod = formData.dateperiod.map((d) =>
+      new Date(d).toISOString().split("T")[0]
+    );
+    console.log(data);
+
+    submitHandlers[action](data, opts);
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container 
       spacing={4}
       sx={{
@@ -124,7 +211,9 @@ export default function AchievementForm({
             <AchievementDateInput 
               control={control} 
               setValue={setValue}
-              disabled={false}
+              disabled={
+                defaultValues?.status?.state != undefined &&
+                defaultValues?.status?.state != "incomplete"}
             />
           </Grid>
           <Grid container size={12} spacing={2}>
@@ -199,31 +288,16 @@ export default function AchievementForm({
          <Grid size={12}>
           <AchievementLinkInput control={control}/>
          </Grid>
-       
         </Grid>
- 
-
-
-
-
-
-
-
       </Grid>
-
-
-
-
-
-
-
+      <AchievementsSubmitButton
+        loading={loading}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+      />
     </form>
-
-
   )
 }
-
-
 
 function AchievementsSubmitButton({
   loading,
