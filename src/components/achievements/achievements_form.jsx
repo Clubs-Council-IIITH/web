@@ -4,14 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import dayjs, { isDayjs } from "dayjs";
-import { Controller, useController, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
   Button,
   Chip,
-  CircularProgress,
-  Fade,
   FormControl,
   FormLabel,
   FormControlLabel,
@@ -24,13 +22,11 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Switch,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from "@mui/material";
+import AchievementLinks  from "./achievementLinks";
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
@@ -42,9 +38,6 @@ import { uploadImageFile } from "utils/files";
 
 import { createAchievementAction } from "../../actions/achievements/create/server_action";
 import { editAchievementAction } from "../../actions/achievements/edit/server_action";
-
-const admin_roles=["slo", "slc", "cc"]
-const allowed_role=["slo","slc", "cc", "club"]
 
 export default function AchievementForm({
     id= null, 
@@ -76,7 +69,12 @@ export default function AchievementForm({
   
     const { control, handleSubmit, setValue } = useForm({
     mode: "onChange",
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      links: defaultValues?.blog_links?.length
+        ? defaultValues.blog_links.map((url) => ({ url }))
+        : [{ url: "" }],
+    },
   });
 
   const submitHandlers = {
@@ -272,11 +270,22 @@ export default function AchievementForm({
       />
 
          </Grid>
-        <Grid size={12}>
+        <Grid container size={12} spacing={3}>
+              <Typography
+                variant="subtitle2"
+                gutterBottom
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  alignSelf: "center",
+                  mb: 0,
+                }}
+              >
+                Images
+            </Typography>
               <FileUpload
                 type="image"
                 name="images"
-                label="Images"
                 control={control}
                 maxFiles={5}
                 maxSizeMB={100}
@@ -285,9 +294,24 @@ export default function AchievementForm({
               />
 
          </Grid>
-         <Grid size={12}>
-          <AchievementLinkInput control={control}/>
-         </Grid>
+         <Grid container size={12} spacing={3}>
+             <Typography
+                variant="subtitle2"
+                gutterBottom
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  alignSelf: "center",
+                  mb: 0,
+                }}
+              >
+                Blog links
+            </Typography>
+          <AchievementLinks control={control}/>
+         
+           <AchievementsSubmitButton control={control}/>
+          </Grid>
+
         </Grid>
       </Grid>
       <AchievementsSubmitButton
@@ -303,7 +327,7 @@ function AchievementsSubmitButton({
   loading,
   handleSubmit,
   onSubmit,
-  disabled = true,
+  disabled = false,
 }) {
 
   const label = "Submit"
@@ -623,7 +647,6 @@ function AchievementLinkInput({ control }) {
     <Controller
       name="link"
       control={control}
-      rules={{}}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
