@@ -348,7 +348,7 @@ export default function EventReportForm({
               <Controller
                 name="eventSummary"
                 control={control}
-                defaultValue={defaultReportValues?.summary}
+                defaultValue={defaultReportValues?.summary ?? ""}
                 rules={{
                   required: "Summary of the Event is required!",
                   maxLength: {
@@ -381,7 +381,7 @@ export default function EventReportForm({
               <Controller
                 name="mediaLink"
                 control={control}
-                defaultValue={defaultReportValues?.photosLink}
+                defaultValue={defaultReportValues?.photosLink ?? ""}
                 rules={{
                   required: "Photos/Videos Link is required!",
                   pattern: {
@@ -465,7 +465,7 @@ export default function EventReportForm({
                 name="actualAttendance"
                 control={control}
                 rules={{ required: "Actual Attendance is required!" }}
-                defaultValue={defaultReportValues?.attendance}
+                defaultValue={defaultReportValues?.attendance ?? ""}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}
@@ -501,7 +501,7 @@ export default function EventReportForm({
                     rules={{
                       required: "Actual External Attendance is required!",
                     }}
-                    defaultValue={defaultReportValues?.externalAttendance}
+                    defaultValue={defaultReportValues?.externalAttendance ?? ""}
                     render={({ field, fieldState: { error, invalid } }) => (
                       <TextField
                         {...field}
@@ -555,7 +555,7 @@ export default function EventReportForm({
                 name="actualBudget"
                 control={control}
                 rules={{ required: "Actual Budget is required!" }}
-                defaultValue={defaultReportValues?.actualBudget}
+                defaultValue={defaultReportValues?.actualBudget ?? ""}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}
@@ -650,7 +650,7 @@ export default function EventReportForm({
                   <Controller
                     name="winnersDetails"
                     control={control}
-                    defaultValue={defaultReportValues?.winners}
+                    defaultValue={defaultReportValues?.winners ?? ""}
                     render={({ field, fieldState: { error, invalid } }) => (
                       <TextField
                         {...field}
@@ -678,7 +678,7 @@ export default function EventReportForm({
               <Controller
                 name="feedback"
                 control={control}
-                defaultValue={defaultReportValues?.feedbackCc}
+                defaultValue={defaultReportValues?.feedbackCc ?? ""}
                 render={({ field, fieldState: { error, invalid } }) => (
                   <TextField
                     {...field}
