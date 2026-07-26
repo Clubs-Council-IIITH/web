@@ -293,8 +293,7 @@ export function DownloadEventReportDocx({
                   bold: true,
                 }),
                 new TextRun({
-                  text: `Rs. ${eventReport?.expectedBudget !== undefined && eventReport?.expectedBudget !== null ? eventReport.expectedBudget : "N/A"}`,
-                }),
+                  text: `${eventReport?.expectedBudget !== undefined && eventReport?.expectedBudget !== null ? "Rs. " + eventReport.expectedBudget : "N/A"}`,
               ],
             }),
             new Paragraph({

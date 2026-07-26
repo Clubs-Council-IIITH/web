@@ -185,10 +185,10 @@ export function DownloadEventReport({
 
         <div class="section">
             <h2>Budget Overview</h2>
-            <p><strong>Expected Budget:</strong> Rs. ${
+            <p><strong>Expected Budget:</strong> ${
               eventReport?.expectedBudget !== undefined &&
               eventReport?.expectedBudget !== null
-                ? eventReport.expectedBudget
+                ? "Rs. " + eventReport.expectedBudget
                 : "N/A"
             }</p>
             <p><strong>Actual Budget:</strong> Rs. ${
