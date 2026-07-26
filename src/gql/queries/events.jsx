@@ -317,6 +317,8 @@ export const GET_EVENT_REPORT = gql`
       feedbackCollege
       submittedBy
       submittedTime
+      expectedBudget
+      actualBudget
     }
   }
 `;

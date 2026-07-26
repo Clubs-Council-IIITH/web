@@ -185,6 +185,18 @@ export function DownloadEventReport({
 
         <div class="section">
             <h2>Budget Overview</h2>
+            <p><strong>Expected Budget:</strong> ${
+              eventReport?.expectedBudget !== undefined &&
+              eventReport?.expectedBudget !== null
+                ? "Rs. " + eventReport.expectedBudget
+                : "N/A"
+            }</p>
+            <p><strong>Actual Budget:</strong> Rs. ${
+              eventReport?.actualBudget !== undefined &&
+              eventReport?.actualBudget !== null
+                ? eventReport.actualBudget
+                : "N/A"
+            }</p>
             ${
               event?.budget?.length
                 ? `

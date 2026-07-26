@@ -81,6 +81,8 @@ export const ADD_EVENT_REPORT = gql`
       feedbackCollege
       submittedBy
       submittedTime
+      expectedBudget
+      actualBudget
     }
   }
 `;
@@ -99,6 +101,8 @@ export const EDIT_EVENT_REPORT = gql`
       feedbackCollege
       submittedBy
       submittedTime
+      expectedBudget
+      actualBudget
     }
   }
 `;
