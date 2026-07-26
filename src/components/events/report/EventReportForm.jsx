@@ -62,6 +62,10 @@ export default function EventReportForm({
   const { user } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const totalExpectedBudget =
+    defaultValues?.budget?.reduce((sum, item) => sum + (item.amount || 0), 0) ||
+    0;
+
   const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
   const [clubs, setClubs] = useState([]);
@@ -169,6 +173,8 @@ export default function EventReportForm({
         feedbackCollege: formData.feedback || "N/A",
         submittedBy: formData.submittedBy,
         submittedTime: new Date().toISOString(),
+        expectedBudget: parseFloat(totalExpectedBudget),
+        actualBudget: parseFloat(formData.actualBudget),
       };
       if (!hasPhone && formData.submittedBy_phone) {
         const phoneData = {
@@ -511,6 +517,58 @@ export default function EventReportForm({
                 </Grid>
               </>
             ) : null}
+
+            <Grid
+              sx={{
+                mt: 4,
+              }}
+              size={12}
+            >
+              <Typography
+                variant="subtitle2"
+                gutterBottom
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  mb: 2,
+                }}
+              >
+                Budget
+              </Typography>
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                label="Expected Budget"
+                value={totalExpectedBudget}
+                disabled
+                fullWidth
+              />
+            </Grid>
+            <Grid
+              sx={{
+                mt: 2,
+                mb: 3,
+              }}
+              size={12}
+            >
+              <Controller
+                name="actualBudget"
+                control={control}
+                rules={{ required: "Actual Budget is required!" }}
+                defaultValue={defaultReportValues?.actualBudget}
+                render={({ field, fieldState: { error, invalid } }) => (
+                  <TextField
+                    {...field}
+                    label="Actual Budget*"
+                    type="number"
+                    fullWidth
+                    error={invalid}
+                    helperText={error?.message}
+                    autoComplete="off"
+                  />
+                )}
+              />
+            </Grid>
 
             <Grid
               sx={{

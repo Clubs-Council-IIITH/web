@@ -22,6 +22,7 @@ import ButtonLink from "components/Link";
 import MemberListItem from "components/members/MemberListItem";
 import { canEditReport } from "utils/eventReportAuth";
 import { audienceLabels, locationLabel } from "utils/formatEvent";
+import { fCurrency } from "utils/formatCurrency";
 
 const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });
 
@@ -403,6 +404,37 @@ export function EventReportDetails({
           >
             Budget
           </Typography>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              mt: 0.1,
+              mb: 2,
+            }}
+          >
+            <Grid size={4}>
+              <Box>
+                <Typography variant="overline">Expected Budget</Typography>
+                <Typography variant="body2">
+                  {eventReport?.expectedBudget !== undefined &&
+                  eventReport?.expectedBudget !== null
+                    ? fCurrency(eventReport.expectedBudget)
+                    : "N/A"}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid size={4}>
+              <Box>
+                <Typography variant="overline">Actual Budget</Typography>
+                <Typography variant="body2">
+                  {eventReport?.actualBudget !== undefined &&
+                  eventReport?.actualBudget !== null
+                    ? fCurrency(eventReport.actualBudget)
+                    : "N/A"}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
           {event?.budget?.length ? (
             <EventBudget
               rows={event?.budget.map((b, key) => ({ ...b, id: b?.id || key }))}

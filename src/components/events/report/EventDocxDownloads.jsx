@@ -286,6 +286,28 @@ export function DownloadEventReportDocx({
               text: "Budget Overview",
               heading: "Heading2",
             }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Expected Budget: ",
+                  bold: true,
+                }),
+                new TextRun({
+                  text: `Rs. ${eventReport?.expectedBudget !== undefined && eventReport?.expectedBudget !== null ? eventReport.expectedBudget : "N/A"}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Actual Budget: ",
+                  bold: true,
+                }),
+                new TextRun({
+                  text: `Rs. ${eventReport?.actualBudget !== undefined && eventReport?.actualBudget !== null ? eventReport.actualBudget : "N/A"}`,
+                }),
+              ],
+            }),
             event?.budget?.length
               ? new Table({
                   width: {
