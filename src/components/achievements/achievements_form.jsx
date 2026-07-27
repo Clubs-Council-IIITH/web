@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import dayjs, { isDayjs } from "dayjs";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch, useController } from "react-hook-form";
+import { currentMembersAction } from "actions/members/current/server_action";
 
 import {
   Box,
@@ -29,15 +30,17 @@ import {
 import AchievementLinks  from "./achievementLinks";
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
-import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import FileUpload from "components/FileUpload";
 import { useAuth } from "components/AuthProvider";
 import { useToast } from "components/Toast";
 import { uploadImageFile } from "utils/files";
-
+import { getFullUser } from "actions/users/get/full/server_action";
 import { createAchievementAction } from "../../actions/achievements/create/server_action";
 import { editAchievementAction } from "../../actions/achievements/edit/server_action";
+
+
 
 export default function AchievementForm({
     id= null, 
@@ -66,10 +69,55 @@ export default function AchievementForm({
         }
       })();
     }, []);
-  
+    const getUsers = useCallback(async (clubs,usersList=[]) => {
+      if (!clubs || clubs.length === 0) {
+        return [];
+      }
+
+      for (let club of clubs) {
+        let res = await currentMembersAction({ cid: club?.cid || club?.id || club });
+        if (!res?.ok) {
+          triggerToast({
+            title: "Members cannot be fetched",
+            messages: res?.error?.messages || ["Unable to fetch members"],
+            severity: "error",
+          });
+        } else {
+          let newUserList=[]
+          let count = 0;
+          for(let member of res.data){
+            let user = await getFullUser(member.uid);
+            if(user.ok){
+              newUserList.push(user.data);
+            }
+            else{
+              count++;
+            }  
+        }
+        if(count!=0){
+          triggerToast({
+            title:"Some users couldn't be fetched",
+            messages:`${count} users couldn't be fetched`,
+            severity:"error"
+          })
+        }
+        usersList=[...usersList, ...newUserList]
+        
+        }
+      }
+      return usersList;
+    }, [triggerToast]);
+
+
     const { control, handleSubmit, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
+      name: "",
+      description: "",
+      type: "",
+      clubs: [],
+      userids: [],
+      dateperiod: [null, null],
       ...defaultValues,
       links: defaultValues?.blog_links?.length
         ? defaultValues.blog_links.map((url) => ({ url }))
@@ -122,17 +170,19 @@ export default function AchievementForm({
     setLoading(true);
 
     const data = {
+      ...(id ? { id } : {}),
       name: formData.name,
       code: formData.code,
-      clubids: formData.clubs,
+      clubids: (formData.clubs || []).filter(Boolean),
       achievementType: formData.type,
       content: formData.description,
-      blogLinks: formData.link,
-      userids: [],
+      blogLinks: formData.links?.map((item) => item.url).filter(Boolean) || [],
+      userids: (formData.userids || []).filter(Boolean),
     }
 
     // upload images
     const image_links = []
+    if(formData.images){
     for (const image of formData.images) { 
       const filename = ("achievement_" + data.name + "_" + image.name
       ).replaceAll(".", "_",);
@@ -145,9 +195,10 @@ export default function AchievementForm({
 
       image_links.push(url);
     }
+  }
     console.log(image_links)
 
-    data.imageLinks = image_links;
+    data.imageLinks = image_links.length? image_links: [];
 
     // convert dates to ISO strings
     data.dateperiod = formData.dateperiod.map((d) =>
@@ -229,6 +280,9 @@ export default function AchievementForm({
           </Typography>
                 <ClubIdsSelector control={control} clubs={clubs}/>
           </Grid>
+          <Grid size={12}>
+             <UserIdsSelector control={control} getUser={getUsers}/>
+          </Grid>
         </Grid>
         </Grid>
         
@@ -309,19 +363,21 @@ export default function AchievementForm({
             </Typography>
           <AchievementLinks control={control}/>
          
-           <AchievementsSubmitButton control={control}/>
+          <AchievementsSubmitButton
+            loading={loading}
+            handleSubmit={handleSubmit}
+            onSubmit={onSubmit}
+          />
           </Grid>
 
         </Grid>
       </Grid>
-      <AchievementsSubmitButton
-        loading={loading}
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmit}
-      />
+     
     </form>
   )
 }
+
+
 
 function AchievementsSubmitButton({
   loading,
@@ -396,7 +452,6 @@ function ClubIdsSelector({
   clubs = [],
 }) {
   const [open, setOpen] = useState(false);
-
   return (
     <Controller
       name="clubs"
@@ -465,6 +520,103 @@ function ClubIdsSelector({
   );
 }
 
+
+function UserIdsSelector({
+  control,
+  defaultValue,
+  disabled = false,
+  getUser
+}) {
+  const { field } = useController({name: "userids", control})
+  const [open, setOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+  let clubs = useWatch({
+    control, 
+    name:"clubs",
+    defaultValue:[]
+  });
+
+  useEffect(() => {
+    field.onChange([]);
+    if (!clubs || clubs.length === 0) {
+      setUsers([]);
+      return;
+    }
+    (async () => {
+      const res = await getUser(clubs);
+      if (Array.isArray(res)) {
+        setUsers(res);
+      }
+    })();
+  }, [clubs, getUser]);
+
+  return (
+    <Controller
+      name="userids"
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
+          <InputLabel id="users">Users</InputLabel>
+          <Select
+            labelId="users"
+            label="Users"
+            fullWidth
+            multiple
+            disabled={disabled}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+            input={<OutlinedInput label="Users" />}
+            {...field}
+            value={field.value || []}
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.filter(Boolean).map((value) => (
+                  <Chip
+                    key={value}
+                    label={users.find((user) => user.uid === value)?.name}
+                  />
+                ))}
+              </Box>
+            )}
+          >
+            {/* Close button positioned in the top right corner */}
+            <IconButton
+              size="small"
+              onClick={() => setOpen(false)}
+              sx={{
+                position: "sticky",
+                top: 8,
+                right: 8,
+                zIndex: 1,
+                background: "rgba(255, 255, 255, 0.7)",
+                backdropFilter: "blur(4px)",
+                "&:hover": {
+                  background: "rgba(230, 230, 230, 0.7)",
+                },
+                float: "right", // Ensures it stays to the right
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+
+            {users
+              ?.slice()
+              ?.sort((a, b) => a.name.localeCompare(b.name))
+              ?.map((user) => (
+                <MenuItem key={user.uid} value={user.uid}>
+                  {user.name}
+                </MenuItem>
+              ))}
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )}
+    />
+  );
+}
+
 function AchievementDateInput({
   control,
   setValue,
@@ -497,7 +649,7 @@ function AchievementDateInput({
       dayjs(startDateInput).isAfter(dayjs(endDateInput))
     )
       setValue("dateperiod.1", null);
-  }, [startDateInput]);
+  }, [startDateInput, endDateInput, setValue]);
 
 
   return (
@@ -560,7 +712,7 @@ function AchievementDateInput({
             validate: {
               checkDate: (value) => {
                 return (
-                  dayjs(value) > dayjs(startDateInput) ||
+                  dayjs(value) >= dayjs(startDateInput) ||
                   "Achievement must end after it starts!"
                 );
               },
@@ -640,27 +792,3 @@ function AchievementContentInput({ control }) {
   );
 }
 
-
-// // event link input
-function AchievementLinkInput({ control }) {
-  return (
-    <Controller
-      name="link"
-      control={control}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <TextField
-          {...field}
-          label="Link"
-          autoComplete="off"
-          error={invalid}
-          helperText={
-            error?.message ||
-            "Link to any blog or article regarding the achievement"
-          }
-          variant="outlined"
-          fullWidth
-        />
-      )}
-    />
-  );
-}
