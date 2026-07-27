@@ -13,7 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
-import {EventStatus} from "components/events/EventStates";
+import { ItemStatus } from "components/inventory/items/ItemStates";
 
 /**
  * ItemsTable - Displays a table of inventory items with basic controls.
@@ -46,7 +46,7 @@ export default function ItemsTable({ items: initialItems, isPending }) {
         columns.push(
             { field: "owner", headerName: "Owner", flex: 1 },
             { field: "status", headerName: "Status", width: 150, 
-                renderCell: (params) => <EventStatus status={params.value} /> 
+                renderCell: (params) => <ItemStatus status={params.value} /> 
             }
         );
     }
@@ -57,10 +57,11 @@ export default function ItemsTable({ items: initialItems, isPending }) {
                 autoHeight
                 rows={items}
                 columns={columns}
+                getRowId={(row) => row?._id ?? row?.id}
                 pageSize={isMobile ? 3 : 5}
                 rowsPerPageOptions={isMobile ? [3] : [5]}
                 onRowClick={(params) => {
-                    router.push(`/manage/inventory/items/${params.row._id}`);
+                    router.push(`/manage/inventory/items/${params.row._id ?? params.row.id}`);
                 }}
                 sx={{ minWidth: 600 }}
             />

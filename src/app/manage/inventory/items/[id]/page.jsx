@@ -15,6 +15,7 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 // import { GET_FULL_ITEM } from "gql/queries/inventory";
 
 import ActionPalette from "components/ActionPalette";
+import { ItemStatus } from "components/inventory/items/ItemStates";
 import {
   ApproveItem,
   DeleteItem,
@@ -23,25 +24,6 @@ import {
   SubmitItem,
 } from "components/inventory/items/ItemActions";
 import TranTable from "components/inventory/transactions/TranTable";
-
-// replace with <ItemStatus> once written
-function ItemStatus({ status }) {
-  const state = status?.state || "unknown";
-  const colorMap = {
-    approved: "success",
-    pending: "warning",
-    incomplete: "default",
-    deleted: "error",
-  };
-  return (
-    <Chip
-      label={state.charAt(0).toUpperCase() + state.slice(1)}
-      color={colorMap[state] || "default"}
-      size="small"
-      variant="outlined"
-    />
-  );
-}
 
 // dummy data: remove once GET_FULL_ITEM is wired
 const dummyItem = {
@@ -308,7 +290,7 @@ function getActions(item, user) {
   }
 
   if (["cc", "slo"].includes(user?.role)) {
-    if (state === "pending") return [ApproveItem, RejectItem, EditItem];
+    if (state === "pending" || state === "pending_cc") return [ApproveItem, RejectItem, EditItem];
     if (state === "deleted") return [];
     return [EditItem, DeleteItem];
   }
