@@ -7,6 +7,7 @@ import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
+import AchievementsGrid from "components/achievements/AchievementsGrid"
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import MembersGrid from "components/members/MembersGrid";
@@ -101,6 +102,46 @@ export default async function Club(props) {
             </Button>
           </Box>
           <EventsGrid type="club" clubid={id} limit={4} />
+        </Box>
+        <Box
+          sx={{
+            my: 4,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="local-activity-outline-rounded" sx={{ mr: 1 }} />
+              <Typography variant="h4">Achievements</Typography>
+            </Box>
+            <Button
+              variant="none"
+              color="secondary"
+              component={ButtonLink}
+              href={`/achievements?club=${id}`}
+            >
+              <Typography
+                variant="button"
+                sx={{
+                  color: "text.primary",
+                }}
+              >
+                View all
+              </Typography>
+              <Icon variant="chevron-right" />
+            </Button>
+          </Box>
+          <AchievementsGrid type="club" cid={id} limit={4} />
         </Box>
 
         <Box
