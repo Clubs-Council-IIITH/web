@@ -4,7 +4,7 @@
 
 import { Box, Card, CardActionArea, Stack, Typography } from "@mui/material";
 
-import AchievementImage from "components/achievements/AchievementImage";
+import { AchievementImage } from "components/achievements/AchievementImages";
 import ButtonLink from "components/Link";
 
 // const DateTime = dynamic(() => import("components/DateTime"), { ssr: false });

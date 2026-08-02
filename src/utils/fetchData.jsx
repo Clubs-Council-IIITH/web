@@ -7,6 +7,7 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 import { GET_EVENT, GET_FULL_EVENT } from "gql/queries/events";
+import { GET_ACHIEVEMENT_BY_ID } from "gql/queries/achievements";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 export const getClub = cache(async (id) => {
@@ -33,6 +34,19 @@ export const getEvent = cache(async (id) => {
     notFound();
   }
 });
+
+export const getAchievement = cache(async (id) => {
+  try {
+    const { data: { achievementById: achievement } = {} } = await getClient().query(GET_ACHIEVEMENT_BY_ID, {
+      achievementid: id,
+    });
+
+    console.log("QUERY:", achievement)
+    return achievement;
+  } catch (achievement) {
+    notFound();
+  }
+})
 
 export const getFullEvent = cache(async (id) => {
   // console.log("Fetching full event with id:", id);
