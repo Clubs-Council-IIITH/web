@@ -2,7 +2,7 @@ import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 
 import AchievementCard from "components/achievements/AchievementCard";
 
-export function AchievementCards({ achievements, loading, noAchievementsMessage }) {
+export default function AchievementCards({ achievements, loading, noAchievementsMessage }) {
   if (loading) {
     return (
       <Box

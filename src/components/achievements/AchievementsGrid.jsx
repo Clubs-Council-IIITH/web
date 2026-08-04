@@ -1,7 +1,7 @@
 import { getClient } from "gql/client";
 import { GET_ACHIEVEMENT_BY_CLUB } from "gql/queries/achievements";
 
-import { AchievementCards } from "./AchievementCards";
+import AchievementCards from "./AchievementCards";
 
 export default async function AchievementsGrid({
   type = "recent", // must be one of: {recent, club}
