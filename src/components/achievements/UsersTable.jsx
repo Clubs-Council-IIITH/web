@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link";
 import { DataGrid } from "@mui/x-data-grid";
 import { Typography, Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -39,7 +40,15 @@ const columns = [
       const firstName = p.row.firstName;
       const lastName = p.row.lastName;
       return (
-        <Typography
+        <Link
+          href={`/profile/${p.row.uid}`}
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            width: "100%",
+          }}
+        >
+          <Typography
             style={{
               overflowWrap: "break-word",
               wordWrap: "break-word",
@@ -51,10 +60,11 @@ const columns = [
               hyphens: "auto",
               padding: "4px 8px",
             }}
-        >
-          {firstName} {lastName}
-        </Typography>
-      )
+          >
+            {firstName} {lastName}
+          </Typography>
+        </Link>
+      );
     }
   },
 ];

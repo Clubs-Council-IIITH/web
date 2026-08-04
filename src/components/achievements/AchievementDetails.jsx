@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 
 import { Box, Card, Grid, Stack, Typography} from "@mui/material";
+import Link from "next/link";
 
 import UsersTable from "components/achievements/UsersTable"
 import ClubButton from "components/clubs/ClubButton";
@@ -97,6 +98,19 @@ export default function AchievementDetails({ achievement, showCode = false }) {
               <ClubButton clubid={clubid} key={clubid} />
             ))}
           </Box>
+          <Box
+            sx={{
+              my: 1,
+            }}
+          />
+            <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+              Links
+            </Typography>
+            {achievement.blogLinks.map((link) => (
+              <Link key={link} href={link}>
+                {link}
+              </Link>
+            ))}
           <Box
             sx={{
               my: 1,

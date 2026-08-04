@@ -20,17 +20,15 @@ export default function AchievementCard({
     <Card>
       <CardActionArea component={ButtonLink} href={`/achievements/${_id}`}>
         <Box sx={{ pt: "100%", position: "relative" }}>
-          {image ? (
-            <AchievementImage
-              name={name}
-              image={image}
-              width={600}
-              height={600}
-              style={{
-                filter: `blur(${blur}em)`,
-              }}
-            />
-          ) : null}
+          <AchievementImage
+            name={name}
+            image={image}
+            width={600}
+            height={600}
+            style={{
+              filter: `blur(${blur}em)`,
+            }}
+          />
         </Box>
 
         <Stack spacing={1} sx={{ p: 3 }}>

@@ -22,6 +22,25 @@ export default function AchievementImages({ achievement }) {
   };
   console.log("image:", achievement);
 
+  // if no image links, render a placeholder image 
+  if(!achievement.imageLinks?.length) {
+    return (
+      <Box
+        sx={{
+          position: "relative",
+          pt: "80%",
+        }}
+      >
+        <AchievementImage
+          name={achievement.name}
+          image={null}
+          width={800}
+          height={500}
+        />
+      </Box>
+    );
+  }
+
   return (
       <Slider {...settings}>
         {achievement.imageLinks.map((image) => (
@@ -65,8 +84,8 @@ export function AchievementImage({ name, image, width, height, style }) {
         position: "absolute",
         ...style,
       }}
-      onError={() =>
-        setImg(getPlaceholder({ seed: name, w: width, h: height }))
+      onError={() =>{
+        setImg(getPlaceholder({ seed: name, w: width, h: height }))}
       }
       priority={true}
     />

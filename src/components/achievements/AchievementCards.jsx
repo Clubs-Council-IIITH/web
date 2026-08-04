@@ -19,7 +19,6 @@ export default function AchievementCards({ achievements, loading, noAchievements
     );
   }
 
-  // console.log(achievements);
   return (
     <Grid container spacing={2}>
       {achievements?.length ? (
@@ -37,7 +36,7 @@ export default function AchievementCards({ achievements, loading, noAchievements
               name={achievement.name}
               image={achievement.imageLinks?.[0]}
               content={achievement.content}
-              blur={achievement.imageLinks?.[0] ? 0 : 0.3}
+              blur={achievement.imageLinks?.[0] ? 0 : 0.2}
             />
           </Grid>
         ))
