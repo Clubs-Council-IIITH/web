@@ -6,7 +6,7 @@ import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACHIEVEMENT_BY_ID } from "gql/queries/achievements";
 
-import AchievementForm from "components/achievements/achievements_form";
+import AchievementForm from "components/achievements/AchievementsForm";
 
 export const metadata = {
   title: "Edit Achievement",
@@ -34,29 +34,30 @@ export default async function EditAchievement(props) {
 
       const { data = {} } = await getClient().query(document, variables);
 
-      const { userMeta, userProfile, achievement } = data;
+      const { userMeta, userProfile, achievementById: achievement } = data;
       const user = { ...userMeta, ...userProfile };
 
+    if (user?.role === "club" && !achievement?.clubids?.includes(user?.uid)) {
+      redirect("/manage/achievements");
+    }
+
     return (
-      user?.role === "club" && !achievement.clubids.includes(user?.uid),
-      (
-        <Container>
-          <Typography
-            variant="h3"
-            gutterBottom
-            sx={{
-              mb: 3,
-            }}
-          >
-            Edit Achievement Details
-          </Typography>
-          <AchievementForm
-            id={id}
-            defaultValues={transformAchievement(achievement)}
-            action="edit"
-          />
-        </Container>
-      )
+      <Container>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            mb: 3,
+          }}
+        >
+          Edit Achievement Details
+        </Typography>
+        <AchievementForm
+          id={id}
+          defaultValues={transformAchievement(achievement)}
+          action="edit"
+        />
+      </Container>
     );
   } catch (error) {
     redirect("/404");

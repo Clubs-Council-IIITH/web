@@ -1,5 +1,5 @@
 import { Container, Typography } from "@mui/material";
-import AchievementForm from "components/achievements/achievements_form";
+import AchievementForm from "components/achievements/AchievementsForm";
 
 export default function NewAchievement(){
     return (

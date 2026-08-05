@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import dayjs, { isDayjs } from "dayjs";
@@ -27,7 +27,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import AchievementLinks  from "./achievementLinks";
+import AchievementLinks  from "./AchievementLinks";
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -53,7 +53,6 @@ export default function AchievementForm({
   const [loading, setLoading] = useState(false);
   const { triggerToast } = useToast();
 
-    // fetch list of clubs
     const [clubs, setClubs] = useState([]);
     useEffect(() => {
       (async () => {
@@ -69,43 +68,45 @@ export default function AchievementForm({
         }
       })();
     }, []);
-    const getUsers = useCallback(async (clubs,usersList=[]) => {
-      if (!clubs || clubs.length === 0) {
-        return [];
+    const getUsers = useCallback(async (clubs) => {
+      if (!clubs || clubs.length === 0) return [];
+
+      const clubResults = await Promise.all(
+        clubs.map((club) =>
+          currentMembersAction({ cid: club?.cid || club?.id || club })
+        )
+      );
+
+      const failedClubs = clubResults.filter((res) => !res?.ok);
+      if (failedClubs.length > 0) {
+        triggerToast({
+          title: "Members cannot be fetched",
+          messages: failedClubs.flatMap(
+            (res) => res?.error?.messages || ["Unable to fetch members"]
+          ),
+          severity: "error",
+        });
       }
 
-      for (let club of clubs) {
-        let res = await currentMembersAction({ cid: club?.cid || club?.id || club });
-        if (!res?.ok) {
-          triggerToast({
-            title: "Members cannot be fetched",
-            messages: res?.error?.messages || ["Unable to fetch members"],
-            severity: "error",
-          });
-        } else {
-          let newUserList=[]
-          let count = 0;
-          for(let member of res.data){
-            let user = await getFullUser(member.uid);
-            if(user.ok){
-              newUserList.push(user.data);
-            }
-            else{
-              count++;
-            }  
-        }
-        if(count!=0){
-          triggerToast({
-            title:"Some users couldn't be fetched",
-            messages:`${count} users couldn't be fetched`,
-            severity:"error"
-          })
-        }
-        usersList=[...usersList, ...newUserList]
-        
-        }
+      const allMembers = clubResults
+        .filter((res) => res?.ok)
+        .flatMap((res) => res.data);
+      const uniqueUids = [...new Set(allMembers.map((m) => m.uid))];
+
+      const userResults = await Promise.all(
+        uniqueUids.map((uid) => getFullUser(uid))
+      );
+
+      const failedCount = userResults.filter((res) => !res?.ok).length;
+      if (failedCount > 0) {
+        triggerToast({
+          title: "Some users couldn't be fetched",
+          messages: [`${failedCount} users couldn't be fetched`],
+          severity: "error",
+        });
       }
-      return usersList;
+
+      return userResults.filter((res) => res?.ok).map((res) => res.data);
     }, [triggerToast]);
 
 
@@ -113,14 +114,16 @@ export default function AchievementForm({
     mode: "onChange",
     defaultValues: {
       name: "",
-      description: "",
       type: "",
       clubs: [],
       userids: [],
       dateperiod: [null, null],
       ...defaultValues,
-      links: defaultValues?.blog_links?.length
-        ? defaultValues.blog_links.map((url) => ({ url }))
+      description: defaultValues?.content ?? "",
+      type: defaultValues?.achievementType ?? "",
+      clubs: defaultValues?.clubids ?? [],
+      links: defaultValues?.blogLinks?.length
+        ? defaultValues.blogLinks.map((url) => ({ url }))
         : [{ url: "" }],
     },
   });
@@ -149,8 +152,8 @@ export default function AchievementForm({
       }
     },
     edit: async (data, opts) => {
-      let res = await editAchievementAction(data);
 
+      let res = await editAchievementAction(data, id);
       if (res.ok) {
         triggerToast({
           title: "Success!",
@@ -170,9 +173,7 @@ export default function AchievementForm({
     setLoading(true);
 
     const data = {
-      ...(id ? { id } : {}),
       name: formData.name,
-      code: formData.code,
       clubids: (formData.clubs || []).filter(Boolean),
       achievementType: formData.type,
       content: formData.description,
@@ -198,7 +199,12 @@ export default function AchievementForm({
   }
     console.log(image_links)
 
-    data.imageLinks = image_links.length? image_links: [];
+    // Bug fix: preserve existing images on edit when no new images are uploaded
+    data.imageLinks = image_links.length
+      ? image_links
+      : action === "edit"
+      ? (defaultValues?.imageLinks ?? [])
+      : [];
 
     // convert dates to ISO strings
     data.dateperiod = formData.dateperiod.map((d) =>
@@ -260,9 +266,6 @@ export default function AchievementForm({
             <AchievementDateInput 
               control={control} 
               setValue={setValue}
-              disabled={
-                defaultValues?.status?.state != undefined &&
-                defaultValues?.status?.state != "incomplete"}
             />
           </Grid>
           <Grid container size={12} spacing={2}>
@@ -281,7 +284,7 @@ export default function AchievementForm({
                 <ClubIdsSelector control={control} clubs={clubs}/>
           </Grid>
           <Grid size={12}>
-             <UserIdsSelector control={control} getUser={getUsers}/>
+             <UserIdsSelector control={control} getUser={()=>{}}/>
           </Grid>
         </Grid>
         </Grid>
@@ -536,7 +539,25 @@ function UserIdsSelector({
     defaultValue:[]
   });
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      // On initial mount, fetch users for any pre-populated clubs (edit form)
+      // but do NOT reset userids — they may already be set via defaultValues.
+      isFirstRender.current = false;
+      if (clubs && clubs.length > 0) {
+        (async () => {
+          const res = await getUser(clubs);
+          if (Array.isArray(res)) {
+            setUsers(res);
+          }
+        })();
+      }
+      return;
+    }
+
+    // User changed clubs — reset their member selection and reload the list.
     field.onChange([]);
     if (!clubs || clubs.length === 0) {
       setUsers([]);
@@ -549,6 +570,7 @@ function UserIdsSelector({
       }
     })();
   }, [clubs, getUser]);
+
 
   return (
     <Controller

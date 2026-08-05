@@ -157,7 +157,7 @@ export default function PaginatedEventGrid({
 
     return selectedClub && selectedState && selectedName;
   };
-
+  
   const upcomingEventsFilter = (event) => {
     const selectedClub =
       !targetClub ||
