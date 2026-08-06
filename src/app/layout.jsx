@@ -7,6 +7,9 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import { AuthProvider } from "components/AuthProvider";
 import { Content, Navigation } from "components/Layout";
 import LocalizationWrapper from "components/LocalizationWrapper";
