@@ -284,7 +284,7 @@ export default function AchievementForm({
                 <ClubIdsSelector control={control} clubs={clubs}/>
           </Grid>
           <Grid size={12}>
-             <UserIdsSelector control={control} getUser={()=>{}}/>
+             <UserIdsSelector control={control} getUser={getUsers}/>
           </Grid>
         </Grid>
         </Grid>
