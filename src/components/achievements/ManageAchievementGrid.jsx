@@ -1,6 +1,3 @@
-import { getClient } from "gql/client";
-import { GET_ACHIEVEMENT_BY_CLUB } from "gql/queries/achievements";
-
 import  ManageAchievementCards  from "./ManageAchievementCards";
 
 export default async function ManageAchievementsGrid({

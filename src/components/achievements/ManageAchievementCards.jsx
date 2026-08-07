@@ -18,7 +18,6 @@ export default function ManageAchievementCards({ achievements, loading, noAchiev
     );
   }
 
-  // console.log(achievements);
   return (
     <Grid container spacing={2}>
       {achievements?.length ? (

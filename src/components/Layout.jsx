@@ -228,6 +228,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
       />
+      <DrawerItem
+        title="achievements"
+        path="/manage/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+      />
       {manageEventItems}
       {manageMemberItems}
     </List>
@@ -255,6 +260,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
       {manageMemberItems}
+      <DrawerItem
+        title="achievements"
+        path="/manage/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+      />
     </List>
   );
 
@@ -328,6 +338,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
           icon={<Icon variant="sim-card-download-outline-rounded" />}
         />
       </DrawerDropdown>
+      <DrawerItem
+        title="achievements"
+        path="/manage/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+      />
     </List>
   );
 
