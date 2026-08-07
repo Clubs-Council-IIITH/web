@@ -132,7 +132,7 @@ export default function AchievementForm({
     log: console.log,
     create: async (data, opts) => {
       let res = await createAchievementAction(data);
-      console.log("CREATED ACHIEVEMENT: ",res);
+      // console.log("CREATED ACHIEVEMENT: ",res);
 
       if (res.ok) {
         triggerToast({
@@ -154,6 +154,7 @@ export default function AchievementForm({
     edit: async (data, opts) => {
 
       let res = await editAchievementAction(data, id);
+      // console.log("EDITED ACHIEVEMENT: ",res);
       if (res.ok) {
         triggerToast({
           title: "Success!",
@@ -197,7 +198,6 @@ export default function AchievementForm({
       image_links.push(url);
     }
   }
-    console.log(image_links)
 
     // Bug fix: preserve existing images on edit when no new images are uploaded
     data.imageLinks = image_links.length
@@ -210,7 +210,7 @@ export default function AchievementForm({
     data.dateperiod = formData.dateperiod.map((d) =>
       new Date(d).toISOString().split("T")[0]
     );
-    console.log(data);
+    // console.log(data);
 
     submitHandlers[action](data, opts);
   }

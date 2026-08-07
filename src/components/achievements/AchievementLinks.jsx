@@ -25,7 +25,7 @@ export default function AchievementLinks({control}){
                     rules={{
                         required: "Link is required",
                         pattern: {
-                            value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,})([/\w .-]*)*\/?$/,
+                            value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,})([/\w .-]+\/?)*$/,
                             message: "Enter a valid URL"
                         }
                     }}

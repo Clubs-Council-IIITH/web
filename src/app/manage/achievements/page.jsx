@@ -19,9 +19,9 @@ export default async function ManageAchievements() {
 
   if (userMeta?.role === "club") {
     const { data } = await getClient().query(GET_ACHIEVEMENT_BY_CLUB, {
-      clubid: userMeta.uid,
+      cid: userMeta.uid,
     });
-    achievements = data?.AchievementsByClub ?? [];
+    achievements = data?.achievementsByClub ?? [];
   } else {
     const { data } = await getClient().query(GET_ALL_ACHIEVEMENTS);
     achievements = data?.allAchievements ?? [];

@@ -5,6 +5,8 @@ import { Container } from "@mui/material";
 import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACHIEVEMENT_BY_ID } from "gql/queries/achievements";
+import Icon from "components/Icon";
+import Tag from "components/Tag";
 
 import ActionPalette from "components/ActionPalette";
 import AchievementDetails from "components/achievements/AchievementDetails";
@@ -30,6 +32,24 @@ export async function generateMetadata(props) {
   }
 }
 
+function getActions(achievement) {
+  if (achievement?.status?.state === "deleted") {
+    return [];
+  }
+
+  if (achievement?.status?.state === "rejected") {
+    return [DeleteAchievement];
+  }
+
+  if (achievement?.status?.state === "approved") {
+    return [DeleteAchievement];
+  }
+
+  if (achievement?.status?.state === "pending") {
+    return [ApproveAchievement, RejectAchievement, DeleteAchievement]
+  }
+}
+
 export default async function ManageAchievementPage(props) {
   const params = await props.params;
   const { id } = params;
@@ -52,13 +72,16 @@ export default async function ManageAchievementPage(props) {
     }
 
     const sloActions = userMeta?.role === "slo" || userMeta?.role === "cc"
-      ? [ApproveAchievement, RejectAchievement, DeleteAchievement]
-      : [];
+      ? getActions(achievement)
+    : [];
 
     return (
       <Container>
         <ActionPalette
-          left={[]}
+          left={[AchievementStatus]}
+          leftProps={[
+            { status: achievement?.status },
+          ]}
           right={sloActions}
         />
         <AchievementDetails achievement={achievement} />
@@ -67,4 +90,43 @@ export default async function ManageAchievementPage(props) {
   } catch {
     redirect("/404");
   }
+}
+
+export function AchievementStatus({ status }) {
+  const statusMap = {
+    pending: {
+      label: "Pending",
+      color: "info",
+      icon: "clock",
+    },
+    approved: {
+      label: "Approved",
+      color: "success",
+      icon: "check",
+    },
+    rejected: {
+      label: "Rejected",
+      color: "warning",
+      icon: "close",
+    },
+    deleted: {
+      label: "Deleted",
+      color: "error",
+      icon: "delete",
+    },
+  };
+
+  const current = statusMap[status?.state] ?? statusMap.pending;
+
+  return (
+    <Tag
+      sx={{
+        height: 36,
+        px: 1,
+      }}
+      label={current.label}
+      color={current.color}
+      icon={<Icon external variant={current.icon} />}
+    />
+  );
 }
