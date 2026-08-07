@@ -571,7 +571,6 @@ function UserIdsSelector({
     })();
   }, [clubs, getUser]);
 
-
   return (
     <Controller
       name="userids"
@@ -597,7 +596,7 @@ function UserIdsSelector({
                 {selected.filter(Boolean).map((value) => (
                   <Chip
                     key={value}
-                    label={users.find((user) => user.uid === value)?.name}
+                    label={`${users.find((user) => user.uid === value)?.firstName ?? ""} ${users.find((user) => user.uid === value)?.lastName ?? ""}`.trim()}
                   />
                 ))}
               </Box>
@@ -625,10 +624,10 @@ function UserIdsSelector({
 
             {users
               ?.slice()
-              ?.sort((a, b) => a.name.localeCompare(b.name))
+              ?.sort((a, b) => a.firstName.localeCompare(b.firstName))
               ?.map((user) => (
                 <MenuItem key={user.uid} value={user.uid}>
-                  {user.name}
+                  {user.firstName} {user.lastName}
                 </MenuItem>
               ))}
           </Select>

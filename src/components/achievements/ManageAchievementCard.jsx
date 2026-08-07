@@ -19,12 +19,12 @@ export default function ManageAchievementCard({
   return (
     <Card>
    {edit &&     
-        <IconButton onClick={()=>{
+        <IconButton onClick={(event)=>{
             router.push(`/manage/achievements/${_id}/edit`);
         }}>
             <EditIcon></EditIcon>
         </IconButton>}
-      <CardActionArea component={ButtonLink} href={`/achievements/${_id}`}>
+      <CardActionArea component={ButtonLink} href={`/manage/achievements/${_id}`}>
         <Box sx={{ pt: "100%", position: "relative" }}>
           <AchievementImage
             name={name}
