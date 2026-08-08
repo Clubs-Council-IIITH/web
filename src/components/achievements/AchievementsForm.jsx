@@ -110,7 +110,7 @@ export default function AchievementForm({
     }, [triggerToast]);
 
 
-    const { control, handleSubmit, setValue } = useForm({
+    const { control, handleSubmit, setValue, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -127,6 +127,22 @@ export default function AchievementForm({
         : [{ url: "" }],
     },
   });
+
+  useEffect(() => {
+    if (action === "edit" && defaultValues?.clubids) {
+      reset({
+        ...defaultValues,
+        name: defaultValues.name ?? "",
+        dateperiod: defaultValues.dateperiod ?? [null, null],
+        description: defaultValues.content ?? "",
+        type: defaultValues.achievementType ?? "",
+        clubs: defaultValues.clubids ?? [],
+        links: defaultValues.blogLinks?.length
+          ? defaultValues.blogLinks.map((url) => ({ url }))
+          : [{ url: "" }],
+      });
+    }
+  }, [action, defaultValues, reset]);
 
   const submitHandlers = {
     log: console.log,
