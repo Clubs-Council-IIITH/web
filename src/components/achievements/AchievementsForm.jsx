@@ -4,17 +4,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import dayjs, { isDayjs } from "dayjs";
-import { Controller, useForm, useWatch, useController } from "react-hook-form";
-import { currentMembersAction } from "actions/members/current/server_action";
+import { Controller, useController, useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
   Button,
   Chip,
   FormControl,
-  FormLabel,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
   Grid,
   IconButton,
   InputLabel,
@@ -27,18 +26,22 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import AchievementLinks  from "./AchievementLinks";
-
+import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers";
-import { getActiveClubIds } from "actions/clubs/ids/server_action";
-import FileUpload from "components/FileUpload";
+
 import { useAuth } from "components/AuthProvider";
+import FileUpload from "components/FileUpload";
 import { useToast } from "components/Toast";
 import { uploadImageFile } from "utils/files";
+
+import { getActiveClubIds } from "actions/clubs/ids/server_action";
+import { currentMembersAction } from "actions/members/current/server_action";
 import { getFullUser } from "actions/users/get/full/server_action";
+
 import { createAchievementAction } from "../../actions/achievements/create/server_action";
 import { editAchievementAction } from "../../actions/achievements/edit/server_action";
+import AchievementLinks from "./AchievementLinks";
 
 
 
@@ -51,6 +54,20 @@ export default function AchievementForm({
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const { triggerToast } = useToast();
+
+  const clubId = user?.role === "club" ? user?.uid : null;
+  const [clubMemberUids, setClubMemberUids] = useState([]);
+
+  useEffect(() => {
+    if (clubId) {
+      (async () => {
+        const res = await currentMembersAction({ cid: clubId });
+        if (res.ok) {
+          setClubMemberUids(res.data.map((m) => m.uid));
+        }
+      })();
+    }
+  }, [clubId]);
 
     const [clubs, setClubs] = useState([]);
     useEffect(() => {
@@ -66,7 +83,16 @@ export default function AchievementForm({
           setClubs(res.data);
         }
       })();
-    }, []);
+    }, [triggerToast]);
+
+  const defaultClubs = useMemo(() => {
+    let baseClubs = defaultValues?.clubids ?? [];
+    if (clubId && !baseClubs.includes(clubId)) {
+      return [clubId, ...baseClubs];
+    }
+    return baseClubs;
+  }, [defaultValues?.clubids, clubId]);
+
     const getUsers = useCallback(async (clubs) => {
       if (!clubs || clubs.length === 0) return [];
 
@@ -109,29 +135,55 @@ export default function AchievementForm({
     }, [triggerToast]);
 
 
-    const { control, handleSubmit, setValue } = useForm({
+    const { control, handleSubmit, setValue, getValues, watch, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       name: "",
       type: "",
-      clubs: [],
+      clubs: defaultClubs,
       userids: [],
       dateperiod: [null, null],
       ...defaultValues,
       description: defaultValues?.content ?? "",
       type: defaultValues?.achievementType ?? "",
-      clubs: defaultValues?.clubids ?? [],
       links: defaultValues?.blogLinks?.length
         ? defaultValues.blogLinks.map((url) => ({ url }))
         : [{ url: "" }],
     },
   });
 
+  const selectedClubs = watch("clubs");
+
+  useEffect(() => {
+    if (user?.role === "club" && user?.uid) {
+      const currentClubs = getValues("clubs") || [];
+      if (!currentClubs.includes(user.uid)) {
+        setValue("clubs", [user.uid, ...currentClubs]);
+      }
+    }
+  }, [user, setValue, getValues]);
+
+  useEffect(() => {
+    if (action === "edit" && defaultValues?.clubids) {
+      reset({
+        ...defaultValues,
+        name: defaultValues.name ?? "",
+        dateperiod: defaultValues.dateperiod ?? [null, null],
+        description: defaultValues.content ?? "",
+        type: defaultValues.achievementType ?? "",
+        clubs: defaultClubs,
+        links: defaultValues.blogLinks?.length
+          ? defaultValues.blogLinks.map((url) => ({ url }))
+          : [{ url: "" }],
+      });
+    }
+  }, [action, defaultValues, reset, defaultClubs]);
+
   const submitHandlers = {
     log: console.log,
     create: async (data, opts) => {
       let res = await createAchievementAction(data);
-      console.log("CREATED ACHIEVEMENT: ",res);
+      // console.log("CREATED ACHIEVEMENT: ",res);
 
       if (res.ok) {
         triggerToast({
@@ -153,6 +205,7 @@ export default function AchievementForm({
     edit: async (data, opts) => {
 
       let res = await editAchievementAction(data, id);
+      // console.log("EDITED ACHIEVEMENT: ",res);
       if (res.ok) {
         triggerToast({
           title: "Success!",
@@ -196,7 +249,6 @@ export default function AchievementForm({
       image_links.push(url);
     }
   }
-    console.log(image_links)
 
     // Bug fix: preserve existing images on edit when no new images are uploaded
     data.imageLinks = image_links.length
@@ -209,7 +261,7 @@ export default function AchievementForm({
     data.dateperiod = formData.dateperiod.map((d) =>
       new Date(d).toISOString().split("T")[0]
     );
-    console.log(data);
+    // console.log(data);
 
     submitHandlers[action](data, opts);
   }
@@ -283,7 +335,7 @@ export default function AchievementForm({
                 <ClubIdsSelector control={control} clubs={clubs}/>
           </Grid>
           <Grid size={12}>
-             <UserIdsSelector control={control} getUser={getUsers}/>
+              <UserIdsSelector control={control} getUser={getUsers} clubMemberUids={clubMemberUids} setValue={setValue} selectedClubs={selectedClubs} />
           </Grid>
         </Grid>
         </Grid>
@@ -454,11 +506,11 @@ function ClubIdsSelector({
   clubs = [],
 }) {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
   return (
     <Controller
       name="clubs"
       control={control}
-      defaultValue={defaultValue}
       rules={{ required: "Select at least one club!" }}
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
@@ -474,6 +526,13 @@ function ClubIdsSelector({
             onClose={() => setOpen(false)}
             input={<OutlinedInput label="Clubs *" />}
             {...field}
+            onChange={(e) => {
+              let val = e.target.value;
+              if (user?.role === "club" && user?.uid && !val.includes(user.uid)) {
+                val = [user.uid, ...val];
+              }
+              field.onChange(val);
+            }}
             value={field.value || []}
             renderValue={(selected) => (
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -510,7 +569,11 @@ function ClubIdsSelector({
               ?.slice()
               ?.sort((a, b) => a.name.localeCompare(b.name))
               ?.map((club) => (
-                <MenuItem key={club.cid} value={club.cid}>
+                <MenuItem
+                  key={club.cid}
+                  value={club.cid}
+                  disabled={user?.role === "club" && club.cid === user?.uid}
+                >
                   {club.name}
                 </MenuItem>
               ))}
@@ -525,18 +588,15 @@ function ClubIdsSelector({
 
 function UserIdsSelector({
   control,
-  defaultValue,
   disabled = false,
-  getUser
+  getUser,
+  clubMemberUids = [],
+  setValue,
+  selectedClubs = [],
 }) {
-  const { field } = useController({name: "userids", control})
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
-  let clubs = useWatch({
-    control, 
-    name:"clubs",
-    defaultValue:[]
-  });
+  const { user } = useAuth();
 
   const isFirstRender = useRef(true);
 
@@ -545,9 +605,9 @@ function UserIdsSelector({
       // On initial mount, fetch users for any pre-populated clubs (edit form)
       // but do NOT reset userids — they may already be set via defaultValues.
       isFirstRender.current = false;
-      if (clubs && clubs.length > 0) {
+      if (selectedClubs && selectedClubs.length > 0) {
         (async () => {
-          const res = await getUser(clubs);
+          const res = await getUser(selectedClubs);
           if (Array.isArray(res)) {
             setUsers(res);
           }
@@ -557,25 +617,40 @@ function UserIdsSelector({
     }
 
     // User changed clubs — reset their member selection and reload the list.
-    field.onChange([]);
-    if (!clubs || clubs.length === 0) {
+    setValue("userids", []);
+    if (!selectedClubs || selectedClubs.length === 0) {
       setUsers([]);
       return;
     }
     (async () => {
-      const res = await getUser(clubs);
+      const res = await getUser(selectedClubs);
       if (Array.isArray(res)) {
         setUsers(res);
       }
     })();
-  }, [clubs, getUser]);
-
+  }, [selectedClubs, getUser, setValue]);
 
   return (
     <Controller
       name="userids"
       control={control}
-      defaultValue={defaultValue}
+      rules={
+        user?.role === "club"
+          ? {
+            validate: {
+              atLeastOneMember: (value) => {
+                const hasMember = (value || []).some((uid) =>
+                  clubMemberUids.includes(uid)
+                );
+                return (
+                  hasMember ||
+                  "At least one member of your club must be selected!"
+                );
+              },
+            },
+          }
+          : {}
+      }
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
           <InputLabel id="users">Users</InputLabel>
@@ -596,7 +671,7 @@ function UserIdsSelector({
                 {selected.filter(Boolean).map((value) => (
                   <Chip
                     key={value}
-                    label={users.find((user) => user.uid === value)?.name}
+                    label={`${users.find((u) => u.uid === value)?.firstName ?? ""} ${users.find((u) => u.uid === value)?.lastName ?? ""}`.trim()}
                   />
                 ))}
               </Box>
@@ -624,10 +699,10 @@ function UserIdsSelector({
 
             {users
               ?.slice()
-              ?.sort((a, b) => a.name.localeCompare(b.name))
-              ?.map((user) => (
-                <MenuItem key={user.uid} value={user.uid}>
-                  {user.name}
+              ?.sort((a, b) => a.firstName.localeCompare(b.firstName))
+              ?.map((u) => (
+                <MenuItem key={u.uid} value={u.uid}>
+                  {u.firstName} {u.lastName}
                 </MenuItem>
               ))}
           </Select>

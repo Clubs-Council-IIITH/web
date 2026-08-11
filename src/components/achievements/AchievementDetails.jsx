@@ -116,7 +116,7 @@ export default function AchievementDetails({ achievement, showCode = false }) {
               my: 1,
             }}
           />
-          <Typography variant="body" sx={{ whiteSpace: "pre-wrap" }}>
+          <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
             {achievement.content || "No description available."}
           </Typography>
           <Box

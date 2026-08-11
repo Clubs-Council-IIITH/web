@@ -47,10 +47,10 @@ const routes = {
   "/manage/holidays/new": ["cc", "slo"], // has to be higher to not conflict with :id
   "/manage/holidays/:id": ["cc", "slo"],
 
-  "manage/achievements":["cc", "slo", "slc"],
-  "manage/achievements/~mine":["club"],
-  "manage/achievements/new":["cc", "slo", "slc", "club"],
-  "manage/achievements/:id" : ["cc", "slo", "club"]
+  "/manage/achievements":["club","cc", "slo", "slc"],
+  "/manage/achievements/~mine":["club"],
+  "/manage/achievements/new":["cc", "slo", "slc", "club"],
+  "/manage/achievements/:id" : ["cc", "slo", "club"],
 };
 
 export default routes;
