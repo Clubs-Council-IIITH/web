@@ -51,7 +51,7 @@ export default async function ManageAchievementPage(props) {
       redirect("/manage/achievements");
     }
 
-    const sloActions = userMeta?.role === "slo"
+    const sloActions = (userMeta?.role === "slo" || userMeta?.role==="cc") 
       ? [ApproveAchievement, RejectAchievement, DeleteAchievement]
       : [];
 

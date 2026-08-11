@@ -28,7 +28,7 @@ import {
   Typography,
 } from "@mui/material";
 import AchievementLinks  from "./AchievementLinks";
-import { useTheme } from "@mui/material/styles";
+
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers";
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
@@ -49,7 +49,6 @@ export default function AchievementForm({
 }){
   const router = useRouter();
   const { user } = useAuth();
-  const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const { triggerToast } = useToast();
 
