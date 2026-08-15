@@ -13,7 +13,7 @@ export default function ManageAchievementCard({
   content,
   image,
   blur = 0,
-  edit = true,
+  edit,
 }) {
     const router = useRouter();
   return (

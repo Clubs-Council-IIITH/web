@@ -9,7 +9,7 @@ export default function NewAchievement(){
           sx={{mb:3}}>
                 Create new Achievement
             </Typography>
-            <AchievementForm></AchievementForm>
+            <AchievementForm />
         </Container>
     )
 }

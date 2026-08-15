@@ -163,6 +163,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         />
       </DrawerDropdown>
       <DrawerItem
+        title="achievements"
+        path="/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+      />
+      <DrawerItem
         title="gallery"
         path="/gallery"
         icon={<Icon variant="gallery-thumbnail-outline-rounded" />}

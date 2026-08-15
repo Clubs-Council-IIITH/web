@@ -20,7 +20,7 @@ export default function AchievementImages({ achievement }) {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  console.log("image:", achievement);
+  // console.log("image:", achievement);
 
   // if no image links, render a placeholder image 
   if(!achievement.imageLinks?.length) {
@@ -28,7 +28,7 @@ export default function AchievementImages({ achievement }) {
       <Box
         sx={{
           position: "relative",
-          pt: "80%",
+          pt: "100%",
         }}
       >
         <AchievementImage
@@ -48,7 +48,7 @@ export default function AchievementImages({ achievement }) {
             key={image}
             sx={{
               position: "relative",
-              pt: "80%",
+              pt: "100%",
             }}
           >
           <AchievementImage
@@ -80,7 +80,7 @@ export function AchievementImage({ name, image, width, height, style }) {
         top: 0,
         width: "100%",
         height: "100%",
-        objectFit: "cover",
+        objectFit: "contain",
         position: "absolute",
         ...style,
       }}
