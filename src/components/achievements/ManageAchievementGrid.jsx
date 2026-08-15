@@ -1,7 +1,7 @@
 import  ManageAchievementCards  from "./ManageAchievementCards";
 
 export default async function ManageAchievementsGrid({
-  achievements = null,
+  achievements = null, edit
 }) {
 
   return (
@@ -9,6 +9,7 @@ export default async function ManageAchievementsGrid({
       achievements={achievements}
       loading={false}
       noAchievementsMessage="No achievements found."
+      edit={edit}
     />
   );
 }

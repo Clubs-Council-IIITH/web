@@ -14,6 +14,7 @@ mutation CreateAchievement($details: CreateAchievementDetails!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       state
       submissionDatetime
@@ -34,6 +35,7 @@ mutation DeleteAchievement($achievementId: String!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       state
       deletionDatetime
@@ -56,6 +58,7 @@ mutation EditAchievement($details: EditAchievementDetails!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       lastUpdatedBy
       lastUpdatedDatetime
@@ -78,6 +81,7 @@ mutation ApproveAchievement($achievementId: String!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       approvedBy
       approvedDatetime
@@ -99,6 +103,7 @@ mutation RejectAchievement($achievementId: String!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       rejectedDatetime
       rejectedBy

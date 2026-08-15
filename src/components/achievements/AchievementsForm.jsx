@@ -42,6 +42,7 @@ import { getFullUser } from "actions/users/get/full/server_action";
 import { createAchievementAction } from "../../actions/achievements/create/server_action";
 import { editAchievementAction } from "../../actions/achievements/edit/server_action";
 import AchievementLinks from "./AchievementLinks";
+import AchievementNewUser from "./AchievementNewUser"
 
 
 
@@ -58,6 +59,8 @@ export default function AchievementForm({
 
   const clubId = user?.role === "club" ? user?.uid : null;
   const [clubMemberUids, setClubMemberUids] = useState([]);
+  const [externalUsers, setExternalUsers] = useState([]);
+  const [external, setExternal] = useState(false)
 
   useEffect(() => {
     if (clubId) {
@@ -150,6 +153,7 @@ export default function AchievementForm({
       links: defaultValues?.blogLinks?.length
         ? defaultValues.blogLinks.map((url) => ({ url }))
         : [{ url: "" }],
+      venue: defaultValues?.venue ?? "",
     },
   });
 
@@ -176,6 +180,7 @@ export default function AchievementForm({
         links: defaultValues.blogLinks?.length
           ? defaultValues.blogLinks.map((url) => ({ url }))
           : [{ url: "" }],
+        venue: defaultValues.venue ?? "",
       });
     }
   }, [action, defaultValues, reset, defaultClubs]);
@@ -232,6 +237,7 @@ export default function AchievementForm({
       content: formData.description,
       blogLinks: formData.links?.map((item) => item.url).filter(Boolean) || [],
       userids: (formData.userids || []).filter(Boolean),
+      venue: formData.venue,
     }
 
     // upload images
@@ -320,6 +326,11 @@ export default function AchievementForm({
               setValue={setValue}
             />
           </Grid>
+          <Grid size={12}>
+            <AchievementVenueInput
+              control={control}
+            />
+          </Grid>
           <Grid container size={12} spacing={2}>
              <Typography
                 variant="subtitle2"
@@ -336,7 +347,27 @@ export default function AchievementForm({
                 <ClubIdsSelector control={control} clubs={clubs}/>
           </Grid>
           <Grid size={12}>
-              <UserIdsSelector control={control} getUser={getUsers} clubMemberUids={clubMemberUids} setValue={setValue} selectedClubs={selectedClubs} />
+              <UserIdsSelector control={control} getUser={getUsers} clubMemberUids={clubMemberUids} setValue={setValue} selectedClubs={selectedClubs} externalUsers={externalUsers}/>
+          </Grid>
+          <Grid size={12} spacing={2}>
+            <Button onClick={() => setExternal(prev => !prev)}>
+              Add External Users 
+            </Button>
+            <Box
+              sx={{
+                my: 1,
+              }}
+            />
+            {external && 
+              <AchievementNewUser control={control} setValue={setValue}
+                onVerifiedUser={(user) => {
+                  setExternalUsers((prev) => [...prev, user]);
+                  const currentUsers = getValues("userids") || [];
+
+                  setValue("userids", [...currentUsers, user.uid]);
+                }}
+              />
+            }
           </Grid>
         </Grid>
         </Grid>
@@ -349,7 +380,8 @@ export default function AchievementForm({
         rules={{ required: 'Please select a type of achievement '}} 
         render={({ field, fieldState: { error } }) => (
           <FormControl error={Boolean(error)} margin="normal">
-            <FormLabel id="plan-radio-group-label">  <Typography
+            <FormLabel id="plan-radio-group-label">  
+              <Typography
                 variant="subtitle2"
                 gutterBottom
                 sx={{
@@ -360,7 +392,8 @@ export default function AchievementForm({
                 }}
               >
                Type of achievement
-          </Typography></FormLabel>
+              </Typography>
+            </FormLabel>
             
             <RadioGroup 
               {...field} 
@@ -499,6 +532,35 @@ function AchievementNameInput({ control, disabled = false}) {
   );
 }
 
+function AchievementVenueInput({ control }) {
+  return (
+    <Controller
+      name="venue"
+      control={control}
+      rules={{
+        maxLength: {
+          value: 150,
+          message: "Venue must be at most 150 characters long!"
+        },
+      }}
+      render={({ field, fieldState: {error, invalid } }) => (
+        <TextField 
+          {...field}
+          label="Venue"
+          autoComplete="off"
+          error={invalid}
+          helperText={error?.message}
+          variant="outlined"
+          fullWidth
+          onBlur={(e) => {
+            field.onChange(e?.target?.value.trim());
+          }}
+        />
+      )}
+    />
+  );
+}
+
 
 function ClubIdsSelector({
   control,
@@ -594,9 +656,10 @@ function UserIdsSelector({
   clubMemberUids = [],
   setValue,
   selectedClubs = [],
+  externalUsers = [],
 }) {
   const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [clubUsers, setClubUsers] = useState([]);
   const { user } = useAuth();
 
   const isFirstRender = useRef(true);
@@ -610,7 +673,7 @@ function UserIdsSelector({
         (async () => {
           const res = await getUser(selectedClubs);
           if (Array.isArray(res)) {
-            setUsers(res);
+            setClubUsers(res);
           }
         })();
       }
@@ -620,16 +683,22 @@ function UserIdsSelector({
     // User changed clubs — reset their member selection and reload the list.
     setValue("userids", []);
     if (!selectedClubs || selectedClubs.length === 0) {
-      setUsers([]);
+      setClubUsers([]);
       return;
     }
     (async () => {
       const res = await getUser(selectedClubs);
       if (Array.isArray(res)) {
-        setUsers(res);
+        setClubUsers(res);
       }
     })();
   }, [selectedClubs, getUser, setValue]);
+
+  const users = [
+    ...new Map(
+      [...clubUsers, ...externalUsers].map((user) => [user.uid, user])
+    ).values(),
+  ];
 
   return (
     <Controller

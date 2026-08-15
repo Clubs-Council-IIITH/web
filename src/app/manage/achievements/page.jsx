@@ -1,4 +1,4 @@
-import { Button, Container, Stack, Typography, Tooltip,  } from "@mui/material";
+import { Button, Container, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_ALL_ACHIEVEMENTS, GET_ACHIEVEMENT_BY_CLUB } from "gql/queries/achievements";
@@ -30,6 +30,10 @@ export default async function ManageAchievements() {
   const pendingAchievements = isApprover
     ? achievements.filter((achievement) => achievement?.status?.state === "pending")
     : [];
+  
+  // console.log("ACHIEVEMENTS: ", achievements);
+
+  const edit = isApprover;
 
   return (
     <Container>
@@ -60,14 +64,14 @@ export default async function ManageAchievements() {
           <Typography variant="h4" gutterBottom>
             Achievements to be approved
           </Typography>
-          <ManageAchievementsGrid type="recent" achievements={pendingAchievements} />
+          <ManageAchievementsGrid type="recent" achievements={pendingAchievements} edit={edit}/>
         </Container>
       )}
 
       <Typography variant="h4" gutterBottom>
         All achievements
       </Typography>
-      <ManageAchievementsGrid type="recent" achievements={achievements} />
+      <ManageAchievementsGrid type="recent" achievements={achievements} edit={edit}/>
     </Container>
   );
 }

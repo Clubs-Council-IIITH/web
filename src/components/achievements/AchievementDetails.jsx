@@ -43,11 +43,6 @@ export default function AchievementDetails({ achievement, showCode = false }) {
           >
             {achievement.name}
           </Typography>
-          <Box
-            sx={{
-              my: 1,
-            }}
-          />
           <Typography
             variant="h6"
             paragraph
@@ -63,6 +58,25 @@ export default function AchievementDetails({ achievement, showCode = false }) {
               my: 1,
             }}
           />
+          {achievement.venue && 
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                }}
+              >
+                <Icon variant="location-on" sx={{ mr: 2, width: 16 }} />
+                <Typography variant="body2">
+                  {achievement.venue}
+                </Typography>
+              </Box>
+              <Box
+              sx={{
+                my: 1,
+              }}
+            />
+          </>
+          }
           <Box
             sx={{
               display: "flex",
@@ -103,9 +117,6 @@ export default function AchievementDetails({ achievement, showCode = false }) {
               my: 1,
             }}
           />
-            <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-              Links
-            </Typography>
             {achievement.blogLinks.map((link) => (
               <Link key={link} href={link}>
                 {link}

@@ -13,6 +13,7 @@ query AllAchievements {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       state
       approvedBy
@@ -41,6 +42,7 @@ query AchievementsByUser($uid: String!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       state
       approvedBy
@@ -69,6 +71,7 @@ query AchievementById($achievementid: String!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       state
       approvedBy
@@ -96,6 +99,7 @@ query AchievementsByClub($cid: String!) {
     blogLinks
     imageLinks
     dateperiod
+    venue
     status {
       state
       approvedBy

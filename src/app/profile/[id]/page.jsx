@@ -175,15 +175,19 @@ export default async function Profile(props) {
                   Memberships
                 </Typography>
                 <UserMemberships rows={memberships} />
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Achievements
-                </Typography>
-                <UserAchievements rows={achievementsByUser} />
+                {achievementsByUser && achievementsByUser.length > 0 && (
+                  <>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Achievements
+                    </Typography>
+                    <UserAchievements rows={achievementsByUser} />
+                  </>
+                )}
               </Stack>
             </Grid>
           </>
