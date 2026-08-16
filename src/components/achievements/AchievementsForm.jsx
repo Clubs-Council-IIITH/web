@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import AchievementImages from "./AchievementImages";
 import dayjs, { isDayjs } from "dayjs";
-import { Controller, useController, useForm, useWatch } from "react-hook-form";
+import { Controller,  useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
@@ -26,7 +26,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers";
 
@@ -97,12 +96,14 @@ export default function AchievementForm({
   }, [defaultValues?.clubids, clubId]);
 
     const getUsers = useCallback(async (clubs) => {
-      if (!clubs || clubs.length === 0) return [];
+      const validCids = (clubs || [])
+        .map((club) => club?.cid || club?.id || club)
+        .filter(Boolean);
+
+      if (validCids.length === 0) return [];
 
       const clubResults = await Promise.all(
-        clubs.map((club) =>
-          currentMembersAction({ cid: club?.cid || club?.id || club })
-        )
+        validCids.map((cid) => currentMembersAction({ cid }))
       );
 
       const failedClubs = clubResults.filter((res) => !res?.ok);
@@ -119,26 +120,23 @@ export default function AchievementForm({
       const allMembers = clubResults
         .filter((res) => res?.ok)
         .flatMap((res) => res.data);
-      const uniqueUids = [...new Set(allMembers.map((m) => m.uid))];
+      const uniqueUids = [...new Set(allMembers.map((m) => m.uid).filter(Boolean))];
 
       const userResults = await Promise.all(
-        uniqueUids.map((uid) => getFullUser(uid))
+        uniqueUids.map(async (uid) => {
+          const res = await getFullUser(uid);
+          if (res?.ok && res?.data) {
+            return { uid, ...res.data };
+          }
+          return { uid, firstName: uid, lastName: "" };
+        })
       );
 
-      const failedCount = userResults.filter((res) => !res?.ok).length;
-      if (failedCount > 0) {
-        triggerToast({
-          title: "Some users couldn't be fetched",
-          messages: [`${failedCount} users couldn't be fetched`],
-          severity: "error",
-        });
-      }
-
-      return userResults.filter((res) => res?.ok).map((res) => res.data);
-    }, [triggerToast]);
+      return userResults;
+    }, []);
 
 
-    const { control, handleSubmit, setValue, getValues, watch, reset } = useForm({
+    const { control, handleSubmit, setValue, getValues, watch, reset, trigger, setError } = useForm({
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -151,7 +149,7 @@ export default function AchievementForm({
       type: defaultValues?.achievementType ?? "",
       links: defaultValues?.blogLinks?.length
         ? defaultValues.blogLinks.map((url) => ({ url }))
-        : [{ url: "" }],
+        : [],
       venue: defaultValues?.venue ?? "",
     },
   });
@@ -178,7 +176,7 @@ export default function AchievementForm({
         clubs: defaultClubs,
         links: defaultValues.blogLinks?.length
           ? defaultValues.blogLinks.map((url) => ({ url }))
-          : [{ url: "" }],
+          : [],
         venue: defaultValues.venue ?? "",
       });
     }
@@ -238,6 +236,13 @@ export default function AchievementForm({
       userids: (formData.userids || []).filter(Boolean),
       venue: formData.venue,
     }
+    const clubUsers = await getUsers(data.clubids);
+    const users = [...clubUsers, ...externalUsers]
+    if(!data.userids || data.userids.length==0 || !data.userids.every((value)=>users.some((x)=>x.uid==value))){
+      setError("userids", { message: "Every user id must be either external or from one of the selected clubs" });
+      setLoading(false);
+      return;
+    }
 
     // upload images
     const image_links = []
@@ -267,8 +272,9 @@ export default function AchievementForm({
     data.dateperiod = formData.dateperiod.map((d) =>
       new Date(d).toISOString().split("T")[0]
     );
-    // console.log(data);
-
+    console.log(data);
+ 
+   
     submitHandlers[action](data, opts);
   }
 
@@ -346,7 +352,7 @@ export default function AchievementForm({
                 <ClubIdsSelector control={control} clubs={clubs}/>
           </Grid>
           <Grid size={12}>
-              <UserIdsSelector control={control} getUser={getUsers} clubMemberUids={clubMemberUids} setValue={setValue} selectedClubs={selectedClubs} externalUsers={externalUsers}/>
+              <UserIdsSelector trigger={trigger} control={control} getUser={getUsers} clubMemberUids={clubMemberUids} setValue={setValue} selectedClubs={selectedClubs} externalUsers={externalUsers}/>
           </Grid>
           <Grid size={12} spacing={2}>
             <Button onClick={() => setExternal(prev => !prev)}>
@@ -367,6 +373,20 @@ export default function AchievementForm({
                 }}
               />
             }
+          </Grid>
+          <Grid size={12}>
+           
+            {action=="edit"&& watch("imageLinks").length!=0 && 
+            <>  
+            <Typography
+              variant="body2"
+              sx={{
+                color: "text.secondary",
+              }}
+              >
+             These are the existing images. Uploading new images will remove these as well.
+            </Typography>
+             <AchievementImages padding="70%" achievement={{"name": watch("name"), "imageLinks" :watch("imageLinks")}}></AchievementImages></>}
           </Grid>
         </Grid>
         </Grid>
@@ -433,7 +453,7 @@ export default function AchievementForm({
                 shape="square"
                 warnSizeMB={80}
               />
-
+            
          </Grid>
          <Grid container size={12} spacing={3}>
              <Typography
@@ -649,6 +669,7 @@ function ClubIdsSelector({
 
 
 function UserIdsSelector({
+  trigger, 
   control,
   disabled = false,
   getUser,
@@ -665,8 +686,6 @@ function UserIdsSelector({
 
   useEffect(() => {
     if (isFirstRender.current) {
-      // On initial mount, fetch users for any pre-populated clubs (edit form)
-      // but do NOT reset userids — they may already be set via defaultValues.
       isFirstRender.current = false;
       if (selectedClubs && selectedClubs.length > 0) {
         (async () => {
@@ -680,7 +699,6 @@ function UserIdsSelector({
     }
 
     // User changed clubs — reset their member selection and reload the list.
-    setValue("userids", []);
     if (!selectedClubs || selectedClubs.length === 0) {
       setClubUsers([]);
       return;
@@ -692,12 +710,19 @@ function UserIdsSelector({
       }
     })();
   }, [selectedClubs, getUser, setValue]);
-
+  useEffect(() => {                                                                            
+      trigger("userids");                                                                        
+    }, [clubUsers, trigger]);    
   const users = [
     ...new Map(
       [...clubUsers, ...externalUsers].map((user) => [user.uid, user])
     ).values(),
   ];
+  const userRef = useRef(users);
+  userRef.current = users;
+
+  const clubMemberUidsRef = useRef(clubMemberUids);
+  clubMemberUidsRef.current = clubMemberUids;
 
   return (
     <Controller
@@ -708,17 +733,22 @@ function UserIdsSelector({
           ? {
             validate: {
               atLeastOneMember: (value) => {
-                const hasMember = (value || []).some((uid) =>
-                  clubMemberUids.includes(uid)
+                if (!value || value.length === 0) return true;
+                const hasMember = value.some((uid) =>
+                  clubMemberUidsRef.current.some(
+                    (cuid) => String(cuid).toLowerCase() === String(uid).toLowerCase()
+                  )
                 );
                 return (
                   hasMember ||
                   "At least one member of your club must be selected!"
                 );
               },
+
             },
           }
-          : {}
+          : {  
+          }
       }
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
@@ -739,8 +769,11 @@ function UserIdsSelector({
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                 {selected.filter(Boolean).map((value) => (
                   <Chip
+                    onMouseDown={(e)=>e.stopPropagation()}
                     key={value}
-                    label={`${users.find((u) => u.uid === value)?.firstName ?? ""} ${users.find((u) => u.uid === value)?.lastName ?? ""}`.trim()}
+                    onDelete={() => {setValue("userids", selected.filter((x) => x !== value), { shouldValidate: true });        
+                         }}
+                    label={`${users.find((u) => u.uid === value)?.firstName ?? "Invalid User"} ${users.find((u) => u.uid === value)?.lastName ?? ""}`.trim()}
                   />
                 ))}
               </Box>

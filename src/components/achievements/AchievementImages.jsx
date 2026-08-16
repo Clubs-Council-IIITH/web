@@ -10,7 +10,7 @@ import "./slick-theme.css"
 import { getFile } from "utils/files";
 import { getPlaceholder } from "utils/placeholder";
 
-export default function AchievementImages({ achievement }) {
+export default function AchievementImages({ achievement, height=500, padding="100%" }) {
   const settings = {
     dots: true,
     arrows: true,
@@ -35,7 +35,7 @@ export default function AchievementImages({ achievement }) {
           name={achievement.name}
           image={null}
           width={800}
-          height={500}
+          height={height}
         />
       </Box>
     );
@@ -48,14 +48,14 @@ export default function AchievementImages({ achievement }) {
             key={image}
             sx={{
               position: "relative",
-              pt: "100%",
+              pt: padding,
             }}
           >
           <AchievementImage
             name={achievement.name}
             image={image}
             width={800}
-            height={500}
+            height={height}
           />
           </Box>
         ))}

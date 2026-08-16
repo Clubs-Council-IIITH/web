@@ -6,18 +6,24 @@ import { GET_CURRENT_MEMBERS } from "gql/queries/members";
 export async function currentMembersAction(clubInput) {
   const response = { ok: false, data: null, error: null };
 
-  const {
-    error,
-    data: { currentMembers },
-  } = await getClient().query(GET_CURRENT_MEMBERS, { clubInput });
-  if (error) {
+  if (!clubInput?.cid) {
     response.error = {
-      title: error.name,
-      messages: error?.graphQLErrors?.map((ge) => ge?.message),
+      title: "Invalid Input",
+      messages: ["Club ID is required"],
+    };
+    return response;
+  }
+
+  const { error, data } = await getClient().query(GET_CURRENT_MEMBERS, { clubInput });
+ 
+  if (error || !data?.currentMembers) {
+    response.error = {
+      title: error?.name || "Error",
+      messages: error?.graphQLErrors?.map((ge) => ge?.message) || ["Failed to fetch members"],
     };
   } else {
     response.ok = true;
-    response.data = [...currentMembers];
+    response.data = [...data.currentMembers];
   }
 
   return response;

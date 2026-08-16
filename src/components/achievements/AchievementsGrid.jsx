@@ -25,7 +25,6 @@ export default async function AchievementsGrid({
       cid,
       limit: limit || 12,
     });
-    // console.log(data);
   }
 
   return (

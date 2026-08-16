@@ -15,7 +15,7 @@ export async function getFullUser(uid) {
     };
   } else {
     response.ok = true;
-    response.data = { ...userMeta, ...userProfile };
+    response.data = { uid, ...userMeta, ...userProfile };
   }
 
   return response;
