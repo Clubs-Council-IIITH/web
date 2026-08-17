@@ -14,6 +14,7 @@ import {
   ApproveAchievement,
   DeleteAchievement,
   RejectAchievement,
+  EditAchievement,
 } from "components/achievements/AchievementActions";
 
 export async function generateMetadata(props) {
@@ -42,11 +43,11 @@ function getActions(achievement) {
   }
 
   if (achievement?.status?.state === "approved") {
-    return [DeleteAchievement];
+    return [EditAchievement, DeleteAchievement];
   }
 
   if (achievement?.status?.state === "pending") {
-    return [ApproveAchievement, RejectAchievement, DeleteAchievement]
+    return [EditAchievement, ApproveAchievement, RejectAchievement, DeleteAchievement]
   }
 }
 
@@ -72,7 +73,7 @@ export default async function ManageAchievementPage(props) {
     }
 
     const sloActions = (userMeta?.role === "slo" || userMeta?.role==="cc") 
-      ? [ApproveAchievement, RejectAchievement, DeleteAchievement]
+      ? getActions(achievement)
       : [];
 
     return (

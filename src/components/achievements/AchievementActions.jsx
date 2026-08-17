@@ -159,3 +159,22 @@ export function DeleteAchievement({ sx }) {
     </>
   );
 }
+
+export function EditAchievement({ sx }) {
+  const router = useRouter();
+  const { id } = useParams();
+
+  return (
+    <Button
+      variant="contained"
+      color="info"
+      startIcon={<Icon variant="edit-outline" />}
+      sx={sx}
+      onClick={()=>{
+        router.push(`/manage/achievements/${id}/edit`);
+      }}
+    >
+        Edit
+    </Button>
+  )
+}

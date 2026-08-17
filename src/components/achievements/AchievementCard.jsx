@@ -19,7 +19,7 @@ export default function AchievementCard({
   return (
     <Card>
       <CardActionArea component={ButtonLink} href={`/achievements/${_id}`}>
-        <Box sx={{ pt: "100%", position: "relative" }}>
+        <Box sx={{ pt: "65%", position: "relative" }}>
           <AchievementImage
             name={name}
             image={image}

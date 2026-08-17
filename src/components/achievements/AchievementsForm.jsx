@@ -126,9 +126,9 @@ export default function AchievementForm({
         uniqueUids.map(async (uid) => {
           const res = await getFullUser(uid);
           if (res?.ok && res?.data) {
-            return { uid, ...res.data };
+            return res.data;
           }
-          return { uid, firstName: uid, lastName: "" };
+          return null
         })
       );
 
@@ -182,6 +182,23 @@ export default function AchievementForm({
     }
   }, [action, defaultValues, reset, defaultClubs]);
 
+  useEffect(() => {
+    if (action === "edit" && defaultValues?.userids) {
+      (async() =>{
+        const currentUsers = await Promise.all(
+          defaultValues.userids.map(async(uid) => {
+            const res = await getFullUser(uid);
+            if(res?.ok && res?.data) {
+              return res.data;
+            }
+            return null;
+          })
+        )
+        setExternalUsers(currentUsers.filter(Boolean));
+      })();
+    };
+  },[defaultValues?.userids, action]);
+
   const submitHandlers = {
     log: console.log,
     create: async (data, opts) => {
@@ -208,7 +225,7 @@ export default function AchievementForm({
     edit: async (data, opts) => {
 
       let res = await editAchievementAction(data, id);
-      // console.log("EDITED ACHIEVEMENT: ",res);
+      console.log("EDITED ACHIEVEMENT: ",res);
       if (res.ok) {
         triggerToast({
           title: "Success!",
@@ -234,8 +251,9 @@ export default function AchievementForm({
       content: formData.description,
       blogLinks: formData.links?.map((item) => item.url).filter(Boolean) || [],
       userids: (formData.userids || []).filter(Boolean),
-      venue: formData.venue,
+      venue: formData.venue.trim() || null,
     }
+    console.log("SUBMIT VENUE:", formData.venue, data.venue);
     const clubUsers = await getUsers(data.clubids);
     const users = [...clubUsers, ...externalUsers]
     if(!data.userids || data.userids.length==0 || !data.userids.every((value)=>users.some((x)=>x.uid==value))){
@@ -272,7 +290,7 @@ export default function AchievementForm({
     data.dateperiod = formData.dateperiod.map((d) =>
       new Date(d).toISOString().split("T")[0]
     );
-    console.log(data);
+    // console.log(data);
  
    
     submitHandlers[action](data, opts);

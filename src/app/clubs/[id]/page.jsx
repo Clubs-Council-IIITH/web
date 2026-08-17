@@ -103,45 +103,8 @@ export default async function Club(props) {
           </Box>
           <EventsGrid type="club" clubid={id} limit={4} />
         </Box>
-        <Box
-          sx={{
-            my: 4,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              mb: 1,
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Icon variant="local-activity-outline-rounded" sx={{ mr: 1 }} />
-              <Typography variant="h4">Achievements</Typography>
-            </Box>
-            <Button
-              variant="none"
-              color="secondary"
-              component={ButtonLink}
-              href={`/achievements?club=${id}`}
-            >
-              <Typography
-                variant="button"
-                sx={{
-                  color: "text.primary",
-                }}
-              >
-                View all
-              </Typography>
-              <Icon variant="chevron-right" />
-            </Button>
-          </Box>
-          <AchievementsGrid type="club" cid={id} limit={4} />
+        <Box>
+          <AchievementsGrid type="club" cid={id} limit={4} clubid={id}/>
         </Box>
 
         <Box

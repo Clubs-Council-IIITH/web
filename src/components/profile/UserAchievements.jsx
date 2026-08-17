@@ -4,10 +4,12 @@ import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
 
 export default  
 function UserAchievements({ rows = [] }) {
   const theme = useTheme();
+  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const columns = [
@@ -91,6 +93,9 @@ function UserAchievements({ rows = [] }) {
             ".MuiDataGrid-cell:focus": {
               outline: "none",
             },
+          }}
+          onRowClick={(params) => {
+            router.push(`/achievements/${params.row._id}`);
           }}
         />
       </>

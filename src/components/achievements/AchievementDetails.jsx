@@ -1,12 +1,13 @@
 import dayjs from "dayjs";
 
-import { Box, Card, Grid, Stack, Typography} from "@mui/material";
+import { Box, Card, Grid, Stack, Typography, Chip } from "@mui/material";
 import Link from "next/link";
 
 import UsersTable from "components/achievements/UsersTable"
 import ClubButton from "components/clubs/ClubButton";
 import AchievementImages from "./AchievementImages";
 import Icon from "components/Icon";
+import AchievementTypeChips from "./AchievementTypeChips"
 
 export default function AchievementDetails({ achievement, showCode = false }) {
   return (
@@ -43,16 +44,12 @@ export default function AchievementDetails({ achievement, showCode = false }) {
           >
             {achievement.name}
           </Typography>
-          <Typography
-            variant="h6"
-            paragraph
+          <Box
             sx={{
-              mt: 1,
-              mb: 0,
+              my: 1,
             }}
-          >
-            {achievement.achievementType}
-          </Typography>
+          />
+          <AchievementTypeChips achievementType={achievement.achievementType} />
           <Box
             sx={{
               my: 1,
@@ -141,4 +138,3 @@ export default function AchievementDetails({ achievement, showCode = false }) {
     </Grid> 
   );  
 }
-

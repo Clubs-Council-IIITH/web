@@ -18,14 +18,14 @@ export default function ManageAchievementCard({
     const router = useRouter();
   return (
     <Card>
-   {edit &&     
+   {/* {edit &&     
         <IconButton onClick={(event)=>{
             router.push(`/manage/achievements/${_id}/edit`);
         }}>
             <EditIcon></EditIcon>
-        </IconButton>}
+        </IconButton>} */}
       <CardActionArea component={ButtonLink} href={`/manage/achievements/${_id}`}>
-        <Box sx={{ pt: "100%", position: "relative" }}>
+        <Box sx={{ pt: "80%", position: "relative" }}>
           <AchievementImage
             name={name}
             image={image}

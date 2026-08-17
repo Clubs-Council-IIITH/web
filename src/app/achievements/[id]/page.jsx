@@ -4,6 +4,7 @@ import { getAchievement } from "utils/fetchData";
 import { shortDescription } from "app/layout";
 import { getFile, PUBLIC_URL } from "utils/files";
 import AchievementDetails from "components/achievements/AchievementDetails";
+import { Container } from "@mui/material";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -39,5 +40,9 @@ export default async function Achievement(props) {
     const { id } = params;
     const achievement = await getAchievement(id);
 
-    return <AchievementDetails achievement={achievement} />
+    return (
+      <Container>
+        <AchievementDetails achievement={achievement} />
+      </Container>
+    )
 }

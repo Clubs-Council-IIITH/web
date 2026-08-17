@@ -5,6 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Typography, Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getUserProfile } from "utils/fetchData";
+import UserImage from "components/users/UserImage";
 
 export default function UsersTable({ achievement }) {
   const [users, setUsers] = useState([]);
@@ -27,8 +28,12 @@ const columns = [
     sortable: false,
     filterable: false,
     renderCell: (p) => (
-      <Avatar
-        src={p.row.image}
+      <UserImage 
+        image={p.row.img}
+        name={p.row.firstName}
+        gender={p.row.gender}
+        width={40}
+        height={40}
       />
     ),
   },

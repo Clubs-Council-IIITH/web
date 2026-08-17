@@ -2,12 +2,16 @@ import { getClient } from "gql/client";
 import { GET_ACHIEVEMENT_BY_CLUB } from "gql/queries/achievements";
 
 import AchievementCards from "./AchievementCards";
+import { Box, Button, Typography } from "@mui/material";
+import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 
 export default async function AchievementsGrid({
   type = "recent", // must be one of: {recent, club}
   cid = null,
   limit = undefined,
   achievements = null,
+  clubid
 }) {
   console.log("AchievementsGrid rendered");
   if (type === "club" && !cid) {
@@ -27,11 +31,52 @@ export default async function AchievementsGrid({
     });
   }
 
+  const achievementList = data?.data?.achievementsByClub ?? data?.data?.achievements ?? [];
+
+  if (!achievementList.length) {
+    return null;
+  }
+
   return (
+    <>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        mb: 1,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Icon variant="local-activity-outline-rounded" sx={{ mr: 1 }} />
+        <Typography variant="h4">Achievements</Typography>
+      </Box>
+      <Button
+        variant="none"
+        color="secondary"
+        component={ButtonLink}
+        href={`/achievements?club=${clubid}`}
+      >
+        <Typography
+          variant="button"
+          sx={{
+            color: "text.primary",
+          }}
+        >
+          View all
+        </Typography>
+        <Icon variant="chevron-right" />
+      </Button>
+    </Box>
     <AchievementCards
-      achievements={data.data.achievementsByClub}
+      achievements={achievementList.slice(0, limit)}
       loading={false}
       noAchievementsMessage="No achievements found."
     />
+    </>
   );
 }
