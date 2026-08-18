@@ -1,63 +1,86 @@
 import { Button, Container, Divider, Stack, Typography } from "@mui/material";
 
-import ButtonLink from "components/Link";
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
+import {
+  GET_ALL_TRANSACTIONS,
+  GET_PENDING_TRANSACTIONS,
+} from "gql/queries/inventory";
+
 import Icon from "components/Icon";
 import TranTable from "components/inventory/transactions/TranTable";
+import ButtonLink from "components/Link";
 
 export const metadata = {
   title: "Manage Transactions",
 };
 
-const dummyUser = { role: "slo" };
+async function getalltransactionsquery(querystring) {
+  "use server";
 
-const dummyPendingTransactions = [
-  {
-    _id: "1",
-    itemName: "Projector",
-    brand: "Epson",
-    quantity: 1,
-    borrow_date: "2026-07-01",
-    period: "2026-07-01 - 2026-07-03",
-    user: "Alice",
-    status: { state: "pending_slo" },
-  },
-  {
-    _id: "t-102",
-    itemName: "Speaker",
-    brand: "JBL",
-    quantity: 2,
-    borrow_date: "2026-07-04",
-    period: "2026-07-04 - 2026-07-06",
-    user: "Bob",
-    status: { state: "pending_slo" },
-  },
-];
+  const { data = {}, error } = await getClient().query(GET_ALL_TRANSACTIONS, {
+    clubid: querystring["targetClub"],
+    pastTransactionsLimit: querystring["pastTransactionsLimit"],
+    hideDeleted: querystring["hideDeleted"],
+  });
 
-const dummyTransactions = [
-  ...dummyPendingTransactions,
-  {
-    _id: "t-103",
-    itemName: "Mic Kit",
-    brand: "Shure",
-    quantity: 1,
-    borrow_date: "2026-06-27",
-    period: "2026-06-27 - 2026-06-28",
-    user: "Charlie",
-    status: { state: "borrowed" },
-  },
-  {
-    _id: "t-104",
-    itemName: "Projector",
-    brand: "Epson",
-    quantity: 1,
-    borrow_date: "2026-06-15",
-    period: "2026-06-15 - 2026-06-16",
-    user: "Dana",
-    status: { state: "completed" },
-  },
-];
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  const { data: { allClubs = [] } = {} } = await getClient().query(GET_ALL_CLUB_IDS, {});
+  const clubMap = (allClubs || []).reduce((acc, club) => {
+    if (club.cid) acc[club.cid] = club.name;
+    if (club._id) acc[club._id] = club.name;
+    return acc;
+  }, {});
+
+  return (data?.getTransactions || []).map((tx) => ({
+    ...tx,
+    clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
+  }));
+}
 
 export default async function ManageTransactions() {
+  const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+    userInput: null,
+  });
+
+  const role = userMeta?.role;
+  const clubid = role === "club" ? userMeta?.uid : undefined;
+
+  const { data: { allClubs = [] } = {} } = await getClient().query(GET_ALL_CLUB_IDS, {});
+  const clubMap = (allClubs || []).reduce((acc, club) => {
+    if (club.cid) acc[club.cid] = club.name;
+    if (club._id) acc[club._id] = club.name;
+    return acc;
+  }, {});
+
+  // Pending transactions (cc / slo only — query handles auth)
+  let pendingTransactions = [];
+  if (["cc", "slo"].includes(role)) {
+    const { data } = await getClient().query(GET_PENDING_TRANSACTIONS, {
+      clubid,
+    });
+    pendingTransactions = (data?.getPendingTransactions ?? []).map((tx) => ({
+      ...tx,
+      clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
+    }));
+  }
+
+  // All transactions initial fetch
+  const { data: allData } = await getClient().query(GET_ALL_TRANSACTIONS, {
+    clubid,
+    pastTransactionsLimit: 4,
+    hideDeleted: true,
+  });
+  const allTransactions = (allData?.getTransactions ?? []).map((tx) => ({
+    ...tx,
+    clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
+  }));
+
   return (
     <Container>
       <Stack
@@ -72,7 +95,7 @@ export default async function ManageTransactions() {
           Manage Transactions
         </Typography>
 
-        {["cc", "slo", "club"].includes(dummyUser.role) ? (
+        {["cc", "slo", "club"].includes(role) ? (
           <Button
             component={ButtonLink}
             href="/manage/inventory/transactions/new"
@@ -84,7 +107,7 @@ export default async function ManageTransactions() {
         ) : null}
       </Stack>
 
-      {dummyPendingTransactions.length ? (
+      {pendingTransactions.length ? (
         <>
           <Typography
             variant="subtitle2"
@@ -95,9 +118,9 @@ export default async function ManageTransactions() {
               mb: 1,
             }}
           >
-            Pending SLO Approvals
+            Pending Approvals
           </Typography>
-          <TranTable transactions={dummyPendingTransactions} />
+          <TranTable transactions={pendingTransactions} />
           <Divider sx={{ my: 4 }} />
         </>
       ) : null}
@@ -113,7 +136,12 @@ export default async function ManageTransactions() {
       >
         All Transactions
       </Typography>
-      <TranTable transactions={dummyTransactions} />
+      <TranTable
+        transactions={allTransactions}
+        query={getalltransactionsquery}
+        clubid={clubid}
+        canViewDeletedTransactions={role === "slo"}
+      />
     </Container>
   );
 }

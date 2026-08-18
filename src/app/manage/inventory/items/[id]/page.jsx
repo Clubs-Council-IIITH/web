@@ -2,20 +2,17 @@ import { redirect } from "next/navigation";
 
 import {
   Box,
-  Chip,
   Divider,
   Grid,
   Typography,
 } from "@mui/material";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-// import { GET_FULL_ITEM } from "gql/queries/inventory";
+import { GET_FULL_ITEM } from "gql/queries/inventory";
 
 import ActionPalette from "components/ActionPalette";
-import { ItemStatus } from "components/inventory/items/ItemStates";
 import {
   ApproveItem,
   DeleteItem,
@@ -23,37 +20,21 @@ import {
   RejectItem,
   SubmitItem,
 } from "components/inventory/items/ItemActions";
+import { ItemStatus } from "components/inventory/items/ItemStates";
 import TranTable from "components/inventory/transactions/TranTable";
-
-// dummy data: remove once GET_FULL_ITEM is wired
-const dummyItem = {
-  _id: "1",
-  name: "Projector",
-  quantity: 3,
-  instock: 3,
-  status: { state: "approved" },
-  brand: "Epson",
-  clubid: "studlife.office",
-  description: "Used for club presentations and screenings.",
-  warrantyDetails: "2-year manufacturer warranty",
-  photo: "http://localhost/_next/image?url=http%3A%2F%2Ffiles%2Ffiles%2Fstatic%3Ffilename%3D1.jpg%26filetype%3Dgallery&w=3840&q=75",
-  billOfPurchase: "https://docs.google.com/document/d/1hWIPaX7OJTW6FAAuFySfTHjAAMHUczPgLzcysaGjULs/edit?tab=t.0",
-  itemCode: null,
-};
 
 export async function generateMetadata(props) {
   const params = await props.params;
   const { id } = params;
 
-  // const { data: { inventoryItem: item } = {} } = await getClient().query(
-  //   GET_FULL_ITEM,
-  //   { id },
-  // );
-  const item = dummyItem;
+  const { data: { getItem: item } = {} } = await getClient().query(
+    GET_FULL_ITEM,
+    { iid: id },
+  );
 
   return {
     title: item?.name ?? "Inventory Item",
-    description: item?.description || "No description provided.",
+    description: item?.other_details || "No description provided.",
   };
 }
 
@@ -61,12 +42,10 @@ export default async function ManageInventoryItemID(props) {
   const params = await props.params;
   const { id } = params;
 
-  // const { data: { inventoryItem: item } = {}, error } = await getClient().query(
-  //   GET_FULL_ITEM,
-  //   { id },
-  // );
-  const item = dummyItem;
-  const error = null;
+  const { data: { getItem: item } = {}, error } = await getClient().query(
+    GET_FULL_ITEM,
+    { iid: id },
+  );
 
   if (error?.message?.includes("Item not found") || !item) {
     return redirect("/404");
@@ -87,6 +66,7 @@ export default async function ManageInventoryItemID(props) {
   // clubs can only see their own items
   if (
     user?.role === "club" &&
+    item?.clubid &&
     user?.uid !== item?.clubid
   ) {
     redirect("/404");
@@ -98,18 +78,17 @@ export default async function ManageInventoryItemID(props) {
     <Box>
       <ActionPalette
         left={[ItemStatus]}
-        leftProps={[{ status: item?.status }]}
+        leftProps={[{ status: item?.status || { state: "approved" } }]}
         right={getActions(item, user)}
         rightProps={[{}]}
       />
 
       <Grid container spacing={4} sx={{ mt: 1 }}>
-        {/* photo + bill */}
+        {/* photo */}
         <Grid
           size={{ xs: 12, md: 4 }}
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          {/* photo */}
           {item?.photo ? (
             <Box
               component="img"
@@ -142,58 +121,6 @@ export default async function ManageInventoryItemID(props) {
               </Typography>
             </Box>
           )}
-
-          {/* bill of purchase */}
-          {item?.billOfPurchase ? (
-            <Box
-              component="a"
-              href={item.billOfPurchase}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-                px: 2,
-                py: 1.5,
-                borderRadius: 2,
-                border: "1px solid",
-                borderColor: "divider",
-                textDecoration: "none",
-                color: "text.primary",
-                "&:hover": { backgroundColor: "action.hover" },
-                cursor: "pointer",
-              }}
-            >
-              <PictureAsPdfIcon color="error" />
-              <Box>
-                <Typography variant="body2" fontWeight={500}>
-                  Bill of Purchase
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Click to download
-                </Typography>
-              </Box>
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-                px: 2,
-                py: 1.5,
-                borderRadius: 2,
-                border: "1px dashed",
-                borderColor: "divider",
-              }}
-            >
-              <PictureAsPdfIcon color="disabled" />
-              <Typography variant="body2" color="text.secondary">
-                No bill uploaded
-              </Typography>
-            </Box>
-          )}
         </Grid>
 
         {/* item details */}
@@ -204,13 +131,13 @@ export default async function ManageInventoryItemID(props) {
               <Typography variant="h5" fontWeight={600}>
                 {item?.name}
               </Typography>
-              {item?.status?.state === "approved" && item?.itemCode ? (
+              {item?.iid ? (
                 <Typography
                   variant="caption"
                   color="text.secondary"
                   sx={{ fontFamily: "monospace", letterSpacing: 1 }}
                 >
-                  {item.itemCode}
+                  Asset Code: {item.iid}
                 </Typography>
               ) : null}
             </Grid>
@@ -222,25 +149,11 @@ export default async function ManageInventoryItemID(props) {
             {/* metadata */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <Typography variant="overline" color="text.secondary">
-                Owner Club
+                Owner / Club
               </Typography>
               <Typography variant="body1">
                 {ownerClub?.name ?? item?.clubid ?? "—"}
               </Typography>
-            </Grid>
-
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="overline" color="text.secondary">
-                Total Quantity
-              </Typography>
-              <Typography variant="body1">{item?.quantity ?? "—"}</Typography>
-            </Grid>
-
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="overline" color="text.secondary">
-                Quantity in store
-              </Typography>
-              <Typography variant="body1">{item?.instock ?? "—"}</Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -250,36 +163,69 @@ export default async function ManageInventoryItemID(props) {
               <Typography variant="body1">{item?.brand || "—"}</Typography>
             </Grid>
 
-            {item?.warrantyDetails ? (
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Net Quantity
+              </Typography>
+              <Typography variant="body1">{item?.netQty ?? item?.net_qty ?? 0}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Available Quantity
+              </Typography>
+              <Typography variant="body1">{item?.availableQty ?? item?.available_qty ?? 0}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Total Quantity
+              </Typography>
+              <Typography variant="body1">{item?.totalQty ?? item?.total_qty ?? 0}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Current Location
+              </Typography>
+              <Typography variant="body1">
+                {Array.isArray(item?.currentLocation || item?.current_location)
+                  ? (item.currentLocation || item.current_location).join(", ")
+                  : (item?.currentLocation || item?.current_location) || "—"}
+              </Typography>
+            </Grid>
+
+            {(item?.warrantyDetails || item?.warranty_details) ? (
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="overline" color="text.secondary">
-                  Warranty
+                  Warranty Details
                 </Typography>
-                <Typography variant="body1">{item.warrantyDetails}</Typography>
+                <Typography variant="body1">{item.warrantyDetails || item.warranty_details}</Typography>
               </Grid>
             ) : null}
 
-            {item?.description ? (
+            {(item?.otherDetails || item?.other_details) ? (
               <Grid size={12}>
                 <Typography variant="overline" color="text.secondary">
-                  Description
+                  Other Details
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ mt: 0.5, whiteSpace: "pre-wrap" }}
                 >
-                  {item.description}
+                  {item.otherDetails || item.other_details}
                 </Typography>
               </Grid>
             ) : null}
           </Grid>
         </Grid>
-        <TranTable item={item} />
+        <Grid size={12}>
+          <TranTable item={item} />
+        </Grid>
       </Grid>
     </Box>
   );
 }
-
 
 function getActions(item, user) {
   const state = item?.status?.state;

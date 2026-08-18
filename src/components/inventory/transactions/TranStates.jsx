@@ -3,16 +3,16 @@
 import Chip from "@mui/material/Chip";
 
 const colorMap = {
-  approved: "success",
-  approved_slo: "success",
+  incomplete: "default",
   pending: "warning",
+  pending_club: "warning",
   pending_slo: "warning",
+  approved_slo: "info",
   borrowed: "info",
   completed: "success",
   rejected: "error",
-  incomplete: "default",
-  deleted: "error",
   cancelled: "default",
+  deleted: "error",
 };
 
 function formatState(state = "unknown") {

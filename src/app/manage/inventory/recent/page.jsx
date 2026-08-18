@@ -1,72 +1,139 @@
 
 
-import { Container, Stack, Typography, Card, Box } from "@mui/material";
-import { combineQuery, getClient } from "gql/client";
+import { Box, Button, Card, Container, Grid,Stack, Typography } from "@mui/material";
+
+import { getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
+import { GET_ALL_ITEMS, GET_ALL_TRANSACTIONS } from "gql/queries/inventory";
+
 import ItemsTable from "components/inventory/items/ItemsTable";
 import TranTable from "components/inventory/transactions/TranTable";
-
+import ButtonLink from "components/Link";
 
 export const metadata = {
   title: "Manage Inventory",
 };
 
 export default async function ManageInventory() {
-    // bring list of inventory items
+    const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
+        userInput: null,
+    });
 
-    // DASHBOARD:
-    // - (/inventory) Main inventory page: Two dashboards (for cc/slo all clubs visible, for club only to specific club)
-    // - Recent Transactions (top 10-20)
-    // - Items in storage (Top 10 arranged based on frequency of transactions) (View all button on top to take to seperate page)
-    // - Some statistics like "Number of items borrowed, Number of items in storage"
+    const role = userMeta?.role;
+    const isClubUser = role === "club";
+    const clubFilter = isClubUser ? userMeta?.uid : null;
 
-    // TODO: Replace with real data fetching logic
-    const dummyItems = [
-        { id: "1", name: "Projector", quantity: 3, status: "available", category: "Electronics", location: "Room 101", lastTransaction: "2026-05-10", owner: "CC", description: "Epson projector" },
-        { id: "2", name: "Speaker", quantity: 5, status: "borrowed", category: "Audio", location: "Room 102", lastTransaction: "2026-05-11", owner: "SLC", description: "JBL speaker" },
-    ];
-    const dummyTransactions = [
-        { id: "3", itemName: "Projector", type: "borrow", quantity: 1, date: "2026-05-11", user: "Alice", status: "approved", remarks: "For event" },
-        { id: "4", itemName: "Speaker", type: "return", quantity: 2, date: "2026-05-12", user: "Bob", status: "pending", remarks: "Returned late" },
-    ];
+    // Fetch active clubs for human-readable club names
+    const { data: { allClubs = [] } = {} } = await getClient().query(GET_ALL_CLUB_IDS, {});
+    const clubMap = (allClubs || []).reduce((acc, club) => {
+        if (club.cid) acc[club.cid] = club.name;
+        if (club._id) acc[club._id] = club.name;
+        return acc;
+    }, {});
+
+    // Fetch real items and recent transactions
+    const { data: { getItems: displayItems = [] } = {} } = await getClient().query(GET_ALL_ITEMS, {
+        clubid: clubFilter,
+        limit: 10,
+    });
+
+    const { data: { getTransactions: recentTransactions = [] } = {} } = await getClient().query(GET_ALL_TRANSACTIONS, {
+        clubid: clubFilter,
+        limit: 10,
+        hideDeleted: true,
+    });
+
+    const enrichedItems = displayItems.map((item) => ({
+        ...item,
+        clubName: clubMap[item.clubid] || item.clubName || item.clubid || "—",
+    }));
+
+    const enrichedTransactions = recentTransactions.map((tx) => ({
+        ...tx,
+        clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "—",
+    }));
+
+    // Compute basic statistics
+    const totalItemsCount = enrichedItems.reduce((acc, item) => acc + (item.totalQty ?? item.total_qty ?? 0), 0);
+    const availableItemsCount = enrichedItems.reduce((acc, item) => acc + (item.availableQty ?? item.available_qty ?? 0), 0);
+    const borrowedCount = enrichedTransactions.filter(t => t?.status?.state === "borrowed").length;
+
+    const itemsSectionTitle = isClubUser ? "Items in Possession" : "Items in Storage";
+    const totalItemsCardTitle = isClubUser ? "Total Items in Possession" : "Total Items in Storage";
 
     return (
         <Container>
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 3 }}>
                 <Typography variant="h3" gutterBottom>
                     Manage Inventory
                 </Typography>
-                {/* <Card sx={{ p: 2, mt: 1, width: 'fit-content', boxShadow: 2 }}>
-                    <Typography variant="subtitle1">Total: 200</Typography>
-                    <Typography variant="subtitle1">Borrowed: 50</Typography>
-                </Card> */}
+                
+                {/* Statistics Cards */}
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                        <Card sx={{ p: 2, boxShadow: 1 }}>
+                            <Typography variant="caption" color="text.secondary">{totalItemsCardTitle}</Typography>
+                            <Typography variant="h4" fontWeight={600}>{totalItemsCount}</Typography>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                        <Card sx={{ p: 2, boxShadow: 1 }}>
+                            <Typography variant="caption" color="text.secondary">Available Items</Typography>
+                            <Typography variant="h4" fontWeight={600} color="success.main">{availableItemsCount}</Typography>
+                        </Card>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                        <Card sx={{ p: 2, boxShadow: 1 }}>
+                            <Typography variant="caption" color="text.secondary">Active Borrowed Items</Typography>
+                            <Typography variant="h4" fontWeight={600} color="warning.main">{borrowedCount}</Typography>
+                        </Card>
+                    </Grid>
+                </Grid>
             </Box>
-            <Box sx={{ mb: 2 }}>
-                <Typography
-                    variant="subtitle2"
-                    gutterBottom
-                    sx={{
-                        color: "text.secondary",
-                        textTransform: "uppercase",
-                        mb: 1,
-                    }}
-                >
-                    Recent Transactions
-                </Typography>
-                <TranTable transactions={dummyTransactions}/>
+
+            <Box sx={{ mb: 4 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            color: "text.secondary",
+                            textTransform: "uppercase",
+                        }}
+                    >
+                        Recent Transactions
+                    </Typography>
+                    <Button
+                        component={ButtonLink}
+                        href="/manage/inventory/transactions"
+                        size="small"
+                    >
+                        View All Transactions
+                    </Button>
+                </Stack>
+                <TranTable transactions={enrichedTransactions} pageSize={10} hideFooterPagination />
             </Box>
-            <Box sx={{ mb: 2 }}>
-                <Typography
-                    variant="subtitle2"
-                    gutterBottom
-                    sx={{
-                        color: "text.secondary",
-                        textTransform: "uppercase",
-                        mb: 1,
-                    }}
-                >
-                    Items in Storage
-                </Typography>
-                <ItemsTable items={dummyItems}/>
+
+            <Box sx={{ mb: 4 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            color: "text.secondary",
+                            textTransform: "uppercase",
+                        }}
+                    >
+                        {itemsSectionTitle}
+                    </Typography>
+                    <Button
+                        component={ButtonLink}
+                        href="/manage/inventory/items"
+                        size="small"
+                    >
+                        View All Items
+                    </Button>
+                </Stack>
+                <ItemsTable items={enrichedItems} pageSize={10} hideFooterPagination />
             </Box>
         </Container>
     );

@@ -1,98 +1,70 @@
 import gql from "graphql-tag";
 
 export const GET_ALL_ITEMS = gql`
-  query InventoryItems(
-    $clubid: String
-    $paginationOn: Boolean
-    $skip: Int
-    $limit: Int
-    $status: String
-    $hideDeleted: Boolean
-  ) {
-    inventoryItems(
-      clubid: $clubid
-      paginationOn: $paginationOn
-      skip: $skip
-      limit: $limit
-      status: $status
-      hideDeleted: $hideDeleted
-    ) {
+  query GetItems($clubid: String, $limit: Int) {
+    getItems(clubid: $clubid, limit: $limit) {
       _id
-      itemCode
+      iid
       name
       brand
-      quantity
-      instock
       clubid
-      description
-      warrantyDetails
-      photo
-      billOfPurchase
-      status {
-        state
-        creationTime
-        submissionTime
-        lastUpdatedTime
-        lastUpdatedBy
-      }
+      netQty
+      availableQty
+      totalQty
+      currentLocation
     }
   }
 `;
 
 export const GET_PENDING_ITEMS = gql`
   query PendingInventoryItems($clubid: String) {
-    pendingInventoryItems(clubid: $clubid) {
+    getItems(clubid: $clubid) {
       _id
-      itemCode
+      iid
       name
       brand
-      quantity
       clubid
-      status {
-        state
-        submissionTime
-      }
+      netQty
+      availableQty
+      totalQty
     }
   }
 `;
 
 export const GET_FULL_ITEM = gql`
-  query InventoryItem($itemid: String!) {
-    inventoryItem(itemid: $itemid) {
+  query GetItem($iid: String!) {
+    getItem(iid: $iid) {
       _id
-      itemCode
+      iid
       name
       brand
-      quantity
-      instock
-      clubid
-      description
-      warrantyDetails
       photo
-      billOfPurchase
-      status {
-        state
-        creationTime
-        submissionTime
-        lastUpdatedTime
-        lastUpdatedBy
-        approver
-      }
+      clubid
+      netQty
+      availableQty
+      totalQty
+      warrantyDetails
+      otherDetails
+      currentLocation
+      requiresApproval
     }
   }
 `;
 
 export const GET_ITEMS_FOR_SELECTOR = gql`
   query InventoryItemsForSelector($clubid: String) {
-    inventoryItems(clubid: $clubid, hideDeleted: true) {
+    getItems(clubid: $clubid) {
       _id
-      itemCode
+      iid
       name
       brand
-      instock
+      clubid
+      netQty
     }
   }
 `;
+
+
 
 export const GET_ALL_TRANSACTIONS = gql`
   query InventoryTransactions(
@@ -104,7 +76,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     $pastTransactionsLimit: Int
     $hideDeleted: Boolean
   ) {
-    inventoryTransactions(
+    getTransactions(
       clubid: $clubid
       itemid: $itemid
       paginationOn: $paginationOn
@@ -114,20 +86,16 @@ export const GET_ALL_TRANSACTIONS = gql`
       hideDeleted: $hideDeleted
     ) {
       _id
+      tid
       itemid
       itemName
       itemCode
-      brand
+      itemClubid
       clubid
+      clubName
       quantity
-      borrow_date
       startDate
       endDate
-      purpose
-      pickupLocation
-      storageLocation
-      eventid
-      eventName
       user
       status {
         state
@@ -135,6 +103,8 @@ export const GET_ALL_TRANSACTIONS = gql`
         approvedTime
         lastUpdatedTime
         lastUpdatedBy
+        borrowDate
+        approver
       }
     }
   }
@@ -142,19 +112,21 @@ export const GET_ALL_TRANSACTIONS = gql`
 
 export const GET_PENDING_TRANSACTIONS = gql`
   query PendingInventoryTransactions($clubid: String) {
-    pendingInventoryTransactions(clubid: $clubid) {
+    getPendingTransactions(clubid: $clubid) {
       _id
+      tid
       itemid
       itemName
       itemCode
-      brand
+      itemClubid
       clubid
       quantity
-      borrow_date
       user
       status {
         state
         submissionTime
+        borrowDate
+        approver
       }
     }
   }
@@ -162,26 +134,26 @@ export const GET_PENDING_TRANSACTIONS = gql`
 
 export const GET_FULL_TRANSACTION = gql`
   query InventoryTransaction($transactionid: String!) {
-    inventoryTransaction(transactionid: $transactionid) {
+    getTransaction(tid: $transactionid) {
       _id
+      tid
       itemid
       itemName
       itemCode
-      brand
+      itemClubid
       clubid
       clubName
       quantity
-      borrow_date
       startDate
       endDate
       purpose
-      pickupLocation
       storageLocation
       eventid
       eventName
       user
       remarks
-      approver
+      photoBefore
+      photoAfter
       status {
         state
         submissionTime
@@ -189,6 +161,9 @@ export const GET_FULL_TRANSACTION = gql`
         lastUpdatedTime
         lastUpdatedBy
         sloComment
+        returnComment
+        borrowDate
+        approver
       }
     }
   }
