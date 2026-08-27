@@ -1,5 +1,11 @@
 import gpl from 'graphql-tag'
 
+export const GET_ACHIEVEMENT_ID_FROM_CODE = gpl`
+  query Query($code: String!) {
+    achievementid(code: $code)
+  }
+`;
+
 export const GET_ALL_ACHIEVEMENTS= gpl`
 query AllAchievements {
   allAchievements {

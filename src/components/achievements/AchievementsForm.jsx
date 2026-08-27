@@ -251,9 +251,9 @@ export default function AchievementForm({
       content: formData.description,
       blogLinks: formData.links?.map((item) => item.url).filter(Boolean) || [],
       userids: (formData.userids || []).filter(Boolean),
-      venue: formData.venue.trim() || null,
+      venue: formData.venue.trim() || "",
     }
-    console.log("SUBMIT VENUE:", formData.venue, data.venue);
+    // console.log("SUBMIT VENUE:", formData.venue, data.venue);
     const clubUsers = await getUsers(data.clubids);
     const users = [...clubUsers, ...externalUsers]
     if(!data.userids || data.userids.length==0 || !data.userids.every((value)=>users.some((x)=>x.uid==value))){
@@ -392,20 +392,6 @@ export default function AchievementForm({
               />
             }
           </Grid>
-          <Grid size={12}>
-           
-            {action=="edit"&& watch("imageLinks").length!=0 && 
-            <>  
-            <Typography
-              variant="body2"
-              sx={{
-                color: "text.secondary",
-              }}
-              >
-             These are the existing images. Uploading new images will remove these as well.
-            </Typography>
-             <AchievementImages padding="70%" achievement={{"name": watch("name"), "imageLinks" :watch("imageLinks")}}></AchievementImages></>}
-          </Grid>
         </Grid>
         </Grid>
         
@@ -447,31 +433,6 @@ export default function AchievementForm({
           </FormControl>
         )}
       />
-
-         </Grid>
-        <Grid container size={12} spacing={3}>
-              <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                  color: "text.secondary",
-                  alignSelf: "center",
-                  mb: 0,
-                }}
-              >
-                Images
-            </Typography>
-              <FileUpload
-                type="image"
-                name="images"
-                control={control}
-                maxFiles={5}
-                maxSizeMB={100}
-                shape="square"
-                warnSizeMB={80}
-              />
-            
          </Grid>
          <Grid container size={12} spacing={3}>
              <Typography
@@ -486,18 +447,59 @@ export default function AchievementForm({
               >
                 Blog links
             </Typography>
-          <AchievementLinks control={control}/>
-         
-          <AchievementsSubmitButton
-            loading={loading}
-            handleSubmit={handleSubmit}
-            onSubmit={onSubmit}
-          />
+            <AchievementLinks control={control}/>
           </Grid>
-
+          <Grid container size={12} spacing={3}>
+            <Grid size={12} spacing={3}>
+              <Typography
+                variant="subtitle2"
+                gutterBottom
+                sx={{
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                  alignSelf: "center",
+                  mb: 0,
+                }}
+              >
+                Images
+              </Typography>
+              {action=="edit"&& watch("imageLinks").length!=0 && 
+                <>  
+                  <AchievementImages 
+                    padding="70%" 
+                    achievement={{"name": watch("name"), "imageLinks" :watch("imageLinks")}}
+                  />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                    }}
+                  >
+                    These are the existing image/s. Uploading new images will remove these as well.
+                  </Typography>
+                </>}
+            </Grid>
+          <Grid size={12}>
+            <FileUpload
+              type="image"
+              name="images"
+              control={control}
+              maxFiles={5}
+              maxSizeMB={100}
+              shape="square"
+              warnSizeMB={80}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-     
+          <Grid container size={12} spacing={3}>
+            <AchievementsSubmitButton
+              loading={loading}
+              handleSubmit={handleSubmit}
+              onSubmit={onSubmit}
+            />
+          </Grid>
+        </Grid>
+      </Grid> 
     </form>
   )
 }
