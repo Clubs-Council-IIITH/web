@@ -54,7 +54,7 @@ export default async function ManageEvents() {
           Manage Events
         </Typography>
 
-        {["cc", "club"].includes(userMeta?.role) ? (
+        {["cc", "club", "slo"].includes(userMeta?.role) ? (
           <Button
             component={ButtonLink}
             href="/manage/events/new"

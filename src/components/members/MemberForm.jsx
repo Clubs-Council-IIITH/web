@@ -110,7 +110,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
     // set club ID for member based on user role
     if (user?.role === "club") {
       data.cid = user?.uid;
-    } else if (user?.role === "cc") {
+    } else if (["cc", "slo"].includes(user?.role)) {
       data.cid = formData.cid;
     }
 
@@ -206,7 +206,7 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
             xl: 8,
           }}
         >
-          {user?.role === "cc" ? (
+          {["cc", "slo"].includes(user?.role) ? (
             <Grid size={12}>
               <MemberClubSelect control={control} edit={action === "edit"} />
             </Grid>
