@@ -309,6 +309,11 @@ export const GET_EVENT_REPORT = gql`
       summary
       attendance
       externalAttendance
+      allocatedBudget
+      allocatedBudgetBreakdown {
+        description
+        allocatedAmount
+      }
       prizes
       prizesBreakdown
       winners

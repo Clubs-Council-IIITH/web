@@ -11,6 +11,13 @@ import {
   Divider,
   Grid,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
 } from "@mui/material";
 
 import EventBudget from "components/events/EventBudget";
@@ -259,6 +266,34 @@ export function EventReportDetails({
             </>
           ) : null}
         </Grid>
+
+        {eventReport?.allocatedBudgetBreakdown?.length > 0 && (
+          <Grid
+            size={{
+              xs: 12,
+              md: 4,
+              sm: 6,
+            }}
+          >
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{
+                textTransform: "uppercase",
+              }}
+            >
+              Allocated Budget
+            </Typography>
+            <Box sx={{ mt: 2 }}>
+              <EventBudget
+                editable={false}
+                rows={eventReport.allocatedBudgetBreakdown.map((item, idx) => ({ id: idx, description: item.description, amount: item.allocatedAmount }))}
+                hideAdvance={true}
+                showTotal={true}
+              />
+            </Box>
+          </Grid>
+        )}
 
         <Grid
           size={{

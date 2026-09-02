@@ -8,7 +8,7 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch, useFieldArray } from "react-hook-form";
 
 import {
   Box,
@@ -24,6 +24,14 @@ import {
   Select,
   TextField,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -32,8 +40,10 @@ import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
+import Icon from "components/Icon";
 import MemberListItem from "components/members/MemberListItem";
 import { useToast } from "components/Toast";
+import EventBudget from "components/events/EventBudget";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventReportAction } from "actions/events/report/create/server_action";
@@ -85,7 +95,7 @@ export default function EventReportForm({
     fetchClubs();
   }, []);
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       ...defaultValues,
       ...defaultReportValues,
@@ -93,6 +103,15 @@ export default function EventReportForm({
   });
 
   const prizesInput = watch("prizes");
+
+  const [allocatedBudgetRows, setAllocatedBudgetRows] = useState(
+    defaultReportValues?.allocatedBudgetBreakdown?.map((b, idx) => ({ id: idx, description: b.description, amount: b.allocatedAmount })) || []
+  );
+
+  useEffect(() => {
+    // Update the form's value whenever local rows change
+    setValue("allocatedBudgetBreakdown", allocatedBudgetRows.map(r => ({ description: r.description, allocatedAmount: r.amount })));
+  }, [allocatedBudgetRows, setValue]);
 
   const submitHandlers = {
     log: console.log,
@@ -161,6 +180,11 @@ export default function EventReportForm({
         summary: formData.eventSummary,
         attendance: parseInt(formData.actualAttendance, 0),
         externalAttendance: parseInt(formData.actualExternalAttendance, null),
+        allocatedBudget: formData.allocatedBudgetBreakdown?.reduce((acc, curr) => acc + (parseFloat(curr.allocatedAmount) || 0), 0) || null,
+        allocatedBudgetBreakdown: formData.allocatedBudgetBreakdown?.map(b => ({
+          description: b.description,
+          allocatedAmount: parseFloat(b.allocatedAmount || 0)
+        })) || [],
         prizes: formData.prizes || [],
         prizesBreakdown: formData.prizesBreakdown || "N/A",
         winners: formData.winnersDetails || "N/A",
@@ -207,8 +231,7 @@ export default function EventReportForm({
           spacing={3}
           size={{
             xs: 12,
-            md: 7,
-            xl: 8,
+            md: 6,
           }}
         >
           <Grid container>
@@ -398,33 +421,6 @@ export default function EventReportForm({
               />
             </Grid>
             <Grid
-              sx={{
-                mt: 2,
-              }}
-              size={12}
-            >
-              <SubmittedBy
-                control={control}
-                cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
-                hasPhone={hasPhone}
-                setHasPhone={setHasPhone}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          spacing={3}
-          sx={{
-            alignItems: "flex-start",
-          }}
-          size={{
-            xs: "grow",
-            md: "grow",
-          }}
-        >
-          <Grid container>
-            <Grid
               container
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
@@ -511,6 +507,49 @@ export default function EventReportForm({
                 </Grid>
               </>
             ) : null}
+
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
+              <SubmittedBy
+                control={control}
+                cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
+                hasPhone={hasPhone}
+                setHasPhone={setHasPhone}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            alignItems: "flex-start",
+          }}
+          size={{
+            xs: "grow",
+            md: "grow",
+          }}
+        >
+          <Grid container>
+            <Grid size={12} sx={{ mt: 2 }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" gutterBottom sx={{ color: "text.secondary", textTransform: "uppercase" }}>
+                  Allocated Budget Breakdown
+                </Typography>
+              </Box>
+              
+              <EventBudget
+                editable={true}
+                rows={allocatedBudgetRows}
+                setRows={setAllocatedBudgetRows}
+                hideAdvance={true}
+                showTotal={true}
+              />
+            </Grid>
 
             <Grid
               sx={{
