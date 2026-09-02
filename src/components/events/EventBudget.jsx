@@ -18,6 +18,9 @@ export default function EventBudget({
   setBudgetEditing = console.log,
   billViewable = false,
   billEditable = false,
+  hideAdvance = false,
+  showTotal = false,
+  showAllocated = false,
 }) {
   const theme = useTheme();
   const [error, setError] = useState("");
@@ -106,7 +109,9 @@ export default function EventBudget({
     {
       field: "amount",
       type: "number",
-      headerName: billViewable ? "Amount" : "Proposed Amount",
+      headerName: showAllocated ? "Proposed Amount" : "Amount",
+      width: 150,
+      minWidth: 150,
       flex: isMobile ? null : 1,
       editable: editable,
       renderCell: (p) => (
@@ -127,12 +132,44 @@ export default function EventBudget({
       ),
       display: "flex",
     },
+    ...(showAllocated
+      ? [
+          {
+            field: "allocatedAmount",
+            type: "number",
+            headerName: "Allocated Amount",
+            width: 150,
+            minWidth: 150,
+            flex: isMobile ? null : 1,
+            editable: editable,
+            
+            renderCell: (p) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  px: "5px",
+                  py: "10px",
+                  justifyContent: "center",
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {fCurrency(p.value)}
+              </Typography>
+            ),
+            display: "flex",
+          },
+        ]
+      : []),
     ...(billEditable || (billViewable && showExtraFields)
       ? [
           {
             field: "billno",
             type: "string",
             headerName: "Bill No.",
+            width: 120,
             flex: isMobile ? null : 1,
             editable: billEditable,
             renderCell: (p) => (
@@ -157,6 +194,8 @@ export default function EventBudget({
             field: "amountUsed",
             type: "number",
             headerName: "Amount Used",
+            width: 150,
+            minWidth: 150,
             flex: isMobile ? null : 1,
             editable: billEditable,
             renderCell: (p) => (
@@ -179,23 +218,27 @@ export default function EventBudget({
           },
         ]
       : []),
-    {
-      field: "advance",
-      type: "boolean",
-      headerName: "Advance",
-      width: isMobile ? 20 : 100,
-      editable: editable,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (p) => (
-        <Icon
-          external
-          color={!!p.value ? "success.main" : "error.main"}
-          variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
-        />
-      ),
-      display: "flex",
-    },
+    ...(!hideAdvance
+      ? [
+          {
+            field: "advance",
+            type: "boolean",
+            headerName: "Advance",
+            width: isMobile ? 20 : 100,
+            editable: editable,
+            headerAlign: "center",
+            align: "center",
+            renderCell: (p) => (
+              <Icon
+                external
+                color={!!p.value ? "success.main" : "error.main"}
+                variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
+              />
+            ),
+            display: "flex",
+          },
+        ]
+      : []),
     ...(editable
       ? [
           {
@@ -204,20 +247,22 @@ export default function EventBudget({
             align: "center",
             width: isMobile ? 20 : 50,
             renderCell: (p) => (
-              <IconButton
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(p.row);
-                }}
-                size="small"
-              >
-                <Icon
-                  color="error.main"
-                  variant="delete-forever-outline"
-                  sx={{ height: 16, width: 16 }}
-                />
-              </IconButton>
+              !p.row.isOriginal ? (
+                <IconButton
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(p.row);
+                  }}
+                  size="small"
+                >
+                  <Icon
+                    color="error.main"
+                    variant="delete-forever-outline"
+                    sx={{ height: 16, width: 16 }}
+                  />
+                </IconButton>
+              ) : null
             ),
             display: "flex",
             disableColumnMenu: true,
@@ -239,10 +284,17 @@ export default function EventBudget({
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <DataGrid
+          isCellEditable={(params) => {
+            if (params.row.isOriginal) {
+              if (params.field === "allocatedAmount") return editable;
+              return false;
+            }
+            return editable;
+          }}
           getRowHeight={() => "auto"}
           columns={columns}
           rows={rows}
-          editMode="row"
+          
           processRowUpdate={onUpdate}
           disableRowSelectionOnClick
           onRowEditStart={() => setBudgetEditing(true)}
@@ -263,6 +315,12 @@ export default function EventBudget({
           }}
         />
       </div>
+
+      {showTotal && (
+        <Typography variant="subtitle2" sx={{ mt: 2, textAlign: "right", px: 2 }}>
+          Total: {fCurrency(rows.reduce((acc, r) => acc + (parseFloat(showAllocated ? r.allocatedAmount : r.amount) || 0), 0))}
+        </Typography>
+      )}
 
       <Typography variant="caption" color="error">
         {error}

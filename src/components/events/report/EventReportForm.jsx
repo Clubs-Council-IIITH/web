@@ -8,7 +8,7 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch, useFieldArray } from "react-hook-form";
 
 import {
   Box,
@@ -24,6 +24,14 @@ import {
   Select,
   TextField,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -32,8 +40,10 @@ import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 
 import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
+import Icon from "components/Icon";
 import MemberListItem from "components/members/MemberListItem";
 import { useToast } from "components/Toast";
+import EventBudget from "components/events/EventBudget";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createEventReportAction } from "actions/events/report/create/server_action";
@@ -85,7 +95,7 @@ export default function EventReportForm({
     fetchClubs();
   }, []);
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
       ...defaultValues,
       ...defaultReportValues,
@@ -93,6 +103,36 @@ export default function EventReportForm({
   });
 
   const prizesInput = watch("prizes");
+
+  const [allocatedBudgetRows, setAllocatedBudgetRows] = useState(() => {
+    if (defaultReportValues?.allocatedBudgetBreakdown?.length > 0) {
+      return defaultReportValues.allocatedBudgetBreakdown.map((item, idx) => {
+        const match = defaultValues?.budget?.find(b => b.description === item.description);
+        return {
+          id: idx,
+          description: item.description,
+          amount: match ? match.amount : 0,
+          advance: match ? match.advance : false,
+          allocatedAmount: item.allocatedAmount,
+          isOriginal: !!match
+        };
+      });
+    } else {
+      return defaultValues?.budget?.map((item, idx) => ({
+        id: idx,
+        description: item.description,
+        amount: item.amount,
+        advance: item.advance,
+        allocatedAmount: item.amount,
+        isOriginal: true
+      })) || [];
+    }
+  });
+
+  useEffect(() => {
+    // Update the form's value whenever local rows change
+    setValue("allocatedBudgetBreakdown", allocatedBudgetRows.map(r => ({ description: r.description, allocatedAmount: r.allocatedAmount })));
+  }, [allocatedBudgetRows, setValue]);
 
   const submitHandlers = {
     log: console.log,
@@ -161,6 +201,11 @@ export default function EventReportForm({
         summary: formData.eventSummary,
         attendance: parseInt(formData.actualAttendance, 0),
         externalAttendance: parseInt(formData.actualExternalAttendance, null),
+        allocatedBudget: formData.allocatedBudgetBreakdown?.reduce((acc, curr) => acc + (parseFloat(curr.allocatedAmount) || 0), 0) || null,
+        allocatedBudgetBreakdown: formData.allocatedBudgetBreakdown?.map(b => ({
+          description: b.description,
+          allocatedAmount: parseFloat(b.allocatedAmount || 0)
+        })) || [],
         prizes: formData.prizes || [],
         prizesBreakdown: formData.prizesBreakdown || "N/A",
         winners: formData.winnersDetails || "N/A",
@@ -211,9 +256,10 @@ export default function EventReportForm({
             xl: 8,
           }}
         >
-          <Grid container>
+          <Grid container spacing={3}>
             <Grid
               container
+              size={12}
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography
@@ -397,17 +443,19 @@ export default function EventReportForm({
                 )}
               />
             </Grid>
-            <Grid
-              sx={{
-                mt: 2,
-              }}
-              size={12}
-            >
-              <SubmittedBy
-                control={control}
-                cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
-                hasPhone={hasPhone}
-                setHasPhone={setHasPhone}
+            <Grid size={12} sx={{ mt: 2 }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" gutterBottom sx={{ color: "text.secondary", textTransform: "uppercase" }}>
+                  Allocated Budget Breakdown
+                </Typography>
+              </Box>
+              
+              <EventBudget
+                editable={true}
+                rows={allocatedBudgetRows}
+                setRows={setAllocatedBudgetRows}
+                showAllocated={true}
+                showTotal={true}
               />
             </Grid>
           </Grid>
@@ -423,9 +471,10 @@ export default function EventReportForm({
             md: "grow",
           }}
         >
-          <Grid container>
+          <Grid container spacing={3}>
             <Grid
               container
+              size={12}
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
               <Typography
@@ -440,7 +489,7 @@ export default function EventReportForm({
                 Attendance
               </Typography>
             </Grid>
-            <Grid size={12}>
+            <Grid size={{xs: 12, md: 6}}>
               <TextField
                 label="Expected Participation"
                 value={defaultValues?.population}
@@ -450,10 +499,10 @@ export default function EventReportForm({
             </Grid>
             <Grid
               sx={{
-                mt: 2,
+                mt: { xs: 2, md: 0 },
                 mb: 3,
               }}
-              size={12}
+              size={{xs: 12, md: 6}}
             >
               <Controller
                 name="actualAttendance"
@@ -475,7 +524,7 @@ export default function EventReportForm({
             </Grid>
             {defaultValues?.externalPopulation ? (
               <>
-                <Grid size={12}>
+                <Grid size={{xs: 12, md: 6}}>
                   <TextField
                     label="Expected External Participation"
                     value={defaultValues?.population}
@@ -485,9 +534,10 @@ export default function EventReportForm({
                 </Grid>
                 <Grid
                   sx={{
-                    mt: 2,
+                    mt: { xs: 2, md: 0 },
+                    mb: 3,
                   }}
-                  size={12}
+                  size={{xs: 12, md: 6}}
                 >
                   <Controller
                     name="actualExternalAttendance"
@@ -635,6 +685,20 @@ export default function EventReportForm({
                     disabled={false}
                   />
                 )}
+              />
+            </Grid>
+
+            <Grid
+              sx={{
+                mt: 2,
+              }}
+              size={12}
+            >
+              <SubmittedBy
+                control={control}
+                cid={user?.role === "club" ? user?.uid : defaultValues?.clubid}
+                hasPhone={hasPhone}
+                setHasPhone={setHasPhone}
               />
             </Grid>
             <Grid
