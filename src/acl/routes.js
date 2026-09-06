@@ -27,7 +27,7 @@ const routes = {
   "/manage/data-members": ["cc", "club", "slo"],
 
   "/manage/events": ["cc", "club", "slc", "slo"],
-  "/manage/events/new": ["cc", "club"], // has to be higher to not conflict with :id
+  "/manage/events/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
   "/manage/events/:id": ["cc", "club", "slc", "slo"],
   "/manage/events/:id/edit": ["cc", "club", "slo"],
   "/manage/events/:id/report": ["cc", "club", "slo"],
@@ -36,12 +36,12 @@ const routes = {
   "/manage/finances": ["cc", "club", "slo"],
   "/manage/finances/:id": ["slo"],
 
-  "/manage/clubs": ["cc"],
-  "/manage/clubs/new": ["cc"], // has to be higher to not conflict with :id
-  "/manage/clubs/~mine": ["club"], // has to be higher to not conflict with :id
-  "/manage/clubs/~mine/edit": ["club"], // has to be higher to not conflict with :id
-  "/manage/clubs/:id": ["cc"],
-  "/manage/clubs/:id/edit": ["cc"],
+  "/manage/clubs": ["cc", "slo"],
+  "/manage/clubs/new": ["cc", "slo"], // has to be higher to not conflict with :id
+  "/manage/clubs/~mine": ["club", "slo"], // has to be higher to not conflict with :id
+  "/manage/clubs/~mine/edit": ["club", "slo"], // has to be higher to not conflict with :id
+  "/manage/clubs/:id": ["cc", "slo"],
+  "/manage/clubs/:id/edit": ["cc", "slo"],
 
   "/manage/holidays": ["cc", "slo"],
   "/manage/holidays/new": ["cc", "slo"], // has to be higher to not conflict with :id
