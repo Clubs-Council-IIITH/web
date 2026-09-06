@@ -306,6 +306,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       >
         <Typography variant="overline">Manage</Typography>
       </Box>
+      <DrawerItem
+        title="clubs & bodies"
+        path="/manage/clubs"
+        icon={<Icon variant="explore-outline-rounded" />}
+      />
       {manageEventItems}
       <DrawerItem
         title="Holidays"
