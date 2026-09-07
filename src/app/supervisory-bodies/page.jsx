@@ -8,10 +8,9 @@ export const metadata = {
 };
 
 export default async function SupervisoryBodies() {
-
   return (
     <Box>
-      <ClubsGrid category="supervisory"/>
+      <ClubsGrid category="supervisory" />
     </Box>
   );
 }

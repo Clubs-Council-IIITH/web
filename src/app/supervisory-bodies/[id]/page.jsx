@@ -12,12 +12,10 @@ export async function generateMetadata(props) {
   const { id } = params;
 
   const club = await getClub(id);
-  if (club?.category != "supervisory")
-  {
-    if(club?.category == "body")
-        return permanentRedirect(`/student-bodies/${id}`);
-    else
-        return permanentRedirect(`/clubs/${id}`);
+  if (club?.category != "supervisory") {
+    if (club?.category == "body")
+      return permanentRedirect(`/student-bodies/${id}`);
+    else return permanentRedirect(`/clubs/${id}`);
   }
 
   return {

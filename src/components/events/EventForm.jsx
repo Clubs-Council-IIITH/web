@@ -1970,7 +1970,9 @@ function EventPOC({ control, cid, hasPhone, setHasPhone, disabled = false }) {
                 sx={{
                   // Overrides standard background color
                   backgroundColor: (theme) =>
-                    theme.palette.mode === "dark" ? "background.default" : "#ffffff",
+                    theme.palette.mode === "dark"
+                      ? "background.default"
+                      : "#ffffff",
                   // Overrides browser autofill background color changes
                   "& input:-webkit-autofill": {
                     WebkitBoxShadow: (theme) =>
