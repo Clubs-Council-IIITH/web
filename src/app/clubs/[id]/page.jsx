@@ -20,6 +20,8 @@ export async function generateMetadata(props) {
 
   if (club?.category == "body")
     return permanentRedirect(`/student-bodies/${id}`);
+  if (club?.category == "supervisory")
+    return permanentRedirect(`/supervisory-bodies/${id}`);
 
   return {
     title: club.name,
