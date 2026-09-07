@@ -200,7 +200,9 @@ export default function EventBudget({
               <Icon
                 external
                 color={!!p.value ? "success.main" : "error.main"}
-                variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
+                variant={
+                  !!p.value ? "eva:checkmark-outline" : "eva:close-outline"
+                }
               />
             ),
             display: "flex",
@@ -276,8 +278,14 @@ export default function EventBudget({
       </div>
 
       {showTotal && (
-        <Typography variant="subtitle2" sx={{ mt: 2, textAlign: "right", px: 2 }}>
-          Total: {fCurrency(rows.reduce((acc, r) => acc + (parseFloat(r.amount) || 0), 0))}
+        <Typography
+          variant="subtitle2"
+          sx={{ mt: 2, textAlign: "right", px: 2 }}
+        >
+          Total:{" "}
+          {fCurrency(
+            rows.reduce((acc, r) => acc + (parseFloat(r.amount) || 0), 0),
+          )}
         </Typography>
       )}
 

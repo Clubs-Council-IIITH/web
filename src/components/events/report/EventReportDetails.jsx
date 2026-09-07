@@ -10,14 +10,14 @@ import {
   Chip,
   Divider,
   Grid,
-  Typography,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper
+  Typography,
 } from "@mui/material";
 
 import EventBudget from "components/events/EventBudget";
@@ -287,7 +287,11 @@ export function EventReportDetails({
             <Box sx={{ mt: 2 }}>
               <EventBudget
                 editable={false}
-                rows={eventReport.allocatedBudgetBreakdown.map((item, idx) => ({ id: idx, description: item.description, amount: item.allocatedAmount }))}
+                rows={eventReport.allocatedBudgetBreakdown.map((item, idx) => ({
+                  id: idx,
+                  description: item.description,
+                  amount: item.allocatedAmount,
+                }))}
                 hideAdvance={true}
                 showTotal={true}
                 billViewable={true}
