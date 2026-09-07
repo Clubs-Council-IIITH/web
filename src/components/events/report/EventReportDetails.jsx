@@ -290,6 +290,7 @@ export function EventReportDetails({
                 rows={eventReport.allocatedBudgetBreakdown.map((item, idx) => ({ id: idx, description: item.description, amount: item.allocatedAmount }))}
                 hideAdvance={true}
                 showTotal={true}
+                billViewable={true}
               />
             </Box>
           </Grid>

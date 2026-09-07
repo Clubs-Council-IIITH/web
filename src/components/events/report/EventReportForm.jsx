@@ -548,6 +548,7 @@ export default function EventReportForm({
                 setRows={setAllocatedBudgetRows}
                 hideAdvance={true}
                 showTotal={true}
+                billViewable={true}
               />
             </Grid>
 
