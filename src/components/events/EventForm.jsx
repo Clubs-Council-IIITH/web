@@ -527,7 +527,7 @@ export default function EventForm({
                     }
                   />
                 </Grid>
-              ) : user?.role === "cc" ? (
+              ) : ["cc", "slo"].includes(user?.role) ? (
                 <Grid size={12}>
                   <EventPOC
                     control={control}
@@ -1967,6 +1967,20 @@ function EventPOC({ control, cid, hasPhone, setHasPhone, disabled = false }) {
                 label="Phone Number"
                 variant="outlined"
                 fullWidth
+                sx={{
+                  // Overrides standard background color
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark" ? "background.default" : "#ffffff",
+                  // Overrides browser autofill background color changes
+                  "& input:-webkit-autofill": {
+                    WebkitBoxShadow: (theme) =>
+                      `0 0 0 1000px ${
+                        theme.palette.mode === "dark" ? "#1e1e1e" : "#ffffff"
+                      } inset !important`,
+                    WebkitTextFillColor: (theme) =>
+                      theme.palette.mode === "dark" ? "#ffffff" : "#1e1e1e",
+                  },
+                }}
               />
             )}
           />
