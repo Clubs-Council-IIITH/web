@@ -18,6 +18,8 @@ export default function EventBudget({
   setBudgetEditing = console.log,
   billViewable = false,
   billEditable = false,
+  hideAdvance = false,
+  showTotal = false,
 }) {
   const theme = useTheme();
   const [error, setError] = useState("");
@@ -107,6 +109,8 @@ export default function EventBudget({
       field: "amount",
       type: "number",
       headerName: billViewable ? "Amount" : "Proposed Amount",
+      width: 150,
+      minWidth: 150,
       flex: isMobile ? null : 1,
       editable: editable,
       renderCell: (p) => (
@@ -133,6 +137,7 @@ export default function EventBudget({
             field: "billno",
             type: "string",
             headerName: "Bill No.",
+            width: 120,
             flex: isMobile ? null : 1,
             editable: billEditable,
             renderCell: (p) => (
@@ -157,6 +162,8 @@ export default function EventBudget({
             field: "amountUsed",
             type: "number",
             headerName: "Amount Used",
+            width: 150,
+            minWidth: 150,
             flex: isMobile ? null : 1,
             editable: billEditable,
             renderCell: (p) => (
@@ -179,23 +186,27 @@ export default function EventBudget({
           },
         ]
       : []),
-    {
-      field: "advance",
-      type: "boolean",
-      headerName: "Advance",
-      width: isMobile ? 20 : 100,
-      editable: editable,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (p) => (
-        <Icon
-          external
-          color={!!p.value ? "success.main" : "error.main"}
-          variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
-        />
-      ),
-      display: "flex",
-    },
+    ...(!hideAdvance
+      ? [
+          {
+            field: "advance",
+            type: "boolean",
+            headerName: "Advance",
+            width: isMobile ? 20 : 100,
+            editable: editable,
+            headerAlign: "center",
+            align: "center",
+            renderCell: (p) => (
+              <Icon
+                external
+                color={!!p.value ? "success.main" : "error.main"}
+                variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
+              />
+            ),
+            display: "flex",
+          },
+        ]
+      : []),
     ...(editable
       ? [
           {
@@ -263,6 +274,12 @@ export default function EventBudget({
           }}
         />
       </div>
+
+      {showTotal && (
+        <Typography variant="subtitle2" sx={{ mt: 2, textAlign: "right", px: 2 }}>
+          Total: {fCurrency(rows.reduce((acc, r) => acc + (parseFloat(r.amount) || 0), 0))}
+        </Typography>
+      )}
 
       <Typography variant="caption" color="error">
         {error}

@@ -311,6 +311,25 @@ export function DownloadEventReport({
             }
         </div>
 
+        ${
+          eventReport?.allocatedBudgetBreakdown?.length
+            ? `
+        <div class="section">
+            <h2>Allocated Budget</h2>
+            <p><strong>Total Allocated:</strong> ₹${eventReport.allocatedBudget}</p>
+            <ul>
+                ${eventReport.allocatedBudgetBreakdown
+                  .map(
+                    (item) =>
+                      `<li>${item.description} - ${item.allocatedAmount}</li>`,
+                  )
+                  .join("")}
+            </ul>
+        </div>
+        `
+            : ""
+        }
+
         <div class="section">
             <h2>Prizes</h2>
             ${

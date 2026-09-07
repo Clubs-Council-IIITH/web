@@ -630,6 +630,35 @@ export function DownloadEventReportDocx({
                   ]
                 : ""),
 
+            ...(eventReport?.allocatedBudgetBreakdown?.length
+              ? [
+                  new Paragraph({
+                    text: "Allocated Budget",
+                    heading: "Heading2",
+                  }),
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: "Total Allocated: ",
+                        bold: true,
+                      }),
+                      new TextRun({
+                        text: `₹${eventReport.allocatedBudget}`,
+                      }),
+                    ],
+                  }),
+                  ...eventReport.allocatedBudgetBreakdown.map(
+                    (item) =>
+                      new Paragraph({
+                        text: `${item.description} - ₹${item.allocatedAmount}`,
+                        bullet: {
+                          level: 0,
+                        },
+                      }),
+                  ),
+                ]
+              : []),
+
             new Paragraph({
               text: "Prizes",
               heading: "Heading2",
