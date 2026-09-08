@@ -1,13 +1,15 @@
-import dayjs from "dayjs";
-
-import { Box, Card, Grid, Stack, Typography, Chip } from "@mui/material";
 import Link from "next/link";
 
-import UsersTable from "components/achievements/UsersTable"
+import dayjs from "dayjs";
+
+import { Box, Card, Chip, Grid, Stack, Typography } from "@mui/material";
+
+import UsersTable from "components/achievements/UsersTable";
 import ClubButton from "components/clubs/ClubButton";
-import AchievementImages from "./AchievementImages";
 import Icon from "components/Icon";
-import AchievementTypeChips from "./AchievementTypeChips"
+
+import AchievementImages from "./AchievementImages";
+import AchievementTypeChips from "./AchievementTypeChips";
 
 export default function AchievementDetails({ achievement, showCode = false }) {
   return (
@@ -18,10 +20,10 @@ export default function AchievementDetails({ achievement, showCode = false }) {
           md: 6,
         }}
       >
-        <Card variant="outlined"> 
+        <Card variant="outlined">
           <AchievementImages achievement={achievement} />
         </Card>
-      </Grid> 
+      </Grid>
       <Grid
         size={{
           xs: "grow",
@@ -55,7 +57,7 @@ export default function AchievementDetails({ achievement, showCode = false }) {
               my: 1,
             }}
           />
-          {achievement.venue && 
+          {achievement.venue && (
             <>
               <Box
                 sx={{
@@ -63,17 +65,15 @@ export default function AchievementDetails({ achievement, showCode = false }) {
                 }}
               >
                 <Icon variant="location-on" sx={{ mr: 2, width: 16 }} />
-                <Typography variant="body2">
-                  {achievement.venue}
-                </Typography>
+                <Typography variant="body2">{achievement.venue}</Typography>
               </Box>
               <Box
-              sx={{
-                my: 1,
-              }}
-            />
-          </>
-          }
+                sx={{
+                  my: 1,
+                }}
+              />
+            </>
+          )}
           <Box
             sx={{
               display: "flex",
@@ -114,11 +114,11 @@ export default function AchievementDetails({ achievement, showCode = false }) {
               my: 1,
             }}
           />
-            {achievement.blogLinks.map((link) => (
-              <Link key={link} href={link}>
-                {link}
-              </Link>
-            ))}
+          {achievement.blogLinks.map((link) => (
+            <Link key={link} href={link}>
+              {link}
+            </Link>
+          ))}
           <Box
             sx={{
               my: 1,
@@ -135,6 +135,6 @@ export default function AchievementDetails({ achievement, showCode = false }) {
           <UsersTable achievement={achievement} />
         </Stack>
       </Grid>
-    </Grid> 
-  );  
+    </Grid>
+  );
 }

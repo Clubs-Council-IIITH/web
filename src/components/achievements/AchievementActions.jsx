@@ -10,8 +10,8 @@ import Icon from "components/Icon";
 import { useToast } from "components/Toast";
 
 import { approveAchievementAction } from "actions/achievements/approve/server_action";
-import { rejectAchievementAction } from "actions/achievements/reject/server_action";
 import { deleteAchievementAction } from "actions/achievements/delete/server_action";
+import { rejectAchievementAction } from "actions/achievements/reject/server_action";
 
 export function ApproveAchievement({ sx }) {
   const router = useRouter();
@@ -170,11 +170,11 @@ export function EditAchievement({ sx }) {
       color="info"
       startIcon={<Icon variant="edit-outline" />}
       sx={sx}
-      onClick={()=>{
+      onClick={() => {
         router.push(`/manage/achievements/${id}/edit`);
       }}
     >
-        Edit
+      Edit
     </Button>
-  )
+  );
 }

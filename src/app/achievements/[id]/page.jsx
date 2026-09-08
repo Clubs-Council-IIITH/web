@@ -1,10 +1,11 @@
 import dayjs from "dayjs";
 
-import { getAchievement } from "utils/fetchData";
-import { shortDescription } from "app/layout";
-import { getFile, PUBLIC_URL } from "utils/files";
-import AchievementDetails from "components/achievements/AchievementDetails";
 import { Container } from "@mui/material";
+
+import { shortDescription } from "app/layout";
+import AchievementDetails from "components/achievements/AchievementDetails";
+import { getAchievement } from "utils/fetchData";
+import { getFile, PUBLIC_URL } from "utils/files";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -12,11 +13,11 @@ export async function generateMetadata(props) {
 
   const achievement = await getAchievement(id);
   const img = achievement.imageLinks?.length
-  ? getFile(achievement.imageLinks[0], true)
-  : `${PUBLIC_URL}/og-image.png`;
+    ? getFile(achievement.imageLinks[0], true)
+    : `${PUBLIC_URL}/og-image.png`;
 
-  const day = dayjs(achievement.dateperiod[0]). format("dddd")
-    
+  const day = dayjs(achievement.dateperiod[0]).format("dddd");
+
   return {
     title: `${achievement.name} | Life @ IIITH`,
     description: achievement.content ? achievement.content : shortDescription,
@@ -36,13 +37,13 @@ export async function generateMetadata(props) {
 }
 
 export default async function Achievement(props) {
-    const params = await props.params;
-    const { id } = params;
-    const achievement = await getAchievement(id);
+  const params = await props.params;
+  const { id } = params;
+  const achievement = await getAchievement(id);
 
-    return (
-      <Container>
-        <AchievementDetails achievement={achievement} />
-      </Container>
-    )
+  return (
+    <Container>
+      <AchievementDetails achievement={achievement} />
+    </Container>
+  );
 }

@@ -1,5 +1,4 @@
-import gpl from 'graphql-tag'
-
+import gpl from "graphql-tag";
 
 export const CREATE_ACHIEVEMENT = gpl`
 mutation CreateAchievement($details: CreateAchievementDetails!) {
@@ -21,7 +20,7 @@ mutation CreateAchievement($details: CreateAchievementDetails!) {
     }
   }
 }
-`
+`;
 export const DELETE_ACHIEVEMENT = gpl`
 mutation DeleteAchievement($achievementId: String!) {
   deleteAchievement(achievementId: $achievementId) {
@@ -44,7 +43,7 @@ mutation DeleteAchievement($achievementId: String!) {
     }
   }
 }
-`
+`;
 export const EDIT_ACHIEVEMENT = gpl`
 mutation EditAchievement($details: EditAchievementDetails!) {
   editAchievement(details: $details) {
@@ -67,7 +66,7 @@ mutation EditAchievement($details: EditAchievementDetails!) {
     }
   }
 }
-`
+`;
 export const APPROVE_ACHIEVEMENT = gpl`
 mutation ApproveAchievement($achievementId: String!) {
   approveAchievement(achievementId: $achievementId) {
@@ -89,7 +88,7 @@ mutation ApproveAchievement($achievementId: String!) {
     }
   }
 }
-`
+`;
 export const REJECT_ACHIEVEMENT = gpl`
 mutation RejectAchievement($achievementId: String!) {
   rejectAchievement(achievementId: $achievementId) {
@@ -112,4 +111,4 @@ mutation RejectAchievement($achievementId: String!) {
     }
   }
 }
-`
+`;

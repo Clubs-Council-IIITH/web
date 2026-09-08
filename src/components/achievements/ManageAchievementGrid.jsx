@@ -1,9 +1,9 @@
-import  ManageAchievementCards  from "./ManageAchievementCards";
+import ManageAchievementCards from "./ManageAchievementCards";
 
 export default async function ManageAchievementsGrid({
-  achievements = null, edit
+  achievements = null,
+  edit,
 }) {
-
   return (
     <ManageAchievementCards
       achievements={achievements}

@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import { Container, Typography } from "@mui/material";
 
 import { combineQuery, getClient } from "gql/client";
-import { GET_USER } from "gql/queries/auth";
 import { GET_ACHIEVEMENT_BY_ID } from "gql/queries/achievements";
+import { GET_USER } from "gql/queries/auth";
 
 import AchievementForm from "components/achievements/AchievementsForm";
 
@@ -18,9 +18,9 @@ function transformAchievement(achievement) {
     // parse datetime strings to date objects
     dateperiod: [
       new Date(achievement?.dateperiod[0]),
-      new Date(achievement?.dateperiod[1])
+      new Date(achievement?.dateperiod[1]),
     ],
-  }
+  };
 }
 
 export default async function EditAchievement(props) {
@@ -32,10 +32,10 @@ export default async function EditAchievement(props) {
       .add(GET_USER, { userInput: null })
       .add(GET_ACHIEVEMENT_BY_ID, { achievementid: id });
 
-      const { data = {} } = await getClient().query(document, variables);
+    const { data = {} } = await getClient().query(document, variables);
 
-      const { userMeta, userProfile, achievementById: achievement } = data;
-      const user = { ...userMeta, ...userProfile };
+    const { userMeta, userProfile, achievementById: achievement } = data;
+    const user = { ...userMeta, ...userProfile };
 
     if (user?.role === "club" && !achievement?.clubids?.includes(user?.uid)) {
       redirect("/manage/achievements");

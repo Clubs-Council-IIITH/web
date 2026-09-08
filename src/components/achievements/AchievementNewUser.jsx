@@ -1,14 +1,17 @@
-import {Controller} from 'react-hook-form'
-import { useToast } from "components/Toast";
+import { Controller } from "react-hook-form";
+
+import { Button, Stack, TextField, Typography } from "@mui/material";
+
 import Icon from "components/Icon";
-import { Stack,
-    TextField,
-    Button,
-    Typography
-} from '@mui/material'
+import { useToast } from "components/Toast";
+
 import { getUsers } from "actions/users/get/server_action";
 
-export default function AchievementNewUser({ control, setValue, onVerifiedUser }) {
+export default function AchievementNewUser({
+  control,
+  setValue,
+  onVerifiedUser,
+}) {
   const { triggerToast } = useToast();
 
   return (
@@ -43,8 +46,8 @@ export default function AchievementNewUser({ control, setValue, onVerifiedUser }
                 field.onChange("");
               } else {
                 triggerToast({
-                ...res.error,
-                severity: "error",
+                  ...res.error,
+                  severity: "error",
                 });
               }
             }}

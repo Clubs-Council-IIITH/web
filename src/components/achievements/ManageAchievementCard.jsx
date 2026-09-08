@@ -2,11 +2,20 @@
 
 // import dynamic from "next/dynamic";
 
-import { Box, Card, CardActionArea, Stack, Typography, IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
+
+import {
+  Box,
+  Card,
+  CardActionArea,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+
 import { AchievementImage } from "components/achievements/AchievementImages";
 import ButtonLink from "components/Link";
-import EditIcon from '@mui/icons-material/Edit';
 export default function ManageAchievementCard({
   _id,
   name,
@@ -15,16 +24,19 @@ export default function ManageAchievementCard({
   blur = 0,
   edit,
 }) {
-    const router = useRouter();
+  const router = useRouter();
   return (
     <Card>
-   {/* {edit &&     
+      {/* {edit &&     
         <IconButton onClick={(event)=>{
             router.push(`/manage/achievements/${_id}/edit`);
         }}>
             <EditIcon></EditIcon>
         </IconButton>} */}
-      <CardActionArea component={ButtonLink} href={`/manage/achievements/${_id}`}>
+      <CardActionArea
+        component={ButtonLink}
+        href={`/manage/achievements/${_id}`}
+      >
         <Box sx={{ pt: "80%", position: "relative" }}>
           <AchievementImage
             name={name}

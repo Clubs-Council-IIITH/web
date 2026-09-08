@@ -3,11 +3,11 @@ import { permanentRedirect } from "next/navigation";
 
 import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
 
+import AchievementsGrid from "components/achievements/AchievementsGrid";
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
 import EventsGrid from "components/events/EventsGrid";
-import AchievementsGrid from "components/achievements/AchievementsGrid"
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import MembersGrid from "components/members/MembersGrid";
@@ -106,7 +106,7 @@ export default async function Club(props) {
           <EventsGrid type="club" clubid={id} limit={4} />
         </Box>
         <Box>
-          <AchievementsGrid type="club" cid={id} limit={4} clubid={id}/>
+          <AchievementsGrid type="club" cid={id} limit={4} clubid={id} />
         </Box>
 
         <Box

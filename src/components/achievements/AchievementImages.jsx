@@ -2,15 +2,22 @@
 
 import { useState } from "react";
 import Image from "next/image";
+
 import Slider from "react-slick";
+
 import { Box } from "@mui/material";
-import "slick-carousel/slick/slick.css";
-import "./slick-theme.css"
 
 import { getFile } from "utils/files";
 import { getPlaceholder } from "utils/placeholder";
 
-export default function AchievementImages({ achievement, height=500, padding="100%" }) {
+import "slick-carousel/slick/slick.css";
+import "./slick-theme.css";
+
+export default function AchievementImages({
+  achievement,
+  height = 500,
+  padding = "100%",
+}) {
   const settings = {
     dots: true,
     arrows: true,
@@ -22,8 +29,8 @@ export default function AchievementImages({ achievement, height=500, padding="10
   };
   // console.log("image:", achievement);
 
-  // if no image links, render a placeholder image 
-  if(!achievement.imageLinks?.length) {
+  // if no image links, render a placeholder image
+  if (!achievement.imageLinks?.length) {
     return (
       <Box
         sx={{
@@ -42,24 +49,24 @@ export default function AchievementImages({ achievement, height=500, padding="10
   }
 
   return (
-      <Slider {...settings}>
-        {achievement.imageLinks.map((image) => (
-          <Box
-            key={image}
-            sx={{
-              position: "relative",
-              pt: padding,
-            }}
-          >
+    <Slider {...settings}>
+      {achievement.imageLinks.map((image) => (
+        <Box
+          key={image}
+          sx={{
+            position: "relative",
+            pt: padding,
+          }}
+        >
           <AchievementImage
             name={achievement.name}
             image={image}
             width={800}
             height={height}
           />
-          </Box>
-        ))}
-      </Slider>
+        </Box>
+      ))}
+    </Slider>
   );
 }
 
@@ -86,9 +93,9 @@ export function AchievementImage({ name, image, width, height, style }) {
         position: "absolute",
         ...style,
       }}
-      onError={() =>{
-        setImg(getPlaceholder({ seed: name, w: width, h: height }))}
-      }
+      onError={() => {
+        setImg(getPlaceholder({ seed: name, w: width, h: height }));
+      }}
       priority={true}
     />
   );

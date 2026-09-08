@@ -1,4 +1,4 @@
-import gpl from 'graphql-tag'
+import gpl from "graphql-tag";
 
 export const GET_ACHIEVEMENT_ID_FROM_CODE = gpl`
   query Query($code: String!) {
@@ -6,7 +6,7 @@ export const GET_ACHIEVEMENT_ID_FROM_CODE = gpl`
   }
 `;
 
-export const GET_ALL_ACHIEVEMENTS= gpl`
+export const GET_ALL_ACHIEVEMENTS = gpl`
 query AllAchievements {
   allAchievements {
     _id
@@ -34,7 +34,7 @@ query AllAchievements {
     }
   }
 }
-`
+`;
 export const GET_ACHIEVEMENT_BY_USER = gpl`
 query AchievementsByUser($uid: String!) {
   achievementsByUser(uid: $uid) {
@@ -62,9 +62,9 @@ query AchievementsByUser($uid: String!) {
       rejectedBy
     }
   }
-}`
+}`;
 
-export const GET_ACHIEVEMENT_BY_ID= gpl`
+export const GET_ACHIEVEMENT_BY_ID = gpl`
 query AchievementById($achievementid: String!) {
   achievementById(achievementid: $achievementid) {
     _id
@@ -91,7 +91,7 @@ query AchievementById($achievementid: String!) {
       rejectedBy
     }
   }
-}`
+}`;
 export const GET_ACHIEVEMENT_BY_CLUB = gpl`
 query AchievementsByClub($cid: String!) {
   achievementsByClub(cid: $cid) {
@@ -119,4 +119,4 @@ query AchievementsByClub($cid: String!) {
       rejectedBy
     }
   }
-}`
+}`;

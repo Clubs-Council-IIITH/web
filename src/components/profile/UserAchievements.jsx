@@ -1,13 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid } from "@mui/x-data-grid";
-import { useRouter } from "next/navigation";
 
-export default  
-function UserAchievements({ rows = [] }) {
+export default function UserAchievements({ rows = [] }) {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -36,14 +36,13 @@ function UserAchievements({ rows = [] }) {
           </Typography>
         );
       },
-    display: "flex",
+      display: "flex",
     },
     {
       field: "achievementType",
       headerName: "Type",
       flex: isMobile ? null : 5,
       renderCell: (p) => {
-
         return (
           <Typography
             variant="body2"
@@ -66,41 +65,41 @@ function UserAchievements({ rows = [] }) {
           </Typography>
         );
       },
-    display: "flex",
+      display: "flex",
     },
   ];
 
   return (
     <>
-    {rows?.length ? (
-      <>
-        <DataGrid
-          autoHeight
-          getRowHeight={() => (isMobile ? "auto" : null)}
-          rows={rows}
-          columns={columns}
-          disableRowSelectionOnClick
-          getRowId={(row) => row._id}
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "end", sort: "desc" }],
-            },
-            pagination: { paginationModel: { pageSize: 5 } },
-          }}
-          pageSizeOptions={[5, 10, 25]}
-          sx={{
-            // disable cell selection style
-            ".MuiDataGrid-cell:focus": {
-              outline: "none",
-            },
-          }}
-          onRowClick={(params) => {
-            router.push(`/achievements/${params.row._id}`);
-          }}
-        />
-      </>
-    ) : (
-      "No Achievements Found!"
+      {rows?.length ? (
+        <>
+          <DataGrid
+            autoHeight
+            getRowHeight={() => (isMobile ? "auto" : null)}
+            rows={rows}
+            columns={columns}
+            disableRowSelectionOnClick
+            getRowId={(row) => row._id}
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "end", sort: "desc" }],
+              },
+              pagination: { paginationModel: { pageSize: 5 } },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            sx={{
+              // disable cell selection style
+              ".MuiDataGrid-cell:focus": {
+                outline: "none",
+              },
+            }}
+            onRowClick={(params) => {
+              router.push(`/achievements/${params.row._id}`);
+            }}
+          />
+        </>
+      ) : (
+        "No Achievements Found!"
       )}
     </>
   );

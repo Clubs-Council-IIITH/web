@@ -3,19 +3,19 @@ import { redirect } from "next/navigation";
 import { Container } from "@mui/material";
 
 import { combineQuery, getClient } from "gql/client";
-import { GET_USER } from "gql/queries/auth";
 import { GET_ACHIEVEMENT_BY_ID } from "gql/queries/achievements";
-import Icon from "components/Icon";
-import Tag from "components/Tag";
+import { GET_USER } from "gql/queries/auth";
 
-import ActionPalette from "components/ActionPalette";
-import AchievementDetails from "components/achievements/AchievementDetails";
 import {
   ApproveAchievement,
   DeleteAchievement,
-  RejectAchievement,
   EditAchievement,
+  RejectAchievement,
 } from "components/achievements/AchievementActions";
+import AchievementDetails from "components/achievements/AchievementDetails";
+import ActionPalette from "components/ActionPalette";
+import Icon from "components/Icon";
+import Tag from "components/Tag";
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -47,7 +47,12 @@ function getActions(achievement) {
   }
 
   if (achievement?.status?.state === "pending") {
-    return [EditAchievement, ApproveAchievement, RejectAchievement, DeleteAchievement]
+    return [
+      EditAchievement,
+      ApproveAchievement,
+      RejectAchievement,
+      DeleteAchievement,
+    ];
   }
 }
 
@@ -56,7 +61,9 @@ export default async function ManageAchievementPage(props) {
   const { id } = params;
 
   try {
-    const { document, variables } = combineQuery("CombinedManageAchievementQuery")
+    const { document, variables } = combineQuery(
+      "CombinedManageAchievementQuery",
+    )
       .add(GET_USER, { userInput: null })
       .add(GET_ACHIEVEMENT_BY_ID, { achievementid: id });
 
@@ -72,17 +79,16 @@ export default async function ManageAchievementPage(props) {
       redirect("/manage/achievements");
     }
 
-    const sloActions = (userMeta?.role === "slo" || userMeta?.role==="cc") 
-      ? getActions(achievement)
-      : [];
+    const sloActions =
+      userMeta?.role === "slo" || userMeta?.role === "cc"
+        ? getActions(achievement)
+        : [];
 
     return (
       <Container>
         <ActionPalette
           left={[AchievementStatus]}
-          leftProps={[
-            { status: achievement?.status },
-          ]}
+          leftProps={[{ status: achievement?.status }]}
           right={sloActions}
         />
         <AchievementDetails achievement={achievement} />

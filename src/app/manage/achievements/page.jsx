@@ -1,8 +1,12 @@
 import { Button, Container, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
-import { GET_ALL_ACHIEVEMENTS, GET_ACHIEVEMENT_BY_CLUB } from "gql/queries/achievements";
+import {
+  GET_ACHIEVEMENT_BY_CLUB,
+  GET_ALL_ACHIEVEMENTS,
+} from "gql/queries/achievements";
 import { GET_USER } from "gql/queries/auth";
+
 import ManageAchievementsGrid from "components/achievements/ManageAchievementGrid";
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
@@ -28,9 +32,11 @@ export default async function ManageAchievements() {
   }
   const isApprover = userMeta?.role === "slo" || userMeta?.role === "cc";
   const pendingAchievements = isApprover
-    ? achievements.filter((achievement) => achievement?.status?.state === "pending")
+    ? achievements.filter(
+        (achievement) => achievement?.status?.state === "pending",
+      )
     : [];
-  
+
   // console.log("ACHIEVEMENTS: ", achievements);
 
   const edit = isApprover;
@@ -64,17 +70,22 @@ export default async function ManageAchievements() {
           <Typography variant="h4" gutterBottom>
             Achievements to be approved
           </Typography>
-          <ManageAchievementsGrid type="recent" achievements={pendingAchievements} edit={edit}/>
+          <ManageAchievementsGrid
+            type="recent"
+            achievements={pendingAchievements}
+            edit={edit}
+          />
         </Container>
       )}
 
       <Typography variant="h4" gutterBottom>
         All achievements
       </Typography>
-      <ManageAchievementsGrid type="recent" achievements={achievements} edit={edit}/>
+      <ManageAchievementsGrid
+        type="recent"
+        achievements={achievements}
+        edit={edit}
+      />
     </Container>
   );
 }
-
-
-

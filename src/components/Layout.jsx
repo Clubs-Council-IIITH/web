@@ -165,7 +165,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="achievements"
         path="/achievements"
-        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
       />
       <DrawerItem
         title="gallery"
@@ -236,7 +236,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="achievements"
         path="/manage/achievements"
-        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
       />
       {manageEventItems}
       {manageMemberItems}
@@ -268,7 +268,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="achievements"
         path="/manage/achievements"
-        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
       />
     </List>
   );
@@ -351,7 +351,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       <DrawerItem
         title="achievements"
         path="/manage/achievements"
-        icon={<Icon variant="workspace-premium-outline-rounded"/>}
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
       />
     </List>
   );

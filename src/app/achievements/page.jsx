@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_ALL_ACHIEVEMENTS } from "gql/queries/achievements";
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 async function query(querystring) {
-  "use server"
+  "use server";
 
   const { data = {}, error } = await getClient().query(GET_ALL_ACHIEVEMENTS, {
     cid: querystring["targetClub"],
@@ -36,12 +36,15 @@ export default async function Achievements(props) {
   const achievements = await query(searchParams);
 
   const filtered_achievements = achievements.filter((achievement) => {
-    const achievementsClub = !targetClub || achievement.clubids.includes(targetClub);
+    const achievementsClub =
+      !targetClub || achievement.clubids.includes(targetClub);
 
-    const achievementsName = !targetName || achievement.name.toLowerCase().includes(targetName.toLowerCase());
+    const achievementsName =
+      !targetName ||
+      achievement.name.toLowerCase().includes(targetName.toLowerCase());
 
     return achievementsClub && achievementsName;
-  })
+  });
 
   console.log("ACHIEVEMENTS:", achievements);
   return (
@@ -58,11 +61,11 @@ export default async function Achievements(props) {
           my: 1,
         }}
       />
-      <AchievementCards 
+      <AchievementCards
         achievements={filtered_achievements}
         loading={false}
         noAchievementsMessage="No achievements found."
-       />
+      />
     </Box>
   );
 }

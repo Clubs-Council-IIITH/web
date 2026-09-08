@@ -7,9 +7,6 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_CLUB } from "gql/queries/clubs";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
 import { AuthProvider } from "components/AuthProvider";
 import { Content, Navigation } from "components/Layout";
 import LocalizationWrapper from "components/LocalizationWrapper";
@@ -19,6 +16,9 @@ import { fontClass } from "components/ThemeRegistry/typography";
 import Toast, { ToastProvider } from "components/Toast";
 import TransitionProvider from "components/TransitionProvider";
 import { PUBLIC_URL } from "utils/files";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const description =
   "Discover the vibrant campus life at IIIT Hyderabad. Explore diverse student-led clubs and bodies, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";

@@ -2,14 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import AchievementImages from "./AchievementImages";
+
 import dayjs, { isDayjs } from "dayjs";
-import { Controller,  useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 
 import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -25,7 +26,6 @@ import {
   TextField,
   Tooltip,
   Typography,
-  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -41,15 +41,16 @@ import { getFullUser } from "actions/users/get/full/server_action";
 
 import { createAchievementAction } from "../../actions/achievements/create/server_action";
 import { editAchievementAction } from "../../actions/achievements/edit/server_action";
+import MemberListItem from "../members/MemberListItem.jsx";
+import AchievementImages from "./AchievementImages";
 import AchievementLinks from "./AchievementLinks";
 import AchievementNewUser from "./AchievementNewUser";
-import MemberListItem from "../members/MemberListItem.jsx";
 
 export default function AchievementForm({
-    id= null, 
-    action = "create",
-    defaultValues={}
-}){
+  id = null,
+  action = "create",
+  defaultValues = {},
+}) {
   const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -58,7 +59,7 @@ export default function AchievementForm({
   const clubId = user?.role === "club" ? user?.uid : null;
   const [clubMemberUids, setClubMemberUids] = useState([]);
   const [externalUsers, setExternalUsers] = useState([]);
-  const [external, setExternal] = useState(false)
+  const [external, setExternal] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
@@ -72,21 +73,21 @@ export default function AchievementForm({
     }
   }, [clubId]);
 
-    const [clubs, setClubs] = useState([]);
-    useEffect(() => {
-      (async () => {
-        let res = await getActiveClubIds();
-        if (!res.ok) {
-          triggerToast({
-            title: "Unable to fetch clubs",
-            messages: res.error.messages,
-            severity: "error",
-          });
-        } else {
-          setClubs(res.data);
-        }
-      })();
-    }, [triggerToast]);
+  const [clubs, setClubs] = useState([]);
+  useEffect(() => {
+    (async () => {
+      let res = await getActiveClubIds();
+      if (!res.ok) {
+        triggerToast({
+          title: "Unable to fetch clubs",
+          messages: res.error.messages,
+          severity: "error",
+        });
+      } else {
+        setClubs(res.data);
+      }
+    })();
+  }, [triggerToast]);
 
   const defaultClubs = useMemo(() => {
     let baseClubs = defaultValues?.clubids ?? [];
@@ -96,48 +97,58 @@ export default function AchievementForm({
     return baseClubs;
   }, [defaultValues?.clubids, clubId]);
 
-    const getUsers = useCallback(async (clubs) => {
-      const validCids = (clubs || [])
-        .map((club) => club?.cid || club?.id || club)
-        .filter(Boolean);
+  const getUsers = useCallback(async (clubs) => {
+    const validCids = (clubs || [])
+      .map((club) => club?.cid || club?.id || club)
+      .filter(Boolean);
 
-      if (validCids.length === 0) return [];
+    if (validCids.length === 0) return [];
 
-      const clubResults = await Promise.all(
-        validCids.map((cid) => currentMembersAction({ cid }))
-      );
+    const clubResults = await Promise.all(
+      validCids.map((cid) => currentMembersAction({ cid })),
+    );
 
-      const failedClubs = clubResults.filter((res) => !res?.ok);
-      if (failedClubs.length > 0) {
-        triggerToast({
-          title: "Members cannot be fetched",
-          messages: failedClubs.flatMap(
-            (res) => res?.error?.messages || ["Unable to fetch members"]
-          ),
-          severity: "error",
-        });
-      }
+    const failedClubs = clubResults.filter((res) => !res?.ok);
+    if (failedClubs.length > 0) {
+      triggerToast({
+        title: "Members cannot be fetched",
+        messages: failedClubs.flatMap(
+          (res) => res?.error?.messages || ["Unable to fetch members"],
+        ),
+        severity: "error",
+      });
+    }
 
-      const allMembers = clubResults
-        .filter((res) => res?.ok)
-        .flatMap((res) => res.data);
-      const uniqueUids = [...new Set(allMembers.map((m) => m.uid).filter(Boolean))];
+    const allMembers = clubResults
+      .filter((res) => res?.ok)
+      .flatMap((res) => res.data);
+    const uniqueUids = [
+      ...new Set(allMembers.map((m) => m.uid).filter(Boolean)),
+    ];
 
-      const userResults = await Promise.all(
-        uniqueUids.map(async (uid) => {
-          const res = await getFullUser(uid);
-          if (res?.ok && res?.data) {
-            return res.data;
-          }
-          return null
-        })
-      );
+    const userResults = await Promise.all(
+      uniqueUids.map(async (uid) => {
+        const res = await getFullUser(uid);
+        if (res?.ok && res?.data) {
+          return res.data;
+        }
+        return null;
+      }),
+    );
 
-      return userResults;
-    }, []);
+    return userResults;
+  }, []);
 
-
-    const { control, handleSubmit, setValue, getValues, watch, reset, trigger, setError } = useForm({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    getValues,
+    watch,
+    reset,
+    trigger,
+    setError,
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -198,20 +209,20 @@ export default function AchievementForm({
 
   useEffect(() => {
     if (action === "edit" && defaultValues?.userids) {
-      (async() =>{
+      (async () => {
         const currentUsers = await Promise.all(
-          defaultValues.userids.map(async(uid) => {
+          defaultValues.userids.map(async (uid) => {
             const res = await getFullUser(uid);
-            if(res?.ok && res?.data) {
+            if (res?.ok && res?.data) {
               return res.data;
             }
             return null;
-          })
-        )
+          }),
+        );
         setExternalUsers(currentUsers.filter(Boolean));
       })();
-    };
-  },[defaultValues?.userids, action]);
+    }
+  }, [defaultValues?.userids, action]);
 
   const submitHandlers = {
     log: console.log,
@@ -237,7 +248,6 @@ export default function AchievementForm({
       }
     },
     edit: async (data, opts) => {
-
       let res = await editAchievementAction(data, id);
       // console.log("EDITED ACHIEVEMENT: ",res);
       if (res.ok) {
@@ -254,7 +264,7 @@ export default function AchievementForm({
         setLoading(false);
       }
     },
-  }
+  };
   async function onSubmit(formData, opts) {
     setLoading(true);
 
@@ -266,57 +276,64 @@ export default function AchievementForm({
       blogLinks: formData.links?.map((item) => item.url).filter(Boolean) || [],
       userids: (formData.userids || []).filter(Boolean),
       venue: formData.venue.trim() || "",
-    }
+    };
     // console.log("SUBMIT VENUE:", formData.venue, data.venue);
     const clubUsers = await getUsers(data.clubids);
-    const users = [...clubUsers, ...externalUsers]
-    if(!data.userids || data.userids.length==0 || !data.userids.every((value)=>users.some((x)=>x.uid==value))){
-      setError("userids", { message: "Every user id must be either external or from one of the selected clubs" });
+    const users = [...clubUsers, ...externalUsers];
+    if (
+      !data.userids ||
+      data.userids.length == 0 ||
+      !data.userids.every((value) => users.some((x) => x.uid == value))
+    ) {
+      setError("userids", {
+        message:
+          "Every user id must be either external or from one of the selected clubs",
+      });
       setLoading(false);
       return;
     }
 
     // upload images
-    const image_links = []
-    if(formData.images){
-    for (const image of formData.images) { 
-      const filename = ("achievement_" + data.name + "_" + image.name
-      ).replaceAll(".", "_",);
+    const image_links = [];
+    if (formData.images) {
+      for (const image of formData.images) {
+        const filename = (
+          "achievement_" +
+          data.name +
+          "_" +
+          image.name
+        ).replaceAll(".", "_");
 
-      const url = await uploadImageFile(
-        image,
-        filename,
-        80,
-      );
+        const url = await uploadImageFile(image, filename, 80);
 
-      image_links.push(url);
+        image_links.push(url);
+      }
     }
-  }
 
     // Bug fix: preserve existing images on edit when no new images are uploaded
     data.imageLinks = image_links.length
       ? image_links
       : action === "edit"
-      ? (defaultValues?.imageLinks ?? [])
-      : [];
+        ? (defaultValues?.imageLinks ?? [])
+        : [];
 
     // convert dates to ISO strings
-    data.dateperiod = formData.dateperiod.map(
-      (date) => dayjs(date).format("YYYY-MM-DD")
+    data.dateperiod = formData.dateperiod.map((date) =>
+      dayjs(date).format("YYYY-MM-DD"),
     );
     // console.log(data);
- 
-   
+
     submitHandlers[action](data, opts);
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container 
-      spacing={4}
-      sx={{
+      <Grid
+        container
+        spacing={4}
+        sx={{
           alignItems: "flex-start",
-      }}
+        }}
       >
         <Grid
           container
@@ -327,106 +344,41 @@ export default function AchievementForm({
             xl: 8,
           }}
         >
-        <Grid container 
-        sx={{display:"flex", 
-          justifyContent:"flex-start",
-          width:"100%"
-        }}
-        >
-         <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                  color: "text.secondary",
-                  alignSelf: "center",
-                  mb: 0,
-                }}
-              >
-                Details
-          </Typography>
-        </Grid> 
-        <Grid container spacing={2}>
-          <Grid size={12}>
-            <AchievementNameInput 
-            control={control}
-            />
-          </Grid>
-          <Grid size={12}>
-            <AchievementContentInput
-            control={control}
-            />
-          </Grid>
-          <Grid size={12}>
-            <AchievementDateInput 
-              control={control} 
-              setValue={setValue}
-            />
-          </Grid>
-          <Grid size={12}>
-            <AchievementVenueInput
-              control={control}
-            />
-          </Grid>
-          <Grid container size={12} spacing={2}>
-             <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{
-                  textTransform: "uppercase",
-                  color: "text.secondary",
-                  alignSelf: "center",
-                  mb: 0,
-                }}
-              >
-                Select your clubs
-          </Typography>
-                <ClubIdsSelector control={control} clubs={clubs}/>
-          </Grid>
-          <Grid size={12}>
-              <UserIdsSelector trigger={trigger} control={control} getUser={getUsers} clubMemberUids={clubMemberUids} setValue={setValue} selectedClubs={selectedClubs} externalUsers={externalUsers}/>
-          </Grid>
-          <Grid size={12} spacing={2}>
-            <Button onClick={() => setExternal(prev => !prev)}>
-              Add External Users 
-            </Button>
-            <Box
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="subtitle2"
+              gutterBottom
               sx={{
-                my: 1,
+                textTransform: "uppercase",
+                color: "text.secondary",
+                alignSelf: "center",
+                mb: 0,
               }}
-            />
-            {external && 
-              <AchievementNewUser control={control} setValue={setValue}
-                onVerifiedUser={(user) => {
-                  setExternalUsers((prev) => [...prev, user]);
-                  const currentUsers = getValues("userids") || [];
-
-                  if (currentUsers.includes(user.uid)) {
-                    triggerToast({
-                      title: "Already added",
-                      messages: ["User has already been added"],
-                      severity: "warning",
-                    })
-                    return;
-                  }
-
-                  setValue("userids", [...currentUsers, user.uid]);
-                }}
-              />
-            }
+            >
+              Details
+            </Typography>
           </Grid>
-        </Grid>
-        </Grid>
-        
-        <Grid container size={4} spacing={2}>
-          <Grid size={12}>
-        <Controller
-        name="type"
-        control={control}
-        rules={{ required: 'Please select a type of achievement '}} 
-        render={({ field, fieldState: { error } }) => (
-          <FormControl error={Boolean(error)} margin="normal">
-            <FormLabel id="plan-radio-group-label">  
+          <Grid container spacing={2}>
+            <Grid size={12}>
+              <AchievementNameInput control={control} />
+            </Grid>
+            <Grid size={12}>
+              <AchievementContentInput control={control} />
+            </Grid>
+            <Grid size={12}>
+              <AchievementDateInput control={control} setValue={setValue} />
+            </Grid>
+            <Grid size={12}>
+              <AchievementVenueInput control={control} />
+            </Grid>
+            <Grid container size={12} spacing={2}>
               <Typography
                 variant="subtitle2"
                 gutterBottom
@@ -437,40 +389,120 @@ export default function AchievementForm({
                   mb: 0,
                 }}
               >
-               Type of achievement
+                Select your clubs
               </Typography>
-            </FormLabel>
-            
-            <RadioGroup 
-              {...field} 
-              value={field.value || ""}
-              row
-              aria-labelledby="plan-radio-group-label"
-            >
-              <FormControlLabel value="project" control={<Radio />} label="Project" />
-              <FormControlLabel value="competition" control={<Radio />} label="Competition" />
-              <FormControlLabel value="other" control={<Radio />} label="Other" />
-            </RadioGroup>
-
-            {error && <FormHelperText>{error.message}</FormHelperText>}
-          </FormControl>
-        )}
-      />
-         </Grid>
-         <Grid container size={12} spacing={3}>
-             <Typography
-                variant="subtitle2"
-                gutterBottom
+              <ClubIdsSelector control={control} clubs={clubs} />
+            </Grid>
+            <Grid size={12}>
+              <UserIdsSelector
+                trigger={trigger}
+                control={control}
+                getUser={getUsers}
+                clubMemberUids={clubMemberUids}
+                setValue={setValue}
+                selectedClubs={selectedClubs}
+                externalUsers={externalUsers}
+              />
+            </Grid>
+            <Grid size={12} spacing={2}>
+              <Button onClick={() => setExternal((prev) => !prev)}>
+                Add External Users
+              </Button>
+              <Box
                 sx={{
-                  textTransform: "uppercase",
-                  color: "text.secondary",
-                  alignSelf: "center",
-                  mb: 0,
+                  my: 1,
                 }}
-              >
-                Blog links
+              />
+              {external && (
+                <AchievementNewUser
+                  control={control}
+                  setValue={setValue}
+                  onVerifiedUser={(user) => {
+                    setExternalUsers((prev) => [...prev, user]);
+                    const currentUsers = getValues("userids") || [];
+
+                    if (currentUsers.includes(user.uid)) {
+                      triggerToast({
+                        title: "Already added",
+                        messages: ["User has already been added"],
+                        severity: "warning",
+                      });
+                      return;
+                    }
+
+                    setValue("userids", [...currentUsers, user.uid]);
+                  }}
+                />
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container size={4} spacing={2}>
+          <Grid size={12}>
+            <Controller
+              name="type"
+              control={control}
+              rules={{ required: "Please select a type of achievement " }}
+              render={({ field, fieldState: { error } }) => (
+                <FormControl error={Boolean(error)} margin="normal">
+                  <FormLabel id="plan-radio-group-label">
+                    <Typography
+                      variant="subtitle2"
+                      gutterBottom
+                      sx={{
+                        textTransform: "uppercase",
+                        color: "text.secondary",
+                        alignSelf: "center",
+                        mb: 0,
+                      }}
+                    >
+                      Type of achievement
+                    </Typography>
+                  </FormLabel>
+
+                  <RadioGroup
+                    {...field}
+                    value={field.value || ""}
+                    row
+                    aria-labelledby="plan-radio-group-label"
+                  >
+                    <FormControlLabel
+                      value="project"
+                      control={<Radio />}
+                      label="Project"
+                    />
+                    <FormControlLabel
+                      value="competition"
+                      control={<Radio />}
+                      label="Competition"
+                    />
+                    <FormControlLabel
+                      value="other"
+                      control={<Radio />}
+                      label="Other"
+                    />
+                  </RadioGroup>
+
+                  {error && <FormHelperText>{error.message}</FormHelperText>}
+                </FormControl>
+              )}
+            />
+          </Grid>
+          <Grid container size={12} spacing={3}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+                alignSelf: "center",
+                mb: 0,
+              }}
+            >
+              Blog links
             </Typography>
-            <AchievementLinks control={control}/>
+            <AchievementLinks control={control} />
           </Grid>
           <Grid container size={12} spacing={3}>
             <Grid size={12} spacing={3}>
@@ -491,11 +523,14 @@ export default function AchievementForm({
                   my: 0.5,
                 }}
               />
-              {action=="edit"&& watch("imageLinks").length!=0 && 
-                <>  
-                  <AchievementImages 
-                    padding="70%" 
-                    achievement={{"name": watch("name"), "imageLinks" :watch("imageLinks")}}
+              {action == "edit" && watch("imageLinks").length != 0 && (
+                <>
+                  <AchievementImages
+                    padding="70%"
+                    achievement={{
+                      name: watch("name"),
+                      imageLinks: watch("imageLinks"),
+                    }}
                   />
                   <Typography
                     variant="body2"
@@ -503,10 +538,12 @@ export default function AchievementForm({
                       color: "text.secondary",
                     }}
                   >
-                    These are the existing image/s. Uploading new images will remove these as well.
+                    These are the existing image/s. Uploading new images will
+                    remove these as well.
                   </Typography>
-                </>}
-                {action === "create" && imagePreviews.length !== 0 && (
+                </>
+              )}
+              {action === "create" && imagePreviews.length !== 0 && (
                 <>
                   <AchievementImages
                     key={imagePreviews.join("|")}
@@ -524,20 +561,21 @@ export default function AchievementForm({
                   >
                     Images Preview
                   </Typography>
-                </>)}
+                </>
+              )}
             </Grid>
-          <Grid size={12}>
-            <FileUpload
-              type="image"
-              name="images"
-              control={control}
-              maxFiles={5}
-              maxSizeMB={100}
-              shape="square"
-              warnSizeMB={80}
-            />
+            <Grid size={12}>
+              <FileUpload
+                type="image"
+                name="images"
+                control={control}
+                maxFiles={5}
+                maxSizeMB={100}
+                shape="square"
+                warnSizeMB={80}
+              />
+            </Grid>
           </Grid>
-        </Grid>
           <Grid container size={12} spacing={3}>
             <AchievementsSubmitButton
               loading={loading}
@@ -546,9 +584,9 @@ export default function AchievementForm({
             />
           </Grid>
         </Grid>
-      </Grid> 
+      </Grid>
     </form>
-  )
+  );
 }
 
 function AchievementsSubmitButton({
@@ -557,19 +595,16 @@ function AchievementsSubmitButton({
   onSubmit,
   disabled = false,
 }) {
-
-  const label = "Submit"
-  const tooltipText = !disabled? "": "You are not authorized to submit"
+  const label = "Submit";
+  const tooltipText = !disabled ? "" : "You are not authorized to submit";
   return (
     <Tooltip title={tooltipText} disableHoverListener={!tooltipText}>
       <span>
         <Button
           loading={loading}
           variant="contained"
-          onClick={
-             () => handleSubmit((data) =>
-                    onSubmit(data, { shouldSubmit: true }),
-                  )()
+          onClick={() =>
+            handleSubmit((data) => onSubmit(data, { shouldSubmit: true }))()
           }
           size="large"
           color="primary"
@@ -582,9 +617,8 @@ function AchievementsSubmitButton({
     </Tooltip>
   );
 }
-   
 
-function AchievementNameInput({ control, disabled = false}) {
+function AchievementNameInput({ control, disabled = false }) {
   return (
     <Controller
       name="name"
@@ -624,11 +658,11 @@ function AchievementVenueInput({ control }) {
       rules={{
         maxLength: {
           value: 150,
-          message: "Venue must be at most 150 characters long!"
+          message: "Venue must be at most 150 characters long!",
         },
       }}
-      render={({ field, fieldState: {error, invalid } }) => (
-        <TextField 
+      render={({ field, fieldState: { error, invalid } }) => (
+        <TextField
           {...field}
           label="Venue"
           autoComplete="off"
@@ -644,7 +678,6 @@ function AchievementVenueInput({ control }) {
     />
   );
 }
-
 
 function ClubIdsSelector({
   control,
@@ -675,7 +708,11 @@ function ClubIdsSelector({
             {...field}
             onChange={(e) => {
               let val = e.target.value;
-              if (user?.role === "club" && user?.uid && !val.includes(user.uid)) {
+              if (
+                user?.role === "club" &&
+                user?.uid &&
+                !val.includes(user.uid)
+              ) {
                 val = [user.uid, ...val];
               }
               field.onChange(val);
@@ -733,7 +770,7 @@ function ClubIdsSelector({
 }
 
 function UserIdsSelector({
-  trigger, 
+  trigger,
   control,
   disabled = false,
   getUser,
@@ -781,12 +818,12 @@ function UserIdsSelector({
     };
     loadUsers();
   }, [selectedClubs]);
-  useEffect(() => {                                                                            
-      trigger("userids");                                                                        
-    }, [clubUsers, trigger]);    
+  useEffect(() => {
+    trigger("userids");
+  }, [clubUsers, trigger]);
   const users = [
     ...new Map(
-      [...clubUsers, ...externalUsers].map((user) => [user.uid, user])
+      [...clubUsers, ...externalUsers].map((user) => [user.uid, user]),
     ).values(),
   ];
   const userRef = useRef(users);
@@ -802,24 +839,24 @@ function UserIdsSelector({
       rules={
         user?.role === "club"
           ? {
-            validate: {
-              atLeastOneMember: (value) => {
-                if (!value || value.length === 0) return true;
-                const hasMember = value.some((uid) =>
-                  clubMemberUidsRef.current.some(
-                    (cuid) => String(cuid).toLowerCase() === String(uid).toLowerCase()
-                  )
-                );
-                return (
-                  hasMember ||
-                  "At least one member of your club must be selected!"
-                );
+              validate: {
+                atLeastOneMember: (value) => {
+                  if (!value || value.length === 0) return true;
+                  const hasMember = value.some((uid) =>
+                    clubMemberUidsRef.current.some(
+                      (cuid) =>
+                        String(cuid).toLowerCase() ===
+                        String(uid).toLowerCase(),
+                    ),
+                  );
+                  return (
+                    hasMember ||
+                    "At least one member of your club must be selected!"
+                  );
+                },
               },
-
-            },
-          }
-          : {  
-          }
+            }
+          : {}
       }
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
@@ -851,10 +888,15 @@ function UserIdsSelector({
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                 {selected.filter(Boolean).map((value) => (
                   <Chip
-                    onMouseDown={(e)=>e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
                     key={value}
-                    onDelete={() => {setValue("userids", selected.filter((x) => x !== value), { shouldValidate: true });        
-                         }}
+                    onDelete={() => {
+                      setValue(
+                        "userids",
+                        selected.filter((x) => x !== value),
+                        { shouldValidate: true },
+                      );
+                    }}
                     label={`${users.find((u) => u.uid === value)?.firstName ?? "Invalid User"} ${users.find((u) => u.uid === value)?.lastName ?? ""}`.trim()}
                   />
                 ))}
@@ -885,19 +927,15 @@ function UserIdsSelector({
                 <CircularProgress size={20} sx={{ mr: 1 }} />
                 Loading users...
               </MenuItem>
-            ):(
+            ) : (
               users
-              ?.slice()
-              ?.sort((a, b) => a.firstName.localeCompare(b.firstName))
-              ?.map((user) => (
-                <MenuItem
-                  key={user._id}
-                  value={user.uid}
-                  component="div"
-                >
-                  <MemberListItem uid={user.uid} />
-                </MenuItem>
-              ))
+                ?.slice()
+                ?.sort((a, b) => a.firstName.localeCompare(b.firstName))
+                ?.map((user) => (
+                  <MenuItem key={user._id} value={user.uid} component="div">
+                    <MemberListItem uid={user.uid} />
+                  </MenuItem>
+                ))
             )}
           </Select>
           <FormHelperText>{error?.message}</FormHelperText>
@@ -907,11 +945,7 @@ function UserIdsSelector({
   );
 }
 
-function AchievementDateInput({
-  control,
-  setValue,
-  disabled = false,
-}) {
+function AchievementDateInput({ control, setValue, disabled = false }) {
   const [startDateInput, endDateInput] = useWatch({
     control,
     name: ["dateperiod.0", "dateperiod.1"],
@@ -933,7 +967,7 @@ function AchievementDateInput({
   }, [error]);
 
   useEffect(() => {
-    if(
+    if (
       startDateInput &&
       endDateInput &&
       dayjs(endDateInput).isBefore(dayjs(startDateInput), "day")
@@ -941,7 +975,6 @@ function AchievementDateInput({
       setValue("dateperiod.1", null);
     }
   }, [startDateInput, endDateInput, setValue]);
-
 
   return (
     <Grid container spacing={2}>
@@ -971,17 +1004,13 @@ function AchievementDateInput({
                   helperText: error?.message,
                 },
               }}
-      
-          
               sx={{ width: "100%" }}
               value={
                 value instanceof Date && !isDayjs(value) ? dayjs(value) : value
               }
               onChange={(newValue) => {
                 onChange(newValue);
-             
               }}
-  
               format="DD/MM/YYYY"
               {...rest}
             />
@@ -1017,10 +1046,9 @@ function AchievementDateInput({
               label="Ends *"
               minDate={
                 startDateInput
-                  ? (startDateInput instanceof Date && !isDayjs(startDateInput)
-                      ? dayjs(startDateInput)
-                      : startDateInput
-                    )
+                  ? startDateInput instanceof Date && !isDayjs(startDateInput)
+                    ? dayjs(startDateInput)
+                    : startDateInput
                   : null
               }
               onError={(error) => setError(error)}

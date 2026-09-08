@@ -1,7 +1,12 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 
 import ManageAchievementCard from "components/achievements/ManageAchievementCard";
-export default function ManageAchievementCards({ achievements, loading, noAchievementsMessage, edit }) {
+export default function ManageAchievementCards({
+  achievements,
+  loading,
+  noAchievementsMessage,
+  edit,
+}) {
   if (loading) {
     return (
       <Box
@@ -56,4 +61,3 @@ export default function ManageAchievementCards({ achievements, loading, noAchiev
     </Grid>
   );
 }
-
