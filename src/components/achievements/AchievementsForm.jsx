@@ -289,8 +289,8 @@ export default function AchievementForm({
       : [];
 
     // convert dates to ISO strings
-    data.dateperiod = formData.dateperiod.map((d) =>
-      new Date(d).toISOString().split("T")[0]
+    data.dateperiod = formData.dateperiod.map(
+      (d) => d.format("YYYY-MM-DD")
     );
     // console.log(data);
  
@@ -900,12 +900,13 @@ function AchievementDateInput({
   }, [error]);
 
   useEffect(() => {
-    if (
+    if(
       startDateInput &&
       endDateInput &&
-      dayjs(startDateInput).isAfter(dayjs(endDateInput))
-    )
+      dayjs(endDateInput).isBefore(dayjs(startDateInput), "day")
+    ) {
       setValue("dateperiod.1", null);
+    }
   }, [startDateInput, endDateInput, setValue]);
 
 
@@ -969,8 +970,8 @@ function AchievementDateInput({
             validate: {
               checkDate: (value) => {
                 return (
-                  dayjs(value) >= dayjs(startDateInput) ||
-                  "Achievement must end after it starts!"
+                  !dayjs(value).isBefore(dayjs(startDateInput), "day") ||
+                  "Achievement must end on or after it starts!"
                 );
               },
             },
