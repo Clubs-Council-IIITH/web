@@ -4,11 +4,13 @@ import { Container, Grid, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_CLUB, GET_MEMBERSHIPS } from "gql/queries/clubs";
+import { GET_ACHIEVEMENT_BY_USER } from "gql/queries/achievements";
 
 import ActionPalette from "components/ActionPalette";
 import { EditUser } from "components/profile/UserActions";
 import UserDetails from "components/profile/UserDetails";
 import UserMemberships from "components/profile/UserMemberships";
+import UserAchievements from "components/profile/UserAchievements";
 import UserImage from "components/users/UserImage";
 import { getCurrentUser, getUserProfile } from "utils/fetchData";
 
@@ -68,6 +70,12 @@ export default async function Profile(props) {
       if (!club && currentUser?.uid !== user.uid) notFound();
     }
   }
+  const {
+    data: { achievementsByUser },
+  } = await getClient().query(GET_ACHIEVEMENT_BY_USER, {
+    uid: user.uid
+  });
+
 
   if (user?.role === "cc") redirect("/clubs-council");
   if (club) redirect(`/clubs/${club.cid}`);
@@ -167,6 +175,19 @@ export default async function Profile(props) {
                   Memberships
                 </Typography>
                 <UserMemberships rows={memberships} />
+                {achievementsByUser && achievementsByUser.length > 0 && (
+                  <>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Achievements
+                    </Typography>
+                    <UserAchievements rows={achievementsByUser} />
+                  </>
+                )}
               </Stack>
             </Grid>
           </>
