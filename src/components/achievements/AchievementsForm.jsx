@@ -302,7 +302,7 @@ export default function AchievementForm({
 
     // convert dates to ISO strings
     data.dateperiod = formData.dateperiod.map(
-      (d) => d.format("YYYY-MM-DD")
+      (date) => dayjs(date).format("YYYY-MM-DD")
     );
     // console.log(data);
  
