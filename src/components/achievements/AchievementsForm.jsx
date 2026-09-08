@@ -25,6 +25,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -41,7 +42,8 @@ import { getFullUser } from "actions/users/get/full/server_action";
 import { createAchievementAction } from "../../actions/achievements/create/server_action";
 import { editAchievementAction } from "../../actions/achievements/edit/server_action";
 import AchievementLinks from "./AchievementLinks";
-import AchievementNewUser from "./AchievementNewUser"
+import AchievementNewUser from "./AchievementNewUser";
+import MemberListItem from "../members/MemberListItem.jsx";
 
 
 
@@ -225,7 +227,7 @@ export default function AchievementForm({
     edit: async (data, opts) => {
 
       let res = await editAchievementAction(data, id);
-      console.log("EDITED ACHIEVEMENT: ",res);
+      // console.log("EDITED ACHIEVEMENT: ",res);
       if (res.ok) {
         triggerToast({
           title: "Success!",
@@ -386,6 +388,15 @@ export default function AchievementForm({
                 onVerifiedUser={(user) => {
                   setExternalUsers((prev) => [...prev, user]);
                   const currentUsers = getValues("userids") || [];
+
+                  if (currentUsers.includes(user.uid)) {
+                    triggerToast({
+                      title: "Already added",
+                      messages: ["User has already been added"],
+                      severity: "warning",
+                    })
+                    return;
+                  }
 
                   setValue("userids", [...currentUsers, user.uid]);
                 }}
@@ -701,7 +712,7 @@ function UserIdsSelector({
   const [open, setOpen] = useState(false);
   const [clubUsers, setClubUsers] = useState([]);
   const { user } = useAuth();
-
+  const [loadingUsers, setLoadingUsers] = useState(false);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -721,15 +732,22 @@ function UserIdsSelector({
     // User changed clubs — reset their member selection and reload the list.
     if (!selectedClubs || selectedClubs.length === 0) {
       setClubUsers([]);
+      setLoadingUsers(false);
       return;
     }
-    (async () => {
-      const res = await getUser(selectedClubs);
-      if (Array.isArray(res)) {
-        setClubUsers(res);
+    const loadUsers = async () => {
+      setLoadingUsers(true);
+      try {
+        const res = await getUser(selectedClubs);
+        if (Array.isArray(res)) {
+          setClubUsers(res);
+        }
+      } finally {
+        setLoadingUsers(false);
       }
-    })();
-  }, [selectedClubs, getUser, setValue]);
+    };
+    loadUsers();
+  }, [selectedClubs]);
   useEffect(() => {                                                                            
       trigger("userids");                                                                        
     }, [clubUsers, trigger]);    
@@ -782,6 +800,17 @@ function UserIdsSelector({
             open={open}
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "left",
+              },
+              transformOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              style: { maxHeight: 400 },
+            }}
             input={<OutlinedInput label="Users" />}
             {...field}
             value={field.value || []}
@@ -818,15 +847,25 @@ function UserIdsSelector({
             >
               <CloseIcon />
             </IconButton>
-
-            {users
+            {loadingUsers ? (
+              <MenuItem disabled>
+                <CircularProgress size={20} sx={{ mr: 1 }} />
+                Loading users...
+              </MenuItem>
+            ):(
+              users
               ?.slice()
               ?.sort((a, b) => a.firstName.localeCompare(b.firstName))
-              ?.map((u) => (
-                <MenuItem key={u.uid} value={u.uid}>
-                  {u.firstName} {u.lastName}
+              ?.map((user) => (
+                <MenuItem
+                  key={user._id}
+                  value={user.uid}
+                  component="div"
+                >
+                  <MemberListItem uid={user.uid} />
                 </MenuItem>
-              ))}
+              ))
+            )}
           </Select>
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>

@@ -150,7 +150,7 @@ export function DeleteAchievement({ sx }) {
       <ConfirmDialog
         open={dialog}
         title="Delete this achievement?"
-        description="Deleting the achievement will mark it as deleted and hide it from the public. This action cannot be undone."
+        description="This will mark the achievement as deleted and hide it from the public. This action cannot be undone."
         onConfirm={deleteAchievement}
         onClose={() => setDialog(false)}
         confirmProps={{ color: "error" }}
