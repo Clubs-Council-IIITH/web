@@ -45,8 +45,6 @@ import AchievementLinks from "./AchievementLinks";
 import AchievementNewUser from "./AchievementNewUser";
 import MemberListItem from "../members/MemberListItem.jsx";
 
-
-
 export default function AchievementForm({
     id= null, 
     action = "create",
@@ -61,6 +59,7 @@ export default function AchievementForm({
   const [clubMemberUids, setClubMemberUids] = useState([]);
   const [externalUsers, setExternalUsers] = useState([]);
   const [external, setExternal] = useState(false)
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     if (clubId) {
@@ -157,6 +156,19 @@ export default function AchievementForm({
   });
 
   const selectedClubs = watch("clubs");
+  const images = useWatch({
+    control,
+    name: "images",
+    defaultValue: [],
+  });
+
+  useEffect(() => {
+    const urls = images.map((file) => URL.createObjectURL(file));
+    setImagePreviews(urls);
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [images]);
 
   useEffect(() => {
     if (user?.role === "club" && user?.uid) {
@@ -474,6 +486,11 @@ export default function AchievementForm({
               >
                 Images
               </Typography>
+              <Box
+                sx={{
+                  my: 0.5,
+                }}
+              />
               {action=="edit"&& watch("imageLinks").length!=0 && 
                 <>  
                   <AchievementImages 
@@ -489,6 +506,25 @@ export default function AchievementForm({
                     These are the existing image/s. Uploading new images will remove these as well.
                   </Typography>
                 </>}
+                {action === "create" && imagePreviews.length !== 0 && (
+                <>
+                  <AchievementImages
+                    key={imagePreviews.join("|")}
+                    padding="70%"
+                    achievement={{
+                      name: watch("name"),
+                      imageLinks: imagePreviews,
+                    }}
+                  />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                    }}
+                  >
+                    Images Preview
+                  </Typography>
+                </>)}
             </Grid>
           <Grid size={12}>
             <FileUpload
@@ -514,8 +550,6 @@ export default function AchievementForm({
     </form>
   )
 }
-
-
 
 function AchievementsSubmitButton({
   loading,
@@ -697,7 +731,6 @@ function ClubIdsSelector({
     />
   );
 }
-
 
 function UserIdsSelector({
   trigger, 
@@ -1015,8 +1048,6 @@ function AchievementDateInput({
   );
 }
 
-
-
 function AchievementContentInput({ control }) {
   return (
     <Controller
@@ -1050,3 +1081,29 @@ function AchievementContentInput({ control }) {
   );
 }
 
+// function AchievementImagePreview({ images, name }) {
+//   const [urls, setUrls] = useState([]);
+
+//   useEffect(() => {
+//     const newUrls = images
+//       .map((file) => URL.createObjectURL(file));
+
+//     setUrls(newUrls);
+
+//     return () => {
+//       newUrls.forEach((url) => URL.revokeObjectURL(url));
+//     };
+//   }, [images]);
+
+//   if (!urls.length) return null;
+
+//   return (
+//     <AchievementImages
+//       padding="70%"
+//       achievement={{
+//         name,
+//         imageLinks: urls,
+//       }}
+//     />
+//   );
+// }

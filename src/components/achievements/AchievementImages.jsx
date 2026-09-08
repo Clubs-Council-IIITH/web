@@ -66,7 +66,9 @@ export default function AchievementImages({ achievement, height=500, padding="10
 export function AchievementImage({ name, image, width, height, style }) {
   const [img, setImg] = useState(
     image
-      ? getFile(image)
+      ? image.startsWith("blob:")
+        ? image
+        : getFile(image)
       : getPlaceholder({ seed: name, w: width, h: height }),
   );
 
