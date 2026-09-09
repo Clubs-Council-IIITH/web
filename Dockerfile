@@ -29,6 +29,7 @@ CMD [ "npm", "run", "dev" ]
 FROM node:24-slim AS prod-build
 ENV NEXT_PUBLIC_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=0
+ENV NEXT_BUILD_WORKERS=1
 
 WORKDIR /web
 
