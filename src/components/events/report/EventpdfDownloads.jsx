@@ -46,7 +46,31 @@ export function DownloadEventReport({
         clubs.find((club) => club.cid === collab)?.category === "body",
     );
 
-  const htmlContent = `
+    let unifiedBudgetRows = [];
+  if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map((item, idx) => {
+      const match = event?.budget?.find(b => b.description === item.description);
+      return {
+        id: idx,
+        description: item.description,
+        amount: match ? match.amount : 0,
+        advance: match ? match.advance : false,
+        allocatedAmount: item.allocatedAmount,
+        isOriginal: !!match
+      };
+    });
+  } else {
+    unifiedBudgetRows = event?.budget?.map((item, idx) => ({
+      id: idx,
+      description: item.description,
+      amount: item.amount,
+      advance: item.advance,
+      allocatedAmount: item.amount,
+      isOriginal: true
+    })) || [];
+  }
+
+const htmlContent = `
     <style>
         .report-container {
             margin-top: -40px;
@@ -186,18 +210,19 @@ export function DownloadEventReport({
         <div class="section">
             <h2>Budget Overview</h2>
             ${
-              event?.budget?.length
+              unifiedBudgetRows?.length
                 ? `
             <table>
                 <thead>
                     <tr>
                         <th>Description</th>
-                        <th class="adv">Amount</th>
+                        <th class="adv">Proposed</th>
+                        <th class="adv">Allocated</th>
                         <th class="adv">Advance</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${event.budget
+                    ${unifiedBudgetRows
                       .map(
                         (item) => `
                     <tr>
@@ -205,7 +230,8 @@ export function DownloadEventReport({
                           item?.description?.replace(/\n/g, "<br />") ||
                           "Unknown"
                         }</td>
-                        <td class="adv">${item?.amount || "Unknown"}</td>
+                        <td class="adv">${item?.amount || 0}</td>
+                        <td class="adv">${item?.allocatedAmount || 0}</td>
                         <td class="adv">${
                           item?.advance == true ? "Yes" : "No"
                         }</td>
@@ -311,24 +337,7 @@ export function DownloadEventReport({
             }
         </div>
 
-        ${
-          eventReport?.allocatedBudgetBreakdown?.length
-            ? `
-        <div class="section">
-            <h2>Allocated Budget</h2>
-            <p><strong>Total Allocated:</strong> ₹${eventReport.allocatedBudget}</p>
-            <ul>
-                ${eventReport.allocatedBudgetBreakdown
-                  .map(
-                    (item) =>
-                      `<li>${item.description} - ${item.allocatedAmount}</li>`,
-                  )
-                  .join("")}
-            </ul>
-        </div>
-        `
-            : ""
-        }
+        
 
         <div class="section">
             <h2>Prizes</h2>
@@ -498,7 +507,31 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
       (collab) =>
         clubs.find((club) => club.cid === collab)?.category === "body",
     );
-  const htmlContent = `
+    let unifiedBudgetRows = [];
+  if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map((item, idx) => {
+      const match = event?.budget?.find(b => b.description === item.description);
+      return {
+        id: idx,
+        description: item.description,
+        amount: match ? match.amount : 0,
+        advance: match ? match.advance : false,
+        allocatedAmount: item.allocatedAmount,
+        isOriginal: !!match
+      };
+    });
+  } else {
+    unifiedBudgetRows = event?.budget?.map((item, idx) => ({
+      id: idx,
+      description: item.description,
+      amount: item.amount,
+      advance: item.advance,
+      allocatedAmount: item.amount,
+      isOriginal: true
+    })) || [];
+  }
+
+const htmlContent = `
     <style>
         .report-container {
             margin-top: -40px;

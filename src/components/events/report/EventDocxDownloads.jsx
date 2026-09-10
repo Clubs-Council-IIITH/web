@@ -48,7 +48,31 @@ export function DownloadEventReportDocx({
         clubs.find((club) => club.cid === collab)?.category === "body",
     );
 
-  const fetchImageBuffer = async (url) => {
+    let unifiedBudgetRows = [];
+  if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map((item, idx) => {
+      const match = event?.budget?.find(b => b.description === item.description);
+      return {
+        id: idx,
+        description: item.description,
+        amount: match ? match.amount : 0,
+        advance: match ? match.advance : false,
+        allocatedAmount: item.allocatedAmount,
+        isOriginal: !!match
+      };
+    });
+  } else {
+    unifiedBudgetRows = event?.budget?.map((item, idx) => ({
+      id: idx,
+      description: item.description,
+      amount: item.amount,
+      advance: item.advance,
+      allocatedAmount: item.amount,
+      isOriginal: true
+    })) || [];
+  }
+
+const fetchImageBuffer = async (url) => {
     const response = await fetch(url);
     return await response.arrayBuffer();
   };
@@ -286,7 +310,7 @@ export function DownloadEventReportDocx({
               text: "Budget Overview",
               heading: "Heading2",
             }),
-            event?.budget?.length
+            unifiedBudgetRows?.length
               ? new Table({
                   width: {
                     size: 100,
@@ -316,14 +340,30 @@ export function DownloadEventReportDocx({
                             new Paragraph({
                               children: [
                                 new TextRun({
-                                  text: "Amount",
+                                  text: "Proposed",
                                   bold: true,
                                 }),
                               ],
                             }),
                           ],
                           width: {
-                            size: 25,
+                            size: 20,
+                            type: WidthType.PERCENTAGE,
+                          },
+                        }),
+                        new TableCell({
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Allocated",
+                                  bold: true,
+                                }),
+                              ],
+                            }),
+                          ],
+                          width: {
+                            size: 20,
                             type: WidthType.PERCENTAGE,
                           },
                         }),
@@ -339,13 +379,13 @@ export function DownloadEventReportDocx({
                             }),
                           ],
                           width: {
-                            size: 25,
+                            size: 10,
                             type: WidthType.PERCENTAGE,
                           },
                         }),
                       ],
                     }),
-                    ...event.budget.map(
+                    ...unifiedBudgetRows.map(
                       (item) =>
                         new TableRow({
                           children: [
@@ -630,34 +670,7 @@ export function DownloadEventReportDocx({
                   ]
                 : ""),
 
-            ...(eventReport?.allocatedBudgetBreakdown?.length
-              ? [
-                  new Paragraph({
-                    text: "Allocated Budget",
-                    heading: "Heading2",
-                  }),
-                  new Paragraph({
-                    children: [
-                      new TextRun({
-                        text: "Total Allocated: ",
-                        bold: true,
-                      }),
-                      new TextRun({
-                        text: `₹${eventReport.allocatedBudget}`,
-                      }),
-                    ],
-                  }),
-                  ...eventReport.allocatedBudgetBreakdown.map(
-                    (item) =>
-                      new Paragraph({
-                        text: `${item.description} - ₹${item.allocatedAmount}`,
-                        bullet: {
-                          level: 0,
-                        },
-                      }),
-                  ),
-                ]
-              : []),
+            
 
             new Paragraph({
               text: "Prizes",
