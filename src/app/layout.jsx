@@ -17,6 +17,9 @@ import Toast, { ToastProvider } from "components/Toast";
 import TransitionProvider from "components/TransitionProvider";
 import { PUBLIC_URL } from "utils/files";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 const description =
   "Discover the vibrant campus life at IIIT Hyderabad. Explore diverse student-led clubs and bodies, and events that foster an inclusive community and enrich student experiences beyond the classroom. Stay updated on activities, events, and opportunities to engage and grow at IIIT-H.";
 export const shortDescription =

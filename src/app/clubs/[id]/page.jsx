@@ -3,6 +3,7 @@ import { permanentRedirect } from "next/navigation";
 
 import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
 
+import AchievementsGrid from "components/achievements/AchievementsGrid";
 import ClubBanner from "components/clubs/ClubBanner";
 import ClubInfo from "components/clubs/ClubInfo";
 import ClubSocials from "components/clubs/ClubSocials";
@@ -20,6 +21,8 @@ export async function generateMetadata(props) {
 
   if (club?.category == "body")
     return permanentRedirect(`/student-bodies/${id}`);
+  if (club?.category == "supervisory")
+    return permanentRedirect(`/supervisory-bodies/${id}`);
 
   return {
     title: club.name,
@@ -101,6 +104,9 @@ export default async function Club(props) {
             </Button>
           </Box>
           <EventsGrid type="club" clubid={id} limit={4} />
+        </Box>
+        <Box>
+          <AchievementsGrid type="club" cid={id} limit={4} clubid={id} />
         </Box>
 
         <Box

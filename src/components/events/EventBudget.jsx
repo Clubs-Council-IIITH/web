@@ -109,7 +109,7 @@ export default function EventBudget({
     {
       field: "amount",
       type: "number",
-      headerName: showAllocated ? "Proposed Amount" : "Amount",
+      headerName: showAllocated ? "Proposed Amount" : (billViewable ? "Amount" : "Proposed Amount"),
       width: 150,
       minWidth: 150,
       flex: isMobile ? null : 1,

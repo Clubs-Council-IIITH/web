@@ -12,9 +12,9 @@ export async function generateMetadata(props) {
   const { id } = params;
 
   const club = await getClub(id);
-  if (club?.category != "body") {
-    if (club?.category == "supervisory")
-      return permanentRedirect(`/supervisory-bodies/${id}/members`);
+  if (club?.category != "supervisory") {
+    if (club?.category == "body")
+      return permanentRedirect(`/student-bodies/${id}/members`);
     else return permanentRedirect(`/clubs/${id}/members`);
   }
 
@@ -23,7 +23,7 @@ export async function generateMetadata(props) {
   };
 }
 
-export default async function BodyMembers(props) {
+export default async function SupervisoryMembers(props) {
   const params = await props.params;
   return ClubMembers({ params });
 }
