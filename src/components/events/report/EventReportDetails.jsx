@@ -10,14 +10,14 @@ import {
   Chip,
   Divider,
   Grid,
-  Typography,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper
+  Typography,
 } from "@mui/material";
 
 import EventBudget from "components/events/EventBudget";
@@ -43,26 +43,31 @@ export function EventReportDetails({
 
   let unifiedBudgetRows = [];
   if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
-    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map((item, idx) => {
-      const match = event?.budget?.find(b => b.description === item.description);
-      return {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map(
+      (item, idx) => {
+        const match = event?.budget?.find(
+          (b) => b.description === item.description,
+        );
+        return {
+          id: idx,
+          description: item.description,
+          amount: match ? match.amount : 0,
+          advance: match ? match.advance : false,
+          allocatedAmount: item.allocatedAmount,
+          isOriginal: !!match,
+        };
+      },
+    );
+  } else {
+    unifiedBudgetRows =
+      event?.budget?.map((item, idx) => ({
         id: idx,
         description: item.description,
-        amount: match ? match.amount : 0,
-        advance: match ? match.advance : false,
-        allocatedAmount: item.allocatedAmount,
-        isOriginal: !!match
-      };
-    });
-  } else {
-    unifiedBudgetRows = event?.budget?.map((item, idx) => ({
-      id: idx,
-      description: item.description,
-      amount: item.amount,
-      advance: item.advance,
-      allocatedAmount: item.amount,
-      isOriginal: true
-    })) || [];
+        amount: item.amount,
+        advance: item.advance,
+        allocatedAmount: item.amount,
+        isOriginal: true,
+      })) || [];
   }
 
   return (
@@ -290,8 +295,6 @@ export function EventReportDetails({
             </>
           ) : null}
         </Grid>
-
-        
 
         <Grid
           size={{

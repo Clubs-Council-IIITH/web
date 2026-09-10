@@ -46,31 +46,36 @@ export function DownloadEventReport({
         clubs.find((club) => club.cid === collab)?.category === "body",
     );
 
-    let unifiedBudgetRows = [];
+  let unifiedBudgetRows = [];
   if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
-    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map((item, idx) => {
-      const match = event?.budget?.find(b => b.description === item.description);
-      return {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map(
+      (item, idx) => {
+        const match = event?.budget?.find(
+          (b) => b.description === item.description,
+        );
+        return {
+          id: idx,
+          description: item.description,
+          amount: match ? match.amount : 0,
+          advance: match ? match.advance : false,
+          allocatedAmount: item.allocatedAmount,
+          isOriginal: !!match,
+        };
+      },
+    );
+  } else {
+    unifiedBudgetRows =
+      event?.budget?.map((item, idx) => ({
         id: idx,
         description: item.description,
-        amount: match ? match.amount : 0,
-        advance: match ? match.advance : false,
-        allocatedAmount: item.allocatedAmount,
-        isOriginal: !!match
-      };
-    });
-  } else {
-    unifiedBudgetRows = event?.budget?.map((item, idx) => ({
-      id: idx,
-      description: item.description,
-      amount: item.amount,
-      advance: item.advance,
-      allocatedAmount: item.amount,
-      isOriginal: true
-    })) || [];
+        amount: item.amount,
+        advance: item.advance,
+        allocatedAmount: item.amount,
+        isOriginal: true,
+      })) || [];
   }
 
-const htmlContent = `
+  const htmlContent = `
     <style>
         .report-container {
             margin-top: -40px;
@@ -507,31 +512,36 @@ export function DownloadEvent({ event, clubs, pocProfile, eventBills }) {
       (collab) =>
         clubs.find((club) => club.cid === collab)?.category === "body",
     );
-    let unifiedBudgetRows = [];
+  let unifiedBudgetRows = [];
   if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
-    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map((item, idx) => {
-      const match = event?.budget?.find(b => b.description === item.description);
-      return {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map(
+      (item, idx) => {
+        const match = event?.budget?.find(
+          (b) => b.description === item.description,
+        );
+        return {
+          id: idx,
+          description: item.description,
+          amount: match ? match.amount : 0,
+          advance: match ? match.advance : false,
+          allocatedAmount: item.allocatedAmount,
+          isOriginal: !!match,
+        };
+      },
+    );
+  } else {
+    unifiedBudgetRows =
+      event?.budget?.map((item, idx) => ({
         id: idx,
         description: item.description,
-        amount: match ? match.amount : 0,
-        advance: match ? match.advance : false,
-        allocatedAmount: item.allocatedAmount,
-        isOriginal: !!match
-      };
-    });
-  } else {
-    unifiedBudgetRows = event?.budget?.map((item, idx) => ({
-      id: idx,
-      description: item.description,
-      amount: item.amount,
-      advance: item.advance,
-      allocatedAmount: item.amount,
-      isOriginal: true
-    })) || [];
+        amount: item.amount,
+        advance: item.advance,
+        allocatedAmount: item.amount,
+        isOriginal: true,
+      })) || [];
   }
 
-const htmlContent = `
+  const htmlContent = `
     <style>
         .report-container {
             margin-top: -40px;

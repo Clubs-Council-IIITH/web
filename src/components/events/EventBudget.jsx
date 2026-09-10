@@ -109,7 +109,11 @@ export default function EventBudget({
     {
       field: "amount",
       type: "number",
-      headerName: showAllocated ? "Proposed Amount" : (billViewable ? "Amount" : "Proposed Amount"),
+      headerName: showAllocated
+        ? "Proposed Amount"
+        : billViewable
+          ? "Amount"
+          : "Proposed Amount",
       width: 150,
       minWidth: 150,
       flex: isMobile ? null : 1,
@@ -142,7 +146,7 @@ export default function EventBudget({
             minWidth: 150,
             flex: isMobile ? null : 1,
             editable: editable,
-            
+
             renderCell: (p) => (
               <Typography
                 variant="body2"
@@ -232,7 +236,9 @@ export default function EventBudget({
               <Icon
                 external
                 color={!!p.value ? "success.main" : "error.main"}
-                variant={!!p.value ? "eva:checkmark-outline" : "eva:close-outline"}
+                variant={
+                  !!p.value ? "eva:checkmark-outline" : "eva:close-outline"
+                }
               />
             ),
             display: "flex",
@@ -246,7 +252,7 @@ export default function EventBudget({
             type: "actions",
             align: "center",
             width: isMobile ? 20 : 50,
-            renderCell: (p) => (
+            renderCell: (p) =>
               !p.row.isOriginal ? (
                 <IconButton
                   onMouseDown={(e) => e.stopPropagation()}
@@ -262,8 +268,7 @@ export default function EventBudget({
                     sx={{ height: 16, width: 16 }}
                   />
                 </IconButton>
-              ) : null
-            ),
+              ) : null,
             display: "flex",
             disableColumnMenu: true,
             sortable: false,
@@ -294,7 +299,6 @@ export default function EventBudget({
           getRowHeight={() => "auto"}
           columns={columns}
           rows={rows}
-          
           processRowUpdate={onUpdate}
           disableRowSelectionOnClick
           onRowEditStart={() => setBudgetEditing(true)}
@@ -317,8 +321,19 @@ export default function EventBudget({
       </div>
 
       {showTotal && (
-        <Typography variant="subtitle2" sx={{ mt: 2, textAlign: "right", px: 2 }}>
-          Total: {fCurrency(rows.reduce((acc, r) => acc + (parseFloat(showAllocated ? r.allocatedAmount : r.amount) || 0), 0))}
+        <Typography
+          variant="subtitle2"
+          sx={{ mt: 2, textAlign: "right", px: 2 }}
+        >
+          Total:{" "}
+          {fCurrency(
+            rows.reduce(
+              (acc, r) =>
+                acc +
+                (parseFloat(showAllocated ? r.allocatedAmount : r.amount) || 0),
+              0,
+            ),
+          )}
         </Typography>
       )}
 
