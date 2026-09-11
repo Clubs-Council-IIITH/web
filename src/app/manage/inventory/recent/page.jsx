@@ -40,6 +40,7 @@ export default async function ManageInventory() {
 
     const { data: { getTransactions: recentTransactions = [] } = {} } = await getClient().query(GET_ALL_TRANSACTIONS, {
         clubid: clubFilter,
+        paginationOn: true,
         limit: 10,
         hideDeleted: true,
     });

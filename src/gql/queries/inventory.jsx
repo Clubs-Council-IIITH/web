@@ -64,6 +64,12 @@ export const GET_ITEMS_FOR_SELECTOR = gql`
   }
 `;
 
+export const CHECK_ITEM_AVAILABILITY = gql`
+  query CheckItemAvailability($iid: String!, $borrowQty: Int!) {
+    checkAvailability(iid: $iid, borrowQty: $borrowQty)
+  }
+`;
+
 
 
 export const GET_ALL_TRANSACTIONS = gql`

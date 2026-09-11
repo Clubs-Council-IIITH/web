@@ -14,9 +14,8 @@ export default async function NewInventoryItem() {
     userInput: null,
   });
 
-  // only cc/slo/club roles can reach this page; otherwise the layout's
-  // nav access control would have blocked it – but redirect defensively
-  const allowedRoles = ["cc", "slo", "club"];
+  // only cc/slo roles can reach this page
+  const allowedRoles = ["cc", "slo"];
   if (!allowedRoles.includes(userMeta?.role)) {
     const { redirect } = await import("next/navigation");
     redirect("/404");

@@ -25,7 +25,11 @@ export default async function NewTransactionPage() {
     getClient().query(GET_ITEMS_FOR_SELECTOR, {}),
 
     // All active transactions — used for clashing-item detection
-    getClient().query(GET_ALL_TRANSACTIONS, { hideDeleted: true }),
+    getClient().query(GET_ALL_TRANSACTIONS, {
+      hideDeleted: true,
+      paginationOn: true,
+      limit: 100,
+    }),
 
     // Upcoming / unfinished events, filtered by club when user is a club role
     getClient().query(GET_UNFINISHED_EVENTS, {

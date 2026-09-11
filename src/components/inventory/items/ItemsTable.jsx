@@ -41,8 +41,8 @@ export default function ItemsTable({
     const iid = row?.iid || row?.code;
     if (!iid) return;
 
-    const currentAvail = row?.availableQty ?? row?.available_qty ?? 0;
-    const netQty = row?.netQty ?? row?.net_qty ?? 0;
+    const currentAvail = row?.availableQty ?? 0;
+    const netQty = row?.netQty?? 0;
     const optimisticAvail = Math.max(0, Math.min(netQty, currentAvail + delta));
 
     // Optimistic update — only availableQty changes
@@ -162,9 +162,9 @@ export default function ItemsTable({
       align: "center",
       headerAlign: "center",
       valueGetter: (value, row) =>
-        row?.availableQty ?? row?.available_qty ?? 0,
+        row?.availableQty ?? 0,
       renderCell: ({ row }) => {
-        const qty = row?.availableQty ?? row?.available_qty ?? 0;
+        const qty = row?.availableQty ?? 0;
         if (!canEditQty) return qty;
         return (
           <Box
@@ -175,26 +175,7 @@ export default function ItemsTable({
               gap: 0.5,
             }}
           >
-            <IconButton
-              size="small"
-              disabled={qty <= 0}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAdjustAvailable(row, -1);
-              }}
-            >
-              <RemoveIcon fontSize="small" />
-            </IconButton>
             <Typography variant="body2">{qty}</Typography>
-            <IconButton
-              size="small"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAdjustAvailable(row, +1);
-              }}
-            >
-              <AddIcon fontSize="small" />
-            </IconButton>
           </Box>
         );
       },
@@ -206,7 +187,7 @@ export default function ItemsTable({
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",
-      valueGetter: (value, row) => row?.netQty ?? row?.net_qty ?? 0,
+      valueGetter: (value, row) => row?.netQty ?? 0,
       display: "flex",
     },
     {
@@ -215,7 +196,7 @@ export default function ItemsTable({
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",
-      valueGetter: (value, row) => row?.totalQty ?? row?.total_qty ?? 0,
+      valueGetter: (value, row) => row?.totalQty ?? 0,
       display: "flex",
     },
   ];
@@ -224,11 +205,11 @@ export default function ItemsTable({
     <DataGrid
       rows={items}
       columns={columns}
-      getRowId={(row) => row?._id ?? row?.id ?? row?.iid}
+      getRowId={(row) => row?._id}
       getRowHeight={() => null}
       onRowClick={(params) => {
         router.push(
-          `/manage/inventory/items/${params.row?.iid || params.row?._id || params.row?.id}`,
+          `/manage/inventory/items/${params.row?._id}`,
         );
       }}
       disableRowSelectionOnClick
@@ -246,7 +227,7 @@ export default function ItemsTable({
         pagination: { paginationModel: { pageSize } },
       }}
       getRowClassName={(params) => {
-        const qty = params.row?.netQty ?? params.row?.net_qty ?? 0;
+        const qty = params.row?.netQty ?? 0;
         return qty === 0 ? "out-of-stock-row" : "";
       }}
       showToolbar

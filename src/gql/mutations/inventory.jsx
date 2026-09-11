@@ -4,15 +4,18 @@ import gql from "graphql-tag";
 // Item mutations
 // ---------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
-// Item mutations
-// ---------------------------------------------------------------------------
-
 export const CREATE_INVENTORY_ITEM = gql`
   mutation CreateInventoryItem($details: FullItemInput!) {
     addItem(itemInput: $details) {
       _id
       iid
+      name
+      brand
+      clubid
+      netQty
+      availableQty
+      totalQty
+      currentLocation
     }
   }
 `;
@@ -22,6 +25,13 @@ export const EDIT_INVENTORY_ITEM = gql`
     editItem(itemInput: $details) {
       _id
       iid
+      name
+      brand
+      clubid
+      netQty
+      availableQty
+      totalQty
+      currentLocation
     }
   }
 `;
@@ -50,38 +60,6 @@ export const ADJUST_AVAILABLE_QTY = gql`
   }
 `;
 
-export const DELETE_INVENTORY_ITEM = gql`
-  mutation DeleteInventoryItem($itemid: String!) {
-    deleteInventoryItem(itemid: $itemid) {
-      _id
-    }
-  }
-`;
-
-export const APPROVE_INVENTORY_ITEM = gql`
-  mutation ApproveInventoryItem($itemid: String!) {
-    approveInventoryItem(itemid: $itemid) {
-      _id
-    }
-  }
-`;
-
-export const REJECT_INVENTORY_ITEM = gql`
-  mutation RejectInventoryItem($itemid: String!, $reason: String) {
-    rejectInventoryItem(itemid: $itemid, reason: $reason) {
-      _id
-    }
-  }
-`;
-
-export const SUBMIT_INVENTORY_ITEM = gql`
-  mutation SubmitInventoryItem($itemid: String!) {
-    submitInventoryItem(itemid: $itemid) {
-      _id
-    }
-  }
-`;
-
 // ---------------------------------------------------------------------------
 // Transaction mutations
 // ---------------------------------------------------------------------------
@@ -91,6 +69,34 @@ export const CREATE_TRANSACTION = gql`
     createTransaction(details: $details) {
       _id
       tid
+      itemid
+      itemName
+      itemCode
+      itemClubid
+      clubid
+      clubName
+      quantity
+      startDate
+      endDate
+      purpose
+      storageLocation
+      eventid
+      eventName
+      user
+      remarks
+      photoBefore
+      photoAfter
+      status {
+        state
+        submissionTime
+        approvedTime
+        lastUpdatedTime
+        lastUpdatedBy
+        sloComment
+        returnComment
+        borrowDate
+        approver
+      }
     }
   }
 `;
@@ -100,6 +106,9 @@ export const EDIT_TRANSACTION = gql`
     editTransaction(details: $details) {
       _id
       tid
+      status {
+        state
+      }
     }
   }
 `;

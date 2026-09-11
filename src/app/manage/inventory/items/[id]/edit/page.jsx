@@ -24,14 +24,15 @@ export async function generateMetadata(props) {
 
 function transformItem(item) {
   return {
+    iid: item?.iid ?? "",
     name: item?.name ?? "",
     brand: item?.brand ?? "",
     quantity: item?.netQty ?? item?.net_qty ?? 1,
     description: item?.otherDetails ?? item?.other_details ?? "",
     warrantyDetails: item?.warrantyDetails ?? item?.warranty_details ?? "",
     clubid: item?.clubid ?? "",
+    currentLocation: item?.currentLocation ?? item?.current_location ?? [],
     photo: item?.photo ?? null,
-    billOfPurchase: item?.billOfPurchase ?? null,
   };
 }
 

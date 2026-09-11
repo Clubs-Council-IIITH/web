@@ -2,9 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import { Controller, useForm } from "react-hook-form";
-
 import {
   Box,
   Button,
@@ -25,18 +23,16 @@ import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
 import FileUpload from "components/FileUpload";
 import { useToast } from "components/Toast";
-import { uploadImageFile, uploadPDFFile } from "utils/files";
+import { uploadImageFile } from "utils/files";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
-// import { createInventoryItemAction } from "actions/inventory/create/server_action";
-// import { editInventoryItemAction } from "actions/inventory/edit/server_action";
+import { createInventoryItemAction } from "actions/inventory/items/create/server_action";
+import { editInventoryItemAction } from "actions/inventory/items/edit/server_action";
 
 const admin_roles = ["cc", "slo"];
 
 const photo_maxSizeMB = 10;
 const photo_warnSizeMB = 1;
-const bill_maxSizeMB = 20;
-const bill_warnSizeMB = 2;
 
 export default function ItemForm({
   id = null,
@@ -73,15 +69,17 @@ export default function ItemForm({
 
   const formDefaultValues = useMemo(
     () => ({
+      iid: defaultValues?.iid ?? "",
       name: defaultValues?.name ?? "",
       brand: defaultValues?.brand ?? "",
-      description: defaultValues?.description ?? "",
+      otherDetails: defaultValues?.otherDetails ?? defaultValues?.description ?? "",
       warrantyDetails: defaultValues?.warrantyDetails ?? "",
       clubid: defaultValues?.clubid || "slo",
       totalQty: defaultValues?.totalQty ?? defaultValues?.total_qty ?? defaultValues?.quantity ?? 1,
       availableQty: defaultValues?.availableQty ?? defaultValues?.available_qty ?? defaultValues?.quantity ?? 1,
+      currentLocation: defaultValues?.currentLocation ?? defaultValues?.current_location ?? [],
+      requiresApproval: defaultValues?.requiresApproval ?? true,
       photo: defaultValues?.photo ?? null,
-      billOfPurchase: defaultValues?.billOfPurchase ?? null,
     }),
     [defaultValues],
   );
@@ -93,7 +91,7 @@ export default function ItemForm({
 
   const submitHandlers = {
     create: async (data, opts) => {
-      // let res = await createInventoryItemAction(data);
+      const res = await createInventoryItemAction(data);
       if (res.ok) {
         const isDraft = opts?.saveAsDraft;
         triggerToast({
@@ -107,14 +105,14 @@ export default function ItemForm({
           ],
           severity: "success",
         });
-        router.push("/manage/inventory");
+        router.push("/manage/inventory/recent");
       } else {
         triggerToast({ ...res.error, severity: "error" });
         setLoading(false);
       }
     },
     edit: async (data, opts) => {
-      // let res = await editInventoryItemAction(data, id);
+      const res = await editInventoryItemAction(data);
       if (res.ok) {
         triggerToast({
           title: "Success!",
@@ -133,16 +131,16 @@ export default function ItemForm({
     setLoading(true);
 
     const data = {
+      iid: formData.iid.trim(),
       name: formData.name,
-      totalQty: parseInt(formData.totalQty || formData.quantity || 1),
-      total_qty: parseInt(formData.totalQty || formData.quantity || 1),
-      availableQty: parseInt(formData.availableQty || formData.quantity || 1),
-      available_qty: parseInt(formData.availableQty || formData.quantity || 1),
-      netQty: parseInt(formData.availableQty || formData.quantity || 1),
-      net_qty: parseInt(formData.availableQty || formData.quantity || 1),
+      totalQty: parseInt(formData.totalQty || 1, 10),
+      availableQty: parseInt(formData.availableQty || 1, 10),
+      netQty: parseInt(formData.availableQty || 1, 10),
       brand: formData.brand,
-      description: formData.description,
+      otherDetails: formData.otherDetails || null,
       warrantyDetails: formData.warrantyDetails || null,
+      currentLocation: formData.currentLocation || [],
+      requiresApproval: true,
     };
 
     // owner club
@@ -150,15 +148,6 @@ export default function ItemForm({
       data.clubid = user?.uid;
     } else if (admin_roles.includes(user?.role)) {
       data.clubid = formData.clubid;
-    }
-
-    // status
-    if (admin_roles.includes(user?.role)) {
-      data.status = { state: "approved" };
-    } else if (opts?.saveAsDraft) {
-      data.status = { state: "incomplete" };
-    } else {
-      data.status = { state: "pending" };
     }
 
     // upload photo
@@ -191,50 +180,7 @@ export default function ItemForm({
       return;
     }
 
-    // upload bill of purchase
-    try {
-      const bill_filename = (
-        "item_bill_" +
-        data.name +
-        "_" +
-        data.clubid
-      ).replace(".", "_");
-
-      if (typeof formData.billOfPurchase === "string") {
-        data.billOfPurchase = formData.billOfPurchase;
-      } else if (
-        Array.isArray(formData.billOfPurchase) &&
-        formData.billOfPurchase.length > 0
-      ) {
-        const file = formData.billOfPurchase[0];
-        if (file?.type === "application/pdf") {
-          data.billOfPurchase = await uploadPDFFile(
-            file,
-            false,
-            bill_filename,
-            bill_maxSizeMB,
-          );
-        } else {
-          data.billOfPurchase = await uploadImageFile(
-            file,
-            bill_filename,
-            bill_warnSizeMB,
-          );
-        }
-      } else {
-        data.billOfPurchase = null;
-      }
-    } catch (error) {
-      triggerToast({
-        title: "Error uploading bill",
-        messages: error.message ? [error.message] : ["Failed to upload bill"],
-        severity: "error",
-      });
-      setLoading(false);
-      return;
-    }
-
-    submitHandlers[action](data, opts);
+    await submitHandlers[action](data, opts);
   }
 
   return (
@@ -267,6 +213,11 @@ export default function ItemForm({
                 </Grid>
               ) : null}
 
+              {/* asset code */}
+              <Grid size={12}>
+                <ItemCodeInput control={control} />
+              </Grid>
+
               {/* name */}
               <Grid size={12}>
                 <ItemNameInput control={control} />
@@ -281,6 +232,10 @@ export default function ItemForm({
               </Grid>
               <Grid size={{ xs: 12, sm: 4 }}>
                 <ItemBrandInput control={control} />
+              </Grid>
+
+              <Grid size={12}>
+                <ItemLocationInput control={control} />
               </Grid>
 
               {/* description */}
@@ -326,33 +281,6 @@ export default function ItemForm({
                   maxSizeMB={photo_maxSizeMB}
                   shape="square"
                   warnSizeMB={photo_warnSizeMB}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-
-          {/* bill of purchase */}
-          <Grid container>
-            <Typography
-              variant="subtitle2"
-              gutterBottom
-              sx={{
-                textTransform: "uppercase",
-                color: "text.secondary",
-              }}
-            >
-              Bill of Purchase
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={12}>
-                <FileUpload
-                  type="document"
-                  name="billOfPurchase"
-                  label="Bill / Invoice"
-                  control={control}
-                  maxFiles={1}
-                  maxSizeMB={bill_maxSizeMB}
-                  warnSizeMB={bill_warnSizeMB}
                 />
               </Grid>
             </Grid>
@@ -552,6 +480,67 @@ function ItemClubSelect({ control, clubs = [] }) {
   );
 }
 
+function ItemCodeInput({ control }) {
+  return (
+    <Controller
+      name="iid"
+      control={control}
+      rules={{ required: "Asset code is required!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <TextField
+          {...field}
+          label="Asset Code"
+          autoComplete="off"
+          error={invalid}
+          helperText={error?.message}
+          variant="outlined"
+          fullWidth
+          required
+          onBlur={(event) => field.onChange(event.target.value.trim())}
+        />
+      )}
+    />
+  );
+}
+
+function ItemLocationInput({ control }) {
+  const locations = [
+    ["amphi", "Amphitheater Storage Room"],
+    ["vindhya", "Vindhya Storage Room"],
+    ["himalaya", "Himalaya Storage Room"],
+    ["music_room", "Music Room"],
+    ["astro_lab", "Astro Lab"],
+    ["other", "Other"],
+  ];
+
+  return (
+    <Controller
+      name="currentLocation"
+      control={control}
+      rules={{ required: "Select at least one location!" }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <FormControl fullWidth error={invalid}>
+          <InputLabel id="item-location-label">Current Location *</InputLabel>
+          <Select
+            {...field}
+            multiple
+            labelId="item-location-label"
+            label="Current Location *"
+            value={field.value || []}
+          >
+            {locations.map(([value, label]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )}
+    />
+  );
+}
+
 function ItemNameInput({ control }) {
   return (
     <Controller
@@ -669,7 +658,7 @@ function ItemBrandInput({ control }) {
 function ItemDescriptionInput({ control }) {
   return (
     <Controller
-      name="description"
+      name="otherDetails"
       control={control}
       rules={{
         maxLength: {
@@ -680,7 +669,7 @@ function ItemDescriptionInput({ control }) {
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
           {...field}
-          label="Description"
+          label="Other Details"
           autoComplete="off"
           error={invalid}
           helperText={error?.message}

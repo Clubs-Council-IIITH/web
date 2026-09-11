@@ -10,16 +10,10 @@ import {
 import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
-import { GET_FULL_ITEM } from "gql/queries/inventory";
+import { GET_ALL_TRANSACTIONS, GET_FULL_ITEM } from "gql/queries/inventory";
 
 import ActionPalette from "components/ActionPalette";
-import {
-  ApproveItem,
-  DeleteItem,
-  EditItem,
-  RejectItem,
-  SubmitItem,
-} from "components/inventory/items/ItemActions";
+import { EditItem } from "components/inventory/items/ItemActions";
 import { ItemStatus } from "components/inventory/items/ItemStates";
 import TranTable from "components/inventory/transactions/TranTable";
 
@@ -34,7 +28,7 @@ export async function generateMetadata(props) {
 
   return {
     title: item?.name ?? "Inventory Item",
-    description: item?.other_details || "No description provided.",
+    description: item?.otherDetails || item?.other_details || "No description provided.",
   };
 }
 
@@ -73,6 +67,11 @@ export default async function ManageInventoryItemID(props) {
   }
 
   const ownerClub = allClubs?.find((c) => c.cid === item?.clubid);
+  const { data: transactionData } = await getClient().query(
+    GET_ALL_TRANSACTIONS,
+    { itemid: item.iid, hideDeleted: true, paginationOn: true, limit: 25 },
+  );
+  const relatedTransactions = transactionData?.getTransactions ?? [];
 
   return (
     <Box>
@@ -220,7 +219,7 @@ export default async function ManageInventoryItemID(props) {
           </Grid>
         </Grid>
         <Grid size={12}>
-          <TranTable item={item} />
+          <TranTable item={item} transactions={relatedTransactions} />
         </Grid>
       </Grid>
     </Box>
@@ -228,18 +227,5 @@ export default async function ManageInventoryItemID(props) {
 }
 
 function getActions(item, user) {
-  const state = item?.status?.state;
-
-  if (user?.role === "club") {
-    if (state === "incomplete") return [SubmitItem];
-    return [];
-  }
-
-  if (["cc", "slo"].includes(user?.role)) {
-    if (state === "pending" || state === "pending_cc") return [ApproveItem, RejectItem, EditItem];
-    if (state === "deleted") return [];
-    return [EditItem, DeleteItem];
-  }
-
-  return [];
+  return ["cc", "slo", "club"].includes(user?.role) ? [EditItem] : [];
 }

@@ -136,7 +136,7 @@ export default function TransactionForm({
       const details = {
         itemid: item?.iid || item?._id || formData.itemid,
         itemName: item?.name || "",
-        itemCode: item?.code || item?.iid || item?._id || "",
+        itemCode: item?.iid || item?._id || "",
         itemClubid: item?.clubid || null,
         clubid: user?.uid || user?.club || item?.clubid || "slo",
         clubName: user?.name || null,
@@ -146,6 +146,7 @@ export default function TransactionForm({
         purpose: formData.useEvent ? (linkedEvent ? `For event: ${linkedEvent.name}` : "") : formData.purpose,
         eventid: formData.useEvent ? formData.eventid : null,
         eventName: formData.useEvent && linkedEvent ? linkedEvent.name : null,
+        storageLocation: formData.storageLocation || null,
         remarks: formData.remarks || null,
       };
 
@@ -597,6 +598,30 @@ export default function TransactionForm({
                   />
                 </Grid>
               ) : null}
+
+              <Grid size={12}>
+                <Controller
+                  name="storageLocation"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel id="tran-storage-label">Storage Location</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="tran-storage-label"
+                        label="Storage Location"
+                      >
+                        <MenuItem value="amphi">Amphitheater Storage Room</MenuItem>
+                        <MenuItem value="vindhya">Vindhya Storage Room</MenuItem>
+                        <MenuItem value="himalaya">Himalaya Storage Room</MenuItem>
+                        <MenuItem value="music_room">Music Room</MenuItem>
+                        <MenuItem value="astro_lab">Astro Lab</MenuItem>
+                        <MenuItem value="other">Other</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </Grid>
 
               {/* remarks */}
               <Grid size={12}>
