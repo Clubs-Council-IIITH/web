@@ -400,7 +400,7 @@ export default function TransactionForm({
                   }}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Start Date *"
+                      label="Start Date"
                       format="DD/MM/YYYY"
                       value={field.value ? dayjs(field.value) : null}
                       onChange={(newValue) => {
@@ -437,7 +437,7 @@ export default function TransactionForm({
                   }}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Return By *"
+                      label="Return By"
                       format="DD/MM/YYYY"
                       value={field.value ? dayjs(field.value) : null}
                       onChange={(newValue) => {

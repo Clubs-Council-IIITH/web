@@ -46,6 +46,17 @@ const routes = {
   "/manage/holidays": ["cc", "slo"],
   "/manage/holidays/new": ["cc", "slo"], // has to be higher to not conflict with :id
   "/manage/holidays/:id": ["cc", "slo"],
+
+  "/manage/inventory": ["cc", "club", "slo"],
+  "/manage/inventory/items": ["cc", "club", "slo"],
+  "/manage/inventory/items/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
+  "/manage/inventory/items/:id": ["cc", "club", "slo"],
+  "/manage/inventory/items/:id/edit": ["cc", "club", "slo"],
+  "/manage/inventory/transactions": ["cc", "club", "slo"],
+  "/manage/inventory/transactions/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
+  "/manage/inventory/transactions/:id": ["cc", "club", "slo"],
+  "/manage/inventory/transactions/:id/edit": ["cc", "club", "slo"],
+
 };
 
 export default routes;

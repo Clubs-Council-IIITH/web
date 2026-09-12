@@ -11,6 +11,8 @@ export const CREATE_INVENTORY_ITEM = gql`
       iid
       name
       brand
+      photo
+      invoice
       clubid
       netQty
       availableQty
@@ -27,6 +29,8 @@ export const EDIT_INVENTORY_ITEM = gql`
       iid
       name
       brand
+      photo
+      invoice
       clubid
       netQty
       availableQty

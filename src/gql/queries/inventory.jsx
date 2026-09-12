@@ -39,6 +39,7 @@ export const GET_FULL_ITEM = gql`
       name
       brand
       photo
+      invoice
       clubid
       netQty
       availableQty

@@ -23,7 +23,7 @@ import { useAuth } from "components/AuthProvider";
 import ConfirmDialog from "components/ConfirmDialog";
 import FileUpload from "components/FileUpload";
 import { useToast } from "components/Toast";
-import { uploadImageFile } from "utils/files";
+import { uploadImageFile, uploadPDFFile } from "utils/files";
 
 import { getActiveClubIds } from "actions/clubs/ids/server_action";
 import { createInventoryItemAction } from "actions/inventory/items/create/server_action";
@@ -80,6 +80,7 @@ export default function ItemForm({
       currentLocation: defaultValues?.currentLocation ?? defaultValues?.current_location ?? [],
       requiresApproval: defaultValues?.requiresApproval ?? true,
       photo: defaultValues?.photo ?? null,
+      invoice: defaultValues?.invoice ?? null,
     }),
     [defaultValues],
   );
@@ -141,6 +142,8 @@ export default function ItemForm({
       warrantyDetails: formData.warrantyDetails || null,
       currentLocation: formData.currentLocation || [],
       requiresApproval: true,
+      photo: formData.photo || null,
+      invoice: formData.invoice || null,
     };
 
     // owner club
@@ -174,6 +177,37 @@ export default function ItemForm({
       triggerToast({
         title: "Error uploading photo",
         messages: error.message ? [error.message] : ["Failed to upload photo"],
+        severity: "error",
+      });
+      setLoading(false);
+      return;
+    }
+    
+    // upload invoice
+    try {
+      const invoice_filename = (
+        "item_invoice_" +
+        data.name +
+        "_" +
+        data.clubid
+      ).replace(".", "_");
+
+      if (typeof formData.invoice === "string") {
+        data.invoice = formData.invoice;
+      } else if (Array.isArray(formData.invoice) && formData.invoice.length > 0) {
+        data.invoice = await uploadPDFFile(
+          formData.invoice[0],
+          false,
+          invoice_filename,
+          photo_maxSizeMB,
+        );
+      } else {
+        data.invoice = null;
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error uploading invoice",
+        messages: error.message ? [error.message] : ["Failed to upload invoice"],
         severity: "error",
       });
       setLoading(false);
@@ -281,6 +315,31 @@ export default function ItemForm({
                   maxSizeMB={photo_maxSizeMB}
                   shape="square"
                   warnSizeMB={photo_warnSizeMB}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid container>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{
+                textTransform: "uppercase",
+                color: "text.secondary",
+              }}
+            >
+              invoice
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid size={12}>
+                <FileUpload
+                  type="document"
+                  name="invoice"
+                  label="Item Invoice"
+                  control={control}
+                  maxFiles={1}
+                  maxSizeMB={photo_maxSizeMB}
                 />
               </Grid>
             </Grid>
@@ -723,3 +782,4 @@ function ItemWarrantyInput({ control }) {
     />
   );
 }
+  

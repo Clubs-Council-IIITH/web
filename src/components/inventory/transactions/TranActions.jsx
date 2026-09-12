@@ -25,6 +25,8 @@ import { returnTransactionAction } from "actions/inventory/transactions/return/s
 import { cancelTransactionAction } from "actions/inventory/transactions/cancel/server_action";
 import { deleteTransactionAction } from "actions/inventory/transactions/delete/server_action";
 import { submitTransactionAction } from "actions/inventory/transactions/submit/server_action";
+import { logo_maxSizeMB, logo_warnSizeMB } from "components/clubs/ClubForm";
+import FileUpload from "components/FileUpload";
 
 // ---------------------------------------------------------------------------
 // Submit (incomplete → pending / pending_slo)
@@ -300,13 +302,18 @@ export function MarkBorrowed({ tid, sx }) {
           <DialogContentText sx={{ mb: 2 }}>
             Provide item status/condition notes and an optional photo URL before borrowing.
           </DialogContentText>
-          <TextField
-            label="Before Photo URL (optional)"
-            fullWidth
-            value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Grid size={12}>
+            <FileUpload
+              type="image"
+              name="Before Photo"
+              label="Before Photo (optional)"
+              control={(e) => setPhotoUrl(e.target.value)}
+              maxFiles={1}
+              shape="circle"
+              maxSizeMB={photo_maxSizeMB}
+              warnSizeMB={photo_warnSizeMB}
+            />
+          </Grid>
           <TextField
             label="Item Status / Condition Remarks (optional)"
             fullWidth
