@@ -44,13 +44,16 @@ export default async function ManageMembers({ searchParams }) {
     ...(onlyPast ? ["past"] : []),
   ];
 
-  const { data: { userMeta, userProfile } = {} } = await getClient().query(
-    GET_USER,
-    { userInput: null },
-  );
-  const user = { ...userMeta, ...userProfile };
-  const isCC = ["cc", "slo"].includes(userMeta?.role);
-  const isClub = user?.role === "club";
+  let clubs = [];
+  if (isElevated) {
+    const { data: { allClubs } = {} } = await getClient().query(
+      GET_ACTIVE_CLUB_IDS,
+      {},
+    );
+    clubs = allClubs || [];
+  }
+
+  const activeClub = targetClub || user?.uid;
 
   return (
     <Container>
@@ -96,33 +99,19 @@ export default async function ManageMembers({ searchParams }) {
         </Stack>
       </Stack>
 
-      {isCC && <PendingMembersDataGrid />}
-
       <Box>
-        <Typography
-          variant="subtitle2"
-          gutterBottom
-          sx={{
-            color: "text.secondary",
-            textTransform: "uppercase",
-            mb: 2,
-          }}
-        >
-          All Members
-        </Typography>
         <Box sx={{ mt: 2, mb: 3 }}>
           <MembersFilter
-            club={
-              targetClub || (userMeta?.role === "slo" ? undefined : user?.uid)
-            }
+            club={activeClub}
             state={targetState}
-            cc={isCC}
+            elevated={isElevated}
+            clubs={clubs}
           />
         </Box>
 
-        {(isClub || targetClub) && (
+        {activeClub && (
           <MembersDataGrid
-            club={isClub ? user?.uid : targetClub}
+            club={activeClub}
             onlyCurrent={onlyCurrent}
             onlyPast={onlyPast}
           />

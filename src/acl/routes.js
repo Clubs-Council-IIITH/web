@@ -19,6 +19,7 @@ const routes = {
   "/docs/new": ["cc"],
 
   "/manage/members": ["cc", "club", "slo"],
+  "/manage/pending-members": ["cc", "slo"],
   "/manage/members/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
   "/manage/members/bulk-add": ["cc", "club", "slo"],
   "/manage/members/bulk-edit": ["cc", "club", "slo"],
