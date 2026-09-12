@@ -49,7 +49,6 @@ export default function MemberPositions({
   const minYear = 2010;
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
-  const maxDateStr = `${currentYear}-${String(currentMonth).padStart(2, "0")}`;
 
   const emptyPositionItem = {
     name: null,
@@ -79,35 +78,54 @@ export default function MemberPositions({
       row.error = "Role name is required";
     }
 
+    if (row.startYear && !row.startMonth) {
+      row.startMonth = 1;
+    }
+
     // Ensure years are within bounds, but leave months as they are
     if (row.startYear < minYear) row.startYear = minYear;
 
-    // Only clamp if the month is actually set
     if (
-      row.startMonth &&
-      (row.startYear > currentYear ||
-        (row.startYear === currentYear && row.startMonth > currentMonth))
+      row.startYear > currentYear ||
+      (row.startYear === currentYear &&
+        row.startMonth &&
+        row.startMonth > currentMonth)
     ) {
-      row.startYear = currentYear;
-      row.startMonth = currentMonth;
+      row.isValid = false;
+      row.error = "Start date cannot be in the future";
     }
 
     // Handle End Date Logic
     if (row.endYear) {
+      if (!row.endMonth) {
+        row.endMonth =
+          row.startYear && row.endYear === row.startYear && row.startMonth
+            ? row.startMonth
+            : 1;
+      }
       if (row.endYear < minYear) {
         row.endYear = null;
         row.endMonth = null;
       }
+    }
 
-      if (row.endYear && row.endMonth) {
-        const isEndBeforeStart =
-          row.endYear < row.startYear ||
-          (row.endYear === row.startYear && row.endMonth < row.startMonth);
+    if (row.endYear && row.endMonth) {
+      const isEndBeforeStart =
+        row.endYear < row.startYear ||
+        (row.endYear === row.startYear && row.endMonth < row.startMonth);
 
-        if (isEndBeforeStart) {
-          row.isValid = false;
-          row.error = "End date cannot be before start date";
-        }
+      if (isEndBeforeStart) {
+        row.isValid = false;
+        row.error = "End date cannot be before start date";
+      }
+
+      const isEndFuture =
+        row.endYear > currentYear ||
+        (row.endYear === currentYear && row.endMonth > currentMonth);
+
+      if (isEndFuture) {
+        row.isValid = false;
+        row.error = "End date cannot be in the future";
       }
     }
 
@@ -201,24 +219,25 @@ export default function MemberPositions({
       valueGetter: (value, row) =>
         fmtMonthYear(row?.startMonth, row?.startYear),
       valueSetter: (value, row) => {
-        if (!value) return row; // Don't clear start date on empty, or handle as you wish
-        const [y, m] = value.split("-");
-        const y_num = parseInt(y, 10);
-        const m_num = Math.min(12, Math.max(1, parseInt(m, 10)));
-        if (isNaN(y_num) || isNaN(m_num)) return row;
+        if (!value) return row;
+        const parts = String(value).trim().split(/[-/.]/);
+        const y_num = parseInt(parts[0], 10);
+        if (isNaN(y_num)) return row;
+        const m_num =
+          parts.length > 1 && parts[1] && !isNaN(parseInt(parts[1], 10))
+            ? Math.min(12, Math.max(1, parseInt(parts[1], 10)))
+            : 1;
         return { ...row, startYear: y_num, startMonth: m_num };
       },
       renderEditCell: (params) => (
         <input
-          type="month"
-          defaultValue={fmtMonthYear(
-            params.row.startMonth,
-            params.row.startYear,
-            true,
-          )}
+          type="text"
+          placeholder="YYYY-MM (or YYYY)"
+          defaultValue={
+            fmtMonthYear(params.row.startMonth, params.row.startYear)
+          }
           ref={(input) => input && input.focus()}
           onChange={(e) => {
-            // This triggers valueSetter automatically
             params.api.setEditCellValue({
               id: params.id,
               field: params.field,
@@ -228,8 +247,14 @@ export default function MemberPositions({
           onBlur={() => {
             params.api.stopCellEditMode({ id: params.id, field: params.field });
           }}
-          min="2010-01"
-          max={maxDateStr}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              params.api.stopCellEditMode({
+                id: params.id,
+                field: params.field,
+              });
+            }
+          }}
           style={{
             width: "100%",
             padding: 6,
@@ -249,25 +274,36 @@ export default function MemberPositions({
 
       valueGetter: (value, row) => fmtMonthYear(row?.endMonth, row?.endYear),
       valueSetter: (value, row) => {
-        if (!value) {
+        if (!value || value === "present") {
           return { ...row, endYear: null, endMonth: null };
         }
-        const [y, m] = value.split("-");
-        const y_num = parseInt(y, 10);
-        const m_num = Math.min(12, Math.max(1, parseInt(m, 10)));
-        if (isNaN(y_num) || isNaN(m_num)) {
+        const parts = String(value).trim().split(/[-/.]/);
+        const y_num = parseInt(parts[0], 10);
+        if (isNaN(y_num)) {
           return { ...row, endYear: null, endMonth: null };
+        }
+        const hasMonth =
+          parts.length > 1 && parts[1] && !isNaN(parseInt(parts[1], 10));
+        let m_num;
+        if (hasMonth) {
+          m_num = Math.min(12, Math.max(1, parseInt(parts[1], 10)));
+        } else {
+          m_num =
+            row?.startYear && y_num === row.startYear && row?.startMonth
+              ? row.startMonth
+              : 1;
         }
         return { ...row, endYear: y_num, endMonth: m_num };
       },
       renderEditCell: (params) => (
         <input
-          type="month"
-          defaultValue={fmtMonthYear(
-            params.row.endMonth,
-            params.row.endYear,
-            true,
-          )}
+          type="text"
+          placeholder="YYYY-MM (or YYYY)"
+          defaultValue={
+            params.row.endYear
+              ? fmtMonthYear(params.row.endMonth, params.row.endYear)
+              : ""
+          }
           ref={(input) => input && input.focus()}
           onChange={(e) => {
             params.api.setEditCellValue({
@@ -279,8 +315,14 @@ export default function MemberPositions({
           onBlur={() => {
             params.api.stopCellEditMode({ id: params.id, field: params.field });
           }}
-          min="2010-01"
-          max={maxDateStr}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              params.api.stopCellEditMode({
+                id: params.id,
+                field: params.field,
+              });
+            }
+          }}
           style={{
             width: "100%",
             padding: 6,
