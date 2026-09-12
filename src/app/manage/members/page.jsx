@@ -1,18 +1,22 @@
+import { redirect } from "next/navigation";
+
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
 import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
-import { GET_MEMBERS, GET_PENDING_MEMBERS } from "gql/queries/members";
+import { GET_ACTIVE_CLUB_IDS } from "gql/queries/clubs";
+import { GET_CURRENT_MEMBERS, GET_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
 import Icon from "components/Icon";
 import ButtonLink from "components/Link";
 import MembersFilter from "components/members/MembersFilter";
 import MembersTable from "components/members/MembersTable";
+
 export const metadata = { title: "Manage Members" };
 
 // Fetch and merge user profiles into member objects
-async function enrichMembers(members) {
+export async function enrichMembers(members) {
   if (!members?.length) return [];
 
   const { document, variables } = combineQuery("CompositeMembers").addN(
@@ -37,6 +41,29 @@ function getLatestYear(member) {
 
 export default async function ManageMembers({ searchParams }) {
   const { club: targetClub, current, past } = await searchParams;
+
+  const { data: { userMeta, userProfile } = {} } = await getClient().query(
+    GET_USER,
+    { userInput: null },
+  );
+  const user = { ...userMeta, ...userProfile };
+  const isElevated = ["cc", "slo"].includes(userMeta?.role);
+
+  // If initial search params are missing, redirect immediately so URL has default params
+  const defaultClub = targetClub || user?.uid;
+  const needsClub = !targetClub && !!defaultClub;
+  const needsCurrent = current === undefined;
+  const needsPast = past === undefined;
+
+  if (needsClub || needsCurrent || needsPast) {
+    const params = new URLSearchParams();
+    if (defaultClub) params.set("club", defaultClub);
+    params.set("current", current ?? "true");
+    params.set("past", past ?? "false");
+
+    redirect(`/manage/members?${params.toString()}`);
+  }
+
   const onlyCurrent = current === "true";
   const onlyPast = past === "true";
   const targetState = [
@@ -121,44 +148,31 @@ export default async function ManageMembers({ searchParams }) {
   );
 }
 
-async function PendingMembersDataGrid() {
-  const { data: { pendingMembers } = {} } =
-    await getClient().query(GET_PENDING_MEMBERS);
-  const processedMembers = await enrichMembers(pendingMembers);
-
-  return processedMembers.length > 0 ? (
-    <Box sx={{ mb: 3 }}>
-      <Typography
-        variant="subtitle2"
-        gutterBottom
-        sx={{ color: "text.secondary", textTransform: "uppercase" }}
-      >
-        Pending Approval
-      </Typography>
-      <MembersTable
-        members={processedMembers}
-        showClub={true}
-        showIcon={false}
-      />
-    </Box>
-  ) : null;
-}
-
 async function MembersDataGrid({
   club,
   onlyCurrent = false,
   onlyPast = false,
 }) {
-  const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
-    clubInput: { cid: club },
-  });
-  const currentYear = new Date().getFullYear() + 1;
+  let targetMembers = [];
 
-  const targetMembers = members?.filter((member) => {
-    if (onlyCurrent === onlyPast) return true;
-    const isCurrent = getLatestYear(member) === currentYear;
-    return onlyCurrent ? isCurrent : !isCurrent;
-  });
+  if (!onlyPast && onlyCurrent) {
+    const { data: { currentMembers } = {} } = await getClient().query(
+      GET_CURRENT_MEMBERS,
+      { clubInput: { cid: club } },
+    );
+    targetMembers = currentMembers || [];
+  } else {
+    const { data: { members } = {} } = await getClient().query(GET_MEMBERS, {
+      clubInput: { cid: club },
+    });
+    const currentYear = new Date().getFullYear() + 1;
+
+    targetMembers = (members || []).filter((member) => {
+      if (onlyCurrent === onlyPast) return true;
+      const isCurrent = getLatestYear(member) === currentYear;
+      return onlyCurrent ? isCurrent : !isCurrent;
+    });
+  }
 
   const processedMembers = await enrichMembers(targetMembers);
   return <MembersTable members={processedMembers} />;
