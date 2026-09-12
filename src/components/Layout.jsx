@@ -211,6 +211,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="group-outline-rounded" />}
       />
       <DrawerItem
+        title="Pending Members"
+        path="/manage/pending-members"
+        icon={<Icon variant="group-add-outline-rounded" />}
+      />
+      <DrawerItem
         title="Data Download"
         path="/manage/data-members"
         icon={<Icon variant="sim-card-download-outline-rounded" />}
@@ -332,22 +337,7 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/holidays"
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
-      <DrawerDropdown
-        title="members"
-        // TODO: Change icon for this
-        icon={<Icon variant="group-outline-rounded" />}
-      >
-        <DrawerItem
-          title="Members List"
-          path="/manage/members"
-          icon={<Icon variant="group-outline-rounded" />}
-        />
-        <DrawerItem
-          title="Data Download"
-          path="/manage/data-members"
-          icon={<Icon variant="sim-card-download-outline-rounded" />}
-        />
-      </DrawerDropdown>
+      {manageMemberItems}
       <DrawerItem
         title="achievements"
         path="/manage/achievements"
