@@ -39,11 +39,12 @@ export default function DataGrid(theme) {
           "& .MuiDataGrid-editLongTextCellValue": {
             color: theme.palette.text.primary,
           },
-          "& .MuiDataGrid-editLongTextCellPopper, & .MuiDataGrid-editLongTextCellPopup": {
-            backgroundColor: isDark
-              ? theme.palette.grey[800]
-              : theme.palette.background.paper,
-          },
+          "& .MuiDataGrid-editLongTextCellPopper, & .MuiDataGrid-editLongTextCellPopup":
+            {
+              backgroundColor: isDark
+                ? theme.palette.grey[800]
+                : theme.palette.background.paper,
+            },
           "& .MuiDataGrid-editLongTextCellPopperContent": {
             backgroundColor: isDark
               ? theme.palette.grey[800]
