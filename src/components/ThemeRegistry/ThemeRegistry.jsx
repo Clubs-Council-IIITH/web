@@ -40,10 +40,14 @@ export default function ThemeRegistry({ children }) {
       : palette.light.background.default;
 
     document.body.style.backgroundColor = backgroundColor;
+    document.documentElement.style.colorScheme = prefersDarkMode.isDark
+      ? "dark"
+      : "light";
 
     return () => {
       // Optional cleanup
       document.body.style.backgroundColor = "";
+      document.documentElement.style.colorScheme = "";
     };
   }, [prefersDarkMode]);
 
