@@ -28,7 +28,7 @@ export async function generateMetadata(props) {
 
   return {
     title: item?.name ?? "Inventory Item",
-    description: item?.otherDetails || item?.other_details || "No description provided.",
+    description: item?.otherDetails || "No description provided.",
   };
 }
 
@@ -166,21 +166,21 @@ export default async function ManageInventoryItemID(props) {
               <Typography variant="overline" color="text.secondary">
                 Net Quantity
               </Typography>
-              <Typography variant="body1">{item?.netQty ?? item?.net_qty ?? 0}</Typography>
+              <Typography variant="body1">{item?.netQty?? 0}</Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <Typography variant="overline" color="text.secondary">
                 Available Quantity
               </Typography>
-              <Typography variant="body1">{item?.availableQty ?? item?.available_qty ?? 0}</Typography>
+              <Typography variant="body1">{item?.availableQty?? 0}</Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <Typography variant="overline" color="text.secondary">
                 Total Quantity
               </Typography>
-              <Typography variant="body1">{item?.totalQty ?? item?.total_qty ?? 0}</Typography>
+              <Typography variant="body1">{item?.totalQty?? 0}</Typography>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -188,22 +188,22 @@ export default async function ManageInventoryItemID(props) {
                 Current Location
               </Typography>
               <Typography variant="body1">
-                {Array.isArray(item?.currentLocation || item?.current_location)
-                  ? (item.currentLocation || item.current_location).join(", ")
-                  : (item?.currentLocation || item?.current_location) || "—"}
+                {Array.isArray(item?.currentLocation)
+                  ? (item.currentLocation).join(", ")
+                  : (item?.currentLocation) || "—"}
               </Typography>
             </Grid>
 
-            {(item?.warrantyDetails || item?.warranty_details) ? (
+            {(item?.warrantyDetails) ? (
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="overline" color="text.secondary">
                   Warranty Details
                 </Typography>
-                <Typography variant="body1">{item.warrantyDetails || item.warranty_details}</Typography>
+                <Typography variant="body1">{item.warrantyDetails}</Typography>
               </Grid>
             ) : null}
 
-            {(item?.otherDetails || item?.other_details) ? (
+            {(item?.otherDetails) ? (
               <Grid size={12}>
                 <Typography variant="overline" color="text.secondary">
                   Other Details
@@ -212,7 +212,7 @@ export default async function ManageInventoryItemID(props) {
                   variant="body2"
                   sx={{ mt: 0.5, whiteSpace: "pre-wrap" }}
                 >
-                  {item.otherDetails || item.other_details}
+                  {item.otherDetails}
                 </Typography>
               </Grid>
             ) : null}

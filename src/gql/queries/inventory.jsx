@@ -61,6 +61,7 @@ export const GET_ITEMS_FOR_SELECTOR = gql`
       brand
       clubid
       netQty
+      currentLocation
     }
   }
 `;
@@ -103,6 +104,7 @@ export const GET_ALL_TRANSACTIONS = gql`
       quantity
       startDate
       endDate
+      itemLocation
       user
       status {
         state
@@ -128,6 +130,7 @@ export const GET_PENDING_TRANSACTIONS = gql`
       itemClubid
       clubid
       quantity
+      itemLocation
       user
       status {
         state
@@ -155,6 +158,7 @@ export const GET_FULL_TRANSACTION = gql`
       endDate
       purpose
       storageLocation
+      itemLocation
       eventid
       eventName
       user

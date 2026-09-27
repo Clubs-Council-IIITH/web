@@ -56,8 +56,8 @@ export default async function ManageInventory() {
     }));
 
     // Compute basic statistics
-    const totalItemsCount = enrichedItems.reduce((acc, item) => acc + (item.totalQty ?? item.total_qty ?? 0), 0);
-    const availableItemsCount = enrichedItems.reduce((acc, item) => acc + (item.availableQty ?? item.available_qty ?? 0), 0);
+    const totalItemsCount = enrichedItems.reduce((acc, item) => acc + (item.totalQty ?? 0), 0);
+    const availableItemsCount = enrichedItems.reduce((acc, item) => acc + (item.availableQty ?? 0), 0);
     const borrowedCount = enrichedTransactions.filter(t => t?.status?.state === "borrowed").length;
 
     const itemsSectionTitle = isClubUser ? "Items in Possession" : "Items in Storage";

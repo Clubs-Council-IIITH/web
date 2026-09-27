@@ -153,6 +153,26 @@ export default function ItemsTable({
             ),
             display: "flex",
           },
+          {
+            field: "currentLocation",
+            headerName: "Location",
+            flex: 3,
+            valueGetter: (value) =>
+              Array.isArray(value) ? value.join(", ") : value || "",
+            renderCell: ({ value }) => (
+              <Typography
+                variant="body2"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {value || "—"}
+              </Typography>
+            ),
+            display: "flex",
+          },
         ]
       : []),
     {

@@ -6,6 +6,7 @@ import {
   GET_ALL_TRANSACTIONS,
   GET_FULL_TRANSACTION,
 } from "gql/queries/inventory";
+import { getFile } from "utils/files";
 
 import ActionPalette from "components/ActionPalette";
 import {
@@ -62,8 +63,8 @@ export default async function ManageTransactionID(props) {
   const isCompleted = transaction?.status?.state === "completed";
   const showPhotosToSlo = isSloOrCc && isCompleted;
 
-  const photoBefore = transaction?.photoBefore || transaction?.photo_before;
-  const photoAfter = transaction?.photoAfter || transaction?.photo_after;
+  const photoBefore = transaction?.photoBefore;
+  const photoAfter = transaction?.photoAfter;
   const hasPhotos = showPhotosToSlo && (photoBefore || photoAfter);
 
   return (
@@ -86,7 +87,7 @@ export default async function ManageTransactionID(props) {
                 </Typography>
                 <Box
                   component="img"
-                  src={photoBefore}
+                  src={getFile(photoBefore)}
                   alt="Before photo"
                   sx={{ width: "100%", borderRadius: 1, mt: 0.5, objectFit: "cover", maxHeight: 220 }}
                 />
@@ -99,7 +100,7 @@ export default async function ManageTransactionID(props) {
                 </Typography>
                 <Box
                   component="img"
-                  src={photoAfter}
+                  src={getFile(photoAfter)}
                   alt="After photo"
                   sx={{ width: "100%", borderRadius: 1, mt: 0.5, objectFit: "cover", maxHeight: 220 }}
                 />
@@ -147,8 +148,8 @@ export default async function ManageTransactionID(props) {
                 Borrow date
               </Typography>
               <Typography variant="body1">
-                {(transaction?.status?.borrowDate || transaction?.status?.borrow_date)
-                  ? new Date(transaction.status.borrowDate || transaction.status.borrow_date).toLocaleDateString()
+                {(transaction?.status?.borrowDate)
+                  ? new Date(transaction.status.borrowDate).toLocaleDateString()
                   : "—"}
               </Typography>
             </Grid>

@@ -84,6 +84,7 @@ export const CREATE_TRANSACTION = gql`
       endDate
       purpose
       storageLocation
+      itemLocation
       eventid
       eventName
       user

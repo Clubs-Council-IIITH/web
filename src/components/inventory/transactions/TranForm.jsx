@@ -81,10 +81,10 @@ export default function TransactionForm({
     [items, selectedItemId],
   );
 
-  // net_qty = qty available for clubs to borrow at this time
+  // netQty = qty available for clubs to borrow at this time
   const netQty = selectedItem?.netQty ?? null;
 
-  // Whether requested quantity exceeds available net_qty
+  // Whether requested quantity exceeds available netQty
   const qtyExceedsAvailable =
     netQty !== null && Number(quantity) > netQty;
 
@@ -138,6 +138,7 @@ export default function TransactionForm({
         itemName: item?.name || "",
         itemCode: item?.iid || item?._id || "",
         itemClubid: item?.clubid || null,
+        itemLocation: item?.currentLocation || null,
         clubid: user?.uid || user?.club || item?.clubid || "slo",
         clubName: user?.name || null,
         quantity: parseInt(formData.quantity, 10),

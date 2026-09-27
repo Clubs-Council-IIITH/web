@@ -27,11 +27,11 @@ function transformItem(item) {
     iid: item?.iid ?? "",
     name: item?.name ?? "",
     brand: item?.brand ?? "",
-    quantity: item?.netQty ?? item?.net_qty ?? 1,
-    description: item?.otherDetails ?? item?.other_details ?? "",
-    warrantyDetails: item?.warrantyDetails ?? item?.warranty_details ?? "",
+    quantity: item?.netQty ?? 1,
+    description: item?.otherDetails ?? "",
+    warrantyDetails: item?.warrantyDetails ?? "",
     clubid: item?.clubid ?? "",
-    currentLocation: item?.currentLocation ?? item?.current_location ?? [],
+    currentLocation: item?.currentLocation ?? [],
     photo: item?.photo ?? null,
   };
 }

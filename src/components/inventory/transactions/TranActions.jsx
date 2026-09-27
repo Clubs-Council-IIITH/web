@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 import {
   Button,
@@ -10,6 +11,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   TextField,
 } from "@mui/material";
 
@@ -25,8 +27,11 @@ import { returnTransactionAction } from "actions/inventory/transactions/return/s
 import { cancelTransactionAction } from "actions/inventory/transactions/cancel/server_action";
 import { deleteTransactionAction } from "actions/inventory/transactions/delete/server_action";
 import { submitTransactionAction } from "actions/inventory/transactions/submit/server_action";
-import { logo_maxSizeMB, logo_warnSizeMB } from "components/clubs/ClubForm";
+import { uploadImageFile } from "utils/files";
 import FileUpload from "components/FileUpload";
+
+const photo_maxSizeMB = 10;
+const photo_warnSizeMB = 1;
 
 // ---------------------------------------------------------------------------
 // Submit (incomplete → pending / pending_slo)
@@ -267,12 +272,36 @@ export function MarkBorrowed({ tid, sx }) {
   const { triggerToast } = useToast();
   const [dialog, setDialog] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState("");
   const [statusText, setStatusText] = useState("");
+
+  const { control, watch, reset } = useForm({
+    defaultValues: { photo: null },
+  });
+  const photoFile = watch("photo");
 
   const handle = async () => {
     setLoading(true);
-    const res = await markBorrowedAction(tid, photoUrl || null, statusText || null);
+
+    let photo = null;
+    try {
+      if (Array.isArray(photoFile) && photoFile.length > 0) {
+        photo = await uploadImageFile(
+          photoFile[0],
+          "txn_" + tid + "_before",
+          photo_warnSizeMB,
+        );
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error uploading photo",
+        messages: error?.message ? [error.message] : ["Failed to upload photo"],
+        severity: "error",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const res = await markBorrowedAction(tid, photo || null, statusText || null);
     setLoading(false);
     setDialog(false);
     if (res.ok) {
@@ -300,16 +329,16 @@ export function MarkBorrowed({ tid, sx }) {
         <DialogTitle>Confirm Item Borrow</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            Provide item status/condition notes and an optional photo URL before borrowing.
+            Provide item status/condition notes and an optional before-photo before borrowing.
           </DialogContentText>
-          <Grid size={12}>
+          <Grid size={12} sx={{ mb: 2 }}>
             <FileUpload
               type="image"
-              name="Before Photo"
+              name="photo"
               label="Before Photo (optional)"
-              control={(e) => setPhotoUrl(e.target.value)}
+              control={control}
               maxFiles={1}
-              shape="circle"
+              shape="square"
               maxSizeMB={photo_maxSizeMB}
               warnSizeMB={photo_warnSizeMB}
             />
@@ -344,11 +373,35 @@ export function ReturnTransaction({ tid, sx }) {
   const [dialog, setDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState("");
-  const [photoUrl, setPhotoUrl] = useState("");
+
+  const { control, watch, reset } = useForm({
+    defaultValues: { photo: null },
+  });
+  const photoFile = watch("photo");
 
   const handle = async () => {
     setLoading(true);
-    const res = await returnTransactionAction(tid, comment || null, photoUrl || null);
+
+    let photo = null;
+    try {
+      if (Array.isArray(photoFile) && photoFile.length > 0) {
+        photo = await uploadImageFile(
+          photoFile[0],
+          "txn_" + tid + "_after",
+          photo_warnSizeMB,
+        );
+      }
+    } catch (error) {
+      triggerToast({
+        title: "Error uploading photo",
+        messages: error?.message ? [error.message] : ["Failed to upload photo"],
+        severity: "error",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const res = await returnTransactionAction(tid, comment || null, photo || null);
     setLoading(false);
     setDialog(false);
     if (res.ok) {
@@ -376,15 +429,20 @@ export function ReturnTransaction({ tid, sx }) {
         <DialogTitle>Confirm Item Return</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            Provide return notes and an optional after-condition photo URL upon return.
+            Provide return notes and an optional after-condition photo upon return.
           </DialogContentText>
-          <TextField
-            label="After Photo URL (optional)"
-            fullWidth
-            value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Grid size={12} sx={{ mb: 2 }}>
+            <FileUpload
+              type="image"
+              name="photo"
+              label="After Photo (optional)"
+              control={control}
+              maxFiles={1}
+              shape="square"
+              maxSizeMB={photo_maxSizeMB}
+              warnSizeMB={photo_warnSizeMB}
+            />
+          </Grid>
           <TextField
             label="Return Comment / Status Notes (optional)"
             fullWidth
