@@ -31,15 +31,17 @@ import { useToast } from "components/Toast";
 import { ISOtoHuman } from "utils/formatTime";
 
 import { createTransactionAction } from "actions/inventory/transactions/create/server_action";
+import { editTransactionAction } from "actions/inventory/transactions/edit/server_action";
 import { submitTransactionAction } from "actions/inventory/transactions/submit/server_action";
 
 export default function TransactionForm({
+  id = null,
+  action = "create",
   defaultValues = {},
   items = [],
   events = [],
   pocs = [],
   existingTransactions = [],
-  onSubmit,
   submitLabel = "Submit Request",
 }) {
   const router = useRouter();
@@ -125,20 +127,44 @@ export default function TransactionForm({
   const submit = async (formData) => {
     setLoading(true);
     try {
-      if (onSubmit) {
-        await onSubmit(formData);
+      const linkedEvent = events.find((e) => e._id === formData.eventid);
+
+      if (action === "edit") {
+        const details = {
+          tid: id,
+          quantity: parseInt(formData.quantity, 10),
+          startDate: formData.startDate ? dayjs(formData.startDate).format("YYYY-MM-DD") : null,
+          endDate: formData.endDate ? dayjs(formData.endDate).format("YYYY-MM-DD") : null,
+          purpose: formData.useEvent ? (linkedEvent ? `For event: ${linkedEvent.name}` : "") : formData.purpose,
+          eventid: formData.useEvent ? formData.eventid : null,
+          eventName: formData.useEvent && linkedEvent ? linkedEvent.name : null,
+          storageLocation: formData.storageLocation || null,
+          remarks: formData.remarks || null,
+        };
+
+        const editRes = await editTransactionAction(details);
+        if (!editRes.ok) {
+          triggerToast({
+            title: editRes.error?.title || "Error updating transaction",
+            messages: editRes.error?.messages || ["Failed to update transaction."],
+            severity: "error",
+          });
+          return;
+        }
+
+        triggerToast({
+          title: "Saved!",
+          messages: ["Transaction updated successfully."],
+          severity: "success",
+        });
+        router.push(`/manage/inventory/transactions/${id}`);
         return;
       }
 
       const item = items.find((i) => i._id === formData.itemid || i.iid === formData.itemid);
-      const linkedEvent = events.find((e) => e._id === formData.eventid);
 
       const details = {
         itemid: item?.iid || item?._id || formData.itemid,
-        itemName: item?.name || "",
-        itemCode: item?.iid || item?._id || "",
-        itemClubid: item?.clubid || null,
-        itemLocation: item?.currentLocation || null,
         clubid: user?.uid || user?.club || item?.clubid || "slo",
         clubName: user?.name || null,
         quantity: parseInt(formData.quantity, 10),
@@ -222,6 +248,7 @@ export default function TransactionForm({
                         {...field}
                         labelId="tran-item-label"
                         label="Item *"
+                        disabled={action === "edit"}
                       >
                         {items.map((item) => {
                           const qty = item.netQty ?? 0;
@@ -661,7 +688,13 @@ export default function TransactionForm({
                 open={cancelDialog}
                 title="Confirm cancellation"
                 description="Are you sure you want to cancel? Any unsaved changes will be lost."
-                onConfirm={() => router.push("/manage/inventory/transactions")}
+                onConfirm={() =>
+                  router.push(
+                    action === "edit"
+                      ? `/manage/inventory/transactions/${id}`
+                      : "/manage/inventory/transactions",
+                  )
+                }
                 onClose={() => setCancelDialog(false)}
                 confirmProps={{ color: "primary" }}
                 confirmText="Yes, discard my changes"

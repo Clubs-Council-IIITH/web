@@ -109,11 +109,10 @@ export default function TranTable({
       display: "flex",
     };
 
-    const itemLocationCol = {
-      field: "itemLocation",
-      headerName: "Location",
+    const ownerClubCol = {
+      field: "itemClubName",
+      headerName: "Owner Club",
       flex: 3,
-      valueGetter: (value) => (Array.isArray(value) ? value.join(", ") : value || ""),
       renderCell: ({ value }) => (
         <Typography
           variant="body2"
@@ -123,7 +122,7 @@ export default function TranTable({
             whiteSpace: "nowrap",
           }}
         >
-          {value || "—"}
+          {value || "SLO"}
         </Typography>
       ),
       display: "flex",
@@ -249,7 +248,7 @@ export default function TranTable({
       return [userCol, clubCol, quantityCol, startDateCol, endDateCol, statusCol];
     }
 
-    return [itemCol, itemCodeCol, itemLocationCol, clubCol, quantityCol, startDateCol, endDateCol, statusCol];
+    return [itemCol, itemCodeCol, ownerClubCol, clubCol, quantityCol, startDateCol, endDateCol, statusCol];
   }, [item, isMobile]);
 
   return (

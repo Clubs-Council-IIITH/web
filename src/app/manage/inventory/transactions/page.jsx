@@ -5,6 +5,7 @@ import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import {
   GET_ALL_TRANSACTIONS,
+  GET_FULL_ITEM,
   GET_PENDING_TRANSACTIONS,
 } from "gql/queries/inventory";
 
@@ -15,6 +16,32 @@ import ButtonLink from "components/Link";
 export const metadata = {
   title: "Manage Transactions",
 };
+
+// Transactions only store itemid, so item name/location for display is
+// looked up per unique itemid found in the given transactions.
+async function getItemMapFor(transactions) {
+  const uniqueItemIds = [...new Set(transactions.map((tx) => tx.itemid).filter(Boolean))];
+  const items = await Promise.all(
+    uniqueItemIds.map(async (iid) => {
+      const { data } = await getClient().query(GET_FULL_ITEM, { iid });
+      return data?.getItem ?? null;
+    }),
+  );
+  return items.reduce((acc, item) => {
+    if (item) acc[item.iid] = item;
+    return acc;
+  }, {});
+}
+
+function withItemDetails(tx, itemMap, clubMap) {
+  const item = itemMap[tx.itemid];
+  return {
+    ...tx,
+    itemName: item?.name,
+    itemCode: item?.iid,
+    itemClubName: item?.clubid ? clubMap[item.clubid] || item.clubid : null,
+  };
+}
 
 async function getalltransactionsquery(querystring) {
   "use server";
@@ -36,9 +63,10 @@ async function getalltransactionsquery(querystring) {
     if (club._id) acc[club._id] = club.name;
     return acc;
   }, {});
+  const itemMap = await getItemMapFor(data?.getTransactions || []);
 
   return (data?.getTransactions || []).map((tx) => ({
-    ...tx,
+    ...withItemDetails(tx, itemMap, clubMap),
     clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
   }));
 }
@@ -58,16 +86,14 @@ export default async function ManageTransactions() {
     return acc;
   }, {});
 
-  // Pending transactions (cc / slo only — query handles auth)
-  let pendingTransactions = [];
-  if (["cc", "slo"].includes(role)) {
+  // Pending transactions: cc/slo see everything pending; a club only sees
+  // pending_club requests awaiting its approval on items it owns.
+  let rawPendingTransactions = [];
+  if (["cc", "slo", "club"].includes(role)) {
     const { data } = await getClient().query(GET_PENDING_TRANSACTIONS, {
       clubid,
     });
-    pendingTransactions = (data?.getPendingTransactions ?? []).map((tx) => ({
-      ...tx,
-      clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
-    }));
+    rawPendingTransactions = data?.getPendingTransactions ?? [];
   }
 
   // All transactions initial fetch
@@ -76,8 +102,19 @@ export default async function ManageTransactions() {
     pastTransactionsLimit: 4,
     hideDeleted: true,
   });
-  const allTransactions = (allData?.getTransactions ?? []).map((tx) => ({
-    ...tx,
+  const rawAllTransactions = allData?.getTransactions ?? [];
+
+  const itemMap = await getItemMapFor([
+    ...rawPendingTransactions,
+    ...rawAllTransactions,
+  ]);
+
+  const pendingTransactions = rawPendingTransactions.map((tx) => ({
+    ...withItemDetails(tx, itemMap, clubMap),
+    clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
+  }));
+  const allTransactions = rawAllTransactions.map((tx) => ({
+    ...withItemDetails(tx, itemMap, clubMap),
     clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "SLO",
   }));
 

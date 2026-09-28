@@ -17,6 +17,7 @@ import {
 
 import ConfirmDialog from "components/ConfirmDialog";
 import Icon from "components/Icon";
+import ButtonLink from "components/Link";
 import { useToast } from "components/Toast";
 
 import { approveSLOTransactionAction } from "actions/inventory/transactions/approve_slo/server_action";
@@ -32,6 +33,25 @@ import FileUpload from "components/FileUpload";
 
 const photo_maxSizeMB = 10;
 const photo_warnSizeMB = 1;
+
+// ---------------------------------------------------------------------------
+// Edit (incomplete / pending_club / pending_slo, requesting club only)
+// ---------------------------------------------------------------------------
+
+export function EditTransaction({ tid, sx }) {
+  return (
+    <Button
+      component={ButtonLink}
+      href={`/manage/inventory/transactions/${tid}/edit`}
+      variant="contained"
+      color="warning"
+      startIcon={<Icon variant="edit-outline" />}
+      sx={sx}
+    >
+      Edit
+    </Button>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Submit (incomplete → pending / pending_slo)

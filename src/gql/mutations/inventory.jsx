@@ -64,6 +64,16 @@ export const ADJUST_AVAILABLE_QTY = gql`
   }
 `;
 
+export const DELETE_INVENTORY_ITEM = gql`
+  mutation DeleteInventoryItem($iid: String!) {
+    deleteItem(iid: $iid) {
+      _id
+      iid
+      isDeleted
+    }
+  }
+`;
+
 // ---------------------------------------------------------------------------
 // Transaction mutations
 // ---------------------------------------------------------------------------
@@ -74,9 +84,6 @@ export const CREATE_TRANSACTION = gql`
       _id
       tid
       itemid
-      itemName
-      itemCode
-      itemClubid
       clubid
       clubName
       quantity
@@ -84,7 +91,6 @@ export const CREATE_TRANSACTION = gql`
       endDate
       purpose
       storageLocation
-      itemLocation
       eventid
       eventName
       user

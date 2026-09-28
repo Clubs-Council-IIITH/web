@@ -4,6 +4,7 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import {
   GET_ALL_TRANSACTIONS,
+  GET_FULL_ITEM,
   GET_FULL_TRANSACTION,
 } from "gql/queries/inventory";
 import { getFile } from "utils/files";
@@ -14,6 +15,7 @@ import {
   ApproveSloTransaction,
   CancelTransaction,
   DeleteTransaction,
+  EditTransaction,
   MarkBorrowed,
   RejectTransaction,
   ReturnTransaction,
@@ -45,6 +47,14 @@ export default async function ManageTransactionID(props) {
   const transaction = txData?.getTransaction ?? null;
   const targetTid = transaction?.tid || transaction?._id || id;
 
+  let item = null;
+  if (transaction?.itemid) {
+    const { data: itemData } = await getClient().query(GET_FULL_ITEM, {
+      iid: transaction.itemid,
+    });
+    item = itemData?.getItem ?? null;
+  }
+
   // Fetch past related transactions for the same item (last 5)
   let relatedTransactions = [];
   if (transaction?.itemid) {
@@ -57,15 +67,18 @@ export default async function ManageTransactionID(props) {
     );
   }
 
-  const actions = getActions(transaction, userMeta);
+  const actions = getActions(transaction, userMeta, item?.clubid);
 
-  const isSloOrCc = ["slo", "cc"].includes(userMeta?.role);
-  const isCompleted = transaction?.status?.state === "completed";
-  const showPhotosToSlo = isSloOrCc && isCompleted;
+  // Photos are only visible to SLO, the item's owning club, and the
+  // requesting (borrowing) club.
+  const canViewPhotos =
+    userMeta?.role === "slo" ||
+    (item?.clubid && userMeta?.uid === item.clubid) ||
+    (transaction?.clubid && userMeta?.uid === transaction.clubid);
 
   const photoBefore = transaction?.photoBefore;
   const photoAfter = transaction?.photoAfter;
-  const hasPhotos = showPhotosToSlo && (photoBefore || photoAfter);
+  const hasPhotos = canViewPhotos && Boolean(photoBefore || photoAfter);
 
   return (
     <Box>
@@ -79,7 +92,6 @@ export default async function ManageTransactionID(props) {
       <Grid container spacing={4} sx={{ mt: 1 }}>
         {hasPhotos && (
           <Grid size={{ xs: 12, md: 5 }} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {/* Photo documentation - visible only to SLO/CC after borrow & return is completed */}
             {photoBefore && (
               <Box>
                 <Typography variant="overline" color="text.secondary">
@@ -87,7 +99,7 @@ export default async function ManageTransactionID(props) {
                 </Typography>
                 <Box
                   component="img"
-                  src={getFile(photoBefore)}
+                  src={getFile(photoBefore, true)}
                   alt="Before photo"
                   sx={{ width: "100%", borderRadius: 1, mt: 0.5, objectFit: "cover", maxHeight: 220 }}
                 />
@@ -100,7 +112,7 @@ export default async function ManageTransactionID(props) {
                 </Typography>
                 <Box
                   component="img"
-                  src={getFile(photoAfter)}
+                  src={getFile(photoAfter, true)}
                   alt="After photo"
                   sx={{ width: "100%", borderRadius: 1, mt: 0.5, objectFit: "cover", maxHeight: 220 }}
                 />
@@ -113,10 +125,10 @@ export default async function ManageTransactionID(props) {
           <Grid container spacing={3}>
             <Grid size={12}>
               <Typography variant="h5" fontWeight={600}>
-                {transaction?.itemName}
+                {item?.name}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                {transaction?.itemCode} · Requested by{" "}
+                {item?.iid} · Requested by{" "}
                 {transaction?.user || "Unknown"}
               </Typography>
             </Grid>
@@ -170,7 +182,7 @@ export default async function ManageTransactionID(props) {
                 Storage location
               </Typography>
               <Typography variant="body1">
-                {transaction?.storageLocation || "—"}
+                {transaction?.storageLocation?.replaceAll("_", " ") || "—"}
               </Typography>
             </Grid>
 
@@ -249,11 +261,11 @@ export default async function ManageTransactionID(props) {
  * Derive the list of action button components based on current state + role.
  * Returns an array of { component, props } objects.
  */
-function getActions(transaction, user) {
+function getActions(transaction, user, itemClubid) {
   const state = transaction?.status?.state;
   const role = user?.role;
   const uid = user?.uid;
-  const userClubid = user?.clubid || user?.cid;
+  const userClubid = user?.uid;
   const isOwner =
     transaction?.user === uid ||
     (transaction?.clubid && transaction?.clubid === userClubid);
@@ -261,6 +273,19 @@ function getActions(transaction, user) {
   if (!state || !role) return [];
 
   const actions = [];
+
+  // Edit: while still incomplete, or awaiting the requesting club's own
+  // approval step — pending_club for a cross-club borrow, pending_slo
+  // otherwise (no pending_club stage when the club already owns the item
+  // or it's SLO-owned).
+  // Disabled for the requesting club for now
+  const hasPendingClubStage = itemClubid && itemClubid !== transaction?.clubid;
+  const canEditState =
+    state === "incomplete" ||
+    (hasPendingClubStage ? state === "pending_club" : state === "pending_slo");
+  if (canEditState && ["cc", "slo"].includes(role)) {
+    actions.push({ component: EditTransaction, props: {} });
+  }
 
   // Submit draft
   if (state === "incomplete" && (isOwner || ["cc", "slo"].includes(role))) {
@@ -270,7 +295,7 @@ function getActions(transaction, user) {
   // Club approves cross-club borrow
   if (
     state === "pending_club" &&
-    (transaction?.itemClubid === userClubid || ["cc", "slo"].includes(role))
+    (itemClubid === userClubid || ["cc", "slo"].includes(role))
   ) {
     actions.push({ component: ApproveClubTransaction, props: {} });
     actions.push({ component: RejectTransaction, props: {} });

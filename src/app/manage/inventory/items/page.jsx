@@ -15,6 +15,40 @@ export const metadata = {
   title: "Manage Items",
 };
 
+async function getallitemsquery(querystring) {
+  "use server";
+
+  const { data = {}, error } = await getClient().query(GET_ALL_ITEMS, {
+    hideDeleted: querystring["hideDeleted"],
+  });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  const { data: { allClubs = [] } = {} } = await getClient().query(GET_ALL_CLUB_IDS, {});
+  const clubMap = (allClubs || []).reduce((acc, club) => {
+    if (club.cid) acc[club.cid] = club.name;
+    if (club._id) acc[club._id] = club.name;
+    return acc;
+  }, {});
+
+  const enriched = (data?.getItems || []).map((item) => ({
+    ...item,
+    clubName: clubMap[item.clubid] || item.clubName || item.clubid || "—",
+  }));
+
+  const targetClub = querystring["targetClub"];
+  if (querystring["scope"] === "possession") {
+    return targetClub ? enriched.filter((item) => item.clubid === targetClub) : [];
+  }
+  if (querystring["scope"] === "storage" && targetClub) {
+    return enriched.filter((item) => !item.clubid || item.clubid !== targetClub);
+  }
+  return enriched;
+}
+
 export default async function ManageItems() {
   // fetching user's metadata to determine role and permissions
   const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
@@ -88,7 +122,12 @@ export default async function ManageItems() {
           >
             Items in Possession
           </Typography>
-          <ItemsTable items={possessionItems} />
+          <ItemsTable
+            items={possessionItems}
+            query={getallitemsquery}
+            clubid={clubId}
+            scope="possession"
+          />
         </Box>
       )}
 
@@ -103,7 +142,12 @@ export default async function ManageItems() {
         >
           Items in Storage
         </Typography>
-        <ItemsTable items={storageItems} />
+        <ItemsTable
+          items={storageItems}
+          query={getallitemsquery}
+          clubid={isClubUser ? clubId : null}
+          scope="storage"
+        />
       </Box>
     </Container>
   );

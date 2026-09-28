@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, FormControlLabel, IconButton, Switch, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
@@ -21,6 +21,9 @@ import { adjustAvailableQtyAction } from "actions/inventory/items/qty/server_act
  */
 export default function ItemsTable({
   items: initialItems,
+  query,
+  clubid,
+  scope,
   pageSize = 25,
   hideFooterPagination = false,
 }) {
@@ -29,11 +32,22 @@ export default function ItemsTable({
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { user } = useAuth();
 
+  // Toggle state for Deleted Items
+  const [hideDeleted, setHideDeleted] = useState(true);
   const [items, setItems] = useState(initialItems || []);
 
   useEffect(() => {
-    setItems(initialItems || []);
-  }, [initialItems]);
+    if (!query) {
+      setItems(initialItems || []);
+      return;
+    }
+
+    async function fetchItems() {
+      const result = await query({ targetClub: clubid, scope, hideDeleted });
+      setItems(result || []);
+    }
+    fetchItems();
+  }, [query, clubid, scope, hideDeleted, initialItems]);
 
   const canEditQty = ["cc", "slo"].includes(user?.role);
 
@@ -222,63 +236,88 @@ export default function ItemsTable({
   ];
 
   return (
-    <DataGrid
-      rows={items}
-      columns={columns}
-      getRowId={(row) => row?._id}
-      getRowHeight={() => null}
-      onRowClick={(params) => {
-        router.push(
-          `/manage/inventory/items/${params.row?._id}`,
-        );
-      }}
-      disableRowSelectionOnClick
-      hideFooterPagination={hideFooterPagination}
-      initialState={{
-        sorting: {
-          sortModel: [{ field: "name", sort: "asc" }],
-        },
-        filter: {
-          filterModel: {
-            items: [],
-            quickFilterLogicOperator: GridLogicOperator.Or,
+    <>
+      {query && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            mb: 2,
+            mt: 1,
+          }}
+        >
+          <FormControlLabel
+            control={
+              <Switch
+                checked={hideDeleted}
+                onChange={(e) => setHideDeleted(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Hide Deleted Items"
+            sx={{ marginLeft: 1 }}
+          />
+        </Box>
+      )}
+      <DataGrid
+        rows={items}
+        columns={columns}
+        getRowId={(row) => row?._id}
+        getRowHeight={() => null}
+        onRowClick={(params) => {
+          router.push(
+            `/manage/inventory/items/${params.row?.iid}`,
+          );
+        }}
+        disableRowSelectionOnClick
+        hideFooterPagination={hideFooterPagination}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "name", sort: "asc" }],
           },
-        },
-        pagination: { paginationModel: { pageSize } },
-      }}
-      getRowClassName={(params) => {
-        const qty = params.row?.netQty ?? 0;
-        return qty === 0 ? "out-of-stock-row" : "";
-      }}
-      showToolbar
-      sx={{
-        // disable cell selection outline
-        ".MuiDataGrid-cell:focus": {
-          outline: "none",
-        },
-        // pointer cursor on all rows
-        "& .MuiDataGrid-row:hover": {
-          cursor: "pointer",
-        },
-        "& .MuiDataGrid-cell": {
-          padding: "8px",
-        },
-        "& .MuiDataGrid-columnHeader": {
-          padding: "0 8px",
-        },
-        "& .out-of-stock-row": {
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark"
-              ? "rgba(211, 47, 47, 0.25)"
-              : "#ffebee",
-          "&:hover": {
+          filter: {
+            filterModel: {
+              items: [],
+              quickFilterLogicOperator: GridLogicOperator.Or,
+            },
+          },
+          pagination: { paginationModel: { pageSize } },
+        }}
+        getRowClassName={(params) => {
+          const qty = params.row?.netQty ?? 0;
+          return qty === 0 ? "out-of-stock-row" : "";
+        }}
+        showToolbar
+        sx={{
+          // disable cell selection outline
+          ".MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          // pointer cursor on all rows
+          "& .MuiDataGrid-row:hover": {
+            cursor: "pointer",
+          },
+          "& .MuiDataGrid-cell": {
+            padding: "8px",
+          },
+          "& .MuiDataGrid-columnHeader": {
+            padding: "0 8px",
+          },
+          "& .out-of-stock-row": {
             backgroundColor: (theme) =>
               theme.palette.mode === "dark"
-                ? "rgba(211, 47, 47, 0.35)"
-                : "#ffcdd2",
+                ? "rgba(211, 47, 47, 0.25)"
+                : "#ffebee",
+            "&:hover": {
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(211, 47, 47, 0.35)"
+                  : "#ffcdd2",
+            },
           },
-        },
-      }}
-    />
+        }}
+      />
+    </>
   );
 }

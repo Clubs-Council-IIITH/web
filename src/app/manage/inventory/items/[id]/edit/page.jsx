@@ -12,10 +12,11 @@ export async function generateMetadata(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { getItem: item } = {} } = await getClient().query(
+  const { data } = await getClient().query(
     GET_FULL_ITEM,
     { iid: id },
   );
+  const item = data?.getItem;
 
   return {
     title: item?.name ? `Edit — ${item.name}` : "Edit Item",

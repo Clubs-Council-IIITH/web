@@ -13,18 +13,28 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_ALL_TRANSACTIONS, GET_FULL_ITEM } from "gql/queries/inventory";
 
 import ActionPalette from "components/ActionPalette";
-import { EditItem } from "components/inventory/items/ItemActions";
+import { DeleteItem, EditItem } from "components/inventory/items/ItemActions";
 import { ItemStatus } from "components/inventory/items/ItemStates";
 import TranTable from "components/inventory/transactions/TranTable";
+
+const ACTIVE_TRANSACTION_STATES = [
+  "incomplete",
+  "pending",
+  "pending_club",
+  "pending_slo",
+  "approved_slo",
+  "borrowed",
+];
 
 export async function generateMetadata(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { getItem: item } = {} } = await getClient().query(
+  const { data } = await getClient().query(
     GET_FULL_ITEM,
     { iid: id },
   );
+  const item = data?.getItem;
 
   return {
     title: item?.name ?? "Inventory Item",
@@ -36,10 +46,11 @@ export default async function ManageInventoryItemID(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { data: { getItem: item } = {}, error } = await getClient().query(
+  const { data, error } = await getClient().query(
     GET_FULL_ITEM,
     { iid: id },
   );
+  const item = data?.getItem;
 
   if (error?.message?.includes("Item not found") || !item) {
     return redirect("/404");
@@ -57,29 +68,25 @@ export default async function ManageInventoryItemID(props) {
   const { allClubs, userMeta, userProfile } = combinedData;
   const user = { ...userMeta, ...userProfile };
 
-  // clubs can only see their own items
-  if (
-    user?.role === "club" &&
-    item?.clubid &&
-    user?.uid !== item?.clubid
-  ) {
-    redirect("/404");
-  }
-
   const ownerClub = allClubs?.find((c) => c.cid === item?.clubid);
   const { data: transactionData } = await getClient().query(
     GET_ALL_TRANSACTIONS,
     { itemid: item.iid, hideDeleted: true, paginationOn: true, limit: 25 },
   );
   const relatedTransactions = transactionData?.getTransactions ?? [];
+  const activeTransactionCount = relatedTransactions.filter((tx) =>
+    ACTIVE_TRANSACTION_STATES.includes(tx.status?.state),
+  ).length;
+
+  const actions = getActions(item, user, activeTransactionCount);
 
   return (
     <Box>
       <ActionPalette
         left={[ItemStatus]}
-        leftProps={[{ status: item?.status || { state: "approved" } }]}
-        right={getActions(item, user)}
-        rightProps={[{}]}
+        leftProps={[{ status: item?.isDeleted ? "deleted" : "approved" }]}
+        right={actions.map((a) => a.component)}
+        rightProps={actions.map((a) => a.props)}
       />
 
       <Grid container spacing={4} sx={{ mt: 1 }}>
@@ -226,6 +233,16 @@ export default async function ManageInventoryItemID(props) {
   );
 }
 
-function getActions(item, user) {
-  return ["cc", "slo", "club"].includes(user?.role) ? [EditItem] : [];
+function getActions(item, user, activeTransactionCount) {
+  const actions = [];
+  if (["cc", "slo"].includes(user?.role)) {
+    actions.push({ component: EditItem, props: {} });
+  }
+  if (user?.role === "slo" && !item?.isDeleted) {
+    actions.push({
+      component: DeleteItem,
+      props: { iid: item.iid, activeTransactionCount },
+    });
+  }
+  return actions;
 }

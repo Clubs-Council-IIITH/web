@@ -5,7 +5,7 @@ import { Box, Button, Card, Container, Grid,Stack, Typography } from "@mui/mater
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
-import { GET_ALL_ITEMS, GET_ALL_TRANSACTIONS } from "gql/queries/inventory";
+import { GET_ALL_ITEMS, GET_ALL_TRANSACTIONS, GET_FULL_ITEM } from "gql/queries/inventory";
 
 import ItemsTable from "components/inventory/items/ItemsTable";
 import TranTable from "components/inventory/transactions/TranTable";
@@ -14,6 +14,22 @@ import ButtonLink from "components/Link";
 export const metadata = {
   title: "Manage Inventory",
 };
+
+// Transactions only store itemid, so item name/location for display is
+// looked up per unique itemid found in the given transactions.
+async function getItemMapFor(transactions) {
+    const uniqueItemIds = [...new Set(transactions.map((tx) => tx.itemid).filter(Boolean))];
+    const items = await Promise.all(
+        uniqueItemIds.map(async (iid) => {
+            const { data } = await getClient().query(GET_FULL_ITEM, { iid });
+            return data?.getItem ?? null;
+        }),
+    );
+    return items.reduce((acc, item) => {
+        if (item) acc[item.iid] = item;
+        return acc;
+    }, {});
+}
 
 export default async function ManageInventory() {
     const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
@@ -32,33 +48,44 @@ export default async function ManageInventory() {
         return acc;
     }, {});
 
-    // Fetch real items and recent transactions
-    const { data: { getItems: displayItems = [] } = {} } = await getClient().query(GET_ALL_ITEMS, {
+    // Fetch all items (for accurate stats) and recent transactions
+    const { data: { getItems: allItems = [] } = {} } = await getClient().query(GET_ALL_ITEMS, {
         clubid: clubFilter,
-        limit: 10,
     });
+    const displayItems = allItems.slice(0, 10);
 
-    const { data: { getTransactions: recentTransactions = [] } = {} } = await getClient().query(GET_ALL_TRANSACTIONS, {
+    // Fetch all matching transactions (for accurate stats); the backend
+    // returns everything when paginationOn isn't set.
+    const { data: { getTransactions: allTransactions = [] } = {} } = await getClient().query(GET_ALL_TRANSACTIONS, {
         clubid: clubFilter,
-        paginationOn: true,
-        limit: 10,
         hideDeleted: true,
     });
+    const recentTransactions = allTransactions.slice(0, 10);
 
     const enrichedItems = displayItems.map((item) => ({
         ...item,
         clubName: clubMap[item.clubid] || item.clubName || item.clubid || "—",
     }));
 
-    const enrichedTransactions = recentTransactions.map((tx) => ({
-        ...tx,
-        clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "—",
-    }));
+    const itemMap = await getItemMapFor(recentTransactions);
+    const enrichedTransactions = recentTransactions.map((tx) => {
+        const item = itemMap[tx.itemid];
+        return {
+            ...tx,
+            itemName: item?.name,
+            itemCode: item?.iid,
+            itemClubName: item?.clubid ? clubMap[item.clubid] || item.clubid : null,
+            clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "—",
+        };
+    });
 
-    // Compute basic statistics
-    const totalItemsCount = enrichedItems.reduce((acc, item) => acc + (item.totalQty ?? 0), 0);
-    const availableItemsCount = enrichedItems.reduce((acc, item) => acc + (item.availableQty ?? 0), 0);
-    const borrowedCount = enrichedTransactions.filter(t => t?.status?.state === "borrowed").length;
+    // Compute basic statistics across the full item/transaction sets, not
+    // just the 10-row previews shown in the tables below.
+    const totalItemsCount = allItems.length;
+    const availableItemsCount = allItems.reduce((acc, item) => acc + (item.availableQty ?? 0), 0);
+    const borrowedQuantity = allTransactions
+        .filter((t) => t?.status?.state === "borrowed")
+        .reduce((acc, t) => acc + (t.quantity ?? 0), 0);
 
     const itemsSectionTitle = isClubUser ? "Items in Possession" : "Items in Storage";
     const totalItemsCardTitle = isClubUser ? "Total Items in Possession" : "Total Items in Storage";
@@ -87,7 +114,7 @@ export default async function ManageInventory() {
                     <Grid size={{ xs: 12, sm: 4 }}>
                         <Card sx={{ p: 2, boxShadow: 1 }}>
                             <Typography variant="caption" color="text.secondary">Active Borrowed Items</Typography>
-                            <Typography variant="h4" fontWeight={600} color="warning.main">{borrowedCount}</Typography>
+                            <Typography variant="h4" fontWeight={600} color="warning.main">{borrowedQuantity}</Typography>
                         </Card>
                     </Grid>
                 </Grid>

@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const GET_ALL_ITEMS = gql`
-  query GetItems($clubid: String, $limit: Int) {
-    getItems(clubid: $clubid, limit: $limit) {
+  query GetItems($clubid: String, $limit: Int, $hideDeleted: Boolean) {
+    getItems(clubid: $clubid, limit: $limit, hideDeleted: $hideDeleted) {
       _id
       iid
       name
@@ -12,6 +12,7 @@ export const GET_ALL_ITEMS = gql`
       availableQty
       totalQty
       currentLocation
+      isDeleted
     }
   }
 `;
@@ -48,6 +49,7 @@ export const GET_FULL_ITEM = gql`
       otherDetails
       currentLocation
       requiresApproval
+      isDeleted
     }
   }
 `;
@@ -96,15 +98,11 @@ export const GET_ALL_TRANSACTIONS = gql`
       _id
       tid
       itemid
-      itemName
-      itemCode
-      itemClubid
       clubid
       clubName
       quantity
       startDate
       endDate
-      itemLocation
       user
       status {
         state
@@ -125,12 +123,8 @@ export const GET_PENDING_TRANSACTIONS = gql`
       _id
       tid
       itemid
-      itemName
-      itemCode
-      itemClubid
       clubid
       quantity
-      itemLocation
       user
       status {
         state
@@ -148,9 +142,6 @@ export const GET_FULL_TRANSACTION = gql`
       _id
       tid
       itemid
-      itemName
-      itemCode
-      itemClubid
       clubid
       clubName
       quantity
@@ -158,7 +149,6 @@ export const GET_FULL_TRANSACTION = gql`
       endDate
       purpose
       storageLocation
-      itemLocation
       eventid
       eventName
       user
