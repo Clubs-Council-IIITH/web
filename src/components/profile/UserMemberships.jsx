@@ -46,6 +46,13 @@ export default function UserMemberships({ rows = [] }) {
 
   const [clubs, setClubs] = useState([]);
 
+  const rowsWithIds = rows.map((row, idx) => ({
+    id:
+      row.rid ||
+      `${row.cid}-${row.name}-${row.startYear}-${row.startMonth ?? ""}-${idx}`,
+    ...row,
+  }));
+
   // Get categories that are actually present in the user's club memberships
   const getActiveCategoriesFromUserClubs = () => {
     const categories = new Set();
@@ -160,15 +167,15 @@ export default function UserMemberships({ rows = [] }) {
 
   return (
     <>
-      {rows?.length ? (
+      {rowsWithIds?.length ? (
         <>
           <DataGrid
             autoHeight
             getRowHeight={() => (isMobile ? "auto" : null)}
-            rows={rows}
+            rows={rowsWithIds}
             columns={columns}
             disableRowSelectionOnClick
-            getRowId={(row) => row.rid}
+            getRowId={(row) => row.id}
             initialState={{
               sorting: {
                 sortModel: [{ field: "end", sort: "desc" }],

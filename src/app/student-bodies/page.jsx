@@ -1,7 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import ClubsGrid from "components/clubs/ClubsGrid";
+import Icon from "components/Icon";
 import { getStaticFile } from "utils/files";
+
+import { studentBodyCategories } from "constants/clubCategories";
 
 export const metadata = {
   title: "Student Bodies @ IIIT-H",
@@ -18,8 +21,32 @@ export default async function StudentBodies() {
   };
 
   return (
-    <Box>
-      <ClubsGrid category="body" staticClubs={[cc]} />
-    </Box>
-  );
+    <>
+      { studentBodyCategories.map((category, index) => {
+        return (
+          <Box key={category} sx={{mx: 5}}>
+            <Box
+              sx={{
+                mb: 2,
+                mt: index != 0 ? 5: 0,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="component-exchange" sx={{ mr: 1 }} />
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  textTransform: "uppercase",
+                }}
+              >
+                {category}
+              </Typography>
+            </Box>
+            <ClubsGrid category={category} staticClubs={[cc]} />
+          </Box>
+        )
+      }) }
+    </>
+  )
 }

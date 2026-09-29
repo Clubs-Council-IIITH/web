@@ -6,15 +6,14 @@ import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import ClubCard from "components/clubs/ClubCard";
 
 export default async function ClubsGrid({ category, staticClubs = [] }) {
-  const { data: { allClubs } = {} } = await getClient().query(
+  const { data: { allClubs = [] } = {} } = await getClient().query(
     GET_ACTIVE_CLUBS,
-    {},
+    { category },
   );
 
   return (
     <Grid container spacing={2}>
-      {[...staticClubs, ...allClubs]
-        ?.filter((club) => club.category === category)
+      {[...staticClubs, ...(allClubs || [])]
         ?.sort((a, b) => a.name.localeCompare(b.name))
         ?.map((club) => (
           <Grid

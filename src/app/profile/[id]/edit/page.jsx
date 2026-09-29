@@ -40,10 +40,12 @@ export default async function EditProfile(props) {
   let isClub = user?.role === "club";
   const isCC = user?.role === "cc";
 
+  const isElevated = ["slo", "cc"].includes(currentUser?.role)
+
   if (
     userProfile === null ||
     userMeta === null ||
-    (currentUser?.uid !== user?.uid && currentUser?.role !== "cc") ||
+    (currentUser?.uid !== user?.uid && !isElevated) ||
     isCC
   )
     redirect("/404");

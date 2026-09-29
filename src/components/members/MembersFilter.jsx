@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
@@ -16,13 +16,19 @@ import {
 
 import { useToast } from "components/Toast";
 
-import { getActiveClubIds } from "actions/clubs/ids/server_action";
-
-export default function MembersFilter({ club, state, cc = false }) {
+export default function MembersFilter({
+  club,
+  state,
+  elevated = false,
+  clubs = null,
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { triggerToast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
+  const isElevated = elevated;
 
   // get a new searchParams string by merging the current
   // searchParams with a provided key/value pair
@@ -39,32 +45,17 @@ export default function MembersFilter({ club, state, cc = false }) {
   // show both current and past if no state is selected
   useEffect(() => {
     if (state.length === 0 && club)
-      router.push(
+      router.replace(
         `${pathname}?current=true&past=false${club ? `&club=${club}` : ""}`,
+        { scroll: false },
       );
-  }, [state, club]);
+  }, [state, club, pathname, router]);
 
-  // fetch list of clubs
-  const [clubs, setClubs] = useState([]);
-  useEffect(() => {
-    (async () => {
-      let res = await getActiveClubIds();
-      if (!res.ok) {
-        triggerToast({
-          title: "Unable to fetch clubs",
-          messages: res.error.messages,
-          severity: "error",
-        });
-      } else {
-        setClubs(res.data);
-      }
-    })();
-  }, []);
-
+  // fetch list of clubs if not provided by server
   return (
-    <Container>
+    <Container sx={{ opacity: isPending ? 0.7 : 1, transition: "opacity 0.2s" }}>
       <Grid container spacing={2}>
-        {cc && (
+        {isElevated && (
           <Grid
             size={{
               xs: 12,
@@ -77,10 +68,14 @@ export default function MembersFilter({ club, state, cc = false }) {
                 labelId="clubid"
                 label="Filter by club"
                 fullWidth
+                disabled={isPending}
                 onChange={(e) =>
-                  router.push(
-                    `${pathname}?${createQueryString("club", e?.target?.value)}`,
-                  )
+                  startTransition(() => {
+                    router.replace(
+                      `${pathname}?${createQueryString("club", e?.target?.value)}`,
+                      { scroll: false },
+                    );
+                  })
                 }
                 value={clubs.some((c) => c.cid === club) ? club : ""}
               >
@@ -107,18 +102,22 @@ export default function MembersFilter({ club, state, cc = false }) {
               fullWidth
               value={state}
               color="primary"
+              disabled={isPending}
               sx={{ height: "100%" }}
               onChange={(e) => {
                 // don't do anything if all states are being unselected
                 if (state.length === 1 && state.includes(e?.target?.value))
                   return;
 
-                return router.push(
-                  `${pathname}?${createQueryString(
-                    e?.target?.value,
-                    !state.includes(e?.target?.value),
-                  )}`,
-                );
+                startTransition(() => {
+                  router.replace(
+                    `${pathname}?${createQueryString(
+                      e?.target?.value,
+                      !state.includes(e?.target?.value),
+                    )}`,
+                    { scroll: false },
+                  );
+                });
               }}
             >
               <ToggleButton disableRipple key="current" value="current">

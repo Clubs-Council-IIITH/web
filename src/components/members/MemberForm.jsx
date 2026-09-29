@@ -133,16 +133,24 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
     data.roles = formData.roles
       .filter((i) => i?.name)
       .map((i) => {
-        let sy = parseInt(i.startYear);
+        let sy = parseInt(i.startYear, 10);
         if (!Number.isInteger(sy)) sy = nowY;
         let smVal = i.startMonth;
-        let sm = smVal != null ? parseInt(smVal) : null;
-        if (sm != null && !Number.isInteger(sm)) sm = null;
+        let sm = smVal != null ? parseInt(smVal, 10) : 1;
+        if (!Number.isInteger(sm)) sm = 1;
 
-        let ey = i.endYear != null ? parseInt(i.endYear) : null;
+        let ey =
+          i.endYear != null && i.endYear !== ""
+            ? parseInt(i.endYear, 10)
+            : null;
         let emVal = i.endMonth;
-        let em = ey != null ? (emVal != null ? parseInt(emVal) : null) : null;
-        if (em != null && !Number.isInteger(em)) em = null;
+        let em =
+          ey != null
+            ? emVal != null && emVal !== ""
+              ? parseInt(emVal, 10)
+              : (sy && ey === sy && sm ? sm : 1)
+            : null;
+        if (em != null && !Number.isInteger(em)) em = 1;
 
         return {
           name: i.name,
@@ -152,6 +160,36 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           endMonth: em,
         };
       });
+
+    const nowM = now.getMonth() + 1;
+    const isFutureStart = data.roles.some(
+      (r) =>
+        r.startYear > nowY ||
+        (r.startYear === nowY && r.startMonth && r.startMonth > nowM),
+    );
+    if (isFutureStart) {
+      setLoading(false);
+      return triggerToast({
+        title: "Error!",
+        messages: ["Start date cannot be in the future."],
+        severity: "error",
+      });
+    }
+
+    const isFutureEnd = data.roles.some(
+      (r) =>
+        r.endYear &&
+        (r.endYear > nowY ||
+          (r.endYear === nowY && r.endMonth && r.endMonth > nowM)),
+    );
+    if (isFutureEnd) {
+      setLoading(false);
+      return triggerToast({
+        title: "Error!",
+        messages: ["End date cannot be in the future."],
+        severity: "error",
+      });
+    }
 
     // If editing legacy data and any role still has no startMonth or has endYear without endMonth, prompt user
     if (action === "edit") {

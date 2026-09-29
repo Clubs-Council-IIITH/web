@@ -18,6 +18,8 @@ function transformMember(member) {
       member?.roles?.map((role, key) => ({
         ...role,
         id: role?.rid || key,
+        startMonth: role?.startMonth ?? 1,
+        endMonth: role?.endYear ? (role?.endMonth ?? 1) : null,
         isValid: true,
       })) || [],
   };
