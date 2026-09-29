@@ -22,13 +22,13 @@ export default async function StudentBodies() {
 
   return (
     <>
-      { studentBodyCategories.map((category, index) => {
+      {studentBodyCategories.map((category, index) => {
         return (
-          <Box key={category} sx={{mx: 5}}>
+          <Box key={category} sx={{ mx: 5 }}>
             <Box
               sx={{
                 mb: 2,
-                mt: index != 0 ? 5: 0,
+                mt: index != 0 ? 5 : 0,
                 display: "flex",
                 alignItems: "center",
               }}
@@ -45,8 +45,8 @@ export default async function StudentBodies() {
             </Box>
             <ClubsGrid category={category} staticClubs={[cc]} />
           </Box>
-        )
-      }) }
+        );
+      })}
     </>
-  )
+  );
 }

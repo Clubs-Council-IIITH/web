@@ -10,7 +10,9 @@ export async function getActiveClubIds() {
   if (error) {
     response.error = {
       title: error.name,
-      messages: error?.graphQLErrors?.map((ge) => ge?.message) || [error.message],
+      messages: error?.graphQLErrors?.map((ge) => ge?.message) || [
+        error.message,
+      ],
     };
   } else {
     response.ok = true;

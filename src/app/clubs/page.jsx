@@ -12,13 +12,13 @@ export const metadata = {
 export default async function Clubs() {
   return (
     <>
-      { clubCategories.map((category, index) => {
+      {clubCategories.map((category, index) => {
         return (
-          <Box key={category} sx={{mx: 5}}>
+          <Box key={category} sx={{ mx: 5 }}>
             <Box
               sx={{
                 mb: 2,
-                mt: index != 0 ? 5: 0,
+                mt: index != 0 ? 5 : 0,
                 display: "flex",
                 alignItems: "center",
               }}
@@ -33,10 +33,10 @@ export default async function Clubs() {
                 {category}
               </Typography>
             </Box>
-            <ClubsGrid category={category}/>
+            <ClubsGrid category={category} />
           </Box>
-        )
-      }) }
+        );
+      })}
     </>
   );
 }

@@ -40,7 +40,7 @@ export default async function EditProfile(props) {
   let isClub = user?.role === "club";
   const isCC = user?.role === "cc";
 
-  const isElevated = ["slo", "cc"].includes(currentUser?.role)
+  const isElevated = ["slo", "cc"].includes(currentUser?.role);
 
   if (
     userProfile === null ||

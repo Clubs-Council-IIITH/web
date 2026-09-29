@@ -244,7 +244,9 @@ export default function BulkEdit({ mode = "add" }) {
               : member.endMonth == null ||
                   member.endMonth === "-" ||
                   member.endMonth === ""
-                ? (sy && ey === sy && sm ? sm : 1)
+                ? sy && ey === sy && sm
+                  ? sm
+                  : 1
                 : parseInt(member.endMonth, 10);
           return {
             uid: member.uid,
@@ -291,9 +293,10 @@ export default function BulkEdit({ mode = "add" }) {
             : member.endMonth == null ||
                 member.endMonth === "-" ||
                 member.endMonth === ""
-              ? (member.startYear && plannedEndYear === parseInt(member.startYear, 10)
-                  ? plannedStartMonth
-                  : 1)
+              ? member.startYear &&
+                plannedEndYear === parseInt(member.startYear, 10)
+                ? plannedStartMonth
+                : 1
               : parseInt(member.endMonth, 10);
 
         // check if role has changed
@@ -311,9 +314,7 @@ export default function BulkEdit({ mode = "add" }) {
               return {
                 name: role.name,
                 startYear: addNew ? role.startYear : member.startYear,
-                startMonth: addNew
-                  ? role.startMonth ?? 1
-                  : plannedStartMonth,
+                startMonth: addNew ? (role.startMonth ?? 1) : plannedStartMonth,
                 endYear: addNew
                   ? parseInt(member.startYear, 10)
                   : plannedEndYear,
@@ -848,7 +849,8 @@ function MembersTable({
       valueGetter: (value, row) =>
         fmtMonthYear(row.endMonth, row.endYear) ?? "",
       valueSetter: (value, row) => {
-        if (!value || value === "present") return { ...row, endYear: null, endMonth: null };
+        if (!value || value === "present")
+          return { ...row, endYear: null, endMonth: null };
         const parts = String(value).trim().split(/[-/.]/);
         const y_num = parseInt(parts[0], 10);
         if (isNaN(y_num)) {

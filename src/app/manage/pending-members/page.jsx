@@ -4,7 +4,7 @@ import { combineQuery, getClient } from "gql/client";
 import { GET_PENDING_MEMBERS } from "gql/queries/members";
 import { GET_USER_PROFILE } from "gql/queries/users";
 
-import { enrichMembers } from "app/manage/members/page"
+import { enrichMembers } from "app/manage/members/page";
 import MembersTable from "components/members/MembersTable";
 
 async function PendingMembersDataGrid() {
@@ -13,11 +13,7 @@ async function PendingMembersDataGrid() {
   const processedMembers = await enrichMembers(pendingMembers);
 
   return processedMembers.length > 0 ? (
-    <MembersTable
-      members={processedMembers}
-      showClub={true}
-      showIcon={false}
-    />
+    <MembersTable members={processedMembers} showClub={true} showIcon={false} />
   ) : null;
 }
 
@@ -29,5 +25,5 @@ export default async function PendingMembers() {
       </Typography>
       <PendingMembersDataGrid />
     </Container>
-  )
+  );
 }

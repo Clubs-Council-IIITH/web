@@ -148,7 +148,9 @@ export default function MemberForm({ defaultValues = {}, action = "log" }) {
           ey != null
             ? emVal != null && emVal !== ""
               ? parseInt(emVal, 10)
-              : (sy && ey === sy && sm ? sm : 1)
+              : sy && ey === sy && sm
+                ? sm
+                : 1
             : null;
         if (em != null && !Number.isInteger(em)) em = 1;
 

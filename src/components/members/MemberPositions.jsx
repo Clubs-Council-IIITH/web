@@ -233,9 +233,10 @@ export default function MemberPositions({
         <input
           type="text"
           placeholder="YYYY-MM (or YYYY)"
-          defaultValue={
-            fmtMonthYear(params.row.startMonth, params.row.startYear)
-          }
+          defaultValue={fmtMonthYear(
+            params.row.startMonth,
+            params.row.startYear,
+          )}
           ref={(input) => input && input.focus()}
           onChange={(e) => {
             params.api.setEditCellValue({

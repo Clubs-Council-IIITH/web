@@ -53,7 +53,9 @@ export default function MembersFilter({
 
   // fetch list of clubs if not provided by server
   return (
-    <Container sx={{ opacity: isPending ? 0.7 : 1, transition: "opacity 0.2s" }}>
+    <Container
+      sx={{ opacity: isPending ? 0.7 : 1, transition: "opacity 0.2s" }}
+    >
       <Grid container spacing={2}>
         {isElevated && (
           <Grid
