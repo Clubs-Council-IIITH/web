@@ -83,10 +83,10 @@ export default async function Profile(props) {
     <Container>
       {/*
         show action palette only
-        1. if current user is CC, or
+        1. if current user is CC or SLO, or
         2. if current user is viewing their own profile and is not a club
       */}
-      {currentUser?.role === "cc" ||
+      {["cc", "slo"].includes(currentUser?.role) ||
       (memberships?.length !== 0 && currentUser?.uid === user?.uid) ? (
         <ActionPalette right={[EditUser]} rightJustifyMobile="flex-end" />
       ) : null}
