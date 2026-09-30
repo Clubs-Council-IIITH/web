@@ -298,19 +298,19 @@ export function MarkBorrowed({ tid, sx }) {
     defaultValues: { photo: null },
   });
   const photoFile = watch("photo");
+  const hasPhoto = Array.isArray(photoFile) && photoFile.length > 0;
 
   const handle = async () => {
+    if (!hasPhoto) return;
     setLoading(true);
 
     let photo = null;
     try {
-      if (Array.isArray(photoFile) && photoFile.length > 0) {
-        photo = await uploadImageFile(
-          photoFile[0],
-          "txn_" + tid + "_before",
-          photo_warnSizeMB,
-        );
-      }
+      photo = await uploadImageFile(
+        photoFile[0],
+        "txn_" + tid + "_before",
+        photo_warnSizeMB,
+      );
     } catch (error) {
       triggerToast({
         title: "Error uploading photo",
@@ -321,7 +321,7 @@ export function MarkBorrowed({ tid, sx }) {
       return;
     }
 
-    const res = await markBorrowedAction(tid, photo || null, statusText || null);
+    const res = await markBorrowedAction(tid, photo, statusText || null);
     setLoading(false);
     setDialog(false);
     if (res.ok) {
@@ -349,13 +349,13 @@ export function MarkBorrowed({ tid, sx }) {
         <DialogTitle>Confirm Item Borrow</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            Provide item status/condition notes and an optional before-photo before borrowing.
+            A before-photo of the item's condition is required to confirm borrowing.
           </DialogContentText>
           <Grid size={12} sx={{ mb: 2 }}>
             <FileUpload
               type="image"
               name="photo"
-              label="Before Photo (optional)"
+              label="Before Photo *"
               control={control}
               maxFiles={1}
               shape="square"
@@ -374,7 +374,7 @@ export function MarkBorrowed({ tid, sx }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialog(false)}>Cancel</Button>
-          <Button onClick={handle} variant="contained" color="info" disabled={loading}>
+          <Button onClick={handle} variant="contained" color="info" disabled={loading || !hasPhoto}>
             Confirm Borrow
           </Button>
         </DialogActions>
@@ -398,19 +398,19 @@ export function ReturnTransaction({ tid, sx }) {
     defaultValues: { photo: null },
   });
   const photoFile = watch("photo");
+  const hasPhoto = Array.isArray(photoFile) && photoFile.length > 0;
 
   const handle = async () => {
+    if (!hasPhoto) return;
     setLoading(true);
 
     let photo = null;
     try {
-      if (Array.isArray(photoFile) && photoFile.length > 0) {
-        photo = await uploadImageFile(
-          photoFile[0],
-          "txn_" + tid + "_after",
-          photo_warnSizeMB,
-        );
-      }
+      photo = await uploadImageFile(
+        photoFile[0],
+        "txn_" + tid + "_after",
+        photo_warnSizeMB,
+      );
     } catch (error) {
       triggerToast({
         title: "Error uploading photo",
@@ -421,7 +421,7 @@ export function ReturnTransaction({ tid, sx }) {
       return;
     }
 
-    const res = await returnTransactionAction(tid, comment || null, photo || null);
+    const res = await returnTransactionAction(tid, comment || null, photo);
     setLoading(false);
     setDialog(false);
     if (res.ok) {
@@ -449,13 +449,13 @@ export function ReturnTransaction({ tid, sx }) {
         <DialogTitle>Confirm Item Return</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            Provide return notes and an optional after-condition photo upon return.
+            An after-condition photo is required to confirm the return.
           </DialogContentText>
           <Grid size={12} sx={{ mb: 2 }}>
             <FileUpload
               type="image"
               name="photo"
-              label="After Photo (optional)"
+              label="After Photo *"
               control={control}
               maxFiles={1}
               shape="square"
@@ -474,7 +474,7 @@ export function ReturnTransaction({ tid, sx }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialog(false)}>Cancel</Button>
-          <Button onClick={handle} variant="contained" color="success" disabled={loading}>
+          <Button onClick={handle} variant="contained" color="success" disabled={loading || !hasPhoto}>
             Confirm Return
           </Button>
         </DialogActions>

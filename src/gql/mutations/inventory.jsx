@@ -188,7 +188,7 @@ export const REJECT_TRANSACTION = gql`
 
 /** SLO or borrowing club confirms item physically picked up. */
 export const MARK_BORROWED = gql`
-  mutation MarkBorrowed($tid: String!, $photoBefore: String, $remarks: String) {
+  mutation MarkBorrowed($tid: String!, $photoBefore: String!, $remarks: String) {
     markBorrowed(tid: $tid, photoBefore: $photoBefore, remarks: $remarks) {
       _id
       tid

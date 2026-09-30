@@ -85,10 +85,18 @@ export default function ItemForm({
     [defaultValues],
   );
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, watch, trigger } = useForm({
     mode: "onChange",
     defaultValues: formDefaultValues,
   });
+
+  const totalQty = watch("totalQty");
+
+  // re-validate location whenever total quantity changes, since the
+  // "exactly 1 location if total qty is 1" rule depends on both fields
+  useEffect(() => {
+    trigger("currentLocation");
+  }, [totalQty, trigger]);
 
   const submitHandlers = {
     create: async (data, opts) => {
@@ -145,6 +153,17 @@ export default function ItemForm({
       photo: formData.photo || null,
       invoice: formData.invoice || null,
     };
+
+    if (data.totalQty === 1 && data.currentLocation.length !== 1) {
+      setLoading(false);
+      return triggerToast({
+        title: "Error!",
+        messages: [
+          "If total quantity is 1, exactly one storage location must be selected.",
+        ],
+        severity: "error",
+      });
+    }
 
     // owner club
     if (user?.role === "club") {
@@ -269,7 +288,7 @@ export default function ItemForm({
               </Grid>
 
               <Grid size={12}>
-                <ItemLocationInput control={control} />
+                <ItemLocationInput control={control} totalQty={totalQty} />
               </Grid>
 
               {/* description */}
@@ -562,7 +581,7 @@ function ItemCodeInput({ control }) {
   );
 }
 
-function ItemLocationInput({ control }) {
+function ItemLocationInput({ control, totalQty }) {
   const locations = [
     ["amphi", "Amphitheater Storage Room"],
     ["vindhya", "Vindhya Storage Room"],
@@ -576,7 +595,15 @@ function ItemLocationInput({ control }) {
     <Controller
       name="currentLocation"
       control={control}
-      rules={{ required: "Select at least one location!" }}
+      rules={{
+        required: "Select at least one location!",
+        validate: (value) => {
+          if (parseInt(totalQty, 10) === 1 && (value?.length ?? 0) !== 1) {
+            return "If total quantity is 1, select exactly one location!";
+          }
+          return true;
+        },
+      }}
       render={({ field, fieldState: { error, invalid } }) => (
         <FormControl fullWidth error={invalid}>
           <InputLabel id="item-location-label">Current Location *</InputLabel>
@@ -693,9 +720,10 @@ function ItemBrandInput({ control }) {
       name="brand"
       control={control}
       rules={{
+        required: "Brand is required!",
         maxLength: {
-          value: 100,
-          message: "Brand name must be at most 100 characters long!",
+          value: 50,
+          message: "Brand name must be at most 50 characters long!",
         },
       }}
       render={({ field, fieldState: { error, invalid } }) => (
@@ -707,6 +735,7 @@ function ItemBrandInput({ control }) {
           helperText={error?.message}
           variant="outlined"
           fullWidth
+          required
           onBlur={(e) => field.onChange(e?.target?.value.trim())}
         />
       )}
