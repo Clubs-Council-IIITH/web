@@ -21,6 +21,7 @@ import Icon from "components/Icon";
 import Tag from "components/Tag";
 import { stateLabel } from "utils/formatEvent";
 import { ISOtoHuman } from "utils/formatTime";
+import CellLink from "components/CellLink";
 
 function FilterTextInputValue(props) {
   const { item, applyValue } = props;
@@ -96,8 +97,9 @@ export default function EventsTable({
             field: "code",
             headerName: "Event Code",
             flex: 3,
-            renderCell: ({ value }) => (
-              <Typography
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/events/${row._id}`}>
+              {<Typography
                 variant="body2"
                 sx={{
                   color: "text.disabled",
@@ -105,6 +107,8 @@ export default function EventsTable({
               >
                 {value}
               </Typography>
+              }
+            </CellLink>
             ),
             display: "flex",
           },
@@ -114,7 +118,8 @@ export default function EventsTable({
       headerName: "Name",
       flex: isMobile ? null : 5,
       renderCell: ({ value, row }) =>
-        value ? (
+        <CellLink href={`/manage/events/${row._id}`}>
+        {value ? (
           <Box
             sx={{
               display: "flex",
@@ -168,7 +173,8 @@ export default function EventsTable({
           >
             {value}
           </Typography>
-        ),
+        )}
+        </CellLink>,
       display: "flex",
     },
     ...(isMobile
@@ -179,8 +185,9 @@ export default function EventsTable({
             headerName: "Club ID",
             flex: 3,
             valueGetter: (value, row) => row.clubid,
-            renderCell: ({ value }) => (
-              <Typography
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/events/${row._id}`}>
+              {<Typography
                 variant="body2"
                 sx={{
                   overflow: "hidden",
@@ -189,7 +196,8 @@ export default function EventsTable({
                 }}
               >
                 {value}
-              </Typography>
+              </Typography>}
+              </CellLink>
             ),
             display: "flex",
           },
@@ -201,8 +209,9 @@ export default function EventsTable({
             headerAlign: "center",
             valueGetter: (value, row) => row.datetimeperiod[0],
             valueFormatter: (value, row) => ISOtoHuman(value),
-            renderCell: ({ formattedValue }) => (
-              <Typography
+            renderCell: ({ formattedValue, row }) => (
+              <CellLink href={`/manage/events/${row._id}`}>
+              {<Typography
                 variant="body2"
                 sx={{
                   overflow: "hidden",
@@ -211,7 +220,8 @@ export default function EventsTable({
                 }}
               >
                 {formattedValue}
-              </Typography>
+              </Typography>}
+              </CellLink>
             ),
             display: "flex",
           },
@@ -227,8 +237,9 @@ export default function EventsTable({
         requested: row.location.length > 0,
         approved: row.status.room,
       }),
-      renderCell: ({ value }) => (
-        <Tooltip
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/events/${row._id}`}>
+        {<Tooltip
           title={
             !value.requested
               ? "No venue requested"
@@ -254,7 +265,8 @@ export default function EventsTable({
                   : "check"
             }
           />
-        </Tooltip>
+        </Tooltip>}
+        </CellLink>
       ),
       display: "flex",
       sortComparator: (v1, v2) => {
@@ -274,7 +286,7 @@ export default function EventsTable({
         start: row.datetimeperiod[0],
         end: row.datetimeperiod[1],
       }),
-      renderCell: ({ value }) => {
+      renderCell: ({ value, row }) => {
         // change state to 'completed' if it has been approved and is in the past
         if (value.state === "approved" && new Date(value.start) < new Date()) {
           if (new Date(value.end) < new Date()) value.state = "completed";
@@ -282,6 +294,7 @@ export default function EventsTable({
         }
 
         return (
+          <CellLink href={`/manage/events/${row._id}`}>
           <Tag
             label={stateLabel(value.state).shortName}
             color={stateLabel(value.state).color}
@@ -292,6 +305,7 @@ export default function EventsTable({
               textOverflow: "ellipsis",
             }}
           />
+          </CellLink>
         );
       },
       sortComparator: (v1, v2) => {
@@ -438,7 +452,11 @@ export default function EventsTable({
           }
           getRowId={(r) => r._id}
           onRowClick={(params) =>
-            router.push(`/manage/events/${params.row._id}`)
+            window.open(
+              `/manage/events/${params.row._id}`,
+              "_blank",
+              "noopener,noreferrer"
+            )
           }
           disableRowSelectionOnClick
           initialState={{
