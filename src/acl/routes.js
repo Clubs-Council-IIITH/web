@@ -51,6 +51,8 @@ const routes = {
   "/manage/achievements/~mine": ["club"],
   "/manage/achievements/new": ["cc", "slo", "slc", "club"],
   "/manage/achievements/:id": ["cc", "slo", "club"],
+
+  "/manage/gallery": ["cc", "slo"],
 };
 
 export default routes;

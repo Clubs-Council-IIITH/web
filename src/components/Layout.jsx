@@ -270,6 +270,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         path="/manage/achievements"
         icon={<Icon variant="workspace-premium-outline-rounded" />}
       />
+      <DrawerItem
+        title="gallery & images"
+        path="/manage/gallery"
+        icon={<Icon variant="photo-library-outline-rounded" />}
+      />
     </List>
   );
 
@@ -352,6 +357,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         title="achievements"
         path="/manage/achievements"
         icon={<Icon variant="workspace-premium-outline-rounded" />}
+      />
+      <DrawerItem
+        title="gallery & images"
+        path="/manage/gallery"
+        icon={<Icon variant="photo-library-outline-rounded" />}
       />
     </List>
   );

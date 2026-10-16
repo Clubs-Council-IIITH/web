@@ -40,7 +40,8 @@ export default function Carousel({ items, sx }) {
 }
 
 function CarouselItem({ item }) {
-  const { image, title, description } = item;
+  const { title, description } = item;
+  const image = item.url || item.image;
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -69,10 +70,11 @@ function CarouselItem({ item }) {
       >
         <Image
           priority
-          placeholder="blur"
-          alt={title}
+          placeholder={typeof image === "object" ? "blur" : "empty"}
+          alt={title || "Carousel banner"}
           src={image}
           fill={true}
+          unoptimized={typeof image === "string"}
           style={{
             top: 0,
             width: "100%",

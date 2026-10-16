@@ -23,14 +23,39 @@ import carousel10 from "assets/carousel/10.jpg";
 // import carousel11 from "assets/carousel/11.jpg";
 import carousel12 from "assets/carousel/12.jpg";
 
+const FILESERVER_URL =
+  process.env.FILESERVER_URL ||
+  process.env.NEXT_PUBLIC_FILESERVER_URL ||
+  "http://files";
+
 export const metadata = {
   title: "Home | Life @ IIIT-H",
 };
 
-export default function Home() {
+async function getCarouselItems() {
+  try {
+    const res = await fetch(`${FILESERVER_URL}/files/carousel/list`, {
+      next: { revalidate: 300 }, // 5 minutes
+    });
+    if (!res.ok) return fallbackCarouselItems;
+    const data = await res.json();
+    const dynamicItems = (data?.carousel || []).map((item) => ({
+      url: item.url,
+      title: item.title,
+      description: item.description,
+    }));
+    return dynamicItems.length > 0 ? dynamicItems : fallbackCarouselItems;
+  } catch (err) {
+    return fallbackCarouselItems;
+  }
+}
+
+export default async function Home() {
+  const items = await getCarouselItems();
+
   return (
     <Box>
-      <Carousel items={carouselItems} sx={{ mb: 3 }} />
+      <Carousel items={items} sx={{ mb: 3 }} />
       <Stack
         direction="row"
         sx={{
@@ -160,7 +185,7 @@ export default function Home() {
   );
 }
 
-const carouselItems = [
+const fallbackCarouselItems = [
   {
     image: carousel1,
     title: "Clubs at IIIT",

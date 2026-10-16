@@ -82,6 +82,7 @@ function DropZone({
         return {
           "image/png": [".png"],
           "image/jpeg": [".jpg", ".jpeg"],
+          "image/webp": [".webp"],
         };
       case "document":
         return { "application/pdf": [".pdf"] };
@@ -155,6 +156,16 @@ function DropZone({
             files?.length && {
               width: "100%",
               aspectRatio: "4 / 1",
+            }),
+          ...(shape === "portrait" &&
+            files?.length && {
+              width: "60%",
+              aspectRatio: "3 / 4",
+            }),
+          ...(shape === "banner" &&
+            files?.length && {
+              width: "100%",
+              aspectRatio: "2.5 / 1",
             }),
         }}
       >
@@ -241,6 +252,14 @@ function DropZone({
       ) : shape == "rectangle" ? (
         <FormHelperText sx={{ mt: 0 }}>
           Please upload image with around 4:1 aspect ratio for optimal display.
+        </FormHelperText>
+      ) : shape == "portrait" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload a portrait image (around 3:4 aspect ratio, max 1.5MB) for optimal display.
+        </FormHelperText>
+      ) : shape == "banner" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload a banner/landscape image (around 2:1 to 2.5:1 aspect ratio, max 1.5MB) for optimal display.
         </FormHelperText>
       ) : null}
     </Box>

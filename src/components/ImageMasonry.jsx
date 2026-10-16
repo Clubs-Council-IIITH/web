@@ -30,7 +30,6 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
       {
         <ImageList variant="masonry" cols={isDesktop ? cols : 2} gap={10}>
           {images.slice(0, totalImages).map((item, id) => {
-            d;
             return (
               <ImageListItem key={id}>
                 <Card
@@ -63,6 +62,7 @@ export default function ImageMasonry({ images, limit = undefined, cols = 4 }) {
                       preload={id == 1 ? true : false}
                       loading={id == 1 ? "eager" : "lazy"}
                       alt={`Gallery Image ${id}`}
+                      unoptimized={typeof item.url === "string"}
                       style={{
                         width: "100%",
                         height: "auto",
