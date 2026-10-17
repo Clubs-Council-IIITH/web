@@ -113,7 +113,7 @@ export default function GalleryManager({ initialImages = [] }) {
             No gallery images found
           </Typography>
           <Typography variant="body2" color="text.disabled" sx={{ mb: 2 }}>
-            Upload portrait or near-square photos (under 1.5 MB) to display in the site gallery.
+            Upload portrait or near-square photos (under 800 KB) to display in the site gallery.
           </Typography>
           <Button
             variant="outlined"

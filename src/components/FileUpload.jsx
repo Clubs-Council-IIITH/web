@@ -230,7 +230,8 @@ function DropZone({
         error={getIsTypeofFileRejected(fileRejections, ErrorCode.FileTooLarge)}
         sx={{ mt: 0 }}
       >
-        Allowed file size: {maxSizeMB}MB
+        Allowed file size:{" "}
+        {maxSizeMB < 1 ? `${Math.round(maxSizeMB * 1024)}KB` : `${maxSizeMB}MB`}
       </FormHelperText>
       <FormHelperText
         error={getIsTypeofFileRejected(
@@ -255,11 +256,13 @@ function DropZone({
         </FormHelperText>
       ) : shape == "portrait" ? (
         <FormHelperText sx={{ mt: 0 }}>
-          Please upload a portrait image (around 3:4 aspect ratio, max 1.5MB) for optimal display.
+          Please upload a portrait image (around 3:4 aspect ratio, max{" "}
+          {maxSizeMB < 1 ? `${Math.round(maxSizeMB * 1024)}KB` : `${maxSizeMB}MB`}
+          ) for optimal display.
         </FormHelperText>
       ) : shape == "banner" ? (
         <FormHelperText sx={{ mt: 0 }}>
-          Please upload a banner/landscape image (around 2:1 to 2.5:1 aspect ratio, max 1.5MB) for optimal display.
+          Please upload a banner/landscape image (around 2:1 to 2.5:1 aspect ratio, max {maxSizeMB}MB) for optimal display.
         </FormHelperText>
       ) : null}
     </Box>

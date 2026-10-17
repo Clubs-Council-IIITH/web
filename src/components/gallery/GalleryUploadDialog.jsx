@@ -87,12 +87,16 @@ export default function GalleryUploadDialog({
 
     const file = files[0];
 
-    // Client-side validation: Max size 1.5MB
-    const maxBytes = 1.5 * 1024 * 1024;
+    const maxBytes = target === "gallery" ? 800 * 1024 : 2 * 1024 * 1024;
+    const limitLabel = target === "gallery" ? "800 KB" : "2 MB";
     if (file.size > maxBytes) {
+      const sizeLabel =
+        target === "gallery"
+          ? `${(file.size / 1024).toFixed(0)} KB`
+          : `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
       triggerToast({
         title: "File Too Large",
-        messages: [`Image size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds 1.5 MB limit.`],
+        messages: [`Image size (${sizeLabel}) exceeds ${limitLabel} limit.`],
         severity: "error",
       });
       return;
@@ -216,8 +220,8 @@ export default function GalleryUploadDialog({
           <Stack spacing={2.5}>
             <Typography variant="body2" color="text.secondary">
               {target === "gallery"
-                ? "Upload a portrait-oriented or near-square photo for the site gallery (ratio: 0.55 - 1.15, max 1.5 MB, min 600x800)."
-                : "Upload a landscape banner image for the home page carousel (ratio: 1.5 - 3.0, max 1.5 MB, min width 1000px)."}
+                ? "Upload a portrait-oriented or near-square photo for the site gallery (ratio: 0.55 - 1.15, max 800 KB, min 600x800)."
+                : "Upload a landscape banner image for the home page carousel (ratio: 1.5 - 3.0, max 2 MB, min width 1000px)."}
             </Typography>
 
             <FileUpload
@@ -226,7 +230,7 @@ export default function GalleryUploadDialog({
               label={target === "gallery" ? "Gallery Photo" : "Banner Photo"}
               type="image"
               maxFiles={1}
-              maxSizeMB={1.5}
+              maxSizeMB={target === "gallery" ? 800 / 1024 : 2}
               shape={target === "gallery" ? "portrait" : "banner"}
             />
 

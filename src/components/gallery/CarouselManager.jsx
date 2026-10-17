@@ -196,7 +196,7 @@ export default function CarouselManager({ initialItems = [] }) {
             No carousel banners found
           </Typography>
           <Typography variant="body2" color="text.disabled" sx={{ mb: 2 }}>
-            Add landscape banners (under 1.5 MB, ratio: 1.5 - 3.0) with titles and descriptions.
+            Add landscape banners (under 2 MB, ratio: 1.5 - 3.0) with titles and descriptions.
           </Typography>
           <Button
             variant="outlined"
