@@ -98,7 +98,7 @@ export default function EventsTable({
             headerName: "Event Code",
             flex: 3,
             renderCell: ({ value, row }) => (
-              <CellLink href={`/manage/events/${row._id}`}>
+              <CellLink href={`/manage/events/${row._id}`} target="_blank">
               {<Typography
                 variant="body2"
                 sx={{
@@ -118,7 +118,7 @@ export default function EventsTable({
       headerName: "Name",
       flex: isMobile ? null : 5,
       renderCell: ({ value, row }) =>
-        <CellLink href={`/manage/events/${row._id}`}>
+        <CellLink href={`/manage/events/${row._id}`} target="_blank">
         {value ? (
           <Box
             sx={{
@@ -186,7 +186,7 @@ export default function EventsTable({
             flex: 3,
             valueGetter: (value, row) => row.clubid,
             renderCell: ({ value, row }) => (
-              <CellLink href={`/manage/events/${row._id}`}>
+              <CellLink href={`/manage/events/${row._id}`} target="_blank">
               {<Typography
                 variant="body2"
                 sx={{
@@ -210,7 +210,7 @@ export default function EventsTable({
             valueGetter: (value, row) => row.datetimeperiod[0],
             valueFormatter: (value, row) => ISOtoHuman(value),
             renderCell: ({ formattedValue, row }) => (
-              <CellLink href={`/manage/events/${row._id}`}>
+              <CellLink href={`/manage/events/${row._id}`} target="_blank">
               {<Typography
                 variant="body2"
                 sx={{
@@ -238,7 +238,7 @@ export default function EventsTable({
         approved: row.status.room,
       }),
       renderCell: ({ value, row }) => (
-        <CellLink href={`/manage/events/${row._id}`}>
+        <CellLink href={`/manage/events/${row._id}`} target="_blank">
         {<Tooltip
           title={
             !value.requested
@@ -294,7 +294,7 @@ export default function EventsTable({
         }
 
         return (
-          <CellLink href={`/manage/events/${row._id}`}>
+          <CellLink href={`/manage/events/${row._id}`} target="_blank">
           <Tag
             label={stateLabel(value.state).shortName}
             color={stateLabel(value.state).color}
@@ -451,12 +451,15 @@ export default function EventsTable({
             hideClub ? columns.filter((c) => c.field !== "club") : columns
           }
           getRowId={(r) => r._id}
-          onRowClick={(params) =>
-            window.open(
-              `/manage/events/${params.row._id}`,
-              "_blank",
-              "noopener,noreferrer"
-            )
+          onRowClick={(params, muiEvent) => {
+              if (muiEvent.target.closest("a")) return;
+
+              window.open(
+                `/manage/events/${params.row._id}`,
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
           }
           disableRowSelectionOnClick
           initialState={{

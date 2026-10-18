@@ -1,11 +1,11 @@
 import Link from "@mui/material/Link";
 
-export default function CellLink({ href, children }) {
+export default function CellLink({ href, children, target }) {
   return (
     <Link
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={target}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
       underline="none"
       color="inherit"
       sx={{
