@@ -9,6 +9,7 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
 import Tag from "components/Tag";
+import CellLink from "components/CellLink";
 import { billsStateLabel } from "utils/formatEvent";
 
 export default function FinancesTable({ events, role }) {
@@ -22,7 +23,8 @@ export default function FinancesTable({ events, role }) {
       headerName: "Name",
       flex: 5,
       valueGetter: (value, row) => row?.eventname,
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/events/${row.eventid}/bills`}>
         <Typography
           variant="body2"
           style={{
@@ -38,6 +40,7 @@ export default function FinancesTable({ events, role }) {
         >
           {value}
         </Typography>
+        </CellLink>
       ),
       display: "flex",
     },
@@ -49,8 +52,10 @@ export default function FinancesTable({ events, role }) {
             headerName: "Club",
             flex: 3,
             valueGetter: (value, row) => row?.clubid,
-            renderCell: ({ value }) => (
-              <Typography variant="body2">{value}</Typography>
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/events/${row.eventid}/bills`}>
+                <Typography variant="body2">{value}</Typography>
+              </CellLink>
             ),
             display: "flex",
           },
@@ -66,12 +71,14 @@ export default function FinancesTable({ events, role }) {
         status: billsStateLabel(row?.billsStatus?.state),
       }),
       disableExport: true,
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/events/${row.eventid}/bills`}>
         <Tag
           label={value.status.name}
           color={value.status.color}
           sx={{ my: 2 }}
         />
+        </CellLink>
       ),
       display: "flex",
     },
@@ -82,7 +89,8 @@ export default function FinancesTable({ events, role }) {
       align: "center",
       headerAlign: "center",
       valueGetter: (value, row) => row?.eventReportSubmitted,
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/events/${row.eventid}/bills`}>
         <Icon
           variant={
             value === "true" ? "check" : value === "old" ? "remove" : "cancel"
@@ -95,6 +103,7 @@ export default function FinancesTable({ events, role }) {
                 : "error.main"
           }
         />
+        </CellLink>
       ),
       display: "flex",
     },
