@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { Container, Stack, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
@@ -52,6 +54,7 @@ export default async function ManageGallery() {
   const { data: { userMeta } = {} } = await getClient().query(GET_USER, {
     userInput: null,
   });
+  if (!["cc", "slo"].includes(userMeta?.role)) redirect("/");
 
   const [galleryItems, carouselItems] = await Promise.all([
     getGalleryData(),

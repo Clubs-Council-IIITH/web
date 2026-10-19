@@ -108,21 +108,21 @@ export default function GalleryUploadDialog({
       const { width, height, aspectRatio } = await inspectImage(file);
 
       if (target === "gallery") {
-        if (width < 600 || height < 800) {
+        if (width < 500 || height < 500) {
           triggerToast({
             title: "Resolution Too Small",
-            messages: [`Image is ${width}x${height}px. Minimum resolution for gallery images is 600x800px.`],
+            messages: [`Image is ${width}x${height}px. Minimum resolution for gallery images is 500x500px.`],
             severity: "error",
           });
           setLoading(false);
           return;
         }
 
-        if (aspectRatio < 0.55 || aspectRatio > 1.15) {
+        if (aspectRatio < 0.45 || aspectRatio > 1.85) {
           triggerToast({
             title: "Invalid Aspect Ratio",
             messages: [
-              `Aspect ratio is ${aspectRatio}. Gallery requires portrait or near-square images (ratio between 0.55 and 1.15).`,
+              `Aspect ratio is ${aspectRatio}. Gallery photos should be between a tall phone shot and 16:9 (ratio 0.45 to 1.85).`,
             ],
             severity: "error",
           });
@@ -220,7 +220,7 @@ export default function GalleryUploadDialog({
           <Stack spacing={2.5}>
             <Typography variant="body2" color="text.secondary">
               {target === "gallery"
-                ? "Upload a portrait-oriented or near-square photo for the site gallery (ratio: 0.55 - 1.15, max 800 KB, min 600x800)."
+                ? "Upload a photo for the site gallery, from a tall phone shot through 16:9 landscape (ratio: 0.45 - 1.85, max 800 KB, min 500x500)."
                 : "Upload a landscape banner image for the home page carousel (ratio: 1.5 - 3.0, max 2 MB, min width 1000px)."}
             </Typography>
 

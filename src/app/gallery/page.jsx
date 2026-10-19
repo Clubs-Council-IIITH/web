@@ -8,19 +8,27 @@ export const metadata = {
   title: "Gallery | Life @ IIIT-H",
 };
 
+async function loadGalleryItems() {
+  try {
+    const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
+      next: { revalidate: 300 },
+    });
+    if (!response.ok) return [];
+    const galleryJSON = await response.json();
+    return (galleryJSON?.gallery || []).map((item) => ({
+      url: item.url,
+      height: item.height,
+      width: item.width,
+    }));
+  } catch (err) {
+    console.error("Error fetching gallery images:", err);
+    return [];
+  }
+}
+
 export default async function Gallery({ limit = undefined }) {
   const isHomePageWidget = typeof limit === "number";
-
-  const response = await fetch(`${FILESERVER_URL}/files/gallery/list`, {
-    cache: "no-store",
-  });
-
-  const galleryJSON = await response.json();
-  const galleryItems = (galleryJSON?.gallery || []).map((item) => ({
-    url: item.url,
-    height: item.height,
-    width: item.width,
-  }));
+  const galleryItems = await loadGalleryItems();
 
   const masonry = (
     <ImageMasonry

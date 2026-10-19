@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import {
@@ -25,7 +25,7 @@ import { useToast } from "components/Toast";
 
 import { deleteGalleryImageAction } from "actions/gallery/server_action";
 
-export default function GalleryManager({ initialImages = [] }) {
+export default function GalleryManager({ initialImages = [], onCountChange }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const { triggerToast } = useToast();
@@ -34,6 +34,10 @@ export default function GalleryManager({ initialImages = [] }) {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [imageToDelete, setImageToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    onCountChange?.(images.length);
+  }, [images.length, onCountChange]);
 
   const handleUploadSuccess = (newItem) => {
     if (newItem) {
@@ -113,7 +117,7 @@ export default function GalleryManager({ initialImages = [] }) {
             No gallery images found
           </Typography>
           <Typography variant="body2" color="text.disabled" sx={{ mb: 2 }}>
-            Upload portrait or near-square photos (under 800 KB) to display in the site gallery.
+            Upload photos from tall phone shots through 16:9 landscape (under 800 KB).
           </Typography>
           <Button
             variant="outlined"

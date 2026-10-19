@@ -3,30 +3,47 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
+import { jwtDecode } from "jwt-decode";
+
 const FILESERVER_URL =
   process.env.FILESERVER_URL ||
   process.env.NEXT_PUBLIC_FILESERVER_URL ||
   "http://files";
-const INTER_COMMUNICATION_SECRET =
-  process.env.INTER_COMMUNICATION_SECRET || "inter-communication-secret";
 
-async function getAuthHeaders() {
+function unauthorized() {
+  return {
+    ok: false,
+    data: null,
+    error: {
+      title: "Unauthorized",
+      messages: ["Only CC and SLO accounts can manage gallery images."],
+    },
+  };
+}
+
+async function adminHeaders() {
   const cookieStore = await cookies();
   const token = cookieStore.get("Authorization")?.value;
-  const headers = {
-    "X-Inter-Communication-Secret": INTER_COMMUNICATION_SECRET,
-  };
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-    headers["Cookie"] = `Authorization=${token}`;
+  if (!token) return null;
+
+  try {
+    const role = jwtDecode(token)?.role;
+    if (!["cc", "slo"].includes(role)) return null;
+  } catch {
+    return null;
   }
-  return headers;
+
+  return {
+    Authorization: `Bearer ${token}`,
+    Cookie: `Authorization=${token}`,
+  };
 }
 
 export async function uploadGalleryImageAction(formData) {
   const response = { ok: false, data: null, error: null };
   try {
-    const headers = await getAuthHeaders();
+    const headers = await adminHeaders();
+    if (!headers) return unauthorized();
     const res = await fetch(`${FILESERVER_URL}/files/gallery/upload`, {
       method: "POST",
       body: formData,
@@ -45,6 +62,7 @@ export async function uploadGalleryImageAction(formData) {
     const data = await res.json();
     response.ok = true;
     response.data = data;
+    revalidatePath("/");
     revalidatePath("/gallery");
     revalidatePath("/manage/gallery");
   } catch (error) {
@@ -59,7 +77,8 @@ export async function uploadGalleryImageAction(formData) {
 export async function deleteGalleryImageAction(filename) {
   const response = { ok: false, data: null, error: null };
   try {
-    const headers = await getAuthHeaders();
+    const headers = await adminHeaders();
+    if (!headers) return unauthorized();
     headers["Content-Type"] = "application/json";
 
     const res = await fetch(`${FILESERVER_URL}/files/gallery/delete`, {
@@ -78,6 +97,7 @@ export async function deleteGalleryImageAction(filename) {
     }
 
     response.ok = true;
+    revalidatePath("/");
     revalidatePath("/gallery");
     revalidatePath("/manage/gallery");
   } catch (error) {
@@ -92,7 +112,8 @@ export async function deleteGalleryImageAction(filename) {
 export async function uploadCarouselImageAction(formData) {
   const response = { ok: false, data: null, error: null };
   try {
-    const headers = await getAuthHeaders();
+    const headers = await adminHeaders();
+    if (!headers) return unauthorized();
     const res = await fetch(`${FILESERVER_URL}/files/carousel/upload`, {
       method: "POST",
       body: formData,
@@ -125,7 +146,8 @@ export async function uploadCarouselImageAction(formData) {
 export async function updateCarouselItemsAction(items) {
   const response = { ok: false, data: null, error: null };
   try {
-    const headers = await getAuthHeaders();
+    const headers = await adminHeaders();
+    if (!headers) return unauthorized();
     headers["Content-Type"] = "application/json";
 
     const res = await fetch(`${FILESERVER_URL}/files/carousel/update`, {
@@ -160,7 +182,8 @@ export async function updateCarouselItemsAction(items) {
 export async function deleteCarouselItemAction(id, filename) {
   const response = { ok: false, data: null, error: null };
   try {
-    const headers = await getAuthHeaders();
+    const headers = await adminHeaders();
+    if (!headers) return unauthorized();
     headers["Content-Type"] = "application/json";
 
     const res = await fetch(`${FILESERVER_URL}/files/carousel/delete`, {

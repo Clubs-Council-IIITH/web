@@ -256,9 +256,9 @@ function DropZone({
         </FormHelperText>
       ) : shape == "portrait" ? (
         <FormHelperText sx={{ mt: 0 }}>
-          Please upload a portrait image (around 3:4 aspect ratio, max{" "}
+          Please upload a photo from a tall phone shot through 16:9 landscape (max{" "}
           {maxSizeMB < 1 ? `${Math.round(maxSizeMB * 1024)}KB` : `${maxSizeMB}MB`}
-          ) for optimal display.
+          ).
         </FormHelperText>
       ) : shape == "banner" ? (
         <FormHelperText sx={{ mt: 0 }}>

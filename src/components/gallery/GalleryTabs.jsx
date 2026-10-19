@@ -10,6 +10,8 @@ import Icon from "components/Icon";
 
 export default function GalleryTabs({ galleryItems = [], carouselItems = [] }) {
   const [tab, setTab] = useState(0);
+  const [galleryCount, setGalleryCount] = useState(galleryItems.length);
+  const [carouselCount, setCarouselCount] = useState(carouselItems.length);
 
   return (
     <Box sx={{ width: "100%", mt: 2 }}>
@@ -22,18 +24,28 @@ export default function GalleryTabs({ galleryItems = [], carouselItems = [] }) {
           <Tab
             icon={<Icon variant="photo-library-outline-rounded" />}
             iconPosition="start"
-            label={`Gallery Photos (${galleryItems.length})`}
+            label={`Gallery Photos (${galleryCount})`}
           />
           <Tab
             icon={<Icon variant="view-carousel-outline-rounded" />}
             iconPosition="start"
-            label={`Carousel Banners (${carouselItems.length})`}
+            label={`Carousel Banners (${carouselCount})`}
           />
         </Tabs>
       </Box>
 
-      {tab === 0 && <GalleryManager initialImages={galleryItems} />}
-      {tab === 1 && <CarouselManager initialItems={carouselItems} />}
+      <Box sx={{ display: tab === 0 ? "block" : "none" }}>
+        <GalleryManager
+          initialImages={galleryItems}
+          onCountChange={setGalleryCount}
+        />
+      </Box>
+      <Box sx={{ display: tab === 1 ? "block" : "none" }}>
+        <CarouselManager
+          initialItems={carouselItems}
+          onCountChange={setCarouselCount}
+        />
+      </Box>
     </Box>
   );
 }

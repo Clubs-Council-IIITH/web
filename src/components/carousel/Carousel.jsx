@@ -17,7 +17,7 @@ export default function Carousel({ items, sx }) {
   const settings = {
     dots: false,
     lazyLoad: true,
-    infinite: true,
+    infinite: items.length > 1,
     autoplay: true,
     autoplaySpeed: 2000,
     speed: 500,

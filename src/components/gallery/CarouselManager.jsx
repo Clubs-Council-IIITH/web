@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import {
@@ -28,7 +28,7 @@ import {
   updateCarouselItemsAction,
 } from "actions/gallery/server_action";
 
-export default function CarouselManager({ initialItems = [] }) {
+export default function CarouselManager({ initialItems = [], onCountChange }) {
   const { triggerToast } = useToast();
 
   const [items, setItems] = useState(initialItems);
@@ -38,10 +38,13 @@ export default function CarouselManager({ initialItems = [] }) {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
+  useEffect(() => {
+    onCountChange?.(items.length);
+  }, [items.length, onCountChange]);
+
   const handleUploadSuccess = (newItem) => {
     if (newItem) {
       setItems((prev) => [...prev, newItem]);
-      setDirty(false);
     }
   };
 
@@ -221,7 +224,7 @@ export default function CarouselManager({ initialItems = [] }) {
             >
               <Grid container spacing={2.5} alignItems="center">
                 {/* Reorder arrows and order number */}
-                <Grid item xs={12} sm="auto">
+                <Grid size={{ xs: 12, sm: "auto" }}>
                   <Stack
                     direction={{ xs: "row", sm: "column" }}
                     alignItems="center"
@@ -263,7 +266,7 @@ export default function CarouselManager({ initialItems = [] }) {
                 </Grid>
 
                 {/* Banner Thumbnail */}
-                <Grid item xs={12} sm={4} md={3}>
+                <Grid size={{ xs: 12, sm: 4, md: 3 }}>
                   <Box
                     sx={{
                       position: "relative",
@@ -286,7 +289,7 @@ export default function CarouselManager({ initialItems = [] }) {
                 </Grid>
 
                 {/* Editable Title & Description */}
-                <Grid item xs={12} sm={6} md={7}>
+                <Grid size={{ xs: 12, sm: 6, md: 7 }}>
                   <Stack spacing={1.5}>
                     <TextField
                       label="Banner Title"
