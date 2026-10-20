@@ -46,6 +46,7 @@ import EventReportStatus from "components/events/report/EventReportStatus";
 import MemberListItem from "components/members/MemberListItem";
 import { getFullEvent } from "utils/fetchData";
 import { locationLabel } from "utils/formatEvent";
+import { stripMarkdown } from "utils/markdown";
 
 import { getFullUser } from "actions/users/get/full/server_action";
 
@@ -56,7 +57,7 @@ export async function generateMetadata(props) {
   const event = await getFullEvent(id);
   return {
     title: event.name,
-    description: event.description || "No description provided.",
+    description: stripMarkdown(event.description) || "No description provided.",
   };
 }
 
