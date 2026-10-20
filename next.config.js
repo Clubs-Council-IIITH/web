@@ -27,6 +27,11 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     dangerouslyAllowLocalIP: true,
+    localPatterns: [
+      {
+        pathname: "/**",
+      },
+    ],
     remotePatterns: [
       {
         protocol: "https",
