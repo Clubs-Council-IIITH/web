@@ -59,7 +59,13 @@ export default function GalleryUploadDialog({
   const [loading, setLoading] = useState(false);
   const { triggerToast } = useToast();
 
-  const { control, handleSubmit, reset, register, formState: { errors } } = useForm({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    register,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       file: [],
       title: "",
@@ -111,7 +117,9 @@ export default function GalleryUploadDialog({
         if (width < 500 || height < 500) {
           triggerToast({
             title: "Resolution Too Small",
-            messages: [`Image is ${width}x${height}px. Minimum resolution for gallery images is 500x500px.`],
+            messages: [
+              `Image is ${width}x${height}px. Minimum resolution for gallery images is 500x500px.`,
+            ],
             severity: "error",
           });
           setLoading(false);
@@ -146,7 +154,9 @@ export default function GalleryUploadDialog({
         } else {
           triggerToast({
             title: res.error?.title || "Upload Failed",
-            messages: res.error?.messages || ["Failed to upload gallery image."],
+            messages: res.error?.messages || [
+              "Failed to upload gallery image.",
+            ],
             severity: "error",
           });
         }
@@ -155,7 +165,9 @@ export default function GalleryUploadDialog({
         if (width < 1000) {
           triggerToast({
             title: "Resolution Too Small",
-            messages: [`Image width is ${width}px. Minimum width for carousel banners is 1000px.`],
+            messages: [
+              `Image width is ${width}px. Minimum width for carousel banners is 1000px.`,
+            ],
             severity: "error",
           });
           setLoading(false);
@@ -192,7 +204,9 @@ export default function GalleryUploadDialog({
         } else {
           triggerToast({
             title: res.error?.title || "Upload Failed",
-            messages: res.error?.messages || ["Failed to upload carousel banner."],
+            messages: res.error?.messages || [
+              "Failed to upload carousel banner.",
+            ],
             severity: "error",
           });
         }
@@ -200,7 +214,10 @@ export default function GalleryUploadDialog({
     } catch (err) {
       triggerToast({
         title: "Processing Error",
-        messages: [err.message || "An unexpected error occurred while preparing the image."],
+        messages: [
+          err.message ||
+            "An unexpected error occurred while preparing the image.",
+        ],
         severity: "error",
       });
     } finally {
@@ -265,7 +282,11 @@ export default function GalleryUploadDialog({
             variant="contained"
             disabled={loading}
             startIcon={
-              loading ? <CircularProgress size={18} color="inherit" /> : <Icon variant="upload" />
+              loading ? (
+                <CircularProgress size={18} color="inherit" />
+              ) : (
+                <Icon variant="upload" />
+              )
             }
           >
             {loading ? "Uploading..." : "Upload Image"}

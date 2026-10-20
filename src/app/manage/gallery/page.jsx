@@ -80,10 +80,7 @@ export default async function ManageGallery() {
         Update images and hero banners shown across the Clubs Council website.
       </Typography>
 
-      <GalleryTabs
-        galleryItems={galleryItems}
-        carouselItems={carouselItems}
-      />
+      <GalleryTabs galleryItems={galleryItems} carouselItems={carouselItems} />
     </Container>
   );
 }

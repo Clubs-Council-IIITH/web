@@ -256,13 +256,17 @@ function DropZone({
         </FormHelperText>
       ) : shape == "portrait" ? (
         <FormHelperText sx={{ mt: 0 }}>
-          Please upload a photo from a tall phone shot through 16:9 landscape (max{" "}
-          {maxSizeMB < 1 ? `${Math.round(maxSizeMB * 1024)}KB` : `${maxSizeMB}MB`}
+          Please upload a photo from a tall phone shot through 16:9 landscape
+          (max{" "}
+          {maxSizeMB < 1
+            ? `${Math.round(maxSizeMB * 1024)}KB`
+            : `${maxSizeMB}MB`}
           ).
         </FormHelperText>
       ) : shape == "banner" ? (
         <FormHelperText sx={{ mt: 0 }}>
-          Please upload a banner/landscape image (around 2:1 to 2.5:1 aspect ratio, max {maxSizeMB}MB) for optimal display.
+          Please upload a banner/landscape image (around 2:1 to 2.5:1 aspect
+          ratio, max {maxSizeMB}MB) for optimal display.
         </FormHelperText>
       ) : null}
     </Box>

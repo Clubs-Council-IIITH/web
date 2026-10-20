@@ -69,9 +69,7 @@ export default function CarouselManager({ initialItems = [], onCountChange }) {
 
   const handleChangeText = (id, field, value) => {
     setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item,
-      ),
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
     setDirty(true);
   };
@@ -124,7 +122,9 @@ export default function CarouselManager({ initialItems = [], onCountChange }) {
       } else {
         triggerToast({
           title: res.error?.title || "Delete Failed",
-          messages: res.error?.messages || ["Failed to delete carousel banner."],
+          messages: res.error?.messages || [
+            "Failed to delete carousel banner.",
+          ],
           severity: "error",
         });
       }
@@ -152,7 +152,8 @@ export default function CarouselManager({ initialItems = [], onCountChange }) {
         <Box>
           <Typography variant="h5">Home Page Carousel</Typography>
           <Typography variant="body2" color="text.secondary">
-            {items.length} banners in hero rotation. Reorder and edit titles below.
+            {items.length} banners in hero rotation. Reorder and edit titles
+            below.
           </Typography>
         </Box>
 
@@ -199,7 +200,8 @@ export default function CarouselManager({ initialItems = [], onCountChange }) {
             No carousel banners found
           </Typography>
           <Typography variant="body2" color="text.disabled" sx={{ mb: 2 }}>
-            Add landscape banners (under 2 MB, ratio: 1.5 - 3.0) with titles and descriptions.
+            Add landscape banners (under 2 MB, ratio: 1.5 - 3.0) with titles and
+            descriptions.
           </Typography>
           <Button
             variant="outlined"
@@ -246,7 +248,11 @@ export default function CarouselManager({ initialItems = [], onCountChange }) {
                     <Typography
                       variant="subtitle2"
                       color="text.secondary"
-                      sx={{ fontWeight: "bold", minWidth: 24, textAlign: "center" }}
+                      sx={{
+                        fontWeight: "bold",
+                        minWidth: 24,
+                        textAlign: "center",
+                      }}
                     >
                       #{idx + 1}
                     </Typography>
@@ -349,7 +355,9 @@ export default function CarouselManager({ initialItems = [], onCountChange }) {
           color: "error",
           variant: "contained",
           disabled: deleting,
-          startIcon: deleting ? <CircularProgress size={16} color="inherit" /> : null,
+          startIcon: deleting ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : null,
         }}
         onConfirm={handleDeleteConfirm}
         onClose={() => !deleting && setItemToDelete(null)}

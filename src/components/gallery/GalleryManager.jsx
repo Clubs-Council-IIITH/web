@@ -117,7 +117,8 @@ export default function GalleryManager({ initialImages = [], onCountChange }) {
             No gallery images found
           </Typography>
           <Typography variant="body2" color="text.disabled" sx={{ mb: 2 }}>
-            Upload photos from tall phone shots through 16:9 landscape (under 800 KB).
+            Upload photos from tall phone shots through 16:9 landscape (under
+            800 KB).
           </Typography>
           <Button
             variant="outlined"
@@ -229,7 +230,9 @@ export default function GalleryManager({ initialImages = [], onCountChange }) {
           color: "error",
           variant: "contained",
           disabled: deleting,
-          startIcon: deleting ? <CircularProgress size={16} color="inherit" /> : null,
+          startIcon: deleting ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : null,
         }}
         onConfirm={handleDeleteConfirm}
         onClose={() => !deleting && setImageToDelete(null)}
