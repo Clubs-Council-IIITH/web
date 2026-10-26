@@ -43,7 +43,7 @@
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.12.40",
     "motion": "^12.35.2",
-    "next": "16.2.3",
+    "next": "16.2.6",
     "next-mdx-remote-client": "^2.1.10",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^8.4.2",
