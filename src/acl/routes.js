@@ -18,16 +18,17 @@ const routes = {
   "/docs/:id": ["cc"],
   "/docs/new": ["cc"],
 
-  "/manage/members": ["cc", "club"],
-  "/manage/members/new": ["cc", "club"], // has to be higher to not conflict with :id
-  "/manage/members/bulk-add": ["cc", "club"],
-  "/manage/members/bulk-edit": ["cc", "club"],
-  "/manage/members/:id": ["cc", "club"],
-  "/manage/members/:id/edit": ["cc", "club"],
+  "/manage/members": ["cc", "club", "slo"],
+  "/manage/pending-members": ["cc", "slo"],
+  "/manage/members/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
+  "/manage/members/bulk-add": ["cc", "club", "slo"],
+  "/manage/members/bulk-edit": ["cc", "club", "slo"],
+  "/manage/members/:id": ["cc", "club", "slo"],
+  "/manage/members/:id/edit": ["cc", "club", "slo"],
   "/manage/data-members": ["cc", "club", "slo"],
 
   "/manage/events": ["cc", "club", "slc", "slo"],
-  "/manage/events/new": ["cc", "club"], // has to be higher to not conflict with :id
+  "/manage/events/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
   "/manage/events/:id": ["cc", "club", "slc", "slo"],
   "/manage/events/:id/edit": ["cc", "club", "slo"],
   "/manage/events/:id/report": ["cc", "club", "slo"],
@@ -36,16 +37,23 @@ const routes = {
   "/manage/finances": ["cc", "club", "slo"],
   "/manage/finances/:id": ["slo"],
 
-  "/manage/clubs": ["cc"],
-  "/manage/clubs/new": ["cc"], // has to be higher to not conflict with :id
-  "/manage/clubs/~mine": ["club"], // has to be higher to not conflict with :id
-  "/manage/clubs/~mine/edit": ["club"], // has to be higher to not conflict with :id
-  "/manage/clubs/:id": ["cc"],
-  "/manage/clubs/:id/edit": ["cc"],
+  "/manage/clubs": ["cc", "slo"],
+  "/manage/clubs/new": ["cc", "slo"], // has to be higher to not conflict with :id
+  "/manage/clubs/~mine": ["club", "slo"], // has to be higher to not conflict with :id
+  "/manage/clubs/~mine/edit": ["club", "slo"], // has to be higher to not conflict with :id
+  "/manage/clubs/:id": ["cc", "slo"],
+  "/manage/clubs/:id/edit": ["cc", "slo"],
 
   "/manage/holidays": ["cc", "slo"],
   "/manage/holidays/new": ["cc", "slo"], // has to be higher to not conflict with :id
   "/manage/holidays/:id": ["cc", "slo"],
+
+  "/manage/achievements": ["club", "cc", "slo", "slc"],
+  "/manage/achievements/~mine": ["club"],
+  "/manage/achievements/new": ["cc", "slo", "slc", "club"],
+  "/manage/achievements/:id": ["cc", "slo", "club"],
+
+  "/manage/gallery": ["cc", "slo"],
 
   "/manage/inventory": ["cc", "club", "slo"],
   "/manage/inventory/recent": ["cc", "club", "slo"],
@@ -57,7 +65,6 @@ const routes = {
   "/manage/inventory/transactions/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
   "/manage/inventory/transactions/:id": ["cc", "club", "slo"],
   "/manage/inventory/transactions/:id/edit": ["cc", "club", "slo"],
-
 };
 
 export default routes;

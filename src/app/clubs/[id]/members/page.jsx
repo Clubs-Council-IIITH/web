@@ -12,6 +12,8 @@ export async function generateMetadata(props) {
   const club = await getClub(id);
   if (club?.category == "body")
     return permanentRedirect(`/student-bodies/${id}/members`);
+  if (club?.category == "supervisory")
+    return permanentRedirect(`/supervisory-bodies/${id}/members`);
 
   return {
     title: `Members | ${club.name}`,

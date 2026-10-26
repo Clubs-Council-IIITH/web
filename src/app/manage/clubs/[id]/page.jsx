@@ -81,7 +81,7 @@ function getActions(club, user) {
   /*
    * CC - edit, delete
    */
-  if (user?.role === "cc") {
+  if (["cc", "slo"].includes(user?.role)) {
     return [EditClub, DeleteClub];
   }
 }

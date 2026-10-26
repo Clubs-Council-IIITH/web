@@ -4,6 +4,7 @@ import Autocomplete from "./Autocomplete";
 import Backdrop from "./Backdrop";
 import Button from "./Button";
 import Card from "./Card";
+import DataGrid from "./DataGrid";
 import Input from "./Input";
 import Paper from "./Paper";
 import Table from "./Table";
@@ -21,5 +22,6 @@ export default function ComponentsOverrides(theme) {
     Backdrop(theme),
     Typography(theme),
     Autocomplete(theme),
+    DataGrid(theme),
   );
 }

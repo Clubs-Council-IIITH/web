@@ -30,19 +30,22 @@ export default function ImageModal({ images, id = null, onClose = () => {} }) {
           transform: "translate(-50%, -50%)",
         }}
       >
-        <Image
-          src={id != null ? images[id].url : null}
-          width={0}
-          height={0}
-          sizes="100vw"
-          alt={`Gallery Image ${id}`}
-          style={{
-            width: "100%",
-            height: "auto",
-            maxHeight: "100vh",
-            maxWidth: "100vw",
-          }}
-        />
+        {id !== null && images?.[id] ? (
+          <Image
+            src={images[id].url}
+            width={images[id].width || 1200}
+            height={images[id].height || 800}
+            sizes="100vw"
+            alt={`Gallery Image ${id}`}
+            unoptimized={typeof images[id].url === "string"}
+            style={{
+              width: "100%",
+              height: "auto",
+              maxHeight: "100vh",
+              maxWidth: "100vw",
+            }}
+          />
+        ) : null}
       </Box>
     </Modal>
   );

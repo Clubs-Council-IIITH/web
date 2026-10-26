@@ -20,7 +20,7 @@ export default function MemberActionsList({
   ]);
 
   useEffect(() => {
-    if (member && user && user?.role === "cc") {
+    if (member && user && ["cc", "slo"].includes(user?.role)) {
       setActions([...(allowEditing ? [EditMember] : []), DeleteMember]);
       let i = 0;
       for (i in member.roles) {

@@ -163,6 +163,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         />
       </DrawerDropdown>
       <DrawerItem
+        title="achievements"
+        path="/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
+      />
+      <DrawerItem
         title="gallery"
         path="/gallery"
         icon={<Icon variant="gallery-thumbnail-outline-rounded" />}
@@ -206,6 +211,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="group-outline-rounded" />}
       />
       <DrawerItem
+        title="Pending Members"
+        path="/manage/pending-members"
+        icon={<Icon variant="group-add-outline-rounded" />}
+      />
+      <DrawerItem
         title="Data Download"
         path="/manage/data-members"
         icon={<Icon variant="sim-card-download-outline-rounded" />}
@@ -227,6 +237,11 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         title="club/Student Body"
         path="/manage/clubs"
         icon={<Icon variant="explore-outline-rounded" />}
+      />
+      <DrawerItem
+        title="achievements"
+        path="/manage/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
       />
       {manageEventItems}
       {manageMemberItems}
@@ -255,6 +270,16 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
       {manageMemberItems}
+      <DrawerItem
+        title="achievements"
+        path="/manage/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
+      />
+      <DrawerItem
+        title="gallery & images"
+        path="/manage/gallery"
+        icon={<Icon variant="photo-library-outline-rounded" />}
+      />
     </List>
   );
 
@@ -326,23 +351,28 @@ function Drawer({ drawerOpen, onCloseDrawer }) {
       >
         <Typography variant="overline">Manage</Typography>
       </Box>
+      <DrawerItem
+        title="clubs & bodies"
+        path="/manage/clubs"
+        icon={<Icon variant="explore-outline-rounded" />}
+      />
       {manageEventItems}
       <DrawerItem
         title="Holidays"
         path="/manage/holidays"
         icon={<Icon variant="event-busy-outline-rounded" />}
       />
-      <DrawerDropdown
-        title="members"
-        // TODO: Change icon for this
-        icon={<Icon variant="group-outline-rounded" />}
-      >
-        <DrawerItem
-          title="Data Download"
-          path="/manage/data-members"
-          icon={<Icon variant="sim-card-download-outline-rounded" />}
-        />
-      </DrawerDropdown>
+      {manageMemberItems}
+      <DrawerItem
+        title="achievements"
+        path="/manage/achievements"
+        icon={<Icon variant="workspace-premium-outline-rounded" />}
+      />
+      <DrawerItem
+        title="gallery & images"
+        path="/manage/gallery"
+        icon={<Icon variant="photo-library-outline-rounded" />}
+      />
     </List>
   );
 

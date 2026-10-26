@@ -10,6 +10,13 @@ import {
   Chip,
   Divider,
   Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 
@@ -33,6 +40,35 @@ export function EventReportDetails({
   user,
 }) {
   const showEditReportButton = canEditReport(event, eventReport, user);
+
+  let unifiedBudgetRows = [];
+  if (eventReport?.allocatedBudgetBreakdown?.length > 0) {
+    unifiedBudgetRows = eventReport.allocatedBudgetBreakdown.map(
+      (item, idx) => {
+        const match = event?.budget?.find(
+          (b) => b.description === item.description,
+        );
+        return {
+          id: idx,
+          description: item.description,
+          amount: match ? match.amount : 0,
+          advance: match ? match.advance : false,
+          allocatedAmount: item.allocatedAmount,
+          isOriginal: !!match,
+        };
+      },
+    );
+  } else {
+    unifiedBudgetRows =
+      event?.budget?.map((item, idx) => ({
+        id: idx,
+        description: item.description,
+        amount: item.amount,
+        advance: item.advance,
+        allocatedAmount: item.amount,
+        isOriginal: true,
+      })) || [];
+  }
 
   return (
     <Box
@@ -403,10 +439,12 @@ export function EventReportDetails({
           >
             Budget
           </Typography>
-          {event?.budget?.length ? (
+          {unifiedBudgetRows.length ? (
             <EventBudget
-              rows={event?.budget.map((b, key) => ({ ...b, id: b?.id || key }))}
+              rows={unifiedBudgetRows}
               editable={false}
+              showAllocated={true}
+              showTotal={true}
             />
           ) : (
             <Box
@@ -414,7 +452,7 @@ export function EventReportDetails({
                 mt: 2,
               }}
             >
-              None requested
+              None requested/allocated
             </Box>
           )}
           <Typography

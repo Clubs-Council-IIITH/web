@@ -47,6 +47,10 @@ export default function GlobalStyles() {
           margin: 0,
           padding: 0,
         },
+        ".MuiDataGrid-editLongTextCellPopperContent textarea": {
+          color: "inherit",
+          fontFamily: "inherit",
+        },
       }}
     />
   );

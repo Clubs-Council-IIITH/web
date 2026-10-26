@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const GET_ACTIVE_CLUBS = gql`
-  query ActiveClubs {
-    allClubs(onlyActive: true) {
+  query ActiveClubs($category: String) {
+    allClubs(category: $category, onlyActive: true) {
       _id
       cid
       state
@@ -17,8 +17,8 @@ export const GET_ACTIVE_CLUBS = gql`
 `;
 
 export const GET_ALL_CLUBS = gql`
-  query AllClubs {
-    allClubs {
+  query AllClubs($category: String) {
+    allClubs(category: $category) {
       _id
       cid
       code
@@ -34,8 +34,8 @@ export const GET_ALL_CLUBS = gql`
 `;
 
 export const GET_ALL_CLUB_IDS = gql`
-  query AllClubs {
-    allClubs {
+  query AllClubs($category: String) {
+    allClubs(category: $category) {
       _id
       cid
       name
@@ -44,8 +44,8 @@ export const GET_ALL_CLUB_IDS = gql`
 `;
 
 export const GET_ACTIVE_CLUB_IDS = gql`
-  query ActiveClubs {
-    allClubs(onlyActive: true) {
+  query ActiveClubs($category: String) {
+    allClubs(category: $category, onlyActive: true) {
       _id
       cid
       name

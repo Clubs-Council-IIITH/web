@@ -27,6 +27,11 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     dangerouslyAllowLocalIP: true,
+    localPatterns: [
+      {
+        pathname: "/**",
+      },
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -125,6 +130,9 @@ const nextConfig = {
   },
   experimental: {
     turbopackFileSystemCacheForDev: true,
+    cpus: process.env.NEXT_BUILD_WORKERS
+      ? parseInt(process.env.NEXT_BUILD_WORKERS, 10)
+      : 1,
   },
 };
 

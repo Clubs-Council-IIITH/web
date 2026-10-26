@@ -1,31 +1,42 @@
-import { Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-import { getStaticFile } from "utils/files";
+import ClubsGrid from "components/clubs/ClubsGrid";
+import Icon from "components/Icon";
 
-import Content from "./content.mdx";
+import { supervisoryBodyCategories } from "constants/clubCategories";
 
 export const metadata = {
   title: "Supervisory Bodies @ IIIT-H",
 };
 
-export default async function SupervisoryBodies() {
-  const sacMembers = await fetch(getStaticFile("sacMembers.json"), {
-    next: { revalidate: 40 * 60 }, // 40 minutes
-  });
-  const slcMembers = await fetch(getStaticFile("slcMembers.json"), {
-    next: { revalidate: 40 * 60 }, // 40 minutes
-  });
-  const sloMembers = await fetch(getStaticFile("sloMembers.json"), {
-    next: { revalidate: 40 * 60 }, // 40 minutes
-  });
-
+export default async function Clubs() {
   return (
-    <Container>
-      <Content
-        sacMembers={await sacMembers.json()}
-        slcMembers={await slcMembers.json()}
-        sloMembers={await sloMembers.json()}
-      />
-    </Container>
+    <>
+      {supervisoryBodyCategories.map((category, index) => {
+        return (
+          <Box key={category} sx={{ mx: 5 }}>
+            <Box
+              sx={{
+                mb: 2,
+                mt: index != 0 ? 5 : 0,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Icon variant="component-exchange" sx={{ mr: 1 }} />
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  textTransform: "uppercase",
+                }}
+              >
+                {category}
+              </Typography>
+            </Box>
+            <ClubsGrid category={category} />
+          </Box>
+        );
+      })}
+    </>
   );
 }

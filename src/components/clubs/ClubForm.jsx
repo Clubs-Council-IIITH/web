@@ -522,6 +522,7 @@ function ClubCategorySelect({ control, disabled }) {
             <MenuItem value="affinity">Affinity Group</MenuItem>
             <MenuItem value="admin">Admin</MenuItem>
             <MenuItem value="body">Student Body</MenuItem>
+            <MenuItem value="supervisory">Supervisory Body</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>

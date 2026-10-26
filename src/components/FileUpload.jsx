@@ -82,6 +82,7 @@ function DropZone({
         return {
           "image/png": [".png"],
           "image/jpeg": [".jpg", ".jpeg"],
+          "image/webp": [".webp"],
         };
       case "document":
         return { "application/pdf": [".pdf"] };
@@ -156,6 +157,16 @@ function DropZone({
               width: "100%",
               aspectRatio: "4 / 1",
             }),
+          ...(shape === "portrait" &&
+            files?.length && {
+              width: "60%",
+              aspectRatio: "3 / 4",
+            }),
+          ...(shape === "banner" &&
+            files?.length && {
+              width: "100%",
+              aspectRatio: "2.5 / 1",
+            }),
         }}
       >
         <input {...getInputProps()} />
@@ -219,7 +230,8 @@ function DropZone({
         error={getIsTypeofFileRejected(fileRejections, ErrorCode.FileTooLarge)}
         sx={{ mt: 0 }}
       >
-        Allowed file size: {maxSizeMB}MB
+        Allowed file size:{" "}
+        {maxSizeMB < 1 ? `${Math.round(maxSizeMB * 1024)}KB` : `${maxSizeMB}MB`}
       </FormHelperText>
       <FormHelperText
         error={getIsTypeofFileRejected(
@@ -241,6 +253,20 @@ function DropZone({
       ) : shape == "rectangle" ? (
         <FormHelperText sx={{ mt: 0 }}>
           Please upload image with around 4:1 aspect ratio for optimal display.
+        </FormHelperText>
+      ) : shape == "portrait" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload a photo from a tall phone shot through 16:9 landscape
+          (max{" "}
+          {maxSizeMB < 1
+            ? `${Math.round(maxSizeMB * 1024)}KB`
+            : `${maxSizeMB}MB`}
+          ).
+        </FormHelperText>
+      ) : shape == "banner" ? (
+        <FormHelperText sx={{ mt: 0 }}>
+          Please upload a banner/landscape image (around 2:1 to 2.5:1 aspect
+          ratio, max {maxSizeMB}MB) for optimal display.
         </FormHelperText>
       ) : null}
     </Box>
