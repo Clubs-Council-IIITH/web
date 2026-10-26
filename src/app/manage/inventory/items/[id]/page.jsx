@@ -1,0 +1,248 @@
+import { redirect } from "next/navigation";
+
+import {
+  Box,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
+
+import { combineQuery, getClient } from "gql/client";
+import { GET_USER } from "gql/queries/auth";
+import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
+import { GET_ALL_TRANSACTIONS, GET_FULL_ITEM } from "gql/queries/inventory";
+
+import ActionPalette from "components/ActionPalette";
+import { DeleteItem, EditItem } from "components/inventory/items/ItemActions";
+import { ItemStatus } from "components/inventory/items/ItemStates";
+import TranTable from "components/inventory/transactions/TranTable";
+
+const ACTIVE_TRANSACTION_STATES = [
+  "incomplete",
+  "pending",
+  "pending_club",
+  "pending_slo",
+  "approved_slo",
+  "borrowed",
+];
+
+export async function generateMetadata(props) {
+  const params = await props.params;
+  const { id } = params;
+
+  const { data } = await getClient().query(
+    GET_FULL_ITEM,
+    { iid: id },
+  );
+  const item = data?.getItem;
+
+  return {
+    title: item?.name ?? "Inventory Item",
+    description: item?.otherDetails || "No description provided.",
+  };
+}
+
+export default async function ManageInventoryItemID(props) {
+  const params = await props.params;
+  const { id } = params;
+
+  const { data, error } = await getClient().query(
+    GET_FULL_ITEM,
+    { iid: id },
+  );
+  const item = data?.getItem;
+
+  if (error?.message?.includes("Item not found") || !item) {
+    return redirect("/404");
+  }
+
+  const { document, variables } = combineQuery("CombinedInventoryItemQuery")
+    .add(GET_ACTIVE_CLUBS)
+    .add(GET_USER, { userInput: null });
+
+  const { data: combinedData = {} } = await getClient().query(
+    document,
+    variables,
+  );
+
+  const { allClubs, userMeta, userProfile } = combinedData;
+  const user = { ...userMeta, ...userProfile };
+
+  const ownerClub = allClubs?.find((c) => c.cid === item?.clubid);
+  const { data: transactionData } = await getClient().query(
+    GET_ALL_TRANSACTIONS,
+    { itemid: item.iid, hideDeleted: true, paginationOn: true, limit: 25 },
+  );
+  const relatedTransactions = transactionData?.getTransactions ?? [];
+  const activeTransactionCount = relatedTransactions.filter((tx) =>
+    ACTIVE_TRANSACTION_STATES.includes(tx.status?.state),
+  ).length;
+
+  const actions = getActions(item, user, activeTransactionCount);
+
+  return (
+    <Box>
+      <ActionPalette
+        left={[ItemStatus]}
+        leftProps={[{ status: item?.isDeleted ? "deleted" : "approved" }]}
+        right={actions.map((a) => a.component)}
+        rightProps={actions.map((a) => a.props)}
+      />
+
+      <Grid container spacing={4} sx={{ mt: 1 }}>
+        {/* photo */}
+        <Grid
+          size={{ xs: 12, md: 4 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          {item?.photo ? (
+            <Box
+              component="img"
+              src={item.photo}
+              alt={item.name}
+              sx={{
+                width: "100%",
+                aspectRatio: "1 / 1",
+                objectFit: "cover",
+                borderRadius: 2,
+                border: "1px solid",
+                borderColor: "divider",
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                aspectRatio: "1 / 1",
+                borderRadius: 2,
+                border: "1px dashed",
+                borderColor: "divider",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                No photo
+              </Typography>
+            </Box>
+          )}
+        </Grid>
+
+        {/* item details */}
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Grid container spacing={3}>
+            {/* name + item code */}
+            <Grid size={12}>
+              <Typography variant="h5" fontWeight={600}>
+                {item?.name}
+              </Typography>
+              {item?.iid ? (
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontFamily: "monospace", letterSpacing: 1 }}
+                >
+                  Asset Code: {item.iid}
+                </Typography>
+              ) : null}
+            </Grid>
+
+            <Grid size={12}>
+              <Divider />
+            </Grid>
+
+            {/* metadata */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Owner / Club
+              </Typography>
+              <Typography variant="body1">
+                {ownerClub?.name ?? item?.clubid ?? "—"}
+              </Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Brand
+              </Typography>
+              <Typography variant="body1">{item?.brand || "—"}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Net Quantity
+              </Typography>
+              <Typography variant="body1">{item?.netQty?? 0}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Available Quantity
+              </Typography>
+              <Typography variant="body1">{item?.availableQty?? 0}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Total Quantity
+              </Typography>
+              <Typography variant="body1">{item?.totalQty?? 0}</Typography>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="overline" color="text.secondary">
+                Current Location
+              </Typography>
+              <Typography variant="body1">
+                {Array.isArray(item?.currentLocation)
+                  ? (item.currentLocation).join(", ")
+                  : (item?.currentLocation) || "—"}
+              </Typography>
+            </Grid>
+
+            {(item?.warrantyDetails) ? (
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="overline" color="text.secondary">
+                  Warranty Details
+                </Typography>
+                <Typography variant="body1">{item.warrantyDetails}</Typography>
+              </Grid>
+            ) : null}
+
+            {(item?.otherDetails) ? (
+              <Grid size={12}>
+                <Typography variant="overline" color="text.secondary">
+                  Other Details
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mt: 0.5, whiteSpace: "pre-wrap" }}
+                >
+                  {item.otherDetails}
+                </Typography>
+              </Grid>
+            ) : null}
+          </Grid>
+        </Grid>
+        <Grid size={12}>
+          <TranTable item={item} transactions={relatedTransactions} />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+function getActions(item, user, activeTransactionCount) {
+  const actions = [];
+  if (["cc", "slo"].includes(user?.role)) {
+    actions.push({ component: EditItem, props: {} });
+  }
+  if (user?.role === "slo" && !item?.isDeleted) {
+    actions.push({
+      component: DeleteItem,
+      props: { iid: item.iid, activeTransactionCount },
+    });
+  }
+  return actions;
+}
