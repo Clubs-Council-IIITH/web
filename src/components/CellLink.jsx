@@ -1,4 +1,4 @@
-import Link from "@mui/material/Link";
+import Link from "next/link";
 
 export default function CellLink({ href, children, target }) {
   return (
@@ -6,13 +6,13 @@ export default function CellLink({ href, children, target }) {
       href={href}
       target={target}
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
-      underline="none"
-      color="inherit"
-      sx={{
+      style={{
         display: "flex",
         alignItems: "center",
         width: "100%",
         height: "100%",
+        textDecoration: "none",
+        color: "inherit",
       }}
     >
       {children}
