@@ -9,6 +9,7 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
 import Tag from "components/Tag";
+import CellLink from "components/CellLink";
 import { billsStateLabel } from "utils/formatEvent";
 
 export default function FinancesTable({ events, role }) {
@@ -22,23 +23,28 @@ export default function FinancesTable({ events, role }) {
       headerName: "Name",
       flex: 5,
       valueGetter: (value, row) => row?.eventname,
-      renderCell: ({ value }) => (
-        <Typography
-          variant="body2"
-          style={{
-            overflowWrap: "break-word",
-            wordWrap: "break-word",
-            msWordBreak: "break-all",
-            wordBreak: "break-all",
-            msHyphens: "auto",
-            MozHyphens: "auto",
-            WebkitHyphens: "auto",
-            hyphens: "auto",
-          }}
-        >
-          {value}
-        </Typography>
-      ),
+      renderCell: ({ value, row }) => {
+        const financeLink = getFinanceLink({role, row})
+        return (
+          <CellLink href={financeLink}>
+            <Typography
+              variant="body2"
+              style={{
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
+                msWordBreak: "break-all",
+                wordBreak: "break-all",
+                msHyphens: "auto",
+                MozHyphens: "auto",
+                WebkitHyphens: "auto",
+                hyphens: "auto",
+              }}
+            >
+              {value}
+            </Typography>
+          </CellLink>
+      )
+    },
       display: "flex",
     },
     ...(isMobile || !["cc", "slo"].includes(role)
@@ -49,9 +55,14 @@ export default function FinancesTable({ events, role }) {
             headerName: "Club",
             flex: 3,
             valueGetter: (value, row) => row?.clubid,
-            renderCell: ({ value }) => (
-              <Typography variant="body2">{value}</Typography>
-            ),
+            renderCell: ({ value, row }) => {
+              const financeLink = getFinanceLink({role, row})
+              return (
+                <CellLink href={financeLink}>
+                  <Typography variant="body2">{value}</Typography>
+                </CellLink>
+              )
+            },
             display: "flex",
           },
         ]),
@@ -66,13 +77,18 @@ export default function FinancesTable({ events, role }) {
         status: billsStateLabel(row?.billsStatus?.state),
       }),
       disableExport: true,
-      renderCell: ({ value }) => (
-        <Tag
-          label={value.status.name}
-          color={value.status.color}
-          sx={{ my: 2 }}
-        />
-      ),
+      renderCell: ({ value, row }) => {
+        const financeLink = getFinanceLink({role, row})
+        return (
+          <CellLink href={financeLink}>
+            <Tag
+              label={value.status.name}
+              color={value.status.color}
+              sx={{ my: 2 }}
+            />
+          </CellLink>
+        )
+      },
       display: "flex",
     },
     {
@@ -82,20 +98,25 @@ export default function FinancesTable({ events, role }) {
       align: "center",
       headerAlign: "center",
       valueGetter: (value, row) => row?.eventReportSubmitted,
-      renderCell: ({ value }) => (
-        <Icon
-          variant={
-            value === "true" ? "check" : value === "old" ? "remove" : "cancel"
-          }
-          color={
-            value === "true"
-              ? "success.main"
-              : value === "old"
-                ? "warning.main"
-                : "error.main"
-          }
-        />
-      ),
+      renderCell: ({ value, row }) => {
+        const financeLink = getFinanceLink({role, row})
+        return (
+          <CellLink href={financeLink}>
+            <Icon
+              variant={
+              value === "true" ? "check" : value === "old" ? "remove" : "cancel"
+            }
+            color={
+              value === "true"
+                ? "success.main"
+                : value === "old"
+                  ? "warning.main"
+                  : "error.main"
+            }
+          />
+          </CellLink>
+        )
+      },
       display: "flex",
     },
   ];
@@ -108,19 +129,7 @@ export default function FinancesTable({ events, role }) {
       columns={columns}
       getRowId={(r) => r.eventid}
       onRowClick={(params) => {
-        const status = params.row.billsStatus?.state;
-
-        if (role === "slo") {
-          if (status === "submitted")
-            router.push(`/manage/finances/${params.row.eventid}`);
-          else router.push(`/manage/events/${params.row.eventid}`);
-        } else if (role === "club") {
-          if (status === "not_submitted" || status === "rejected")
-            router.push(`/manage/events/${params.row.eventid}/bills`);
-          else router.push(`/manage/events/${params.row.eventid}`);
-        } else {
-          router.push(`/manage/events/${params.row.eventid}`);
-        }
+        router.push(getFinanceLink({role, row: params.row}))
       }}
       // getRowClassName={(params) =>
       //   ["rejected", "not_submitted"].includes(params.row.billsStatus?.state)
@@ -158,4 +167,21 @@ export default function FinancesTable({ events, role }) {
       pageSizeOptions={[5, 10, 20]}
     />
   );
+}
+
+function getFinanceLink({role, row}) {
+  const status = row.billsStatus?.state
+  if (role === "slo") {
+    if (status === "submitted")
+      return `/manage/finances/${row.eventid}`;
+    else 
+      return `/manage/events/${row.eventid}`;
+  } else if (role === "club") {
+    if (status === "not_submitted" || status === "rejected")
+      return `/manage/events/${row.eventid}/bills`
+    else 
+      return `/manage/events/${row.eventid}`
+  } else {
+    return `/manage/events/${row.eventid}`
+  }
 }

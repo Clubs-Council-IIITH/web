@@ -16,6 +16,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import Icon from "components/Icon";
+import CellLink from "components/CellLink";
 import { getFile } from "utils/files";
 import { fmtMonthYear } from "utils/membersDates";
 import { getUserNameFromUID } from "utils/users";
@@ -42,7 +43,8 @@ export default function MembersTable({
       disableExport: true,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
         <Avatar sx={{ height: 32, width: 32, my: 2 }}>
           {value.img ? (
             <Image
@@ -52,6 +54,7 @@ export default function MembersTable({
             />
           ) : null}
         </Avatar>
+        </CellLink>
       ),
       display: "flex",
     },
@@ -65,6 +68,11 @@ export default function MembersTable({
         }
         return `${row.firstName} ${row.lastName}`;
       },
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
+          <Typography variant="body2">{value}</Typography>
+        </CellLink>
+      ),
       display: "flex",
       flex: 6,
     },
@@ -74,7 +82,8 @@ export default function MembersTable({
             field: "email",
             headerName: "Email",
             flex: 8,
-            renderCell: ({ value }) => (
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
               <Box
                 sx={{
                   textTransform: "lowercase",
@@ -84,6 +93,7 @@ export default function MembersTable({
               >
                 {value || "Email Not Available"}
               </Box>
+              </CellLink>
             ),
             display: "flex",
           },
@@ -111,7 +121,8 @@ export default function MembersTable({
             disableColumnMenu: true,
             sortable: false,
             valueGetter: (value, row) => row.roles,
-            renderCell: ({ value }) => (
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
               <Box sx={{ width: "100%", height: "100%", p: 1 }}>
                 <Stack
                   direction="column"
@@ -205,6 +216,7 @@ export default function MembersTable({
                   ))}
                 </Stack>
               </Box>
+              </CellLink>
             ),
           },
         ]),
