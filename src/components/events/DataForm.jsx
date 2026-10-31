@@ -449,6 +449,10 @@ export default function DataForm({ defaultValues = {}, action = "log" }) {
                               fieldValue: "event_report_submitted",
                               fieldName: "Event Report Submitted",
                             },
+                            {
+                              fieldValue: "event_report_photos_link",
+                              fieldName: "Report's Photos Link",
+                            },
                           ]),
                     ].map(({ fieldValue, fieldName }) => (
                       <Grid
