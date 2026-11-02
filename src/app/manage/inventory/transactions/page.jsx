@@ -45,8 +45,10 @@ function withItemDetails(tx, itemMap, clubMap) {
 async function getalltransactionsquery(querystring) {
   "use server";
 
+  // targetClub is the viewing club (clubs only): show what it requested plus
+  // everything about the items it owns
   const { data = {}, error } = await getClient().query(GET_ALL_TRANSACTIONS, {
-    clubid: querystring["targetClub"],
+    involvingClubid: querystring["targetClub"],
     pastTransactionsLimit: querystring["pastTransactionsLimit"],
     hideDeleted: querystring["hideDeleted"],
   });
@@ -97,7 +99,7 @@ export default async function ManageTransactions() {
 
   // All transactions initial fetch
   const { data: allData } = await getClient().query(GET_ALL_TRANSACTIONS, {
-    clubid,
+    involvingClubid: clubid,
     pastTransactionsLimit: 4,
     hideDeleted: true,
   });

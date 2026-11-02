@@ -49,15 +49,15 @@ export default async function ManageInventory() {
     }, {});
 
     // Fetch all items (for accurate stats) and recent transactions
-    const { data: { getItems: allItems = [] } = {} } = await getClient().query(GET_ALL_ITEMS, {
-        clubid: clubFilter,
-    });
+    // Every role sees every item, whichever club owns it.
+    const { data: { getItems: allItems = [] } = {} } = await getClient().query(GET_ALL_ITEMS, {});
     const displayItems = allItems.slice(0, 10);
 
     // Fetch all matching transactions (for accurate stats); the backend
     // returns everything when paginationOn isn't set.
+    // A club sees what it requested plus everything about the items it owns.
     const { data: { getTransactions: allTransactions = [] } = {} } = await getClient().query(GET_ALL_TRANSACTIONS, {
-        clubid: clubFilter,
+        involvingClubid: clubFilter,
         hideDeleted: true,
     });
     const recentTransactions = allTransactions.slice(0, 10);
@@ -86,8 +86,8 @@ export default async function ManageInventory() {
         .filter((t) => t?.status?.state === "borrowed")
         .reduce((acc, t) => acc + (t.quantity ?? 0), 0);
 
-    const itemsSectionTitle = isClubUser ? "Items in Possession" : "Items in Storage";
-    const totalItemsCardTitle = isClubUser ? "Total Items in Possession" : "Total Items in Storage";
+    const itemsSectionTitle = "Items in Inventory";
+    const totalItemsCardTitle = "Total Items in Inventory";
 
     return (
         <Container>

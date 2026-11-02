@@ -80,6 +80,7 @@ export const GET_ALL_TRANSACTIONS = gql`
   query InventoryTransactions(
     $clubid: String
     $itemid: String
+    $involvingClubid: String
     $paginationOn: Boolean
     $skip: Int
     $limit: Int
@@ -89,6 +90,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     getTransactions(
       clubid: $clubid
       itemid: $itemid
+      involvingClubid: $involvingClubid
       paginationOn: $paginationOn
       skip: $skip
       limit: $limit
