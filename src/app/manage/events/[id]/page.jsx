@@ -390,6 +390,7 @@ function getActions(event, clashFlag, user) {
    */
   if (event?.status?.state === "deleted") {
     if (["club", "cc"].includes(user?.role)) return [CopyEvent];
+    else if (user?.role === "slo") return [EditEvent];
     else return [];
   }
 
@@ -452,7 +453,7 @@ function getActions(event, clashFlag, user) {
       !upcoming &&
       event?.budget?.length
     )
-      return [EditFinances, DeleteEvent];
+      return [EditFinances, EditEvent, DeleteEvent];
     else return [EditEvent, DeleteEvent];
   }
 
