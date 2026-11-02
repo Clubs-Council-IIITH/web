@@ -192,6 +192,7 @@ export default function ItemsTable({
     {
       field: "availableQty",
       headerName: "Available",
+      description: "Units in storage right now (never more than Net)",
       flex: isMobile ? null : 3,
       align: "center",
       headerAlign: "center",
@@ -218,6 +219,7 @@ export default function ItemsTable({
     {
       field: "netQty",
       headerName: "Net Qty",
+      description: "Units clubs are allowed to borrow",
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",
@@ -227,6 +229,7 @@ export default function ItemsTable({
     {
       field: "totalQty",
       headerName: "Total Qty",
+      description: "Every unit owned, including ones not lent out to clubs",
       flex: isMobile ? null : 2,
       align: "center",
       headerAlign: "center",

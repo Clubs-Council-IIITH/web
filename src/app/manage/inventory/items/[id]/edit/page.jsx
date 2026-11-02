@@ -28,12 +28,16 @@ function transformItem(item) {
     iid: item?.iid ?? "",
     name: item?.name ?? "",
     brand: item?.brand ?? "",
-    quantity: item?.netQty ?? 1,
+    totalQty: item?.totalQty ?? 0,
+    netQty: item?.netQty ?? 0,
+    availableQty: item?.availableQty ?? 0,
     description: item?.otherDetails ?? "",
     warrantyDetails: item?.warrantyDetails ?? "",
     clubid: item?.clubid ?? "",
     currentLocation: item?.currentLocation ?? [],
+    requiresApproval: item?.requiresApproval ?? true,
     photo: item?.photo ?? null,
+    invoice: item?.invoice ?? null,
   };
 }
 

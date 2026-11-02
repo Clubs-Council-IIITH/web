@@ -34,6 +34,17 @@ const admin_roles = ["cc", "slo"];
 const photo_maxSizeMB = 10;
 const photo_warnSizeMB = 1;
 
+// asset codes aren't typed in, they're generated as "ITM-" + 6 characters
+// (no 0/O/1/I so they're easy to read out); the backend rejects duplicates
+const code_chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+function generateItemCode() {
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  return (
+    "ITM-" + Array.from(bytes, (b) => code_chars[b % code_chars.length]).join("")
+  );
+}
+
 export default function ItemForm({
   id = null,
   defaultValues = {},
@@ -67,36 +78,78 @@ export default function ItemForm({
     })();
   }, []);
 
+  // the asset code is generated once per form, so a retry after a failed
+  // submit doesn't create a second code; editing keeps the existing one
+  const [newItemCode] = useState(generateItemCode);
+
   const formDefaultValues = useMemo(
     () => ({
-      iid: defaultValues?.iid ?? "",
       name: defaultValues?.name ?? "",
       brand: defaultValues?.brand ?? "",
       otherDetails: defaultValues?.otherDetails ?? defaultValues?.description ?? "",
       warrantyDetails: defaultValues?.warrantyDetails ?? "",
       clubid: defaultValues?.clubid || "slo",
-      totalQty: defaultValues?.totalQty ?? defaultValues?.total_qty ?? defaultValues?.quantity ?? 1,
-      availableQty: defaultValues?.availableQty ?? defaultValues?.available_qty ?? defaultValues?.quantity ?? 1,
+      totalQty: defaultValues?.totalQty ?? 1,
+      netQty: defaultValues?.netQty ?? 1,
+      availableQty: defaultValues?.availableQty ?? 1,
       currentLocation: defaultValues?.currentLocation ?? defaultValues?.current_location ?? [],
       requiresApproval: defaultValues?.requiresApproval ?? true,
       photo: defaultValues?.photo ?? null,
-      invoice: defaultValues?.invoice ?? null,
+      invoice: defaultValues?.invoice
+        ? [{ name: defaultValues.invoice.split("/").pop(), storedPath: defaultValues.invoice }]
+        : null,
     }),
     [defaultValues],
   );
 
-  const { control, handleSubmit, watch, trigger } = useForm({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    trigger,
+    setValue,
+    formState: { dirtyFields, touchedFields, isSubmitted },
+  } = useForm({
     mode: "onChange",
     defaultValues: formDefaultValues,
   });
 
-  const totalQty = watch("totalQty");
+  const [totalQty, netQty] = watch(["totalQty", "netQty"]);
 
-  // re-validate location whenever total quantity changes, since the
-  // "exactly 1 location if total qty is 1" rule depends on both fields
+  // new stock starts out fully borrowable and in storage, so on create net and
+  // available follow total (and available follows net) until edited by hand
   useEffect(() => {
-    trigger("currentLocation");
-  }, [totalQty, trigger]);
+    if (action === "create" && !dirtyFields.netQty) {
+      setValue("netQty", totalQty);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalQty]);
+
+  useEffect(() => {
+    if (action === "create" && !dirtyFields.availableQty) {
+      setValue("availableQty", netQty);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [netQty]);
+
+  // the quantity rules depend on each other (available <= net <= total, and a
+  // total of 1 needs exactly one location), so re-validate the dependants when
+  // a quantity changes - but only once the user has touched them (or tried to
+  // submit), otherwise a fresh form opens with fields already showing errors
+  const revalidate = (name) => {
+    if (isSubmitted || touchedFields[name] || dirtyFields[name]) trigger(name);
+  };
+
+  useEffect(() => {
+    revalidate("currentLocation");
+    revalidate("netQty");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalQty]);
+
+  useEffect(() => {
+    revalidate("availableQty");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [netQty]);
 
   const submitHandlers = {
     create: async (data, opts) => {
@@ -139,12 +192,14 @@ export default function ItemForm({
   async function onSubmit(formData, opts) {
     setLoading(true);
 
+    // (the fields are required, so these are never empty; don't default with
+    // `|| 1` as that would turn a real quantity of 0 into 1)
     const data = {
-      iid: formData.iid.trim(),
+      iid: action === "edit" ? defaultValues?.iid || id : newItemCode,
       name: formData.name,
-      totalQty: parseInt(formData.totalQty || 1, 10),
-      availableQty: parseInt(formData.availableQty || 1, 10),
-      netQty: parseInt(formData.availableQty || 1, 10),
+      totalQty: parseInt(formData.totalQty, 10),
+      netQty: parseInt(formData.netQty, 10),
+      availableQty: parseInt(formData.availableQty, 10),
       brand: formData.brand,
       otherDetails: formData.otherDetails || null,
       warrantyDetails: formData.warrantyDetails || null,
@@ -211,8 +266,8 @@ export default function ItemForm({
         data.clubid
       ).replace(".", "_");
 
-      if (typeof formData.invoice === "string") {
-        data.invoice = formData.invoice;
+      if (formData.invoice?.[0]?.storedPath) {
+        data.invoice = formData.invoice[0].storedPath;
       } else if (Array.isArray(formData.invoice) && formData.invoice.length > 0) {
         data.invoice = await uploadPDFFile(
           formData.invoice[0],
@@ -266,24 +321,32 @@ export default function ItemForm({
                 </Grid>
               ) : null}
 
-              {/* asset code */}
-              <Grid size={12}>
-                <ItemCodeInput control={control} />
-              </Grid>
-
               {/* name */}
               <Grid size={12}>
                 <ItemNameInput control={control} />
               </Grid>
 
-              {/* total qty + available qty + brand */}
+              {/* total qty + net qty + available qty */}
               <Grid size={{ xs: 12, sm: 4 }}>
                 <ItemTotalQuantityInput control={control} />
               </Grid>
               <Grid size={{ xs: 12, sm: 4 }}>
-                <ItemAvailableQuantityInput control={control} />
+                <ItemNetQuantityInput control={control} totalQty={totalQty} />
               </Grid>
               <Grid size={{ xs: 12, sm: 4 }}>
+                <ItemAvailableQuantityInput control={control} netQty={netQty} />
+              </Grid>
+              <Grid size={12}>
+                <Typography variant="caption" color="text.secondary">
+                  <strong>Total</strong>: every unit owned, including ones not
+                  lent out to clubs. <strong>Net</strong>: units clubs are
+                  allowed to borrow. <strong>Available</strong>: units in
+                  storage right now (never more than Net).
+                </Typography>
+              </Grid>
+
+              {/* brand */}
+              <Grid size={12}>
                 <ItemBrandInput control={control} />
               </Grid>
 
@@ -558,29 +621,6 @@ function ItemClubSelect({ control, clubs = [] }) {
   );
 }
 
-function ItemCodeInput({ control }) {
-  return (
-    <Controller
-      name="iid"
-      control={control}
-      rules={{ required: "Asset code is required!" }}
-      render={({ field, fieldState: { error, invalid } }) => (
-        <TextField
-          {...field}
-          label="Asset Code"
-          autoComplete="off"
-          error={invalid}
-          helperText={error?.message}
-          variant="outlined"
-          fullWidth
-          required
-          onBlur={(event) => field.onChange(event.target.value.trim())}
-        />
-      )}
-    />
-  );
-}
-
 function ItemLocationInput({ control, totalQty }) {
   const locations = [
     ["amphi", "Amphitheater Storage Room"],
@@ -687,7 +727,37 @@ function ItemTotalQuantityInput({ control }) {
   );
 }
 
-function ItemAvailableQuantityInput({ control }) {
+function ItemNetQuantityInput({ control, totalQty }) {
+  return (
+    <Controller
+      name="netQty"
+      control={control}
+      rules={{
+        required: "Net quantity is required!",
+        min: { value: 0, message: "Net quantity must be at least 0!" },
+        validate: (value) =>
+          Number(value) <= Number(totalQty) ||
+          "Net quantity can't be more than the total!",
+      }}
+      render={({ field, fieldState: { error, invalid } }) => (
+        <TextField
+          {...field}
+          type="number"
+          label="Net Quantity"
+          autoComplete="off"
+          error={invalid}
+          helperText={error?.message}
+          variant="outlined"
+          fullWidth
+          required
+          slotProps={{ input: { inputProps: { min: 0 } } }}
+        />
+      )}
+    />
+  );
+}
+
+function ItemAvailableQuantityInput({ control, netQty }) {
   return (
     <Controller
       name="availableQty"
@@ -695,6 +765,9 @@ function ItemAvailableQuantityInput({ control }) {
       rules={{
         required: "Available quantity is required!",
         min: { value: 0, message: "Available quantity must be at least 0!" },
+        validate: (value) =>
+          Number(value) <= Number(netQty) ||
+          "Available quantity can't be more than the net quantity!",
       }}
       render={({ field, fieldState: { error, invalid } }) => (
         <TextField
