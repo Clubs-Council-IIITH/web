@@ -4,6 +4,7 @@ import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ITEMS_FOR_SELECTOR, GET_ALL_TRANSACTIONS } from "gql/queries/inventory";
 import { GET_UNFINISHED_EVENTS } from "gql/queries/events";
+import { GET_ACTIVE_CLUB_IDS } from "gql/queries/clubs";
 
 import TransactionForm from "components/inventory/transactions/TranForm";
 
@@ -20,7 +21,7 @@ export default async function NewTransactionPage() {
   const clubid = role === "club" ? userMeta?.uid : undefined;
 
   // Run all fetches in parallel
-  const [itemsRes, txRes, eventsRes] = await Promise.all([
+  const [itemsRes, txRes, eventsRes, clubsRes] = await Promise.all([
     // All items available for selector (including items in storage)
     getClient().query(GET_ITEMS_FOR_SELECTOR, {}),
 
@@ -37,10 +38,14 @@ export default async function NewTransactionPage() {
       public: false,
       excludeCompleted: true,
     }),
+
+    // Clubs cc / slo can request on behalf of (a club only needs its own name)
+    getClient().query(GET_ACTIVE_CLUB_IDS, {}),
   ]);
 
   const items = itemsRes.data?.getItems ?? [];
   const existingTransactions = txRes.data?.getTransactions ?? [];
+  const clubs = clubsRes.data?.allClubs ?? [];
 
   // Keep only events that haven't ended yet
   const now = new Date();
@@ -57,6 +62,7 @@ export default async function NewTransactionPage() {
       <TransactionForm
         items={items}
         events={events}
+        clubs={clubs}
         existingTransactions={existingTransactions}
         submitLabel="Create Request"
       />

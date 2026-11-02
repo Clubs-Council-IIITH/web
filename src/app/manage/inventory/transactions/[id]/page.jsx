@@ -69,10 +69,10 @@ export default async function ManageTransactionID(props) {
 
   const actions = getActions(transaction, userMeta, item?.clubid);
 
-  // Photos are only visible to SLO, the item's owning club, and the
+  // Photos are only visible to CC, SLO, the item's owning club, and the
   // requesting (borrowing) club.
   const canViewPhotos =
-    userMeta?.role === "slo" ||
+    ["cc", "slo"].includes(userMeta?.role) ||
     (item?.clubid && userMeta?.uid === item.clubid) ||
     (transaction?.clubid && userMeta?.uid === transaction.clubid);
 
@@ -292,17 +292,18 @@ function getActions(transaction, user, itemClubid) {
     actions.push({ component: SubmitTransaction, props: {} });
   }
 
-  // Club approves cross-club borrow
+  // The item's owner approves a cross-club borrow (a club, or cc when the
+  // item is registered under cc); slo can step in. cc has no say otherwise.
   if (
     state === "pending_club" &&
-    (itemClubid === userClubid || ["cc", "slo"].includes(role))
+    (itemClubid === userClubid || role === "slo")
   ) {
     actions.push({ component: ApproveClubTransaction, props: {} });
     actions.push({ component: RejectTransaction, props: {} });
   }
 
-  // SLO/CC approves
-  if (state === "pending_slo" && ["cc", "slo"].includes(role)) {
+  // SLO approval / rejection is SLO's alone
+  if (state === "pending_slo" && role === "slo") {
     actions.push({ component: ApproveSloTransaction, props: {} });
     actions.push({ component: RejectTransaction, props: {} });
   }

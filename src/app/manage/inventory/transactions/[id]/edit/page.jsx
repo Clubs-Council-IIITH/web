@@ -4,6 +4,7 @@ import { Container, Typography } from "@mui/material";
 
 import { getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
+import { GET_ALL_CLUB_IDS } from "gql/queries/clubs";
 import { GET_EVENT, GET_UNFINISHED_EVENTS } from "gql/queries/events";
 import { GET_FULL_ITEM, GET_FULL_TRANSACTION } from "gql/queries/inventory";
 
@@ -56,7 +57,7 @@ export default async function EditTransactionPage(props) {
     redirect("/404");
   }
 
-  const [eventsRes, eventRes] = await Promise.all([
+  const [eventsRes, eventRes, clubsRes] = await Promise.all([
     getClient().query(GET_UNFINISHED_EVENTS, {
       clubid: role === "club" ? uid : null,
       public: false,
@@ -65,6 +66,7 @@ export default async function EditTransactionPage(props) {
     transaction.eventid
       ? getClient().query(GET_EVENT, { eventid: transaction.eventid })
       : Promise.resolve({ data: null }),
+    getClient().query(GET_ALL_CLUB_IDS, {}),
   ]);
 
   const now = new Date();
@@ -80,7 +82,14 @@ export default async function EditTransactionPage(props) {
     events.push(linkedEvent);
   }
 
+  const clubName =
+    clubsRes.data?.allClubs?.find((c) => c.cid === transaction.clubid)?.name ??
+    transaction.clubName ??
+    transaction.clubid;
+
   const defaultValues = {
+    clubid: transaction.clubid ?? "",
+    clubName,
     // The item Select's options are keyed by _id (see TranForm.jsx), so the
     // default value must match that, not the human-readable iid.
     itemid: item?._id ?? transaction.itemid ?? "",

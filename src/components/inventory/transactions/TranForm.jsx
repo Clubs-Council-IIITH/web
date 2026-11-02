@@ -14,6 +14,7 @@ import {
   Chip,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -34,12 +35,16 @@ import { createTransactionAction } from "actions/inventory/transactions/create/s
 import { editTransactionAction } from "actions/inventory/transactions/edit/server_action";
 import { submitTransactionAction } from "actions/inventory/transactions/submit/server_action";
 
+// Display names for cc / slo when they request in their own name
+const ADMIN_REQUESTER_NAMES = { cc: "Clubs Council", slo: "SLO" };
+
 export default function TransactionForm({
   id = null,
   action = "create",
   defaultValues = {},
   items = [],
   events = [],
+  clubs = [],
   pocs = [],
   existingTransactions = [],
   submitLabel = "Submit Request",
@@ -52,6 +57,7 @@ export default function TransactionForm({
 
   const normalizedDefaults = useMemo(
     () => ({
+      clubid: defaultValues?.clubid ?? user?.uid ?? "",
       itemid: defaultValues?.itemid ?? "",
       quantity: defaultValues?.quantity ?? 1,
       startDate: defaultValues?.startDate ?? null,
@@ -63,19 +69,75 @@ export default function TransactionForm({
       poc: defaultValues?.poc ?? "",
       remarks: defaultValues?.remarks ?? "",
     }),
-    [defaultValues],
+    [defaultValues, user?.uid],
   );
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: normalizedDefaults,
     mode: "onChange",
   });
 
   const useEvent = watch("useEvent");
+  const selectedClubid = watch("clubid");
+  const selectedEventId = watch("eventid");
   const selectedItemId = watch("itemid");
   const quantity = watch("quantity");
   const startDate = watch("startDate");
   const endDate = watch("endDate");
+
+  // cc / slo can request for themselves (the default) or in the name of any
+  // club; a club can only request in its own name. The requesting club is
+  // fixed once the transaction exists.
+  const isAdmin = ["cc", "slo"].includes(user?.role);
+  const canPickClub = isAdmin && action === "create";
+
+  const clubOptions = useMemo(() => {
+    const own = {
+      cid: user?.uid,
+      name:
+        ADMIN_REQUESTER_NAMES[user?.role] ??
+        clubs.find((c) => c.cid === user?.uid)?.name ??
+        user?.uid,
+    };
+    const others = clubs
+      .filter((c) => c.cid !== user?.uid)
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return isAdmin ? [own, ...others] : [own];
+  }, [clubs, user?.uid, user?.role, isAdmin]);
+
+  const selectedClubName =
+    action === "edit"
+      ? defaultValues?.clubName || selectedClubid
+      : (clubOptions.find((c) => c.cid === selectedClubid)?.name ??
+        selectedClubid);
+
+  // Events that can be attached to this request. A club's own list is
+  // already scoped server-side; for cc / slo it follows the club selected
+  // above (its own events and the ones it collaborates on). The event this
+  // transaction is already linked to always stays selectable.
+  const eventsForClub = (clubid) =>
+    isAdmin
+      ? events.filter(
+          (e) =>
+            (defaultValues?.eventid && e._id === defaultValues.eventid) ||
+            e.clubid === clubid ||
+            e.collabclubs?.includes(clubid),
+        )
+      : events;
+  const clubEvents = eventsForClub(selectedClubid);
+
+  // Switching club: drop an event selection that doesn't belong to the new
+  // club, and switch the event link off if the club has no events at all.
+  const handleClubChange = (onChange) => (e) => {
+    onChange(e);
+    const nextEvents = eventsForClub(e.target.value);
+    if (!nextEvents.some((ev) => ev._id === selectedEventId)) {
+      setValue("eventid", "");
+    }
+    if (nextEvents.length === 0) {
+      setValue("useEvent", false);
+    }
+  };
 
   // Resolved item object for the currently selected item
   const selectedItem = useMemo(
@@ -163,10 +225,17 @@ export default function TransactionForm({
 
       const item = items.find((i) => i._id === formData.itemid || i.iid === formData.itemid);
 
+      // only cc / slo may name a club other than themselves
+      const requestClubid = canPickClub
+        ? formData.clubid || user?.uid
+        : user?.uid;
+      const requestClubName =
+        clubOptions.find((c) => c.cid === requestClubid)?.name ?? null;
+
       const details = {
         itemid: item?.iid || item?._id || formData.itemid,
-        clubid: user?.uid || user?.club || item?.clubid || "slo",
-        clubName: user?.name || null,
+        clubid: requestClubid,
+        clubName: requestClubName,
         quantity: parseInt(formData.quantity, 10),
         startDate: formData.startDate ? dayjs(formData.startDate).format("YYYY-MM-DD") : null,
         endDate: formData.endDate ? dayjs(formData.endDate).format("YYYY-MM-DD") : null,
@@ -223,6 +292,58 @@ export default function TransactionForm({
       <Grid container spacing={4} sx={{ alignItems: "flex-start" }}>
         {/* ── Left column: request details ─────────────────────────────── */}
         <Grid container spacing={2} size={{ xs: 12, md: 7, xl: 8 }}>
+
+          {/* Section: Requesting club */}
+          <Grid container size={12}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ textTransform: "uppercase", color: "text.secondary", mb: 2 }}
+            >
+              Requesting Club
+            </Typography>
+
+            <Grid container spacing={2} size={12}>
+              <Grid size={12}>
+                <Controller
+                  name="clubid"
+                  control={control}
+                  render={({ field }) =>
+                    canPickClub ? (
+                      <FormControl fullWidth>
+                        <InputLabel id="tran-club-label">
+                          Request on behalf of
+                        </InputLabel>
+                        <Select
+                          {...field}
+                          labelId="tran-club-label"
+                          label="Request on behalf of"
+                          onChange={handleClubChange(field.onChange)}
+                        >
+                          {clubOptions.map((c) => (
+                            <MenuItem key={c.cid} value={c.cid}>
+                              {c.cid === user?.uid ? `${c.name} (own)` : c.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <FormHelperText>
+                          Defaults to your own account. Pick a club to make the
+                          request in its name.
+                        </FormHelperText>
+                      </FormControl>
+                    ) : (
+                      <TextField
+                        label="Club"
+                        value={selectedClubName ?? ""}
+                        fullWidth
+                        disabled
+                      />
+                    )
+                  }
+                />
+              </Grid>
+            </Grid>
+          </Grid>
 
           {/* Section: Item */}
           <Grid container size={12}>
@@ -505,11 +626,22 @@ export default function TransactionForm({
                   control={control}
                   render={({ field }) => (
                     <FormControlLabel
-                      control={<Switch {...field} checked={field.value} />}
+                      control={
+                        <Switch
+                          {...field}
+                          checked={field.value}
+                          disabled={clubEvents.length === 0 && !field.value}
+                        />
+                      }
                       label="Link this request to an event"
                     />
                   )}
                 />
+                {clubEvents.length === 0 && !useEvent ? (
+                  <FormHelperText>
+                    No upcoming events found for {selectedClubName}.
+                  </FormHelperText>
+                ) : null}
               </Grid>
 
               {/* event selector OR purpose textarea */}
@@ -527,14 +659,14 @@ export default function TransactionForm({
                           labelId="tran-event-label"
                           label="Linked Event *"
                         >
-                          {events.length === 0 ? (
+                          {clubEvents.length === 0 ? (
                             <MenuItem disabled value="">
                               <Typography variant="body2" color="text.secondary">
                                 No upcoming events found
                               </Typography>
                             </MenuItem>
                           ) : (
-                            events.map((event) => (
+                            clubEvents.map((event) => (
                               <MenuItem key={event._id} value={event._id}>
                                 <Box>
                                   <Typography variant="body2">{event.name}</Typography>

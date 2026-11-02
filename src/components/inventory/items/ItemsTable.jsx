@@ -93,24 +93,6 @@ export default function ItemsTable({
   };
 
   const columns = [
-    ...(!isMobile
-      ? [
-          {
-            field: "iid",
-            headerName: "Asset Code",
-            flex: 3,
-            renderCell: ({ value, row }) => (
-              <Typography
-                variant="body2"
-                sx={{ color: "text.disabled", fontFamily: "monospace" }}
-              >
-                {value || row?.code || "—"}
-              </Typography>
-            ),
-            display: "flex",
-          },
-        ]
-      : []),
     {
       field: "name",
       headerName: "Item Name",

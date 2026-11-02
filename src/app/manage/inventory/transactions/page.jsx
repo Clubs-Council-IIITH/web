@@ -38,7 +38,6 @@ function withItemDetails(tx, itemMap, clubMap) {
   return {
     ...tx,
     itemName: item?.name,
-    itemCode: item?.iid,
     itemClubName: item?.clubid ? clubMap[item.clubid] || item.clubid : null,
   };
 }

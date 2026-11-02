@@ -73,7 +73,6 @@ export default async function ManageInventory() {
         return {
             ...tx,
             itemName: item?.name,
-            itemCode: item?.iid,
             itemClubName: item?.clubid ? clubMap[item.clubid] || item.clubid : null,
             clubName: clubMap[tx.clubid] || tx.clubName || tx.clubid || "—",
         };

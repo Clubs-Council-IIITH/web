@@ -94,21 +94,6 @@ export default function TranTable({
       display: "flex",
     };
 
-    const itemCodeCol = {
-      field: "itemCode",
-      headerName: "Asset Code",
-      flex: 3,
-      renderCell: ({ value }) => (
-        <Typography
-          variant="body2"
-          sx={{ color: "text.disabled", fontFamily: "monospace" }}
-        >
-          {value || "—"}
-        </Typography>
-      ),
-      display: "flex",
-    };
-
     const ownerClubCol = {
       field: "itemClubName",
       headerName: "Owner Club",
@@ -248,7 +233,7 @@ export default function TranTable({
       return [userCol, clubCol, quantityCol, startDateCol, endDateCol, statusCol];
     }
 
-    return [itemCol, itemCodeCol, ownerClubCol, clubCol, quantityCol, startDateCol, endDateCol, statusCol];
+    return [itemCol, ownerClubCol, clubCol, quantityCol, startDateCol, endDateCol, statusCol];
   }, [item, isMobile]);
 
   return (

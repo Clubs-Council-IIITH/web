@@ -11,6 +11,7 @@ import { combineQuery, getClient } from "gql/client";
 import { GET_USER } from "gql/queries/auth";
 import { GET_ACTIVE_CLUBS } from "gql/queries/clubs";
 import { GET_ALL_TRANSACTIONS, GET_FULL_ITEM } from "gql/queries/inventory";
+import { getFile } from "utils/files";
 
 import ActionPalette from "components/ActionPalette";
 import { DeleteItem, EditItem } from "components/inventory/items/ItemActions";
@@ -98,7 +99,7 @@ export default async function ManageInventoryItemID(props) {
           {item?.photo ? (
             <Box
               component="img"
-              src={item.photo}
+              src={getFile(item.photo, true)}
               alt={item.name}
               sx={{
                 width: "100%",
