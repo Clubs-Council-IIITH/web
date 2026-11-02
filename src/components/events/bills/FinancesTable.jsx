@@ -80,7 +80,7 @@ export default function FinancesTable({ events, role }) {
       renderCell: ({ value, row }) => {
         const financeLink = getFinanceLink({role, row})
         return (
-          <CellLink href={financeLink}>
+          <CellLink href={financeLink} align="center">
             <Tag
               label={value.status.name}
               color={value.status.color}
@@ -101,7 +101,7 @@ export default function FinancesTable({ events, role }) {
       renderCell: ({ value, row }) => {
         const financeLink = getFinanceLink({role, row})
         return (
-          <CellLink href={financeLink}>
+          <CellLink href={financeLink} align="center">
             <Icon
               variant={
               value === "true" ? "check" : value === "old" ? "remove" : "cancel"

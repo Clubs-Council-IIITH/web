@@ -210,7 +210,7 @@ export default function EventsTable({
             valueGetter: (value, row) => row.datetimeperiod[0],
             valueFormatter: (value, row) => ISOtoHuman(value),
             renderCell: ({ formattedValue, row }) => (
-              <CellLink href={`/manage/events/${row._id}`} target="_blank">
+              <CellLink href={`/manage/events/${row._id}`} target="_blank" align="center">
               {<Typography
                 variant="body2"
                 sx={{
@@ -238,7 +238,7 @@ export default function EventsTable({
         approved: row.status.room,
       }),
       renderCell: ({ value, row }) => (
-        <CellLink href={`/manage/events/${row._id}`} target="_blank">
+        <CellLink href={`/manage/events/${row._id}`} target="_blank" align="center">
         {<Tooltip
           title={
             !value.requested
@@ -294,7 +294,7 @@ export default function EventsTable({
         }
 
         return (
-          <CellLink href={`/manage/events/${row._id}`} target="_blank">
+          <CellLink href={`/manage/events/${row._id}`} target="_blank" align="center">
           <Tag
             label={stateLabel(value.state).shortName}
             color={stateLabel(value.state).color}

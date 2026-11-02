@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function CellLink({ href, children, target }) {
+export default function CellLink({ href, children, target, align = "left" }) {
   return (
     <Link
       href={href}
@@ -9,6 +9,7 @@ export default function CellLink({ href, children, target }) {
       style={{
         display: "flex",
         alignItems: "center",
+        justifyContent: align === "center" ? "center" : "start",
         width: "100%",
         height: "100%",
         textDecoration: "none",
