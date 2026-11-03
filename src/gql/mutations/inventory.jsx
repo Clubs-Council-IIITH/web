@@ -163,10 +163,19 @@ export const APPROVE_CLUB_TRANSACTION = gql`
 
 /** SLO / CC approves the borrow request. */
 export const APPROVE_SLO_TRANSACTION = gql`
-  mutation ApproveSLOTransaction($tid: String!, $sloComment: String) {
-    approveSLOTransaction(tid: $tid, sloComment: $sloComment) {
+  mutation ApproveSLOTransaction(
+    $tid: String!
+    $sloComment: String
+    $requirePhotos: Boolean
+  ) {
+    approveSLOTransaction(
+      tid: $tid
+      sloComment: $sloComment
+      requirePhotos: $requirePhotos
+    ) {
       _id
       tid
+      photosRequired
       status {
         state
       }
@@ -188,7 +197,7 @@ export const REJECT_TRANSACTION = gql`
 
 /** SLO or borrowing club confirms item physically picked up. */
 export const MARK_BORROWED = gql`
-  mutation MarkBorrowed($tid: String!, $photoBefore: String!, $remarks: String) {
+  mutation MarkBorrowed($tid: String!, $photoBefore: String, $remarks: String) {
     markBorrowed(tid: $tid, photoBefore: $photoBefore, remarks: $remarks) {
       _id
       tid

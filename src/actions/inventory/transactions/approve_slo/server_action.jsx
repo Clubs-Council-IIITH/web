@@ -3,7 +3,11 @@
 import { getClient } from "gql/client";
 import { APPROVE_SLO_TRANSACTION } from "gql/mutations/inventory";
 
-export async function approveSLOTransactionAction(tid, sloComment = null) {
+export async function approveSLOTransactionAction(
+  tid,
+  sloComment = null,
+  requirePhotos = false,
+) {
   const response = { ok: false, data: null, error: null };
 
   try {
@@ -11,6 +15,7 @@ export async function approveSLOTransactionAction(tid, sloComment = null) {
     const result = await client.mutation(APPROVE_SLO_TRANSACTION, {
       tid,
       sloComment,
+      requirePhotos,
     });
 
     if (result.error) {

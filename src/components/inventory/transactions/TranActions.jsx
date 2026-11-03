@@ -11,7 +11,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
+  FormHelperText,
   Grid,
+  Switch,
   TextField,
 } from "@mui/material";
 
@@ -158,10 +161,15 @@ export function ApproveSloTransaction({ tid, sx }) {
   const [dialog, setDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState("");
+  const [requirePhotos, setRequirePhotos] = useState(false);
 
   const handle = async () => {
     setLoading(true);
-    const res = await approveSLOTransactionAction(tid, comment || null);
+    const res = await approveSLOTransactionAction(
+      tid,
+      comment || null,
+      requirePhotos,
+    );
     setLoading(false);
     setDialog(false);
     if (res.ok) {
@@ -200,6 +208,20 @@ export function ApproveSloTransaction({ tid, sx }) {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
+          <FormControlLabel
+            sx={{ mt: 2, display: "flex" }}
+            control={
+              <Switch
+                checked={requirePhotos}
+                onChange={(e) => setRequirePhotos(e.target.checked)}
+              />
+            }
+            label="Require before and after photos"
+          />
+          <FormHelperText>
+            Off by default. When on, the borrowing club must add a before photo
+            at pickup and an after photo at return. When off, both are optional.
+          </FormHelperText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialog(false)}>Cancel</Button>
@@ -287,7 +309,7 @@ export function RejectTransaction({ tid, sx }) {
 // Mark Borrowed (approved_slo → borrowed)
 // ---------------------------------------------------------------------------
 
-export function MarkBorrowed({ tid, sx }) {
+export function MarkBorrowed({ tid, sx, photosRequired = false }) {
   const router = useRouter();
   const { triggerToast } = useToast();
   const [dialog, setDialog] = useState(false);
@@ -301,24 +323,26 @@ export function MarkBorrowed({ tid, sx }) {
   const hasPhoto = Array.isArray(photoFile) && photoFile.length > 0;
 
   const handle = async () => {
-    if (!hasPhoto) return;
+    if (photosRequired && !hasPhoto) return;
     setLoading(true);
 
     let photo = null;
-    try {
-      photo = await uploadImageFile(
-        photoFile[0],
-        "txn_" + tid + "_before",
-        photo_warnSizeMB,
-      );
-    } catch (error) {
-      triggerToast({
-        title: "Error uploading photo",
-        messages: error?.message ? [error.message] : ["Failed to upload photo"],
-        severity: "error",
-      });
-      setLoading(false);
-      return;
+    if (hasPhoto) {
+      try {
+        photo = await uploadImageFile(
+          photoFile[0],
+          "txn_" + tid + "_before",
+          photo_warnSizeMB,
+        );
+      } catch (error) {
+        triggerToast({
+          title: "Error uploading photo",
+          messages: error?.message ? [error.message] : ["Failed to upload photo"],
+          severity: "error",
+        });
+        setLoading(false);
+        return;
+      }
     }
 
     const res = await markBorrowedAction(tid, photo, statusText || null);
@@ -349,13 +373,15 @@ export function MarkBorrowed({ tid, sx }) {
         <DialogTitle>Confirm Item Borrow</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            A before-photo of the item's condition is required to confirm borrowing.
+            {photosRequired
+              ? "A before photo of the item's condition is required to confirm borrowing."
+              : "You can add a before photo of the item's condition (optional)."}
           </DialogContentText>
           <Grid size={12} sx={{ mb: 2 }}>
             <FileUpload
               type="image"
               name="photo"
-              label="Before Photo *"
+              label={photosRequired ? "Before Photo *" : "Before Photo (optional)"}
               control={control}
               maxFiles={1}
               shape="square"
@@ -374,7 +400,12 @@ export function MarkBorrowed({ tid, sx }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialog(false)}>Cancel</Button>
-          <Button onClick={handle} variant="contained" color="info" disabled={loading || !hasPhoto}>
+          <Button
+            onClick={handle}
+            variant="contained"
+            color="info"
+            disabled={loading || (photosRequired && !hasPhoto)}
+          >
             Confirm Borrow
           </Button>
         </DialogActions>
@@ -387,7 +418,7 @@ export function MarkBorrowed({ tid, sx }) {
 // Return (borrowed → completed)
 // ---------------------------------------------------------------------------
 
-export function ReturnTransaction({ tid, sx }) {
+export function ReturnTransaction({ tid, sx, photosRequired = false }) {
   const router = useRouter();
   const { triggerToast } = useToast();
   const [dialog, setDialog] = useState(false);
@@ -401,24 +432,26 @@ export function ReturnTransaction({ tid, sx }) {
   const hasPhoto = Array.isArray(photoFile) && photoFile.length > 0;
 
   const handle = async () => {
-    if (!hasPhoto) return;
+    if (photosRequired && !hasPhoto) return;
     setLoading(true);
 
     let photo = null;
-    try {
-      photo = await uploadImageFile(
-        photoFile[0],
-        "txn_" + tid + "_after",
-        photo_warnSizeMB,
-      );
-    } catch (error) {
-      triggerToast({
-        title: "Error uploading photo",
-        messages: error?.message ? [error.message] : ["Failed to upload photo"],
-        severity: "error",
-      });
-      setLoading(false);
-      return;
+    if (hasPhoto) {
+      try {
+        photo = await uploadImageFile(
+          photoFile[0],
+          "txn_" + tid + "_after",
+          photo_warnSizeMB,
+        );
+      } catch (error) {
+        triggerToast({
+          title: "Error uploading photo",
+          messages: error?.message ? [error.message] : ["Failed to upload photo"],
+          severity: "error",
+        });
+        setLoading(false);
+        return;
+      }
     }
 
     const res = await returnTransactionAction(tid, comment || null, photo);
@@ -449,13 +482,15 @@ export function ReturnTransaction({ tid, sx }) {
         <DialogTitle>Confirm Item Return</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            An after-condition photo is required to confirm the return.
+            {photosRequired
+              ? "An after photo of the item's condition is required to confirm the return."
+              : "You can add an after photo of the item's condition (optional)."}
           </DialogContentText>
           <Grid size={12} sx={{ mb: 2 }}>
             <FileUpload
               type="image"
               name="photo"
-              label="After Photo *"
+              label={photosRequired ? "After Photo *" : "After Photo (optional)"}
               control={control}
               maxFiles={1}
               shape="square"
@@ -474,7 +509,12 @@ export function ReturnTransaction({ tid, sx }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialog(false)}>Cancel</Button>
-          <Button onClick={handle} variant="contained" color="success" disabled={loading || !hasPhoto}>
+          <Button
+            onClick={handle}
+            variant="contained"
+            color="success"
+            disabled={loading || (photosRequired && !hasPhoto)}
+          >
             Confirm Return
           </Button>
         </DialogActions>

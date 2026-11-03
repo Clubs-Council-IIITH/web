@@ -273,6 +273,8 @@ function getActions(transaction, user, itemClubid) {
   if (!state || !role) return [];
 
   const actions = [];
+  // SLO decides at approval whether the before and after photos are mandatory
+  const photosRequired = Boolean(transaction?.photosRequired);
 
   // Edit: while still incomplete, or awaiting the requesting club's own
   // approval step — pending_club for a cross-club borrow, pending_slo
@@ -310,7 +312,7 @@ function getActions(transaction, user, itemClubid) {
 
   // Perform borrow: borrowing club (or CC/SLO) uploads photo & status when approved_slo
   if (state === "approved_slo" && (isOwner || ["cc", "slo"].includes(role))) {
-    actions.push({ component: MarkBorrowed, props: {} });
+    actions.push({ component: MarkBorrowed, props: { photosRequired } });
   }
 
   // Club cancels after SLO approval
@@ -320,7 +322,7 @@ function getActions(transaction, user, itemClubid) {
 
   // Perform return: borrowing club (or CC/SLO) uploads return details when borrowed
   if (state === "borrowed" && (isOwner || ["cc", "slo"].includes(role))) {
-    actions.push({ component: ReturnTransaction, props: {} });
+    actions.push({ component: ReturnTransaction, props: { photosRequired } });
   }
 
   // CC / SLO can always soft-delete

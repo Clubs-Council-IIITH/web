@@ -157,6 +157,7 @@ export const GET_FULL_TRANSACTION = gql`
       remarks
       photoBefore
       photoAfter
+      photosRequired
       status {
         state
         submissionTime
