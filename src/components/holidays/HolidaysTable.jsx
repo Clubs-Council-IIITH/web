@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import { ISOtoHuman } from "utils/formatTime";
 import CellLink from "components/CellLink";
+import { ISOtoHuman } from "utils/formatTime";
 
 export default function HolidaysTable({ holidays, showPast = false }) {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function HolidaysTable({ holidays, showPast = false }) {
       headerName: "Name",
       flex: 5,
       renderCell: (params) => (
-          <CellLink href={`/manage/holidays/${params.id}`}>
+        <CellLink href={`/manage/holidays/${params.id}`}>
           <Typography
             variant="body2"
             sx={{
@@ -46,7 +46,7 @@ export default function HolidaysTable({ holidays, showPast = false }) {
           >
             {params.value}
           </Typography>
-          </CellLink>
+        </CellLink>
       ),
       display: "flex",
     },
@@ -56,9 +56,9 @@ export default function HolidaysTable({ holidays, showPast = false }) {
       flex: 3,
       renderCell: (params) => (
         <CellLink href={`/manage/holidays/${params.id}`}>
-        <Typography variant="body2">
-          {ISOtoHuman(params.value, true, false)}
-        </Typography>
+          <Typography variant="body2">
+            {ISOtoHuman(params.value, true, false)}
+          </Typography>
         </CellLink>
       ),
       display: "flex",

@@ -16,12 +16,12 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
+import CellLink from "components/CellLink";
 import ConfirmDialog from "components/ConfirmDialog";
 import Icon from "components/Icon";
 import Tag from "components/Tag";
 import { stateLabel } from "utils/formatEvent";
 import { ISOtoHuman } from "utils/formatTime";
-import CellLink from "components/CellLink";
 
 function FilterTextInputValue(props) {
   const { item, applyValue } = props;
@@ -99,16 +99,17 @@ export default function EventsTable({
             flex: 3,
             renderCell: ({ value, row }) => (
               <CellLink href={`/manage/events/${row._id}`} target="_blank">
-              {<Typography
-                variant="body2"
-                sx={{
-                  color: "text.disabled",
-                }}
-              >
-                {value}
-              </Typography>
-              }
-            </CellLink>
+                {
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.disabled",
+                    }}
+                  >
+                    {value}
+                  </Typography>
+                }
+              </CellLink>
             ),
             display: "flex",
           },
@@ -117,64 +118,65 @@ export default function EventsTable({
       field: "name",
       headerName: "Name",
       flex: isMobile ? null : 5,
-      renderCell: ({ value, row }) =>
+      renderCell: ({ value, row }) => (
         <CellLink href={`/manage/events/${row._id}`} target="_blank">
-        {value ? (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              overflow: "hidden",
-            }}
-          >
-            {row.sponsor && row.sponsor.length > 0 ? (
-              <Tooltip title="Event has sponsors" arrow>
-                <Icon
-                  sx={{
-                    mr: 0.5,
-                    flexShrink: 0,
-                  }}
-                  variant={"paid-rounded"}
-                  color="#FFC046"
-                />
-              </Tooltip>
-            ) : row.budget && row.budget.length > 0 ? (
-              <Tooltip title="Event requires budget" arrow>
-                <Icon
-                  sx={{
-                    mr: 0.5,
-                    flexShrink: 0,
-                  }}
-                  variant={"paid-rounded"}
-                />
-              </Tooltip>
-            ) : null}
+          {value ? (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                overflow: "hidden",
+              }}
+            >
+              {row.sponsor && row.sponsor.length > 0 ? (
+                <Tooltip title="Event has sponsors" arrow>
+                  <Icon
+                    sx={{
+                      mr: 0.5,
+                      flexShrink: 0,
+                    }}
+                    variant={"paid-rounded"}
+                    color="#FFC046"
+                  />
+                </Tooltip>
+              ) : row.budget && row.budget.length > 0 ? (
+                <Tooltip title="Event requires budget" arrow>
+                  <Icon
+                    sx={{
+                      mr: 0.5,
+                      flexShrink: 0,
+                    }}
+                    variant={"paid-rounded"}
+                  />
+                </Tooltip>
+              ) : null}
+              <Typography
+                variant="body2"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  minWidth: 0, // Allow text to shrink
+                }}
+              >
+                {value}
+              </Typography>
+            </Box>
+          ) : (
             <Typography
               variant="body2"
               sx={{
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
-                minWidth: 0, // Allow text to shrink
               }}
             >
               {value}
             </Typography>
-          </Box>
-        ) : (
-          <Typography
-            variant="body2"
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {value}
-          </Typography>
-        )}
-        </CellLink>,
+          )}
+        </CellLink>
+      ),
       display: "flex",
     },
     ...(isMobile
@@ -187,16 +189,18 @@ export default function EventsTable({
             valueGetter: (value, row) => row.clubid,
             renderCell: ({ value, row }) => (
               <CellLink href={`/manage/events/${row._id}`} target="_blank">
-              {<Typography
-                variant="body2"
-                sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {value}
-              </Typography>}
+                {
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {value}
+                  </Typography>
+                }
               </CellLink>
             ),
             display: "flex",
@@ -210,17 +214,23 @@ export default function EventsTable({
             valueGetter: (value, row) => row.datetimeperiod[0],
             valueFormatter: (value, row) => ISOtoHuman(value),
             renderCell: ({ formattedValue, row }) => (
-              <CellLink href={`/manage/events/${row._id}`} target="_blank" align="center">
-              {<Typography
-                variant="body2"
-                sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
+              <CellLink
+                href={`/manage/events/${row._id}`}
+                target="_blank"
+                align="center"
               >
-                {formattedValue}
-              </Typography>}
+                {
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {formattedValue}
+                  </Typography>
+                }
               </CellLink>
             ),
             display: "flex",
@@ -238,34 +248,40 @@ export default function EventsTable({
         approved: row.status.room,
       }),
       renderCell: ({ value, row }) => (
-        <CellLink href={`/manage/events/${row._id}`} target="_blank" align="center">
-        {<Tooltip
-          title={
-            !value.requested
-              ? "No venue requested"
-              : !value.approved
-                ? "Venue requested, pending approval"
-                : "Venue approved"
-          }
-          arrow
+        <CellLink
+          href={`/manage/events/${row._id}`}
+          target="_blank"
+          align="center"
         >
-          <Icon
-            sx={{
-              color: !value.requested
-                ? "secondary.main"
-                : !value.approved
-                  ? "warning.main"
-                  : "success.main",
-            }}
-            variant={
-              !value.requested
-                ? "remove-rounded"
-                : !value.approved
-                  ? "refresh-rounded"
-                  : "check"
-            }
-          />
-        </Tooltip>}
+          {
+            <Tooltip
+              title={
+                !value.requested
+                  ? "No venue requested"
+                  : !value.approved
+                    ? "Venue requested, pending approval"
+                    : "Venue approved"
+              }
+              arrow
+            >
+              <Icon
+                sx={{
+                  color: !value.requested
+                    ? "secondary.main"
+                    : !value.approved
+                      ? "warning.main"
+                      : "success.main",
+                }}
+                variant={
+                  !value.requested
+                    ? "remove-rounded"
+                    : !value.approved
+                      ? "refresh-rounded"
+                      : "check"
+                }
+              />
+            </Tooltip>
+          }
         </CellLink>
       ),
       display: "flex",
@@ -294,17 +310,21 @@ export default function EventsTable({
         }
 
         return (
-          <CellLink href={`/manage/events/${row._id}`} target="_blank" align="center">
-          <Tag
-            label={stateLabel(value.state).shortName}
-            color={stateLabel(value.state).color}
-            sx={{
-              my: 2,
-              maxWidth: "100%",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          />
+          <CellLink
+            href={`/manage/events/${row._id}`}
+            target="_blank"
+            align="center"
+          >
+            <Tag
+              label={stateLabel(value.state).shortName}
+              color={stateLabel(value.state).color}
+              sx={{
+                my: 2,
+                maxWidth: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            />
           </CellLink>
         );
       },
@@ -452,15 +472,14 @@ export default function EventsTable({
           }
           getRowId={(r) => r._id}
           onRowClick={(params, muiEvent) => {
-              if (muiEvent.target.closest("a")) return;
+            if (muiEvent.target.closest("a")) return;
 
-              window.open(
-                `/manage/events/${params.row._id}`,
-                "_blank",
-                "noopener,noreferrer"
-              )
-            }
-          }
+            window.open(
+              `/manage/events/${params.row._id}`,
+              "_blank",
+              "noopener,noreferrer",
+            );
+          }}
           disableRowSelectionOnClick
           initialState={{
             sorting: {

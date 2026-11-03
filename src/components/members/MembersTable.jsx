@@ -15,8 +15,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
-import Icon from "components/Icon";
 import CellLink from "components/CellLink";
+import Icon from "components/Icon";
 import { getFile } from "utils/files";
 import { fmtMonthYear } from "utils/membersDates";
 import { getUserNameFromUID } from "utils/users";
@@ -45,15 +45,15 @@ export default function MembersTable({
       sortable: false,
       renderCell: ({ value, row }) => (
         <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
-        <Avatar sx={{ height: 32, width: 32, my: 2 }}>
-          {value.img ? (
-            <Image
-              alt={value.name || "User Image"}
-              src={getFile(value.img)}
-              fill={true}
-            />
-          ) : null}
-        </Avatar>
+          <Avatar sx={{ height: 32, width: 32, my: 2 }}>
+            {value.img ? (
+              <Image
+                alt={value.name || "User Image"}
+                src={getFile(value.img)}
+                fill={true}
+              />
+            ) : null}
+          </Avatar>
         </CellLink>
       ),
       display: "flex",
@@ -84,15 +84,15 @@ export default function MembersTable({
             flex: 8,
             renderCell: ({ value, row }) => (
               <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
-              <Box
-                sx={{
-                  textTransform: "lowercase",
-                  fontSize: "0.9em",
-                  fontFamily: "monospace",
-                }}
-              >
-                {value || "Email Not Available"}
-              </Box>
+                <Box
+                  sx={{
+                    textTransform: "lowercase",
+                    fontSize: "0.9em",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {value || "Email Not Available"}
+                </Box>
               </CellLink>
             ),
             display: "flex",
@@ -123,99 +123,99 @@ export default function MembersTable({
             valueGetter: (value, row) => row.roles,
             renderCell: ({ value, row }) => (
               <CellLink href={`/manage/members/${row.cid}:${row.uid}`}>
-              <Box sx={{ width: "100%", height: "100%", p: 1 }}>
-                <Stack
-                  direction="column"
-                  divider={<Divider orientation="horizontal" flexItem />}
-                  spacing={1}
-                  sx={{ width: "100%" }}
-                >
-                  {value?.map((role, key) => (
-                    <Box
-                      key={key}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%",
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
+                <Box sx={{ width: "100%", height: "100%", p: 1 }}>
+                  <Stack
+                    direction="column"
+                    divider={<Divider orientation="horizontal" flexItem />}
+                    spacing={1}
+                    sx={{ width: "100%" }}
+                  >
+                    {value?.map((role, key) => (
+                      <Box
+                        key={key}
                         sx={{
-                          color: "text.secondary",
                           display: "flex",
+                          justifyContent: "space-between",
                           alignItems: "center",
-                          flexGrow: 1,
-                          minWidth: 0, // Allow text to shrink if necessary
+                          width: "100%",
                         }}
                       >
-                        <span
-                          style={{
-                            minWidth: 0,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {role?.name}
-                        </span>
-                        <Box
-                          component="span"
+                        <Typography
+                          variant="body2"
                           sx={{
-                            color: "grey.400",
-                            display: "inline-block",
-                            mx: 0.5,
-                            flexShrink: 0,
-                          }}
-                        >
-                          ({fmtMonthYear(role?.startMonth, role?.startYear)} -{" "}
-                          {fmtMonthYear(role?.endMonth, role?.endYear)})
-                        </Box>
-                      </Typography>
-                      {showIcon && (
-                        <Box
-                          sx={{
+                            color: "text.secondary",
                             display: "flex",
-                            justifyContent: "flex-end",
-                            ml: 1,
-                            flexShrink: 0,
+                            alignItems: "center",
+                            flexGrow: 1,
+                            minWidth: 0, // Allow text to shrink if necessary
                           }}
                         >
-                          <Tooltip
-                            arrow
-                            title={
-                              role?.approved
-                                ? "Approved"
-                                : role?.rejected
-                                  ? "Rejected"
-                                  : "Pending approval"
-                            }
+                          <span
+                            style={{
+                              minWidth: 0,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
                           >
-                            <Icon
-                              external
-                              color={
+                            {role?.name}
+                          </span>
+                          <Box
+                            component="span"
+                            sx={{
+                              color: "grey.400",
+                              display: "inline-block",
+                              mx: 0.5,
+                              flexShrink: 0,
+                            }}
+                          >
+                            ({fmtMonthYear(role?.startMonth, role?.startYear)} -{" "}
+                            {fmtMonthYear(role?.endMonth, role?.endYear)})
+                          </Box>
+                        </Typography>
+                        {showIcon && (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "flex-end",
+                              ml: 1,
+                              flexShrink: 0,
+                            }}
+                          >
+                            <Tooltip
+                              arrow
+                              title={
                                 role?.approved
-                                  ? "success.main"
+                                  ? "Approved"
                                   : role?.rejected
-                                    ? "error.main"
-                                    : "warning.main"
+                                    ? "Rejected"
+                                    : "Pending approval"
                               }
-                              variant={
-                                role?.approved
-                                  ? "eva:checkmark-outline"
-                                  : role?.rejected
-                                    ? "eva:close-outline"
-                                    : "eva:refresh-fill"
-                              }
-                            />
-                          </Tooltip>
-                        </Box>
-                      )}
-                    </Box>
-                  ))}
-                </Stack>
-              </Box>
+                            >
+                              <Icon
+                                external
+                                color={
+                                  role?.approved
+                                    ? "success.main"
+                                    : role?.rejected
+                                      ? "error.main"
+                                      : "warning.main"
+                                }
+                                variant={
+                                  role?.approved
+                                    ? "eva:checkmark-outline"
+                                    : role?.rejected
+                                      ? "eva:close-outline"
+                                      : "eva:refresh-fill"
+                                }
+                              />
+                            </Tooltip>
+                          </Box>
+                        )}
+                      </Box>
+                    ))}
+                  </Stack>
+                </Box>
               </CellLink>
             ),
           },

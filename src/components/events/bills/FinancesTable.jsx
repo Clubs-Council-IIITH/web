@@ -7,9 +7,9 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
+import CellLink from "components/CellLink";
 import Icon from "components/Icon";
 import Tag from "components/Tag";
-import CellLink from "components/CellLink";
 import { billsStateLabel } from "utils/formatEvent";
 
 export default function FinancesTable({ events, role }) {
@@ -24,7 +24,7 @@ export default function FinancesTable({ events, role }) {
       flex: 5,
       valueGetter: (value, row) => row?.eventname,
       renderCell: ({ value, row }) => {
-        const financeLink = getFinanceLink({role, row})
+        const financeLink = getFinanceLink({ role, row });
         return (
           <CellLink href={financeLink}>
             <Typography
@@ -43,8 +43,8 @@ export default function FinancesTable({ events, role }) {
               {value}
             </Typography>
           </CellLink>
-      )
-    },
+        );
+      },
       display: "flex",
     },
     ...(isMobile || !["cc", "slo"].includes(role)
@@ -56,12 +56,12 @@ export default function FinancesTable({ events, role }) {
             flex: 3,
             valueGetter: (value, row) => row?.clubid,
             renderCell: ({ value, row }) => {
-              const financeLink = getFinanceLink({role, row})
+              const financeLink = getFinanceLink({ role, row });
               return (
                 <CellLink href={financeLink}>
                   <Typography variant="body2">{value}</Typography>
                 </CellLink>
-              )
+              );
             },
             display: "flex",
           },
@@ -78,7 +78,7 @@ export default function FinancesTable({ events, role }) {
       }),
       disableExport: true,
       renderCell: ({ value, row }) => {
-        const financeLink = getFinanceLink({role, row})
+        const financeLink = getFinanceLink({ role, row });
         return (
           <CellLink href={financeLink} align="center">
             <Tag
@@ -87,7 +87,7 @@ export default function FinancesTable({ events, role }) {
               sx={{ my: 2 }}
             />
           </CellLink>
-        )
+        );
       },
       display: "flex",
     },
@@ -99,23 +99,27 @@ export default function FinancesTable({ events, role }) {
       headerAlign: "center",
       valueGetter: (value, row) => row?.eventReportSubmitted,
       renderCell: ({ value, row }) => {
-        const financeLink = getFinanceLink({role, row})
+        const financeLink = getFinanceLink({ role, row });
         return (
           <CellLink href={financeLink} align="center">
             <Icon
               variant={
-              value === "true" ? "check" : value === "old" ? "remove" : "cancel"
-            }
-            color={
-              value === "true"
-                ? "success.main"
-                : value === "old"
-                  ? "warning.main"
-                  : "error.main"
-            }
-          />
+                value === "true"
+                  ? "check"
+                  : value === "old"
+                    ? "remove"
+                    : "cancel"
+              }
+              color={
+                value === "true"
+                  ? "success.main"
+                  : value === "old"
+                    ? "warning.main"
+                    : "error.main"
+              }
+            />
           </CellLink>
-        )
+        );
       },
       display: "flex",
     },
@@ -129,7 +133,7 @@ export default function FinancesTable({ events, role }) {
       columns={columns}
       getRowId={(r) => r.eventid}
       onRowClick={(params) => {
-        router.push(getFinanceLink({role, row: params.row}))
+        router.push(getFinanceLink({ role, row: params.row }));
       }}
       // getRowClassName={(params) =>
       //   ["rejected", "not_submitted"].includes(params.row.billsStatus?.state)
@@ -169,19 +173,16 @@ export default function FinancesTable({ events, role }) {
   );
 }
 
-function getFinanceLink({role, row}) {
-  const status = row.billsStatus?.state
+function getFinanceLink({ role, row }) {
+  const status = row.billsStatus?.state;
   if (role === "slo") {
-    if (status === "submitted")
-      return `/manage/finances/${row.eventid}`;
-    else 
-      return `/manage/events/${row.eventid}`;
+    if (status === "submitted") return `/manage/finances/${row.eventid}`;
+    else return `/manage/events/${row.eventid}`;
   } else if (role === "club") {
     if (status === "not_submitted" || status === "rejected")
-      return `/manage/events/${row.eventid}/bills`
-    else 
-      return `/manage/events/${row.eventid}`
+      return `/manage/events/${row.eventid}/bills`;
+    else return `/manage/events/${row.eventid}`;
   } else {
-    return `/manage/events/${row.eventid}`
+    return `/manage/events/${row.eventid}`;
   }
 }

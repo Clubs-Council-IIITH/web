@@ -7,10 +7,9 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
+import CellLink from "components/CellLink";
 import ClubLogo from "components/clubs/ClubLogo";
 import Tag from "components/Tag";
-import CellLink from "components/CellLink";
-
 
 export default function ClubsTable({ clubs }) {
   const router = useRouter();
@@ -29,7 +28,12 @@ export default function ClubsTable({ clubs }) {
       }),
       renderCell: ({ value, row }) => (
         <CellLink href={`/manage/clubs/${row.cid}`}>
-        <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
+          <ClubLogo
+            name={value.name}
+            logo={value.logo}
+            width={32}
+            height={32}
+          />
         </CellLink>
       ),
       display: "flex",
@@ -45,9 +49,7 @@ export default function ClubsTable({ clubs }) {
             headerName: "Code",
             flex: 3,
             renderCell: ({ value, row }) => (
-              <CellLink href={`/manage/clubs/${row.cid}`}>
-                {value}
-              </CellLink>
+              <CellLink href={`/manage/clubs/${row.cid}`}>{value}</CellLink>
             ),
           },
         ]),
@@ -55,28 +57,29 @@ export default function ClubsTable({ clubs }) {
       field: "name",
       headerName: "Name",
       flex: isMobile ? null : 6,
-      renderCell: (p) =>
+      renderCell: (p) => (
         <CellLink href={`/manage/clubs/${p.id}`}>
-        {p.value ? (
-          <Typography
-            variant="body2"
-            style={{
-              overflowWrap: "break-word",
-              wordWrap: "break-word",
-              msWordBreak: "break-all",
-              wordBreak: "break-all",
-              msHyphens: "auto",
-              MozHyphens: "auto",
-              WebkitHyphens: "auto",
-              hyphens: "auto",
-            }}
-          >
-            {p.value}
-          </Typography>
-        ) : (
-          p.value
-        )}
-        </CellLink>,
+          {p.value ? (
+            <Typography
+              variant="body2"
+              style={{
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
+                msWordBreak: "break-all",
+                wordBreak: "break-all",
+                msHyphens: "auto",
+                MozHyphens: "auto",
+                WebkitHyphens: "auto",
+                hyphens: "auto",
+              }}
+            >
+              {p.value}
+            </Typography>
+          ) : (
+            p.value
+          )}
+        </CellLink>
+      ),
       display: "flex",
     },
     ...(isDesktop
@@ -87,15 +90,15 @@ export default function ClubsTable({ clubs }) {
             flex: 6,
             renderCell: ({ value, row }) => (
               <CellLink href={`/manage/clubs/${row.cid}`}>
-              <Box
-                sx={{
-                  textTransform: "lowercase",
-                  fontSize: "0.9em",
-                  fontFamily: "monospace",
-                }}
-              >
-                {value}
-              </Box>
+                <Box
+                  sx={{
+                    textTransform: "lowercase",
+                    fontSize: "0.9em",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {value}
+                </Box>
               </CellLink>
             ),
             display: "flex",
@@ -109,13 +112,13 @@ export default function ClubsTable({ clubs }) {
       valueGetter: (value) => (value === "body" ? "Student Body" : value),
       renderCell: ({ value, row }) => (
         <CellLink href={`/manage/clubs/${row.cid}`}>
-        <Box
-          sx={{
-            textTransform: "capitalize",
-          }}
-        >
-          {value}
-        </Box>
+          <Box
+            sx={{
+              textTransform: "capitalize",
+            }}
+          >
+            {value}
+          </Box>
         </CellLink>
       ),
       display: "flex",
@@ -128,11 +131,11 @@ export default function ClubsTable({ clubs }) {
       flex: isMobile ? null : 2,
       renderCell: ({ value, row }) => (
         <CellLink href={`/manage/clubs/${row.cid}`}>
-        <Tag
-          label={value}
-          color={value === "active" ? "success" : "error"}
-          sx={{ my: 2 }}
-        />
+          <Tag
+            label={value}
+            color={value === "active" ? "success" : "error"}
+            sx={{ my: 2 }}
+          />
         </CellLink>
       ),
       display: "flex",
