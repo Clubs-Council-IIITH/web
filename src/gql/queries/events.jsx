@@ -107,6 +107,7 @@ export const GET_UNFINISHED_EVENTS = gql`
       name
       code
       clubid
+      collabclubs
       datetimeperiod
       status {
         state

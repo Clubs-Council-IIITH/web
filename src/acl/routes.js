@@ -54,6 +54,17 @@ const routes = {
   "/manage/achievements/:id": ["cc", "slo", "club"],
 
   "/manage/gallery": ["cc", "slo"],
+
+  "/manage/inventory": ["cc", "club", "slo"],
+  "/manage/inventory/recent": ["cc", "club", "slo"],
+  "/manage/inventory/items": ["cc", "club", "slo"],
+  "/manage/inventory/items/new": ["cc", "slo"], // has to be higher to not conflict with :id
+  "/manage/inventory/items/:id": ["cc", "club", "slo"],
+  "/manage/inventory/items/:id/edit": ["cc", "slo"],
+  "/manage/inventory/transactions": ["cc", "club", "slo"],
+  "/manage/inventory/transactions/new": ["cc", "club", "slo"], // has to be higher to not conflict with :id
+  "/manage/inventory/transactions/:id": ["cc", "club", "slo"],
+  "/manage/inventory/transactions/:id/edit": ["cc", "club", "slo"],
 };
 
 export default routes;
