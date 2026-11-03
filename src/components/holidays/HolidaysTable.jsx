@@ -7,6 +7,7 @@ import { Typography } from "@mui/material";
 import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import { ISOtoHuman } from "utils/formatTime";
+import CellLink from "components/CellLink";
 
 export default function HolidaysTable({ holidays, showPast = false }) {
   const router = useRouter();
@@ -29,21 +30,23 @@ export default function HolidaysTable({ holidays, showPast = false }) {
       headerName: "Name",
       flex: 5,
       renderCell: (params) => (
-        <Typography
-          variant="body2"
-          sx={{
-            overflowWrap: "break-word",
-            wordWrap: "break-word",
-            msWordBreak: "break-all",
-            wordBreak: "break-all",
-            msHyphens: "auto",
-            MozHyphens: "auto",
-            WebkitHyphens: "auto",
-            hyphens: "auto",
-          }}
-        >
-          {params.value}
-        </Typography>
+          <CellLink href={`/manage/holidays/${params.id}`}>
+          <Typography
+            variant="body2"
+            sx={{
+              overflowWrap: "break-word",
+              wordWrap: "break-word",
+              msWordBreak: "break-all",
+              wordBreak: "break-all",
+              msHyphens: "auto",
+              MozHyphens: "auto",
+              WebkitHyphens: "auto",
+              hyphens: "auto",
+            }}
+          >
+            {params.value}
+          </Typography>
+          </CellLink>
       ),
       display: "flex",
     },
@@ -52,9 +55,11 @@ export default function HolidaysTable({ holidays, showPast = false }) {
       headerName: "Date",
       flex: 3,
       renderCell: (params) => (
+        <CellLink href={`/manage/holidays/${params.id}`}>
         <Typography variant="body2">
           {ISOtoHuman(params.value, true, false)}
         </Typography>
+        </CellLink>
       ),
       display: "flex",
     },

@@ -9,6 +9,8 @@ import { DataGrid, GridLogicOperator } from "@mui/x-data-grid";
 
 import ClubLogo from "components/clubs/ClubLogo";
 import Tag from "components/Tag";
+import CellLink from "components/CellLink";
+
 
 export default function ClubsTable({ clubs }) {
   const router = useRouter();
@@ -25,8 +27,10 @@ export default function ClubsTable({ clubs }) {
         name: row.name,
         logo: row.logo,
       }),
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/clubs/${row.cid}`}>
         <ClubLogo name={value.name} logo={value.logo} width={32} height={32} />
+        </CellLink>
       ),
       display: "flex",
       disableExport: true,
@@ -40,6 +44,11 @@ export default function ClubsTable({ clubs }) {
             field: "code",
             headerName: "Code",
             flex: 3,
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/clubs/${row.cid}`}>
+                {value}
+              </CellLink>
+            ),
           },
         ]),
     {
@@ -47,7 +56,8 @@ export default function ClubsTable({ clubs }) {
       headerName: "Name",
       flex: isMobile ? null : 6,
       renderCell: (p) =>
-        p.value ? (
+        <CellLink href={`/manage/clubs/${p.id}`}>
+        {p.value ? (
           <Typography
             variant="body2"
             style={{
@@ -65,7 +75,8 @@ export default function ClubsTable({ clubs }) {
           </Typography>
         ) : (
           p.value
-        ),
+        )}
+        </CellLink>,
       display: "flex",
     },
     ...(isDesktop
@@ -74,7 +85,8 @@ export default function ClubsTable({ clubs }) {
             field: "email",
             headerName: "Email",
             flex: 6,
-            renderCell: ({ value }) => (
+            renderCell: ({ value, row }) => (
+              <CellLink href={`/manage/clubs/${row.cid}`}>
               <Box
                 sx={{
                   textTransform: "lowercase",
@@ -84,6 +96,7 @@ export default function ClubsTable({ clubs }) {
               >
                 {value}
               </Box>
+              </CellLink>
             ),
             display: "flex",
           },
@@ -94,7 +107,8 @@ export default function ClubsTable({ clubs }) {
       headerName: "Category",
       flex: isMobile ? null : 2,
       valueGetter: (value) => (value === "body" ? "Student Body" : value),
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/clubs/${row.cid}`}>
         <Box
           sx={{
             textTransform: "capitalize",
@@ -102,6 +116,7 @@ export default function ClubsTable({ clubs }) {
         >
           {value}
         </Box>
+        </CellLink>
       ),
       display: "flex",
     },
@@ -111,12 +126,14 @@ export default function ClubsTable({ clubs }) {
       align: "center",
       headerAlign: "center",
       flex: isMobile ? null : 2,
-      renderCell: ({ value }) => (
+      renderCell: ({ value, row }) => (
+        <CellLink href={`/manage/clubs/${row.cid}`}>
         <Tag
           label={value}
           color={value === "active" ? "success" : "error"}
           sx={{ my: 2 }}
         />
+        </CellLink>
       ),
       display: "flex",
     },
