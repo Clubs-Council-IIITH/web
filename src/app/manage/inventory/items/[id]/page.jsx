@@ -4,6 +4,7 @@ import {
   Box,
   Divider,
   Grid,
+  Link,
   Typography,
 } from "@mui/material";
 
@@ -68,6 +69,11 @@ export default async function ManageInventoryItemID(props) {
 
   const { allClubs, userMeta, userProfile } = combinedData;
   const user = { ...userMeta, ...userProfile };
+
+  // CC, SLO and the club that owns the item can open its invoice
+  const canViewInvoice =
+    ["cc", "slo"].includes(user?.role) ||
+    (user?.role === "club" && Boolean(user?.uid) && user.uid === item?.clubid);
 
   const ownerClub = allClubs?.find((c) => c.cid === item?.clubid);
   const { data: transactionData } = await getClient().query(
@@ -208,6 +214,24 @@ export default async function ManageInventoryItemID(props) {
                   Warranty Details
                 </Typography>
                 <Typography variant="body1">{item.warrantyDetails}</Typography>
+              </Grid>
+            ) : null}
+
+            {item?.invoice && canViewInvoice ? (
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="overline" color="text.secondary">
+                  Invoice
+                </Typography>
+                <Typography variant="body1">
+                  <Link
+                    href={getFile(item.invoice, true)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    View invoice (PDF)
+                  </Link>
+                </Typography>
               </Grid>
             ) : null}
 
